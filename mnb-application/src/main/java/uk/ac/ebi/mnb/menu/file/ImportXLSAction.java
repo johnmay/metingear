@@ -13,11 +13,10 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import uk.ac.ebi.mnb.importer.xls.wizzard.ExcelWizzard;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.mnb.parser.ExcelImporter;
 import uk.ac.ebi.mnb.parser.ExcelXLSImporter;
 import uk.ac.ebi.mnb.core.FileChooserAction;
-import mnb.todo.MainController;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.Reconstruction;
 
@@ -81,16 +80,16 @@ public class ImportXLSAction
                 ExcelImporter importer = name.endsWith(".xls") ?
                                          new ExcelXLSImporter(stream) : null;
                 ExcelWizzard wizzard = new ExcelWizzard(reconstruction, choosenFile, importer,
-                                                        MainView.getInstance());
+                                                        MainFrame.getInstance());
                 wizzard.setVisible(true);
 
                 // update the views
-                MainView.getInstance().getSourceListController().update();
-                MainView.getInstance().getProjectPanel().update();
+                MainFrame.getInstance().getSourceListController().update();
+                MainFrame.getInstance().getProjectPanel().update();
                 System.out.println("done..");
 
             } catch( IOException ex ) {
-                MainView.getInstance().showErrorDialog("Unable to import Excel file: " + ex.
+                MainFrame.getInstance().showErrorDialog("Unable to import Excel file: " + ex.
                   getMessage());
             }
         }

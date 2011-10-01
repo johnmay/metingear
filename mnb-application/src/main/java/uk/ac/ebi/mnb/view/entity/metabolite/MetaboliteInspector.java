@@ -30,7 +30,7 @@ import uk.ac.ebi.mnb.view.labels.BoldLabel;
 import uk.ac.ebi.mnb.view.entity.EntityInspector;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 
 
 /**

@@ -1,4 +1,3 @@
-
 /**
  * BasicAnnotationCellRenderer.java
  *
@@ -26,47 +25,30 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.core.ApplicationPreferences;
 import uk.ac.ebi.mnb.view.labels.AltLabel;
-
 
 /**
  *          BasicAnnotationCellRenderer – 2011.09.29 <br>
- *          Class description
+ *          Renders boolean values as Yes and No (personal preference)
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
 public class BasicBooleanCellRenderer extends DefaultTableCellRenderer {
-
+    
     private static final Logger LOGGER = Logger.getLogger(BasicBooleanCellRenderer.class);
     private JLabel emptyLabel = new JLabel("");
-
-
+    
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
-                                                   boolean isSelected, boolean hasFocus, int row,
-                                                   int column) {
-
-        if( value instanceof Boolean ) {
-
-            JLabel label = new AltLabel(((Boolean) value) ? "Yes" : "No");
-
-            if( isSelected ) {
-                label.setBackground(table.getSelectionBackground());
-            } else {
-                label.setBackground(table.getBackground());
-            }
-
-            return label;
-
-        } else {
-            return emptyLabel;
-        }
-
-
-
+            boolean isSelected, boolean hasFocus, int row,
+            int column) {
+        
+        this.setText((Boolean) value ? "Yes" : "No");
+        this.setFont(ApplicationPreferences.getInstance().getTheme().getBodyFont());
+        
+        return this;
+        
     }
-
-
 }
-

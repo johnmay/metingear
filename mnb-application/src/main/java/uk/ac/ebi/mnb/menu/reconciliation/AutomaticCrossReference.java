@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.menu.reconciliation;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.core.DelayedBuildAction;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 
 
 /**
@@ -46,7 +46,7 @@ public class AutomaticCrossReference extends DelayedBuildAction {
 
     @Override
     public void buildComponents() {
-        dialog = new AutomaticCrossReferenceDialog(MainView.getInstance(), MainView.getInstance());
+        dialog = new AutomaticCrossReferenceDialog(MainFrame.getInstance(), MainFrame.getInstance());
     }
 
 

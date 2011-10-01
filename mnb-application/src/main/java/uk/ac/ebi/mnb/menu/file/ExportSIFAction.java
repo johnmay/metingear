@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import mnb.view.old.MatrixModel;
 import mnb.view.old.MatrixView;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 
 /**
@@ -44,9 +44,9 @@ public class ExportSIFAction
 
     @Override
     public void activateActions() {
-        MatrixView matrixView = MainView.getInstance().getProjectPanel().getMatrixView();
+        MatrixView matrixView = MainFrame.getInstance().getProjectPanel().getMatrixView();
         if ( matrixView == null ) {
-            MainView.getInstance().showErrorDialog( "Unable to obtain the matrix from the project. Have you used Build > StoichiometricMatrix before exporting"  );
+            MainFrame.getInstance().showErrorDialog( "Unable to obtain the matrix from the project. Have you used Build > StoichiometricMatrix before exporting"  );
             return;
         }
         MatrixModel model = matrixView.getModel();
@@ -71,7 +71,7 @@ public class ExportSIFAction
             model.toTextFile( fw );
             fw.close();
         } catch ( IOException ex ) {
-            MainView.getInstance().showErrorDialog("There was a problem when writing " + choosenFile);
+            MainFrame.getInstance().showErrorDialog("There was a problem when writing " + choosenFile);
         }
 
 

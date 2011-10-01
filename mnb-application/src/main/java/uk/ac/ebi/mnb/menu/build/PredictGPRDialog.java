@@ -20,7 +20,7 @@ import uk.ac.ebi.mnb.view.labels.Label;
 import uk.ac.ebi.metabolomes.biowh.BiowhConnection;
 import uk.ac.ebi.metabolomes.biowh.DataSetProvider;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 
 
 /**
@@ -39,7 +39,7 @@ public class PredictGPRDialog
 
 
     public PredictGPRDialog() {
-        super(MainView.getInstance(), MainView.getInstance(), "EnzymeAnnotation");
+        super(MainFrame.getInstance(), MainFrame.getInstance(), "EnzymeAnnotation");
         layoutForm();
     }
 
@@ -83,14 +83,14 @@ public class PredictGPRDialog
 
         // todo.. move some to update..
         TaskManager.getInstance().add(task);
-        MainView.getInstance().getSourceListController().update();
+        MainFrame.getInstance().getSourceListController().update();
 
     }
 
 
     @Override
     public void update() {
-        MainView.getInstance().getProjectPanel().update();
+        MainFrame.getInstance().getProjectPanel().update();
     }
 
 

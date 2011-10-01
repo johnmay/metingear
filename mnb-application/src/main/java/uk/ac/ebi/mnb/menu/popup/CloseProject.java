@@ -30,7 +30,7 @@ import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 
 
 /**
@@ -54,7 +54,7 @@ public class CloseProject extends GeneralAction implements ContextSensitiveActio
     public void actionPerformed(ActionEvent e) {
         LOGGER.info("TODO: Offer save suggestion before close");
         ReconstructionManager.getInstance().removeProject(reconstruction);
-        MainView.getInstance().update();
+        MainFrame.getInstance().update();
         long start = System.currentTimeMillis();
         System.gc();
         long end = System.currentTimeMillis();

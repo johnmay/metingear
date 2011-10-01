@@ -24,7 +24,7 @@ import uk.ac.ebi.core.ReconstructionManager;
 import mnb.view.old.ReactionGraph;
 import mnb.view.old.GraphPanel;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 
@@ -57,8 +57,8 @@ public class ReactionGraphAction
             }
         }
         GraphPanel gp = new GraphPanel();
-        MainView.getInstance().getProjectPanel().add(gp, "Reaction Graph");
-        ((CardLayout)MainView.getInstance().getProjectPanel().getLayout()).show( MainView.getInstance().getProjectPanel() , "Reaction Graph");
+        MainFrame.getInstance().getProjectPanel().add(gp, "Reaction Graph");
+        ((CardLayout)MainFrame.getInstance().getProjectPanel().getLayout()).show( MainFrame.getInstance().getProjectPanel() , "Reaction Graph");
         ReactionGraph graph = new ReactionGraph();
         graph.addReactions( reactionsToShow );
         gp.setModel( graph );

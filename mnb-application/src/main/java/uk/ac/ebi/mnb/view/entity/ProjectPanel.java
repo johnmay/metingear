@@ -41,7 +41,7 @@ import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import uk.ac.ebi.metabolomes.run.RunnableTask;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.search.SearchManager;
 
 
@@ -174,13 +174,13 @@ public class ProjectPanel
             SearchManager.getInstance().updateCurrentIndex(reconstruction);
         } catch( CorruptIndexException ex ) {
             logger.info(ex.getMessage());
-            MainView.getInstance().showWarningDialog("Unable to index component for searching");
+            MainFrame.getInstance().showWarningDialog("Unable to index component for searching");
         } catch( LockObtainFailedException ex ) {
             logger.info(ex.getMessage());
-            MainView.getInstance().showWarningDialog("Unable to index component for searching");
+            MainFrame.getInstance().showWarningDialog("Unable to index component for searching");
         } catch( IOException ex ) {
             logger.info(ex.getMessage());
-            MainView.getInstance().showWarningDialog("Unable to index component for searching");
+            MainFrame.getInstance().showWarningDialog("Unable to index component for searching");
         }
 
     }

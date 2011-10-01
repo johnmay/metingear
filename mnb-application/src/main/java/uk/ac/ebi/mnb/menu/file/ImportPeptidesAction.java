@@ -22,7 +22,7 @@ import org.biojava3.core.sequence.io.ProteinSequenceCreator;
 import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.mnb.io.FastaFileFilter;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.io.FileFilterManager;
@@ -115,15 +115,15 @@ public class ImportPeptidesAction extends FileChooserAction {
           getActiveReconstruction().addGeneProducts(peptides);
 
         if( clashingIdentifiers.length > 0 ) {
-            JOptionPane.showMessageDialog(MainView.getInstance(),
+            JOptionPane.showMessageDialog(MainFrame.getInstance(),
                                           clashingIdentifiers.length +
                                           " products had matching identifiers and were not imported",
                                           "Warning",
                                           JOptionPane.WARNING_MESSAGE);
         }
-        MainView.getInstance().getSourceListController().update();
-        MainView.getInstance().getProjectPanel().update();
-        MainView.getInstance().getJMenuBar().setActiveDependingOnRequirements();
+        MainFrame.getInstance().getSourceListController().update();
+        MainFrame.getInstance().getProjectPanel().update();
+        MainFrame.getInstance().getJMenuBar().setActiveDependingOnRequirements();
 
 
 

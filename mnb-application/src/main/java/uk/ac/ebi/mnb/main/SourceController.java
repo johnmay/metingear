@@ -220,7 +220,7 @@ public class SourceController
 
         selected = item;
 
-        ProjectPanel projectPanel = MainView.getInstance().getProjectPanel();
+        ProjectPanel projectPanel = MainFrame.getInstance().getProjectPanel();
 
         if( item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem) ) {
             projectPanel.setSelected(((EntitySourceItem) item).getEntity());
@@ -244,7 +244,7 @@ public class SourceController
     @Override
     public void sourceListCategoryClicked(SourceListCategory category, Button button, int clickCount) {
         if( category.equals(tasks) ) {
-            MainView.getInstance().getProjectPanel().setTaskView();
+            MainFrame.getInstance().getProjectPanel().setTaskView();
         }
     }
 

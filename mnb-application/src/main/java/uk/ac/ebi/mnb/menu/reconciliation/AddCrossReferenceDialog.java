@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.core.AnnotatedEntity;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.mnb.view.AltPanel;
 import uk.ac.ebi.resource.IdentifierFactory;
 
@@ -57,7 +57,7 @@ public class AddCrossReferenceDialog extends DropdownDialog {
 
     public AddCrossReferenceDialog() {
 
-        super(MainView.getInstance(), MainView.getInstance(), "AddCrossReference");
+        super(MainFrame.getInstance(), MainFrame.getInstance(), "AddCrossReference");
         for( Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers() ) {
             nameIndexMap.put(id.getShortDescription(), id.getIndex());
         }
@@ -118,7 +118,7 @@ public class AddCrossReferenceDialog extends DropdownDialog {
 
     @Override
     public void update() {
-        MainView.getInstance().getProjectPanel().update();
+        MainFrame.getInstance().getProjectPanel().update();
     }
 
 

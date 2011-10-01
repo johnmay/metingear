@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.SwingUtilities;
 import uk.ac.ebi.metabolomes.run.RunnableTask;
 import uk.ac.ebi.metabolomes.run.TaskStatus;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 
 
 /**
@@ -155,14 +155,14 @@ public class TaskManager
                 }
             }
 
-            MainView.getInstance().repaint();
+            MainFrame.getInstance().repaint();
 
         } while( queuedTasks.size() > 0 ||
                  runningTasks.size() > 0 );
 
         executor.shutdown();
-        MainView.getInstance().getJMenuBar().setActiveDependingOnRequirements();
-        MainView.getInstance().getProjectPanel().update();
+        MainFrame.getInstance().getJMenuBar().setActiveDependingOnRequirements();
+        MainFrame.getInstance().getProjectPanel().update();
 
 
 
@@ -177,8 +177,8 @@ public class TaskManager
                   new Runnable() {
 
                       public void run() {
-                          MainView.getInstance().getSourceListController().update();
-                          MainView.getInstance().getProjectPanel().getTaskView().update();
+                          MainFrame.getInstance().getSourceListController().update();
+                          MainFrame.getInstance().getProjectPanel().getTaskView().update();
                       }
 
 

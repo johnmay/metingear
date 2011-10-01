@@ -25,7 +25,7 @@ import java.util.List;
 import uk.ac.ebi.mnb.core.DelayedBuildAction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 
 
 /**
@@ -56,7 +56,7 @@ public class DownloadStructures
     @Override
     public void activateActions() {
 
-        List< AnnotatedEntity> components = MainView.getInstance().getProjectPanel().
+        List< AnnotatedEntity> components = MainFrame.getInstance().getProjectPanel().
           getSelectedEntities();
 
         if( components.isEmpty() == false ) {
@@ -64,7 +64,7 @@ public class DownloadStructures
             dialog.setVisible(true);
             
             // modal dialog won't execute till after
-            MainView.getInstance().getProjectPanel().update();
+            MainFrame.getInstance().getProjectPanel().update();
         }
 
     }

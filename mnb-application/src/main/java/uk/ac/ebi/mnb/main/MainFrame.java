@@ -12,7 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-
 package uk.ac.ebi.mnb.main;
 
 import com.explodingpixels.macwidgets.*;
@@ -20,26 +19,39 @@ import java.awt.event.ComponentEvent;
 import com.jgoodies.forms.factories.Borders;
 
 
+import com.jgoodies.forms.layout.CellConstraints;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ComponentAdapter;
+import java.io.IOException;
+import java.util.List;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
-import uk.ac.ebi.mnb.view.AboutDialog;
+import javax.swing.text.BadLocationException;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.store.LockObtainFailedException;
+import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.view.DialogController;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.mnb.view.entity.ProjectPanel;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.mnb.menu.file.OpenProjectAction;
+import uk.ac.ebi.mnb.menu.file.NewProjectAction;
+import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
 import uk.ac.ebi.mnb.view.MessageManager;
 import uk.ac.ebi.mnb.view.ViewUtils;
-
+import uk.ac.ebi.mnb.view.labels.IconButton;
+import uk.ac.ebi.search.SearchManager;
+import uk.ac.ebi.search.SearchableIndex;
 
 /**
  * MainView.java
@@ -50,18 +62,18 @@ import uk.ac.ebi.mnb.view.ViewUtils;
  * @author johnmay
  * @date Apr 8, 2011
  */
-public class MainView
-  extends JFrame
-  implements DialogController {
+public class MainFrame
+        extends JFrame
+        implements DialogController {
 
     private static final org.apache.log4j.Logger LOGGER =
-                                                 org.apache.log4j.Logger.getLogger(MainView.class);
+            org.apache.log4j.Logger.getLogger(MainFrame.class);
     private UnifiedToolBar toolbar;
     private JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
     private ProjectPanel project = new ProjectPanel();
     private MessageManager messages = new MessageManager();
     private SourceController sourceController;
-
+    private JTextField searchField = new JTextField(10); // move to a toolbar wraping class
 
     /**
      *
@@ -70,23 +82,113 @@ public class MainView
      * @return Instance of MainView
      *
      */
-    public static MainView getInstance() {
+    public static MainFrame getInstance() {
         return MainViewHolder.INSTANCE;
     }
-
 
     /**
      * Inner class holding the instance
      */
     private static class MainViewHolder {
 
-        private static final MainView INSTANCE = new MainView();
+        private static final MainFrame INSTANCE = new MainFrame();
     }
 
-
-    private MainView() {
+    private MainFrame() {
 
         super("Metabolic Network Builder");
+
+        // mac widgets
+        MacUtils.makeWindowLeopardStyle(getRootPane());
+
+        // toolbar
+        UnifiedToolBar toolbar = new UnifiedToolBar();
+        CellConstraints cc = new CellConstraints();
+        add(toolbar.getComponent(), BorderLayout.NORTH);
+        searchField.putClientProperty("JTextField.variant", "search");
+        toolbar.addComponentToRight(new LabeledComponentGroup("Search", searchField).getComponent());
+        toolbar.addComponentToCenter(new IconButton(new NewProjectAction()));
+        toolbar.addComponentToCenter(new IconButton(new AddCrossReference()));
+        setToolbar(toolbar);
+
+        // search field
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+
+            public void insertUpdate(DocumentEvent e) {
+                final Reconstruction recon = ReconstructionManager.getInstance().
+                        getActiveReconstruction();
+                if (recon != null) {
+                    try {
+                        final String text =
+                                e.getDocument().getText(0, e.getDocument().getLength());
+
+
+                        new Thread(new Runnable() {
+
+                            public void run() {
+                                try {
+
+                                    SearchableIndex index = SearchManager.getInstance().
+                                            getCurrentIndex();
+
+                                    if (index == null) {
+                                        Thread t = SearchManager.getInstance().updateCurrentIndex(
+                                                recon);
+                                        t.wait();
+                                        index = SearchManager.getInstance().getCurrentIndex();
+                                    }
+
+                                    final List<AnnotatedEntity> entities =
+                                            index.getRankedEntities(SearchManager.getInstance().getQuery(
+                                            text
+                                            + "~"));
+
+                                    if (entities != null) {
+                                        SwingUtilities.invokeLater(new Runnable() {
+
+                                            public void run() {
+                                                SearchManager.getInstance().setPreviousEntries(
+                                                        entities);
+                                                getProjectPanel().
+                                                        getSearchView().update();
+                                            }
+                                        });
+                                    }
+
+
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                } catch (ParseException ex) {
+                                    ex.printStackTrace();
+                                } catch (CorruptIndexException ex) {
+                                    ex.printStackTrace();
+                                } catch (LockObtainFailedException ex) {
+                                    ex.printStackTrace();
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        }).start();
+
+
+                        MainFrame.getInstance().getProjectPanel().setSearchView();
+                    } catch (BadLocationException ex) {
+                        ex.printStackTrace();
+                    }
+
+
+
+                }
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
+
+
 
         // 4 x 3 size
         Dimension dimensions = Toolkit.getDefaultToolkit().getScreenSize();
@@ -125,7 +227,7 @@ public class MainView
         pane.setBorder(Borders.EMPTY_BORDER);
         // paint hairline border
         ((BasicSplitPaneUI) pane.getUI()).getDivider().setBorder(
-          BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
+                BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
 
         addComponentListener(new ComponentAdapter() {
 
@@ -134,17 +236,13 @@ public class MainView
                 updateDialogLocations();
             }
 
-
             @Override
             public void componentResized(ComponentEvent e) {
                 messages.update();
             }
-
-
         });
 
     }
-
 
     /**
      * Access the source list controller
@@ -154,7 +252,6 @@ public class MainView
         return sourceController;
     }
 
-
     /**
      * 
      * Updates the currently displayed dialogs to the correct position of the frame
@@ -162,8 +259,8 @@ public class MainView
      */
     public void updateDialogLocations() {
 
-        for( Window window : getWindows() ) {
-            if( window instanceof DropdownDialog ) {
+        for (Window window : getWindows()) {
+            if (window instanceof DropdownDialog) {
                 DropdownDialog dialog = ((DropdownDialog) window);
                 dialog.setLocation();
                 dialog.validate();
@@ -171,7 +268,6 @@ public class MainView
         }
 
     }
-
 
     /**
      * Returns the main menu bar (MainMenuBar) from the MainView
@@ -181,7 +277,6 @@ public class MainView
     public MainMenuBar getJMenuBar() {
         return (MainMenuBar) super.getJMenuBar();
     }
-
 
     /**
      *
@@ -193,7 +288,6 @@ public class MainView
         return project;
     }
 
-
     /**
      * Sends update signal to project items
      */
@@ -202,22 +296,18 @@ public class MainView
         sourceController.update();
     }
 
-
     public void setToolbar(UnifiedToolBar toolbar) {
         this.toolbar = toolbar;
     }
-
 
     public UnifiedToolBar getToolbar() {
         return toolbar;
     }
 
     //***** message delegation *****//
-
     public void showWarningDialog(String mesg) {
         messages.addMessage(new WarningMessage(mesg));
     }
-
 
     public void showErrorDialog(String mesg) {
         messages.addMessage(new ErrorMessage(mesg));
@@ -239,7 +329,4 @@ public class MainView
         return;
 
     }
-
-
 }
-

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>mnb</artifactId>
         <groupId>uk.ac.ebi</groupId>
-        <version>${mnb.version}</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     <groupId>uk.ac.ebi</groupId>
     <artifactId>mnb-application</artifactId>
@@ -82,18 +82,18 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-importer</artifactId>
-            <version>${mnb.version}</version>
+            <artifactId>mnb-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-core</artifactId>
-            <version>${mnb.version}</version>
+            <artifactId>mnb-importer</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mnb-miscellaneous</artifactId>
-            <version>${mnb.version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
     <build>

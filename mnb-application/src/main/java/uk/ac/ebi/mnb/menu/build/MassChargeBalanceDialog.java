@@ -33,7 +33,7 @@ import javax.swing.border.Border;
 import mnb.view.old.TaskManager;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.metabolomes.core.reaction.ReactionBalancer;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 
 
 /**
@@ -56,7 +56,7 @@ public class MassChargeBalanceDialog
 
 
     public MassChargeBalanceDialog() {
-        super(MainView.getInstance(), MainView.getInstance(), "MassChargeBalance");
+        super(MainFrame.getInstance(), MainFrame.getInstance(), "MassChargeBalance");
         protonCheckBox = new JCheckBox("<html>H<sup>+</sup></html>");
         waterCheckBox = new JCheckBox("<html>H<sub>2</sub>O</html>");
         oxygenCheckBox = new JCheckBox("<html>O<sub>2</sub></html>");

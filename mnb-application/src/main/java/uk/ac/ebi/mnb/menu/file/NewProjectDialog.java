@@ -19,7 +19,7 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.mnb.io.TaxonomyMap;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 
 
@@ -45,7 +45,7 @@ public class NewProjectDialog extends DropdownDialog {
 
     public NewProjectDialog() {
 
-        super(MainView.getInstance(), MainView.getInstance(), "NewProject");
+        super(MainFrame.getInstance(), MainFrame.getInstance(), "NewProject");
 
         idField = new JTextField();
         codeField = new JTextField();
@@ -214,8 +214,8 @@ public class NewProjectDialog extends DropdownDialog {
 
     @Override
     public void update() {
-        MainView.getInstance().getProjectPanel().update();
-        MainView.getInstance().getSourceListController().update();
+        MainFrame.getInstance().getProjectPanel().update();
+        MainFrame.getInstance().getSourceListController().update();
     }
 
 

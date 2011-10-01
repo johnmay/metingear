@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.view.entity.EntityInspector;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 
 
 /**
@@ -89,7 +89,7 @@ public class InspectorToolbar
             @Override
             public void actionPerformed(ActionEvent e) {
                 inspector.store();
-                MainView.getInstance().getProjectPanel().update();
+                MainFrame.getInstance().getProjectPanel().update();
                 setViewMode();
             }
 

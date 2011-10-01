@@ -50,7 +50,7 @@ import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.mnb.view.AltPanel;
 import uk.ac.ebi.mnb.view.CheckBox;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
@@ -77,7 +77,7 @@ public class DownloadStructuresDialog
 
 
     public DownloadStructuresDialog() {
-        super(MainView.getInstance(), MainView.getInstance(), "DownloadStructures");
+        super(MainFrame.getInstance(), MainFrame.getInstance(), "DownloadStructures");
 
 
 
@@ -178,7 +178,7 @@ public class DownloadStructuresDialog
 
 
         if( problemIdentifiers.isEmpty() == false ) {
-            MainView.getInstance().showWarningDialog("Unable to download structure for; " +
+            MainFrame.getInstance().showWarningDialog("Unable to download structure for; " +
                                                      StringUtils.join(problemIdentifiers, ", "));
         }
 
@@ -188,7 +188,7 @@ public class DownloadStructuresDialog
 
     @Override
     public void update() {
-        MainView.getInstance().getProjectPanel().update();
+        MainFrame.getInstance().getProjectPanel().update();
     }
 
 

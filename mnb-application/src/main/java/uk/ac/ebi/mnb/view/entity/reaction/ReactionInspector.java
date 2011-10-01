@@ -35,7 +35,7 @@ import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.main.MainFrame;
 
 
 /**
@@ -92,7 +92,7 @@ public class ReactionInspector
         for( int i = 0 ; i < reactants.size() ; i++ ) {
             Metabolite m = reactants.get(i);
             panel.add(
-              new InternalLinkLabel(m, m.getName(), MainView.getInstance().getProjectPanel()),
+              new InternalLinkLabel(m, m.getName(), MainFrame.getInstance().getProjectPanel()),
               cc.xy(
               columnIndex, 1));
             columnIndex += i + 1 < reactants.size() ? 2 : 1;
@@ -101,7 +101,7 @@ public class ReactionInspector
         for( int i = 0 ; i < products.size() ; i++ ) {
             Metabolite m = products.get(i);
             panel.add(
-              new InternalLinkLabel(m, m.getName(), MainView.getInstance().getProjectPanel()),
+              new InternalLinkLabel(m, m.getName(), MainFrame.getInstance().getProjectPanel()),
               cc.xy(
               columnIndex, 1));
             columnIndex += i + 1 < products.size() ? 2 : 1;
