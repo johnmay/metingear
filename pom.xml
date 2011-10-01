@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>uk.ac.ebi</groupId>
+    <artifactId>mnb</artifactId>
+    <version>${mnb.version}</version>
+    <packaging>pom</packaging>
+    <name>mnb</name>
+    <modules>
+        <module>mnb-application</module>
+        <module>mnb-miscellaneous</module>
+        <module>mnb-model-importer</module>
+        <module>mnb-core</module>
+        <module>mnb-simulation</module>
+    </modules>
+
+    <properties>
+        <mnb.version>1.1-SNAPSHOT</mnb.version>
+    </properties>
+
+    <repositories>
+        
+        <repository>
+            <id>maven-repo</id>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>ibiblio</id>
+            <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <releases/>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>ebi-repo</id>
+            <name>EBI maven repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+        </repository>
+
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI maven snapshots repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
+        </repository>
+
+        <repository>
+            <id>biobabel-repo</id>
+            <url>${biobabel.maven.repo.url}</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>dev.java.net.2</id>
+            <name>java.net repository for Maven2</name>
+            <url>http://download.java.net/maven/2/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        
+        <repository>
+            <id>ambit-plovdiv</id>
+            <name>ambit-plovdiv</name>
+            <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        
+        <repository>
+            <id>rothamsted-bbsrc</id>
+            <name>rothamsted-bbsrc</name>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <url>http://ondex.rothamsted.bbsrc.ac.uk/nexus/content/repositories/public/</url>
+        </repository>
+        
+    </repositories>
+</project>
