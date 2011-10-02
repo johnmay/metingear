@@ -174,13 +174,13 @@ public class ProjectPanel
             SearchManager.getInstance().updateCurrentIndex(reconstruction);
         } catch( CorruptIndexException ex ) {
             logger.info(ex.getMessage());
-            MainFrame.getInstance().showWarningDialog("Unable to index component for searching");
+            MainFrame.getInstance().addWarningMessage("Unable to index component for searching");
         } catch( LockObtainFailedException ex ) {
             logger.info(ex.getMessage());
-            MainFrame.getInstance().showWarningDialog("Unable to index component for searching");
+            MainFrame.getInstance().addWarningMessage("Unable to index component for searching");
         } catch( IOException ex ) {
             logger.info(ex.getMessage());
-            MainFrame.getInstance().showWarningDialog("Unable to index component for searching");
+            MainFrame.getInstance().addWarningMessage("Unable to index component for searching");
         }
 
     }

@@ -74,12 +74,12 @@ public class ExportSBMLAction
             writer.write(document, sbmlOut);
 
         } catch( IOException ex ) {
-            MainFrame.getInstance().showErrorDialog("Invalid file " + ex.getMessage());
+            MainFrame.getInstance().addErrorMessage("Invalid file " + ex.getMessage());
         } catch( SBMLException ex ) {
-            MainFrame.getInstance().showErrorDialog("There was an unknown error when exporting reconstruction to SBML" +
+            MainFrame.getInstance().addErrorMessage("There was an unknown error when exporting reconstruction to SBML" +
                                                    ex);
         } catch( XMLStreamException ex ) {
-            MainFrame.getInstance().showErrorDialog("Error writing SBML document to disk");
+            MainFrame.getInstance().addErrorMessage("Error writing SBML document to disk");
         }
 
     }

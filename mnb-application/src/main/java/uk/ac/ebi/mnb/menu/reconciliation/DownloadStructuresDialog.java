@@ -178,7 +178,7 @@ public class DownloadStructuresDialog
 
 
         if( problemIdentifiers.isEmpty() == false ) {
-            MainFrame.getInstance().showWarningDialog("Unable to download structure for; " +
+            MainFrame.getInstance().addWarningMessage("Unable to download structure for; " +
                                                      StringUtils.join(problemIdentifiers, ", "));
         }
 

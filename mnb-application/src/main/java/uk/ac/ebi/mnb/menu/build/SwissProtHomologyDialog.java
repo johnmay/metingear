@@ -133,7 +133,7 @@ public class SwissProtHomologyDialog
 
         // if there are no protein products then show a warning message
         if( products == null || products.length == 0 ) {
-            MainFrame.getInstance().showWarningDialog(
+            MainFrame.getInstance().addWarningMessage(
               "Cannot run UniProt/SwissProt homology, project contains no protein products.");
             return;
         }

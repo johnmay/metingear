@@ -47,24 +47,25 @@ import uk.ac.ebi.metabolomes.execs.CommandLineMain;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**
- * @name    FilterUniqueIsomers
+ * @name   FilterUniqueIsomers
  * @date    2011.07.26
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
- * @brief   Takes a CSV with InChI values and write molecules
+ *          Converts a CSV with InChI, InChIKey and AuxInfo columns and write molecules to
+ *          'cdk-generated.mol' file. Note each value should be prefixed with InChI=, InChIKey= and AuxInfo=
  *
  */
-public class FilterUniqueIsomers
+public class InChICSV2MDL
         extends CommandLineMain {
 
-    private static final Logger LOGGER = Logger.getLogger( FilterUniqueIsomers.class );
+    private static final Logger LOGGER = Logger.getLogger( InChICSV2MDL.class );
 
     public static void main( String[] args ) {
-        new FilterUniqueIsomers( args ).process();
+        new InChICSV2MDL( args ).process();
     }
 
-    private FilterUniqueIsomers( String[] args ) {
+    private InChICSV2MDL( String[] args ) {
         super( args );
     }
 
@@ -113,7 +114,7 @@ public class FilterUniqueIsomers
             reader.close();
 
             InChIGeneratorFactory INCHI_FACTORY = InChIGeneratorFactory.getInstance();
-            MDLV2000Writer writer = new MDLV2000Writer( new FileOutputStream( "cdk-generated" + ".mol" ) );
+            MDLV2000Writer writer = new MDLV2000Writer( new FileOutputStream( "cdk-generated.mol" ) );
 
 
             for ( InChI inchi : inchis ) {

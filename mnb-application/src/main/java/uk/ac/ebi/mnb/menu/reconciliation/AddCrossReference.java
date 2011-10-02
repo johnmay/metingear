@@ -60,12 +60,12 @@ public class AddCrossReference
         uk.ac.ebi.mnb.view.entity.EntityView view = MainFrame.getInstance().getProjectPanel().
           getActiveView();
         if( view == null ) {
-            MainFrame.getInstance().showErrorDialog( "Unable to add cross reference, no active view available");
+            MainFrame.getInstance().addErrorMessage( "Unable to add cross reference, no active view available");
 
         } else {
             AnnotatedEntity reconComponent = view.getSelectedEntity();
             if( reconComponent == null ) {
-                MainFrame.getInstance().showErrorDialog("Unable to add cross reference, no active component available");
+                MainFrame.getInstance().addErrorMessage("Unable to add cross reference, no active component available");
             } else {
                 dialog.setComponent(reconComponent);
                 dialog.setVisible(true);

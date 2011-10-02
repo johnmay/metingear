@@ -41,7 +41,7 @@ import org.apache.lucene.store.LockObtainFailedException;
 
 import com.explodingpixels.macwidgets.*;
 import com.jgoodies.forms.factories.Borders;
-import com.jgoodies.forms.layout.CellConstraints;
+import org.apache.log4j.Logger;
 
 /**
  * MainView.java
@@ -56,25 +56,13 @@ public class MainFrame
         extends JFrame
         implements DialogController {
 
-    private static final org.apache.log4j.Logger LOGGER =
-            org.apache.log4j.Logger.getLogger(MainFrame.class);
-    private UnifiedToolBar toolbar;
-    private JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+    private static final Logger LOGGER = Logger.getLogger(MainFrame.class);
+    private UnifiedToolBar toolbar; //TODO: wrap in class
+    private JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT); //TODO wrap
     private ProjectPanel project = new ProjectPanel();
     private MessageManager messages = new MessageManager();
-    private SourceController sourceController;
-    private JTextField searchField = new JTextField(10); // move to a toolbar wraping class
-
-    /**
-     *
-     * Singleton access method
-     * 
-     * @return Instance of MainView
-     *
-     */
-    public static MainFrame getInstance() {
-        return MainViewHolder.INSTANCE;
-    }
+    private SourceController sourceController; //TODO:  move to SourceList wrapping class
+    private JTextField searchField = new JTextField(10); //TODO:  move to a toolbar wraping class
 
     /**
      * Inner class holding the instance
@@ -92,14 +80,11 @@ public class MainFrame
         MacUtils.makeWindowLeopardStyle(getRootPane());
 
         // toolbar
-        UnifiedToolBar toolbar = new UnifiedToolBar();
-        CellConstraints cc = new CellConstraints();
-        add(toolbar.getComponent(), BorderLayout.NORTH);
-        searchField.putClientProperty("JTextField.variant", "search");
+        toolbar = new UnifiedToolBar();
+        searchField.putClientProperty("JTextField.variant", "search"); // makes the search bar rounded
         toolbar.addComponentToRight(new LabeledComponentGroup("Search", searchField).getComponent());
         toolbar.addComponentToCenter(new IconButton(new NewProjectAction()));
         toolbar.addComponentToCenter(new IconButton(new AddCrossReference()));
-        setToolbar(toolbar);
 
         // search field
         searchField.getDocument().addDocumentListener(new DocumentListener() {
@@ -179,8 +164,7 @@ public class MainFrame
         });
 
 
-
-        // 4 x 3 size
+        // default size currently: 4 x 3
         Dimension dimensions = Toolkit.getDefaultToolkit().getScreenSize();
         setSize((int) ((float) dimensions.height * (4f / 3f)), dimensions.height);
 
@@ -189,27 +173,20 @@ public class MainFrame
         // menu bar
         setJMenuBar(new MainMenuBar());
 
-        // source list
+        // source list (todo: wrap in a class MNBSourceList)
         sourceController = new SourceController();
-        SourceList list = new SourceList(sourceController.model);
+        SourceList source = new SourceList(sourceController.model);
         SourceListControlBar controlBar = new SourceListControlBar();
         controlBar.installDraggableWidgetOnSplitPane(pane);
-        controlBar.createAndAddButton(ViewUtils.createImageIcon("images/cutout/plus_16x16.png", ""), null);
-        controlBar.createAndAddPopdownButton(ViewUtils.createImageIcon("images/cutout/arrow_cog_16x16.png", ""), sourceController);
-        pane.setDividerLocation(300);
+        controlBar.createAndAddButton(MacIcons.PLUS, null);
+        controlBar.createAndAddPopdownButton(MacIcons.GEAR, sourceController);
+        pane.setDividerLocation((int) ((float) getWidth() * 0.25)); // 25 % of the width
         pane.setBorder(Borders.EMPTY_BORDER);
-        pane.add(list.getComponent(), JSplitPane.LEFT);
-        list.installSourceListControlBar(controlBar);
-        list.addSourceListSelectionListener(sourceController);
-        list.addSourceListClickListener(sourceController);
+        pane.add(source.getComponent(), JSplitPane.LEFT);
+        source.installSourceListControlBar(controlBar);
+        source.addSourceListSelectionListener(sourceController);
+        source.addSourceListClickListener(sourceController);
         //list.setColorScheme(new SourceListDarkColorScheme());
-
-        messages.setVisible(false);
-
-        //
-        this.add(pane, BorderLayout.CENTER);
-        this.add(messages, BorderLayout.SOUTH);
-
         // setup the pane
         pane.add(project, JSplitPane.RIGHT);
         pane.setContinuousLayout(true);
@@ -218,6 +195,12 @@ public class MainFrame
         // paint hairline border
         ((BasicSplitPaneUI) pane.getUI()).getDivider().setBorder(
                 BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
+
+
+        // main layout
+        this.add(toolbar.getComponent(), BorderLayout.NORTH);
+        this.add(pane, BorderLayout.CENTER);
+        this.add(messages, BorderLayout.SOUTH);
 
         addComponentListener(new ComponentAdapter() {
 
@@ -234,14 +217,7 @@ public class MainFrame
 
     }
 
-    /**
-     * Access the source list controller
-     * @return
-     */
-    public SourceController getSourceListController() {
-        return sourceController;
-    }
-
+    /** Dialog placement **/
     /**
      * 
      * Updates the currently displayed dialogs to the correct position of the frame
@@ -260,7 +236,69 @@ public class MainFrame
     }
 
     /**
-     * Returns the main menu bar (MainMenuBar) from the MainView
+     *
+     * Places the provided dialog in a drop down location under the toolbar
+     * @param dialog
+     *
+     */
+    public void place(DropdownDialog dialog) {
+
+        int x = toolbar.getComponent().getLocationOnScreen().x
+                + toolbar.getComponent().getWidth() / 2 - dialog.getWidth() / 2;
+        int y = toolbar.getComponent().getLocationOnScreen().y
+                + toolbar.getComponent().getHeight(); // height should change only screen location
+
+        dialog.setLocation(x, y);
+
+        return;
+
+    }
+
+    /**
+     *
+     * Sends update signal to project items and source list
+     * 
+     */
+    public void update() {
+        project.update();
+        sourceController.update();
+    }
+
+    /** Message delegation **/
+    /**
+     * 
+     * Adds a warning message in the message controller
+     * @param mesg Short and concise description of the warning
+     *
+     */
+    public void addWarningMessage(String mesg) {
+        messages.addMessage(new WarningMessage(mesg));
+    }
+
+    /**
+     *
+     * Adds an error message in the message controller
+     * @param mesg Short and concise description of the error
+     *
+     */
+    public void addErrorMessage(String mesg) {
+        messages.addMessage(new ErrorMessage(mesg));
+    }
+
+    /* Getters/Setters */
+    /**
+     *
+     * Singleton access method
+     *
+     * @return Instance of MainView
+     *
+     */
+    public static MainFrame getInstance() {
+        return MainViewHolder.INSTANCE;
+    }
+
+    /**
+     * Access the attached menu bar
      * @return
      */
     @Override
@@ -279,44 +317,18 @@ public class MainFrame
     }
 
     /**
-     * Sends update signal to project items
+     * Access the displayed tool-bar
+     * @return
      */
-    public void update() {
-        project.update();
-        sourceController.update();
-    }
-
-    public void setToolbar(UnifiedToolBar toolbar) {
-        this.toolbar = toolbar;
-    }
-
     public UnifiedToolBar getToolbar() {
         return toolbar;
     }
 
-    //***** message delegation *****//
-    public void showWarningDialog(String mesg) {
-        messages.addMessage(new WarningMessage(mesg));
-    }
-
-    public void showErrorDialog(String mesg) {
-        messages.addMessage(new ErrorMessage(mesg));
-    }
-
     /**
-     *
-     * Places the provided dialog in a drop down location under the toolbar
-     * @param dialog
-     * 
+     * Access the source list controller
+     * @return
      */
-    public void place(DropdownDialog dialog) {
-
-        int x = toolbar.getComponent().getLocationOnScreen().x + toolbar.getComponent().getWidth() / 2 - dialog.getWidth() / 2;
-        int y = toolbar.getComponent().getLocationOnScreen().y + toolbar.getComponent().getHeight();
-
-        dialog.setLocation(x, y);
-
-        return;
-
+    public SourceController getSourceListController() {
+        return sourceController;
     }
 }

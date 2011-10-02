@@ -46,7 +46,7 @@ public class ExportSIFAction
     public void activateActions() {
         MatrixView matrixView = MainFrame.getInstance().getProjectPanel().getMatrixView();
         if ( matrixView == null ) {
-            MainFrame.getInstance().showErrorDialog( "Unable to obtain the matrix from the project. Have you used Build > StoichiometricMatrix before exporting"  );
+            MainFrame.getInstance().addErrorMessage( "Unable to obtain the matrix from the project. Have you used Build > StoichiometricMatrix before exporting"  );
             return;
         }
         MatrixModel model = matrixView.getModel();
@@ -71,7 +71,7 @@ public class ExportSIFAction
             model.toTextFile( fw );
             fw.close();
         } catch ( IOException ex ) {
-            MainFrame.getInstance().showErrorDialog("There was a problem when writing " + choosenFile);
+            MainFrame.getInstance().addErrorMessage("There was a problem when writing " + choosenFile);
         }
 
 

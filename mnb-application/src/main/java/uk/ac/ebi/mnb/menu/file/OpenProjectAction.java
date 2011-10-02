@@ -79,12 +79,12 @@ public class OpenProjectAction
 
 
             }  catch( IOException ex ) {
-                MainFrame.getInstance().showErrorDialog(
+                MainFrame.getInstance().addErrorMessage(
                   "Unable to load project " + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
                 ex.printStackTrace();
             } catch( ClassNotFoundException ex ) {
                 ex.printStackTrace();
-                MainFrame.getInstance().showErrorDialog(
+                MainFrame.getInstance().addErrorMessage(
                   "Unable to load project: " +
                   ex.getStackTrace().toString().replaceAll("\n", "<br>"));
             }

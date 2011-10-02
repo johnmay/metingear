@@ -5,7 +5,7 @@
     <parent>
         <artifactId>mnb</artifactId>
         <groupId>uk.ac.ebi</groupId>
-        <version>${mnb.version}</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     <groupId>uk.ac.ebi</groupId>
     <artifactId>mnb-miscellaneous</artifactId>
@@ -70,8 +70,8 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>Importer</artifactId>
-            <version>1.0</version>
+            <artifactId>mnb-importer</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

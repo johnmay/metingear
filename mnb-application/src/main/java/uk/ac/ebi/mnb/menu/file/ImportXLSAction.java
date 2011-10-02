@@ -89,7 +89,7 @@ public class ImportXLSAction
                 System.out.println("done..");
 
             } catch( IOException ex ) {
-                MainFrame.getInstance().showErrorDialog("Unable to import Excel file: " + ex.
+                MainFrame.getInstance().addErrorMessage("Unable to import Excel file: " + ex.
                   getMessage());
             }
         }

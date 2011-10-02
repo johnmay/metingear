@@ -96,7 +96,7 @@ public class MessageManager extends JPanel {
         WARN_PAINT = new GradientPaint(0, 0, WARN_LOW, 0,
                                        getPreferredSize().height / 2, WARN_HIGH, true);
 
-
+        this.setVisible(false);
     }
 
 
