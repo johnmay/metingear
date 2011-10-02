@@ -14,44 +14,34 @@
  */
 package uk.ac.ebi.mnb.main;
 
-import com.explodingpixels.macwidgets.*;
-import java.awt.event.ComponentEvent;
-import com.jgoodies.forms.factories.Borders;
-
-
-import com.jgoodies.forms.layout.CellConstraints;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.Window;
-import java.awt.event.ComponentAdapter;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.List;
+
+import uk.ac.ebi.core.*;
+import uk.ac.ebi.mnb.core.*;
+import uk.ac.ebi.mnb.menu.MainMenuBar;
+import uk.ac.ebi.mnb.menu.file.NewProjectAction;
+import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
+import uk.ac.ebi.mnb.view.*;
+import uk.ac.ebi.mnb.view.entity.ProjectPanel;
+import uk.ac.ebi.mnb.view.labels.IconButton;
+import uk.ac.ebi.search.*;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.text.BadLocationException;
+
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.store.LockObtainFailedException;
-import uk.ac.ebi.core.AnnotatedEntity;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.menu.MainMenuBar;
-import uk.ac.ebi.mnb.view.DialogController;
-import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.mnb.view.entity.ProjectPanel;
-import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.mnb.menu.file.NewProjectAction;
-import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
-import uk.ac.ebi.mnb.view.MessageManager;
-import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.view.labels.IconButton;
-import uk.ac.ebi.search.SearchManager;
-import uk.ac.ebi.search.SearchableIndex;
+
+import com.explodingpixels.macwidgets.*;
+import com.jgoodies.forms.factories.Borders;
+import com.jgoodies.forms.layout.CellConstraints;
 
 /**
  * MainView.java
