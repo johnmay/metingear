@@ -77,8 +77,8 @@ public class MassChargeBalanceDialog
         builder.add(waterCheckBox, cc.xy(3, 5));
         builder.add(oxygenCheckBox, cc.xy(5, 5));
         builder.add(new JSeparator(), cc.xyw(1, 7, 5));
-        builder.add(getCloseButton(), cc.xy(3, 9));
-        builder.add(getRunButton(), cc.xy(5, 9));
+        builder.add(getClose(), cc.xy(3, 9));
+        builder.add(getActivate(), cc.xy(5, 9));
         add(builder.getPanel());
     }
 

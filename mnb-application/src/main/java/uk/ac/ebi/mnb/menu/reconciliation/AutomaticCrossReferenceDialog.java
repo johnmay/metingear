@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
-import uk.ac.ebi.mnb.view.AltPanel;
+import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.CheckBox;
 import uk.ac.ebi.mnb.view.DialogController;
 import uk.ac.ebi.mnb.view.DropdownDialog;
@@ -77,7 +77,7 @@ public class AutomaticCrossReferenceDialog
         CellConstraints cc = new CellConstraints();
 
         // options
-        JComponent selection = new AltPanel();
+        JComponent selection = new DialogPanel();
 
         selection.setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p"));
         selection.add(chebiCheckBox, cc.xy(1, 1));
@@ -85,10 +85,10 @@ public class AutomaticCrossReferenceDialog
         selection.add(keggCheckBox, cc.xy(1, 3));
 
         // close and run buttons
-        JComponent component = new AltPanel();
+        JComponent component = new DialogPanel();
         component.setLayout(new FormLayout("p:grow, right:min,4dlu ,right:min", "p"));
-        component.add(getCloseButton(), cc.xy(2, 1));
-        component.add(getRunButton(), cc.xy(4, 1));
+        component.add(getClose(), cc.xy(2, 1));
+        component.add(getActivate(), cc.xy(4, 1));
 
         add(new Label("Match name(s) to chemical databases"), cc.xy(2, 2));
         add(new JSeparator(JSeparator.HORIZONTAL), cc.xy(2, 4));

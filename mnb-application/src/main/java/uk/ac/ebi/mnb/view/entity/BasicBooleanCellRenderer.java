@@ -25,7 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.ApplicationPreferences;
+import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.labels.AltLabel;
 
 /**
@@ -46,7 +46,7 @@ public class BasicBooleanCellRenderer extends DefaultTableCellRenderer {
             int column) {
         
         this.setText((Boolean) value ? "Yes" : "No");
-        this.setFont(ApplicationPreferences.getInstance().getTheme().getBodyFont());
+        this.setFont(Settings.getInstance().getTheme().getBodyFont());
         
         return this;
         

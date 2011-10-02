@@ -1,4 +1,3 @@
-
 /**
  * EntityPanelFactory.java
  *
@@ -24,20 +23,21 @@ package uk.ac.ebi.mnb.view.entity;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
+import java.util.Collection;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import mnb.view.old.AnnotationsPanel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
+import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.TransparentTextField;
+import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.view.labels.Label;
-
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
@@ -46,23 +46,32 @@ import uk.ac.ebi.mnb.view.labels.Label;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class EntityPanelFactory {
+public abstract class EntityPanel
+        extends GeneralPanel {
 
-    private static final Logger LOGGER = Logger.getLogger(EntityPanelFactory.class);
+    private static final Logger LOGGER = Logger.getLogger(EntityPanel.class);
     private String type;
     private GeneralPanel basic = new GeneralPanel(
-      new FormLayout("p, p:grow, p, p:grow, p", "p, 4dlu, p"));
+            new FormLayout("p, p:grow, p, p:grow, p", "p, 4dlu, p"));
     private Label typeLabel = new Label();
     private JSeparator seperator = new JSeparator(JSeparator.HORIZONTAL);
     private JTextField accession = new TransparentTextField("", 10, false);
     private JTextField name = new TransparentTextField("", 35, false);
     private JTextField abbreviation = new TransparentTextField("", 10, false);
     private AnnotatedEntity entity;
+    private JPanel synopsis;
+    private JPanel references;
+    private JPanel annotations;
     private CellConstraints cc = new CellConstraints();
-    private AnnotationVisitor renderer;
+    private AnnotationRenderer renderer;
+    private JPanel middle;
+    private JPanel midleft;
 
+    public AnnotationVisitor getRenderer() {
+        return renderer;
+    }
 
-    public EntityPanelFactory(String type, AnnotationVisitor renderer) {
+    public EntityPanel(String type, AnnotationRenderer renderer) {
         this.type = type;
         typeLabel.setText(type);
         layoutBasicPanel();
@@ -71,40 +80,34 @@ public abstract class EntityPanelFactory {
         name.setHorizontalAlignment(SwingConstants.CENTER);
         accession.setHorizontalAlignment(SwingConstants.CENTER);
         abbreviation.setHorizontalAlignment(SwingConstants.CENTER);
-    }
-
-
-    public AnnotationVisitor getRenderer() {
-        return renderer;
-    }
-
-
-    public JPanel getPanel() {
-
-        GeneralPanel panel = new GeneralPanel();
-        panel.setBorder(Borders.DLU7_BORDER);
-
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-
-        panel.add(getBasicPanel());
-
-        JPanel midPanel = new JPanel();
-        midPanel.setLayout(new BoxLayout(midPanel, BoxLayout.LINE_AXIS));
-        JPanel specifics = new JPanel();
-        specifics.setLayout(new BoxLayout(specifics, BoxLayout.PAGE_AXIS));
-
-        specifics.add(getSpecificsPanel());
-        specifics.add(getInternalReferencePanel());
-
-        midPanel.add(specifics);
-        midPanel.add(getAnnotationPanel());
-        panel.add(midPanel);
-
-
-        return panel;
 
     }
 
+    public void setup() {
+        // could move
+
+        synopsis = getSynopsis();
+        annotations = getAnnotationPanel();
+        references = getInternalReferencePanel();
+
+        setLayout(new FormLayout("p:grow", "p,p"));
+        setBorder(Borders.DLU7_BORDER);
+
+        add(getBasicPanel(), cc.xy(1, 1));
+
+        middle = new GeneralPanel(new FormLayout("p:grow, p", "p"));
+        midleft = new GeneralPanel(new FormLayout("p", "p, p"));
+
+
+        midleft.add(synopsis, cc.xy(1, 1));
+        midleft.add(references, cc.xy(1, 2));
+
+
+        middle.add(midleft, cc.xy(1, 1, CellConstraints.LEFT, CellConstraints.TOP));
+        middle.add(annotations, cc.xy(2, 1, CellConstraints.RIGHT, CellConstraints.TOP));
+        add(middle, cc.xy(1, 2));
+        //TODO add observations panel...
+    }
 
     /**
      * lays out the labels of the basic panel
@@ -116,20 +119,29 @@ public abstract class EntityPanelFactory {
         basic.add(seperator, cc.xyw(1, 3, 5));
     }
 
-
-    public GeneralPanel getBasicPanel() {
+    public JPanel getBasicPanel() {
         return basic;
     }
 
-
     public JPanel getAnnotationPanel() {
+
         JPanel panel = new GeneralPanel();
-        CellConstraints cc = new CellConstraints();
-        panel.setLayout(new FormLayout("p:grow", "p"));
-        panel.add(new Label("Annotations"), cc.xy(1, 1));
+
+
+        if (entity != null) {
+
+            Collection<Annotation> annotations = entity.getAnnotations();
+            panel.setLayout(ViewUtils.formLayoutHelper(2, annotations.size(), 4, 4));
+            int i = 1;
+            for (Annotation annotation : annotations) {
+                panel.add(renderer.getLabel(annotation), cc.xy(1, i));
+                panel.add((JComponent) renderer.visit(annotation), cc.xy(3, i)); // better way to do this would be with a method similar to table e.g. this.setText(), this.setLabel()
+                i += 2;
+            }
+        }
+
         return panel;
     }
-
 
     /**
      *
@@ -140,7 +152,7 @@ public abstract class EntityPanelFactory {
      */
     public boolean setEntity(AnnotatedEntity entity) {
 
-        if( this.entity == entity ) { // don't reset
+        if (this.entity == entity) { // don't reset
             return false;
         }
 
@@ -148,7 +160,6 @@ public abstract class EntityPanelFactory {
 
         return true;
     }
-
 
     /**
      * 
@@ -159,18 +170,20 @@ public abstract class EntityPanelFactory {
      */
     public boolean update() {
 
-        if( entity != null ) {
+        if (entity != null) {
             accession.setText(entity.getAccession());
             name.setText(entity.getName());
             name.setCaretPosition(0);
             abbreviation.setText(entity.getAbbreviation());
+            middle.remove(annotations);
+            annotations = getAnnotationPanel();
+            middle.add(annotations, cc.xy(2, 1, CellConstraints.RIGHT, CellConstraints.TOP));
             return true;
         }
 
         return false;
 
     }
-
 
     /**
      * Sets if the info is editable
@@ -182,7 +195,6 @@ public abstract class EntityPanelFactory {
         abbreviation.setEditable(editable);
     }
 
-
     /**
      * Persists changed information in the currently selected entity
      */
@@ -192,12 +204,7 @@ public abstract class EntityPanelFactory {
         entity.setName(name.getText().trim());
     }
 
-
-    public abstract JPanel getSpecificsPanel();
-
+    public abstract JPanel getSynopsis();
 
     public abstract JPanel getInternalReferencePanel();
-
-
 }
-

@@ -115,8 +115,8 @@ public class SwissProtHomologyDialog
         builder.add(maxSequenceSpinner, cc.xyw(3, componentConstraintY, 3));
         componentConstraintY += 2;
 
-        builder.add(getCloseButton(), cc.xy(3, componentConstraintY));
-        builder.add(getRunButton(), cc.xy(5, componentConstraintY));
+        builder.add(getClose(), cc.xy(3, componentConstraintY));
+        builder.add(getActivate(), cc.xy(5, componentConstraintY));
 
         add(builder.getPanel());
     }

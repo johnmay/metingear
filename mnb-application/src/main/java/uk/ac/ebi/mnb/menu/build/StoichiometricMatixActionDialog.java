@@ -60,8 +60,8 @@ public class StoichiometricMatixActionDialog
         PanelBuilder builder = new PanelBuilder(layout);
         builder.setDefaultDialogBorder();
         builder.add(new JSeparator(), cc.xyw(1, 1, 3));
-        builder.add(getCloseButton(), cc.xy(1, 5));
-        builder.add(getRunButton(), cc.xy(3, 5));
+        builder.add(getClose(), cc.xy(1, 5));
+        builder.add(getActivate(), cc.xy(3, 5));
         builder.add(new JSeparator(), cc.xyw(1, 7, 3));
         add(builder.getPanel());
     }

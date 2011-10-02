@@ -1,4 +1,3 @@
-
 /**
  * MetabolitePanel.java
  *
@@ -21,19 +20,21 @@
  */
 package uk.ac.ebi.mnb.view.entity.reaction;
 
-import uk.ac.ebi.mnb.view.entity.metabolite.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.Sizes;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.entity.EntityPanelFactory;
-
+import uk.ac.ebi.mnb.view.ReactionRenderer;
+import uk.ac.ebi.mnb.view.entity.EntityPanel;
+import uk.ac.ebi.mnb.view.labels.Label;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -43,29 +44,28 @@ import uk.ac.ebi.mnb.view.entity.EntityPanelFactory;
  * @author  $Author$ (this version)
  */
 public class ReactionPanel
-  extends EntityPanelFactory {
+        extends EntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionPanel.class);
     private MetabolicReaction entity;
-    private JLabel formula;
-    private JTextField generic;
-
+    private ReactionRenderer renderer = new ReactionRenderer();
+    private JLabel reactionLabel = new Label();
+    private CellConstraints cc = new CellConstraints();
 
     public ReactionPanel() {
         super("Metabolite", new AnnotationRenderer());
     }
-
 
     @Override
     public boolean update() {
 
 
         // update all fields and labels...
+        reactionLabel.setIcon(renderer.getReaction(entity));
 
         return super.update();
 
     }
-
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
@@ -73,22 +73,34 @@ public class ReactionPanel
         return super.setEntity(entity);
     }
 
-
     /**
      * Returns the specific information panel
      */
-    public JPanel getSpecificsPanel() {
+    public JPanel getSynopsis() {
 
-        JPanel panel = new JPanel();
+        JPanel panel = new GeneralPanel();
 
-        panel.setBackground(Color.LIGHT_GRAY);
-        panel.add(new JLabel("Metabolic Specifics"));
+        panel.add(new Label("Todo: Reaction Synopsis"));
 
 
         return panel;
 
     }
 
+    @Override
+    public JPanel getBasicPanel() {
+
+        JPanel panel = super.getBasicPanel();
+
+        FormLayout layout = (FormLayout) panel.getLayout();
+
+        // add a row
+        layout.appendRow(new RowSpec(RowSpec.CENTER, Sizes.PREFERRED, RowSpec.DEFAULT_GROW));
+        panel.add(reactionLabel, cc.xyw(1, layout.getRowCount(), layout.getColumnCount(), cc.CENTER, cc.CENTER));
+
+        return panel;
+
+    }
 
     /**
      * Returns the internal reference panel information panel
@@ -103,7 +115,4 @@ public class ReactionPanel
         return panel;
 
     }
-
-
 }
-

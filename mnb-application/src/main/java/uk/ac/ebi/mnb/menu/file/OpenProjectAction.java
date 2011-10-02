@@ -19,7 +19,7 @@ import uk.ac.ebi.mnb.io.FileFilterManager;
 import uk.ac.ebi.mnb.io.ProjectFilter;
 import uk.ac.ebi.mnb.main.SourceController;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.mnb.core.ApplicationPreferences;
+import uk.ac.ebi.mnb.settings.Settings;
 
 
 /**

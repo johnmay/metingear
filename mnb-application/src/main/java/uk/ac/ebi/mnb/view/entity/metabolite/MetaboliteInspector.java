@@ -44,14 +44,7 @@ public class MetaboliteInspector
   extends EntityInspector {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteInspector.class);
-    private static final BoldLabel idLabel = new BoldLabel("Identifier");
-    private static final BoldLabel nameLabel = new BoldLabel("Name");
-    private static final BoldLabel genericLabel = new BoldLabel("Generic");
-    private static final JTextField idField = new TransparentTextField();
-    private static final JTextField nameField = new TransparentTextField();
-    private static final JTextField genericField = new TransparentTextField();
-
-
+  
     public MetaboliteInspector() {
         super(new MetabolitePanel());
     }

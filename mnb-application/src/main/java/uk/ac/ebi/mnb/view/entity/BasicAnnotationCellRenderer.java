@@ -30,7 +30,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import uk.ac.ebi.mnb.view.labels.Label;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.ApplicationPreferences;
+import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.labels.AltLabel;
 
 
@@ -52,7 +52,7 @@ public class BasicAnnotationCellRenderer extends DefaultTableCellRenderer {
                                                    boolean isSelected, boolean hasFocus, int row,
                                                    int column) {
 
-        this.setFont(ApplicationPreferences.getInstance().getTheme().getBodyFont());
+        this.setFont(Settings.getInstance().getTheme().getBodyFont());
 
         if( value instanceof Collection ) {
 

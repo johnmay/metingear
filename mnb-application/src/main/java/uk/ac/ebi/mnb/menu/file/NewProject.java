@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.mnb.menu.file;
 
-import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.Locale;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -20,8 +20,10 @@ import uk.ac.ebi.mnb.io.TaxonomyMap;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.view.DialogPanel;
+import uk.ac.ebi.mnb.view.labels.BoldLabel;
+import uk.ac.ebi.mnb.view.labels.Label;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
-
 
 /**
  * NewProjectDialog.java
@@ -30,11 +32,11 @@ import uk.ac.ebi.resource.ReconstructionIdentifier;
  * @author johnmay
  * @date Apr 13, 2011
  */
-public class NewProjectDialog extends DropdownDialog {
+public class NewProject extends DropdownDialog {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-      NewProjectDialog.class);
+            org.apache.log4j.Logger.getLogger(
+            NewProject.class);
     private boolean fieldsAreValid = true;
     private JTextField idField;
     private JTextField codeField;
@@ -42,47 +44,51 @@ public class NewProjectDialog extends DropdownDialog {
     private JTextField nameField;
     private JTextField kingdomField;
 
+    public NewProject() {
 
-    public NewProjectDialog() {
+        super(MainFrame.getInstance(), "NewProject");
 
-        super(MainFrame.getInstance(), MainFrame.getInstance(), "NewProject");
+        idField = new JTextField(15);
+        codeField = new JTextField(5);
+        taxonField = new JTextField(5);
+        nameField = new JTextField(15);
+        kingdomField = new JTextField(10);
 
-        idField = new JTextField();
-        codeField = new JTextField();
-        taxonField = new JTextField();
-        nameField = new JTextField();
-        kingdomField = new JTextField();
+        setDefaultLayout();
 
+    }
 
+    @Override
+    public JLabel getDescription() {
+        JLabel label = super.getDescription();
+        label.setText("Create a new project");
+        return label;
+    }
+
+    @Override
+    public JPanel getOptions() {
 
         FormLayout layout = new FormLayout(
-          "right:max(50dlu;p), 4dlu, 75dlu, 7dlu, right:p, 4dlu, 75dlu",
-          "p, 2dlu, p, 3dlu, p, 3dlu, p, 7dlu, " +
-          "p, 2dlu, p, 3dlu, p, 3dlu, p");
-        PanelBuilder builder = new PanelBuilder(layout);
-        builder.setDefaultDialogBorder();
+                "right:p, 4dlu, p, 4dlu, p, 4dlu, p",
+                "p, 4dlu, p, 4dlu, p");
+        JPanel panel = new DialogPanel(layout);
         CellConstraints cc = new CellConstraints();
 
-        builder.addSeparator("New Project", cc.xyw(1, 1, 7));
-        builder.addLabel("Identifier", cc.xy(1, 3));
-        builder.add(idField, cc.xy(3, 3));
-
-        builder.addSeparator("Organism Details", cc.xyw(1, 9, 7));
-        builder.addLabel("Code", cc.xy(1, 11));
-        builder.add(codeField, cc.xy(3, 11));
-        builder.addLabel("Taxon", cc.xy(5, 11));
-        builder.add(taxonField, cc.xy(7, 11));
-
-        builder.addLabel("Official Name", cc.xy(1, 13));
-        builder.add(nameField, cc.xy(3, 13));
-        builder.addLabel("Kingdom", cc.xy(5, 13));
-        builder.add(kingdomField, cc.xy(7, 13));
+        panel.add(new BoldLabel("Reconstuction Accession:"), cc.xy(5, 1));
+        panel.add(idField, cc.xy(7, 1));
 
 
-        builder.add(getCloseButton(), cc.xy(3, 15));
-        builder.add(getRunButton(), cc.xy(7, 15));
+        panel.add(new BoldLabel("Code:"), cc.xy(1, 3));
+        panel.add(codeField, cc.xy(3, 3));
+        panel.add(new BoldLabel("Official Name:"), cc.xy(5, 3));
+        panel.add(nameField, cc.xy(7, 3));
 
-        add(builder.getPanel());
+        panel.add(new BoldLabel("Taxon:"), cc.xy(1, 5));
+        panel.add(taxonField, cc.xy(3, 5));
+        panel.add(new BoldLabel("Kingdom:"), cc.xy(5, 5));
+        panel.add(kingdomField, cc.xy(7, 5));
+
+
 
         // load this here (doesn't take that long but saves the user waiting for a response)
         TaxonomyMap.getInstance();
@@ -94,30 +100,25 @@ public class NewProjectDialog extends DropdownDialog {
                 autoSetFromCode();
             }
 
-
             public void removeUpdate(DocumentEvent e) {
             }
 
-
             public void changedUpdate(DocumentEvent e) {
             }
-
-
         });
 
 
+        return panel;
+
 
     }
-
-
     private boolean autoSetting = false;
-
 
     private void autoSetFromCode() {
         String code = codeField.getText().trim().toUpperCase(Locale.ENGLISH);
-        if( code.length() == 5 ) {
+        if (code.length() == 5) {
             final Taxonomy details = TaxonomyMap.getInstance().get(code);
-            if( details != null ) {
+            if (details != null) {
                 taxonField.setText(Integer.toString(details.getTaxon()));
                 kingdomField.setText(details.getKingdom().name());
                 nameField.setText(details.getOfficialName());
@@ -126,23 +127,21 @@ public class NewProjectDialog extends DropdownDialog {
         autoSetting = false;
     }
 
-
     public String getCode() {
         String code = codeField.getText();
         // could check against db also
-        if( code.isEmpty() || code.length() != 5 ) {
+        if (code.isEmpty() || code.length() != 5) {
             flagAsInvalidInput("Organism code", code,
-                               "five letter code for organism (e.g. MYTUB, SPEPQ)");
+                    "five letter code for organism (e.g. MYTUB, SPEPQ)");
         }
         return code;
     }
 
-
     public Kingdom getKingdom() {
         String type = kingdomField.getText();
-        if( type.isEmpty() ) {
+        if (type.isEmpty()) {
             flagAsInvalidInput("Kingdom type", kingdomField.getText(),
-                               "type of organism (A) Archea, (B) Bacteria, (V) Virus etc.");
+                    "type of organism (A) Archea, (B) Bacteria, (V) Virus etc.");
             return Kingdom.UNDEFINED;
         }
         return Kingdom.getKingdom(type);
@@ -150,44 +149,39 @@ public class NewProjectDialog extends DropdownDialog {
 
     }
 
-
     public String getOfficialName() {
         String name = nameField.getText();
-        if( name.isEmpty() ) {
+        if (name.isEmpty()) {
             flagAsInvalidInput("Official Name", name, "non empty name for organism");
         }
         return name;
     }
 
-
     public Integer getTaxon() {
         try {
             return Integer.parseInt(taxonField.getText());
-        } catch( NumberFormatException ex ) {
+        } catch (NumberFormatException ex) {
             flagAsInvalidInput("Taxon code", taxonField.getText(),
-                               "five digit taxon code (e.g. 12342)");
+                    "five digit taxon code (e.g. 12342)");
             return 0;
         }
     }
 
-
     public String getProjectIdentifier() {
-        if( idField.getText().isEmpty() ) {
+        if (idField.getText().isEmpty()) {
             return getOfficialName();
         }
         return idField.getText();
     }
 
-
     public void flagAsInvalidInput(String label, String found, String expected) {
-        JOptionPane.showMessageDialog(this, label +
-                                            " input '" +
-                                            found +
-                                            "' is not a valid. Expected '" +
-                                            expected + "'!");
+        JOptionPane.showMessageDialog(this, label
+                + " input '"
+                + found
+                + "' is not a valid. Expected '"
+                + expected + "'!");
         fieldsAreValid = false;
     }
-
 
     @Override
     public void process() {
@@ -199,7 +193,7 @@ public class NewProjectDialog extends DropdownDialog {
         Kingdom kingdom = getKingdom();
         String name = getOfficialName();
 
-        if( fieldsAreValid ) {
+        if (fieldsAreValid) {
 
             Taxonomy orgId = new Taxonomy(taxon, code, kingdom, name, name);
             ReconstructionIdentifier proId = new ReconstructionIdentifier(getProjectIdentifier());
@@ -211,13 +205,9 @@ public class NewProjectDialog extends DropdownDialog {
         }
     }
 
-
     @Override
     public void update() {
         MainFrame.getInstance().getProjectPanel().update();
         MainFrame.getInstance().getSourceListController().update();
     }
-
-
 }
-

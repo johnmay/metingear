@@ -41,7 +41,7 @@ import uk.ac.ebi.mnb.view.ComboBox;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.view.entity.EntityPanelFactory;
+import uk.ac.ebi.mnb.view.entity.EntityPanel;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
 import uk.ac.ebi.mnb.view.labels.Label;
 import uk.ac.ebi.mnb.view.labels.WarningLabel;
@@ -55,7 +55,7 @@ import uk.ac.ebi.mnb.view.labels.WarningLabel;
  * @author  $Author$ (this version)
  */
 public class MetabolitePanel
-  extends EntityPanelFactory {
+  extends EntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolitePanel.class);
     private Metabolite entity;
@@ -80,7 +80,7 @@ public class MetabolitePanel
     public MetabolitePanel() {
         super("Metabolite", new AnnotationRenderer());
 
-        buildSpecificPanel();
+        buildSynopsis();
     }
 
 
@@ -146,21 +146,15 @@ public class MetabolitePanel
     /**
      * Returns the specific information panel
      */
-    public JPanel getSpecificsPanel() {
-
-
-
-
-
+    public JPanel getSynopsis() {
         return specific;
-
     }
 
 
     /**
      * Builds entity specific panel
      */
-    private void buildSpecificPanel() {
+    private void buildSynopsis() {
         specific = new GeneralPanel();
         specific.setLayout(new FormLayout("p:grow, 4dlu, p:grow, 4dlu, p:grow, 4dlu, p:grow",
                                           "p, 4dlu, p, 4dlu, p"));

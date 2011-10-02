@@ -17,7 +17,7 @@ public class NewProjectAction
     extends DelayedBuildAction {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( NewProjectAction.class );
-    private NewProjectDialog dialog;
+    private NewProject dialog;
 
     public NewProjectAction() {
         super( "NewProject" );
@@ -30,6 +30,6 @@ public class NewProjectAction
 
     @Override
     public void buildComponents() {
-        dialog = new NewProjectDialog();
+        dialog = new NewProject();
     }
 }

@@ -35,7 +35,7 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.mnb.main.MainFrame;
-import uk.ac.ebi.mnb.view.AltPanel;
+import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.resource.IdentifierFactory;
 
 
@@ -83,17 +83,17 @@ public class AddCrossReferenceDialog extends DropdownDialog {
         CellConstraints cc = new CellConstraints();
 
         // options
-        JComponent selection = new AltPanel();
+        JComponent selection = new DialogPanel();
         selection.setLayout(new FormLayout("p, 4dlu, p", "p"));
         selection.add(type, cc.xy(1, 1));
         selection.add(accession, cc.xy(3, 1));
 
 
         // close and run buttons
-        JComponent component = new AltPanel();
+        JComponent component = new DialogPanel();
         component.setLayout(new FormLayout("left:p, pref:grow, right:p", "p"));
-        component.add(getCloseButton(), cc.xy(1, 1));
-        component.add(getRunButton(), cc.xy(3, 1));
+        component.add(getClose(), cc.xy(1, 1));
+        component.add(getActivate(), cc.xy(3, 1));
 
         add(selection, cc.xy(2, 2));
         add(component, cc.xy(2, 4));

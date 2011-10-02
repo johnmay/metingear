@@ -21,16 +21,13 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import chemaxon.jchem.cartridge.costestim.calibra.IdxCalibrator;
 import com.jgoodies.forms.factories.Borders;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
-import uk.ac.ebi.mnb.core.ApplicationPreferences;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;

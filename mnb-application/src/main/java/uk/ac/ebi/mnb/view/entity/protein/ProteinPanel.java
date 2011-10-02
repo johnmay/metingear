@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.entity.EntityPanelFactory;
+import uk.ac.ebi.mnb.view.entity.EntityPanel;
 
 
 /**
@@ -40,7 +40,7 @@ import uk.ac.ebi.mnb.view.entity.EntityPanelFactory;
  * @author  $Author$ (this version)
  */
 public class ProteinPanel
-  extends EntityPanelFactory {
+  extends EntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(ProteinPanel.class);
     private GeneProduct entity;
@@ -74,7 +74,7 @@ public class ProteinPanel
     /**
      * Returns the specific information panel
      */
-    public JPanel getSpecificsPanel() {
+    public JPanel getSynopsis() {
 
         JPanel panel = new JPanel();
 

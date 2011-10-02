@@ -18,15 +18,6 @@
 package uk.ac.ebi.mnb.view.entity.reaction;
 
 import uk.ac.ebi.mnb.view.entity.EntityView;
-import java.awt.BorderLayout;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import uk.ac.ebi.mnb.view.labels.EmphasizedLabel;
-import uk.ac.ebi.mnb.view.labels.Label;
-import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteInspector;
-import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteTable;
 
 
 /**

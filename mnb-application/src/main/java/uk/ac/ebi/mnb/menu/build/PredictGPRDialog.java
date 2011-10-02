@@ -54,8 +54,8 @@ public class PredictGPRDialog
         builder.setDefaultDialogBorder();
         builder.add(new Label("Gene-Protein-Reaction"), cc.xyw(1, 1, 3));
         builder.add(new JSeparator(), cc.xyw(1, 3, 3));
-        builder.add(getCloseButton(), cc.xy(1, 5));
-        builder.add(getRunButton(), cc.xy(3, 5));
+        builder.add(getClose(), cc.xy(1, 5));
+        builder.add(getActivate(), cc.xy(3, 5));
         add(builder.getPanel());
     }
 
