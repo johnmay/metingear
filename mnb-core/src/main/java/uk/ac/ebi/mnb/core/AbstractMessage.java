@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.mnb.core;
 
-import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.interfaces.Message;
 
 
 /**
@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class Message {
+public class AbstractMessage implements Message {
 
    
     private final String mesage;
@@ -39,13 +39,13 @@ public class Message {
 
     
 
-    public Message(String mesage) {
+    public AbstractMessage(String mesage) {
         this.mesage = mesage;
     }
 
 
 
-    public String getMesage() {
+    public String getMessage() {
         return mesage;
     }
 

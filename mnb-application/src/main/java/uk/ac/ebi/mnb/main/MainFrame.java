@@ -43,6 +43,8 @@ import org.apache.lucene.store.LockObtainFailedException;
 import com.explodingpixels.macwidgets.*;
 import com.jgoodies.forms.factories.Borders;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.interfaces.MainController;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 
 /**
@@ -56,13 +58,13 @@ import uk.ac.ebi.mnb.interfaces.ViewController;
  */
 public class MainFrame
         extends JFrame
-        implements DialogController {
+        implements DialogController, MainController {
 
     private static final Logger LOGGER = Logger.getLogger(MainFrame.class);
     private UnifiedToolBar toolbar; //TODO: wrap in class
     private JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT); //TODO wrap
     private ProjectView project = new ProjectView();
-    private MessageManager messages = new MessageManager();
+    private MessageManager messages = new MessageBar();
     private SourceController sourceController; //TODO:  move to SourceList wrapping class
     private JTextField searchField = new JTextField(10); //TODO:  move to a toolbar wraping class
 
@@ -200,7 +202,7 @@ public class MainFrame
 
         Box topbar = Box.createVerticalBox();
         topbar.add(toolbar.getComponent());
-        topbar.add(messages);
+        topbar.add((MessageBar) messages);
 
         // main layout
         this.add(topbar, BorderLayout.NORTH);
@@ -217,7 +219,6 @@ public class MainFrame
             public void componentResized(ComponentEvent e) {
                 messages.update();
             }
-            
         });
 
     }
@@ -291,6 +292,10 @@ public class MainFrame
         messages.addMessage(new ErrorMessage(mesg));
     }
 
+    public MessageManager getMessageManager() {
+        return messages;
+    }
+
     /* Getters/Setters */
     /**
      *
@@ -337,4 +342,9 @@ public class MainFrame
     public SourceController getSourceListController() {
         return sourceController;
     }
+
+    public DialogController getDialogController() {
+        return this;
+    }
+    
 }

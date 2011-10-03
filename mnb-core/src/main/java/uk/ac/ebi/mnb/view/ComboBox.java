@@ -1,4 +1,3 @@
-
 /**
  * ComboBox.java
  *
@@ -26,7 +25,6 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.theme.Theme;
 
-
 /**
  *          ComboBox – 2011.09.30 <br>
  *          Class description
@@ -38,21 +36,16 @@ public class ComboBox extends JComboBox {
 
     private static final Logger LOGGER = Logger.getLogger(ComboBox.class);
 
-
     public ComboBox() {
         Theme theme = Settings.getInstance().getTheme();
         setForeground(theme.getForeground());
         setFont(theme.getBodyFont());
     }
-
-
+    
     public ComboBox(Object... items) {
         super(items);
         Theme theme = Settings.getInstance().getTheme();
         setForeground(theme.getForeground());
         setFont(theme.getBodyFont());
     }
-
-
 }
-

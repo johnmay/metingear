@@ -20,10 +20,12 @@ package uk.ac.ebi.mnb.dialog.tools;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
+import com.google.common.collect.Multimap;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.JCheckBox;
@@ -40,6 +42,9 @@ import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
+import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
+import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
+import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
 import uk.ac.ebi.mnb.core.TooltipLabel;
 import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.interfaces.ViewController;
@@ -47,6 +52,7 @@ import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.CheckBox;
 import uk.ac.ebi.mnb.view.ComboBox;
 import uk.ac.ebi.mnb.view.SelectionDialog;
+import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 
 /**
  *          AutomaticCrossReferenceDialog – 2011.09.30 <br>
@@ -123,12 +129,33 @@ public class AutomaticCrossReference
         boolean useKegg = kegg.isSelected();
 
         chebiClient.setStarsCategory(chebiAll.isSelected() ? StarsCategory.ALL : StarsCategory.THREE_ONLY);
+
         chebiClient.setMaxResults((Integer) results.getValue());
+        keggClient.setMaxResults((Integer) results.getValue());
+
+        List<CandidateFactory> factories = new ArrayList<CandidateFactory>();
+        if (useChEBI) {
+            factories.add(new CandidateFactory(chebiClient, new ChemicalFingerprintEncoder()));
+        }
+        if (useKegg) {
+            factories.add(new CandidateFactory(keggClient, new ChemicalFingerprintEncoder()));
+        }
 
         for (Metabolite metabolite : metabolties) {
-            if (useChEBI) {
-            }
-            if (useKegg) {
+            for (CandidateFactory factory : factories) {
+                Multimap<Integer, CandidateEntry> map = factory.getCandidates(metabolite.getName());
+                if (map.containsKey(0)) {
+                    for (CandidateEntry entry : map.get(0)) {
+                        metabolite.addAnnotation(factory.getCrossReference(entry));
+                    }
+                } else {
+                    Multimap<Integer, SynonymCandidateEntry> synonymMap = factory.getSynonymCandidates(metabolite.getName());
+                    if (synonymMap.containsKey(0)) {
+                        for (CandidateEntry entry : synonymMap.get(0)) {
+                            metabolite.addAnnotation(factory.getCrossReference(entry));
+                        }
+                    }
+                }
             }
         }
 
@@ -136,7 +163,7 @@ public class AutomaticCrossReference
 
     @Override
     public boolean update() {
-        // update
+        getController().update();
         return true;
     }
 }

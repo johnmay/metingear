@@ -22,22 +22,17 @@
 package mnb.io.resolve;
 
 import com.google.common.collect.Multimap;
-import java.util.ArrayList;
-import java.util.List;
 import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.metabolomes.identifier.UniqueIdentifier;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
-import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 

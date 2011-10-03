@@ -74,7 +74,7 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
     }
 
     @Deprecated
-    public AnnotatedEntity getSelectedEntity(){
+    public AnnotatedEntity getSelectedEntity() {
         throw new UnsupportedOperationException("Method deprecated and to be removed");
     }
 
@@ -116,7 +116,32 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
 
         }
 
+        requestFocusInWindow();
+
+
         return true;
 
+    }
+
+    /**
+     * Sets the selection in the table to that of the annotated entities. This method
+     * will request the focus of window as to allow easy copying
+     *
+     * @param entities
+     * @return
+     */
+    public boolean setSelection(Collection<? extends AnnotatedEntity> entities) {
+        removeRowSelectionInterval(0, getModel().getRowCount() - 1);
+
+        for (AnnotatedEntity entity : entities) {
+            int index = convertRowIndexToView(getModel().indexOf(entity));
+            if (index != -1) {
+                addRowSelectionInterval(index, index);
+            }
+        }
+
+        requestFocusInWindow();
+
+        return true;
     }
 }

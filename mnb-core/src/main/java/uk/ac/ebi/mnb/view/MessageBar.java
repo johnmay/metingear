@@ -33,7 +33,6 @@ import java.awt.event.*;
 import java.util.Stack;
 
 import uk.ac.ebi.mnb.core.*;
-import uk.ac.ebi.mnb.view.labels.BoldLabel;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.mnb.view.labels.Label;
 
@@ -42,12 +41,13 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingConstants;
 
 import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import uk.ac.ebi.mnb.interfaces.Message;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
 
 /**
  *          MessageManager – 2011.09.30 <br>
@@ -56,9 +56,9 @@ import com.jgoodies.forms.layout.FormLayout;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MessageManager extends JPanel {
+public class MessageBar extends JPanel implements MessageManager {
 
-    private static final Logger LOGGER = Logger.getLogger(MessageManager.class);
+    private static final Logger LOGGER = Logger.getLogger(MessageBar.class);
     private final Color warningColor = Color.YELLOW;
     private final ImageIcon warningIcon = ViewUtils.createImageIcon("images/cutout/warning_16x16.png",
             "Warning");
@@ -75,7 +75,7 @@ public class MessageManager extends JPanel {
     private JLabel label = new Label();
     private Stack<Message> stack = new Stack();
 
-    public MessageManager() {
+    public MessageBar() {
         super(
                 new FormLayout("6dlu, right:min, 4dlu, p:grow, 4dlu, right:min, 6dlu", "1dlu, center:p, 1dlu"));
         CellConstraints cc = new CellConstraints();
@@ -96,18 +96,18 @@ public class MessageManager extends JPanel {
     }
 
     public void addMessage(Message message) {
-        LOGGER.info("Adding message to manager: " + message.getMesage());
+        LOGGER.info("Adding message to manager: " + message.getMessage());
         stack.push(message);
         update();
         setVisible(true);
     }
 
-    public void update() {
+    public boolean update() {
 
         if (!stack.isEmpty()) {
 
             label.setPreferredSize(new Dimension(getParent().getSize().width - 75, 18));
-            label.setText(stack.peek().getMesage());
+            label.setText(stack.peek().getMessage());
 
             if (stack.peek() instanceof ErrorMessage) {
                 paint = ERROR_PAINT;
@@ -120,6 +120,7 @@ public class MessageManager extends JPanel {
         }
         repaint();
         revalidate();
+        return true;
     }
 
     /**
@@ -134,7 +135,7 @@ public class MessageManager extends JPanel {
 
                 public void actionPerformed(ActionEvent e) {
                     if (!stack.isEmpty()) {
-                        ViewUtils.setClipboard(stack.peek().getMesage());
+                        ViewUtils.setClipboard(stack.peek().getMessage());
                     }
                     menu.setVisible(false);
                 }

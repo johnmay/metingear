@@ -43,5 +43,5 @@ public interface SelectionController extends Updatable {
     @Deprecated
     public AnnotatedEntity getSelectedEntity();
 
-    
+    public boolean setSelection(Collection<? extends AnnotatedEntity> entities);
 }

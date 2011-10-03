@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class WarningMessage extends Message {
+public class WarningMessage extends AbstractMessage {
 
     public WarningMessage(String mesage) {
         super(mesage);
@@ -39,8 +39,8 @@ public class WarningMessage extends Message {
 
 
     @Override
-    public String getMesage() {
-        return "Warning:" + super.getMesage();
+    public String getMessage() {
+        return "Warning:" + super.getMessage();
     }
 
 

@@ -5,6 +5,9 @@
 
 package uk.ac.ebi.mnb.menu;
 
+import uk.ac.ebi.mnb.core.SelectionMenuItem;
+import uk.ac.ebi.mnb.dialog.tools.ChokePoint;
+import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.mnb.menu.build.RunTasksAction;
 import uk.ac.ebi.mnb.menu.reconciliation.DownloadStructures;
 
@@ -27,6 +30,7 @@ public class ToolsMenu extends ClearMenu {
         super("Tools");
 
         add(new ReconciliationMenu());
+        add(new ChokePoint(MainFrame.getInstance()));
 
       
     }

@@ -118,5 +118,11 @@ public class AbstractEntityView
         return table.setSelection(annotatedComponent);
     }
 
+    public boolean setSelection(Collection<? extends AnnotatedEntity> entities) {
+        return table.setSelection(entities);
+    }
+
+    
+
 
 }

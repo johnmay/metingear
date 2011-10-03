@@ -25,14 +25,16 @@ import com.jgoodies.forms.layout.FormLayout;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.ComboBox;
 import uk.ac.ebi.mnb.interfaces.DialogController;
+import uk.ac.ebi.mnb.settings.Settings;
+import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.labels.BoldLabel;
+import uk.ac.ebi.mnb.view.labels.Label;
 
 /**
  *          Preferences - 2011.10.02 <br>
@@ -45,7 +47,8 @@ import uk.ac.ebi.mnb.view.labels.BoldLabel;
 public class PreferenceDialog extends DropdownDialog {
 
     private static final Logger LOGGER = Logger.getLogger(PreferenceDialog.class);
-    private JPanel options;
+    private JComboBox metSourceView;
+    private JComboBox rxnSourceView;
 
     public PreferenceDialog(JFrame frame, DialogController controller) {
         super(frame, controller, "SaveDialog");
@@ -58,13 +61,16 @@ public class PreferenceDialog extends DropdownDialog {
         JPanel options = new DialogPanel(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p"));
         CellConstraints cc = new CellConstraints();
 
-        JComboBox metaboliteSourceSelector = new ComboBox("Name", "Accession", "Abbreviation");
-        JComboBox reactionSourceSelector = new ComboBox("Name", "Accession", "Abbreviation");
+        metSourceView = new ComboBox(SourceItemDisplayType.values());
+        metSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_METABOLITE));
+        rxnSourceView = new ComboBox(SourceItemDisplayType.values());
+        rxnSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_REACTION));
 
-        options.add(new BoldLabel("Metabolites"), cc.xy(1, 1));
-        options.add(metaboliteSourceSelector, cc.xy(3, 1));
-        options.add(new BoldLabel("Reactions"), cc.xy(5, 1));
-        options.add(reactionSourceSelector, cc.xy(7, 1));
+
+        options.add(new Label("Metabolites: ", SwingConstants.RIGHT), cc.xy(1, 1));
+        options.add(metSourceView, cc.xy(3, 1));
+        options.add(new Label("Reactions: ", SwingConstants.RIGHT), cc.xy(5, 1));
+        options.add(rxnSourceView, cc.xy(7, 1));
 
         return options;
 
@@ -72,8 +78,9 @@ public class PreferenceDialog extends DropdownDialog {
 
     @Override
     public void process() {
-        //        ApplicationPreferences preferences = ApplicationPreferences.getInstance();
-        //        preferences.get(preferences.VIEW_SOURCE_METABOLITE);
+        Settings settings = Settings.getInstance();
+        settings.put(Settings.VIEW_SOURCE_METABOLITE, (SourceItemDisplayType) metSourceView.getSelectedItem());
+        settings.put(Settings.VIEW_SOURCE_REACTION, (SourceItemDisplayType) rxnSourceView.getSelectedItem());
     }
 
     @Override

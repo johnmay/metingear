@@ -145,6 +145,12 @@ public abstract class AbstractEntityInspector
         return true;
     }
 
+    public boolean setSelection(Collection<? extends AnnotatedEntity> entities) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    
+
     public Collection<AnnotatedEntity> getSelection() {
         return table.getSelection();
     }

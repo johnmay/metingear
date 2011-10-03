@@ -12,7 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-
 package uk.ac.ebi.mnb.view.entity;
 
 import java.awt.CardLayout;
@@ -46,7 +45,6 @@ import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.search.SearchManager;
 
-
 /**
  * ProjectPanel.java
  * ProjectPanel is the main panel view of the application. The object extends JTabbedPane
@@ -56,11 +54,11 @@ import uk.ac.ebi.search.SearchManager;
  * @date Apr 8, 2011
  */
 public class ProjectView
-  extends JPanel implements ViewController {
+        extends JPanel implements ViewController {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-      ProjectView.class);
+            org.apache.log4j.Logger.getLogger(
+            ProjectView.class);
     // underlying tab components
     private JScrollPane matrixPane;
     private MatrixView matrix = null;
@@ -72,7 +70,6 @@ public class ProjectView
     private SearchView search = null;
     private CardLayout layout;
     private Map<String, AbstractEntityView> viewMap;
-
 
     public ProjectView() {
 
@@ -102,15 +99,14 @@ public class ProjectView
 
     }
 
-
     /**
      * Returns the currently active view
      * @return
      */
     public EntityView getActiveView() {
 
-        for( AbstractEntityView pane : Arrays.asList(reactions, metabolites) ) {
-            if( pane != null && pane.isVisible() ) {
+        for (AbstractEntityView pane : Arrays.asList(reactions, metabolites)) {
+            if (pane != null && pane.isVisible()) {
                 return pane;
             }
         }
@@ -120,31 +116,25 @@ public class ProjectView
 
     }
 
-
     public void setProductView() {
         layout.show(this, products.getClass().getSimpleName());
     }
-
 
     public void setReactionView() {
         layout.show(this, reactions.getClass().getSimpleName());
     }
 
-
     public void setMetaboliteView() {
         layout.show(this, metabolites.getClass().getSimpleName());
     }
-
 
     public void setTaskView() {
         layout.show(this, tasks.getClass().getSimpleName());
     }
 
-
     public void setSearchView() {
         layout.show(this, search.getClass().getSimpleName());
     }
-
 
     /**
      * 
@@ -157,7 +147,7 @@ public class ProjectView
         ReconstructionManager manager = ReconstructionManager.getInstance();
         Reconstruction reconstruction = manager.getActiveReconstruction();
 
-        if( reconstruction == null ) {
+        if (reconstruction == null) {
             return false;
         }
 
@@ -174,13 +164,13 @@ public class ProjectView
             // don't update search view (getSearchView().update() for that) but update
             // the indexer
             SearchManager.getInstance().updateCurrentIndex(reconstruction);
-        } catch( CorruptIndexException ex ) {
+        } catch (CorruptIndexException ex) {
             logger.info(ex.getMessage());
             MainFrame.getInstance().addWarningMessage("Unable to index component for searching");
-        } catch( LockObtainFailedException ex ) {
+        } catch (LockObtainFailedException ex) {
             logger.info(ex.getMessage());
             MainFrame.getInstance().addWarningMessage("Unable to index component for searching");
-        } catch( IOException ex ) {
+        } catch (IOException ex) {
             logger.info(ex.getMessage());
             MainFrame.getInstance().addWarningMessage("Unable to index component for searching");
         }
@@ -189,7 +179,6 @@ public class ProjectView
         return true; // update successful
 
     }
-
 
     /**
      *
@@ -203,12 +192,11 @@ public class ProjectView
      */
     public AnnotatedEntity getSelectedEntity() {
         EntityView view = getActiveView();
-        if( view != null ) {
+        if (view != null) {
             return view.getSelectedEntity();
         }
         return null;
     }
-
 
     /**
      * 
@@ -221,14 +209,13 @@ public class ProjectView
 
         EntityView view = getActiveView();
 
-        if( view != null ) {
+        if (view != null) {
             return view.getSelection();
         }
 
         return new ArrayList();
 
     }
-
 
     /**
      *
@@ -242,31 +229,25 @@ public class ProjectView
         throw new UnsupportedOperationException("Not supported yet");
     }
 
-
     public ProteinView getProductView() {
         return products;
     }
-
 
     public MetaboliteView getMetaboliteView() {
         return metabolites;
     }
 
-
     public ReactionsView getReactionView() {
         return reactions;
     }
-
 
     public TaskView getTaskView() {
         return tasks;
     }
 
-
     public SearchView getSearchView() {
         return search;
     }
-
 
     /**
      * 
@@ -287,19 +268,38 @@ public class ProjectView
 
     }
 
-    /* deprecated methods */
+    /**
+     * At the moment sets view to that of first item and then selects all provided. This method presumes
+     * all entities are the same
+     * @param entities
+     * @return
+     */
+    public boolean setSelection(Collection<? extends AnnotatedEntity> entities) {
 
+        if (entities.isEmpty()) {
+            return false;
+        }
+
+        AnnotatedEntity entity = entities.iterator().next();
+
+        AbstractEntityView view = viewMap.get(entity.getBaseType());
+
+        layout.show(this, view.getClass().getSimpleName());
+
+        return view.setSelection(entities);
+    }
+
+    /* deprecated methods */
     /**
      * Sets the tabbed pane view to the matrix view
      */
     @Deprecated
     public void setMatrixView() {
-        if( matrix == null ) {
+        if (matrix == null) {
             return;
         }
         //setSelectedComponent( matrixPane );
     }
-
 
     @Deprecated
     public void addMatrixView(MatrixModel model) {
@@ -308,7 +308,6 @@ public class ProjectView
         //addTab( "Matrix View" , matrixPane );
         setMatrixView();
     }
-
 
     /**
      * Returns the instance of matrix view currently held in the project panel. This
@@ -319,8 +318,4 @@ public class ProjectView
     public MatrixView getMatrixView() {
         return matrix;
     }
-
-
-
 }
-

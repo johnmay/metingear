@@ -45,7 +45,7 @@ public class SearchPanel
   extends EntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(SearchPanel.class);
-    private Metabolite entity;
+    private AnnotatedEntity entity;
     private JLabel formula;
     private JTextField generic;
 
@@ -68,7 +68,7 @@ public class SearchPanel
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
-        this.entity = (Metabolite) entity;
+        this.entity = entity;
         return super.setEntity(entity);
     }
 

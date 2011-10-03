@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ErrorMessage extends Message{
+public class ErrorMessage extends AbstractMessage{
 
 
     public ErrorMessage(String mesage) {
@@ -40,8 +40,8 @@ public class ErrorMessage extends Message{
 
 
     @Override
-    public String getMesage() {
-        return "Error:" + super.getMesage();
+    public String getMessage() {
+        return "Error:" + super.getMessage();
     }
 
 
