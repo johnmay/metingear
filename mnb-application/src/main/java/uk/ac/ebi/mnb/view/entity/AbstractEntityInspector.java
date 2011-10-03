@@ -22,9 +22,9 @@ package uk.ac.ebi.mnb.view.entity;
 
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
@@ -35,6 +35,7 @@ import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 /**
  *          EntityInspector – 2011.09.06 <br>
@@ -43,14 +44,14 @@ import uk.ac.ebi.core.AnnotatedEntity;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class EntityInspector
+public abstract class AbstractEntityInspector
         extends GeneralPanel
-        implements ListSelectionListener {
+        implements ListSelectionListener, SelectionController {
 
-    private static final Logger LOGGER = Logger.getLogger(EntityInspector.class);
+    private static final Logger LOGGER = Logger.getLogger(AbstractEntityInspector.class);
     private boolean editable = false;
     private InspectorToolbar toolbar;
-    private EntityTable table;
+    private AbstractEntityTable table;
     private CellConstraints cc = new CellConstraints();
     private AnnotatedEntity component;
     private AnnotationRenderer renderer = new AnnotationRenderer();
@@ -58,7 +59,7 @@ public abstract class EntityInspector
     private static Border PADDING_BORDER = Borders.DLU7_BORDER;
     private EntityPanel panel;
 
-    public EntityInspector(EntityPanel panel) {
+    public AbstractEntityInspector(EntityPanel panel) {
         this.panel = panel;
         panel.setup();
         toolbar = new InspectorToolbar(this);
@@ -87,16 +88,16 @@ public abstract class EntityInspector
     /**
      * Sets the table this inspector is linked too
      */
-    public void setTable(EntityTable table) {
+    public void setTable(AbstractEntityTable table) {
         this.table = table;
     }
 
     /**
      * Updates the inspector with the currently selected component
      */
-    public void update() {
+    public boolean update() {
         if (table == null) {
-            return;
+            return false;
         }
         int selected = table.getSelectedRow();
         if (selected != -1) {
@@ -116,13 +117,16 @@ public abstract class EntityInspector
                 revalidate();
             }
         }
+        return true;
     }
 
     /**
      * Access the currently displayed component
      * @return The active component
+     * @deprecated use getSelection()
      */
-    public AnnotatedEntity getActiveComponent() {
+    @Deprecated
+    public AnnotatedEntity getSelectedEntity() {
         return component;
     }
     private JScrollPane pane;
@@ -136,12 +140,13 @@ public abstract class EntityInspector
         update();
     }
 
-    public List<AnnotatedEntity> getActiveComponents() {
-        List<AnnotatedEntity> components = new ArrayList();
-        for (Integer index : table.getSelectedRows()) {
-            components.add(table.getModel().getEntity(index));
-        }
-        return components;
+    public boolean setSelection(AnnotatedEntity entity) {
+        // do nothing..
+        return true;
+    }
+
+    public Collection<AnnotatedEntity> getSelection() {
+        return table.getSelection();
     }
 
     /**

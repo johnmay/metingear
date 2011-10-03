@@ -85,7 +85,7 @@ public class ImportXLSAction
 
                 // update the views
                 MainFrame.getInstance().getSourceListController().update();
-                MainFrame.getInstance().getProjectPanel().update();
+                MainFrame.getInstance().getViewController().update();
                 System.out.println("done..");
 
             } catch( IOException ex ) {

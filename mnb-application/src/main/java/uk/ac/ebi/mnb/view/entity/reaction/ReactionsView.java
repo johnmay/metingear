@@ -17,7 +17,7 @@
 
 package uk.ac.ebi.mnb.view.entity.reaction;
 
-import uk.ac.ebi.mnb.view.entity.EntityView;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityView;
 
 
 /**
@@ -29,7 +29,7 @@ import uk.ac.ebi.mnb.view.entity.EntityView;
  *
  */
 public class ReactionsView
-  extends EntityView {
+  extends AbstractEntityView {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(

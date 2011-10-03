@@ -14,7 +14,6 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.ac.ebi.mnb.main;
 
 import javax.swing.JPopupMenu;
@@ -46,11 +45,11 @@ import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import uk.ac.ebi.metabolomes.run.RunnableTask;
+import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
 import uk.ac.ebi.mnb.menu.popup.SetActiveProject;
 import uk.ac.ebi.mnb.menu.popup.ContextSensitiveAction;
-import uk.ac.ebi.mnb.view.entity.ProjectPanel;
-
+import uk.ac.ebi.mnb.view.entity.ProjectView;
 
 /**
  * SourceController.java – MetabolicDevelopmentKit – Jun 3, 2011
@@ -58,13 +57,13 @@ import uk.ac.ebi.mnb.view.entity.ProjectPanel;
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
 public class SourceController
-  implements SourceListSelectionListener,
-             SourceListClickListener,
-             PopupMenuCustomizer {
+        implements SourceListSelectionListener,
+        SourceListClickListener,
+        PopupMenuCustomizer {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-      SourceController.class);
+            org.apache.log4j.Logger.getLogger(
+            SourceController.class);
     public final SourceListModel model;
     private SourceListCategory reconstructions;
     private SourceListCategory activeProject;
@@ -77,7 +76,6 @@ public class SourceController
     private Object selected;
     private List<EntitySourceItem> items = new ArrayList(); // list of items to update
     private Map<AnnotatedEntity, EntitySourceItem> itemMap = new HashMap();
-
 
     public SourceController() {
 
@@ -103,11 +101,10 @@ public class SourceController
 
     }
 
-
     /**
      * Updates all currently available items to that in the active reconstruction.
      */
-    public void update() {
+    public boolean update() {
 
 
         // metabolite first
@@ -118,14 +115,14 @@ public class SourceController
         Set<AnnotatedEntity> itemCollector = new HashSet();
         itemCollector.addAll(itemMap.keySet());
 
-        if( manager.hasProjects() ) {
+        if (manager.hasProjects()) {
 
             // reconstructions
-            for( int i = 0 ; i < manager.size() ; i++ ) {
+            for (int i = 0; i < manager.size(); i++) {
                 Reconstruction reconstruction = manager.getProject(i);
-                if( itemMap.containsKey(reconstruction) == false ) {
+                if (itemMap.containsKey(reconstruction) == false) {
                     EntitySourceItem item = new ReconstructionSourceItem(reconstruction,
-                                                                         reconstructions);
+                            reconstructions);
                     itemMap.put(reconstruction, item);
                     model.addItemToCategory(item, reconstructions);
                 }
@@ -136,8 +133,8 @@ public class SourceController
             Reconstruction reconstruction = manager.getActiveReconstruction();
 
             // metabolites
-            for( Metabolite m : reconstruction.getMetabolites() ) {
-                if( itemMap.containsKey(m) == false ) {
+            for (Metabolite m : reconstruction.getMetabolites()) {
+                if (itemMap.containsKey(m) == false) {
                     EntitySourceItem item = new MetaboliteSourceItem(m, metabolites);
                     itemMap.put(m, item);
                     model.addItemToItem(item, metabolites);
@@ -149,8 +146,8 @@ public class SourceController
 
             // reactions
 
-            for( Reaction r : reconstruction.getReactions() ) {
-                if( itemMap.containsKey(r) == false ) {
+            for (Reaction r : reconstruction.getReactions()) {
+                if (itemMap.containsKey(r) == false) {
                     EntitySourceItem item = new ReactionSourceItem(r, reactions);
                     itemMap.put(r, item);
                     model.addItemToItem(item, reactions);
@@ -162,8 +159,8 @@ public class SourceController
 
 
             // products
-            for( GeneProduct p : reconstruction.getGeneProducts().getAllProducts() ) {
-                if( itemMap.containsKey(p) == false ) {
+            for (GeneProduct p : reconstruction.getGeneProducts().getAllProducts()) {
+                if (itemMap.containsKey(p) == false) {
                     EntitySourceItem item = new ProductSourceItem(p, products);
                     itemMap.put(p, item);
                     model.addItemToItem(item, products);
@@ -180,9 +177,9 @@ public class SourceController
 
         // task are independant from reconstruction
         // products
-        for( RunnableTask t : TaskManager.getInstance().getTasks() ) {
+        for (RunnableTask t : TaskManager.getInstance().getTasks()) {
             System.out.println("task: " + t);
-            if( itemMap.containsKey(t) == false ) {
+            if (itemMap.containsKey(t) == false) {
                 EntitySourceItem item = new TaskSourceItem(t, tasks);
                 itemMap.put(t, item);
                 model.addItemToCategory(item, tasks);
@@ -194,15 +191,15 @@ public class SourceController
 
 
         // remove collected items
-        for( AnnotatedEntity deprecatedEntity : itemCollector ) {
+        for (AnnotatedEntity deprecatedEntity : itemCollector) {
             EntitySourceItem item = itemMap.get(deprecatedEntity);
             item.remove(model);
             itemMap.remove(deprecatedEntity);
         }
 
+        return true;
 
     }
-
 
     /**
      * Mouse event listeners
@@ -213,65 +210,57 @@ public class SourceController
         sourceListItemClicked(item, Button.LEFT, 1);
     }
 
-
     @Override
     public void sourceListItemClicked(SourceListItem item, Button button, int clickCount) {
 
 
         selected = item;
 
-        ProjectPanel projectPanel = MainFrame.getInstance().getProjectPanel();
+        ProjectView view = (ProjectView) MainFrame.getInstance().getViewController();
 
-        if( item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem) ) {
-            projectPanel.setSelected(((EntitySourceItem) item).getEntity());
-        } else if( item instanceof ReconstructionSourceItem && clickCount > 1 ) {
+        if (item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem)) {
+            view.setSelection(((EntitySourceItem) item).getEntity());
+        } else if (item instanceof ReconstructionSourceItem && clickCount > 1) {
             setActiveProject.setContext(selected);
             setActiveProject.actionPerformed(null);
-        } else if( item instanceof SourceListItem ) {
-            if( item == metabolites ) {
-                projectPanel.setMetaboliteView();
-            } else if( item == reactions ) {
-                projectPanel.setReactionView();
-            } else if( item == products ) {
-                projectPanel.setProductView();
+        } else if (item instanceof SourceListItem) {
+            if (item == metabolites) {
+                view.setMetaboliteView();
+            } else if (item == reactions) {
+                view.setReactionView();
+            } else if (item == products) {
+                view.setProductView();
             } else {
                 System.out.println("Unhandled item clicked: " + item.getText());
             }
         }
     }
 
-
     @Override
     public void sourceListCategoryClicked(SourceListCategory category, Button button, int clickCount) {
-        if( category.equals(tasks) ) {
-            MainFrame.getInstance().getProjectPanel().setTaskView();
+        if (category.equals(tasks)) {
+            ((ProjectView)MainFrame.getInstance().getViewController()).setTaskView();
         }
     }
-
-
     List<ContextSensitiveAction> actions = new ArrayList();
-
 
     public void customizePopup(JPopupMenu popup) {
 
         ReconstructionManager manager = ReconstructionManager.getInstance();
 
         // if there's no item add them all
-        if( popup.getComponents().length == 0 ) {
-            for( Action action : Arrays.asList(setActiveProject,
-                                               new CloseProject()) ) {
+        if (popup.getComponents().length == 0) {
+            for (Action action : Arrays.asList(setActiveProject,
+                    new CloseProject())) {
                 actions.add((ContextSensitiveAction) action);
                 popup.add(action);
             }
         }
 
         // set active/inactive given the context of the current selection
-        for( ContextSensitiveAction action : actions ) {
+        for (ContextSensitiveAction action : actions) {
             action.setContext(selected);
         }
 
     }
-
-
 }
-

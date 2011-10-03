@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.mnb.view;
 
+import uk.ac.ebi.mnb.interfaces.DialogController;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -27,6 +28,7 @@ import sun.net.ApplicationProxy;
 import uk.ac.ebi.mnb.core.ActionProperties;
 import uk.ac.ebi.mnb.core.CloseDialogAction;
 import uk.ac.ebi.mnb.core.ProcessDialogAction;
+import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.labels.Label;
 import uk.ac.ebi.mnb.view.theme.Theme;
@@ -41,7 +43,7 @@ import uk.ac.ebi.mnb.view.theme.Theme;
  *
  */
 public abstract class DropdownDialog
-        extends JDialog {
+        extends JDialog implements Updatable {
 
     private static final Logger LOGGER = Logger.getLogger(DropdownDialog.class);
     private JButton close;
@@ -228,5 +230,5 @@ public abstract class DropdownDialog
      * this method is automatically wrapped in a SwingUtils.invokeLater to be
      * thread safe
      */
-    public abstract void update();
+    public abstract boolean update();
 }

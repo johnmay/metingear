@@ -1,4 +1,3 @@
-
 /**
  * DownloadStructuresDialog.java
  *
@@ -24,6 +23,7 @@ package uk.ac.ebi.mnb.menu.reconciliation;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -49,7 +49,6 @@ import uk.ac.ebi.mnb.view.CheckBox;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
-
 /**
  *          DownloadStructuresDialog – 2011.09.27 <br>
  *          Class description
@@ -58,16 +57,15 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  * @author  $Author$ (this version)
  */
 public class DownloadStructuresDialog
-  extends DropdownDialog {
+        extends DropdownDialog {
 
     private static final Logger LOGGER = Logger.getLogger(DownloadStructuresDialog.class);
-    private List<AnnotatedEntity> components;
+    private Collection<AnnotatedEntity> components;
     private ChEBIWebServiceConnection chebi;
     private KeggCompoundWebServiceConnection kegg;
     private JCheckBox chebiCheckBox;
     private JCheckBox keggCheckBox;
     private JCheckBox chebiAllStarCheckBox;
-
 
     public DownloadStructuresDialog() {
         super(MainFrame.getInstance(), MainFrame.getInstance(), "DownloadStructures");
@@ -82,10 +80,9 @@ public class DownloadStructuresDialog
         layoutOptions();
     }
 
-
     private void layoutOptions() {
         setLayout(new FormLayout("10dlu, pref, 10dlu",
-                                 "10dlu, pref, 2dlu, pref, 2dlu, pref, 4dlu, pref, 10dlu"));
+                "10dlu, pref, 2dlu, pref, 2dlu, pref, 4dlu, pref, 10dlu"));
 
         CellConstraints cc = new CellConstraints();
 
@@ -110,20 +107,18 @@ public class DownloadStructuresDialog
 
     }
 
-
-    public void setComponents(List<AnnotatedEntity> components) {
+    public void setComponents(Collection<AnnotatedEntity> components) {
         this.components = components;
     }
-
 
     @Override
     public void process() {
 
 
-        if( chebi == null ) {
+        if (chebi == null) {
             chebi = new ChEBIWebServiceConnection();
         }
-        if( kegg == null ) {
+        if (kegg == null) {
             kegg = new KeggCompoundWebServiceConnection();
         }
 
@@ -131,7 +126,7 @@ public class DownloadStructuresDialog
         boolean useKEGG = keggCheckBox.isSelected();
 
         // set chebi filtering
-        if( chebiAllStarCheckBox.isSelected() ) {
+        if (chebiAllStarCheckBox.isSelected()) {
             chebi.setStarsCategory(StarsCategory.ALL);
         } else {
             chebi.setStarsCategory(StarsCategory.THREE_ONLY);
@@ -139,30 +134,30 @@ public class DownloadStructuresDialog
 
         List<Identifier> problemIdentifiers = new ArrayList();
 
-        for( AnnotatedEntity component : components ) {
+        for (AnnotatedEntity component : components) {
 
-            for( Annotation xref : component.getAnnotationsExtending(CrossReference.class) ) {
+            for (Annotation xref : component.getAnnotationsExtending(CrossReference.class)) {
 
                 Identifier id = ((CrossReference) xref).getIdentifier();
-                if( useChEBI && id instanceof ChEBIIdentifier ) {
+                if (useChEBI && id instanceof ChEBIIdentifier) {
                     try {
                         IAtomContainer molecule = chebi.getAtomContainer(id.getAccession());
-                        if( molecule != null ) {
+                        if (molecule != null) {
                             component.addAnnotation(new ChemicalStructure(molecule));
                         } else {
                             problemIdentifiers.add(id);
                         }
-                    } catch( Exception ex ) {
+                    } catch (Exception ex) {
                         problemIdentifiers.add(id);
                     }
-                } else if( useKEGG && id instanceof KEGGCompoundIdentifier ) {
+                } else if (useKEGG && id instanceof KEGGCompoundIdentifier) {
                     IAtomContainer molecule;
                     try {
                         molecule = kegg.getAtomContainer(id.getAccession());
                         component.addAnnotation(new ChemicalStructure(molecule));
-                    } catch( UnfetchableEntry ex ) {
+                    } catch (UnfetchableEntry ex) {
                         problemIdentifiers.add(id);
-                    } catch( MissingStructureException ex ) {
+                    } catch (MissingStructureException ex) {
                         problemIdentifiers.add(id);
                     }
                 }
@@ -170,20 +165,16 @@ public class DownloadStructuresDialog
         }
 
 
-        if( problemIdentifiers.isEmpty() == false ) {
-            MainFrame.getInstance().addWarningMessage("Unable to download structure for; " +
-                                                     StringUtils.join(problemIdentifiers, ", "));
+        if (problemIdentifiers.isEmpty() == false) {
+            MainFrame.getInstance().addWarningMessage("Unable to download structure for; "
+                    + StringUtils.join(problemIdentifiers, ", "));
         }
 
 
     }
 
-
     @Override
-    public void update() {
-        MainFrame.getInstance().getProjectPanel().update();
+    public boolean update() {
+        return MainFrame.getInstance().getViewController().update();
     }
-
-
 }
-

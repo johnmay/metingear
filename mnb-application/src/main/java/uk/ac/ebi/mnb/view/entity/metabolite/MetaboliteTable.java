@@ -30,7 +30,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import uk.ac.ebi.mnb.view.entity.BasicAnnotationCellRenderer;
 import uk.ac.ebi.mnb.view.entity.BasicBooleanCellRenderer;
-import uk.ac.ebi.mnb.view.entity.EntityTable;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import mnb.view.old.CachedMoleculeRenderer;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -45,7 +45,7 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetaboliteTable extends EntityTable {
+public class MetaboliteTable extends AbstractEntityTable {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteTable.class);
 

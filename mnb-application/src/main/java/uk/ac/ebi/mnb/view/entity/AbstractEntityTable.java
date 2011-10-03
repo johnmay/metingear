@@ -1,4 +1,3 @@
-
 /**
  * EntityTable.java
  *
@@ -25,16 +24,14 @@ import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
 import com.explodingpixels.widgets.TableUtils;
 import java.awt.Container;
 import java.awt.Rectangle;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JLabel;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import javax.swing.JTable;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.annotation.crossreference.Classification;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.AnnotatedEntity;
-
+import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 /**
  *          EntityTable – 2011.09.06 <br>
@@ -43,12 +40,11 @@ import uk.ac.ebi.core.AnnotatedEntity;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class EntityTable extends JTable {
+public abstract class AbstractEntityTable extends JTable implements SelectionController {
 
-    private static final Logger LOGGER = Logger.getLogger(EntityTable.class);
+    private static final Logger LOGGER = Logger.getLogger(AbstractEntityTable.class);
 
-
-    public EntityTable(EntityTableModel model) {
+    public AbstractEntityTable(EntityTableModel model) {
         super(model);
         setUI(new ITunesTableUI());
         setAutoscrolls(true);
@@ -59,18 +55,14 @@ public abstract class EntityTable extends JTable {
             public void sort(int columnModelIndex, TableUtils.SortDirection sortDirection) {
                 // no implementation.
             }
-
-
         });
         setColumnModel(columnModel);
     }
-
 
     @Override
     public EntityTableModel getModel() {
         return (EntityTableModel) super.getModel();
     }
-
 
     /**
      *
@@ -81,6 +73,18 @@ public abstract class EntityTable extends JTable {
         return getModel().update();
     }
 
+    @Deprecated
+    public AnnotatedEntity getSelectedEntity(){
+        throw new UnsupportedOperationException("Method deprecated and to be removed");
+    }
+
+    public Collection<AnnotatedEntity> getSelection() {
+        List<AnnotatedEntity> components = new ArrayList();
+        for (Integer index : getSelectedRows()) {
+            components.add(getModel().getEntity(convertRowIndexToModel(index)));
+        }
+        return components;
+    }
 
     /**
      *
@@ -89,7 +93,7 @@ public abstract class EntityTable extends JTable {
      * @param component
      *
      */
-    public void setSelected(AnnotatedEntity component) {
+    public boolean setSelection(AnnotatedEntity component) {
 
         int index = convertRowIndexToView(getModel().indexOf(component));
 
@@ -101,20 +105,18 @@ public abstract class EntityTable extends JTable {
 
         Container parent = getParent();
 
-        if( parent != null ) {
+        if (parent != null) {
 
-            int y = getTableHeader().getHeight() + (getRowHeight() * index) - ((int) parent.
-                                                                               getHeight() /
-                                                                               2);
+            int y = getTableHeader().getHeight() + (getRowHeight() * index) - ((int) parent.getHeight()
+                    / 2);
 
             scrollRectToVisible(new Rectangle(0, y,
-                                              parent.getWidth(),
-                                              parent.getHeight()));
+                    parent.getWidth(),
+                    parent.getHeight()));
 
         }
 
+        return true;
+
     }
-
-
 }
-

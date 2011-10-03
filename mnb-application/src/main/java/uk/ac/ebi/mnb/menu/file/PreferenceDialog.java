@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.ComboBox;
-import uk.ac.ebi.mnb.view.DialogController;
+import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
@@ -42,12 +42,12 @@ import uk.ac.ebi.mnb.view.labels.BoldLabel;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class Preferences extends DropdownDialog {
+public class PreferenceDialog extends DropdownDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(Preferences.class);
+    private static final Logger LOGGER = Logger.getLogger(PreferenceDialog.class);
     private JPanel options;
 
-    public Preferences(JFrame frame, DialogController controller) {
+    public PreferenceDialog(JFrame frame, DialogController controller) {
         super(frame, controller, "SaveDialog");
         setDefaultLayout();
     }
@@ -77,7 +77,7 @@ public class Preferences extends DropdownDialog {
     }
 
     @Override
-    public void update() {
-        MainFrame.getInstance().getSourceListController().update();
+    public boolean update() {
+        return MainFrame.getInstance().getSourceListController().update();
     }
 }

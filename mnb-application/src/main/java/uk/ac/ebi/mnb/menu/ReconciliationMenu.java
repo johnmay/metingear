@@ -24,10 +24,10 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.DropdownMenuItem;
+import uk.ac.ebi.mnb.core.SelectionMenuItem;
+import uk.ac.ebi.mnb.dialog.tools.AutomaticCrossReference;
 import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
-import uk.ac.ebi.mnb.menu.reconciliation.AutomaticCrossReferenceDialog;
 import uk.ac.ebi.mnb.menu.reconciliation.DownloadStructures;
 
 /**
@@ -45,12 +45,12 @@ public class ReconciliationMenu extends JMenu {
     public ReconciliationMenu() {
         super("Reconciliation");
 
-        JFrame frame = MainFrame.getInstance();
+        MainFrame frame = MainFrame.getInstance();
 
         items[0] = new DynamicMenuItem(new AddCrossReference());
-        items[1] = new DropdownMenuItem(frame,
-                                        "AutomaticCrossReference",
-                                        AutomaticCrossReferenceDialog.class.getConstructors()[0]);
+        items[1] = new SelectionMenuItem(frame,
+                                         frame.getViewController(),
+                                         AutomaticCrossReference.class);
         items[2] = new DynamicMenuItem(new DownloadStructures());
 
         for (JMenuItem mnbMenuItem : items) {

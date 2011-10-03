@@ -1,4 +1,3 @@
-
 /**
  * ExcelWizzard.java
  *
@@ -50,7 +49,7 @@ import mnb.io.tabular.preparse.PreparsedSheet;
 import mnb.io.tabular.type.EntityColumn;
 import mnb.io.tabular.type.ReactionColumn;
 import mnb.io.tabular.xls.HSSFPreparsedSheet;
-import uk.ac.ebi.mnb.view.DialogController;
+import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
@@ -64,7 +63,6 @@ import uk.ac.ebi.mnb.xls.options.ImporterOptions;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
-
 /**
  * @name    ExcelWizzard
  * @date    2011.08.04
@@ -75,26 +73,25 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
  *
  */
 public class ExcelWizzard
-  extends DropdownDialog {
+        extends DropdownDialog {
 
     private static final Logger LOGGER = Logger.getLogger(ExcelWizzard.class);
     private CardLayout layout = new CardLayout();
     private int activeStage = 0;
-    private String[] stages = new String[]{ "Sheet Choice",
-                                            "Reaction Column Choice",
-                                            "Metabolite Column Choice",
-                                            "Gene Column Choice" };
+    private String[] stages = new String[]{"Sheet Choice",
+        "Reaction Column Choice",
+        "Metabolite Column Choice",
+        "Gene Column Choice"};
     private SheetChooserDialog sheetChooserDialog;
     private ReactionColumnChooser reactionColumnChooser;
     private JPanel shiftPanel = new JPanel();
     private WizzardStage[] stageObjects = new WizzardStage[4];
     private Reconstruction reconstruction;
 
-
     public ExcelWizzard(Reconstruction reconstruction,
-                        File file,
-                        ExcelImporter excelImporter,
-                        final JFrame parent) {
+            File file,
+            ExcelImporter excelImporter,
+            final JFrame parent) {
 
         super(parent, (DialogController) parent, "Excel Import");
 
@@ -114,7 +111,7 @@ public class ExcelWizzard
         stageObjects[2] = new MetaboliteColumnChooser(properties);
         stageObjects[3] = new ImportPanel(properties);
 
-        for( int i = 0 ; i < 4 ; i++ ) {
+        for (int i = 0; i < 4; i++) {
             shiftPanel.add((JPanel) stageObjects[i], stages[i]);
         }
 
@@ -129,22 +126,17 @@ public class ExcelWizzard
         add(navPanel, BorderLayout.SOUTH);
 
     }
-
-
     private ExcelModelProperties properties;
-
 
     @Override
     public void process() {
         // do nothing
     }
 
-
     @Override
-    public void update() {
-        // does nothing
+    public boolean update() {
+        return true;
     }
-
 
     public class NextPanel extends GeneralAction {
 
@@ -152,10 +144,9 @@ public class ExcelWizzard
             super("ExcelImporterNext");
         }
 
-
         public void actionPerformed(ActionEvent e) {
-            if( stageObjects[activeStage].updateSelection() ) {
-                if( activeStage + 1 < stages.length ) {
+            if (stageObjects[activeStage].updateSelection()) {
+                if (activeStage + 1 < stages.length) {
                     activeStage++;
                     stageObjects[activeStage].reloadPanel();
                     layout.show(shiftPanel, stages[activeStage]);
@@ -177,30 +168,30 @@ public class ExcelWizzard
                         Integer metI = Integer.parseInt(properties.getProperty("ent.sheet"));
 
                         PreparsedSheet rxnSht = new HSSFPreparsedSheet(workbook.getSheetAt(rxnI),
-                                                                       properties,
-                                                                       ReactionColumn.DATA_BOUNDS);
+                                properties,
+                                ReactionColumn.DATA_BOUNDS);
                         PreparsedSheet entSht = new HSSFPreparsedSheet(workbook.getSheetAt(metI),
-                                                                       properties,
-                                                                       EntityColumn.DATA_BOUNDS);
+                                properties,
+                                EntityColumn.DATA_BOUNDS);
                         bar.setValue(0);
                         bar.setMaximum(rxnSht.getRowCount());
 
                         ChemicalDBWebService ws =
-                                             new CachedChemicalWS(
-                          new ChEBIWebServiceConnection(StarsCategory.ALL, 10));
+                                new CachedChemicalWS(
+                                new ChEBIWebServiceConnection(StarsCategory.ALL, 10));
 
                         CandidateFactory factory =
-                                         new CandidateFactory(ws,
-                                                              new ChemicalFingerprintEncoder());
+                                new CandidateFactory(ws,
+                                new ChemicalFingerprintEncoder());
 
                         EntryReconciler reconciler = new AutomatedReconciler(factory,
-                                                                             new ChEBIIdentifier());
+                                new ChEBIIdentifier());
 
                         EntityResolver entitySheet = new EntityResolver(entSht, reconciler);
                         ReactionParser parser = new ReactionParser(entitySheet);
 
 
-                        while( rxnSht.hasNext() ) {
+                        while (rxnSht.hasNext()) {
 
                             completed += 1;
                             final int i = completed;
@@ -210,19 +201,17 @@ public class ExcelWizzard
                                 public void run() {
                                     ((ImportPanel) stageObjects[3]).getProgressBar().setValue(i);
                                 }
-
-
                             });
 
                             PreparsedReaction ppRxn = (PreparsedReaction) rxnSht.next();
                             try {
 
                                 MetabolicReaction rxn =
-                                                  parser.parseReaction(ppRxn);
+                                        parser.parseReaction(ppRxn);
                                 reconstruction.addReaction(rxn);
 
 
-                            } catch( UnparsableReactionError ex ) {
+                            } catch (UnparsableReactionError ex) {
                                 LOGGER.error("Error parsing reaction");
                             }
                         }
@@ -230,17 +219,14 @@ public class ExcelWizzard
                         // close on finish
                         setVisible(false);
 
-                    } catch( IOException ex ) {
+                    } catch (IOException ex) {
                         LOGGER.error("Could not load workbook:" + ex.getMessage());
                     }
 
                 }
             }
         }
-
-
     }
-
 
     public class PrevPanel extends GeneralAction {
 
@@ -248,19 +234,13 @@ public class ExcelWizzard
             super("ExcelImporterPrev");
         }
 
-
         public void actionPerformed(ActionEvent e) {
 
-            if( activeStage - 1 >= 0 ) {
+            if (activeStage - 1 >= 0) {
                 activeStage--;
                 stageObjects[activeStage].reloadPanel();
                 layout.show(shiftPanel, stages[activeStage]);
             }
         }
-
-
     }
-
-
 }
-

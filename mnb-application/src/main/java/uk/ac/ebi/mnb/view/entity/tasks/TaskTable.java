@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.tasks;
 
-import uk.ac.ebi.mnb.view.entity.EntityTable;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
 
@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class TaskTable extends EntityTable {
+public class TaskTable extends AbstractEntityTable {
 
     private static final Logger LOGGER = Logger.getLogger(TaskTable.class);
 

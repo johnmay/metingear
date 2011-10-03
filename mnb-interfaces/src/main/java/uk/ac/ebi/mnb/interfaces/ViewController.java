@@ -29,8 +29,11 @@ package uk.ac.ebi.mnb.interfaces;
  */
 public interface ViewController extends SelectionController {
 
+    /**
+     * Access the currently active entity view
+     * @return
+     */
+    public EntityView getActiveView();
 
-    public void getActiveView();
-
-
+    
 }

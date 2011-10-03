@@ -28,7 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.view.entity.EntityInspector;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import uk.ac.ebi.mnb.main.MainFrame;
 
 
@@ -50,10 +50,10 @@ public class InspectorToolbar
     private TriAreaComponent viewPanel = new TriAreaComponent();
     private String EDIT_PANEL_NAME = "Edit";
     private String VIEW_PANEL_NAME = "View";
-    private EntityInspector inspector;
+    private AbstractEntityInspector inspector;
 
 
-    public InspectorToolbar(EntityInspector inspectorPanel) {
+    public InspectorToolbar(AbstractEntityInspector inspectorPanel) {
         inspector = inspectorPanel;
         setLayout(layout);
         setUpViewPanel();
@@ -89,7 +89,7 @@ public class InspectorToolbar
             @Override
             public void actionPerformed(ActionEvent e) {
                 inspector.store();
-                MainFrame.getInstance().getProjectPanel().update();
+                MainFrame.getInstance().getViewController().update();
                 setViewMode();
             }
 

@@ -22,7 +22,7 @@
 package uk.ac.ebi.mnb.view.entity.tasks;
 
 import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.entity.EntityInspector;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.view.entity.EntityPanel;
 
@@ -34,7 +34,7 @@ import uk.ac.ebi.mnb.view.entity.EntityPanel;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class TaskInspector extends EntityInspector {
+public class TaskInspector extends AbstractEntityInspector {
 
     private static final Logger LOGGER = Logger.getLogger(TaskInspector.class);
 

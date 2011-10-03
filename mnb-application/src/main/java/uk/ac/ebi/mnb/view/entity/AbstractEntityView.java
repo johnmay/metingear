@@ -1,4 +1,3 @@
-
 /**
  * EntityView.java
  *
@@ -23,6 +22,7 @@ package uk.ac.ebi.mnb.view.entity;
 
 import com.jgoodies.forms.factories.Borders;
 import java.awt.Color;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
@@ -31,7 +31,7 @@ import javax.swing.plaf.basic.BasicSplitPaneUI;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
-
+import uk.ac.ebi.mnb.interfaces.EntityView;
 
 /**
  *          EntityView – 2011.09.06 <br>
@@ -40,15 +40,16 @@ import uk.ac.ebi.core.AnnotatedEntity;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class EntityView
-  extends JSplitPane {
+public class AbstractEntityView
+        extends JSplitPane
+        implements EntityView {
 
-    private static final Logger LOGGER = Logger.getLogger(EntityView.class);
-    private final EntityTable table;
-    private final EntityInspector inspector;
+    private static final Logger LOGGER = Logger.getLogger(AbstractEntityView.class);
+    private final AbstractEntityTable table;
+    private final AbstractEntityInspector inspector;
 
-    public EntityView(EntityTable table,
-                         EntityInspector inspector) {
+    public AbstractEntityView(AbstractEntityTable table,
+            AbstractEntityInspector inspector) {
 
         this.table = table;
         this.inspector = inspector;
@@ -64,14 +65,12 @@ public class EntityView
 
     }
 
-
     private void setBorders() {
         // simple narrow border on top and bottom
         ((BasicSplitPaneUI) getUI()).getDivider().setBorder(
-          BorderFactory.createMatteBorder(1, 0, 1, 0, new Color(0xa5a5a5)));
+                BorderFactory.createMatteBorder(1, 0, 1, 0, new Color(0xa5a5a5)));
         setBorder(Borders.EMPTY_BORDER);
     }
-
 
     /**
      *
@@ -80,17 +79,15 @@ public class EntityView
      * @return Class extending EntityTable
      *
      */
-    public EntityTable getTable() {
+    public AbstractEntityTable getTable() {
         return table;
     }
-
 
     public boolean update() {
         table.update();
         inspector.update();
         return true; // ? what return
     }
-
 
     /**
      *
@@ -99,29 +96,27 @@ public class EntityView
      * @return Class extending the EntityInspector
      *
      */
-    public EntityInspector getInspector() {
+    public AbstractEntityInspector getInspector() {
         return inspector;
     }
-
 
     /**
      * Returns the currently selected component in the view
      * @return
+     * @Deprecated use getSelection()
      */
+    @Deprecated
     public AnnotatedEntity getSelectedEntity() {
-        return inspector.getActiveComponent();
+        return inspector.getSelectedEntity();
     }
 
-
-    public List<AnnotatedEntity> getSelectedEntities() {
-        return inspector.getActiveComponents();
+    public Collection<AnnotatedEntity> getSelection() {
+        return inspector.getSelection();
     }
 
-
-    public void setSelected(AnnotatedEntity annotatedComponent) {
-        table.setSelected(annotatedComponent);
+    public boolean setSelection(AnnotatedEntity annotatedComponent) {
+        return table.setSelection(annotatedComponent);
     }
 
 
 }
-

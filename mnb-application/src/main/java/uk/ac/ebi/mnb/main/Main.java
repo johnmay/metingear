@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
-import uk.ac.ebi.mnb.menu.file.Preferences;
+import uk.ac.ebi.mnb.menu.file.PreferenceDialog;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.view.AboutDialog;
 
@@ -48,7 +48,7 @@ public class Main {
             app.setPreferencesHandler(new PreferencesHandler() {
 
                 public void handlePreferences(PreferencesEvent pe) {
-                    Preferences pref = new Preferences(MainFrame.getInstance(),
+                    PreferenceDialog pref = new PreferenceDialog(MainFrame.getInstance(),
                             MainFrame.getInstance());
                     pref.setVisible(true);
                 }
@@ -57,7 +57,6 @@ public class Main {
 
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
-
                 public void run() {
                     MainFrame.getInstance().setJMenuBar(new MainMenuBar());
                     MainFrame.getInstance().setVisible(true);

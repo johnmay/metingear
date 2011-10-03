@@ -13,9 +13,9 @@
         <module>mnb-core</module>
         <module>mnb-simulation</module>
         <module>mnb-edit</module>
-    <module>Interfaces</module>
-    <module>Dialogs</module>
-  </modules>
+        <module>mnb-interfaces</module>
+        <module>mnb-dialog</module>
+    </modules>
 
     <properties>
         <mnb.version>1.1-SNAPSHOT</mnb.version>

@@ -30,7 +30,7 @@ import uk.ac.ebi.core.AnnotatedEntity;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface SelectionController {
+public interface SelectionController extends Updatable {
 
     /**
      * Sets the selection as the provide item
@@ -39,4 +39,9 @@ public interface SelectionController {
     public boolean setSelection(AnnotatedEntity entity);
 
     public Collection<AnnotatedEntity> getSelection();
+
+    @Deprecated
+    public AnnotatedEntity getSelectedEntity();
+
+    
 }

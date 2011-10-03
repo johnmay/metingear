@@ -46,25 +46,26 @@ public class ReactionGraphAction
 
     @Override
     public void actionPerformed( ActionEvent e ) {
-        //SelectionManager selectionManager = MainController.getInstance().getSelectionManager();
-        //GeneProductSelection selection = selectionManager.getGeneProductSelection();
-        GeneProduct[] products = ReconstructionManager.getInstance().getActiveReconstruction().getGeneProducts().getAllProducts();
-        System.out.println( products.length );
-        List<Reaction> reactionsToShow = new ArrayList();
-        for ( GeneProduct product : products ) {
-            if ( !product.getReactions().isEmpty() ) {
-                reactionsToShow.addAll( product.getReactions() );
-            }
-        }
-        GraphPanel gp = new GraphPanel();
-        MainFrame.getInstance().getProjectPanel().add(gp, "Reaction Graph");
-        ((CardLayout)MainFrame.getInstance().getProjectPanel().getLayout()).show( MainFrame.getInstance().getProjectPanel() , "Reaction Graph");
-        ReactionGraph graph = new ReactionGraph();
-        graph.addReactions( reactionsToShow );
-        gp.setModel( graph );
-        gp.buildGraph();
-        gp.revalidate();
-        gp.repaint();
+        throw new UnsupportedOperationException("Old method");
+//        //SelectionManager selectionManager = MainController.getInstance().getSelectionManager();
+//        //GeneProductSelection selection = selectionManager.getGeneProductSelection();
+//        GeneProduct[] products = ReconstructionManager.getInstance().getActiveReconstruction().getGeneProducts().getAllProducts();
+//        System.out.println( products.length );
+//        List<Reaction> reactionsToShow = new ArrayList();
+//        for ( GeneProduct product : products ) {
+//            if ( !product.getReactions().isEmpty() ) {
+//                reactionsToShow.addAll( product.getReactions() );
+//            }
+//        }
+//        GraphPanel gp = new GraphPanel();
+//        MainFrame.getInstance().getViewController().add(gp, "Reaction Graph");
+//        ((CardLayout)MainFrame.getInstance().getViewController().getLayout()).show( MainFrame.getInstance().getViewController() , "Reaction Graph");
+//        ReactionGraph graph = new ReactionGraph();
+//        graph.addReactions( reactionsToShow );
+//        gp.setModel( graph );
+//        gp.buildGraph();
+//        gp.revalidate();
+//        gp.repaint();
 
     }
 }

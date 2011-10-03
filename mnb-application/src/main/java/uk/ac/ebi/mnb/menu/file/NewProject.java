@@ -206,8 +206,7 @@ public class NewProject extends DropdownDialog {
     }
 
     @Override
-    public void update() {
-        MainFrame.getInstance().getProjectPanel().update();
-        MainFrame.getInstance().getSourceListController().update();
+    public boolean update() {
+        return MainFrame.getInstance().update();
     }
 }

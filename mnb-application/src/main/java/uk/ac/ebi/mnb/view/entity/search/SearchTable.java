@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.view.entity.search;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import uk.ac.ebi.mnb.view.entity.EntityTable;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
@@ -37,7 +37,7 @@ import uk.ac.ebi.mnb.main.MainFrame;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class SearchTable extends EntityTable {
+public class SearchTable extends AbstractEntityTable {
 
     private static final Logger LOGGER = Logger.getLogger(SearchTable.class);
     private DoubleClickListener listener;
@@ -53,10 +53,10 @@ public class SearchTable extends EntityTable {
 
     private class DoubleClickListener extends MouseAdapter {
 
-        private EntityTable table;
+        private AbstractEntityTable table;
 
 
-        public DoubleClickListener(EntityTable table) {
+        public DoubleClickListener(AbstractEntityTable table) {
             this.table = table;
         }
 
@@ -67,7 +67,7 @@ public class SearchTable extends EntityTable {
                 int index = table.getSelectedRow();
                 if(index != -1){
                     AnnotatedEntity entity = table.getModel().getEntity(convertRowIndexToModel(index));
-                    MainFrame.getInstance().getProjectPanel().setSelected(entity);
+                    MainFrame.getInstance().getViewController().setSelection(entity);
                 }
 
             }

@@ -1,8 +1,8 @@
 
 /**
- * EntitySelector.java
+ * DialogController.java
  *
- * 2011.09.28
+ * 2011.09.26
  *
  * This file is part of the CheMet library
  * 
@@ -19,25 +19,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view;
+package uk.ac.ebi.mnb.interfaces;
 
-import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import javax.swing.JDialog;
 
 
 /**
- *          EntitySelector – 2011.09.28 <br>
- *          Class description
+ *          DialogController – 2011.09.26 <br>
+ *          Places a dialog in place determined by it's self
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface  EntitySelector {
+public interface DialogController {
 
-    /**
-     * Set the selected item
-     * @param entity
-     */
-    public void setSelected(AnnotatedEntity entity);
+    public void place(JDialog dialog);
+  
 }
 

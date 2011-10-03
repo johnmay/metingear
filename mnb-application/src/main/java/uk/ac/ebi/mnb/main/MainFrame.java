@@ -14,6 +14,7 @@
  */
 package uk.ac.ebi.mnb.main;
 
+import uk.ac.ebi.mnb.interfaces.DialogController;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -25,7 +26,7 @@ import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.menu.file.NewProjectAction;
 import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
 import uk.ac.ebi.mnb.view.*;
-import uk.ac.ebi.mnb.view.entity.ProjectPanel;
+import uk.ac.ebi.mnb.view.entity.ProjectView;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.search.*;
 
@@ -42,6 +43,7 @@ import org.apache.lucene.store.LockObtainFailedException;
 import com.explodingpixels.macwidgets.*;
 import com.jgoodies.forms.factories.Borders;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.interfaces.ViewController;
 
 /**
  * MainView.java
@@ -59,7 +61,7 @@ public class MainFrame
     private static final Logger LOGGER = Logger.getLogger(MainFrame.class);
     private UnifiedToolBar toolbar; //TODO: wrap in class
     private JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT); //TODO wrap
-    private ProjectPanel project = new ProjectPanel();
+    private ProjectView project = new ProjectView();
     private MessageManager messages = new MessageManager();
     private SourceController sourceController; //TODO:  move to SourceList wrapping class
     private JTextField searchField = new JTextField(10); //TODO:  move to a toolbar wraping class
@@ -124,8 +126,7 @@ public class MainFrame
                                             public void run() {
                                                 SearchManager.getInstance().setPreviousEntries(
                                                         entities);
-                                                getProjectPanel().
-                                                        getSearchView().update();
+                                                ((ProjectView) getViewController()).getSearchView().update();
                                             }
                                         });
                                     }
@@ -146,7 +147,7 @@ public class MainFrame
                         }).start();
 
 
-                        MainFrame.getInstance().getProjectPanel().setSearchView();
+                        ((ProjectView) getViewController()).setSearchView();
                     } catch (BadLocationException ex) {
                         ex.printStackTrace();
                     }
@@ -194,12 +195,17 @@ public class MainFrame
         ((BasicSplitPaneUI) pane.getUI()).getDivider().setBorder(
                 BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
 
+        // Bottom bar – purely aesthetic atm
+        BottomBar bottombar = new BottomBar(BottomBarSize.SMALL);
+
+        Box topbar = Box.createVerticalBox();
+        topbar.add(toolbar.getComponent());
+        topbar.add(messages);
 
         // main layout
-        this.add(toolbar.getComponent(), BorderLayout.NORTH);
+        this.add(topbar, BorderLayout.NORTH);
         this.add(pane, BorderLayout.CENTER);
-        this.add(messages, BorderLayout.SOUTH);
-
+        this.add(bottombar.getComponent(), BorderLayout.SOUTH);
         addComponentListener(new ComponentAdapter() {
 
             @Override
@@ -211,6 +217,7 @@ public class MainFrame
             public void componentResized(ComponentEvent e) {
                 messages.update();
             }
+            
         });
 
     }
@@ -239,7 +246,7 @@ public class MainFrame
      * @param dialog
      *
      */
-    public void place(DropdownDialog dialog) {
+    public void place(JDialog dialog) {
 
         int x = toolbar.getComponent().getLocationOnScreen().x
                 + toolbar.getComponent().getWidth() / 2 - dialog.getWidth() / 2;
@@ -257,9 +264,10 @@ public class MainFrame
      * Sends update signal to project items and source list
      * 
      */
-    public void update() {
+    public boolean update() {
         project.update();
         sourceController.update();
+        return true; // need way of neatly combinding
     }
 
     /** Message delegation **/
@@ -310,7 +318,7 @@ public class MainFrame
      * @return Instance of the project panel
      *
      */
-    public ProjectPanel getProjectPanel() {
+    public ViewController getViewController() {
         return project;
     }
 

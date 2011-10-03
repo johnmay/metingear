@@ -27,7 +27,7 @@ import javax.swing.JTextField;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
-import uk.ac.ebi.mnb.view.entity.EntityInspector;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.mnb.main.MainFrame;
@@ -41,7 +41,7 @@ import uk.ac.ebi.mnb.main.MainFrame;
  * @author  $Author$ (this version)
  */
 public class MetaboliteInspector
-  extends EntityInspector {
+  extends AbstractEntityInspector {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteInspector.class);
   

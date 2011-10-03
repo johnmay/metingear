@@ -272,7 +272,7 @@ public class PredictGPR
         // add to the products
         // MainView.getInstance().notifyProjectTreeOfStructureChange( ReconstructionManager.getInstance() );
         MainFrame.getInstance().getSourceListController().update();
-        MainFrame.getInstance().getProjectPanel().update();
+        MainFrame.getInstance().getViewController().update();
     }
 
 

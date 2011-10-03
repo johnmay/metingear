@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.mnb.menu.reconciliation;
 
-import java.util.List;
+import java.util.Collection;
 import uk.ac.ebi.mnb.core.DelayedBuildAction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
@@ -56,15 +56,15 @@ public class DownloadStructures
     @Override
     public void activateActions() {
 
-        List< AnnotatedEntity> components = MainFrame.getInstance().getProjectPanel().
-          getSelectedEntities();
+        Collection<AnnotatedEntity> components = MainFrame.getInstance().getViewController().
+          getSelection();
 
         if( components.isEmpty() == false ) {
             dialog.setComponents(components);
             dialog.setVisible(true);
             
             // modal dialog won't execute till after
-            MainFrame.getInstance().getProjectPanel().update();
+            MainFrame.getInstance().getViewController().update();
         }
 
     }

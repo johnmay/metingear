@@ -53,8 +53,7 @@ public class ToggleInspectorToolbar extends GeneralAction {
 
         Settings.getInstance().put(Settings.VIEW_TOOLBAR_INSPECTOR,
                                                  selected);
-        MainFrame.getInstance().getProjectPanel().update();
-        MainFrame.getInstance().getProjectPanel().repaint();
+        MainFrame.getInstance().getViewController().getActiveView().update();
 
     }
 

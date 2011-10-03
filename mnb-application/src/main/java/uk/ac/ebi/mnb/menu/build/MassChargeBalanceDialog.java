@@ -89,7 +89,8 @@ public class MassChargeBalanceDialog
 
 
     @Override
-    public void update() {
+    public boolean update() {
+        return true;
     }
 
 

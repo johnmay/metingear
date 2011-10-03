@@ -1,4 +1,3 @@
-
 /**
  * ReactionInspector.java
  *
@@ -23,20 +22,17 @@ package uk.ac.ebi.mnb.view.entity.reaction;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import java.util.Collection;
 import java.util.List;
+import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.ReactionRenderer;
-import uk.ac.ebi.mnb.view.entity.BasicAnnotationCellRenderer;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
-import uk.ac.ebi.mnb.view.entity.EntityInspector;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.main.MainFrame;
-
 
 /**
  *          ReactionInspector – 2011.09.26 <br>
@@ -46,41 +42,37 @@ import uk.ac.ebi.mnb.main.MainFrame;
  * @author  $Author$ (this version)
  */
 public class ReactionInspector
-  extends EntityInspector {
+        extends AbstractEntityInspector {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionInspector.class);
     private CellConstraints cc = new CellConstraints();
-
 
     public ReactionInspector() {
         super(new ReactionPanel());
 
     }
 
-
-  
-
     private GeneralPanel getMetabolicXref() {
 
         GeneralPanel panel = new GeneralPanel();
 
-        MetabolicReaction rxn = (MetabolicReaction) getActiveComponent();
+        MetabolicReaction rxn = (MetabolicReaction) getSelectedEntity();
 
         int size = rxn.getAllReactionMolecules().size();
 
         List<Metabolite> reactants = rxn.getReactantMolecules();
         List<Metabolite> products = rxn.getProductMolecules();
         String columnLayout = "";
-        for( int i = 0 ; i < reactants.size() ; i++ ) {
+        for (int i = 0; i < reactants.size(); i++) {
             columnLayout = columnLayout + 128 + "px" + ", ";
-            if( i + 1 < reactants.size() ) {
+            if (i + 1 < reactants.size()) {
                 columnLayout = columnLayout + +15 + "px" + ", ";
             }
         }
         columnLayout = columnLayout + 128 + "px";
-        for( int i = 0 ; i < products.size() ; i++ ) {
+        for (int i = 0; i < products.size(); i++) {
             columnLayout = columnLayout + ", " + 128 + "px";
-            if( i + 1 < products.size() ) {
+            if (i + 1 < products.size()) {
                 columnLayout = columnLayout + ", " + 15 + "px";
             }
         }
@@ -89,21 +81,21 @@ public class ReactionInspector
 
 
         int columnIndex = 1;
-        for( int i = 0 ; i < reactants.size() ; i++ ) {
+        for (int i = 0; i < reactants.size(); i++) {
             Metabolite m = reactants.get(i);
             panel.add(
-              new InternalLinkLabel(m, m.getName(), MainFrame.getInstance().getProjectPanel()),
-              cc.xy(
-              columnIndex, 1));
+                    new InternalLinkLabel(m, m.getName(), (SelectionController) MainFrame.getInstance().getViewController()),
+                    cc.xy(
+                    columnIndex, 1));
             columnIndex += i + 1 < reactants.size() ? 2 : 1;
         }
         columnIndex += 1; // hop over reaction arrow
-        for( int i = 0 ; i < products.size() ; i++ ) {
+        for (int i = 0; i < products.size(); i++) {
             Metabolite m = products.get(i);
             panel.add(
-              new InternalLinkLabel(m, m.getName(), MainFrame.getInstance().getProjectPanel()),
-              cc.xy(
-              columnIndex, 1));
+                    new InternalLinkLabel(m, m.getName(), (SelectionController)  MainFrame.getInstance().getViewController()),
+                    cc.xy(
+                    columnIndex, 1));
             columnIndex += i + 1 < products.size() ? 2 : 1;
         }
 
@@ -112,12 +104,10 @@ public class ReactionInspector
 
     }
 
-
     @Override
     public void store() {
 //        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
+    
 }
-

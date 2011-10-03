@@ -19,6 +19,7 @@ import java.awt.CardLayout;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,6 @@ import mnb.view.old.MatrixView;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.view.EntitySelector;
 import mnb.view.old.MatrixModel;
 import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
 import uk.ac.ebi.mnb.view.entity.protein.ProteinView;
@@ -41,6 +41,8 @@ import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import uk.ac.ebi.metabolomes.run.RunnableTask;
+import uk.ac.ebi.mnb.interfaces.EntityView;
+import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.search.SearchManager;
 
@@ -53,12 +55,12 @@ import uk.ac.ebi.search.SearchManager;
  * @author johnmay
  * @date Apr 8, 2011
  */
-public class ProjectPanel
-  extends JPanel implements EntitySelector {
+public class ProjectView
+  extends JPanel implements ViewController {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
-      ProjectPanel.class);
+      ProjectView.class);
     // underlying tab components
     private JScrollPane matrixPane;
     private MatrixView matrix = null;
@@ -69,10 +71,10 @@ public class ProjectPanel
     private TaskView tasks = null;
     private SearchView search = null;
     private CardLayout layout;
-    private Map<String, EntityView> viewMap;
+    private Map<String, AbstractEntityView> viewMap;
 
 
-    public ProjectPanel() {
+    public ProjectView() {
 
 //        productBrowser = BrowserSplitPane.getInstance();
         products = new ProteinView();
@@ -107,7 +109,7 @@ public class ProjectPanel
      */
     public EntityView getActiveView() {
 
-        for( EntityView pane : Arrays.asList(reactions, metabolites) ) {
+        for( AbstractEntityView pane : Arrays.asList(reactions, metabolites) ) {
             if( pane != null && pane.isVisible() ) {
                 return pane;
             }
@@ -150,13 +152,13 @@ public class ProjectPanel
      * {@see EntityView#update()}
      *
      */
-    public void update() {
+    public boolean update() {
 
         ReconstructionManager manager = ReconstructionManager.getInstance();
         Reconstruction reconstruction = manager.getActiveReconstruction();
 
         if( reconstruction == null ) {
-            return;
+            return false;
         }
 
         logger.info("Sending update signal to all views");
@@ -182,6 +184,9 @@ public class ProjectPanel
             logger.info(ex.getMessage());
             MainFrame.getInstance().addWarningMessage("Unable to index component for searching");
         }
+
+
+        return true; // update successful
 
     }
 
@@ -212,12 +217,12 @@ public class ProjectPanel
      * @return
      *
      */
-    public List<AnnotatedEntity> getSelectedEntities() {
+    public Collection<AnnotatedEntity> getSelection() {
 
         EntityView view = getActiveView();
 
         if( view != null ) {
-            return view.getSelectedEntities();
+            return view.getSelection();
         }
 
         return new ArrayList();
@@ -270,13 +275,15 @@ public class ProjectPanel
      * @param entity
      * 
      */
-    public void setSelected(AnnotatedEntity entity) {
+    public boolean setSelection(AnnotatedEntity entity) {
 
-        EntityView view = viewMap.get(entity.getBaseType());
+        AbstractEntityView view = viewMap.get(entity.getBaseType());
 
         layout.show(this, view.getClass().getSimpleName());
 
-        view.setSelected(entity);
+        view.setSelection(entity);
+
+        return true; // succesful
 
     }
 
@@ -312,6 +319,7 @@ public class ProjectPanel
     public MatrixView getMatrixView() {
         return matrix;
     }
+
 
 
 }

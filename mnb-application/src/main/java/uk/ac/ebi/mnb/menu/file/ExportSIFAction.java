@@ -44,35 +44,36 @@ public class ExportSIFAction
 
     @Override
     public void activateActions() {
-        MatrixView matrixView = MainFrame.getInstance().getProjectPanel().getMatrixView();
-        if ( matrixView == null ) {
-            MainFrame.getInstance().addErrorMessage( "Unable to obtain the matrix from the project. Have you used Build > StoichiometricMatrix before exporting"  );
-            return;
-        }
-        MatrixModel model = matrixView.getModel();
-        File choosenFile = getFile( showSaveDialog() );
-
-        if ( choosenFile.exists() ) {
-            String mesg = choosenFile.toString() + " already exists. Are you sure you want to save over this file?";
-            String[] values = new String[]{ "Yes" , "No" };
-            String value = "Yes";
-            int selected = JOptionPane.showOptionDialog( null , mesg , "Warning" , JOptionPane.YES_NO_CANCEL_OPTION , JOptionPane.WARNING_MESSAGE , ViewUtils.icon_64x64 , values , value );
-            if ( selected == -1 ) {
-                logger.debug( "user cancelled" );
-                return;
-            } else if ( selected == 1 ) {
-                activateActions();
-            }
-        }
-
-
-        try {
-            FileWriter fw = new FileWriter( choosenFile );
-            model.toTextFile( fw );
-            fw.close();
-        } catch ( IOException ex ) {
-            MainFrame.getInstance().addErrorMessage("There was a problem when writing " + choosenFile);
-        }
+        throw new UnsupportedOperationException("Old method");
+//        MatrixView matrixView = MainFrame.getInstance().getViewController().getMatrixView();
+//        if ( matrixView == null ) {
+//            MainFrame.getInstance().addErrorMessage( "Unable to obtain the matrix from the project. Have you used Build > StoichiometricMatrix before exporting"  );
+//            return;
+//        }
+//        MatrixModel model = matrixView.getModel();
+//        File choosenFile = getFile( showSaveDialog() );
+//
+//        if ( choosenFile.exists() ) {
+//            String mesg = choosenFile.toString() + " already exists. Are you sure you want to save over this file?";
+//            String[] values = new String[]{ "Yes" , "No" };
+//            String value = "Yes";
+//            int selected = JOptionPane.showOptionDialog( null , mesg , "Warning" , JOptionPane.YES_NO_CANCEL_OPTION , JOptionPane.WARNING_MESSAGE , ViewUtils.icon_64x64 , values , value );
+//            if ( selected == -1 ) {
+//                logger.debug( "user cancelled" );
+//                return;
+//            } else if ( selected == 1 ) {
+//                activateActions();
+//            }
+//        }
+//
+//
+//        try {
+//            FileWriter fw = new FileWriter( choosenFile );
+//            model.toTextFile( fw );
+//            fw.close();
+//        } catch ( IOException ex ) {
+//            MainFrame.getInstance().addErrorMessage("There was a problem when writing " + choosenFile);
+//        }
 
 
     }

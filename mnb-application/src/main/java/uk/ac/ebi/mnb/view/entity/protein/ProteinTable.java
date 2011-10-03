@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
-import uk.ac.ebi.mnb.view.entity.EntityTable;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
 
@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProteinTable extends EntityTable {
+public class ProteinTable extends AbstractEntityTable {
 
     private static final Logger LOGGER = Logger.getLogger(ProteinTable.class);
 

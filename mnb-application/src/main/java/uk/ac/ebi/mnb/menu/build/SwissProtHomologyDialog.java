@@ -165,7 +165,8 @@ public class SwissProtHomologyDialog
 
 
     @Override
-    public void update() {
+    public boolean update() {
+        return true;
     }
 
 

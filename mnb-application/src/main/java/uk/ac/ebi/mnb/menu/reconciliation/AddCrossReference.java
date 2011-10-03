@@ -1,4 +1,3 @@
-
 /**
  * AddCrossReference.java
  *
@@ -21,12 +20,11 @@
  */
 package uk.ac.ebi.mnb.menu.reconciliation;
 
-import javax.swing.text.ComponentView;
 import uk.ac.ebi.mnb.core.DelayedBuildAction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.main.MainFrame;
-
 
 /**
  *          AddCrossReference – 2011.09.26 <br>
@@ -36,35 +34,32 @@ import uk.ac.ebi.mnb.main.MainFrame;
  * @author  $Author$ (this version)
  */
 public class AddCrossReference
-  extends DelayedBuildAction {
+        extends DelayedBuildAction {
 
     private static final Logger LOGGER = Logger.getLogger(AddCrossReference.class);
     private AddCrossReferenceDialog dialog;
 
-
     public AddCrossReference() {
         super("AddCrossReference");
     }
-
 
     @Override
     public void buildComponents() {
         dialog = new AddCrossReferenceDialog();
     }
 
-
     @Override
     public void activateActions() {
 
         // check the items are vaild first
-        uk.ac.ebi.mnb.view.entity.EntityView view = MainFrame.getInstance().getProjectPanel().
-          getActiveView();
-        if( view == null ) {
-            MainFrame.getInstance().addErrorMessage( "Unable to add cross reference, no active view available");
+        EntityView view = MainFrame.getInstance().getViewController().
+                getActiveView();
+        if (view == null) {
+            MainFrame.getInstance().addErrorMessage("Unable to add cross reference, no active view available");
 
         } else {
             AnnotatedEntity reconComponent = view.getSelectedEntity();
-            if( reconComponent == null ) {
+            if (reconComponent == null) {
                 MainFrame.getInstance().addErrorMessage("Unable to add cross reference, no active component available");
             } else {
                 dialog.setComponent(reconComponent);
@@ -72,7 +67,4 @@ public class AddCrossReference
             }
         }
     }
-
-
 }
-

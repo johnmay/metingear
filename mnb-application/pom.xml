@@ -101,6 +101,21 @@
             <artifactId>mnb-miscellaneous</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mnb-interfaces</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mnb-dialog</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mnb-dialog</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -119,11 +134,11 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>osxappbundle-maven-plugin</artifactId>
-                <version>1.0-alpha-1</version>
+                <version>1.0-alpha-2</version>
                 <configuration>
                     <mainClass>uk.ac.ebi.mnb.main.Main</mainClass>
                     <iconFile>/Users/johnmay/EBI/illustrations/mnb/icons/mnb.icns</iconFile>
-                    <buildDirectory>/Users/Applications/MNB</buildDirectory>
+                    <buildDirectory>/Users/johnmay/Applications/</buildDirectory>
                 </configuration>
                 <executions>
                     <execution>

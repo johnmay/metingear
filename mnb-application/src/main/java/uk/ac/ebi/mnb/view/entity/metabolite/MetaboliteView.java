@@ -17,7 +17,7 @@
 
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
-import uk.ac.ebi.mnb.view.entity.EntityView;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityView;
 
 
 /**
@@ -26,7 +26,7 @@ import uk.ac.ebi.mnb.view.entity.EntityView;
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
 public class MetaboliteView
-  extends EntityView {
+  extends AbstractEntityView {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(

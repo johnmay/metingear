@@ -122,7 +122,7 @@ public class ImportPeptidesAction extends FileChooserAction {
                                           JOptionPane.WARNING_MESSAGE);
         }
         MainFrame.getInstance().getSourceListController().update();
-        MainFrame.getInstance().getProjectPanel().update();
+        MainFrame.getInstance().getViewController().update();
         MainFrame.getInstance().getJMenuBar().setActiveDependingOnRequirements();
 
 

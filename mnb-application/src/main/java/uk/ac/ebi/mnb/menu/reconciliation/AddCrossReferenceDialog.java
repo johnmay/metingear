@@ -117,8 +117,8 @@ public class AddCrossReferenceDialog extends DropdownDialog {
 
 
     @Override
-    public void update() {
-        MainFrame.getInstance().getProjectPanel().update();
+    public boolean update() {
+        return MainFrame.getInstance().getViewController().update();
     }
 
 

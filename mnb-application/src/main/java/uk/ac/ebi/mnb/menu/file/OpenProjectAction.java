@@ -68,7 +68,7 @@ public class OpenProjectAction
                 }
 
                 SourceController controller = MainFrame.getInstance().getSourceListController();
-                MainFrame.getInstance().getProjectPanel().update();
+                MainFrame.getInstance().getViewController().update();
                 {
                     long start = System.currentTimeMillis();
                     controller.update();

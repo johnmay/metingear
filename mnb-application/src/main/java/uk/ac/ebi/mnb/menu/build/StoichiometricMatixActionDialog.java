@@ -88,7 +88,9 @@ public class StoichiometricMatixActionDialog
         }
         // to fix
 
-        MainFrame.getInstance().getProjectPanel().addMatrixView(s);
+        
+        
+//        MainFrame.getInstance().getViewController().addMatrixView(s);
 
 
 
@@ -96,7 +98,8 @@ public class StoichiometricMatixActionDialog
 
 
     @Override
-    public void update() {
+    public boolean update() {
+        return true;
     }
 
 
