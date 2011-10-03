@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.menu.file.Preferences;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.view.AboutDialog;
@@ -48,7 +49,7 @@ public class Main {
 
                 public void handlePreferences(PreferencesEvent pe) {
                     Preferences pref = new Preferences(MainFrame.getInstance(),
-                                                       MainFrame.getInstance());
+                            MainFrame.getInstance());
                     pref.setVisible(true);
                 }
             });
@@ -58,6 +59,7 @@ public class Main {
             SwingUtilities.invokeAndWait(new Runnable() {
 
                 public void run() {
+                    MainFrame.getInstance().setJMenuBar(new MainMenuBar());
                     MainFrame.getInstance().setVisible(true);
                 }
             });

@@ -23,10 +23,12 @@ package uk.ac.ebi.chemet.render.source;
 
 import com.explodingpixels.macwidgets.SourceListItem;
 import com.explodingpixels.macwidgets.SourceListModel;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 
 
 /**
@@ -41,7 +43,7 @@ public abstract class EntitySourceItem
 
     private static final Logger LOGGER = Logger.getLogger(EntitySourceItem.class);
     private final AnnotatedEntity entity;
-    private static Map<String, Accessor> map = getMap();
+    private static Map<SourceItemDisplayType, Accessor> map = getMap();
     protected  final Object container;
 
 
@@ -61,16 +63,16 @@ public abstract class EntitySourceItem
     /**
      * Updates the source list item
      */
-    public void update(String type) {
+    public void update(SourceItemDisplayType type) {
         setText(map.get(type).access(entity));
     }
 
 
-    private static Map<String, Accessor> getMap() {
-        Map map = new HashMap();
-        map.put("Name", new NameAccessor());
-        map.put("Accession", new AccessionAccessor());
-        map.put("Abbreviation", new AbbreviationAccessor());
+    private static Map<SourceItemDisplayType, Accessor> getMap() {
+        Map map = new EnumMap(SourceItemDisplayType.class);
+        map.put(SourceItemDisplayType.NAME, new NameAccessor());
+        map.put(SourceItemDisplayType.ACCESSION, new AccessionAccessor());
+        map.put(SourceItemDisplayType.ABBREVIATION, new AbbreviationAccessor());
         return map;
     }
 

@@ -170,8 +170,6 @@ public class MainFrame
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // menu bar
-        setJMenuBar(new MainMenuBar());
 
         // source list (todo: wrap in a class MNBSourceList)
         sourceController = new SourceController();

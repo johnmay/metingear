@@ -1,4 +1,3 @@
-
 /**
  * DefaultTheme.java
  *
@@ -27,7 +26,6 @@ import java.awt.Font;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.view.ViewUtils;
 
-
 /**
  *          DefaultTheme – 2011.09.30 <br>
  *          Class description
@@ -38,43 +36,37 @@ import uk.ac.ebi.mnb.view.ViewUtils;
 public class DefaultTheme implements Theme {
 
     private static final Logger LOGGER = Logger.getLogger(DefaultTheme.class);
-
     private Color bg = new Color(237, 237, 237);
 
     public Color getWarningForeground() {
         return Color.RED;
     }
 
-
     public Color getForeground() {
         return Color.DARK_GRAY;
     }
+
     public Color getAltForeground() {
         return Color.DARK_GRAY;
     }
-
 
     public Color getBackground() {
         return Color.WHITE;
     }
 
-
-    public Color getAltBackground() {
+    public Color getDialogBackground() {
         return bg;
     }
-
-
-
 
     public Font getBodyFont() {
         return ViewUtils.DEFAULT_BODY_FONT;
     }
 
-
     public Font getHeaderFont() {
         return ViewUtils.DEFAULT_HEADER_FONT;
     }
 
-
+    public float getDialogOpacity(){
+        return 0.95f;
+    }
 }
-

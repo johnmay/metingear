@@ -119,20 +119,20 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>osxappbundle-maven-plugin</artifactId>
-                <version>1.0-alpha-2</version>
+                <version>1.0-alpha-1</version>
                 <configuration>
                     <mainClass>uk.ac.ebi.mnb.main.Main</mainClass>
                     <iconFile>/Users/johnmay/EBI/illustrations/mnb/icons/mnb.icns</iconFile>
-                    <buildDirectory>/Users/johnmay/Applications</buildDirectory>
+                    <buildDirectory>/Users/Applications/MNB</buildDirectory>
                 </configuration>
-                <!--<executions>
+                <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>bundle</goal>
                         </goals>
                     </execution>
-                </executions>-->
+                </executions>
             </plugin>
         </plugins>
     </build>

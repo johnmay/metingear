@@ -1,8 +1,7 @@
-
 /**
- * ComboBox.java
+ * ItemSelector.java
  *
- * 2011.09.30
+ * 2011.10.03
  *
  * This file is part of the CheMet library
  * 
@@ -19,40 +18,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view;
+package uk.ac.ebi.mnb.interfaces;
 
-import javax.swing.JComboBox;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.theme.Theme;
-
+import java.util.Collection;
+import uk.ac.ebi.core.AnnotatedEntity;
 
 /**
- *          ComboBox – 2011.09.30 <br>
- *          Class description
+ * @name    ItemSelector - 2011.10.03 <br>
+ *          Interface description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ComboBox extends JComboBox {
+public interface SelectionController {
 
-    private static final Logger LOGGER = Logger.getLogger(ComboBox.class);
+    /**
+     * Sets the selection as the provide item
+     * @return
+     */
+    public boolean setSelection(AnnotatedEntity entity);
 
-
-    public ComboBox() {
-        Theme theme = Settings.getInstance().getTheme();
-        setForeground(theme.getForeground());
-        setFont(theme.getBodyFont());
-    }
-
-
-    public ComboBox(Object... items) {
-        super(items);
-        Theme theme = Settings.getInstance().getTheme();
-        setForeground(theme.getForeground());
-        setFont(theme.getBodyFont());
-    }
-
-
+    public Collection<AnnotatedEntity> getSelection();
 }
-

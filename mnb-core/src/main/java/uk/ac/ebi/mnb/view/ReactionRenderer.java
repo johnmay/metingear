@@ -1,4 +1,3 @@
-
 /**
  * ReactionRenderer.java
  *
@@ -52,7 +51,6 @@ import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.core.Metabolite;
 
-
 /**
  *          ReactionRenderer – 2011.09.27 <br>
  *          Class description
@@ -64,28 +62,25 @@ public class ReactionRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionRenderer.class);
     private AtomContainerRenderer renderer =
-                                  new AtomContainerRenderer(
-      Arrays.asList(new BasicSceneGenerator(),
-                    new BasicBondGenerator(),
-                    new BasicAtomGenerator()),
-      new AWTFontManager());
+            new AtomContainerRenderer(
+            Arrays.asList(new BasicSceneGenerator(),
+            new BasicBondGenerator(),
+            new BasicAtomGenerator()),
+            new AWTFontManager());
     private StructureDiagramGenerator sdg = new StructureDiagramGenerator();
 
-
-    public JLabel getReaction(Reaction<Metabolite, ?, ?> rxn) {
-        JLabel label = new JLabel();
-        label.setBackground(Color.WHITE);
+    public ImageIcon getReaction(Reaction<Metabolite, ?, ?> rxn) {
 
         int nParticipants = rxn.getAllReactionParticipants().size();
 
-        if( nParticipants == 0 ) {
-            return label;
+        if (nParticipants == 0) {
+            return new ImageIcon();
         }
 
         int height = 128;
-        int width = (nParticipants * 128) +
-                    (128) // arrow
-          + (nParticipants > 2 ? ((nParticipants - 2) * 15) : 0);
+        int width = (nParticipants * 128)
+                + (128) // arrow
+                + (nParticipants > 2 ? ((nParticipants - 2) * 15) : 0);
 
         BufferedImage masterImg = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g2 = (Graphics2D) masterImg.getGraphics();
@@ -93,44 +88,43 @@ public class ReactionRenderer {
         Rectangle2D bounds = new Rectangle2D.Double(-128, 0, 128, 128);
 
         List<Metabolite> reactants = rxn.getReactantMolecules();
-        for( int i = 0 ; i < reactants.size() ; i++ ) {
+        for (int i = 0; i < reactants.size(); i++) {
 
             bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
-                                            0, 128, 128);
+                    0, 128, 128);
             BufferedImage subImage = new BufferedImage(128, 128, BufferedImage.TYPE_4BYTE_ABGR);
             drawMolecule((Graphics2D) subImage.getGraphics(), new Rectangle(0, 0, 128, 128),
-                         reactants.get(i));
+                    reactants.get(i));
             g2.drawImage(subImage, (int) bounds.getX(), (int) bounds.getY(), null);
 
-            if( i + 1 < reactants.size() ) {
+            if (i + 1 < reactants.size()) {
                 bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
-                                                0, 15, 128);
+                        0, 15, 128);
                 drawPlus(g2, bounds);
             }
         }
         bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
-                                        0, 128, 128);
+                0, 128, 128);
         drawArrow(g2, bounds, Reversibility.REVERSIBLE);
         List<Metabolite> products = rxn.getProductMolecules();
-        for( int i = 0 ; i < products.size() ; i++ ) {
+        for (int i = 0; i < products.size(); i++) {
             bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
-                                            0, 128, 128);
+                    0, 128, 128);
             BufferedImage subImage = new BufferedImage(128, 128, BufferedImage.TYPE_4BYTE_ABGR);
             drawMolecule((Graphics2D) subImage.getGraphics(), new Rectangle(0, 0, 128, 128),
-                         products.get(i));
+                    products.get(i));
             g2.drawImage(subImage, (int) bounds.getX(), (int) bounds.getY(), null);
-            if( i + 1 < products.size() ) {
+            if (i + 1 < products.size()) {
                 bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
-                                                0, 15, 128);
+                        0, 15, 128);
                 drawPlus(g2, bounds);
             }
         }
 
-        label.setIcon(new ImageIcon(masterImg));
 
-        return label;
+        return new ImageIcon(masterImg);
+
     }
-
 
     public void drawMolecule(Graphics2D g2, Rectangle2D bounds, Metabolite metabolite) {
 
@@ -138,9 +132,9 @@ public class ReactionRenderer {
         g2.fill(bounds);
 
 
-        if( metabolite.getChemicalStructures().iterator().hasNext() ) {
+        if (metabolite.getChemicalStructures().iterator().hasNext()) {
             IAtomContainer atomContainer = metabolite.getChemicalStructures().iterator().next().
-              getMolecule();
+                    getMolecule();
 
 
             sdg.setMolecule(new Molecule(atomContainer));
@@ -148,7 +142,7 @@ public class ReactionRenderer {
                 sdg.generateCoordinates();
                 renderer.paint(sdg.getMolecule(), new AWTDrawVisitor(g2), bounds, true);
                 g2.dispose();
-            } catch( CDKException ex ) {
+            } catch (CDKException ex) {
                 ex.printStackTrace();
             }
         } else {
@@ -159,7 +153,6 @@ public class ReactionRenderer {
         }
 
     }
-
 
     public void drawPlus(Graphics2D g2, Rectangle2D bounds) {
         double length = (bounds.getWidth() / 2) * 0.8;
@@ -177,7 +170,6 @@ public class ReactionRenderer {
 
     }
 
-
     public void drawArrow(Graphics2D g2, Rectangle2D bounds, Reversibility reversibility) {
         double length = (bounds.getWidth() / 2) * 0.8;
 
@@ -191,7 +183,7 @@ public class ReactionRenderer {
         g2.setStroke(new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
         g2.draw(new Line2D.Double(centreX - (length * 0.65), centreY, centreX + (length * 0.65),
-                                  centreY));
+                centreY));
 
         int rightX[] = new int[]{
             (int) (centreX + (length * 0.7)),
@@ -211,11 +203,11 @@ public class ReactionRenderer {
             (int) (centreX - length)
         };
 
-        if( reversibility != Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT ) {
+        if (reversibility != Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT) {
             g2.fillPolygon(new Polygon(rightX, y, 3));
             g2.drawPolygon(new Polygon(rightX, y, 3));
         }
-        if( reversibility != Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT ) {
+        if (reversibility != Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT) {
             g2.fillPolygon(new Polygon(leftX, y, 3));
             g2.drawPolygon(new Polygon(leftX, y, 3));
         }
@@ -223,14 +215,10 @@ public class ReactionRenderer {
 
     }
 
-
     public static void main(String[] args) throws IOException {
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_4BYTE_ABGR);
 //        Reaction rxn = new R
 //        new ReactionRenderer().getReaction()
         ImageIO.write(img, "png", new File("/Users/johnmay/Desktop/sample.png"));
     }
-
-
 }
-

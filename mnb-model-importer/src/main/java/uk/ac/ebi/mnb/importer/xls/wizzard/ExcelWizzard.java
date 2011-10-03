@@ -123,7 +123,7 @@ public class ExcelWizzard
 
         JPanel navPanel = new JPanel();
         navPanel.setLayout(new FormLayout("pref:grow, p ,4dlu, right:min, p, left:min", "p"));
-        navPanel.add(getCloseButton(), new CellConstraints().xy(2, 1));
+        navPanel.add(getClose(), new CellConstraints().xy(2, 1));
         navPanel.add(new JButton(new PrevPanel()), new CellConstraints().xy(4, 1));
         navPanel.add(new JButton(new NextPanel()), new CellConstraints().xy(6, 1));
         add(navPanel, BorderLayout.SOUTH);

@@ -1,4 +1,3 @@
-
 /**
  * ReconciliationMenu.java
  *
@@ -21,12 +20,15 @@
  */
 package uk.ac.ebi.mnb.menu;
 
-import uk.ac.ebi.mnb.menu.reconciliation.AutomaticCrossReference;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.core.DropdownMenuItem;
+import uk.ac.ebi.mnb.main.MainFrame;
 import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
+import uk.ac.ebi.mnb.menu.reconciliation.AutomaticCrossReferenceDialog;
 import uk.ac.ebi.mnb.menu.reconciliation.DownloadStructures;
-
 
 /**
  *          ReconciliationMenu – 2011.09.30 <br>
@@ -38,22 +40,22 @@ import uk.ac.ebi.mnb.menu.reconciliation.DownloadStructures;
 public class ReconciliationMenu extends JMenu {
 
     private static final Logger LOGGER = Logger.getLogger(ReconciliationMenu.class);
-    private DynamicMenuItem items[] = new DynamicMenuItem[3];
-
+    private JMenuItem items[] = new JMenuItem[3];
 
     public ReconciliationMenu() {
         super("Reconciliation");
 
+        JFrame frame = MainFrame.getInstance();
+
         items[0] = new DynamicMenuItem(new AddCrossReference());
-        items[1] = new DynamicMenuItem(new AutomaticCrossReference());
+        items[1] = new DropdownMenuItem(frame,
+                                        "AutomaticCrossReference",
+                                        AutomaticCrossReferenceDialog.class.getConstructors()[0]);
         items[2] = new DynamicMenuItem(new DownloadStructures());
 
-        for( DynamicMenuItem mnbMenuItem : items ) {
+        for (JMenuItem mnbMenuItem : items) {
             add(mnbMenuItem);
-            mnbMenuItem.reloadEnabled();
+//            mnbMenuItem.reloadEnabled();
         }
     }
-
-
 }
-

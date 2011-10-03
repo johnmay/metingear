@@ -7,7 +7,7 @@ package uk.ac.ebi.mnb.view.labels;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
-import uk.ac.ebi.mnb.core.ApplicationPreferences;
+import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.ViewUtils;
 
 
@@ -37,8 +37,8 @@ public class AltLabel extends JLabel {
 
 
     public AltLabel() {
-        setFont(ApplicationPreferences.getInstance().getTheme().getBodyFont());
-        setForeground(ApplicationPreferences.getInstance().getTheme().getAltForeground());
+        setFont(Settings.getInstance().getTheme().getBodyFont());
+        setForeground(Settings.getInstance().getTheme().getAltForeground());
     }
 
 

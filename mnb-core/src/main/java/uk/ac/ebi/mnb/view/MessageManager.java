@@ -1,4 +1,3 @@
-
 /**
  * MessageManager.java
  *
@@ -21,8 +20,6 @@
  */
 package uk.ac.ebi.mnb.view;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GradientPaint;
@@ -32,25 +29,25 @@ import java.awt.MouseInfo;
 import java.awt.Paint;
 import java.awt.Point;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.Stack;
+
+import uk.ac.ebi.mnb.core.*;
+import uk.ac.ebi.mnb.view.labels.BoldLabel;
+import uk.ac.ebi.mnb.view.labels.IconButton;
+import uk.ac.ebi.mnb.view.labels.Label;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.mnb.core.GeneralAction;
-import uk.ac.ebi.mnb.core.Message;
-import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.mnb.view.labels.BoldLabel;
-import uk.ac.ebi.mnb.view.labels.IconButton;
-import uk.ac.ebi.mnb.view.labels.Label;
 
+import org.apache.log4j.Logger;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 /**
  *          MessageManager – 2011.09.30 <br>
@@ -64,9 +61,9 @@ public class MessageManager extends JPanel {
     private static final Logger LOGGER = Logger.getLogger(MessageManager.class);
     private final Color warningColor = Color.YELLOW;
     private final ImageIcon warningIcon = ViewUtils.createImageIcon("images/cutout/warning_16x16.png",
-                                                                    "Warning");
+            "Warning");
     private final ImageIcon errorIcon =
-                            ViewUtils.createImageIcon("images/cutout/error_16x16.png", "Error");
+            ViewUtils.createImageIcon("images/cutout/error_16x16.png", "Error");
     private final Color WARN_HIGH = new Color(240, 240, 100);
     private final Color WARN_LOW = new Color(240, 240, 40);
     private final Color ERROR_HIGH = new Color(230, 100, 100);
@@ -78,47 +75,44 @@ public class MessageManager extends JPanel {
     private JLabel label = new Label();
     private Stack<Message> stack = new Stack();
 
-
     public MessageManager() {
         super(
-          new FormLayout("6dlu, right:min, 4dlu, p:grow, 4dlu, right:min, 6dlu", "1dlu, center:p, 1dlu"));
+                new FormLayout("6dlu, right:min, 4dlu, p:grow, 4dlu, right:min, 6dlu", "1dlu, center:p, 1dlu"));
         CellConstraints cc = new CellConstraints();
         label.setForeground(Color.BLACK);
         this.add(iconLabel, cc.xy(2, 2, CellConstraints.LEFT, CellConstraints.CENTER));
         this.add(label, cc.xy(4, 2, CellConstraints.LEFT, CellConstraints.CENTER));
         this.add(new IconButton(new HideMessage()), cc.xy(6, 2, CellConstraints.RIGHT,
-                                                          CellConstraints.CENTER));
+                CellConstraints.CENTER));
 
         this.addMouseListener(new CopyPopup());
         // set the paints
         ERROR_PAINT = new GradientPaint(0, 0, ERROR_LOW, 0,
-                                        getPreferredSize().height / 2, ERROR_HIGH, true);
+                getPreferredSize().height / 2, ERROR_HIGH, true);
         WARN_PAINT = new GradientPaint(0, 0, WARN_LOW, 0,
-                                       getPreferredSize().height / 2, WARN_HIGH, true);
+                getPreferredSize().height / 2, WARN_HIGH, true);
 
         this.setVisible(false);
     }
 
-
     public void addMessage(Message message) {
-        System.out.println("pushing: " + message.getMesage());
+        LOGGER.info("Adding message to manager: " + message.getMesage());
         stack.push(message);
         update();
         setVisible(true);
     }
 
-
     public void update() {
 
-        if( !stack.isEmpty() ) {
+        if (!stack.isEmpty()) {
 
             label.setPreferredSize(new Dimension(getParent().getSize().width - 75, 18));
             label.setText(stack.peek().getMesage());
 
-            if( stack.peek() instanceof ErrorMessage ) {
+            if (stack.peek() instanceof ErrorMessage) {
                 paint = ERROR_PAINT;
                 iconLabel.setIcon(errorIcon);
-            } else if( stack.peek() instanceof WarningMessage ) {
+            } else if (stack.peek() instanceof WarningMessage) {
                 paint = WARN_PAINT;
                 iconLabel.setIcon(warningIcon);
             }
@@ -128,7 +122,6 @@ public class MessageManager extends JPanel {
         revalidate();
     }
 
-
     /**
      * Copies the top message to the clipboard
      */
@@ -136,25 +129,21 @@ public class MessageManager extends JPanel {
 
         private JPopupMenu menu = new JPopupMenu("Messages");
 
-
         public CopyPopup() {
             menu.add(new JMenuItem(new GeneralAction("CopyMessage") {
 
                 public void actionPerformed(ActionEvent e) {
-                    if( !stack.isEmpty() ) {
+                    if (!stack.isEmpty()) {
                         ViewUtils.setClipboard(stack.peek().getMesage());
                     }
                     menu.setVisible(false);
                 }
-
-
             }));
         }
 
-
         @Override
         public void mouseClicked(MouseEvent e) {
-            if( e.getButton() == MouseEvent.BUTTON3 ) {
+            if (e.getButton() == MouseEvent.BUTTON3) {
                 Point mouse = MouseInfo.getPointerInfo().getLocation();
                 menu.setLocation(mouse.x + 20, mouse.y - 20);
                 menu.setVisible(!menu.isVisible());
@@ -162,10 +151,7 @@ public class MessageManager extends JPanel {
                 menu.setVisible(false);
             }
         }
-
-
     }
-
 
     /**
      * Action to hide the panel
@@ -176,20 +162,16 @@ public class MessageManager extends JPanel {
             super("HideMessage");
         }
 
-
         public void actionPerformed(ActionEvent e) {
             stack.pop();
             // when empty hide it
-            if( stack.isEmpty() ) {
+            if (stack.isEmpty()) {
                 setVisible(false);
             } else {
                 update();
             }
         }
-
-
     }
-
 
     @Override
     public void paintComponent(Graphics g) {
@@ -199,7 +181,4 @@ public class MessageManager extends JPanel {
         g2.setPaint(paint);
         g2.fillRect(0, 0, getWidth(), getHeight());
     }
-
-
 }
-

@@ -8,7 +8,7 @@ package uk.ac.ebi.mnb.view.labels;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import uk.ac.ebi.mnb.core.ApplicationPreferences;
+import uk.ac.ebi.mnb.settings.Settings;
 
 
 /**
@@ -23,8 +23,8 @@ public class BoldLabel
 
     public BoldLabel(String text, Icon icon, int horizontalAlignment) {
         super(text, icon, horizontalAlignment);
-        setForeground(ApplicationPreferences.getInstance().getTheme().getForeground());
-        setFont(ApplicationPreferences.getInstance().getTheme().getHeaderFont());
+        setForeground(Settings.getInstance().getTheme().getForeground());
+        setFont(Settings.getInstance().getTheme().getHeaderFont());
     }
 
 

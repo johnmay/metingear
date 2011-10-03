@@ -22,11 +22,13 @@
 package uk.ac.ebi.chemet.render.source;
 
 import com.explodingpixels.macwidgets.SourceListCategory;
+import com.explodingpixels.macwidgets.SourceListItem;
 import com.explodingpixels.macwidgets.SourceListModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 import uk.ac.ebi.mnb.view.ViewUtils;
 
 

@@ -25,7 +25,7 @@ import java.awt.Color;
 import javax.swing.Action;
 import javax.swing.JCheckBox;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.ApplicationPreferences;
+import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.theme.Theme;
 
 
@@ -42,7 +42,7 @@ public class CheckBox extends JCheckBox {
 
 
     public CheckBox() {
-        Theme theme = ApplicationPreferences.getInstance().getTheme();
+        Theme theme = Settings.getInstance().getTheme();
         setFont(theme.getBodyFont());
         setForeground(theme.getForeground());
     }
@@ -50,7 +50,7 @@ public class CheckBox extends JCheckBox {
 
     public CheckBox(Action a) {
         super(a);
-        Theme theme = ApplicationPreferences.getInstance().getTheme();
+        Theme theme = Settings.getInstance().getTheme();
         setFont(theme.getBodyFont());
         setForeground(theme.getForeground());
     }
@@ -58,7 +58,7 @@ public class CheckBox extends JCheckBox {
 
     public CheckBox(String text) {
         super(text);
-        Theme theme = ApplicationPreferences.getInstance().getTheme();
+        Theme theme = Settings.getInstance().getTheme();
         setFont(theme.getBodyFont());
         setForeground(theme.getForeground());
     }

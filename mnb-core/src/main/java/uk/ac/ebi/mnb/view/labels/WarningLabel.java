@@ -24,7 +24,7 @@ package uk.ac.ebi.mnb.view.labels;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.ApplicationPreferences;
+import uk.ac.ebi.mnb.settings.Settings;
 
 
 /**
@@ -52,8 +52,8 @@ public class WarningLabel extends JLabel {
 
 
     public WarningLabel() {
-        setFont(ApplicationPreferences.getInstance().getTheme().getBodyFont());
-        setForeground(ApplicationPreferences.getInstance().getTheme().getWarningForeground());
+        setFont(Settings.getInstance().getTheme().getBodyFont());
+        setForeground(Settings.getInstance().getTheme().getWarningForeground());
     }
 
 

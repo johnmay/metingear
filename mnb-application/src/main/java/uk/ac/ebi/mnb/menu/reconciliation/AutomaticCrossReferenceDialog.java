@@ -1,4 +1,3 @@
-
 /**
  * AutomaticCrossReferenceDialog.java
  *
@@ -23,11 +22,15 @@ package uk.ac.ebi.mnb.menu.reconciliation;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
+import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JSeparator;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
@@ -36,8 +39,6 @@ import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.CheckBox;
 import uk.ac.ebi.mnb.view.DialogController;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.mnb.view.labels.Label;
-
 
 /**
  *          AutomaticCrossReferenceDialog – 2011.09.30 <br>
@@ -47,7 +48,7 @@ import uk.ac.ebi.mnb.view.labels.Label;
  * @author  $Author$ (this version)
  */
 public class AutomaticCrossReferenceDialog
-  extends DropdownDialog {
+        extends DropdownDialog {
 
     private static final Logger LOGGER = Logger.getLogger(AutomaticCrossReferenceDialog.class);
     private List<AnnotatedEntity> components;
@@ -57,58 +58,52 @@ public class AutomaticCrossReferenceDialog
     private JCheckBox keggCheckBox;
     private JCheckBox chebiAllStarCheckBox;
 
+    public AutomaticCrossReferenceDialog(JFrame frame) {
 
-    public AutomaticCrossReferenceDialog(JFrame frame, DialogController controller) {
+        super(frame, "RunDialog");
 
-        super(frame, controller, "AutomaticCrossReference");
-
-        chebiCheckBox = new CheckBox("ChEBI (currated only)");
+        chebiCheckBox = new CheckBox("ChEBI (currated)");
         keggCheckBox = new CheckBox("KEGG Compound");
-        chebiAllStarCheckBox = new CheckBox("ChEBI (a0ll)");
+        chebiAllStarCheckBox = new CheckBox("ChEBI (all)");
+        chebiAllStarCheckBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent ie) {
+                chebiCheckBox.setSelected(chebiAllStarCheckBox.isSelected());
+            }
+        });
 
-        layoutOptions();
+        setDefaultLayout();
+
     }
 
+    @Override
+    public JLabel getDescription() {
+        JLabel label = super.getDescription();
+        label.setText("Match name(s) to chemical databases");
+        return label;
+    }
 
-    private void layoutOptions() {
-        setLayout(new FormLayout("10dlu, pref, 10dlu",
-                                 "10dlu, pref, 2dlu, pref, 2dlu, pref, 4dlu, pref, 10dlu"));
+    @Override
+    public JPanel getOptions() {
+
+        JPanel options = new DialogPanel();
 
         CellConstraints cc = new CellConstraints();
 
-        // options
-        JComponent selection = new DialogPanel();
+        options.setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p"));
+        options.add(chebiCheckBox, cc.xy(1, 1));
+        options.add(chebiAllStarCheckBox, cc.xy(3, 1));
+        options.add(keggCheckBox, cc.xy(1, 3));
 
-        selection.setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p"));
-        selection.add(chebiCheckBox, cc.xy(1, 1));
-        selection.add(chebiAllStarCheckBox, cc.xy(3, 1));
-        selection.add(keggCheckBox, cc.xy(1, 3));
-
-        // close and run buttons
-        JComponent component = new DialogPanel();
-        component.setLayout(new FormLayout("p:grow, right:min,4dlu ,right:min", "p"));
-        component.add(getClose(), cc.xy(2, 1));
-        component.add(getActivate(), cc.xy(4, 1));
-
-        add(new Label("Match name(s) to chemical databases"), cc.xy(2, 2));
-        add(new JSeparator(JSeparator.HORIZONTAL), cc.xy(2, 4));
-        add(selection, cc.xy(2, 6));
-        add(component, cc.xy(2, 8));
-
+        return options;
     }
-
 
     @Override
     public void process() {
         // seach names
     }
 
-
     @Override
     public void update() {
         // update
     }
-
-
 }
-

@@ -1,4 +1,3 @@
-
 /**
  * DefaultTheme.java
  *
@@ -27,7 +26,6 @@ import java.awt.Font;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.view.ViewUtils;
 
-
 /**
  *          DefaultTheme – 2011.09.30 <br>
  *          Class description
@@ -40,41 +38,35 @@ public class DarkTheme implements Theme {
     private static final Logger LOGGER = Logger.getLogger(DarkTheme.class);
     private Color bg = new Color(64, 64, 64);
 
-
     public Color getWarningForeground() {
         return Color.YELLOW;
     }
-
 
     public Color getForeground() {
         return Color.WHITE;
     }
 
-
     public Color getBackground() {
         return bg;
     }
-
 
     public Color getAltForeground() {
         return Color.DARK_GRAY;
     }
 
-
-    public Color getAltBackground() {
+    public Color getDialogBackground() {
         return ViewUtils.BACKGROUND;
     }
-
 
     public Font getBodyFont() {
         return ViewUtils.DEFAULT_BODY_FONT;
     }
 
-
     public Font getHeaderFont() {
         return ViewUtils.DEFAULT_HEADER_FONT;
     }
 
-
+    public float getDialogOpacity() {
+        return 0.95f;
+    }
 }
-

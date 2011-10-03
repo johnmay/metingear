@@ -25,7 +25,8 @@ import com.explodingpixels.macwidgets.SourceListItem;
 import com.explodingpixels.macwidgets.SourceListModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
-import uk.ac.ebi.mnb.core.ApplicationPreferences;
+import uk.ac.ebi.mnb.settings.Settings;
+import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 
 
 /**
@@ -51,8 +52,8 @@ public class ReactionSourceItem
      */
     @Override
     public void update() {
-        ApplicationPreferences pref = ApplicationPreferences.getInstance();
-        String type = pref.getProperty(ApplicationPreferences.VIEW_SOURCE_REACTION);
+        Settings pref = Settings.getInstance();
+        SourceItemDisplayType type = (SourceItemDisplayType) pref.get(Settings.VIEW_SOURCE_REACTION);
         super.update(type);
     }
 

@@ -28,7 +28,7 @@ import java.util.Arrays;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import uk.ac.ebi.mnb.view.labels.BoldLabel;
+import javax.swing.SwingConstants;
 import uk.ac.ebi.mnb.view.labels.Label;
 import uk.ac.ebi.mnb.view.labels.URLLabel;
 import org.apache.log4j.Logger;
@@ -74,7 +74,7 @@ public class AnnotationRenderer implements AnnotationVisitor {
 
 
     public JLabel getLabel(Annotation annotation) {
-        BoldLabel label = new BoldLabel(annotation.getShortDescription() + ":");
+        JLabel label = new Label(annotation.getShortDescription() + ":", SwingConstants.RIGHT);
         label.setToolTipText(annotation.getLongDescription());
         return label;
     }

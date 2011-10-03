@@ -27,13 +27,15 @@ public interface Theme {
     public Color getBackground();
 
 
-    public Color getAltBackground();
+    public Color getDialogBackground();
 
 
     public Font getBodyFont();
 
 
     public Font getHeaderFont();
+
+    public float getDialogOpacity();
 
 
 }

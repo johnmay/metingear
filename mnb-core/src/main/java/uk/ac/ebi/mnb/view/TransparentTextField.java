@@ -7,7 +7,7 @@ package uk.ac.ebi.mnb.view;
 
 import java.awt.Color;
 import javax.swing.JTextField;
-import uk.ac.ebi.mnb.core.ApplicationPreferences;
+import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.theme.Theme;
 
 
@@ -28,7 +28,7 @@ public class TransparentTextField
 
     public TransparentTextField(String text, int columns, boolean editable) {
         super(text, columns);
-        Theme theme = ApplicationPreferences.getInstance().getTheme();
+        Theme theme = Settings.getInstance().getTheme();
         setFont(theme.getBodyFont());
         setForeground(theme.getForeground());
         setBackground(theme.getBackground());
