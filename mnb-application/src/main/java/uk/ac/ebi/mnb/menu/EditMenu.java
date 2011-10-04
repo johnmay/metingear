@@ -21,13 +21,15 @@
 package uk.ac.ebi.mnb.menu;
 
 import java.awt.event.ActionEvent;
+import uk.ac.ebi.mnb.core.GeneralAction;
+import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.view.ViewUtils;
+
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
-import uk.ac.ebi.mnb.view.ViewUtils;
+
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.GeneralAction;
-import uk.ac.ebi.mnb.main.MainView;
 
 /**
  *          EditMenu – 2011.09.26 <br>
