@@ -55,6 +55,7 @@
             </releases>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>interval:10000</updatePolicy>
             </snapshots>
             <id>ebi-repo-snapshots</id>
             <name>EBI maven snapshots repository</name>

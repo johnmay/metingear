@@ -1,4 +1,3 @@
-
 /**
  * ReactionTableModel.java
  *
@@ -23,19 +22,17 @@ package uk.ac.ebi.mnb.view.entity.reaction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.ColumnAccessType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
-import org.xmlcml.cml.element.AbstractIdentifier;
 import uk.ac.ebi.annotation.Subsystem;
-import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.AnnotatedEntity;
-
 
 /**
  *          ReactionTableModel – 2011.09.26 <br>
@@ -49,48 +46,42 @@ public class ReactionTableModel extends EntityTableModel {
     private static final Logger LOGGER = Logger.getLogger(ReactionTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
         new ColumnDescriptor("Reversibility", null,
-                             ColumnAccessType.FIXED,
-                             String.class),
+        ColumnAccessType.FIXED,
+        String.class),
         new ColumnDescriptor("Equation", null,
-                             ColumnAccessType.FIXED,
-                             String.class),
+        ColumnAccessType.FIXED,
+        String.class),
         new ColumnDescriptor(new EnzymeClassification()),
-        new ColumnDescriptor(new Subsystem()) };
-
+        new ColumnDescriptor(new Subsystem())};
 
     public ReactionTableModel() {
         super();
         addColumns(Arrays.asList(DEFAULT));
     }
 
-
     @Override
     public void loadComponents() {
 
         Reconstruction project = ReconstructionManager.getInstance().getActiveReconstruction();
 
-        if( project != null ) {
-            setEntities(project.getReactions());
+        if (project != null) {
+            setEntities(new ArrayList<AnnotatedEntity>(project.getReactions()));
         }
 
     }
-
 
     @Override
     public Object getFixedType(AnnotatedEntity component, String name) {
 
         Reaction rxn = (Reaction) component;
 
-        if( name.equals(DEFAULT[0].getName()) ) {
+        if (name.equals(DEFAULT[0].getName())) {
             return rxn.getReversibility();
-        } else if( name.equals(DEFAULT[1].getName()) ) {
+        } else if (name.equals(DEFAULT[1].getName())) {
             return rxn.toString();
         }
 
         return "NA";
 
     }
-
-
 }
-

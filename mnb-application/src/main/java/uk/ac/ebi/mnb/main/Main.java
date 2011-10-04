@@ -4,8 +4,6 @@
  */
 package uk.ac.ebi.mnb.main;
 
-import com.apple.eawt.AppEvent.PreferencesEvent;
-import com.apple.eawt.PreferencesHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,8 +11,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.menu.file.PreferenceDialog;
-import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.view.AboutDialog;
+import uk.ac.ebi.mnb.view.ViewUtils;
+
 
 /**
  *
@@ -45,11 +44,11 @@ public class Main {
                     dialog.setVisible(true);
                 }
             });
-            app.setPreferencesHandler(new PreferencesHandler() {
+            app.setPreferencesHandler(new com.apple.eawt.PreferencesHandler() {
 
-                public void handlePreferences(PreferencesEvent pe) {
-                    PreferenceDialog pref = new PreferenceDialog(MainFrame.getInstance(),
-                            MainFrame.getInstance());
+                public void handlePreferences(com.apple.eawt.AppEvent.PreferencesEvent pe) {
+                    PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
+                            MainView.getInstance());
                     pref.setVisible(true);
                 }
             });
@@ -58,8 +57,8 @@ public class Main {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
-                    MainFrame.getInstance().setJMenuBar(new MainMenuBar());
-                    MainFrame.getInstance().setVisible(true);
+                    MainView.getInstance().setJMenuBar(new MainMenuBar());
+                    MainView.getInstance().setVisible(true);
                 }
             });
         } catch (InterruptedException ex) {

@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.view;
 import javax.swing.JComboBox;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.theme.Theme;
+import uk.ac.ebi.mnb.interfaces.Theme;
 
 /**
  *          ComboBox – 2011.09.30 <br>

@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.core.AnnotatedEntity;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.resource.IdentifierFactory;
 
@@ -52,12 +52,12 @@ public class AddCrossReferenceDialog extends DropdownDialog {
     private static final Map<String, Byte> nameIndexMap = new HashMap();
     private JComboBox type;
     private JTextField accession;
-    private AnnotatedEntity reconComponent = null;
+    private AnnotatedEntity entity = null;
 
 
     public AddCrossReferenceDialog() {
 
-        super(MainFrame.getInstance(), MainFrame.getInstance(), "AddCrossReference");
+        super(MainView.getInstance(), MainView.getInstance(), "AddCrossReference");
         for( Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers() ) {
             nameIndexMap.put(id.getShortDescription(), id.getIndex());
         }
@@ -72,7 +72,7 @@ public class AddCrossReferenceDialog extends DropdownDialog {
 
 
     public void setComponent(AnnotatedEntity reconComponent) {
-        this.reconComponent = reconComponent;
+        this.entity = reconComponent;
     }
 
 
@@ -110,7 +110,7 @@ public class AddCrossReferenceDialog extends DropdownDialog {
         id.setAccession(accession.getText());
 
         // add to component
-        reconComponent.addAnnotation(new CrossReference(id));
+        entity.addAnnotation(new CrossReference(id));
 
 
     }
@@ -118,7 +118,7 @@ public class AddCrossReferenceDialog extends DropdownDialog {
 
     @Override
     public boolean update() {
-        return MainFrame.getInstance().getViewController().update();
+        return MainView.getInstance().getViewController().update();
     }
 
 

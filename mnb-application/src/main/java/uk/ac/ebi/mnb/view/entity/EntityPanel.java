@@ -29,10 +29,15 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
+import uk.ac.ebi.mnb.edit.AccessionEdit;
+import uk.ac.ebi.mnb.edit.NameEdit;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.TransparentTextField;
@@ -95,7 +100,7 @@ public abstract class EntityPanel
 
         add(getBasicPanel(), cc.xy(1, 1));
 
-        middle = new GeneralPanel(new FormLayout("p:grow, p", "p"));
+        middle = new GeneralPanel(new FormLayout("p, p", "p"));
         midleft = new GeneralPanel(new FormLayout("p", "p, p"));
 
 
@@ -104,9 +109,13 @@ public abstract class EntityPanel
 
 
         middle.add(midleft, cc.xy(1, 1, CellConstraints.LEFT, CellConstraints.TOP));
-        middle.add(annotations, cc.xy(2, 1, CellConstraints.RIGHT, CellConstraints.TOP));
+        middle.add(annotations, cc.xy(2, 1, CellConstraints.LEFT, CellConstraints.TOP));
         add(middle, cc.xy(1, 2));
         //TODO add observations panel...
+    }
+
+    public JPanel getReferences() {
+        return references;
     }
 
     /**
@@ -199,9 +208,15 @@ public abstract class EntityPanel
      * Persists changed information in the currently selected entity
      */
     public void store() {
+
         entity.getIdentifier().setAccession(accession.getText().trim());
         entity.setAbbreviation(abbreviation.getText().trim());
+
+        NameEdit nameEdit = new NameEdit(entity, name.getText().trim());
         entity.setName(name.getText().trim());
+        MainView.getInstance().getUndoManager().addEdit(nameEdit);
+
+
     }
 
     public abstract JPanel getSynopsis();

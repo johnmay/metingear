@@ -42,6 +42,7 @@ import org.apache.lucene.store.LockObtainFailedException;
 
 import com.explodingpixels.macwidgets.*;
 import com.jgoodies.forms.factories.Borders;
+import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
@@ -56,11 +57,12 @@ import uk.ac.ebi.mnb.interfaces.ViewController;
  * @author johnmay
  * @date Apr 8, 2011
  */
-public class MainFrame
+public class MainView
         extends JFrame
         implements DialogController, MainController {
 
-    private static final Logger LOGGER = Logger.getLogger(MainFrame.class);
+    private static final Logger LOGGER = Logger.getLogger(MainView.class);
+    private UndoManager undoManager;
     private UnifiedToolBar toolbar; //TODO: wrap in class
     private JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT); //TODO wrap
     private ProjectView project = new ProjectView();
@@ -73,10 +75,10 @@ public class MainFrame
      */
     private static class MainViewHolder {
 
-        private static final MainFrame INSTANCE = new MainFrame();
+        private static final MainView INSTANCE = new MainView();
     }
 
-    private MainFrame() {
+    private MainView() {
 
         super("Metabolic Network Builder");
 
@@ -221,6 +223,11 @@ public class MainFrame
             }
         });
 
+        undoManager = new UndoManager();
+    }
+
+    public UndoManager getUndoManager() {
+        return undoManager;
     }
 
     /** Dialog placement **/
@@ -304,7 +311,7 @@ public class MainFrame
      * @return Instance of MainView
      *
      */
-    public static MainFrame getInstance() {
+    public static MainView getInstance() {
         return MainViewHolder.INSTANCE;
     }
 
@@ -346,5 +353,4 @@ public class MainFrame
     public DialogController getDialogController() {
         return this;
     }
-    
 }

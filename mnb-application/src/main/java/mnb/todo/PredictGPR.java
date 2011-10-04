@@ -44,7 +44,7 @@ import uk.ac.ebi.metabolomes.core.reaction.BiochemicalReaction;
 import uk.ac.ebi.metabolomes.descriptor.observation.BlastParamType;
 import uk.ac.ebi.metabolomes.run.RunnableTask;
 import uk.ac.ebi.metabolomes.run.TaskStatus;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.warehouse.exceptions.UnknownStructureException;
 import uk.ac.ebi.warehouse.util.ReactionLoader;
@@ -271,8 +271,8 @@ public class PredictGPR
     public void postrun() {
         // add to the products
         // MainView.getInstance().notifyProjectTreeOfStructureChange( ReconstructionManager.getInstance() );
-        MainFrame.getInstance().getSourceListController().update();
-        MainFrame.getInstance().getViewController().update();
+        MainView.getInstance().getSourceListController().update();
+        MainView.getInstance().getViewController().update();
     }
 
 

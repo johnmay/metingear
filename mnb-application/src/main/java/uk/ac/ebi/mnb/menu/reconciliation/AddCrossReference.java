@@ -24,7 +24,7 @@ import uk.ac.ebi.mnb.core.DelayedBuildAction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.EntityView;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 
 /**
  *          AddCrossReference – 2011.09.26 <br>
@@ -52,15 +52,15 @@ public class AddCrossReference
     public void activateActions() {
 
         // check the items are vaild first
-        EntityView view = MainFrame.getInstance().getViewController().
+        EntityView view = MainView.getInstance().getViewController().
                 getActiveView();
         if (view == null) {
-            MainFrame.getInstance().addErrorMessage("Unable to add cross reference, no active view available");
+            MainView.getInstance().addErrorMessage("Unable to add cross reference, no active view available");
 
         } else {
             AnnotatedEntity reconComponent = view.getSelectedEntity();
             if (reconComponent == null) {
-                MainFrame.getInstance().addErrorMessage("Unable to add cross reference, no active component available");
+                MainView.getInstance().addErrorMessage("Unable to add cross reference, no active component available");
             } else {
                 dialog.setComponent(reconComponent);
                 dialog.setVisible(true);

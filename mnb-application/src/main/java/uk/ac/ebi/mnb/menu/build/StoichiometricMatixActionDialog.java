@@ -30,7 +30,7 @@ import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 
 
 /**
@@ -49,7 +49,7 @@ public class StoichiometricMatixActionDialog
 
 
     public StoichiometricMatixActionDialog() {
-        super(MainFrame.getInstance(), MainFrame.getInstance(), "BuildStoichiometricMatrix");
+        super(MainView.getInstance(), MainView.getInstance(), "BuildStoichiometricMatrix");
         layoutForm();
     }
 

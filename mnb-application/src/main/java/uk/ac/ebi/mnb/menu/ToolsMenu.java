@@ -2,15 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.mnb.menu;
 
-import uk.ac.ebi.mnb.core.SelectionMenuItem;
+import javax.swing.JSeparator;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.core.ContextDialogItem;
+import uk.ac.ebi.mnb.dialog.tools.AutomaticCrossReference;
 import uk.ac.ebi.mnb.dialog.tools.ChokePoint;
-import uk.ac.ebi.mnb.main.MainFrame;
-import uk.ac.ebi.mnb.menu.build.RunTasksAction;
+import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
 import uk.ac.ebi.mnb.menu.reconciliation.DownloadStructures;
-
 
 /**
  * FileMenu.java
@@ -21,20 +22,26 @@ import uk.ac.ebi.mnb.menu.reconciliation.DownloadStructures;
  */
 public class ToolsMenu extends ClearMenu {
 
-    private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(ToolsMenu.class);
-
+    private static final Logger logger = Logger.getLogger(ToolsMenu.class);
 
     public ToolsMenu() {
 
         super("Tools");
 
-        add(new ReconciliationMenu());
-        add(new ChokePoint(MainFrame.getInstance()));
+        MainView view = MainView.getInstance();
 
-      
+        add(new DynamicMenuItem(new AddCrossReference()));
+        add(new ContextDialogItem(view,
+                view.getViewController(),
+                AutomaticCrossReference.class));
+        add(new DynamicMenuItem(new DownloadStructures()));
+
+        add(new JSeparator());
+
+        add(new ChokePoint(view));
+
+
+
+
     }
-
-
 }
-

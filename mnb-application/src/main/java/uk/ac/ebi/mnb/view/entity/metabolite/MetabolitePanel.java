@@ -1,4 +1,3 @@
-
 /**
  * MetabolitePanel.java
  *
@@ -21,12 +20,13 @@
  */
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
+import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.awt.Color;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.Sizes;
 import java.util.Collection;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -34,8 +34,11 @@ import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.metabolite.MetaboliteClass;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.ComboBox;
 import uk.ac.ebi.mnb.view.GeneralPanel;
@@ -43,9 +46,9 @@ import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.view.entity.EntityPanel;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
+import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 import uk.ac.ebi.mnb.view.labels.Label;
 import uk.ac.ebi.mnb.view.labels.WarningLabel;
-
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -55,7 +58,7 @@ import uk.ac.ebi.mnb.view.labels.WarningLabel;
  * @author  $Author$ (this version)
  */
 public class MetabolitePanel
-  extends EntityPanel {
+        extends EntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolitePanel.class);
     private Metabolite entity;
@@ -76,20 +79,18 @@ public class MetabolitePanel
     // cell constraints
     private CellConstraints cc = new CellConstraints();
 
-
     public MetabolitePanel() {
         super("Metabolite", new AnnotationRenderer());
 
         buildSynopsis();
     }
 
-
     @Override
     public boolean update() {
 
         // update all fields and labels...
 
-        if( entity.hasStructureAssociated() ) {
+        if (entity.hasStructureAssociated()) {
             JLabel label = (JLabel) getRenderer().visit(entity.getFirstChemicalStructure());
             structure.setIcon(label.getIcon());
             structure.setText("");
@@ -110,17 +111,19 @@ public class MetabolitePanel
         typeViewer.setText(entity.getType().toString());
         typeEditor.setSelectedItem(entity.getType());
 
+
+        // update references
+        updateReferencePanel();
+
         return super.update();
 
     }
-
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
         this.entity = (Metabolite) entity;
         return super.setEntity(entity);
     }
-
 
     @Override
     public void setEditable(boolean editable) {
@@ -138,10 +141,7 @@ public class MetabolitePanel
         markushViewer.setVisible(!editable);
         typeViewer.setVisible(!editable);
     }
-
-
     private JPanel specific;
-
 
     /**
      * Returns the specific information panel
@@ -150,21 +150,20 @@ public class MetabolitePanel
         return specific;
     }
 
-
     /**
      * Builds entity specific panel
      */
     private void buildSynopsis() {
         specific = new GeneralPanel();
         specific.setLayout(new FormLayout("p:grow, 4dlu, p:grow, 4dlu, p:grow, 4dlu, p:grow",
-                                          "p, 4dlu, p, 4dlu, p"));
+                "p, 4dlu, p, 4dlu, p"));
 
 
         specific.add(structure, cc.xyw(1, 1, 7, CellConstraints.CENTER, CellConstraints.CENTER));
         specific.add(formularViewer, cc.xyw(1, 3, 7, CellConstraints.CENTER,
-                                            CellConstraints.CENTER));
+                CellConstraints.CENTER));
         specific.add(formulaEditor, cc.xyw(1, 3, 7, CellConstraints.CENTER,
-                                           CellConstraints.CENTER));
+                CellConstraints.CENTER));
         formulaEditor.setHorizontalAlignment(SwingConstants.CENTER);
 
 
@@ -177,21 +176,37 @@ public class MetabolitePanel
         specific.add(typeEditor, cc.xy(7, 5));
     }
 
-
     /**
      * Returns the internal reference panel information panel
      */
     public JPanel getInternalReferencePanel() {
 
-        JPanel panel = new JPanel();
+        JPanel panel = new GeneralPanel();
 
-        panel.setBackground(Color.DARK_GRAY);
-        panel.add(new JLabel("Internal references"));
+        panel.setBorder(Borders.DLU7_BORDER);
 
         return panel;
 
     }
 
+    public void updateReferencePanel() {
+        if (entity != null) {
+            getReferences().removeAll();
+
+
+            Collection<MetabolicReaction> rxns = ReconstructionManager.getInstance().getActiveReconstruction().getReactions().getReactions(entity);
+
+            FormLayout layout = new FormLayout("p");
+            getReferences().setLayout(layout);
+
+            for (MetabolicReaction rxn : rxns) {
+                layout.appendRow(new RowSpec(Sizes.DLUX2));
+                layout.appendRow(new RowSpec(Sizes.PREFERRED));
+                getReferences().add(new InternalLinkLabel(rxn, MainView.getInstance().getViewController()), cc.xy(1, layout.getRowCount()));
+            }
+
+        }
+    }
 
     @Override
     public void store() {
@@ -201,7 +216,4 @@ public class MetabolitePanel
         entity.setGeneric(((String) markushEditor.getSelectedItem()).equals("Yes") ? true : false);
         entity.setType((MetaboliteClass) typeEditor.getSelectedItem());
     }
-
-
 }
-

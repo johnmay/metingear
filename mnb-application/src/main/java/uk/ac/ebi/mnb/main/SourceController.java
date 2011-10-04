@@ -216,7 +216,7 @@ public class SourceController
 
         selected = item;
 
-        ProjectView view = (ProjectView) MainFrame.getInstance().getViewController();
+        ProjectView view = (ProjectView) MainView.getInstance().getViewController();
 
         if (item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem)) {
             view.setSelection(((EntitySourceItem) item).getEntity());
@@ -239,7 +239,7 @@ public class SourceController
     @Override
     public void sourceListCategoryClicked(SourceListCategory category, Button button, int clickCount) {
         if (category.equals(tasks)) {
-            ((ProjectView)MainFrame.getInstance().getViewController()).setTaskView();
+            ((ProjectView)MainView.getInstance().getViewController()).setTaskView();
         }
     }
     List<ContextSensitiveAction> actions = new ArrayList();

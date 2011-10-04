@@ -20,23 +20,23 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.swing.JFrame;
-import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.mnb.core.ContextAction;
 import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.ViewController;
-import uk.ac.ebi.mnb.view.SelectionDialog;
+
+import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.AuthorAnnotation;
 
 /**
  * @name    FindChokePoints - 2011.10.03 <br>
@@ -54,23 +54,32 @@ public class ChokePoint extends ContextAction {
     }
 
     public void actionPerformed(ActionEvent ae) {
+
         Map<Metabolite, Integer> rMap = new HashMap();
         Map<Metabolite, Integer> pMap = new HashMap();
+
+        Multimap<Metabolite, MetabolicReaction> mToR = HashMultimap.create();
 
         for (MetabolicReaction rxn : Utilities.getReactions(getSelection())) {
             for (Metabolite m : rxn.getReactantMolecules()) {
                 rMap.put(m, rMap.containsKey(m) ? rMap.get(m) + 1 : 1);
+                mToR.put(m, rxn);
             }
             for (Metabolite m : rxn.getProductMolecules()) {
                 pMap.put(m, pMap.containsKey(m) ? pMap.get(m) + 1 : 1);
+                mToR.put(m, rxn);
             }
         }
 
-        List<Metabolite> chokePoints = new ArrayList();
+        List<MetabolicReaction> chokePoints = new ArrayList();
 
         for (Entry<Metabolite, Integer> e : rMap.entrySet()) {
             if (e.getValue() == 1 && pMap.containsKey(e.getKey()) && pMap.get(e.getKey()) == 1) {
-                chokePoints.add(e.getKey());
+                Collection<MetabolicReaction> rxns = mToR.get(e.getKey());
+                chokePoints.addAll(rxns);
+                for (MetabolicReaction rxn : rxns) {
+                    rxn.addAnnotation(new AuthorAnnotation("Choke point reaction"));
+                }
             }
         }
 

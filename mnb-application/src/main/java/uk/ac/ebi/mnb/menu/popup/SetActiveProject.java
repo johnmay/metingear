@@ -30,7 +30,7 @@ import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 
 
 /**
@@ -53,7 +53,7 @@ public class SetActiveProject extends GeneralAction implements ContextSensitiveA
 
     public void actionPerformed(ActionEvent e) {
         ReconstructionManager.getInstance().setActiveReconstruction(reconstruction);
-        MainFrame.getInstance().update();
+        MainView.getInstance().update();
     }
 
 

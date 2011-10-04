@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import uk.ac.ebi.mnb.interfaces.ViewController;
-import uk.ac.ebi.mnb.view.SelectionDialog;
+import uk.ac.ebi.mnb.view.ContextDialog;
 
 /**
  * @name    SelectionMenuItem - 2011.10.03 <br>
@@ -34,7 +34,7 @@ import uk.ac.ebi.mnb.view.SelectionDialog;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class SelectionMenuItem extends JMenuItem {
+public class ContextDialogItem extends JMenuItem {
 
     /**
      * Constructs a SelectionMenuItem using a frame (to place dialog – frame should implement dialog controller) and
@@ -46,18 +46,18 @@ public class SelectionMenuItem extends JMenuItem {
      * @param controller
      * @param clazz
      */
-    public SelectionMenuItem(final JFrame frame, final ViewController controller, final Class<? extends SelectionDialog> clazz) {
+    public ContextDialogItem(final JFrame frame, final ViewController controller, final Class<? extends ContextDialog> clazz) {
         //super(frame, name, constructor);
 
         super(new DelayedBuildAction(clazz.getSimpleName()) {
 
-            private SelectionDialog dialog;
+            private ContextDialog dialog;
 
             @Override
             public void buildComponents() {
                 try {
                     Constructor constructor = clazz.getConstructors()[0];
-                    dialog = (SelectionDialog) constructor.newInstance(frame, controller);
+                    dialog = (ContextDialog) constructor.newInstance(frame, controller);
                 } catch (InstantiationException ex) {
                     ex.printStackTrace();
                 } catch (IllegalAccessException ex) {
@@ -76,7 +76,5 @@ public class SelectionMenuItem extends JMenuItem {
                 }
             }
         });
-
-        System.out.println(frame.getName());
     }
 }

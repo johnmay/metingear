@@ -9,10 +9,9 @@ import com.jgoodies.forms.factories.Borders;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.mnb.settings.Settings;
 
 
 /**
@@ -36,7 +35,8 @@ public class ActionLabel
         setBorder(Borders.EMPTY_BORDER);
         setText(text);
         setToolTipText(text);
-        setFont(ViewUtils.DEFAULT_LINK_FONT);
+        setFont(Settings.getInstance().getTheme().getLinkFont());
+        setForeground(Settings.getInstance().getTheme().getForeground());
         addMouseListener(new FontHover());
     }
 
@@ -45,14 +45,14 @@ public class ActionLabel
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            setFont(ViewUtils.DEFAULT_LINK_HOVER_FONT);
+            setForeground(Settings.getInstance().getTheme().getEmphasisedForeground());
             setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
 
 
         @Override
         public void mouseExited(MouseEvent e) {
-            setFont(ViewUtils.DEFAULT_LINK_FONT);
+            setForeground(Settings.getInstance().getTheme().getForeground());
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
 

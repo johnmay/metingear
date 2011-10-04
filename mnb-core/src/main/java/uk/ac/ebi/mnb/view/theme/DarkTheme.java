@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.theme;
 
-import uk.ac.ebi.mnb.view.theme.Theme;
+import uk.ac.ebi.mnb.interfaces.Theme;
 import java.awt.Color;
 import java.awt.Font;
 import org.apache.log4j.Logger;
@@ -69,4 +69,15 @@ public class DarkTheme implements Theme {
     public float getDialogOpacity() {
         return 0.95f;
     }
+
+    public Font getLinkFont() {
+        return ViewUtils.DEFAULT_LINK_FONT;
+    }
+
+    public Color getEmphasisedForeground() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    
+    
 }

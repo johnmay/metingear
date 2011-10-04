@@ -22,19 +22,19 @@ package uk.ac.ebi.mnb.menu.file;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import java.awt.Label;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.ComboBox;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.mnb.view.labels.Label;
 
 /**
  *          Preferences - 2011.10.02 <br>
@@ -61,6 +61,8 @@ public class PreferenceDialog extends DropdownDialog {
         JPanel options = new DialogPanel(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p"));
         CellConstraints cc = new CellConstraints();
 
+
+                
         metSourceView = new ComboBox(SourceItemDisplayType.values());
         metSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_METABOLITE));
         rxnSourceView = new ComboBox(SourceItemDisplayType.values());
@@ -85,6 +87,6 @@ public class PreferenceDialog extends DropdownDialog {
 
     @Override
     public boolean update() {
-        return MainFrame.getInstance().getSourceListController().update();
+        return MainView.getInstance().getSourceListController().update();
     }
 }

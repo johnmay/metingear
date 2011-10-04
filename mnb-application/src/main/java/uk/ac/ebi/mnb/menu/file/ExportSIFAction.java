@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import mnb.view.old.MatrixModel;
 import mnb.view.old.MatrixView;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 
 /**

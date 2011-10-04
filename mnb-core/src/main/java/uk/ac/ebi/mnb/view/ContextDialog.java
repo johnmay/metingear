@@ -33,11 +33,11 @@ import uk.ac.ebi.mnb.interfaces.ViewController;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class SelectionDialog extends DropdownDialog implements SelectionController {
+public abstract class ContextDialog extends DropdownDialog implements SelectionController {
 
     private ViewController controller;
 
-    public SelectionDialog(JFrame frame, ViewController controller, String dialogName) {
+    public ContextDialog(JFrame frame, ViewController controller, String dialogName) {
         super(frame, dialogName);
         this.controller = controller;
     }

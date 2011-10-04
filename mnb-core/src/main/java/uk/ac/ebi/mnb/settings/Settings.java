@@ -19,7 +19,7 @@ package uk.ac.ebi.mnb.settings;
 import java.util.Properties;
 import uk.ac.ebi.mnb.view.theme.DarkTheme;
 import uk.ac.ebi.mnb.view.theme.DefaultTheme;
-import uk.ac.ebi.mnb.view.theme.Theme;
+import uk.ac.ebi.mnb.interfaces.Theme;
 
 /**
  * ApplicationPreferences.java

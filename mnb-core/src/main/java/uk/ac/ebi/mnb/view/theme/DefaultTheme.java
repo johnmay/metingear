@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.theme;
 
-import uk.ac.ebi.mnb.view.theme.Theme;
+import uk.ac.ebi.mnb.interfaces.Theme;
 import java.awt.Color;
 import java.awt.Font;
 import org.apache.log4j.Logger;
@@ -46,6 +46,12 @@ public class DefaultTheme implements Theme {
         return Color.DARK_GRAY;
     }
 
+    public Color getEmphasisedForeground() {
+        return Color.BLACK;
+    }
+
+
+
     public Color getAltForeground() {
         return Color.DARK_GRAY;
     }
@@ -65,6 +71,12 @@ public class DefaultTheme implements Theme {
     public Font getHeaderFont() {
         return ViewUtils.DEFAULT_HEADER_FONT;
     }
+
+    public Font getLinkFont(){
+        return ViewUtils.DEFAULT_LINK_FONT;
+    }
+
+    
 
     public float getDialogOpacity(){
         return 0.95f;

@@ -51,7 +51,7 @@ import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.CheckBox;
 import uk.ac.ebi.mnb.view.ComboBox;
-import uk.ac.ebi.mnb.view.SelectionDialog;
+import uk.ac.ebi.mnb.view.ContextDialog;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 
 /**
@@ -62,7 +62,7 @@ import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
  * @author  $Author$ (this version)
  */
 public class AutomaticCrossReference
-        extends SelectionDialog {
+        extends ContextDialog {
 
     private static final Logger LOGGER = Logger.getLogger(AutomaticCrossReference.class);
     private List<AnnotatedEntity> components;

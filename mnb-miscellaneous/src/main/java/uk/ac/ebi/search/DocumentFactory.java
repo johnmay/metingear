@@ -1,4 +1,3 @@
-
 /**
  * DocumentFactory.java
  *
@@ -50,7 +49,6 @@ import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
-
 /**
  *          DocumentFactory – 2011.09.28 <br>
  *          Class description
@@ -62,21 +60,20 @@ public class DocumentFactory {
 
     private static final Logger LOGGER = Logger.getLogger(DocumentFactory.class);
 
-
     public static Map<UUID, AnnotatedEntity> write(IndexWriter writer, Reconstruction recon)
-      throws
-      CorruptIndexException, IOException {
+            throws
+            CorruptIndexException, IOException {
 
         Map<UUID, AnnotatedEntity> documents = new HashMap();
-        
-        for( Metabolite m : recon.getMetabolites() ) {
+
+        for (Metabolite m : recon.getMetabolites()) {
             Document doc = getDocument(m);
             UUID uuid = UUID.randomUUID();
             doc.add(new Field("uuid", uuid.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             documents.put(uuid, m);
             writer.addDocument(doc);
         }
-        for( MetabolicReaction rxn : recon.getReactions() ) {
+        for (MetabolicReaction rxn : recon.getReactions()) {
             Document doc = getDocument(rxn);
             UUID uuid = UUID.randomUUID();
             doc.add(new Field("uuid", uuid.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -88,7 +85,6 @@ public class DocumentFactory {
 
     }
 
-
     /**
      * Returns a searchable lucene document for a metabolite
      * @param metabolite
@@ -97,17 +93,16 @@ public class DocumentFactory {
     public static Document getDocument(MetabolicReaction reaction) {
 
         Document document = getDocument(new Document(),
-                                        (AnnotatedEntity) reaction);
+                (AnnotatedEntity) reaction);
 
         // add metabolite data
-        for( Metabolite m : reaction.getAllReactionMolecules() ) {
+        for (Metabolite m : reaction.getAllReactionMolecules()) {
             document = getDocument(document, m);
         }
 
         return document;
 
     }
-
 
     /**
      * Returns a searchable lucene document for a metabolite
@@ -117,13 +112,12 @@ public class DocumentFactory {
     public static Document getDocument(Metabolite metabolite) {
 
         Document entry = getDocument(new Document(),
-                                     (AnnotatedEntity) metabolite);
+                (AnnotatedEntity) metabolite);
 
 
         return entry;
 
     }
-
 
     /**
      * Returns a searchable lucene document for an AnnotatedEntity
@@ -131,35 +125,36 @@ public class DocumentFactory {
      * @return
      */
     public static Document getDocument(Document document,
-                                       AnnotatedEntity entity) {
+            AnnotatedEntity entity) {
 
 
         document.add(new Field(FieldType.ACCESSION.getName(), entity.getAccession(),
-                               Field.Store.YES,
-                               Field.Index.ANALYZED));
-        if( entity.getName() != null ) {
+                Field.Store.YES,
+                Field.Index.ANALYZED));
+        document.add(new Field(FieldType.TYPE.getName(),
+                entity.getBaseType(),
+                Field.Store.YES,
+                Field.Index.ANALYZED));
+        if (entity.getName() != null) {
             document.add(new Field(FieldType.NAME.getName(),
-                                   entity.getName(),
-                                   Field.Store.YES, Field.Index.ANALYZED));
+                    entity.getName(),
+                    Field.Store.YES, Field.Index.ANALYZED));
         }
-        if( entity.getAbbreviation() != null ) {
+        if (entity.getAbbreviation() != null) {
             document.add(new Field(FieldType.ABBREVIATION.getName(),
-                                   entity.getAbbreviation(),
-                                   Field.Store.YES, Field.Index.ANALYZED));
+                    entity.getAbbreviation(),
+                    Field.Store.YES, Field.Index.ANALYZED));
         }
         // index annotations
 
         // xref
-        for( CrossReference xref : entity.getAnnotationsExtending(CrossReference.class) ) {
+        for (CrossReference xref : entity.getAnnotationsExtending(CrossReference.class)) {
             document.add(new Field(FieldType.CROSS_REFERENCE.getName(), xref.getIdentifier().
-              getAccession(), Field.Store.YES, Field.Index.ANALYZED));
+                    getAccession(), Field.Store.YES, Field.Index.ANALYZED));
         }
 
 
         return document;
 
     }
-
-
 }
-

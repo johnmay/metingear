@@ -31,7 +31,7 @@ import uk.ac.ebi.mnb.core.ProcessDialogAction;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.labels.Label;
-import uk.ac.ebi.mnb.view.theme.Theme;
+import uk.ac.ebi.mnb.interfaces.Theme;
 
 /**
  *

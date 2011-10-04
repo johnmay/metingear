@@ -23,7 +23,7 @@ import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.metabolomes.resource.BlastMatrix;
 import uk.ac.ebi.metabolomes.run.BlastHomologySearch;
 import uk.ac.ebi.metabolomes.run.BlastHomologySearchFactory;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 
 
 /**
@@ -49,7 +49,7 @@ public class SwissProtHomologyDialog
 
 
     public SwissProtHomologyDialog() {
-        super(MainFrame.getInstance(), MainFrame.getInstance(), "SwissProtHomology");
+        super(MainView.getInstance(), MainView.getInstance(), "SwissProtHomology");
         setName("Find SwissProt Homologies");
         //setUndecorated( true );
         buildComponents();
@@ -133,7 +133,7 @@ public class SwissProtHomologyDialog
 
         // if there are no protein products then show a warning message
         if( products == null || products.length == 0 ) {
-            MainFrame.getInstance().addWarningMessage(
+            MainView.getInstance().addWarningMessage(
               "Cannot run UniProt/SwissProt homology, project contains no protein products.");
             return;
         }
@@ -153,7 +153,7 @@ public class SwissProtHomologyDialog
         TaskManager tm = TaskManager.getInstance();
         tm.add(searches);
         //MainView.getInstance().setTaskTableView();
-        MainFrame.getInstance().update(); // only need to to tasks
+        MainView.getInstance().update(); // only need to to tasks
 
 
         // todo: need to move to post run in the RunnableTask which means moving the Runnable task...

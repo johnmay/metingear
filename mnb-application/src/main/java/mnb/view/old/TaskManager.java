@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.SwingUtilities;
 import uk.ac.ebi.metabolomes.run.RunnableTask;
 import uk.ac.ebi.metabolomes.run.TaskStatus;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 
 /**
  *
@@ -143,7 +143,7 @@ public class TaskManager
                 }
             }
 
-            MainFrame.getInstance().repaint();
+            MainView.getInstance().repaint();
 
         } while (queuedTasks.size() > 0
                 || runningTasks.size() > 0);
@@ -160,7 +160,7 @@ public class TaskManager
                 SwingUtilities.invokeLater(
                         new Runnable() {
                             public void run() {
-                                MainFrame.getInstance().update();
+                                MainView.getInstance().update();
                             }
                         });
             }

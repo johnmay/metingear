@@ -27,7 +27,7 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 
 
 /**
@@ -67,7 +67,7 @@ public class SearchTable extends AbstractEntityTable {
                 int index = table.getSelectedRow();
                 if(index != -1){
                     AnnotatedEntity entity = table.getModel().getEntity(convertRowIndexToModel(index));
-                    MainFrame.getInstance().getViewController().setSelection(entity);
+                    MainView.getInstance().getViewController().setSelection(entity);
                 }
 
             }

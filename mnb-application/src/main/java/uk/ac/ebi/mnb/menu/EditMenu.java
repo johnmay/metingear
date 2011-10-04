@@ -1,4 +1,3 @@
-
 /**
  * EditMenu.java
  *
@@ -21,12 +20,14 @@
  */
 package uk.ac.ebi.mnb.menu;
 
+import java.awt.event.ActionEvent;
 import javax.swing.JComponent;
-import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
-import uk.ac.ebi.mnb.menu.reconciliation.DownloadStructures;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import org.apache.log4j.Logger;
-
+import uk.ac.ebi.mnb.core.GeneralAction;
+import uk.ac.ebi.mnb.main.MainView;
 
 /**
  *          EditMenu – 2011.09.26 <br>
@@ -38,26 +39,41 @@ import org.apache.log4j.Logger;
 public class EditMenu extends ClearMenu {
 
     private static final Logger LOGGER = Logger.getLogger(EditMenu.class);
-    private JComponent items[] = new JComponent[2];
-
+    private JComponent items[] = new JComponent[3];
 
     public EditMenu() {
         super("Edit");
         setBackground(ViewUtils.CLEAR_COLOUR);
         setBorderPainted(false);
 
-        int index = 0;
-        items[index++] = new DynamicMenuItem(new AddCrossReference());
-        items[index++] = new DynamicMenuItem(new DownloadStructures());
+        MainView view = MainView.getInstance();
 
-        for( JComponent component : items ) {
-            add(component);
-            if( component instanceof DynamicMenuItem ) {
-                ((DynamicMenuItem) component).reloadEnabled();
+        add(new JMenuItem(new GeneralAction("Undo") {
+
+            public void actionPerformed(ActionEvent ae) {
+                MainView.getInstance().getUndoManager().undo();
+                MainView.getInstance().update();
             }
-        }
+        }));
+        add(new JMenuItem(new GeneralAction("Redo") {
+
+            public void actionPerformed(ActionEvent ae) {
+                MainView.getInstance().getUndoManager().redo();
+                MainView.getInstance().update();
+            }
+        }));
+        add(new JSeparator());
+        //add(new ContextDialogItem(view, view.getViewController(), ContextDialog.class));
+
+//        for (JComponent component : items) {
+//            add(component);
+//            if (component instanceof DynamicMenuItem) {
+//                ((DynamicMenuItem) component).reloadEnabled();
+//            }
+//        }
+
+        //new UndoableEditSupport().addUndoableEditListener(MainView.getInstance().getUndoManager());
+
+
     }
-
-
 }
-

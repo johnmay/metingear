@@ -42,7 +42,7 @@ import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import uk.ac.ebi.metabolomes.run.RunnableTask;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.ViewController;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.search.SearchManager;
 
 /**
@@ -166,13 +166,13 @@ public class ProjectView
             SearchManager.getInstance().updateCurrentIndex(reconstruction);
         } catch (CorruptIndexException ex) {
             logger.info(ex.getMessage());
-            MainFrame.getInstance().addWarningMessage("Unable to index component for searching");
+            MainView.getInstance().addWarningMessage("Unable to index component for searching");
         } catch (LockObtainFailedException ex) {
             logger.info(ex.getMessage());
-            MainFrame.getInstance().addWarningMessage("Unable to index component for searching");
+            MainView.getInstance().addWarningMessage("Unable to index component for searching");
         } catch (IOException ex) {
             logger.info(ex.getMessage());
-            MainFrame.getInstance().addWarningMessage("Unable to index component for searching");
+            MainView.getInstance().addWarningMessage("Unable to index component for searching");
         }
 
 

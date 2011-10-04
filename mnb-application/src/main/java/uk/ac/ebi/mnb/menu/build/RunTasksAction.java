@@ -7,7 +7,7 @@ package uk.ac.ebi.mnb.menu.build;
 import java.awt.event.ActionEvent;
 import mnb.view.old.TaskManager;
 import uk.ac.ebi.mnb.core.GeneralAction;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 
 /**
  * RunTasksAction.java
@@ -29,7 +29,7 @@ public class RunTasksAction extends GeneralAction {
         TaskManager tm = TaskManager.getInstance();
         Thread t = new Thread(tm);
         t.start();
-        MainFrame.getInstance().update();
+        MainView.getInstance().update();
     }
 
 

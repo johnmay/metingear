@@ -29,7 +29,7 @@ import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.metabolomes.identifier.UniqueIdentifier;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import org.apache.commons.lang.StringUtils;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
@@ -74,12 +74,12 @@ public class ExportSBMLAction
             writer.write(document, sbmlOut);
 
         } catch( IOException ex ) {
-            MainFrame.getInstance().addErrorMessage("Invalid file " + ex.getMessage());
+            MainView.getInstance().addErrorMessage("Invalid file " + ex.getMessage());
         } catch( SBMLException ex ) {
-            MainFrame.getInstance().addErrorMessage("There was an unknown error when exporting reconstruction to SBML" +
+            MainView.getInstance().addErrorMessage("There was an unknown error when exporting reconstruction to SBML" +
                                                    ex);
         } catch( XMLStreamException ex ) {
-            MainFrame.getInstance().addErrorMessage("Error writing SBML document to disk");
+            MainView.getInstance().addErrorMessage("Error writing SBML document to disk");
         }
 
     }

@@ -13,7 +13,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileView;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.io.FileFilterManager;
 import uk.ac.ebi.mnb.io.ProjectFilter;
@@ -67,8 +67,8 @@ public class OpenProjectAction
                     ReconstructionManager.getInstance().setActiveReconstruction(recon);
                 }
 
-                SourceController controller = MainFrame.getInstance().getSourceListController();
-                MainFrame.getInstance().getViewController().update();
+                SourceController controller = MainView.getInstance().getSourceListController();
+                MainView.getInstance().getViewController().update();
                 {
                     long start = System.currentTimeMillis();
                     controller.update();
@@ -79,12 +79,12 @@ public class OpenProjectAction
 
 
             }  catch( IOException ex ) {
-                MainFrame.getInstance().addErrorMessage(
+                MainView.getInstance().addErrorMessage(
                   "Unable to load project " + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
                 ex.printStackTrace();
             } catch( ClassNotFoundException ex ) {
                 ex.printStackTrace();
-                MainFrame.getInstance().addErrorMessage(
+                MainView.getInstance().addErrorMessage(
                   "Unable to load project: " +
                   ex.getStackTrace().toString().replaceAll("\n", "<br>"));
             }

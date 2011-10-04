@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.main.MainFrame;
+import uk.ac.ebi.mnb.main.MainView;
 
 /**
  *          ReactionInspector – 2011.09.26 <br>
@@ -52,57 +52,7 @@ public class ReactionInspector
 
     }
 
-    private GeneralPanel getMetabolicXref() {
-
-        GeneralPanel panel = new GeneralPanel();
-
-        MetabolicReaction rxn = (MetabolicReaction) getSelectedEntity();
-
-        int size = rxn.getAllReactionMolecules().size();
-
-        List<Metabolite> reactants = rxn.getReactantMolecules();
-        List<Metabolite> products = rxn.getProductMolecules();
-        String columnLayout = "";
-        for (int i = 0; i < reactants.size(); i++) {
-            columnLayout = columnLayout + 128 + "px" + ", ";
-            if (i + 1 < reactants.size()) {
-                columnLayout = columnLayout + +15 + "px" + ", ";
-            }
-        }
-        columnLayout = columnLayout + 128 + "px";
-        for (int i = 0; i < products.size(); i++) {
-            columnLayout = columnLayout + ", " + 128 + "px";
-            if (i + 1 < products.size()) {
-                columnLayout = columnLayout + ", " + 15 + "px";
-            }
-        }
-
-        panel.setLayout(new FormLayout(columnLayout, "p"));
-
-
-        int columnIndex = 1;
-        for (int i = 0; i < reactants.size(); i++) {
-            Metabolite m = reactants.get(i);
-            panel.add(
-                    new InternalLinkLabel(m, m.getName(), (SelectionController) MainFrame.getInstance().getViewController()),
-                    cc.xy(
-                    columnIndex, 1));
-            columnIndex += i + 1 < reactants.size() ? 2 : 1;
-        }
-        columnIndex += 1; // hop over reaction arrow
-        for (int i = 0; i < products.size(); i++) {
-            Metabolite m = products.get(i);
-            panel.add(
-                    new InternalLinkLabel(m, m.getName(), (SelectionController)  MainFrame.getInstance().getViewController()),
-                    cc.xy(
-                    columnIndex, 1));
-            columnIndex += i + 1 < products.size() ? 2 : 1;
-        }
-
-
-        return panel;
-
-    }
+    
 
     @Override
     public void store() {

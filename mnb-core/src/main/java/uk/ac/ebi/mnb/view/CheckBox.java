@@ -26,7 +26,7 @@ import javax.swing.Action;
 import javax.swing.JCheckBox;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.theme.Theme;
+import uk.ac.ebi.mnb.interfaces.Theme;
 
 
 /**
