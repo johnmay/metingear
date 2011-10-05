@@ -12,7 +12,6 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-
 package uk.ac.ebi.mnb.view;
 
 import com.jgoodies.forms.layout.FormLayout;
@@ -31,7 +30,6 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-
 /**
  * ViewUtils.java
  * Util class for handling display
@@ -42,7 +40,7 @@ import javax.swing.ImageIcon;
 public class ViewUtils {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(ViewUtils.class);
+            org.apache.log4j.Logger.getLogger(ViewUtils.class);
     // mono space fonts
     public static final Font COURIER_NEW_PLAIN_11 = new Font("Courier New", Font.PLAIN, 11);
     public static final Font MENOL_PLAIN_11 = new Font("Menlo", Font.PLAIN, 11);
@@ -64,34 +62,33 @@ public class ViewUtils {
     public static final Font DEFAULT_LINK_FONT = VERDANA_UNDERLINE_PLAIN_11;
     public static final Font DEFAULT_LINK_HOVER_FONT = VERDANA_UNDERLINE_BOLD_11;
     // image icons
-    public static final ImageIcon icon_16x16 = createImageIcon("images/networkbuilder_16x16.png",
-                                                               "Metabolic Network Builder");
-    public static final ImageIcon icon_32x32 = createImageIcon("images/networkbuilder_32x32.png",
-                                                               "Metabolic Network Builder");
-    public static final ImageIcon task = createImageIcon("images/runtasks_32x32.png",
-                                                         "Metabolic Network Builder");
-    public static final ImageIcon icon_64x64 = createImageIcon("images/networkbuilder_64x64.png",
-                                                               "Metabolic Network Builder");
-    public static final ImageIcon WARNING_ICON_16x16 = createImageIcon("images/cutout/warning_16x16.png",
-                                                                       "Warning");
-    public static final ImageIcon ERROR_ICON_16x16 = createImageIcon("images/cutout/error_16x16.png",
-                                                                     "Warning");
+    public static final ImageIcon icon_16x16 = getIcon("images/networkbuilder_16x16.png",
+            "Metabolic Network Builder");
+    public static final ImageIcon icon_32x32 = getIcon("images/networkbuilder_32x32.png",
+            "Metabolic Network Builder");
+    public static final ImageIcon task = getIcon("images/runtasks_32x32.png",
+            "Metabolic Network Builder");
+    public static final ImageIcon icon_64x64 = getIcon("images/networkbuilder_64x64.png",
+            "Metabolic Network Builder");
+    public static final ImageIcon WARNING_ICON_16x16 = getIcon("images/cutout/warning_16x16.png",
+            "Warning");
+    public static final ImageIcon ERROR_ICON_16x16 = getIcon("images/cutout/error_16x16.png",
+            "Warning");
     // buffered images
-    public static final BufferedImage logo_32x32 = loadBufferedImage(
-      "images/networkbuilder_32x32.png");
-    public static final BufferedImage logo_64x64 = loadBufferedImage(
-      "images/networkbuilder_64x64.png");
-    public static final BufferedImage logo_128x128 = loadBufferedImage(
-      "images/networkbuilder_128x128.png");
-    public static final BufferedImage logo_256x256 = loadBufferedImage(
-      "images/networkbuilder_256x256.png");
-    public static final BufferedImage logo_512x512 = loadBufferedImage(
-      "images/networkbuilder_512x512.png");
+    public static final BufferedImage logo_32x32 = getImage(
+            "images/networkbuilder_32x32.png");
+    public static final BufferedImage logo_64x64 = getImage(
+            "images/networkbuilder_64x64.png");
+    public static final BufferedImage logo_128x128 = getImage(
+            "images/networkbuilder_128x128.png");
+    public static final BufferedImage logo_256x256 = getImage(
+            "images/networkbuilder_256x256.png");
+    public static final BufferedImage logo_512x512 = getImage(
+            "images/networkbuilder_512x512.png");
     // colors
     public static final Color BACKGROUND = new Color(237, 237, 237);
     public static final Color CLEAR_COLOUR = new Color(0, 0, 0, 255);
     public static Color DARK_BACKGROUND = new Color(64, 64, 64);
-
 
     /**
      * Utility from lifted from (http://download.oracle.com/javase/tutorial/uiswing/components/icon.html)
@@ -100,31 +97,41 @@ public class ViewUtils {
      * @param description
      * @return
      */
-    public static ImageIcon createImageIcon(String path,
-                                            String description) {
+    public static ImageIcon getIcon(String path,
+            String description) {
 
         java.net.URL imageURL = ViewUtils.class.getResource(path);
 
-        if( imageURL != null ) {
+        if (imageURL != null) {
             return new ImageIcon(imageURL, description);
         } else {
-            System.err.println("Couldn't find file: " + path);
+            logger.error("Couldn't find file: " + path);
             return null;
         }
     }
 
+    public static ImageIcon getIcon(String path) {
 
-    public static BufferedImage loadBufferedImage(String path) {
+        java.net.URL imageURL = ViewUtils.class.getResource(path);
+
+        if (imageURL != null) {
+            return new ImageIcon(imageURL);
+        } else {
+            logger.error("Couldn't find file: " + path);
+            return null;
+        }
+    }
+
+    public static BufferedImage getImage(String path) {
         BufferedImage img = null;
         try {
             img = ImageIO.read(ViewUtils.class.getResource(path));
-        } catch( IOException ex ) {
+        } catch (IOException ex) {
             logger.error("could not load image: " + path);
         }
         return img;
 
     }
-
 
     public static void setClipboard(String contents) {
         StringSelection stringSelection = new StringSelection(contents);
@@ -134,17 +141,13 @@ public class ViewUtils {
             public void lostOwnership(Clipboard clipboard, Transferable contents) {
                 // do nothing
             }
-
-
         });
     }
 
-
     public static FormLayout formLayoutHelper(int ncols, int nrows, int ygap, int xgap) {
         return new FormLayout(goodiesFormHelper(ncols, ygap, true),
-                              goodiesFormHelper(nrows, xgap, false));
+                goodiesFormHelper(nrows, xgap, false));
     }
-
 
     /**
      * Wraps the text in {@code<html>..</html>} tags
@@ -156,7 +159,6 @@ public class ViewUtils {
         return sb.append("<html>").append(html).append("</html>").toString();
     }
 
-
     /**
      *
      * @param num
@@ -165,24 +167,21 @@ public class ViewUtils {
      */
     public static String goodiesFormHelper(int nelements, int gap, boolean isColumn) {
         StringBuilder sb = new StringBuilder();
-        for( int i = 0 ; i < nelements ; i++ ) {
-            if( isColumn ) {
+        for (int i = 0; i < nelements; i++) {
+            if (isColumn) {
                 sb.append(i == 0 ? "right:" : "left:");
             }
             sb.append(JGOODIES_PREFERED_WIDTH);
-            if( (i + 1) < nelements ) {
-                sb.append(JGOODIES_SEPERATOR).append(gap).append(JGOODIES_DLU).append(JGOODIES_SEPERATOR +
-                                                                                      "");
+            if ((i + 1) < nelements) {
+                sb.append(JGOODIES_SEPERATOR).append(gap).append(JGOODIES_DLU).append(JGOODIES_SEPERATOR
+                        + "");
             }
         }
         return sb.toString();
     }
-
-
     private static String JGOODIES_DLU = "dlu";
     private static String JGOODIES_SEPERATOR = ", ";
     private static String JGOODIES_PREFERED_WIDTH = "pref";
-
 
     private static Font getUnderlineFont(String family, int i) {
 
@@ -195,7 +194,6 @@ public class ViewUtils {
 
     }
 
-
     private static Font getUnderlineBoldFont(String family, int i) {
         Map<TextAttribute, Object> map = new HashMap();
         map.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_LOW_ONE_PIXEL);
@@ -206,6 +204,22 @@ public class ViewUtils {
         return new Font(map);
     }
 
+    /**
+     * Shades a colour by the given amount (0-1). A positive value will lighten the colour whilst a negative value
+     * will darken the colour.The colour is transform from RGB to HSB where the amount is added to the brightness and
+     * subtracted the saturation
+     * @param color The color to shade
+     * @param amount The amount to shade by
+     * @return
+     */
+    public static Color shade(final Color color, final float amount) {
 
+        float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+
+
+        return Color.getHSBColor(hsb[0],
+                Math.max(0f, hsb[1] - amount),  // decrease saturation
+                Math.min(1f, hsb[2] + amount)); // increase brightness
+
+    }
 }
-

@@ -29,7 +29,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import uk.ac.ebi.mnb.view.labels.Label;
+import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 import uk.ac.ebi.mnb.view.labels.URLLabel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.Molecule;
@@ -74,7 +74,7 @@ public class AnnotationRenderer implements AnnotationVisitor {
 
 
     public JLabel getLabel(Annotation annotation) {
-        JLabel label = new Label(annotation.getShortDescription() + ":", SwingConstants.RIGHT);
+        JLabel label = new ThemedLabel(annotation.getShortDescription() + ":", SwingConstants.RIGHT);
         label.setToolTipText(annotation.getLongDescription());
         return label;
     }
@@ -129,7 +129,7 @@ public class AnnotationRenderer implements AnnotationVisitor {
      */
     public JComponent visit(MolecularFormula annotation) {
 
-        return new Label(ViewUtils.htmlWrapper(MolecularFormulaManipulator.getHTML(annotation.
+        return new ThemedLabel(ViewUtils.htmlWrapper(MolecularFormulaManipulator.getHTML(annotation.
           getFormula())));
 
     }
@@ -150,7 +150,7 @@ public class AnnotationRenderer implements AnnotationVisitor {
             return visit((ChemicalStructure) annotation);
         }
 
-        return new Label(annotation.toString());
+        return new ThemedLabel(annotation.toString());
 
     }
 

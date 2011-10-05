@@ -67,7 +67,7 @@ public abstract class GeneralAction extends AbstractAction {
             putValue(key, propertyValue.toString());
         } else if (key.equals(Action.LARGE_ICON_KEY)) {
 
-            putValue(key, ViewUtils.createImageIcon(propertyValue.toString(), ""));
+            putValue(key, ViewUtils.getIcon(propertyValue.toString(), ""));
         } else {
             Object alteredvalue = key.equals(Action.ACCELERATOR_KEY) ? KeyStroke.getKeyStroke(
                     (String) propertyValue) : propertyValue;

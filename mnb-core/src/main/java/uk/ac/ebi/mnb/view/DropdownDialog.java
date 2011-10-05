@@ -9,6 +9,7 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.sun.awt.AWTUtilities;
+import furbelow.SpinningDialWaitIndicator;
 import java.awt.Color;
 import java.awt.Dialog.ModalityType;
 import java.awt.GradientPaint;
@@ -30,7 +31,7 @@ import uk.ac.ebi.mnb.core.CloseDialogAction;
 import uk.ac.ebi.mnb.core.ProcessDialogAction;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.labels.Label;
+import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 import uk.ac.ebi.mnb.interfaces.Theme;
 
 /**
@@ -51,6 +52,7 @@ public abstract class DropdownDialog
     private DialogController controller;
     private Theme theme = Settings.getInstance().getTheme();
     private Paint paint = new GradientPaint(0, 0, Color.LIGHT_GRAY, 0, 10, Settings.getInstance().getTheme().getDialogBackground());
+    private CellConstraints cc = new CellConstraints();
 
     public DropdownDialog(JFrame frame,
             DialogController controller,
@@ -106,7 +108,7 @@ public abstract class DropdownDialog
      * @return
      */
     public JLabel getDescription() {
-        return new Label(getClass().getSimpleName());
+        return new ThemedLabel(getClass().getSimpleName());
     }
 
     /**
@@ -121,9 +123,22 @@ public abstract class DropdownDialog
 
         JPanel options = new DialogPanel();
 
-        options.add(new Label("Options", SwingConstants.CENTER));
+        options.add(new ThemedLabel("Options", SwingConstants.CENTER));
 
         return options;
+
+    }
+
+    public JPanel getNavigation() {
+
+        JPanel navigation = new DialogPanel(new FormLayout("p:grow, right:min, 4dlu ,right:min",
+                "p"));
+
+        navigation.add(getClose(), cc.xy(2, 1));
+        navigation.add(getActivate(), cc.xy(4, 1));
+
+
+        return navigation;
 
     }
 
@@ -134,20 +149,18 @@ public abstract class DropdownDialog
      */
     public void setDefaultLayout() {
 
-        LayoutManager layout = new FormLayout("p:grow, right:min, 4dlu ,right:min",
+        LayoutManager layout = new FormLayout("p:grow",
                 "p, 4dlu, p, 4dlu, p, 4dlu, p");
         JPanel panel = new DialogPanel(layout);
-        CellConstraints cc = new CellConstraints();
 
         panel.setBorder(Borders.DLU7_BORDER);
 
-        panel.add(getDescription(), cc.xyw(1, 1, 4));
-        panel.add(new JSeparator(SwingConstants.HORIZONTAL), cc.xyw(1, 3, 4));
-        panel.add(getOptions(), cc.xyw(1, 5, 4));
+        panel.add(getDescription(), cc.xy(1, 1));
+        panel.add(new JSeparator(SwingConstants.HORIZONTAL), cc.xy(1, 3));
+        panel.add(getOptions(), cc.xy(1, 5));
 
         // close and active buttons in the bottom right
-        panel.add(getClose(), cc.xy(2, 7));
-        panel.add(getActivate(), cc.xy(4, 7));
+        panel.add(getNavigation(), cc.xy(1, 7));
 
         this.add(panel);
         this.pack();
@@ -218,6 +231,10 @@ public abstract class DropdownDialog
         Graphics2D g2 = (Graphics2D) g;
         g2.setPaint(paint);
         g2.fillRect(0, 0, getPreferredSize().width, 10);
+    }
+
+    public void process(final SpinningDialWaitIndicator waitIndicator){
+        process();
     }
 
     /**

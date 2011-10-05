@@ -28,7 +28,7 @@ import uk.ac.ebi.mnb.interfaces.ViewController;
 
 /**
  * @name    ComponentActionDialog - 2011.10.03 <br>
- *          A DropdownDialog that acts on the current selection
+ *          A DropdownDialog that acts on the current selection and allow updating on the given ViewController
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
@@ -72,5 +72,9 @@ public abstract class ContextDialog extends DropdownDialog implements SelectionC
 
     public ViewController getController() {
         return controller;
+    }
+
+    public boolean update() {
+        return controller.update();
     }
 }

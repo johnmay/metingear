@@ -58,7 +58,7 @@ public class ProcessDialogAction extends GeneralAction {
 
             public void run() {
 
-                dialog.process();
+                dialog.process(waiter);
 
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {

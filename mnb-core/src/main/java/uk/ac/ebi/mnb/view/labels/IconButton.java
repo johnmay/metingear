@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.mnb.view.labels;
 
 import com.jgoodies.forms.factories.Borders;
 import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.JButton;
 
 /**
@@ -16,16 +16,24 @@ import javax.swing.JButton;
  * @author johnmay
  * @date May 5, 2011
  */
-public class IconButton extends JButton{
+public class IconButton extends JButton {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( IconButton.class );
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(IconButton.class);
 
-    public IconButton(Action a) {
-        super( a );
+    public IconButton(Icon icon, Action a) {
+        super(a);
+        setIcon(icon);
         setBorder(Borders.EMPTY_BORDER);
-        if ( getIcon() != null ) {
-            setText( null );
+        if (getIcon() != null) {
+            setText(null);
         }
     }
 
+    public IconButton(Action a) {
+        super(a);
+        setBorder(Borders.EMPTY_BORDER);
+        if (getIcon() != null) {
+            setText(null);
+        }
+    }
 }

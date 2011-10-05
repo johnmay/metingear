@@ -52,4 +52,8 @@ public abstract class ContextAction extends GeneralAction {
     public void addMessage(Message mesg){
         controller.getMessageManager().addMessage(mesg);
     }
+
+    public boolean update(){
+        return controller.update();
+    }
 }

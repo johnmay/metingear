@@ -34,7 +34,7 @@ import java.util.Stack;
 
 import uk.ac.ebi.mnb.core.*;
 import uk.ac.ebi.mnb.view.labels.IconButton;
-import uk.ac.ebi.mnb.view.labels.Label;
+import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -60,10 +60,10 @@ public class MessageBar extends JPanel implements MessageManager {
 
     private static final Logger LOGGER = Logger.getLogger(MessageBar.class);
     private final Color warningColor = Color.YELLOW;
-    private final ImageIcon warningIcon = ViewUtils.createImageIcon("images/cutout/warning_16x16.png",
+    private final ImageIcon warningIcon = ViewUtils.getIcon("images/cutout/warning_16x16.png",
             "Warning");
     private final ImageIcon errorIcon =
-            ViewUtils.createImageIcon("images/cutout/error_16x16.png", "Error");
+            ViewUtils.getIcon("images/cutout/error_16x16.png", "Error");
     private final Color WARN_HIGH = new Color(240, 240, 100);
     private final Color WARN_LOW = new Color(240, 240, 40);
     private final Color ERROR_HIGH = new Color(230, 100, 100);
@@ -72,18 +72,19 @@ public class MessageBar extends JPanel implements MessageManager {
     private final Paint WARN_PAINT;
     private Paint paint;
     private JLabel iconLabel = new JLabel();
-    private JLabel label = new Label();
+    private JLabel label = new ThemedLabel();
     private Stack<Message> stack = new Stack();
 
     public MessageBar() {
         super(
-                new FormLayout("6dlu, right:min, 4dlu, p:grow, 4dlu, right:min, 6dlu", "1dlu, center:p, 1dlu"));
+                new FormLayout("1dlu, min, 1dlu, min, 4dlu, p:grow, 1dlu", "1dlu, center:p, 1dlu"));
         CellConstraints cc = new CellConstraints();
         label.setForeground(Color.BLACK);
-        this.add(iconLabel, cc.xy(2, 2, CellConstraints.LEFT, CellConstraints.CENTER));
-        this.add(label, cc.xy(4, 2, CellConstraints.LEFT, CellConstraints.CENTER));
-        this.add(new IconButton(new HideMessage()), cc.xy(6, 2, CellConstraints.RIGHT,
+        this.add(new IconButton(new HideMessage()), cc.xy(2, 2, CellConstraints.CENTER,
                 CellConstraints.CENTER));
+        this.add(iconLabel, cc.xy(4, 2, CellConstraints.CENTER, CellConstraints.CENTER));
+        this.add(label, cc.xy(6, 2, CellConstraints.CENTER, CellConstraints.CENTER));
+     
 
         this.addMouseListener(new CopyPopup());
         // set the paints
