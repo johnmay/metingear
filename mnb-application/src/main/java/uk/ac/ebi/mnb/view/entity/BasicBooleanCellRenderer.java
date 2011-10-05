@@ -26,7 +26,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.labels.AltLabel;
+import uk.ac.ebi.mnb.view.labels.DialogLabel;
 
 /**
  *          BasicAnnotationCellRenderer – 2011.09.29 <br>

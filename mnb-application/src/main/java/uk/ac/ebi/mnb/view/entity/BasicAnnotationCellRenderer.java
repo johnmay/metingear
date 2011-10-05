@@ -27,11 +27,11 @@ import java.util.Set;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import uk.ac.ebi.mnb.view.labels.Label;
+import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.labels.AltLabel;
+import uk.ac.ebi.mnb.view.labels.DialogLabel;
 
 
 /**
@@ -44,7 +44,7 @@ import uk.ac.ebi.mnb.view.labels.AltLabel;
 public class BasicAnnotationCellRenderer extends DefaultTableCellRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(BasicAnnotationCellRenderer.class);
-    private JLabel emptyLabel = new Label("");
+    private JLabel emptyLabel = new ThemedLabel("");
 
 
     @Override

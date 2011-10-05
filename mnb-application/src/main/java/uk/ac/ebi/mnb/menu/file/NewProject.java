@@ -22,7 +22,7 @@ import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
-import uk.ac.ebi.mnb.view.labels.Label;
+import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 
 /**
@@ -51,7 +51,7 @@ public class NewProject extends DropdownDialog {
         idField = new JTextField(15);
         codeField = new JTextField(5);
         taxonField = new JTextField(5);
-        nameField = new JTextField(15);
+        nameField = new JTextField(20);
         kingdomField = new JTextField(10);
 
         setDefaultLayout();
@@ -74,13 +74,13 @@ public class NewProject extends DropdownDialog {
         JPanel panel = new DialogPanel(layout);
         CellConstraints cc = new CellConstraints();
 
-        panel.add(new BoldLabel("Reconstuction Accession:"), cc.xy(5, 1));
-        panel.add(idField, cc.xy(7, 1));
+        panel.add(new BoldLabel("Reconstuction Accession:"), cc.xyw(1, 1, 3));
+        panel.add(idField, cc.xyw(5, 1, 3));
 
 
         panel.add(new BoldLabel("Code:"), cc.xy(1, 3));
         panel.add(codeField, cc.xy(3, 3));
-        panel.add(new BoldLabel("Official Name:"), cc.xy(5, 3));
+        panel.add(new BoldLabel("Name:"), cc.xy(5, 3));
         panel.add(nameField, cc.xy(7, 3));
 
         panel.add(new BoldLabel("Taxon:"), cc.xy(1, 5));
@@ -122,6 +122,11 @@ public class NewProject extends DropdownDialog {
                 taxonField.setText(Integer.toString(details.getTaxon()));
                 kingdomField.setText(details.getKingdom().name());
                 nameField.setText(details.getOfficialName());
+                nameField.setCaretPosition(0);
+                String[] nameFragments = details.getOfficialName().split("\\s+");
+                if (nameFragments.length >= 2) {
+                    idField.setText("i" + nameFragments[0].substring(0, 3) + nameFragments[1].substring(0, 1).toUpperCase() + nameFragments[1].substring(1, 2));
+                }
             }
         }
         autoSetting = false;

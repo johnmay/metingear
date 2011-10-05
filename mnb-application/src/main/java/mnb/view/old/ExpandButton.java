@@ -25,8 +25,8 @@ public class ExpandButton
 
     public ExpandButton( ExpandComponent a ) {
         super( a );
-        open = ViewUtils.createImageIcon( a.getValue( GeneralAction.EXPAND_BUTTON_OPEN_ICON ).toString() , "" );
-        close = ViewUtils.createImageIcon( a.getValue( GeneralAction.EXPAND_BUTTON_CLOSE_ICON ).toString() , "" );
+        open = ViewUtils.getIcon( a.getValue( GeneralAction.EXPAND_BUTTON_OPEN_ICON ).toString() , "" );
+        close = ViewUtils.getIcon( a.getValue( GeneralAction.EXPAND_BUTTON_CLOSE_ICON ).toString() , "" );
         setIcon( open );
         setText( null );
         a.setButton( this );

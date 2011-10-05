@@ -20,6 +20,9 @@
  */
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
+import com.explodingpixels.data.Rating;
+import com.explodingpixels.macwidgets.ITunesRatingTableCellEditor;
+import com.explodingpixels.macwidgets.ITunesRatingTableCellRenderer;
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -61,6 +64,8 @@ public class MetaboliteTable extends AbstractEntityTable {
                 annotationRenderer);
         setDefaultRenderer(MolecularFormula.class,
                 annotationRenderer);
+        setDefaultRenderer(Rating.class, new ITunesRatingTableCellRenderer());
+        setDefaultEditor(Rating.class, new ITunesRatingTableCellEditor());
 
 //        setRowHeight(64);// only set when chem structure is to be displayed
     }

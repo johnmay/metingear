@@ -14,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
-import uk.ac.ebi.mnb.view.labels.Label;
+import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
 import uk.ac.ebi.metabolomes.descriptor.observation.ObservationCollection;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;

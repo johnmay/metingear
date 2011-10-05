@@ -40,7 +40,7 @@ import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.ReactionRenderer;
 import uk.ac.ebi.mnb.view.entity.EntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
-import uk.ac.ebi.mnb.view.labels.Label;
+import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -55,7 +55,7 @@ public class ReactionPanel
     private static final Logger LOGGER = Logger.getLogger(ReactionPanel.class);
     private MetabolicReaction entity;
     private ReactionRenderer renderer = new ReactionRenderer();
-    private JLabel reactionLabel = new Label();
+    private JLabel reactionLabel = new ThemedLabel();
     private JComponent participantXref;
     private CellConstraints cc = new CellConstraints();
 
@@ -88,7 +88,7 @@ public class ReactionPanel
 
         JPanel panel = new GeneralPanel();
 
-        panel.add(new Label("Todo: Reaction Synopsis"));
+        panel.add(new ThemedLabel("Todo: Reaction Synopsis"));
 
 
         return panel;

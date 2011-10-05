@@ -23,18 +23,21 @@ package uk.ac.ebi.mnb.view.entity;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
+import uk.ac.ebi.mnb.edit.AbbreviationEdit;
 import uk.ac.ebi.mnb.edit.AccessionEdit;
 import uk.ac.ebi.mnb.edit.NameEdit;
 import uk.ac.ebi.mnb.main.MainView;
@@ -42,7 +45,10 @@ import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.view.labels.Label;
+import uk.ac.ebi.mnb.view.labels.ActionLabel;
+import uk.ac.ebi.mnb.view.labels.DeleteAnnotation;
+import uk.ac.ebi.mnb.view.labels.IconButton;
+import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
@@ -58,19 +64,20 @@ public abstract class EntityPanel
     private String type;
     private GeneralPanel basic = new GeneralPanel(
             new FormLayout("p, p:grow, p, p:grow, p", "p, 4dlu, p"));
-    private Label typeLabel = new Label();
+    private ThemedLabel typeLabel = new ThemedLabel();
     private JSeparator seperator = new JSeparator(JSeparator.HORIZONTAL);
     private JTextField accession = new TransparentTextField("", 10, false);
     private JTextField name = new TransparentTextField("", 35, false);
     private JTextField abbreviation = new TransparentTextField("", 10, false);
     private AnnotatedEntity entity;
-    private JPanel synopsis;
+    private JPanel info;
     private JPanel references;
     private JPanel annotations;
     private CellConstraints cc = new CellConstraints();
     private AnnotationRenderer renderer;
     private JPanel middle;
-    private JPanel midleft;
+    private JPanel synopsis;
+    private List<JButton> deleteButtons = new ArrayList();
 
     public AnnotationVisitor getRenderer() {
         return renderer;
@@ -95,22 +102,24 @@ public abstract class EntityPanel
         annotations = getAnnotationPanel();
         references = getInternalReferencePanel();
 
-        setLayout(new FormLayout("p:grow", "p,p"));
+        setLayout(new FormLayout("p:grow", "p,p,p"));
         setBorder(Borders.DLU7_BORDER);
 
         add(getBasicPanel(), cc.xy(1, 1));
 
-        middle = new GeneralPanel(new FormLayout("p, p", "p"));
-        midleft = new GeneralPanel(new FormLayout("p", "p, p"));
+        middle = new GeneralPanel(new FormLayout("p:grow, 4dlu, p:grow", "p"));
+        info = new GeneralPanel(new FormLayout("p", "p, p, p"));
 
 
-        midleft.add(synopsis, cc.xy(1, 1));
-        midleft.add(references, cc.xy(1, 2));
+        info.add(synopsis, cc.xy(1, 1));
+        info.add(new JSeparator(), cc.xy(1, 2));
+        info.add(references, cc.xy(1, 3));
 
 
-        middle.add(midleft, cc.xy(1, 1, CellConstraints.LEFT, CellConstraints.TOP));
-        middle.add(annotations, cc.xy(2, 1, CellConstraints.LEFT, CellConstraints.TOP));
+        middle.add(info, cc.xy(1, 1, CellConstraints.LEFT, CellConstraints.TOP));
+        middle.add(annotations, cc.xy(3, 1, CellConstraints.CENTER, CellConstraints.TOP));
         add(middle, cc.xy(1, 2));
+        add(new JSeparator(), cc.xy(1, 3));
         //TODO add observations panel...
     }
 
@@ -136,15 +145,28 @@ public abstract class EntityPanel
 
         JPanel panel = new GeneralPanel();
 
+        deleteButtons = new ArrayList(); // todo use a pool
 
         if (entity != null) {
 
             Collection<Annotation> annotations = entity.getAnnotations();
-            panel.setLayout(ViewUtils.formLayoutHelper(2, annotations.size(), 4, 4));
+            panel.setLayout(ViewUtils.formLayoutHelper(3, annotations.size(), 4, 4));
             int i = 1;
             for (Annotation annotation : annotations) {
-                panel.add(renderer.getLabel(annotation), cc.xy(1, i));
-                panel.add((JComponent) renderer.visit(annotation), cc.xy(3, i)); // better way to do this would be with a method similar to table e.g. this.setText(), this.setLabel()
+                panel.add(renderer.getLabel(annotation), cc.xy(3, i));
+                panel.add((JComponent) renderer.visit(annotation), cc.xy(5, i)); // better way to do this would be with a method similar to table e.g. this.setText(), this.setLabel()
+
+                MainView view = MainView.getInstance();
+
+                DeleteAnnotation action = new DeleteAnnotation(entity,
+                        annotation,
+                        view.getViewController().getActiveView(),
+                        view.getUndoManager());
+                JButton remove = new IconButton(ViewUtils.getIcon("images/cutout/close_16x16.png", "Remove annotation"),action);
+                remove.setVisible(editable);
+                deleteButtons.add(remove);
+                panel.add(remove, cc.xy(1, i));
+
                 i += 2;
             }
         }
@@ -186,7 +208,7 @@ public abstract class EntityPanel
             abbreviation.setText(entity.getAbbreviation());
             middle.remove(annotations);
             annotations = getAnnotationPanel();
-            middle.add(annotations, cc.xy(2, 1, CellConstraints.RIGHT, CellConstraints.TOP));
+            middle.add(annotations, cc.xy(3, 1, CellConstraints.RIGHT, CellConstraints.TOP));
             return true;
         }
 
@@ -199,22 +221,47 @@ public abstract class EntityPanel
      * @param editable
      */
     public void setEditable(boolean editable) {
+
+        this.editable = editable;
+
         accession.setEditable(editable);
         name.setEditable(editable);
         abbreviation.setEditable(editable);
+
+        for (JButton label : deleteButtons) {
+            label.setVisible(editable);
+        }
+
+
     }
+
+    private boolean editable;
 
     /**
      * Persists changed information in the currently selected entity
      */
     public void store() {
 
-        entity.getIdentifier().setAccession(accession.getText().trim());
-        entity.setAbbreviation(abbreviation.getText().trim());
+        String accessionText = accession.getText().trim();
+        if (!accessionText.equals(entity.getAccession())) {
+            UndoableEdit nameEdit = new AccessionEdit(entity, accessionText);
+            entity.getIdentifier().setAccession(accessionText);
+            MainView.getInstance().getUndoManager().addEdit(nameEdit);
+        }
 
-        NameEdit nameEdit = new NameEdit(entity, name.getText().trim());
-        entity.setName(name.getText().trim());
-        MainView.getInstance().getUndoManager().addEdit(nameEdit);
+        String abbreviationText = abbreviation.getText().trim();
+        if (!abbreviationText.equals(entity.getAbbreviation())) {
+            UndoableEdit nameEdit = new AbbreviationEdit(entity, abbreviationText);
+            entity.setAbbreviation(abbreviationText);
+            MainView.getInstance().getUndoManager().addEdit(nameEdit);
+        }
+
+        String nameText = name.getText().trim();
+        if (!nameText.equals(entity.getName())) {
+            UndoableEdit nameEdit = new NameEdit(entity, nameText);
+            entity.setName(nameText);
+            MainView.getInstance().getUndoManager().addEdit(nameEdit);
+        }
 
 
     }

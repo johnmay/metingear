@@ -30,7 +30,7 @@ import javax.swing.JComponent;
 import javax.swing.JSeparator;
 import org.apache.commons.lang.StringUtils;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.mnb.view.labels.Label;
+import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
@@ -100,7 +100,7 @@ public class DownloadStructuresDialog
         component.add(getClose(), cc.xy(1, 1));
         component.add(getActivate(), cc.xy(3, 1));
 
-        add(new Label("Please select which web services should be used"), cc.xy(2, 2));
+        add(new ThemedLabel("Please select which web services should be used"), cc.xy(2, 2));
         add(new JSeparator(JSeparator.HORIZONTAL), cc.xy(2, 4));
         add(selection, cc.xy(2, 6));
         add(component, cc.xy(2, 8));

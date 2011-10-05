@@ -21,14 +21,13 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
+import com.explodingpixels.data.Rating;
 import java.lang.Object;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
 import uk.ac.ebi.core.ReconstructionManager;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.AnnotatedEntity;
@@ -105,6 +104,12 @@ public abstract class EntityTableModel
         fireTableDataChanged();
         return true;
     }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return getColumnClass(columnIndex) == Rating.class;
+    }
+
 
     /*
      *

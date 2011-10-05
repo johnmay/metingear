@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
+import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import com.jgoodies.forms.factories.Borders;
 import java.awt.Color;
 import java.util.Collection;

@@ -47,7 +47,7 @@ import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.view.entity.EntityPanel;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
-import uk.ac.ebi.mnb.view.labels.Label;
+import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 import uk.ac.ebi.mnb.view.labels.WarningLabel;
 
 /**
@@ -67,15 +67,15 @@ public class MetabolitePanel
     private JLabel structure = new WarningLabel("No Structure");
     // for isGeneric
     private JLabel markush = new BoldLabel("Markush:");
-    private JLabel markushViewer = new Label("");
+    private JLabel markushViewer = new ThemedLabel("");
     private JComboBox markushEditor = new ComboBox("Yes", "No");
     // metabolic class
     private JLabel type = new BoldLabel("Type:");
-    private JLabel typeViewer = new Label("");
+    private JLabel typeViewer = new ThemedLabel("");
     private JComboBox typeEditor = new ComboBox(MetaboliteClass.values());
     // molecular formula
     private JTextField formulaEditor = new TransparentTextField("", 15, false);
-    private JLabel formularViewer = new Label();
+    private JLabel formularViewer = new ThemedLabel();
     // cell constraints
     private CellConstraints cc = new CellConstraints();
 
@@ -100,8 +100,13 @@ public class MetabolitePanel
         }
 
         Collection<MolecularFormula> formulas = entity.getAnnotations(MolecularFormula.class);
-        formularViewer.setText(ViewUtils.htmlWrapper(formulas.iterator().next().toHTML()));
-        formulaEditor.setText(formulas.iterator().next().toString());
+        if (formulas.iterator().hasNext()) {
+            formularViewer.setText(ViewUtils.htmlWrapper(formulas.iterator().next().toHTML()));
+            formulaEditor.setText(formulas.iterator().next().toString());
+        } else {
+            formularViewer.setText("");
+            formulaEditor.setText("");
+        }
 
         boolean generic = entity.isGeneric();
 
@@ -210,9 +215,19 @@ public class MetabolitePanel
 
     @Override
     public void store() {
+
         super.store();
-        MolecularFormula formula = entity.getAnnotations(MolecularFormula.class).iterator().next();
-        formula.setFormula(formulaEditor.getText());
+
+        // formula
+        if (formulaEditor.getText().isEmpty() == false) {
+            if (entity.getAnnotations(MolecularFormula.class).iterator().hasNext()) {
+                MolecularFormula formula = entity.getAnnotations(MolecularFormula.class).iterator().next();
+                formula.setFormula(formulaEditor.getText());
+            } else {
+                entity.addAnnotation(new MolecularFormula(formulaEditor.getText()));
+            }
+        }
+
         entity.setGeneric(((String) markushEditor.getSelectedItem()).equals("Yes") ? true : false);
         entity.setType((MetaboliteClass) typeEditor.getSelectedItem());
     }

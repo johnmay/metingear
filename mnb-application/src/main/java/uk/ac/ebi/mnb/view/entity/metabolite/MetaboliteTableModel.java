@@ -21,6 +21,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
+import com.explodingpixels.data.Rating;
 import java.util.Arrays;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.ColumnAccessType;
@@ -29,7 +30,6 @@ import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.AnnotatedEntity;
@@ -53,7 +53,8 @@ public class MetaboliteTableModel
                              Boolean.class),
         new ColumnDescriptor(new CrossReference()),
         new ColumnDescriptor(new ChemicalStructure()),
-        new ColumnDescriptor(new MolecularFormula())
+        new ColumnDescriptor(new MolecularFormula()),
+        new ColumnDescriptor("Rating", null, ColumnAccessType.FIXED, Rating.class)
     };
 
 
@@ -84,6 +85,8 @@ public class MetaboliteTableModel
         if( name.equals(DEFAULT[0].getName()) ) {
 
             return metabolicEntity.isGeneric();
+        } else if(name.equals("Rating")){
+            return Rating.FOUR_STARS;
         }
 
         return "NA";
