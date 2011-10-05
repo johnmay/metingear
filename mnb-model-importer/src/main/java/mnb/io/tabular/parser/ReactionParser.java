@@ -1,4 +1,3 @@
-
 /**
  * ReactionParser.java
  *
@@ -29,6 +28,7 @@ import mnb.io.tabular.EntityResolver;
 import mnb.io.tabular.preparse.PreparsedReaction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Subsystem;
+import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
@@ -38,8 +38,8 @@ import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.reaction.MetaboliteParticipant;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.resource.classification.ECNumber;
+import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
-
 
 /**
  *          ReactionParser – 2011.08.31 <br>
@@ -55,22 +55,20 @@ public class ReactionParser {
     private static final Pattern EQUATION_ARROW = Pattern.compile("(<[-=]+>)|(<[-=]*)|([-=]*>)");
     private static final Pattern EQUATION_ADDITION = Pattern.compile("\\s+[+]\\s+");
     private static final Pattern REACTION_COMPARTMENT =
-                                 Pattern.compile("\\A\\[(\\w{1,2})\\]\\s*:");
+            Pattern.compile("\\A\\[(\\w{1,2})\\]\\s*:");
     public static final Pattern COEFFICIENT_PATTERN =
-                                Pattern.compile("\\((\\d+(?:.\\d+)?)\\)");
+            Pattern.compile("\\((\\d+(?:.\\d+)?)\\)");
     public static final Pattern ENTITY_COMPARTMENT =
-                                Pattern.compile("\\[(\\w{1,2})\\]");
+            Pattern.compile("\\[(\\w{1,2})\\]");
     private static final Reversibility[] NORMALISED_ARROWS =
-                                         new Reversibility[]{ Reversibility.REVERSIBLE,
-                                                              Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT,
-                                                              Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT };
+            new Reversibility[]{Reversibility.REVERSIBLE,
+        Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT,
+        Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT};
     private EntityResolver entites;
-
 
     public ReactionParser(EntityResolver entityResolver) {
         entites = entityResolver;
     }
-
 
     // attrb include the entitysheet (if available)
     public MetabolicReaction parseReaction(PreparsedReaction reaction) throws UnparsableReactionError {
@@ -79,19 +77,19 @@ public class ReactionParser {
         String[] rxnSides = getReactionSides(equation);
 
         // determine whether the reaction contains two sides or one.
-        if( rxnSides.length == 2 ) {
+        if (rxnSides.length == 2) {
 
             // standard reaction
             return parseTwoSidedReaction(reaction, rxnSides);
 
-        } else if( rxnSides.length == 1 ) {
+        } else if (rxnSides.length == 1) {
 
 
             // exchange reaction
-            if( getReactionArrow(equation) == Reversibility.UNKNOWN ) {
+            if (getReactionArrow(equation) == Reversibility.UNKNOWN) {
 
-                throw new UnparsableReactionError("Unparsable reaction arrow, rxn id" +
-                                                  reaction.getIdentifier());
+                throw new UnparsableReactionError("Unparsable reaction arrow, rxn id"
+                        + reaction.getIdentifier());
             }
 
             parseExchangeReaction(reaction, rxnSides[0]);
@@ -99,33 +97,33 @@ public class ReactionParser {
 
         } else {
 
-            throw new UnparsableReactionError("Equation is empty, rxn id: " +
-                                              reaction.getIdentifier());
+            throw new UnparsableReactionError("Equation is empty, rxn id: "
+                    + reaction.getIdentifier());
         }
     }
 
     /*
      *
      */
-
     private static int ticker = 0;
 
-
     public MetabolicReaction parseTwoSidedReaction(PreparsedReaction reaction,
-                                          String[] equationSides) throws UnparsableReactionError {
+            String[] equationSides) throws UnparsableReactionError {
         // todo
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSides[0]);
         equationSides[0] = reactionCompartment.replaceAll("");
         MetabolicReaction rxn = new MetabolicReaction();
-        rxn.setIdentifier(new BasicReactionIdentifier("Rxn-" + ++ticker));
-        for( MetaboliteParticipant p :
-             parseParticipants(equationSides[0],
-                               Compartment.CYTOPLASM) ) {
+        rxn.setIdentifier(new BasicReactionIdentifier("mnb_rxn_" + ++ticker));
+        rxn.setAbbreviation(reaction.getIdentifier());
+        rxn.setName(reaction.getDescription());
+        for (MetaboliteParticipant p :
+                parseParticipants(equationSides[0],
+                Compartment.CYTOPLASM)) {
             rxn.addReactant(p);
         }
-        for( MetaboliteParticipant p :
-             parseParticipants(equationSides[1],
-                               Compartment.CYTOPLASM) ) {
+        for (MetaboliteParticipant p :
+                parseParticipants(equationSides[1],
+                Compartment.CYTOPLASM)) {
             rxn.addProduct(p);
         }
 
@@ -133,17 +131,18 @@ public class ReactionParser {
 
         // add subsytem annotation
         String subsytem = reaction.getSubsystem();
-        if( subsytem != null ) {
+        if (subsytem != null) {
             rxn.addAnnotation(new Subsystem(subsytem));
         }
 
         // add classification
         String classification = reaction.getClassification();
-        if( classification != null ) {
+        if (classification != null) {
             // load EC code
-            if( classification.matches("(?:\\d+\\.){3}\\d+") || classification.contains("EC") ) {
-                System.out.println("loading ec: '" + classification + "'");
+            if (classification.matches("(?:\\d+\\.){3}\\d+") || classification.contains("EC")) {
                 rxn.addAnnotation(new EnzymeClassification(new ECNumber(classification)));
+            } else if (classification.contains("TC")) {
+                rxn.addAnnotation(new Classification(new BasicProteinIdentifier(classification)));
             }
         }
 
@@ -153,22 +152,20 @@ public class ReactionParser {
 
     }
 
-
     /**
      * Only have left side (or some weird reaction operator)
      */
     public void parseExchangeReaction(PreparsedReaction reaction,
-                                      String equationSide) {
+            String equationSide) {
     }
 
-
     public List<MetaboliteParticipant> parseParticipants(String equationSide,
-                                               Compartment defaultCompartment) throws UnparsableReactionError {
+            Compartment defaultCompartment) throws UnparsableReactionError {
 
         List<MetaboliteParticipant> parsedParticipants = new ArrayList();
 
         String[] participants = EQUATION_ADDITION.split(equationSide);
-        for( String string : participants ) {
+        for (String string : participants) {
             parsedParticipants.add(parseParticipant(string, defaultCompartment));
         }
 
@@ -176,9 +173,8 @@ public class ReactionParser {
 
     }
 
-
     public MetaboliteParticipant parseParticipant(final String participant,
-                                        final Compartment defaultCompartment) throws UnparsableReactionError {
+            final Compartment defaultCompartment) throws UnparsableReactionError {
 
         String entityAbbr = participant;
         String entityAbbrComp = participant;
@@ -187,7 +183,7 @@ public class ReactionParser {
 
         // stoichiometric coefficients
         Matcher coefMatcher = COEFFICIENT_PATTERN.matcher(entityAbbr);
-        if( coefMatcher.find() ) {
+        if (coefMatcher.find()) {
             coef = Double.parseDouble(coefMatcher.group(1));
             entityAbbr = coefMatcher.replaceAll("");
             entityAbbrComp = entityAbbr;
@@ -195,7 +191,7 @@ public class ReactionParser {
 
         // compartment
         Matcher compartmentMatcher = ENTITY_COMPARTMENT.matcher(entityAbbr);
-        if( compartmentMatcher.find() ) {
+        if (compartmentMatcher.find()) {
             compartment = Compartment.getCompartment(compartmentMatcher.group(1));
             entityAbbr = compartmentMatcher.replaceAll("");
         }
@@ -205,14 +201,14 @@ public class ReactionParser {
 //        PreparsedMetabolite entity = entites.getEntity(entityAbbrComp.trim());
         Metabolite entity = entites.getReconciledMetabolite(entityAbbr.trim());
 
-        if( entity != null ) {
+        if (entity != null) {
             // System.out.println( coef + " " + entity.getName() + " " + compartment );
             return new MetaboliteParticipant(entity, coef,
-                                                                    compartment);
+                    compartment);
         } else {
-            System.out.println("Unable to find " + entityAbbrComp.trim() + " or " +
-                               entityAbbr.trim() +
-                               " in metabolite sheet");
+            System.out.println("Unable to find " + entityAbbrComp.trim() + " or "
+                    + entityAbbr.trim()
+                    + " in metabolite sheet");
             throw new UnparsableReactionError("...");
 //            return new MetaboliteParticipant(entity, coef, compartment);
 
@@ -230,25 +226,22 @@ public class ReactionParser {
         // 35FGD+1400DH 1) 35FGD+1400DH 2) 35FGD 1400DH 3) FGD, DH
     }
 
-
     public Participant[] parseReactionSide(String reactionSide) {
         return new Participant[0];
     }
-
 
     public String[] getReactionSides(String equation) {
         return EQUATION_ARROW.split(equation.trim());
     }
 
-
     public Reversibility getReactionArrow(String equation) {
 
         Matcher arrowMatcher = EQUATION_ARROW.matcher(equation);
 
-        if( arrowMatcher.find() ) {
+        if (arrowMatcher.find()) {
 
-            for( int i = 0 ; i < NORMALISED_ARROWS.length ; i++ ) {
-                if( arrowMatcher.group(i + 1) != null ) {
+            for (int i = 0; i < NORMALISED_ARROWS.length; i++) {
+                if (arrowMatcher.group(i + 1) != null) {
                     return NORMALISED_ARROWS[i];
                 }
             }
@@ -257,7 +250,4 @@ public class ReactionParser {
         return Reversibility.UNKNOWN;
 
     }
-
-
 }
-

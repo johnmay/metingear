@@ -33,16 +33,16 @@ import org.apache.log4j.Logger;
  * @brief   Importer for a metabolic model in Office XLS format
  *
  */
-public abstract class ExcelImporter {
+public abstract class ExcelHelper {
 
-    private static final Logger LOGGER = Logger.getLogger( ExcelImporter.class );
+    private static final Logger LOGGER = Logger.getLogger( ExcelHelper.class );
     private Pattern reactionSheetPattern = Pattern.compile( "Reaction|Reconstruction|model" ,
                                                             Pattern.CASE_INSENSITIVE );
     private Pattern metaboliteSheetPattern = Pattern.compile( "Meta|compound|abbreviations" ,
                                                               Pattern.CASE_INSENSITIVE );
     private Pattern reactionOperatorPattern = Pattern.compile( "[<][-=]+[>]|[-=]*[><]" ,
                                                                Pattern.CASE_INSENSITIVE );
-    protected Integer INTIAL_COLUMN_NUMBER = 15;
+    protected Integer INTIAL_COLUMN_NUMBER = 4;
 
     protected Boolean nameMatchesReactionSheet( String sheetName ) {
         return reactionSheetPattern.matcher( sheetName ).find();
@@ -61,6 +61,8 @@ public abstract class ExcelImporter {
     public abstract List<Integer> getMetaboliteSheetIndices();
 
     public abstract List<String> getSheetNames();
+
+    public abstract String[][] getSheetData(int index);
 
     /**
      *

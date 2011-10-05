@@ -13,4 +13,10 @@ public interface WizzardStage {
     // called when options are updated
     public void reloadPanel();
 
+    /**
+     * Returns the description of the stage
+     * @return
+     */
+    public String getDescription();
+
 }

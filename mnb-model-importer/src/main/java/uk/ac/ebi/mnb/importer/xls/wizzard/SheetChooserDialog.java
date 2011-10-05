@@ -1,4 +1,3 @@
-
 /**
  * SheetChooserDialog.java
  *
@@ -23,21 +22,16 @@ package uk.ac.ebi.mnb.importer.xls.wizzard;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.awt.BorderLayout;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import mnb.io.tabular.ExcelModelProperties;
-import uk.ac.ebi.mnb.view.GeneralPanel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.parser.ExcelImporter;
+import uk.ac.ebi.mnb.parser.ExcelHelper;
+import uk.ac.ebi.mnb.view.DialogPanel;
+import uk.ac.ebi.mnb.view.labels.DialogLabel;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
-import uk.ac.ebi.mnb.xls.options.SheetType;
-
 
 /**
  * @name    SheetChooserDialog
@@ -49,13 +43,13 @@ import uk.ac.ebi.mnb.xls.options.SheetType;
  *
  */
 public class SheetChooserDialog
-  extends GeneralPanel
-  implements WizzardStage {
+        extends DialogPanel
+        implements WizzardStage {
 
     private static final Logger LOGGER = Logger.getLogger(SheetChooserDialog.class);
     private FormLayout layout = new FormLayout("p, 4dlu, p, 4dlu, p", "p,4dlu,p,4dlu,p,4dlu,p");
     private CellConstraints cc = new CellConstraints();
-    private ExcelImporter excelHandler;
+    private ExcelHelper excelHelper;
     private ImporterOptions options;
     //  private JTable reactionsSheet;
     //  private JTable metabolitesSheet;
@@ -64,50 +58,45 @@ public class SheetChooserDialog
     private JComboBox geneCB;
     private ExcelModelProperties properties;
 
-
-    public SheetChooserDialog(ExcelImporter excelImporter, ImporterOptions options,
-                              ExcelModelProperties properties) {
+    public SheetChooserDialog(ExcelHelper excelImporter, ImporterOptions options,
+            ExcelModelProperties properties) {
         super();
-        this.excelHandler = excelImporter;
+        this.excelHelper = excelImporter;
         this.options = options;
         this.properties = properties;
-        init();
-    }
 
-
-    private void init() {
         // get all sheet names
-        List<String> sheetNames = excelHandler.getSheetNames();
-        sheetNames.add(0, "- None -");
+        List<String> names = excelHelper.getSheetNames();
+        names.add(0, "- Not Pressent -");
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(layout);
+        setLayout(layout);
 
-        reactionCB = new JComboBox(new DefaultComboBoxModel(sheetNames.toArray()));
-
-        // again.. set the selection to the first one
-        List<Integer> reactionSheets = excelHandler.getReactionSheetIndices();
-        if( reactionSheets.size() > 0 ) {
-            reactionCB.setSelectedItem(sheetNames.get(reactionSheets.get(0) + 1));
-        }
-
-        metaboliteCB = new JComboBox(new DefaultComboBoxModel(sheetNames.toArray()));
+        reactionCB = new JComboBox(new DefaultComboBoxModel(names.toArray()));
 
         // again.. set the selection to the first one
-        List<Integer> metaboliteSheets = excelHandler.getMetaboliteSheetIndices();
-        if( metaboliteSheets.size() > 0 ) {
-            metaboliteCB.setSelectedItem(sheetNames.get(metaboliteSheets.get(0) + 1));
+        List<Integer> reactionSheets = excelHelper.getReactionSheetIndices();
+        if (reactionSheets.size() > 0) {
+            reactionCB.setSelectedItem(names.get(reactionSheets.get(0) + 1));
         }
 
-        geneCB = new JComboBox(new DefaultComboBoxModel(sheetNames.toArray()));
+        metaboliteCB = new JComboBox(new DefaultComboBoxModel(names.toArray()));
 
-        mainPanel.add(reactionCB, cc.xy(3, 1));
-        mainPanel.add(metaboliteCB, cc.xy(3, 3));
-        mainPanel.add(geneCB, cc.xy(3, 5));
-        add(mainPanel, BorderLayout.CENTER);
+        // again.. set the selection to the first one
+        List<Integer> metaboliteSheets = excelHelper.getMetaboliteSheetIndices();
+        if (metaboliteSheets.size() > 0) {
+            metaboliteCB.setSelectedItem(names.get(metaboliteSheets.get(0) + 1));
+        }
+
+        geneCB = new JComboBox(new DefaultComboBoxModel(names.toArray()));
+
+        add(new DialogLabel("Reactions are in sheet named:",  SwingConstants.RIGHT), cc.xy(1, 1));
+        add(reactionCB, cc.xy(3, 1));
+        add(new DialogLabel("Metabolite are in sheet named:", SwingConstants.RIGHT), cc.xy(1, 3));
+        add(metaboliteCB, cc.xy(3, 3));
+        add(new DialogLabel("Genes/Protein/Locus are in sheet named:", SwingConstants.RIGHT), cc.xy(1, 5));
+        add(geneCB, cc.xy(3, 5));
 
     }
-
 
     public Boolean updateSelection() {
 
@@ -116,9 +105,9 @@ public class SheetChooserDialog
 
         // save the reaction sheet selection
         Integer reactionIndex = reactionCB.getSelectedIndex();
-        if( reactionIndex > 0 ) {
+        if (reactionIndex > 0) {
             String index = ((Integer) (reactionIndex - 1)).toString();
-            properties.put("rxn.sheet", index);
+            properties.put(properties.REACTION_SHEET, index);
         } else {
             // can't do anything without a reaction table
             return false;
@@ -126,7 +115,7 @@ public class SheetChooserDialog
 
         // save the metabolite sheet selection
         Integer metabolicIndex = metaboliteCB.getSelectedIndex();
-        if( metabolicIndex > 0 ) {
+        if (metabolicIndex > 0) {
             String index = ((Integer) (metabolicIndex - 1)).toString();
             properties.put("ent.sheet", index);
         }
@@ -136,11 +125,11 @@ public class SheetChooserDialog
         return true;
     }
 
-
     public void reloadPanel() {
         //    throw new UnsupportedOperationException( "Not supported yet." );
     }
 
-
+    public String getDescription() {
+        return "<html>Please select which sheets contain the reactions, metabolites and genes.<br> If a sheet is missing just leave blank</html>";
+    }
 }
-

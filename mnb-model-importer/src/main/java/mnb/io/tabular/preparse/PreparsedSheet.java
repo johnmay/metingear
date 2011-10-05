@@ -1,4 +1,3 @@
-
 /**
  * PreparsedSheet.java
  *
@@ -27,7 +26,6 @@ import java.util.List;
 import mnb.io.tabular.ExcelModelProperties;
 import org.apache.log4j.Logger;
 
-
 /**
  *          PreparsedSheet – 2011.08.29 <br>
  *          Provides uniform access to the entries in either an XLS or XLSX file (currently only XLS
@@ -49,9 +47,8 @@ public abstract class PreparsedSheet {
     private Rectangle bounds;
     private List<TableDescription> providedColumns;
 
-
     public PreparsedSheet(ExcelModelProperties properties,
-                          TableDescription bounds) {
+            TableDescription bounds) {
 
         this.properties = properties;
         this.bounds = properties.getDataBounds(bounds.getKey());
@@ -60,7 +57,6 @@ public abstract class PreparsedSheet {
         this.providedColumns = this.properties.getDefinedColumns(bounds.getClass());
 
     }
-
 
     /**
      *
@@ -78,9 +74,8 @@ public abstract class PreparsedSheet {
      * @return
      */
     public int getRowCount() {
-        return maxIndex-rowIndex;
+        return maxIndex - this.bounds.y - 1;
     }
-
 
     /**
      *
@@ -93,7 +88,6 @@ public abstract class PreparsedSheet {
         return rowIndex < maxIndex;
     }
 
-
     /**
      * Resets the index to the the first entry to be parsed
      * (as indicated in the ExcelModelProperties)
@@ -101,7 +95,6 @@ public abstract class PreparsedSheet {
     public void reset() {
         rowIndex = this.bounds.y - 1;
     }
-
 
     /**
      *
@@ -114,7 +107,6 @@ public abstract class PreparsedSheet {
         return getEntry(++rowIndex, providedColumns);
     }
 
-
     /**
      *
      * Implementing methods should return a PreparsedEntry with the provided 'types' loaded
@@ -126,7 +118,4 @@ public abstract class PreparsedSheet {
      *
      */
     public abstract PreparsedEntry getEntry(int i, List<TableDescription> types);
-
-
 }
-

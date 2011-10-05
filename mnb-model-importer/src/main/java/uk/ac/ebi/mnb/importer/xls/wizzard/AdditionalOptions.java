@@ -1,4 +1,3 @@
-
 /**
  * ImportPanel.java
  *
@@ -24,13 +23,12 @@ package uk.ac.ebi.mnb.importer.xls.wizzard;
 import com.jgoodies.forms.layout.CellConstraints;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import mnb.io.tabular.ExcelModelProperties;
 import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.view.labels.Label;
+import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 import org.apache.log4j.Logger;
-
+import uk.ac.ebi.mnb.view.DialogPanel;
 
 /**
  *          ImportPanel – 2011.09.26 <br>
@@ -39,31 +37,28 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ImportPanel
-  extends JPanel
-  implements WizzardStage {
+public class AdditionalOptions
+        extends DialogPanel
+        implements WizzardStage {
 
-    private static final Logger LOGGER = Logger.getLogger(ImportPanel.class);
+    private static final Logger LOGGER = Logger.getLogger(AdditionalOptions.class);
     private ExcelModelProperties properties;
     private JCheckBox chebi = new JCheckBox();
     private JCheckBox kegg = new JCheckBox();
 
-
-    public ImportPanel(ExcelModelProperties properties) {
+    public AdditionalOptions(ExcelModelProperties properties) {
         this.properties = properties;
     }
-
 
     private void init() {
         setLayout(ViewUtils.formLayoutHelper(2, 5, 4, 4));
         CellConstraints cc = new CellConstraints();
         add(new JLabel("Please select web services to reconcile chemical names"), cc.xy(1, 1));
-        add(new Label("ChEBI (recomended)"), cc.xy(1, 3));
+        add(new ThemedLabel("ChEBI (recomended)"), cc.xy(1, 3));
         add(chebi, cc.xy(3, 3));
-        add(new Label("KEGG"), cc.xy(1, 5));
+        add(new ThemedLabel("KEGG"), cc.xy(1, 5));
         add(kegg, cc.xy(3, 5));
     }
-
 
     public Boolean updateSelection() {
 
@@ -74,19 +69,16 @@ public class ImportPanel
         return true;
     }
 
-
     public void reloadPanel() {
         init();
     }
-
-
     private JProgressBar bar = new JProgressBar();
-
 
     public JProgressBar getProgressBar() {
         return bar;
     }
 
-
+    public String getDescription() {
+        return "<html>Please confirm additional options</html>";
+    }
 }
-

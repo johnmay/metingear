@@ -44,7 +44,7 @@ public class ExcelModelProperties extends Properties {
      * Which sheets contain the reactions and metabolites
      */
     public static final String REACTION_SHEET = "rxn.sheet";
-    public static final String ENTITY_SHEET = "ent.sheet";
+    public static final String METABOLITE_SHEET = "ent.sheet";
 
     public ExcelModelProperties() {
     }
@@ -67,7 +67,6 @@ public class ExcelModelProperties extends Properties {
         return rxnColumns;
 
     }
-
 
     /**
      *
@@ -184,7 +183,7 @@ public class ExcelModelProperties extends Properties {
         for( TableDescription type : ReactionColumn.values() ) {
             properties.put( type.getKey(), "" );
         }
-        for( String type : Arrays.asList( REACTION_SHEET, ENTITY_SHEET ) ) {
+        for( String type : Arrays.asList( REACTION_SHEET, METABOLITE_SHEET ) ) {
             properties.put( type, "" );
         }
 
