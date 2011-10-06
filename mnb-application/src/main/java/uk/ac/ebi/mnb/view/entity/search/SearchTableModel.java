@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.view.entity.search;
 
 import java.util.ArrayList;
 import java.util.List;
-import uk.ac.ebi.mnb.view.entity.ColumnAccessType;
+import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
@@ -45,9 +45,9 @@ public class SearchTableModel extends EntityTableModel {
 
     public SearchTableModel() {
         super(new ArrayList<ColumnDescriptor>());
-        addColumn(new ColumnDescriptor("Rank", Integer.class, ColumnAccessType.FIXED, Integer.class));
+        addColumn(new ColumnDescriptor("Rank", Integer.class, DataType.FIXED, Integer.class));
         addColumns(getDefaultColumns());
-        addColumn(new ColumnDescriptor("Type", Integer.class, ColumnAccessType.FIXED, Integer.class));
+        addColumn(new ColumnDescriptor("Type", Integer.class, DataType.FIXED, Integer.class));
     }
 
 

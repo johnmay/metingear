@@ -23,14 +23,25 @@ package uk.ac.ebi.mnb.view.entity;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.Sizes;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
@@ -41,11 +52,12 @@ import uk.ac.ebi.mnb.edit.AbbreviationEdit;
 import uk.ac.ebi.mnb.edit.AccessionEdit;
 import uk.ac.ebi.mnb.edit.NameEdit;
 import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.renderers.ListLinkRenderer;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
+import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.view.labels.ActionLabel;
 import uk.ac.ebi.mnb.view.labels.DeleteAnnotation;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.mnb.view.labels.ThemedLabel;
@@ -57,10 +69,10 @@ import uk.ac.ebi.mnb.view.labels.ThemedLabel;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class EntityPanel
+public abstract class AbstractEntityPanel
         extends GeneralPanel {
 
-    private static final Logger LOGGER = Logger.getLogger(EntityPanel.class);
+    private static final Logger LOGGER = Logger.getLogger(AbstractEntityPanel.class);
     private String type;
     private GeneralPanel basic = new GeneralPanel(
             new FormLayout("p, p:grow, p, p:grow, p", "p, 4dlu, p"));
@@ -71,19 +83,20 @@ public abstract class EntityPanel
     private JTextField abbreviation = new TransparentTextField("", 10, false);
     private AnnotatedEntity entity;
     private JPanel info;
-    private JPanel references;
     private JPanel annotations;
     private CellConstraints cc = new CellConstraints();
     private AnnotationRenderer renderer;
     private JPanel middle;
     private JPanel synopsis;
     private List<JButton> deleteButtons = new ArrayList();
+    private JList references = new JList();
+    private DefaultListModel refModel = new DefaultListModel();
 
     public AnnotationVisitor getRenderer() {
         return renderer;
     }
 
-    public EntityPanel(String type, AnnotationRenderer renderer) {
+    public AbstractEntityPanel(String type, AnnotationRenderer renderer) {
         this.type = type;
         typeLabel.setText(type);
         layoutBasicPanel();
@@ -93,6 +106,18 @@ public abstract class EntityPanel
         accession.setHorizontalAlignment(SwingConstants.CENTER);
         abbreviation.setHorizontalAlignment(SwingConstants.CENTER);
 
+        // internal references
+        references.setModel(refModel);
+        references.setVisibleRowCount(5);
+        references.setCellRenderer(new ListLinkRenderer());
+        references.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = references.locationToIndex(e.getPoint());
+                MainView.getInstance().getViewController().setSelection((AnnotatedEntity) refModel.get(index));
+            }
+        });
+
     }
 
     public void setup() {
@@ -100,31 +125,27 @@ public abstract class EntityPanel
 
         synopsis = getSynopsis();
         annotations = getAnnotationPanel();
-        references = getInternalReferencePanel();
+        //references = getInternalReferencePanel();
 
         setLayout(new FormLayout("p:grow", "p,p,p"));
         setBorder(Borders.DLU7_BORDER);
 
         add(getBasicPanel(), cc.xy(1, 1));
 
-        middle = new GeneralPanel(new FormLayout("p:grow, 4dlu, p:grow", "p"));
+        middle = new GeneralPanel(new FormLayout("p, 30dlu, p", "p"));
         info = new GeneralPanel(new FormLayout("p", "p, p, p"));
 
 
         info.add(synopsis, cc.xy(1, 1));
         info.add(new JSeparator(), cc.xy(1, 2));
-        info.add(references, cc.xy(1, 3));
+        info.add(new BorderlessScrollPane(references), cc.xy(1, 3));
 
 
-        middle.add(info, cc.xy(1, 1, CellConstraints.LEFT, CellConstraints.TOP));
-        middle.add(annotations, cc.xy(3, 1, CellConstraints.CENTER, CellConstraints.TOP));
+        middle.add(info, cc.xy(1, 1));
+        middle.add(annotations, cc.xy(3, 1));
         add(middle, cc.xy(1, 2));
         add(new JSeparator(), cc.xy(1, 3));
         //TODO add observations panel...
-    }
-
-    public JPanel getReferences() {
-        return references;
     }
 
     /**
@@ -138,36 +159,37 @@ public abstract class EntityPanel
     }
 
     public JPanel getBasicPanel() {
+        basic.setBorder(Borders.DLU4_BORDER);
         return basic;
     }
 
     public JPanel getAnnotationPanel() {
 
         JPanel panel = new GeneralPanel();
+        panel.setBorder(Borders.DLU4_BORDER);
 
         deleteButtons = new ArrayList(); // todo use a pool
 
+        MainView view = MainView.getInstance();
+        Icon closeIcon = ViewUtils.getIcon("images/cutout/close_16x16.png", "Remove annotation");
+
         if (entity != null) {
+            FormLayout layout = new FormLayout("p:grow, min, 4dlu, p, 4dlu, left:p:grow", "");
+            panel.setLayout(layout);
+            for (Annotation annotation : entity.getAnnotations()) {
+                layout.appendRow(new RowSpec(Sizes.PREFERRED));
+                panel.add(renderer.getLabel(annotation), cc.xy(4, layout.getRowCount()));
+                panel.add((JComponent) renderer.visit(annotation), cc.xy(6, layout.getRowCount())); // better way to do this would be with a method similar to table e.g. this.setText(), this.setLabel()
 
-            Collection<Annotation> annotations = entity.getAnnotations();
-            panel.setLayout(ViewUtils.formLayoutHelper(3, annotations.size(), 4, 4));
-            int i = 1;
-            for (Annotation annotation : annotations) {
-                panel.add(renderer.getLabel(annotation), cc.xy(3, i));
-                panel.add((JComponent) renderer.visit(annotation), cc.xy(5, i)); // better way to do this would be with a method similar to table e.g. this.setText(), this.setLabel()
-
-                MainView view = MainView.getInstance();
 
                 DeleteAnnotation action = new DeleteAnnotation(entity,
                         annotation,
                         view.getViewController().getActiveView(),
                         view.getUndoManager());
-                JButton remove = new IconButton(ViewUtils.getIcon("images/cutout/close_16x16.png", "Remove annotation"),action);
+                JButton remove = new IconButton(closeIcon, action);
                 remove.setVisible(editable);
                 deleteButtons.add(remove);
-                panel.add(remove, cc.xy(1, i));
-
-                i += 2;
+                panel.add(remove, cc.xy(2, layout.getRowCount()));
             }
         }
 
@@ -206,6 +228,13 @@ public abstract class EntityPanel
             name.setText(entity.getName());
             name.setCaretPosition(0);
             abbreviation.setText(entity.getAbbreviation());
+
+            // update the internal references
+            refModel.removeAllElements();
+            for (AnnotatedEntity ref : getReferences()) {
+                refModel.addElement(ref);
+            }
+
             middle.remove(annotations);
             annotations = getAnnotationPanel();
             middle.add(annotations, cc.xy(3, 1, CellConstraints.RIGHT, CellConstraints.TOP));
@@ -234,7 +263,6 @@ public abstract class EntityPanel
 
 
     }
-
     private boolean editable;
 
     /**
@@ -269,4 +297,8 @@ public abstract class EntityPanel
     public abstract JPanel getSynopsis();
 
     public abstract JPanel getInternalReferencePanel();
+
+    public Collection<? extends AnnotatedEntity> getReferences() {
+        return new ArrayList<AnnotatedEntity>();
+    }
 }

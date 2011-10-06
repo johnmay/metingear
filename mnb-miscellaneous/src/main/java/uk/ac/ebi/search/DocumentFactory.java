@@ -21,33 +21,19 @@
 package uk.ac.ebi.search;
 
 import java.io.IOException;
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.UUID;
 import org.apache.log4j.Logger;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopScoreDocCollector;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.util.Version;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.interfaces.Annotation;
 
 /**
  *          DocumentFactory – 2011.09.28 <br>
@@ -148,9 +134,9 @@ public class DocumentFactory {
         // index annotations
 
         // xref
-        for (CrossReference xref : entity.getAnnotationsExtending(CrossReference.class)) {
-            document.add(new Field(FieldType.CROSS_REFERENCE.getName(), xref.getIdentifier().
-                    getAccession(), Field.Store.YES, Field.Index.ANALYZED));
+        for (Annotation annotation : entity.getAnnotations()) {
+            document.add(new Field(FieldType.ANNOTATION.getName(), annotation.toString()
+                    , Field.Store.YES, Field.Index.ANALYZED));
         }
 
 

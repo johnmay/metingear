@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view.entity;
+package uk.ac.ebi.mnb.renderers;
 
 import java.awt.Component;
 import javax.swing.JLabel;
@@ -26,7 +26,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.labels.DialogLabel;
 
 /**
  *          BasicAnnotationCellRenderer – 2011.09.29 <br>
@@ -35,20 +34,28 @@ import uk.ac.ebi.mnb.view.labels.DialogLabel;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class BasicBooleanCellRenderer extends DefaultTableCellRenderer {
-    
-    private static final Logger LOGGER = Logger.getLogger(BasicBooleanCellRenderer.class);
-    private JLabel emptyLabel = new JLabel("");
-    
+public class BooleanCellRenderer extends DefaultTableCellRenderer {
+
+    private static final Logger LOGGER = Logger.getLogger(BooleanCellRenderer.class);
+    private JLabel yes = new JLabel("Yes");
+    private JLabel no = new JLabel("No");
+
+    public BooleanCellRenderer() {
+        yes.setFont(Settings.getInstance().getTheme().getBodyFont());
+        no.setFont(Settings.getInstance().getTheme().getBodyFont());
+    }
+
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row,
             int column) {
-        
-        this.setText((Boolean) value ? "Yes" : "No");
-        this.setFont(Settings.getInstance().getTheme().getBodyFont());
-        
-        return this;
-        
+
+        JLabel label = (Boolean) value ? yes : no;
+
+        label.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
+        label.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+
+        return label;
+
     }
 }

@@ -31,7 +31,7 @@ import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.entity.EntityPanel;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 
 /**
@@ -42,7 +42,7 @@ import uk.ac.ebi.mnb.view.entity.EntityPanel;
  * @author  $Author$ (this version)
  */
 public class SearchPanel
-  extends EntityPanel {
+  extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(SearchPanel.class);
     private AnnotatedEntity entity;

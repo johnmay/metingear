@@ -50,10 +50,10 @@ public abstract class EntityTableModel
     private List<? extends AnnotatedEntity> components = new ArrayList<AnnotatedEntity>();
     private static List<ColumnDescriptor> defaultColumns = new ArrayList(
       Arrays.asList(new ColumnDescriptor("Accession", String.class,
-                                         ColumnAccessType.BASIC, String.class),
+                                         DataType.BASIC, String.class),
                     new ColumnDescriptor("Abbreviation", String.class,
-                                         ColumnAccessType.BASIC, String.class),
-                    new ColumnDescriptor("Name", String.class, ColumnAccessType.BASIC,
+                                         DataType.BASIC, String.class),
+                    new ColumnDescriptor("Name", String.class, DataType.BASIC,
                                          String.class)));
 
 
@@ -163,7 +163,7 @@ public abstract class EntityTableModel
     }
 
 
-    public ColumnAccessType getAccessType(Integer column) {
+    public DataType getAccessType(Integer column) {
         return columnDescriptors.get(column).getType();
     }
 
@@ -183,14 +183,14 @@ public abstract class EntityTableModel
 
         // todo: put this in update() and make a Data[][] matrix
 
-        ColumnAccessType type = getAccessType(columnIndex);
-        if( type == ColumnAccessType.FIXED ) {
+        DataType type = getAccessType(columnIndex);
+        if( type == DataType.FIXED ) {
             return getFixedType(entity, getColumnName(columnIndex));
-        } else if( type == ColumnAccessType.BASIC ) {
+        } else if( type == DataType.BASIC ) {
             return getBasicInfo(entity, getColumnName(columnIndex));
-        } else if( type == ColumnAccessType.ANNOTATION ) {
+        } else if( type == DataType.ANNOTATION ) {
             return entity.getAnnotations(columnDescriptors.get(columnIndex).getAccessClass());
-        } else if( type == ColumnAccessType.OBSERVATION ) {
+        } else if( type == DataType.OBSERVATION ) {
             return entity.getObservations().get(
               columnDescriptors.get(columnIndex).getAccessClass());
         }

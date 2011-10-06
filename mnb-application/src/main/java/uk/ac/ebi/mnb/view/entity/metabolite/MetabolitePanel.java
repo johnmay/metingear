@@ -23,8 +23,7 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.Sizes;
+import java.util.ArrayList;
 import java.util.Collection;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -34,19 +33,16 @@ import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.core.AnnotatedEntity;
-import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.metabolite.MetaboliteClass;
-import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.ComboBox;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.view.entity.EntityPanel;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
-import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 import uk.ac.ebi.mnb.view.labels.WarningLabel;
 
@@ -58,7 +54,7 @@ import uk.ac.ebi.mnb.view.labels.WarningLabel;
  * @author  $Author$ (this version)
  */
 public class MetabolitePanel
-        extends EntityPanel {
+        extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolitePanel.class);
     private Metabolite entity;
@@ -117,8 +113,6 @@ public class MetabolitePanel
         typeEditor.setSelectedItem(entity.getType());
 
 
-        // update references
-        updateReferencePanel();
 
         return super.update();
 
@@ -194,23 +188,12 @@ public class MetabolitePanel
 
     }
 
-    public void updateReferencePanel() {
+    @Override
+    public Collection<? extends AnnotatedEntity> getReferences() {
         if (entity != null) {
-            getReferences().removeAll();
-
-
-            Collection<MetabolicReaction> rxns = ReconstructionManager.getInstance().getActiveReconstruction().getReactions().getReactions(entity);
-
-            FormLayout layout = new FormLayout("p");
-            getReferences().setLayout(layout);
-
-            for (MetabolicReaction rxn : rxns) {
-                layout.appendRow(new RowSpec(Sizes.DLUX2));
-                layout.appendRow(new RowSpec(Sizes.PREFERRED));
-                getReferences().add(new InternalLinkLabel(rxn, MainView.getInstance().getViewController()), cc.xy(1, layout.getRowCount()));
-            }
-
+            return ReconstructionManager.getInstance().getActiveReconstruction().getReactions().getReactions(entity);
         }
+        return new ArrayList();
     }
 
     @Override

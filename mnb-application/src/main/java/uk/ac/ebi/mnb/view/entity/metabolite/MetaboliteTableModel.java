@@ -24,7 +24,7 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 import com.explodingpixels.data.Rating;
 import java.util.Arrays;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.view.entity.ColumnAccessType;
+import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
@@ -49,12 +49,12 @@ public class MetaboliteTableModel
     private static final Logger LOGGER = Logger.getLogger(MetaboliteTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
         new ColumnDescriptor("Generic", null,
-                             ColumnAccessType.FIXED,
+                             DataType.FIXED,
                              Boolean.class),
         new ColumnDescriptor(new CrossReference()),
         new ColumnDescriptor(new ChemicalStructure()),
         new ColumnDescriptor(new MolecularFormula()),
-        new ColumnDescriptor("Rating", null, ColumnAccessType.FIXED, Rating.class)
+        new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class)
     };
 
 

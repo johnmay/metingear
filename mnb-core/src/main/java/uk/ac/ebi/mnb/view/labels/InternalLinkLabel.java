@@ -50,7 +50,6 @@ public class InternalLinkLabel extends ActionLabel {
         super(label, new ShowItem(selector, entity));
     }
 
-
 }
 class ShowItem extends AbstractAction {
 

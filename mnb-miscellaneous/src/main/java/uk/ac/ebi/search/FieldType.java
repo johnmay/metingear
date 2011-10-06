@@ -36,7 +36,7 @@ public enum FieldType {
     ACCESSION("Accession"),
     NAME("Name"),
     ABBREVIATION("Abbreviation"),
-    CROSS_REFERENCE("XRef"),
+    ANNOTATION("Annotation"),
     TYPE("Type");
     
     public final String name;

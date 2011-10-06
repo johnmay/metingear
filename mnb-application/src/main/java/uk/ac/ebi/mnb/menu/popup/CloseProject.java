@@ -1,4 +1,3 @@
-
 /**
  * SetActiveProject.java
  *
@@ -32,7 +31,6 @@ import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.mnb.main.MainView;
 
-
 /**
  *          SetActiveProject – 2011.09.07 <br>
  *          Class description
@@ -44,35 +42,34 @@ public class CloseProject extends GeneralAction implements ContextSensitiveActio
 
     private static final Logger LOGGER = Logger.getLogger(CloseProject.class);
     private Reconstruction reconstruction;
-
+    private boolean active = false;
 
     public CloseProject() {
-        super("Popup.CloseProject");
+        super("CloseProject");
     }
 
+    /**
+     * Tells the action to close the active project
+     * @param active
+     */
+    public CloseProject(boolean active) {
+        super("CloseProject");
+        this.active = active;
+    }
 
     public void actionPerformed(ActionEvent e) {
         LOGGER.info("TODO: Offer save suggestion before close");
-        ReconstructionManager.getInstance().removeProject(reconstruction);
+        ReconstructionManager.getInstance().removeProject(active ? ReconstructionManager.getInstance().getActiveReconstruction() : reconstruction);
         MainView.getInstance().update();
-        long start = System.currentTimeMillis();
-        System.gc();
-        long end = System.currentTimeMillis();
-        LOGGER.info("Suggested grabarge collection took " + (end-start) + " (ms)");
     }
-
 
     /**
      * @inheritDoc
      */
     public void setContext(Object entity) {
         setEnabled(entity instanceof ReconstructionSourceItem);
-        if( isEnabled() ) {
+        if (isEnabled()) {
             reconstruction = ((ReconstructionSourceItem) entity).getEntity();
         }
-
     }
-
-
 }
-

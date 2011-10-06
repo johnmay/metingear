@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.mnb.menu.file;
 
 import com.hp.hpl.jena.graph.query.Expression.Application;
 import java.io.File;
 import java.io.IOException;
+import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileView;
@@ -19,8 +19,8 @@ import uk.ac.ebi.mnb.io.FileFilterManager;
 import uk.ac.ebi.mnb.io.ProjectFilter;
 import uk.ac.ebi.mnb.main.SourceController;
 import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.mnb.menu.FileMenu;
 import uk.ac.ebi.mnb.settings.Settings;
-
 
 /**
  * OpenProjectAction.java
@@ -30,34 +30,43 @@ import uk.ac.ebi.mnb.settings.Settings;
  * @date Apr 13, 2011
  */
 public class OpenProjectAction
-  extends FileChooserAction {
+        extends FileChooserAction {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-      OpenProjectAction.class);
+            org.apache.log4j.Logger.getLogger(
+            OpenProjectAction.class);
+    private FileMenu menu;
+    private File fixedFile;
 
-
-    public OpenProjectAction() {
+    public OpenProjectAction(FileMenu menu) {
         super("OpenProject");
+        this.menu = menu;
     }
 
-
+    public OpenProjectAction(FileMenu menu, File file) {
+        super("");
+        this.menu = menu;
+        this.fixedFile = file;
+        putValue(Action.NAME, file.toString());
+    }
     ProjectFilter projFilter = FileFilterManager.getInstance().getProjectFilter();
-
 
     @Override
     public void activateActions() {
 
         // all projects will be directories MyProject.mnb
         // getChooser().setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
-        getChooser().addChoosableFileFilter(projFilter);
-        getChooser().setFileView(new MNBFileView());
-        getChooser().setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        File choosenFile = fixedFile;
 
+        // show file chooser if there is no fixed file (from open recent)
+        if (choosenFile == null) {
+            getChooser().addChoosableFileFilter(projFilter);
+            getChooser().setFileView(new MNBFileView());
+            getChooser().setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            choosenFile = getFile(showOpenDialog());
+        }
 
-        File choosenFile = getFile(showOpenDialog());
-
-        if( choosenFile != null ) {
+        if (choosenFile != null) {
             try {
                 {
                     long start = System.currentTimeMillis();
@@ -77,41 +86,37 @@ public class OpenProjectAction
 
                 }
 
+                // fire signal at the open recent items menu
+                menu.rebuildRecentlyOpen();
 
-            }  catch( IOException ex ) {
+
+            } catch (IOException ex) {
                 MainView.getInstance().addErrorMessage(
-                  "Unable to load project " + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
+                        "Unable to load project " + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
                 ex.printStackTrace();
-            } catch( ClassNotFoundException ex ) {
+            } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
                 MainView.getInstance().addErrorMessage(
-                  "Unable to load project: " +
-                  ex.getStackTrace().toString().replaceAll("\n", "<br>"));
+                        "Unable to load project: "
+                        + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
             }
         }
     }
 
-
     private class MNBFileView
-      extends FileView {
+            extends FileView {
 
         @Override
         public Boolean isTraversable(File f) {
             return !projFilter.accept(f);
         }
 
-
         @Override
         public Icon getIcon(File f) {
-            if( projFilter.accept(f) ) {
+            if (projFilter.accept(f)) {
                 return ViewUtils.icon_16x16;
             }
             return super.getIcon(f);
         }
-
-
     }
-
-
 }
-

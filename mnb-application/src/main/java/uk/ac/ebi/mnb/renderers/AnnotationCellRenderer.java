@@ -1,4 +1,3 @@
-
 /**
  * BasicAnnotationCellRenderer.java
  *
@@ -19,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view.entity;
+package uk.ac.ebi.mnb.renderers;
 
 import java.awt.Component;
 import java.util.Collection;
@@ -33,7 +32,6 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.labels.DialogLabel;
 
-
 /**
  *          BasicAnnotationCellRenderer – 2011.09.29 <br>
  *          Class description
@@ -41,44 +39,20 @@ import uk.ac.ebi.mnb.view.labels.DialogLabel;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class BasicAnnotationCellRenderer extends DefaultTableCellRenderer {
-
-    private static final Logger LOGGER = Logger.getLogger(BasicAnnotationCellRenderer.class);
-    private JLabel emptyLabel = new ThemedLabel("");
-
+public class AnnotationCellRenderer extends DefaultRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
-                                                   boolean isSelected, boolean hasFocus, int row,
-                                                   int column) {
+            boolean isSelected, boolean hasFocus, int row,
+            int column) {
 
-        this.setFont(Settings.getInstance().getTheme().getBodyFont());
+        Collection collection = (Collection) value;
+        this.setText(StringUtils.join(collection, ", "));
 
-        if( value instanceof Collection ) {
-
-            Collection collection = (Collection) value;
-            if( collection.isEmpty() ) {
-                this.setText("-");
-            } else {
-                this.setText(StringUtils.join(collection, ", "));
-            }
-
-            if( isSelected ) {
-                this.setBackground(table.getSelectionBackground());
-            } else {
-                this.setBackground(table.getBackground());
-            }
-
-            //   return label;
-
-        }
+        this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
+        this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
 
         return this;
 
-
-
     }
-
-
 }
-

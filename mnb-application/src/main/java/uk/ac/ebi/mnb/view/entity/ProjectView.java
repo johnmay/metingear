@@ -29,7 +29,7 @@ import uk.ac.ebi.core.ReconstructionManager;
 import mnb.view.old.MatrixModel;
 import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
 import uk.ac.ebi.mnb.view.entity.protein.ProteinView;
-import uk.ac.ebi.mnb.view.entity.reaction.ReactionsView;
+import uk.ac.ebi.mnb.view.entity.reaction.ReactionView;
 import uk.ac.ebi.mnb.view.entity.search.SearchView;
 import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
 import org.apache.lucene.index.CorruptIndexException;
@@ -62,7 +62,7 @@ public class ProjectView
     // underlying tab components
     private JScrollPane matrixPane;
     private MatrixView matrix = null;
-    private ReactionsView reactions = null;
+    private ReactionView reactions = null;
     private MetaboliteView metabolites = null;
 //    private BrowserSplitPane productBrowser;
     private ProteinView products = null;
@@ -75,7 +75,7 @@ public class ProjectView
 
 //        productBrowser = BrowserSplitPane.getInstance();
         products = new ProteinView();
-        reactions = new ReactionsView();
+        reactions = new ReactionView();
         metabolites = new MetaboliteView();
         tasks = new TaskView();
         search = new SearchView();
@@ -237,7 +237,7 @@ public class ProjectView
         return metabolites;
     }
 
-    public ReactionsView getReactionView() {
+    public ReactionView getReactionView() {
         return reactions;
     }
 

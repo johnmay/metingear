@@ -37,21 +37,21 @@ public class ColumnDescriptor {
     private static final Logger LOGGER = Logger.getLogger(ColumnDescriptor.class);
     private String name;
     private Class accessClass;
-    private ColumnAccessType accessType;
+    private DataType accessType;
     private Class dataClass;
 
 
     public ColumnDescriptor(Annotation annotation) {
         this.name = annotation.getShortDescription();
         this.accessClass = annotation.getClass();
-        this.accessType = ColumnAccessType.ANNOTATION;
+        this.accessType = DataType.ANNOTATION;
         this.dataClass = annotation.getClass();
     }
 
 
     public ColumnDescriptor(String name,
                             Class accessClass,
-                            ColumnAccessType type,
+                            DataType type,
                             Class dataClass) {
         this.name = name;
         this.accessClass = accessClass;
@@ -70,7 +70,7 @@ public class ColumnDescriptor {
     }
 
 
-    public ColumnAccessType getType() {
+    public DataType getType() {
         return accessType;
     }
 

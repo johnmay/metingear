@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.view.entity.ColumnAccessType;
+import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
@@ -46,10 +46,10 @@ public class ReactionTableModel extends EntityTableModel {
     private static final Logger LOGGER = Logger.getLogger(ReactionTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
         new ColumnDescriptor("Reversibility", null,
-        ColumnAccessType.FIXED,
+        DataType.FIXED,
         String.class),
         new ColumnDescriptor("Equation", null,
-        ColumnAccessType.FIXED,
+        DataType.FIXED,
         String.class),
         new ColumnDescriptor(new EnzymeClassification()),
         new ColumnDescriptor(new Subsystem())};

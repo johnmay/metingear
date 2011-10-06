@@ -31,8 +31,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import uk.ac.ebi.mnb.view.entity.BasicAnnotationCellRenderer;
-import uk.ac.ebi.mnb.view.entity.BasicBooleanCellRenderer;
+import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
+import uk.ac.ebi.mnb.renderers.BooleanCellRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import mnb.view.old.CachedMoleculeRenderer;
 import org.apache.log4j.Logger;
@@ -40,6 +40,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mnb.renderers.FormulaCellRender;
 
 /**
  *          MetaboliteTable – 2011.09.05 <br>
@@ -56,14 +57,14 @@ public class MetaboliteTable extends AbstractEntityTable {
         super(new MetaboliteTableModel());
         //       setDefaultRenderer(ChemicalStructure.class,
         //                          new ChemStructureRenderer());
-        BasicAnnotationCellRenderer annotationRenderer = new BasicAnnotationCellRenderer();
-        BasicBooleanCellRenderer booleanRenderer = new BasicBooleanCellRenderer();
+        AnnotationCellRenderer annotationRenderer = new AnnotationCellRenderer();
+        BooleanCellRenderer booleanRenderer = new BooleanCellRenderer();
         setDefaultRenderer(Boolean.class,
                 booleanRenderer);
         setDefaultRenderer(CrossReference.class,
                 annotationRenderer);
         setDefaultRenderer(MolecularFormula.class,
-                annotationRenderer);
+                new FormulaCellRender());
         setDefaultRenderer(Rating.class, new ITunesRatingTableCellRenderer());
         setDefaultEditor(Rating.class, new ITunesRatingTableCellEditor());
 

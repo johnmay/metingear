@@ -20,15 +20,16 @@
  */
 package uk.ac.ebi.mnb.view.entity.reaction;
 
+import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
-import java.awt.Color;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.MetabolicReaction;
@@ -38,7 +39,7 @@ import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.ReactionRenderer;
-import uk.ac.ebi.mnb.view.entity.EntityPanel;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 import uk.ac.ebi.mnb.view.labels.ThemedLabel;
 
@@ -50,7 +51,7 @@ import uk.ac.ebi.mnb.view.labels.ThemedLabel;
  * @author  $Author$ (this version)
  */
 public class ReactionPanel
-        extends EntityPanel {
+        extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionPanel.class);
     private MetabolicReaction entity;
@@ -88,8 +89,9 @@ public class ReactionPanel
 
         JPanel panel = new GeneralPanel();
 
-        panel.add(new ThemedLabel("Todo: Reaction Synopsis"));
+        panel.setBorder(Borders.DLU4_BORDER);
 
+        panel.add(new ThemedLabel("TODO: Reaction Synopsis"));
 
         return panel;
 
@@ -107,8 +109,14 @@ public class ReactionPanel
         // add a row
         layout.appendRow(new RowSpec(RowSpec.CENTER, Sizes.PREFERRED, RowSpec.DEFAULT_GROW));
         panel.add(reactionLabel, cc.xyw(1, layout.getRowCount(), layout.getColumnCount(), cc.CENTER, cc.CENTER));
+
         layout.appendRow(new RowSpec(RowSpec.CENTER, Sizes.PREFERRED, RowSpec.NO_GROW));
         panel.add(participantXref, cc.xyw(1, layout.getRowCount(), layout.getColumnCount(), cc.CENTER, cc.CENTER));
+        layout.appendRow(new RowSpec(Sizes.DLUY4));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
+        panel.add(new JSeparator(JSeparator.HORIZONTAL), cc.xyw(1, layout.getRowCount(), layout.getColumnCount()));
+        layout.appendRow(new RowSpec(Sizes.DLUY4));
+
 
         return panel;
 
@@ -119,7 +127,7 @@ public class ReactionPanel
 
         participantXref.removeAll();
 
-        if(entity == null){
+        if (entity == null) {
             return;
         }
 
@@ -173,12 +181,15 @@ public class ReactionPanel
      */
     public JPanel getInternalReferencePanel() {
 
-        JPanel panel = new JPanel();
-
-        panel.setBackground(Color.DARK_GRAY);
-        panel.add(new JLabel("Internal references"));
+        JPanel panel = new GeneralPanel();
+        panel.setBorder(Borders.DLU4_BORDER);
+        panel.add(new JLabel(""));
 
         return panel;
 
     }
+
+
+
+
 }

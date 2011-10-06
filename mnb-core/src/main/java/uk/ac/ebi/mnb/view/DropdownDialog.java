@@ -4,35 +4,31 @@
  */
 package uk.ac.ebi.mnb.view;
 
-import uk.ac.ebi.mnb.interfaces.DialogController;
-import com.jgoodies.forms.factories.Borders;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.sun.awt.AWTUtilities;
 import furbelow.SpinningDialWaitIndicator;
+
+import java.awt.*;
 import java.awt.Color;
 import java.awt.Dialog.ModalityType;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.LayoutManager;
-import java.awt.Paint;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import org.apache.log4j.Logger;
-import sun.net.ApplicationProxy;
-import uk.ac.ebi.mnb.core.ActionProperties;
-import uk.ac.ebi.mnb.core.CloseDialogAction;
-import uk.ac.ebi.mnb.core.ProcessDialogAction;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import uk.ac.ebi.mnb.core.*;
+import uk.ac.ebi.mnb.interfaces.DialogController;
+import uk.ac.ebi.mnb.interfaces.Theme;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.labels.ThemedLabel;
-import uk.ac.ebi.mnb.interfaces.Theme;
+
+import javax.swing.*;
+
+import org.apache.log4j.Logger;
+
+import com.jgoodies.forms.factories.Borders;
+import com.jgoodies.forms.layout.*;
+import com.sun.awt.AWTUtilities;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -61,9 +57,13 @@ public abstract class DropdownDialog
         super(frame, ModalityType.APPLICATION_MODAL);
 
         this.controller = controller;
+
         close = new JButton(new CloseDialogAction(this));
+
         active = new JButton(new ProcessDialogAction(type + ".DialogButton", this));
+
         setUndecorated(true);
+
     }
 
     /**
@@ -175,7 +175,7 @@ public abstract class DropdownDialog
     @Override
     public void setVisible(boolean visible) {
         if (visible) {
-            pack();
+            this.pack();
             this.setLocation();
             if (theme != Settings.getInstance().getTheme()) {
                 updateTheme();
@@ -224,6 +224,23 @@ public abstract class DropdownDialog
     }
 
     /**
+     * Draws the dialog to an image (experimental)
+     */
+    public void drawDialog() {
+        BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
+        Graphics2D g2 = (Graphics2D)img.createGraphics();
+        super.setLocation(0, 0);
+        super.setVisible(true);
+        super.setVisible(false);
+        g2.dispose();
+        try {
+            ImageIO.write(img, "png", new File("/Users/johnmay/Desktop/dialog.png"));
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(DropdownDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
      * Paints a shadow on the background to make it appear tucked under the tool-bar
      */
     public void paint(Graphics g) {
@@ -233,7 +250,11 @@ public abstract class DropdownDialog
         g2.fillRect(0, 0, getPreferredSize().width, 10);
     }
 
-    public void process(final SpinningDialWaitIndicator waitIndicator){
+    /**
+     * Allows access to the spinning dial wait indicator for example setting text
+     * @param waitIndicator
+     */
+    public void process(final SpinningDialWaitIndicator waitIndicator) {
         process();
     }
 

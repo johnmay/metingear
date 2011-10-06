@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import mnb.view.old.TaskManager;
-import uk.ac.ebi.mnb.view.entity.ColumnAccessType;
+import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
@@ -47,16 +47,16 @@ public class TaskTableModel extends EntityTableModel {
     private static final Logger LOGGER = Logger.getLogger(TaskTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
         new ColumnDescriptor("Description", null,
-                             ColumnAccessType.FIXED,
+                             DataType.FIXED,
                              String.class),
         new ColumnDescriptor("Job Id", null,
-                             ColumnAccessType.FIXED,
+                             DataType.FIXED,
                              String.class),
         new ColumnDescriptor("Date", null,
-                             ColumnAccessType.FIXED,
+                             DataType.FIXED,
                              Date.class),
         new ColumnDescriptor("Status", null,
-                             ColumnAccessType.FIXED,
+                             DataType.FIXED,
                              TaskStatus.class)
     };
 

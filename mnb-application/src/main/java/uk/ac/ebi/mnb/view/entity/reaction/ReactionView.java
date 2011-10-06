@@ -14,11 +14,10 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.ac.ebi.mnb.view.entity.reaction;
 
+import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityView;
-
 
 /**
  *
@@ -28,20 +27,14 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityView;
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  *
  */
-public class ReactionsView
-  extends AbstractEntityView {
+public class ReactionView
+        extends AbstractEntityView {
 
-    private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-      ReactionsView.class);
-    private static final String name = "Reaction Panel";
+    private static final Logger LOGGER = Logger.getLogger(ReactionView.class);
 
-
-    public ReactionsView() {
+    public ReactionView() {
         super(new ReactionTable(), new ReactionInspector());
-        setName(name);
     }
-
 
     /**
      * @inheritDoc
@@ -51,7 +44,6 @@ public class ReactionsView
         return (ReactionInspector) super.getInspector();
     }
 
-
     /**
      * @inheritDoc
      */
@@ -59,7 +51,4 @@ public class ReactionsView
     public ReactionTable getTable() {
         return (ReactionTable) super.getTable();
     }
-
-
 }
-

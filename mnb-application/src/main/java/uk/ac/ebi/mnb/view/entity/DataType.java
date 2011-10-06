@@ -10,7 +10,7 @@ package uk.ac.ebi.mnb.view.entity;
  *
  * @author johnmay
  */
-public enum ColumnAccessType {
+public enum DataType {
     FIXED, ANNOTATION, OBSERVATION
 
 ,   BASIC}

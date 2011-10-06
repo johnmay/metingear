@@ -56,7 +56,7 @@ public class ReactionInspector
 
     @Override
     public void store() {
-//        throw new UnsupportedOperationException("Not supported yet.");
+        super.store();
     }
 
     

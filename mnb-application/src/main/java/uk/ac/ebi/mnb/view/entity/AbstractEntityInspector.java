@@ -58,9 +58,9 @@ public abstract class AbstractEntityInspector
     private AnnotationRenderer renderer = new AnnotationRenderer();
     private static final Settings preferences = Settings.getInstance();
     private static Border PADDING_BORDER = Borders.DLU7_BORDER;
-    private EntityPanel panel;
+    private AbstractEntityPanel panel;
 
-    public AbstractEntityInspector(EntityPanel panel) {
+    public AbstractEntityInspector(AbstractEntityPanel panel) {
         this.panel = panel;
         panel.setup();
         toolbar = new InspectorToolbar(this);
