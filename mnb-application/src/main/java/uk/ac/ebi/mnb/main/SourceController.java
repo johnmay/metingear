@@ -43,7 +43,7 @@ import uk.ac.ebi.chemet.render.source.TaskSourceItem;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.metabolomes.run.RunnableTask;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
@@ -159,7 +159,7 @@ public class SourceController
 
 
             // products
-            for (GeneProduct p : reconstruction.getGeneProducts().getAllProducts()) {
+            for (OldGeneProduct p : reconstruction.getGeneProducts().getAllProducts()) {
                 if (itemMap.containsKey(p) == false) {
                     EntitySourceItem item = new ProductSourceItem(p, products);
                     itemMap.put(p, item);

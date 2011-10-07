@@ -27,7 +27,7 @@ import uk.ac.ebi.mnb.io.FastaFileFilter;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.io.FileFilterManager;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.protein.ProteinIdentifier;
 
@@ -79,7 +79,7 @@ public class ImportPeptidesAction extends FileChooserAction {
                                                                                              header.
                           indexOf(" ")));
                         String description = header.substring(header.indexOf(" ") + 1);
-                        GeneProduct p = new GeneProteinProduct(identifer,
+                        OldGeneProduct p = new GeneProteinProduct(identifer,
                                                                entry.getValue().getSequenceAsString(),
                                                                description);
                         peptides.addProduct(p);

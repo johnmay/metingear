@@ -13,7 +13,7 @@ import java.awt.Dimension;
 import java.util.Collection;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.mnb.view.TransparentTextArea;
 import uk.ac.ebi.mnb.view.TransparentTextField;
@@ -36,7 +36,7 @@ public class SynopsisPanel
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
       SynopsisPanel.class);
-    private GeneProduct displayedProduct = null;
+    private OldGeneProduct displayedProduct = null;
     private TransparentTextField identifierField = null;
     private TransparentTextArea descriptionField = null;
     private TransparentTextField sequenceLengthField = null;
@@ -113,7 +113,7 @@ public class SynopsisPanel
      * Gets the displayed product from the inspection details panel
      * @return the current GeneProduct
      */
-    public GeneProduct getDisplayedProduct() {
+    public OldGeneProduct getDisplayedProduct() {
         return displayedProduct;
     }
 
@@ -122,7 +122,7 @@ public class SynopsisPanel
      * Sets the displayed product
      * @param displayedProduct the new gene product to display
      */
-    public void setDisplayedProduct(GeneProduct displayedProduct) {
+    public void setDisplayedProduct(OldGeneProduct displayedProduct) {
         this.displayedProduct = displayedProduct;
         updateFields();
     }

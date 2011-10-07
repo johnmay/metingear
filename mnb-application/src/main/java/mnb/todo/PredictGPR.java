@@ -116,136 +116,136 @@ public class PredictGPR
         GeneProteinProduct[] proteinProducts = this.productCollection.getProteinProducts();
         LOGGER.info("Predicting GRP for " + proteinProducts.length + " protein products");
         for( int i = 0 ; i < proteinProducts.length ; i++ ) {
-            GeneProteinProduct product = proteinProducts[i];
-
-            HashMap<ECNumber, List<BlastHit>> ecToObservationMap =
-                                              new HashMap<ECNumber, List<BlastHit>>(5);
-
-            // filter blast hits
-            List<BlastHit> hits = product.getObservations().getBlastHits();
-            LOGGER.info("product has " + hits.size() + " assigned");
-
-            for( BlastHit blastHit : hits ) {
-                // only take those that fall above the positive threshold
-                Double positiveCoverage = (double) blastHit.getPositive() / (double) blastHit.
-                  getHitLength();
-                UniProtIdentifier id = blastHit.getUniProtIdentifier();
-
-                LOGGER.info("Checking hit " + id);
-
-                if( positiveCoverage > pcthreshold &&
-                    id != null ) {
-
-                    List<ECNumber> ecs = iex.getECNumbers(id);
-                    for( ECNumber ec : ecs ) {
-                        if( ecToObservationMap.containsKey(ec) == Boolean.FALSE ) {
-                            ecToObservationMap.put(ec, new ArrayList<BlastHit>(10));
-                        }
-                        ecToObservationMap.get(ec).add(blastHit);
-                    }
-                }
-            }
-
-            // assign EC
-            List<ECNumber> tentativeECs = new ArrayList<ECNumber>(ecToObservationMap.keySet());
-
-            // only one ec
-            if( tentativeECs.size() == 1 ) {
-                ECNumber ec = tentativeECs.get(0);
-                ObservationCollection oc = new ObservationCollection();
-                oc.addAll(ecToObservationMap.get(ec));
-                EnzymeClassification annotation = new EnzymeClassification(ec);
-
-//                if( oc.size() > 5 ) {
-//                    // green flag
-//                    annotation.setFlag(AnnotationFlag.GREEN);
-//                } else if( oc.size() <= 5 ) {
-//                    // orange flag
-//                    annotation.setFlag(AnnotationFlag.AMBER);
-//                } else {
-//                    // should never happen
-//                    LOGGER.error("could not assign ec: " + ec + " with " + oc.size() +
-//                                 " observations");
-//                    annotation.setFlag(AnnotationFlag.RED);
+//            GeneProteinProduct product = proteinProducts[i];
+//
+//            HashMap<ECNumber, List<BlastHit>> ecToObservationMap =
+//                                              new HashMap<ECNumber, List<BlastHit>>(5);
+//
+//            // filter blast hits
+//            List<BlastHit> hits = product.getObservations().getBlastHits();
+//            LOGGER.info("product has " + hits.size() + " assigned");
+//
+//            for( BlastHit blastHit : hits ) {
+//                // only take those that fall above the positive threshold
+//                Double positiveCoverage = (double) blastHit.getPositive() / (double) blastHit.
+//                  getHitLength();
+//                UniProtIdentifier id = blastHit.getUniProtIdentifier();
+//
+//                LOGGER.info("Checking hit " + id);
+//
+//                if( positiveCoverage > pcthreshold &&
+//                    id != null ) {
+//
+//                    List<ECNumber> ecs = iex.getECNumbers(id);
+//                    for( ECNumber ec : ecs ) {
+//                        if( ecToObservationMap.containsKey(ec) == Boolean.FALSE ) {
+//                            ecToObservationMap.put(ec, new ArrayList<BlastHit>(10));
+//                        }
+//                        ecToObservationMap.get(ec).add(blastHit);
+//                    }
 //                }
-                product.addAnnotation(annotation);
-            }
-            // multiple ecs
-            if( tentativeECs.size() > 1 ) {
-                for( ECNumber ec : tentativeECs ) {
-                    ObservationCollection oc = new ObservationCollection();
-                    oc.addAll(ecToObservationMap.get(ec));
-                    EnzymeClassification annotation = new EnzymeClassification(ec);
-                    // annotation.setFlag(AnnotationFlag.RED);
-                    product.addAnnotation(annotation);
-                }
-            }
-
-            // fetch reaction
-            if( product.getAnnotations(EnzymeClassification.class).size() == 1 ) {
-                EnzymeClassification ecAnnotation =
-                                     new ArrayList<EnzymeClassification>(
-                  product.getAnnotations(EnzymeClassification.class)).get(0);
-                ECNumber ec = (ECNumber) ecAnnotation.getIdentifier();
-                Map<IMolecule, Metabolite> pool = new HashMap<IMolecule, Metabolite>();
-                if( ecToReactionMap.containsKey(ec) ) {
-                    // this reaction is a repeat so add the one we have stored
-                  //todo  product.addReaction(ecToReactionMap.get(ec));
-                } else {
-                    try {
-                        long start = System.currentTimeMillis();
-                        // only do this for one reaction
-
-                        BiochemicalReaction reaction =
-                                            reactionHelper.getBiochemicalReaction(ecAnnotation.
-                          getIdentifier());
-                        long end = System.currentTimeMillis();
-                        LOGGER.info("Time to fetch from bwh: " + (end - start) + " (ms)");
-                        if( reaction != null ) {
-                            ecToReactionMap.put((ECNumber) ecAnnotation.getIdentifier(), reaction);
-                            // make cross-links to product and project
-                           //todo  product.addReaction(reaction);
-                           //todo  project.addReaction(reaction);
-
-                            // add all to the project
-                            IMoleculeSet productSet = reaction.getProducts();
-                            int nProducts = reaction.getProductCount();
-                            for( int pi = 0 ; pi < nProducts ; pi++ ) {
-                                IMolecule mol = productSet.getMolecule(pi);
-                                if( pool.containsKey(mol) == false ) {
-                                    Metabolite ent = new Metabolite();
-                                    ent.setIdentifier(generateId(mol.getID()));
-                                    ent.setName(mol.getID());
-                                    ent.addAnnotation(new ChemicalStructure(mol));
-                                    pool.put(mol, ent);
-                                }
-                                project.addMetabolite(pool.get(mol));
-                            }
-                            IMoleculeSet reactantSet = reaction.getReactants();
-                            int nReactants = reaction.getReactantCount();
-                            for( int ri = 0 ; ri < nReactants ; ri++ ) {
-
-                                IMolecule mol = productSet.getMolecule(ri);
-                                if( pool.containsKey(mol) == false ) {
-                                    Metabolite ent = new Metabolite();
-                                    ent.setIdentifier(generateId(mol.getID()));
-                                    ent.setName(mol.getID());
-                                    ent.addAnnotation(new ChemicalStructure(mol));
-                                    pool.put(mol, ent);
-                                }
-                                project.addMetabolite(pool.get(mol));
-                            }
-                        }
-                    } catch( CDKException ex ) {
-                        ex.printStackTrace();
-                    } catch( SQLException ex ) {
-                        LOGGER.error("SQL Exceptiong", ex);
-                    } catch( UnknownStructureException ex ) {
-                        LOGGER.error("Unknown Structure in Reaction for EC", ex);
-                    }
-                }
-
-            }
+//            }
+//
+//            // assign EC
+//            List<ECNumber> tentativeECs = new ArrayList<ECNumber>(ecToObservationMap.keySet());
+//
+//            // only one ec
+//            if( tentativeECs.size() == 1 ) {
+//                ECNumber ec = tentativeECs.get(0);
+//                ObservationCollection oc = new ObservationCollection();
+//                oc.addAll(ecToObservationMap.get(ec));
+//                EnzymeClassification annotation = new EnzymeClassification(ec);
+//
+////                if( oc.size() > 5 ) {
+////                    // green flag
+////                    annotation.setFlag(AnnotationFlag.GREEN);
+////                } else if( oc.size() <= 5 ) {
+////                    // orange flag
+////                    annotation.setFlag(AnnotationFlag.AMBER);
+////                } else {
+////                    // should never happen
+////                    LOGGER.error("could not assign ec: " + ec + " with " + oc.size() +
+////                                 " observations");
+////                    annotation.setFlag(AnnotationFlag.RED);
+////                }
+//                product.addAnnotation(annotation);
+//            }
+//            // multiple ecs
+//            if( tentativeECs.size() > 1 ) {
+//                for( ECNumber ec : tentativeECs ) {
+//                    ObservationCollection oc = new ObservationCollection();
+//                    oc.addAll(ecToObservationMap.get(ec));
+//                    EnzymeClassification annotation = new EnzymeClassification(ec);
+//                    // annotation.setFlag(AnnotationFlag.RED);
+//                    product.addAnnotation(annotation);
+//                }
+//            }
+//
+//            // fetch reaction
+//            if( product.getAnnotations(EnzymeClassification.class).size() == 1 ) {
+//                EnzymeClassification ecAnnotation =
+//                                     new ArrayList<EnzymeClassification>(
+//                  product.getAnnotations(EnzymeClassification.class)).get(0);
+//                ECNumber ec = (ECNumber) ecAnnotation.getIdentifier();
+//                Map<IMolecule, Metabolite> pool = new HashMap<IMolecule, Metabolite>();
+//                if( ecToReactionMap.containsKey(ec) ) {
+//                    // this reaction is a repeat so add the one we have stored
+//                  //todo  product.addReaction(ecToReactionMap.get(ec));
+//                } else {
+//                    try {
+//                        long start = System.currentTimeMillis();
+//                        // only do this for one reaction
+//
+//                        BiochemicalReaction reaction =
+//                                            reactionHelper.getBiochemicalReaction(ecAnnotation.
+//                          getIdentifier());
+//                        long end = System.currentTimeMillis();
+//                        LOGGER.info("Time to fetch from bwh: " + (end - start) + " (ms)");
+//                        if( reaction != null ) {
+//                            ecToReactionMap.put((ECNumber) ecAnnotation.getIdentifier(), reaction);
+//                            // make cross-links to product and project
+//                           //todo  product.addReaction(reaction);
+//                           //todo  project.addReaction(reaction);
+//
+//                            // add all to the project
+//                            IMoleculeSet productSet = reaction.getProducts();
+//                            int nProducts = reaction.getProductCount();
+//                            for( int pi = 0 ; pi < nProducts ; pi++ ) {
+//                                IMolecule mol = productSet.getMolecule(pi);
+//                                if( pool.containsKey(mol) == false ) {
+//                                    Metabolite ent = new Metabolite();
+//                                    ent.setIdentifier(generateId(mol.getID()));
+//                                    ent.setName(mol.getID());
+//                                    ent.addAnnotation(new ChemicalStructure(mol));
+//                                    pool.put(mol, ent);
+//                                }
+//                                project.addMetabolite(pool.get(mol));
+//                            }
+//                            IMoleculeSet reactantSet = reaction.getReactants();
+//                            int nReactants = reaction.getReactantCount();
+//                            for( int ri = 0 ; ri < nReactants ; ri++ ) {
+//
+//                                IMolecule mol = productSet.getMolecule(ri);
+//                                if( pool.containsKey(mol) == false ) {
+//                                    Metabolite ent = new Metabolite();
+//                                    ent.setIdentifier(generateId(mol.getID()));
+//                                    ent.setName(mol.getID());
+//                                    ent.addAnnotation(new ChemicalStructure(mol));
+//                                    pool.put(mol, ent);
+//                                }
+//                                project.addMetabolite(pool.get(mol));
+//                            }
+//                        }
+//                    } catch( CDKException ex ) {
+//                        ex.printStackTrace();
+//                    } catch( SQLException ex ) {
+//                        LOGGER.error("SQL Exceptiong", ex);
+//                    } catch( UnknownStructureException ex ) {
+//                        LOGGER.error("Unknown Structure in Reaction for EC", ex);
+//                    }
+//                }
+//
+//            }
 
         }
 

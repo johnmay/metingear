@@ -20,13 +20,9 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import com.explodingpixels.data.Rating;
-import com.sri.biospice.warehouse.schema.CrossReference;
 import java.lang.Object;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -187,7 +183,7 @@ public abstract class EntityTableModel
         } else if (type == DataType.ANNOTATION) {
             return entity.getAnnotations(columnDescriptors.get(columnIndex).getAccessClass());
         } else if (type == DataType.OBSERVATION) {
-            return entity.getObservations().get(
+            return entity.getObservationCollection().get(
                     columnDescriptors.get(columnIndex).getAccessClass());
         }
 

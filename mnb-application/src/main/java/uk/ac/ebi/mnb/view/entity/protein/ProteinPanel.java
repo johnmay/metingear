@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
@@ -43,7 +43,7 @@ public class ProteinPanel
   extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(ProteinPanel.class);
-    private GeneProduct entity;
+    private OldGeneProduct entity;
     private JLabel formula;
     private JTextField generic;
 
@@ -66,7 +66,7 @@ public class ProteinPanel
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
-        this.entity = (GeneProduct) entity;
+        this.entity = (OldGeneProduct) entity;
         return super.setEntity(entity);
     }
 

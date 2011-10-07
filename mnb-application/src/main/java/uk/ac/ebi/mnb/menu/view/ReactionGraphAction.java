@@ -23,7 +23,7 @@ import java.util.List;
 import uk.ac.ebi.core.ReconstructionManager;
 import mnb.view.old.ReactionGraph;
 import mnb.view.old.GraphPanel;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;

@@ -24,7 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.metabolomes.core.reaction.BiochemicalReaction;
 
 
@@ -78,7 +78,7 @@ public class ReactionGraph
     private String getModifierName(IReaction reaction) {
         if( reaction instanceof BiochemicalReaction ) {
             BiochemicalReaction biochemicalReaction = (BiochemicalReaction) reaction;
-            List<GeneProduct> modifiers = biochemicalReaction.getModifiers();
+            List<OldGeneProduct> modifiers = biochemicalReaction.getModifiers();
             // could add option here fore what to use.. e.g. ID, Name, EC etc..
             return StringUtils.join(modifiers, ',');
         }

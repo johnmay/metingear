@@ -38,7 +38,7 @@ import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.metabolomes.run.RunnableTask;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.ViewController;
@@ -93,7 +93,7 @@ public class ProjectView
         viewMap = new HashMap();
         viewMap.put(Metabolite.BASE_TYPE, metabolites);
         viewMap.put(Reaction.BASE_TYPE, reactions);
-        viewMap.put(GeneProduct.BASE_TYPE, products);
+        viewMap.put(OldGeneProduct.BASE_TYPE, products);
         viewMap.put(RunnableTask.BASE_TYPE, tasks);
 
 
