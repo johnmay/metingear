@@ -38,7 +38,7 @@ import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.mnb.view.ComboBox;
+import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.labels.DialogLabel;
 
@@ -84,14 +84,14 @@ public class MetaboliteColumnChooser
         start = new JSpinner(new SpinnerNumberModel(1, 1, 4000, 1));
         end = new JSpinner(new SpinnerNumberModel(1, 1, 4000, 1));
 
-        abbreviation = new ComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        name = new ComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        compartment = new ComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        charge = new ComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        formula = new ComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        kegg = new ComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        chebi = new ComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        pubchem = new ComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        abbreviation = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        name = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        compartment = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        charge = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        formula = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        kegg = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        chebi = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        pubchem = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
         table = new SelectionTable(helper);
 
 

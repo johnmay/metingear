@@ -50,7 +50,7 @@ import mnb.io.tabular.ExcelModelProperties;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.mnb.view.ComboBox;
+import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.labels.DialogLabel;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
@@ -112,14 +112,14 @@ public class ReactionColumnChooser
         start = new JSpinner(new SpinnerNumberModel(1, 1, 4000, 1));
         end = new JSpinner(new SpinnerNumberModel(1, 1, 4000, 1));
 
-        abbreviation = new ComboBox(columns);
-        description = new ComboBox(columns);
+        abbreviation = new MComboBox(columns);
+        description = new MComboBox(columns);
 
-        equation = new ComboBox(columns);
-        classification = new ComboBox(columns);
+        equation = new MComboBox(columns);
+        classification = new MComboBox(columns);
 
-        subsystem = new ComboBox(columns);
-        source = new ComboBox(columns);
+        subsystem = new MComboBox(columns);
+        source = new MComboBox(columns);
 
         // content panel
         setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p"));
