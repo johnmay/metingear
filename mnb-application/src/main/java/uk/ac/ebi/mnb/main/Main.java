@@ -32,7 +32,7 @@ public class Main {
         if (os.equals("Mac OS X")) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.setProperty("com.apple.mrj.application.apple.menu.about.name",
-                    "Metabolic Network Builder");
+                    "Metabonater");
             // MainView.getInstance().getRootPane().putClientProperty( "apple.awt.brushMetalLook" , Boolean.TRUE );
             // Set the doc image
             com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();

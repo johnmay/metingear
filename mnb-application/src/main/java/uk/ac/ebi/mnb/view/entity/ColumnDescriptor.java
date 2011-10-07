@@ -39,6 +39,7 @@ public class ColumnDescriptor {
     private Class accessClass;
     private DataType accessType;
     private Class dataClass;
+    private Object instance;
 
 
     public ColumnDescriptor(Annotation annotation) {
@@ -46,6 +47,7 @@ public class ColumnDescriptor {
         this.accessClass = annotation.getClass();
         this.accessType = DataType.ANNOTATION;
         this.dataClass = annotation.getClass();
+        this.instance = annotation;
     }
 
 
@@ -79,6 +81,19 @@ public class ColumnDescriptor {
         return dataClass;
     }
 
+    public Object getInstance() {
+        return instance;
+    }
+
+    @Override
+    public String toString() {
+        return "Column: " + accessClass;
+    }
+
+
+
+
+    
 
 }
 

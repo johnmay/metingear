@@ -80,7 +80,7 @@ public class MainView
 
     private MainView() {
 
-        super("Metabolic Network Builder");
+        super("Metabonater");
 
         // mac widgets
         MacUtils.makeWindowLeopardStyle(getRootPane());

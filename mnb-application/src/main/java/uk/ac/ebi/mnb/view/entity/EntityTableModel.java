@@ -1,4 +1,3 @@
-
 /**
  * EntityTableModel.java
  *
@@ -22,16 +21,24 @@
 package uk.ac.ebi.mnb.view.entity;
 
 import com.explodingpixels.data.Rating;
+import com.sri.biospice.warehouse.schema.CrossReference;
 import java.lang.Object;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.table.AbstractTableModel;
 import uk.ac.ebi.core.ReconstructionManager;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.render.source.AbbreviationAccessor;
+import uk.ac.ebi.chemet.render.source.AccessionAccessor;
+import uk.ac.ebi.chemet.render.source.Accessor;
+import uk.ac.ebi.chemet.render.source.NameAccessor;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.AnnotatedEntity;
-
 
 /**
  *          EntityTableModel – 2011.09.06 <br>
@@ -41,7 +48,7 @@ import uk.ac.ebi.core.AnnotatedEntity;
  * @author  $Author$ (this version)
  */
 public abstract class EntityTableModel
-  extends AbstractTableModel {
+        extends AbstractTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(EntityTableModel.class);
     private Reconstruction currentReconstruction;
@@ -49,23 +56,27 @@ public abstract class EntityTableModel
     private List<ColumnDescriptor> columnDescriptors = new ArrayList();
     private List<? extends AnnotatedEntity> components = new ArrayList<AnnotatedEntity>();
     private static List<ColumnDescriptor> defaultColumns = new ArrayList(
-      Arrays.asList(new ColumnDescriptor("Accession", String.class,
-                                         DataType.BASIC, String.class),
-                    new ColumnDescriptor("Abbreviation", String.class,
-                                         DataType.BASIC, String.class),
-                    new ColumnDescriptor("Name", String.class, DataType.BASIC,
-                                         String.class)));
-
+            Arrays.asList(new ColumnDescriptor("Accession", String.class,
+            DataType.BASIC, String.class),
+            new ColumnDescriptor("Abbreviation", String.class,
+            DataType.BASIC, String.class),
+            new ColumnDescriptor("Name", String.class, DataType.BASIC,
+            String.class)));
+    private Map<String, Accessor> accessMap = new HashMap();
 
     public EntityTableModel() {
         this(defaultColumns);
+        accessMap.put("Name", new NameAccessor());
+        accessMap.put("Abbreviation", new AbbreviationAccessor());
+        accessMap.put("Accession", new AccessionAccessor());
     }
-
 
     public EntityTableModel(List<ColumnDescriptor> columnDescriptors) {
         this.columnDescriptors.addAll(columnDescriptors);
+        accessMap.put("Name", new NameAccessor());
+        accessMap.put("Abbreviation", new AbbreviationAccessor());
+        accessMap.put("Accession", new AccessionAccessor());
     }
-
 
     /**
      * Returns the default columns Accession, Abbreviation and Name
@@ -73,7 +84,6 @@ public abstract class EntityTableModel
     public static List<ColumnDescriptor> getDefaultColumns() {
         return defaultColumns;
     }
-
 
     /**
      * Returns the component and given index
@@ -83,10 +93,7 @@ public abstract class EntityTableModel
     public AnnotatedEntity getEntity(int index) {
         return components.get(index);
     }
-
-
     private Object[][] data;
-
 
     /**
      *
@@ -96,19 +103,23 @@ public abstract class EntityTableModel
     public boolean update() {
         loadComponents();
         data = new Object[components.size()][getColumnCount()];
-        for( int i = 0 ; i < components.size() ; i++ ) {
-            for( int j = 0 ; j < getColumnCount() ; j++ ) {
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < components.size(); i++) {
+            for (int j = 0; j < getColumnCount(); j++) {
                 data[i][j] = getValue(components.get(i), j);
             }
         }
+        long end = System.currentTimeMillis();
+        LOGGER.info("Loaded table data: " + getClass() + " : " + (end - start) + " ms ");
         fireTableDataChanged();
         return true;
     }
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return getColumnClass(columnIndex) == Rating.class;
+        return false;
     }
+
 
 
     /*
@@ -116,83 +127,68 @@ public abstract class EntityTableModel
      * Method is called on update before cells are copied over to data[][]
      *
      */
-
     public abstract void loadComponents();
-
 
     public void setEntities(List<? extends AnnotatedEntity> components) {
         this.components = components;
     }
-
 
     private boolean displayNewReconstruction() {
         Reconstruction reconstruction = pm.getActiveReconstruction();
         return reconstruction instanceof Reconstruction && reconstruction != currentReconstruction;
     }
 
-
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         return columnDescriptors.get(columnIndex).getDataClass();
     }
-
 
     @Override
     public String getColumnName(int column) {
         return columnDescriptors.get(column).getName();
     }
 
-
     public int getColumnCount() {
         return columnDescriptors.size();
     }
-
 
     public boolean addColumns(List<ColumnDescriptor> descriptors) {
         return columnDescriptors.addAll(descriptors);
     }
 
-
     public boolean addColumn(ColumnDescriptor... descriptors) {
         return columnDescriptors.addAll(Arrays.asList(descriptors));
     }
-
 
     public boolean addColumn(ColumnDescriptor descriptor) {
         return columnDescriptors.add(descriptor);
     }
 
-
     public DataType getAccessType(Integer column) {
         return columnDescriptors.get(column).getType();
     }
-
 
     public int getRowCount() {
         return components.size();
     }
 
-
     public Object getValueAt(int rowIndex, int columnIndex) {
         return data[rowIndex][columnIndex];
     }
 
-
     public Object getValue(AnnotatedEntity entity,
-                           Integer columnIndex) {
-
-        // todo: put this in update() and make a Data[][] matrix
+            Integer columnIndex) {
 
         DataType type = getAccessType(columnIndex);
-        if( type == DataType.FIXED ) {
+        if (type == DataType.FIXED) {
             return getFixedType(entity, getColumnName(columnIndex));
-        } else if( type == DataType.BASIC ) {
+        } else if (type == DataType.BASIC) {
             return getBasicInfo(entity, getColumnName(columnIndex));
-        } else if( type == DataType.ANNOTATION ) {
+        } else if (type == DataType.ANNOTATION) {
             return entity.getAnnotations(columnDescriptors.get(columnIndex).getAccessClass());
-        } else if( type == DataType.OBSERVATION ) {
+        } else if (type == DataType.OBSERVATION) {
             return entity.getObservations().get(
-              columnDescriptors.get(columnIndex).getAccessClass());
+                    columnDescriptors.get(columnIndex).getAccessClass());
         }
 
         // will never happen...
@@ -202,26 +198,34 @@ public abstract class EntityTableModel
 
     }
 
-
     public abstract Object getFixedType(AnnotatedEntity component, String name);
-
 
     public Integer indexOf(AnnotatedEntity component) {
         return components.indexOf(component);
     }
 
+    private Object getBasicInfo(AnnotatedEntity entity, String name) {
 
-    private Object getBasicInfo(AnnotatedEntity component, String columnName) {
-        if( columnName.equals("Name") ) {
-            return component.getName();
-        } else if( columnName.equals("Accession") ) {
-            return component.getIdentifier().getAccession();
-        } else if( columnName.equals("Abbreviation") ) {
-            return component.getAbbreviation();
+        Accessor accessor = accessMap.get(name);
+
+        if (accessor != null) {
+            return accessor.access(entity);
         }
+        // maybe do this when os x has java 1.7
+//        switch (name) {
+//            case "Name":
+//                return entity.getName();
+//            case "Abbreviation":
+//                return entity.getName();
+//            case "Accession":
+//                return entity.getName();
+//            default:
+//                return "NA";
+//        }
+//
+
+
         return "NA";
+
     }
-
-
 }
-

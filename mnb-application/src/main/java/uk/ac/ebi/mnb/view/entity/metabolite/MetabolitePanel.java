@@ -37,7 +37,7 @@ import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.metabolite.MetaboliteClass;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.ComboBox;
+import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.mnb.view.ViewUtils;
@@ -64,11 +64,11 @@ public class MetabolitePanel
     // for isGeneric
     private JLabel markush = new BoldLabel("Markush:");
     private JLabel markushViewer = new ThemedLabel("");
-    private JComboBox markushEditor = new ComboBox("Yes", "No");
+    private JComboBox markushEditor = new MComboBox("Yes", "No");
     // metabolic class
     private JLabel type = new BoldLabel("Type:");
     private JLabel typeViewer = new ThemedLabel("");
-    private JComboBox typeEditor = new ComboBox(MetaboliteClass.values());
+    private JComboBox typeEditor = new MComboBox(MetaboliteClass.values());
     // molecular formula
     private JTextField formulaEditor = new TransparentTextField("", 15, false);
     private JLabel formularViewer = new ThemedLabel();

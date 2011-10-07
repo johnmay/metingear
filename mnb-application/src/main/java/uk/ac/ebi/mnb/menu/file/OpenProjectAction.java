@@ -20,7 +20,6 @@ import uk.ac.ebi.mnb.io.ProjectFilter;
 import uk.ac.ebi.mnb.main.SourceController;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.mnb.menu.FileMenu;
-import uk.ac.ebi.mnb.settings.Settings;
 
 /**
  * OpenProjectAction.java

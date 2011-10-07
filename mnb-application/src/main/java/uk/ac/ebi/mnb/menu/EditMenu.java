@@ -32,11 +32,15 @@ import javax.swing.JSeparator;
 import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.core.ContextDialogItem;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.core.ControllerDialogItem;
 import uk.ac.ebi.mnb.core.DelayedBuildAction;
 import uk.ac.ebi.mnb.core.UpdatableDialogItem;
 import uk.ac.ebi.mnb.dialog.edit.AddAuthorAnnotation;
 import uk.ac.ebi.mnb.dialog.edit.MergeEntities;
 import uk.ac.ebi.mnb.dialog.edit.NewMetabolite;
+import uk.ac.ebi.mnb.dialog.edit.NewProteinProduct;
+import uk.ac.ebi.mnb.dialog.edit.NewReaction;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
 /**
@@ -56,7 +60,7 @@ public class EditMenu extends ClearMenu {
         setBackground(ViewUtils.CLEAR_COLOUR);
         setBorderPainted(false);
 
-       final MainView view = MainView.getInstance();
+        final MainView view = MainView.getInstance();
 
         add(new JMenuItem(new GeneralAction("Undo") {
 
@@ -74,22 +78,13 @@ public class EditMenu extends ClearMenu {
         }));
         add(new JSeparator());
         add(new UpdatableDialogItem(view, view.getViewController(), NewMetabolite.class));
+        add(new UpdatableDialogItem(view, view.getViewController(), NewReaction.class));
+        add(new UpdatableDialogItem(view, view.getViewController(), NewProteinProduct.class));
+        add(new JSeparator());
+        add(new ControllerDialogItem(view, MergeEntities.class));
         add(new JSeparator());
         add(new ContextDialogItem(view, view.getViewController(), AddAuthorAnnotation.class));
-        add(new DelayedBuildAction("MergeEntities") {
-
-            DropdownDialog dialog;
-
-            @Override
-            public void buildComponents() {
-                dialog = new MergeEntities(view, view.getViewController(), view.getMessageManager(), view.getViewController(), view.getUndoManager());
-            }
-
-            @Override
-            public void activateActions() {
-                dialog.setVisible(true);
-            }
-        });
+        // add citation
         //add(new ContextDialogItem(view, view.getViewController(), ContextDialog.class));
 
 //        for (JComponent component : items) {

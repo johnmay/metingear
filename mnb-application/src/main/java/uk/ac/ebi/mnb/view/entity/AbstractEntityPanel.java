@@ -25,14 +25,13 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
-import java.awt.Color;
-import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -41,8 +40,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
@@ -110,13 +109,36 @@ public abstract class AbstractEntityPanel
         references.setModel(refModel);
         references.setVisibleRowCount(5);
         references.setCellRenderer(new ListLinkRenderer());
+        references.addMouseMotionListener(new MouseAdapter() {
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int index = references.locationToIndex(e.getPoint());
+                if (references.getCellBounds(index, index).contains(e.getPoint())) {
+                    references.setSelectedIndex(index);
+                    setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                } else {
+                    references.removeSelectionInterval(0, references.getModel().getSize());
+                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                }
+            }
+        });
         references.addMouseListener(new MouseAdapter() {
+
+            // need to monitor when we leave (mouseMoved no longer inside JList)
+            @Override
+            public void mouseExited(MouseEvent e) {
+                references.removeSelectionInterval(0, references.getModel().getSize());
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+
             @Override
             public void mouseClicked(MouseEvent e) {
                 int index = references.locationToIndex(e.getPoint());
                 MainView.getInstance().getViewController().setSelection((AnnotatedEntity) refModel.get(index));
             }
         });
+
 
     }
 
@@ -134,7 +156,6 @@ public abstract class AbstractEntityPanel
 
         middle = new GeneralPanel(new FormLayout("p, 30dlu, p", "p"));
         info = new GeneralPanel(new FormLayout("p", "p, p, p"));
-
 
         info.add(synopsis, cc.xy(1, 1));
         info.add(new JSeparator(), cc.xy(1, 2));
@@ -231,13 +252,21 @@ public abstract class AbstractEntityPanel
 
             // update the internal references
             refModel.removeAllElements();
-            for (AnnotatedEntity ref : getReferences()) {
-                refModel.addElement(ref);
-            }
 
+
+            new SwingWorker() {
+
+                @Override
+                protected Object doInBackground() throws Exception {
+                    for (AnnotatedEntity ref : getReferences()) {
+                        refModel.addElement(ref);
+                    }
+                    return null;
+                }
+            }.run();
             middle.remove(annotations);
             annotations = getAnnotationPanel();
-            middle.add(annotations, cc.xy(3, 1, CellConstraints.RIGHT, CellConstraints.TOP));
+            middle.add(annotations, cc.xy(3, 1, CellConstraints.CENTER, CellConstraints.TOP));
             return true;
         }
 

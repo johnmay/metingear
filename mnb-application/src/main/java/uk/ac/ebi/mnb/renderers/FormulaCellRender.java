@@ -1,7 +1,7 @@
 /**
- * BasicAnnotationCellRenderer.java
+ * FormulaCellRender.java
  *
- * 2011.09.29
+ * 2011.10.06
  *
  * This file is part of the CheMet library
  * 
@@ -23,29 +23,32 @@ package uk.ac.ebi.mnb.renderers;
 import java.awt.Component;
 import java.util.Collection;
 import javax.swing.JTable;
-import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.mnb.view.ViewUtils;
 
 /**
- *          BasicAnnotationCellRenderer – 2011.09.29 <br>
+ * @name    FormulaCellRender - 2011.10.06 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AnnotationCellRenderer extends DefaultRenderer {
+public class FormulaCellRender extends DefaultRenderer {
+
+    private static final Logger LOGGER = Logger.getLogger(FormulaCellRender.class);
 
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row,
-            int column) {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
         Collection collection = (Collection) value;
-        this.setText(StringUtils.join(collection, ", "));
+        if (collection.size() == 1) {
+            this.setText(ViewUtils.htmlWrapper(((MolecularFormula) collection.iterator().next()).toHTML()));
+        }
 
         this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
         this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
 
         return this;
-
     }
 }

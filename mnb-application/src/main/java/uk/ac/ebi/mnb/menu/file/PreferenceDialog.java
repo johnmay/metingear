@@ -30,7 +30,7 @@ import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.DialogPanel;
-import uk.ac.ebi.mnb.view.ComboBox;
+import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
@@ -63,9 +63,9 @@ public class PreferenceDialog extends DropdownDialog {
 
 
                 
-        metSourceView = new ComboBox(SourceItemDisplayType.values());
+        metSourceView = new MComboBox(SourceItemDisplayType.values());
         metSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_METABOLITE));
-        rxnSourceView = new ComboBox(SourceItemDisplayType.values());
+        rxnSourceView = new MComboBox(SourceItemDisplayType.values());
         rxnSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_REACTION));
 
 

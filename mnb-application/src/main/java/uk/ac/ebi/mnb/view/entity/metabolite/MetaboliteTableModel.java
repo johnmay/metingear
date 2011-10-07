@@ -1,4 +1,3 @@
-
 /**
  * MetaboliteTableModel.java
  *
@@ -22,7 +21,10 @@
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
 import com.explodingpixels.data.Rating;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
@@ -34,7 +36,7 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
-
+import uk.ac.ebi.interfaces.Annotation;
 
 /**
  *          MetaboliteTableModel – 2011.09.06 <br>
@@ -44,55 +46,75 @@ import uk.ac.ebi.core.Metabolite;
  * @author  $Author$ (this version)
  */
 public class MetaboliteTableModel
-  extends EntityTableModel {
+        extends EntityTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
         new ColumnDescriptor("Generic", null,
-                             DataType.FIXED,
-                             Boolean.class),
+        DataType.FIXED,
+        Boolean.class),
         new ColumnDescriptor(new CrossReference()),
         new ColumnDescriptor(new ChemicalStructure()),
         new ColumnDescriptor(new MolecularFormula()),
         new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class)
     };
 
-
     public MetaboliteTableModel() {
         super();
         addColumns(Arrays.asList(DEFAULT));
     }
-
 
     @Override
     public void loadComponents() {
 
         Reconstruction project = ReconstructionManager.getInstance().getActiveReconstruction();
 
-        if( project != null ) {
+        if (project != null) {
             setEntities(project.getMetabolites());
-
         }
 
     }
 
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+
+        if (getColumnClass(columnIndex) == CrossReference.class) {
+            return true;
+        }
+
+        return super.isCellEditable(rowIndex, columnIndex);
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+
+        if (getColumnClass(columnIndex) == CrossReference.class) {
+            AnnotatedEntity entity = getEntity(rowIndex);
+            List<Annotation> annotations = new ArrayList( entity.getAnnotations(CrossReference.class) );
+            for (int i = 0; i < annotations.size(); i++) {
+                entity.removeAnnotation(annotations.get(i));
+            }
+            entity.addAnnotations((Collection<Annotation>) aValue);
+            update();
+            return;
+        }
+
+        super.setValueAt(aValue, rowIndex, columnIndex);
+    }
 
     @Override
     public Object getFixedType(AnnotatedEntity component, String name) {
 
         Metabolite metabolicEntity = (Metabolite) component;
 
-        if( name.equals(DEFAULT[0].getName()) ) {
+        if (name.equals(DEFAULT[0].getName())) {
 
             return metabolicEntity.isGeneric();
-        } else if(name.equals("Rating")){
+        } else if (name.equals("Rating")) {
             return Rating.FOUR_STARS;
         }
 
         return "NA";
 
     }
-
-
 }
-

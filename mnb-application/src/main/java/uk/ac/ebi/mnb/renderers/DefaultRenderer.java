@@ -1,7 +1,7 @@
 /**
- * BasicAnnotationCellRenderer.java
+ * DefaultRenderer.java
  *
- * 2011.09.29
+ * 2011.10.06
  *
  * This file is part of the CheMet library
  * 
@@ -20,32 +20,29 @@
  */
 package uk.ac.ebi.mnb.renderers;
 
+import com.explodingpixels.macwidgets.MacFontUtils;
 import java.awt.Component;
-import java.util.Collection;
+import javax.swing.JLabel;
 import javax.swing.JTable;
-import org.apache.commons.lang.StringUtils;
+import javax.swing.table.TableCellRenderer;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.view.ViewUtils;
 
 /**
- *          BasicAnnotationCellRenderer – 2011.09.29 <br>
+ * @name    DefaultRenderer - 2011.10.06 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AnnotationCellRenderer extends DefaultRenderer {
+public class DefaultRenderer extends JLabel implements TableCellRenderer {
 
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row,
-            int column) {
+    public DefaultRenderer() {
+        setFont(MacFontUtils.ITUNES_FONT);
+    }
 
-        Collection collection = (Collection) value;
-        this.setText(StringUtils.join(collection, ", "));
-
-        this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
-        this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        setText(value.toString());
         return this;
-
     }
 }

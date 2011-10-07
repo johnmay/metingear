@@ -1,0 +1,112 @@
+/**
+ * CrossReferenceCellEditor.java
+ *
+ * 2011.10.07
+ *
+ * This file is part of the CheMet library
+ * 
+ * The CheMet library is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * CheMet is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package uk.ac.ebi.mnb.editors;
+
+import java.awt.Component;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.Collection;
+import java.util.EventObject;
+import javax.swing.JTable;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.table.TableCellEditor;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.dialog.table.CrossReferenceEditor;
+import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
+
+/**
+ * @name    CrossReferenceCellEditor - 2011.10.07 <br>
+ *          Class description
+ * @version $Rev$ : Last Changed $Date$
+ * @author  johnmay
+ * @author  $Author$ (this version)
+ */
+public class CrossReferenceCellEditor extends AnnotationCellRenderer implements TableCellEditor {
+
+    private static final Logger LOGGER = Logger.getLogger(CrossReferenceCellEditor.class);
+    private static CrossReferenceEditor xrefEditor = new CrossReferenceEditor(MainView.getInstance());
+    private ChangeEvent event = new ChangeEvent(this);
+
+    public CrossReferenceCellEditor() {
+        //  setFont(Settings.getInstance().getTheme().getBodyFont());
+        xrefEditor.addComponentListener(new ComponentAdapter() {
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                fireEditingStopped();
+            }
+        });
+    }
+
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        Collection refs = (Collection) value;
+        xrefEditor.setup(refs);
+        xrefEditor.pack();
+        xrefEditor.setOpenLocation();
+        xrefEditor.setVisible(true);
+        return getTableCellRendererComponent(table, value, isSelected, isSelected, row, column);
+    }
+
+    @Override
+    public Object getCellEditorValue() {
+        return xrefEditor.getCrossReferences();
+    }
+
+    protected void fireEditingStopped() {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            ((CellEditorListener) listeners[i + 1]).editingStopped(event);
+        }
+    }
+
+    @Override
+    public boolean isCellEditable(EventObject anEvent) {
+        return true;
+    }
+
+    @Override
+    public boolean shouldSelectCell(EventObject anEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean stopCellEditing() {
+        return true;
+    }
+
+    @Override
+    public void cancelCellEditing() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void addCellEditorListener(CellEditorListener l) {
+        listenerList.add(CellEditorListener.class, l);
+    }
+
+    @Override
+    public void removeCellEditorListener(CellEditorListener l) {
+        listenerList.remove(CellEditorListener.class, l);
+    }
+}

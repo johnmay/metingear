@@ -5,9 +5,9 @@
 package uk.ac.ebi.mnb.menu;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.Stack;
 import uk.ac.ebi.mnb.menu.file.ImportSBMLAction;
@@ -16,9 +16,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.core.GeneralAction;
-import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.file.ExportSIFAction;
 import uk.ac.ebi.mnb.menu.file.ExportSBMLAction;
 import uk.ac.ebi.mnb.menu.file.ImportPeptidesAction;
@@ -71,21 +68,14 @@ public class FileMenu
 
     public void rebuildRecentlyOpen() {
         recent.removeAll(); // could just add and remove items... but for now
-        Set<String> seen = new HashSet<String>();
-        Stack<String> items = ReconstructionManager.getInstance().getInstance().getRecent();
-        Stack<String> unique = new Stack<String>();
+        LinkedList<String> items = ReconstructionManager.getInstance().getInstance().getRecent();
         for (int i = items.size() - 1; i >= 0; i--) {
-            if (seen.contains(items.get(i)) == false) {
-                String path = items.get(i);
-                File file = new File(path);
-                if (file.exists()) {
-                    recent.add(new JMenuItem(new OpenProjectAction(this, file)));
-                }
-                seen.add(path);
-                unique.push(path);
+            String path = items.get(i);
+            File file = new File(path);
+            if (file.exists()) {
+                recent.add(new JMenuItem(new OpenProjectAction(this, file)));
             }
         }
-        ReconstructionManager.getInstance().getInstance().setRecent(unique);
 
     }
 

@@ -69,10 +69,8 @@ public class SearchTable extends AbstractEntityTable {
                     AnnotatedEntity entity = table.getModel().getEntity(convertRowIndexToModel(index));
                     MainView.getInstance().getViewController().setSelection(entity);
                 }
-
             }
         }
-
 
     }
 

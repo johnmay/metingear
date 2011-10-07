@@ -145,14 +145,23 @@
                     <iconFile>/Users/johnmay/EBI/illustrations/mnb/icons/mnb.icns</iconFile>
                     <buildDirectory>/Users/johnmay/Applications/</buildDirectory>
                 </configuration>
-                <executions>
+                <!--<executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>bundle</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -50,7 +50,8 @@ public class ProteinTableModel extends EntityTableModel {
 
 
     public ProteinTableModel() {
-        super(Arrays.asList(DEFAULT));
+        super();
+        addColumns(Arrays.asList(DEFAULT));
     }
 
 
