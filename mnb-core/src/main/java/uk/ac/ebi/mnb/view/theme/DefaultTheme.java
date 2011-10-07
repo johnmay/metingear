@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.theme;
 
+import javax.swing.Icon;
 import uk.ac.ebi.mnb.interfaces.Theme;
 import java.awt.Color;
 import java.awt.Font;
@@ -37,6 +38,8 @@ public class DefaultTheme implements Theme {
 
     private static final Logger LOGGER = Logger.getLogger(DefaultTheme.class);
     private Color bg = new Color(237, 237, 237);
+    private Icon plus =  ViewUtils.getIcon("icons/light/plus_12x12.png");
+    private Icon minus =  ViewUtils.getIcon("icons/light/minus_12x12.png");
 
     public Color getWarningForeground() {
         return Color.RED;
@@ -80,5 +83,13 @@ public class DefaultTheme implements Theme {
 
     public float getDialogOpacity(){
         return 0.95f;
+    }
+
+    public Icon getPlusIcon() {
+        return plus;
+    }
+
+    public Icon getMinusIcon() {
+        return minus;
     }
 }

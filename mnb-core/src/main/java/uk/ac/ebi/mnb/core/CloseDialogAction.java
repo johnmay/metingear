@@ -17,15 +17,20 @@ import uk.ac.ebi.mnb.core.GeneralAction;
  */
 public class CloseDialogAction extends GeneralAction {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( CloseDialogAction.class );
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(CloseDialogAction.class);
     private JDialog dialog;
 
-    public CloseDialogAction( JDialog dialog ) {
-        super( "CloseDialog" );
+    public CloseDialogAction(JDialog dialog) {
+        super("CloseDialog");
         this.dialog = dialog;
     }
 
-    public void actionPerformed( ActionEvent e ) {
-        dialog.setVisible( false );
+    public CloseDialogAction(JDialog dialog, boolean named) {
+        super(named ? "CloseDialog" : "");
+        this.dialog = dialog;
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        dialog.setVisible(false);
     }
 }

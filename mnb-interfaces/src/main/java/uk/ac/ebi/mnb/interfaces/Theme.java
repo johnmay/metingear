@@ -6,6 +6,7 @@ package uk.ac.ebi.mnb.interfaces;
 
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.Icon;
 
 /**
  *
@@ -32,4 +33,9 @@ public interface Theme {
     public Font getLinkFont();
 
     public float getDialogOpacity();
+
+    public Icon getPlusIcon();
+
+    public Icon getMinusIcon();
+    
 }

@@ -50,7 +50,7 @@ import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.CheckBox;
-import uk.ac.ebi.mnb.view.ComboBox;
+import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.ContextDialog;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 
@@ -112,7 +112,7 @@ public class AutomaticCrossReference
         options.add(new JSeparator(), cc.xyw(1, 7, 3));
         JLabel label = new TooltipLabel("Method", "<html>The method to use for name matching, Generally they<br> aim to improve recall at the cost of precision</html>", SwingConstants.RIGHT);
         options.add(label, cc.xy(1, 9));
-        options.add(new ComboBox("Direct", "Fingerprint", "N-gram"), cc.xy(3, 9));
+        options.add(new MComboBox("Direct", "Fingerprint", "N-gram"), cc.xy(3, 9));
 
         return options;
     }

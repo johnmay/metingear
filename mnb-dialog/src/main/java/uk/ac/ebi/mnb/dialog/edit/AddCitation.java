@@ -1,7 +1,7 @@
 /**
- * NewMetabolite.java
+ * AddCitation.java
  *
- * 2011.10.04
+ * 2011.10.07
  *
  * This file is part of the CheMet library
  * 
@@ -22,43 +22,54 @@ package uk.ac.ebi.mnb.dialog.edit;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.Updatable;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 /**
- * @name    NewMetabolite - 2011.10.04 <br>
+ * @name    AddCitation - 2011.10.07 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class NewReaction extends NewEntity {
+public class AddCitation extends ControllerDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(NewReaction.class);
+    private static final Logger LOGGER = Logger.getLogger(AddCitation.class);
+    private JTextField field = new JTextField(25);
 
-    public NewReaction(JFrame frame, Updatable updatable) {
-        super(frame, updatable, new BasicChemicalIdentifier());
+    public AddCitation(JFrame frame, Updatable updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+        super(frame, updater, messages, controller, undoableEdits, "SaveDialog");
     }
 
     @Override
     public JLabel getDescription() {
         JLabel label = super.getDescription();
-        label.setText("Please specify detail for a new reaction");
+        label.setText("Add a citation to one or more reconstruction entities");
         return label;
     }
 
     @Override
-    public void process() {
-        ReconstructionManager manager = ReconstructionManager.getInstance();
-        if (manager.hasProjects()) {
-            Reconstruction reconstruction = manager.getActiveReconstruction();
-            MetabolicReaction rxn = new MetabolicReaction(getIdentifier(), getAbbreviation(), getName());
-            reconstruction.addReaction(rxn);
-        }
+    public JPanel getOptions() {
+        JPanel options = super.getOptions();
+        options.add(field);
+        //new Pub
+        return options;
     }
+
+
+    @Override
+    public void process() {
+
+    }
+
+    
+
+    
+
 }

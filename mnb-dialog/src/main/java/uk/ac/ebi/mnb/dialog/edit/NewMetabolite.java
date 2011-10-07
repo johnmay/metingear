@@ -26,9 +26,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.mnb.interfaces.Updatable;
-import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 /**
@@ -49,7 +47,7 @@ public class NewMetabolite extends NewEntity {
     @Override
     public JLabel getDescription() {
         JLabel label = super.getDescription();
-        label.setText("Create a new metabolite");
+        label.setText("Please specify detail for a new metabolite");
         return label;
     }
 
@@ -62,6 +60,4 @@ public class NewMetabolite extends NewEntity {
             reconstruction.addMetabolite(m);
         }
     }
-
-
 }

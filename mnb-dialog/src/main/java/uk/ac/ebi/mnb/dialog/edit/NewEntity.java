@@ -32,7 +32,7 @@ import javax.swing.SwingUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.mnb.interfaces.Updatable;
-import uk.ac.ebi.mnb.view.ComboBox;
+import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.mnb.view.labels.DialogLabel;
 import uk.ac.ebi.resource.IdentifierFactory;

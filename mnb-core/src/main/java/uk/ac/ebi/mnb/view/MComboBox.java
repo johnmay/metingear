@@ -34,24 +34,24 @@ import uk.ac.ebi.mnb.interfaces.Theme;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ComboBox extends JComboBox {
+public class MComboBox extends JComboBox {
 
-    private static final Logger LOGGER = Logger.getLogger(ComboBox.class);
+    private static final Logger LOGGER = Logger.getLogger(MComboBox.class);
 
-    public ComboBox() {
+    public MComboBox() {
         Theme theme = Settings.getInstance().getTheme();
         setForeground(theme.getForeground());
         setFont(theme.getBodyFont());
     }
 
-    public ComboBox(List<String> items) {
+    public MComboBox(List<String> items) {
         super(new DefaultComboBoxModel(items.toArray(new String[0])));
         Theme theme = Settings.getInstance().getTheme();
         setForeground(theme.getForeground());
         setFont(theme.getBodyFont());
     }
 
-    public ComboBox(Object... items) {
+    public MComboBox(Object... items) {
         super(items);
         Theme theme = Settings.getInstance().getTheme();
         setForeground(theme.getForeground());

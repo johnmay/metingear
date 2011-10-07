@@ -22,10 +22,14 @@ package uk.ac.ebi.mnb.dialog.edit;
 
 import java.util.Collection;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
@@ -52,16 +56,38 @@ public class MergeEntities extends ControllerDialog {
     }
 
     @Override
+    public JLabel getDescription() {
+        JLabel label = super.getDescription();
+        label.setText("Merge multiple entries into one");
+        return label;
+    }
+
+    @Override
+    public JPanel getOptions() {
+        return super.getOptions();
+    }
+
+    @Override
     public void process() {
+
+        Collection<AnnotatedEntity> entities = getSelection();
+
 
         // create a new metabolite consisting of the other two.
         // find them in all reactions and update reactions also
-        Metabolite m = new Metabolite();
-//        m.setIdentifier(null);
-//        m.setName();
-//        m.setAbbreviation();
-//        m.addAnnotations();
-        
+        Metabolite m = (Metabolite) entities.iterator().next();
+        Metabolite newMetabolite = new Metabolite();
+
+        newMetabolite.setIdentifier(m.getIdentifier());
+        newMetabolite.setName(m.getName());
+        newMetabolite.setAbbreviation(m.getAbbreviation());
+        newMetabolite.addAnnotations(m.getAnnotations());
+
+        // add edit
+        Reconstruction recon = ReconstructionManager.getInstance().getActiveReconstruction();
+        recon.addMetabolite(newMetabolite);
+//        recon.remove // remove metabolite
+
     }
 
     @Override

@@ -23,8 +23,8 @@ package uk.ac.ebi.mnb.dialog.edit;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.interfaces.Updatable;
@@ -37,18 +37,18 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class NewReaction extends NewEntity {
+public class NewProteinProduct extends NewEntity {
 
-    private static final Logger LOGGER = Logger.getLogger(NewReaction.class);
+    private static final Logger LOGGER = Logger.getLogger(NewProteinProduct.class);
 
-    public NewReaction(JFrame frame, Updatable updatable) {
+    public NewProteinProduct(JFrame frame, Updatable updatable) {
         super(frame, updatable, new BasicChemicalIdentifier());
     }
 
     @Override
     public JLabel getDescription() {
         JLabel label = super.getDescription();
-        label.setText("Please specify detail for a new reaction");
+        label.setText("Please specify detail for a new product");
         return label;
     }
 
@@ -57,8 +57,8 @@ public class NewReaction extends NewEntity {
         ReconstructionManager manager = ReconstructionManager.getInstance();
         if (manager.hasProjects()) {
             Reconstruction reconstruction = manager.getActiveReconstruction();
-            MetabolicReaction rxn = new MetabolicReaction(getIdentifier(), getAbbreviation(), getName());
-            reconstruction.addReaction(rxn);
+            ProteinProduct prod = new ProteinProduct(getIdentifier(), getAbbreviation(), getName());
+//            reconstruction.addP(prod);
         }
     }
 }

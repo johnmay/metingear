@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.theme;
 
+import javax.swing.Icon;
 import uk.ac.ebi.mnb.interfaces.Theme;
 import java.awt.Color;
 import java.awt.Font;
@@ -78,6 +79,16 @@ public class DarkTheme implements Theme {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public Icon getPlusIcon() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Icon getMinusIcon() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    
     
     
 }
