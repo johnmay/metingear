@@ -25,26 +25,38 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.visualisation.AbstractAlignmentRenderer;
+import uk.ac.ebi.chemet.visualisation.BlastAlignmentColor;
+import uk.ac.ebi.chemet.visualisation.LocalAlignmentRenderer;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
 import uk.ac.ebi.mnb.edit.AbbreviationEdit;
 import uk.ac.ebi.mnb.edit.AccessionEdit;
@@ -59,6 +71,8 @@ import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.edit.DeleteAnnotation;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.mnb.view.labels.MLabel;
+import uk.ac.ebi.observation.ObservationCollection;
+import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
@@ -82,6 +96,9 @@ public abstract class AbstractEntityPanel
     private AnnotatedEntity entity;
     private JPanel info;
     private JPanel annotations;
+    private JPanel observations;
+    private JList observationList = new JList();
+    private DefaultListModel observationModel = new DefaultListModel();
     private CellConstraints cc = new CellConstraints();
     private AnnotationRenderer renderer;
     private JPanel middle;
@@ -113,7 +130,7 @@ public abstract class AbstractEntityPanel
             @Override
             public void mouseMoved(MouseEvent e) {
                 int index = references.locationToIndex(e.getPoint());
-                if(index == -1){
+                if (index == -1) {
                     return;
                 }
                 if (references.getCellBounds(index, index).contains(e.getPoint())) {
@@ -149,9 +166,10 @@ public abstract class AbstractEntityPanel
 
         synopsis = getSynopsis();
         annotations = getAnnotationPanel();
+        observations = getObservationPanel();
         //references = getInternalReferencePanel();
 
-        setLayout(new FormLayout("p:grow", "p,p,p"));
+        setLayout(new FormLayout("p:grow", "p,p,p,p"));
         setBorder(Borders.DLU7_BORDER);
 
         add(getBasicPanel(), cc.xy(1, 1));
@@ -168,7 +186,15 @@ public abstract class AbstractEntityPanel
         middle.add(annotations, cc.xy(3, 1));
         add(middle, cc.xy(1, 2));
         add(new JSeparator(), cc.xy(1, 3));
-        //TODO add observations panel...
+        add(observations, cc.xy(1, 4));
+
+    }
+
+    public JPanel getObservationPanel() {
+        JPanel panel = new GeneralPanel();
+        observationList.setModel(observationModel);
+        panel.add(observationList);
+        return panel;
     }
 
     /**
@@ -206,9 +232,9 @@ public abstract class AbstractEntityPanel
 
 
                 DeleteAnnotation action = new DeleteAnnotation(entity,
-                        annotation,
-                        view.getViewController().getActiveView(),
-                        view.getUndoManager());
+                                                               annotation,
+                                                               view.getViewController().getActiveView(),
+                                                               view.getUndoManager());
                 JButton remove = new IconButton(closeIcon, action);
                 remove.setVisible(editable);
                 deleteButtons.add(remove);
@@ -266,6 +292,35 @@ public abstract class AbstractEntityPanel
                     return null;
                 }
             }.run();
+
+
+            observationModel.removeAllElements();
+            observationList.setCellRenderer(new DefaultListCellRenderer() {
+
+                @Override
+                public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                    if (value instanceof LocalAlignment) {
+
+                        LocalAlignment alignment = (LocalAlignment) value;
+
+                        LocalAlignmentRenderer renderer = new LocalAlignmentRenderer(new Rectangle(0, 0, 900, 8), new BlastAlignmentColor(), 1);
+                        Icon icon = new ImageIcon(renderer.render((LocalAlignment) value, (GeneProduct) entity));
+                        this.setIcon(icon);
+                        this.setBorder(null);
+                        this.setBackground(null);
+                        this.setFont(ViewUtils.VERDANA_PLAIN_11);
+                        this.setText(alignment.getSubject());
+                        this.setToolTipText(alignment.toString());
+                        return this;
+                    }
+                    return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                }
+            });
+            ObservationCollection collection = ((AbstractAnnotatedEntity) entity).getObservationCollection();
+            for (Observation observation : collection.get(LocalAlignment.class)) {
+                observationModel.addElement(observation);
+            }
+
             middle.remove(annotations);
             annotations = getAnnotationPanel();
             middle.add(annotations, cc.xy(3, 1, CellConstraints.CENTER, CellConstraints.TOP));

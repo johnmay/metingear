@@ -12,7 +12,7 @@ import uk.ac.ebi.mnb.core.ControllerDialogItem;
 import uk.ac.ebi.mnb.dialog.tools.AutomaticCrossReference;
 import uk.ac.ebi.mnb.dialog.tools.ChokePoint;
 import uk.ac.ebi.mnb.dialog.tools.FormulaSearch;
-import uk.ac.ebi.mnb.dialog.tools.SequenceComparisson;
+import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
 import uk.ac.ebi.mnb.menu.reconciliation.DownloadStructures;
@@ -44,7 +44,7 @@ public class ToolsMenu extends ClearMenu {
 
         add(new ChokePoint(view));
         add(new JSeparator());
-        add(new ControllerDialogItem(view, SequenceComparisson.class));
+        add(new ControllerDialogItem(view, SequenceHomology.class));
 
 
 
