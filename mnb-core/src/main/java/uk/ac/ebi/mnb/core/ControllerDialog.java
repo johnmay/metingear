@@ -85,7 +85,7 @@ public abstract  class ControllerDialog extends DropdownDialog {
 
     @Override
     public boolean update() {
-        return controller.update();
+        return updater.update();
     }
 
 }
