@@ -24,7 +24,7 @@ package uk.ac.ebi.mnb.menu.reconciliation;
 import java.util.Collection;
 import uk.ac.ebi.mnb.core.DelayedBuildAction;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.main.MainView;
 
 

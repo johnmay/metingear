@@ -34,7 +34,7 @@ import uk.ac.ebi.chemet.render.source.AccessionAccessor;
 import uk.ac.ebi.chemet.render.source.Accessor;
 import uk.ac.ebi.chemet.render.source.NameAccessor;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 /**
  *          EntityTableModel – 2011.09.06 <br>
@@ -53,11 +53,11 @@ public abstract class EntityTableModel
     private List<? extends AnnotatedEntity> components = new ArrayList<AnnotatedEntity>();
     private static List<ColumnDescriptor> defaultColumns = new ArrayList(
             Arrays.asList(new ColumnDescriptor("Accession", String.class,
-            DataType.BASIC, String.class),
-            new ColumnDescriptor("Abbreviation", String.class,
-            DataType.BASIC, String.class),
-            new ColumnDescriptor("Name", String.class, DataType.BASIC,
-            String.class)));
+                                               DataType.BASIC, String.class),
+                          new ColumnDescriptor("Abbreviation", String.class,
+                                               DataType.BASIC, String.class),
+                          new ColumnDescriptor("Name", String.class, DataType.BASIC,
+                                               String.class)));
     private Map<String, Accessor> accessMap = new HashMap();
 
     public EntityTableModel() {
@@ -116,8 +116,6 @@ public abstract class EntityTableModel
         return false;
     }
 
-
-
     /*
      *
      * Method is called on update before cells are copied over to data[][]
@@ -173,7 +171,7 @@ public abstract class EntityTableModel
     }
 
     public Object getValue(AnnotatedEntity entity,
-            Integer columnIndex) {
+                           Integer columnIndex) {
 
         DataType type = getAccessType(columnIndex);
         if (type == DataType.FIXED) {
@@ -183,8 +181,9 @@ public abstract class EntityTableModel
         } else if (type == DataType.ANNOTATION) {
             return entity.getAnnotations(columnDescriptors.get(columnIndex).getAccessClass());
         } else if (type == DataType.OBSERVATION) {
-            return entity.getObservationCollection().get(
-                    columnDescriptors.get(columnIndex).getAccessClass());
+            return null;
+//            return entity.getObservationCollection().get(
+//                    columnDescriptors.get(columnIndex).getAccessClass());
         }
 
         // will never happen...

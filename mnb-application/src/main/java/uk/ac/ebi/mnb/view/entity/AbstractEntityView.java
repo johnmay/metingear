@@ -24,14 +24,13 @@ import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import com.jgoodies.forms.factories.Borders;
 import java.awt.Color;
 import java.util.Collection;
-import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 
 /**

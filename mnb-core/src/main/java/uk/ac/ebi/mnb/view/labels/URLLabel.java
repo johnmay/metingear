@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class URLLabel extends ThemedLabel {
+public class URLLabel extends MLabel {
 
     private static final Logger LOGGER = Logger.getLogger(URLLabel.class);
     private URI uri;

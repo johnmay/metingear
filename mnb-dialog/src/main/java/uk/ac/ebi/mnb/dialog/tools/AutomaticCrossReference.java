@@ -26,6 +26,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.JCheckBox;
@@ -38,7 +39,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
@@ -65,7 +66,7 @@ public class AutomaticCrossReference
         extends ContextDialog {
 
     private static final Logger LOGGER = Logger.getLogger(AutomaticCrossReference.class);
-    private List<AnnotatedEntity> components;
+    private List<AbstractAnnotatedEntity> components;
     private ChEBIWebServiceConnection chebiClient;
     private KeggCompoundWebServiceConnection keggClient;
     private JCheckBox chebi = new CheckBox("ChEBI (currated)");
@@ -112,7 +113,7 @@ public class AutomaticCrossReference
         options.add(new JSeparator(), cc.xyw(1, 7, 3));
         JLabel label = new TooltipLabel("Method", "<html>The method to use for name matching, Generally they<br> aim to improve recall at the cost of precision</html>", SwingConstants.RIGHT);
         options.add(label, cc.xy(1, 9));
-        options.add(new MComboBox("Direct", "Fingerprint", "N-gram"), cc.xy(3, 9));
+        options.add(new MComboBox(Arrays.asList("Direct", "Fingerprint", "N-gram")), cc.xy(3, 9));
 
         return options;
     }

@@ -26,7 +26,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
 import java.awt.Cursor;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
 import uk.ac.ebi.mnb.edit.AbbreviationEdit;
@@ -57,9 +56,9 @@ import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.view.labels.DeleteAnnotation;
+import uk.ac.ebi.mnb.edit.DeleteAnnotation;
 import uk.ac.ebi.mnb.view.labels.IconButton;
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
@@ -75,7 +74,7 @@ public abstract class AbstractEntityPanel
     private String type;
     private GeneralPanel basic = new GeneralPanel(
             new FormLayout("p, p:grow, p, p:grow, p", "p, 4dlu, p"));
-    private ThemedLabel typeLabel = new ThemedLabel();
+    private MLabel typeLabel = new MLabel();
     private JSeparator seperator = new JSeparator(JSeparator.HORIZONTAL);
     private JTextField accession = new TransparentTextField("", 10, false);
     private JTextField name = new TransparentTextField("", 35, false);
@@ -114,6 +113,9 @@ public abstract class AbstractEntityPanel
             @Override
             public void mouseMoved(MouseEvent e) {
                 int index = references.locationToIndex(e.getPoint());
+                if(index == -1){
+                    return;
+                }
                 if (references.getCellBounds(index, index).contains(e.getPoint())) {
                     references.setSelectedIndex(index);
                     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

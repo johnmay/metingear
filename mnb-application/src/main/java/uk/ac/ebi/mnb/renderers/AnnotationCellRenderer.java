@@ -20,14 +20,15 @@
  */
 package uk.ac.ebi.mnb.renderers;
 
+import com.google.common.base.Joiner;
 import java.awt.Component;
 import java.util.Collection;
 import javax.swing.JTable;
-import org.apache.commons.lang.StringUtils;
 
 /**
- *          BasicAnnotationCellRenderer – 2011.09.29 <br>
- *          Class description
+ *          AnnotationCellRenderer – 2011.09.29 <br>
+ *          A simple annotation cell renderer that joins the toString() values of a collection
+ *          of annotations using a comma and space ', '.
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
@@ -40,7 +41,7 @@ public class AnnotationCellRenderer extends DefaultRenderer {
             int column) {
 
         Collection collection = (Collection) value;
-        this.setText(StringUtils.join(collection, ", "));
+        this.setText(Joiner.on(", ").join(collection));
 
         this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
         this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());

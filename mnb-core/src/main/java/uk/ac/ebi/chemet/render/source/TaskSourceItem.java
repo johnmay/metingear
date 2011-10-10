@@ -25,8 +25,8 @@ import com.explodingpixels.macwidgets.SourceListCategory;
 import com.explodingpixels.macwidgets.SourceListModel;
 import furbelow.SpinningDial;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
-import uk.ac.ebi.metabolomes.run.RunnableTask;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
+import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.metabolomes.run.TaskStatus;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
@@ -46,7 +46,7 @@ public class TaskSourceItem
     private static final Logger LOGGER = Logger.getLogger(TaskSourceItem.class);
 
 
-    public TaskSourceItem(AnnotatedEntity entity, Object container) {
+    public TaskSourceItem(AbstractAnnotatedEntity entity, Object container) {
         super(entity, container);
     }
 

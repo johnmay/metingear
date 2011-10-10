@@ -24,7 +24,6 @@ import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import java.awt.BorderLayout;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.JScrollPane;
@@ -35,7 +34,7 @@ import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.GeneralPanel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 /**
@@ -141,11 +140,13 @@ public abstract class AbstractEntityInspector
         update();
     }
 
+    @Override
     public boolean setSelection(AnnotatedEntity entity) {
         // do nothing..
         return true;
     }
 
+    @Override
     public boolean setSelection(Collection<? extends AnnotatedEntity> entities) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

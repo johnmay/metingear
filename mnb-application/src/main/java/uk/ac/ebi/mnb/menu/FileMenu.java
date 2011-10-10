@@ -6,16 +6,18 @@ package uk.ac.ebi.mnb.menu;
 
 import java.awt.Color;
 import java.io.File;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Set;
-import java.util.Stack;
 import uk.ac.ebi.mnb.menu.file.ImportSBMLAction;
 import uk.ac.ebi.mnb.menu.file.SaveAsProjectAction;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.mnb.core.UpdatableDialogItem;
+import uk.ac.ebi.mnb.dialog.file.NewMetabolite;
+import uk.ac.ebi.mnb.dialog.file.NewProteinProduct;
+import uk.ac.ebi.mnb.dialog.file.NewReaction;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.file.ExportSIFAction;
 import uk.ac.ebi.mnb.menu.file.ExportSBMLAction;
 import uk.ac.ebi.mnb.menu.file.ImportPeptidesAction;
@@ -42,7 +44,13 @@ public class FileMenu
 
     public FileMenu() {
         super("File");
+
+        MainView view = MainView.getInstance();
+
         add(new DynamicMenuItem(newProjectAction));
+        add(new UpdatableDialogItem(view, view.getViewController(), NewMetabolite.class));
+        add(new UpdatableDialogItem(view, view.getViewController(), NewReaction.class));
+        add(new UpdatableDialogItem(view, view.getViewController(), NewProteinProduct.class));
         add(new DynamicMenuItem(new OpenProjectAction(this)));
         add(recent);
         add(new JSeparator());

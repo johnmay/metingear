@@ -26,7 +26,8 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.Message;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -60,10 +61,13 @@ public abstract  class ControllerDialog extends DropdownDialog {
         this.updater = updater;
         this.messages = messages;
         this.controller = controller;
+        if(undoableEdits == null){
+            LOGGER.error("Undoable edit support not handled in dialog");
+        }
     }
 
 
-    public void setSelection(Collection<AnnotatedEntity> entities){
+    public void setSelection(Collection<AbstractAnnotatedEntity> entities){
         this.controller.setSelection(entities);
     }
 

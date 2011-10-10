@@ -32,9 +32,9 @@ import uk.ac.ebi.mnb.view.labels.MLabel;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class Labels {
+public class MLabels {
 
-    private static final Logger LOGGER = Logger.getLogger(Labels.class);
+    private static final Logger LOGGER = Logger.getLogger(MLabels.class);
 
     public static JLabel newLabel(String text) {
         return new MLabel(text);

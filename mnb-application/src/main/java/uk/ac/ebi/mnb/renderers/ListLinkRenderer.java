@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
 
@@ -47,7 +47,7 @@ public class ListLinkRenderer extends JLabel implements ListCellRenderer {
     }
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        AnnotatedEntity entity = ((AnnotatedEntity) value);
+        AbstractAnnotatedEntity entity = ((AbstractAnnotatedEntity) value);
         String name = entity.getName();
         setText(name.substring(0, Math.min(40, name.length())));
         setToolTipText(entity.getAbbreviation() + ":" + name);

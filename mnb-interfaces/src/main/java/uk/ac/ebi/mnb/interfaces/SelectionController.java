@@ -21,7 +21,7 @@
 package uk.ac.ebi.mnb.interfaces;
 
 import java.util.Collection;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 /**
  * @name    ItemSelector - 2011.10.03 <br>

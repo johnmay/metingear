@@ -35,11 +35,15 @@ import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
-import uk.ac.ebi.metabolomes.run.RunnableTask;
+import uk.ac.ebi.chemet.io.external.RunnableTask;
+import uk.ac.ebi.core.AbstractGeneProduct;
+import uk.ac.ebi.core.ProteinProduct;
+import uk.ac.ebi.core.RNAProduct;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
@@ -57,7 +61,7 @@ public class ProjectView
         extends JPanel implements ViewController {
 
     private static final org.apache.log4j.Logger logger =
-            org.apache.log4j.Logger.getLogger(
+                                                 org.apache.log4j.Logger.getLogger(
             ProjectView.class);
     // underlying tab components
     private JScrollPane matrixPane;
@@ -93,7 +97,10 @@ public class ProjectView
         viewMap = new HashMap();
         viewMap.put(Metabolite.BASE_TYPE, metabolites);
         viewMap.put(Reaction.BASE_TYPE, reactions);
-        viewMap.put(OldGeneProduct.BASE_TYPE, products);
+        
+        viewMap.put(ProteinProduct.BASE_TYPE, products);
+        viewMap.put(RNAProduct.BASE_TYPE, products);
+
         viewMap.put(RunnableTask.BASE_TYPE, tasks);
 
 
@@ -105,7 +112,7 @@ public class ProjectView
      */
     public EntityView getActiveView() {
 
-        for (AbstractEntityView pane : Arrays.asList(reactions, metabolites)) {
+        for (AbstractEntityView pane : Arrays.asList(reactions, metabolites, products)) {
             if (pane != null && pane.isVisible()) {
                 return pane;
             }

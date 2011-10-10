@@ -24,9 +24,8 @@ package uk.ac.ebi.mnb.view.entity.search;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
-import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.main.MainView;
 
 

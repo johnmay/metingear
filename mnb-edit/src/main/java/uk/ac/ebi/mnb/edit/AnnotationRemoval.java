@@ -20,14 +20,13 @@
  */
 package uk.ac.ebi.mnb.edit;
 
-import com.hp.hpl.jena.rdf.model.AnonId;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 
 /**

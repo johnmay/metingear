@@ -22,12 +22,22 @@ package uk.ac.ebi.mnb.menu.file;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.awt.Label;
+import java.io.File;
+import java.io.IOException;
+import java.security.InvalidParameterException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.prefs.Preferences;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+import javax.swing.JTextField;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
+import uk.ac.ebi.metabonater.components.theme.MTextField;
+import uk.ac.ebi.mnb.core.MLabels;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.MComboBox;
@@ -49,6 +59,7 @@ public class PreferenceDialog extends DropdownDialog {
     private static final Logger LOGGER = Logger.getLogger(PreferenceDialog.class);
     private JComboBox metSourceView;
     private JComboBox rxnSourceView;
+    private JTextField blastall;
 
     public PreferenceDialog(JFrame frame, DialogController controller) {
         super(frame, controller, "SaveDialog");
@@ -58,21 +69,26 @@ public class PreferenceDialog extends DropdownDialog {
     @Override
     public JPanel getOptions() {
 
-        JPanel options = new DialogPanel(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p"));
+        JPanel options = new DialogPanel(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 4dlu, p"));
         CellConstraints cc = new CellConstraints();
 
 
-                
+
         metSourceView = new MComboBox(SourceItemDisplayType.values());
         metSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_METABOLITE));
         rxnSourceView = new MComboBox(SourceItemDisplayType.values());
         rxnSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_REACTION));
+        blastall = new MTextField(15);
+        blastall.setText(Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastall.path", ""));
 
-
-        options.add(new Label("Metabolites: ", SwingConstants.RIGHT), cc.xy(1, 1));
+        options.add(MLabels.newFormLabel("Metabolite source view:"), cc.xy(1, 1));
         options.add(metSourceView, cc.xy(3, 1));
-        options.add(new Label("Reactions: ", SwingConstants.RIGHT), cc.xy(5, 1));
+        options.add(MLabels.newFormLabel("Reaction source view:"), cc.xy(5, 1));
         options.add(rxnSourceView, cc.xy(7, 1));
+        options.add(MLabels.newFormLabel("blastall path:"), cc.xy(1, 3));
+        options.add(blastall, cc.xy(3, 3));
+
+
 
         return options;
 
@@ -83,6 +99,14 @@ public class PreferenceDialog extends DropdownDialog {
         Settings settings = Settings.getInstance();
         settings.put(Settings.VIEW_SOURCE_METABOLITE, (SourceItemDisplayType) metSourceView.getSelectedItem());
         settings.put(Settings.VIEW_SOURCE_REACTION, (SourceItemDisplayType) rxnSourceView.getSelectedItem());
+
+        //TODO delgate this to a settings class
+        try {
+            settings.setBlastPreferences(blastall.getText());
+        } catch (InvalidParameterException ex) {
+            MainView.getInstance().addWarningMessage(ex.getMessage());
+        }
+
     }
 
     @Override

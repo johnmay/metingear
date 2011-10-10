@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.Action;
-import mnb.view.old.TaskManager;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.render.source.EntitySourceItem;
 import uk.ac.ebi.chemet.render.source.MetaboliteSourceItem;
@@ -41,11 +40,11 @@ import uk.ac.ebi.chemet.render.source.ReactionSourceItem;
 import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
 import uk.ac.ebi.chemet.render.source.TaskSourceItem;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
-import uk.ac.ebi.metabolomes.run.RunnableTask;
-import uk.ac.ebi.mnb.interfaces.ViewController;
+import uk.ac.ebi.chemet.io.external.RunnableTask;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
 import uk.ac.ebi.mnb.menu.popup.SetActiveProject;
 import uk.ac.ebi.mnb.menu.popup.ContextSensitiveAction;
@@ -143,6 +142,7 @@ public class SourceController
                 itemCollector.remove(m);
 
             }
+            metabolites.setCounterValue(reconstruction.getMetabolites().size());
 
             // reactions
 
@@ -154,12 +154,12 @@ public class SourceController
                 }
                 itemMap.get(r).update();
                 itemCollector.remove(r);
-
             }
+            reactions.setCounterValue(reconstruction.getReactions().size());
 
 
             // products
-            for (OldGeneProduct p : reconstruction.getGeneProducts().getAllProducts()) {
+            for (GeneProduct p : reconstruction.getProducts()) {
                 if (itemMap.containsKey(p) == false) {
                     EntitySourceItem item = new ProductSourceItem(p, products);
                     itemMap.put(p, item);
@@ -239,7 +239,7 @@ public class SourceController
     @Override
     public void sourceListCategoryClicked(SourceListCategory category, Button button, int clickCount) {
         if (category.equals(tasks)) {
-            ((ProjectView)MainView.getInstance().getViewController()).setTaskView();
+            ((ProjectView) MainView.getInstance().getViewController()).setTaskView();
         }
     }
     List<ContextSensitiveAction> actions = new ArrayList();

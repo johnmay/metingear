@@ -21,18 +21,16 @@
  */
 package uk.ac.ebi.mnb.view.entity.tasks;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import mnb.view.old.TaskManager;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParamType;
-import uk.ac.ebi.metabolomes.run.RunnableTask;
+import uk.ac.ebi.chemet.io.external.RunnableTask;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.metabolomes.run.TaskStatus;
+import uk.ac.ebi.mnb.core.TaskManager;
 
 
 /**
@@ -90,11 +88,11 @@ public class TaskTableModel extends EntityTableModel {
             RunnableTask task = (RunnableTask) entity;
 
             if( name.equals("Description") ) {
-                return task.getTaskDescription();
+                return task.getName();
             } else if( name.equals("Job Id") ) {
-                return task.getJobParameters().get(JobParamType.JOBID);
+                return task.getAccession();
             } else if( name.equals("Date") ) {
-                return task.getJobParameters().get(JobParamType.DATE);
+                return task.getOptions().getInitialisationDate();
             } else if( name.equals("Status") ) {
                 return task.getStatus();
             }

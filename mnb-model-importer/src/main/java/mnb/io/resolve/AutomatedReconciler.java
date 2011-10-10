@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Identifier;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
@@ -62,7 +62,7 @@ public class AutomatedReconciler
      * @return
      * @inheritDoc
      */
-    public AnnotatedEntity resolve(PreparsedEntry entry) {
+    public AbstractAnnotatedEntity resolve(PreparsedEntry entry) {
         if( entry instanceof PreparsedMetabolite ) {
             return resolve((PreparsedMetabolite) entry);
         }

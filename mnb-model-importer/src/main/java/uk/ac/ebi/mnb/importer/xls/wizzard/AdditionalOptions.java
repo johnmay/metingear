@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import mnb.io.tabular.ExcelModelProperties;
 import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.view.DialogPanel;
 
@@ -54,9 +54,9 @@ public class AdditionalOptions
         setLayout(ViewUtils.formLayoutHelper(2, 5, 4, 4));
         CellConstraints cc = new CellConstraints();
         add(new JLabel("Please select web services to reconcile chemical names"), cc.xy(1, 1));
-        add(new ThemedLabel("ChEBI (recomended)"), cc.xy(1, 3));
+        add(new MLabel("ChEBI (recomended)"), cc.xy(1, 3));
         add(chebi, cc.xy(3, 3));
-        add(new ThemedLabel("KEGG"), cc.xy(1, 5));
+        add(new MLabel("KEGG"), cc.xy(1, 5));
         add(kegg, cc.xy(3, 5));
     }
 

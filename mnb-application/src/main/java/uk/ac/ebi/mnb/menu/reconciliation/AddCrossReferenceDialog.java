@@ -23,7 +23,6 @@ package uk.ac.ebi.mnb.menu.reconciliation;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.sun.awt.AWTUtilities;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JComboBox;
@@ -33,7 +32,8 @@ import uk.ac.ebi.mnb.view.DropdownDialog;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Identifier;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.resource.IdentifierFactory;

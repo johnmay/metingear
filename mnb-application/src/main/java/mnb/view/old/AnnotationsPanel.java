@@ -13,7 +13,7 @@ import java.util.Collection;
 import javax.swing.JPanel;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.interfaces.Annotation;
 
 
@@ -62,7 +62,7 @@ public class AnnotationsPanel
             Annotation annotation = Iterables.get(annotations, i);
             int ccy = (i == 0) ? 1 : i * 2 + 1;
             //add(new ActionLabel(annotation.toString() + ":", new HighLightObservations(annotation)),  cc.xy(1, ccy));
-            add(new ThemedLabel(annotation.toString()), cc.xy(3, ccy));
+            add(new MLabel(annotation.toString()), cc.xy(3, ccy));
         }
         //  add( new JSeparator( JSeparator.HORIZONTAL ) , cc.xyw( 1 , ( ( nrow == 0 ) ? 1 : nrow * 2 + 1 ) , 3 ) );
 

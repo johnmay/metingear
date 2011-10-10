@@ -21,7 +21,7 @@
 package uk.ac.ebi.mnb.edit;
 
 import javax.swing.undo.*;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 /**
  * @name   NameEdit - 2011.10.02 <br>

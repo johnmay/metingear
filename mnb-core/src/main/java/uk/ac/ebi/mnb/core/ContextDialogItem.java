@@ -77,4 +77,5 @@ public class ContextDialogItem extends JMenuItem {
             }
         });
     }
+
 }

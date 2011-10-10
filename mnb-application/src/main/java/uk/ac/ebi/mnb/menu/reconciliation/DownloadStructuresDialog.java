@@ -30,7 +30,7 @@ import javax.swing.JComponent;
 import javax.swing.JSeparator;
 import org.apache.commons.lang.StringUtils;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
@@ -40,7 +40,8 @@ import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Identifier;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 import uk.ac.ebi.mnb.main.MainView;
@@ -100,7 +101,7 @@ public class DownloadStructuresDialog
         component.add(getClose(), cc.xy(1, 1));
         component.add(getActivate(), cc.xy(3, 1));
 
-        add(new ThemedLabel("Please select which web services should be used"), cc.xy(2, 2));
+        add(new MLabel("Please select which web services should be used"), cc.xy(2, 2));
         add(new JSeparator(JSeparator.HORIZONTAL), cc.xy(2, 4));
         add(selection, cc.xy(2, 6));
         add(component, cc.xy(2, 8));

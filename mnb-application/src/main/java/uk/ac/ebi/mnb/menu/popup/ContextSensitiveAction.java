@@ -22,7 +22,7 @@
 package uk.ac.ebi.mnb.menu.popup;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 
 
 /**

@@ -40,15 +40,11 @@ import uk.ac.ebi.mnb.interfaces.ViewController;
 public class ControllerDialogItem extends JMenuItem {
 
     public ControllerDialogItem(MainController controller, Class<? extends ControllerDialog> clazz) {
-        this((JFrame) controller,
-                controller.getMessageManager(),
-                (Updatable)controller,
-                controller.getViewController(),
-                (SelectionController)controller.getViewController(),
-                clazz);
+        this((JFrame) controller, (Updatable) controller,
+             controller.getMessageManager(),
+             (SelectionController) controller.getViewController(),
+             clazz);
     }
-
-    
 
     /**
      * Constructs a SelectionMenuItem using a frame (to place dialog – frame should implement dialog controller) and
@@ -61,12 +57,10 @@ public class ControllerDialogItem extends JMenuItem {
      * @param clazz
      */
     public ControllerDialogItem(final JFrame frame,
-                                final MessageManager mesg,
                                 final Updatable updater,
-                                final ViewController controller,
+                                final MessageManager mesg,                               
                                 final SelectionController selection,
                                 final Class<? extends ControllerDialog> clazz) {
-        //super(frame, name, constructor);
 
         super(new DelayedBuildAction(clazz.getSimpleName()) {
 
@@ -76,7 +70,11 @@ public class ControllerDialogItem extends JMenuItem {
             public void buildComponents() {
                 try {
                     Constructor constructor = clazz.getConstructors()[0];
-                    dialog = (ControllerDialog) constructor.newInstance(frame, mesg, updater, controller, selection);
+                    dialog = (ControllerDialog) constructor.newInstance(frame,
+                                                                        updater,
+                                                                        mesg,                                                                
+                                                                        selection,
+                                                                        null);
                 } catch (InstantiationException ex) {
                     ex.printStackTrace();
                 } catch (IllegalAccessException ex) {

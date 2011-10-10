@@ -34,7 +34,7 @@ import java.util.Stack;
 
 import uk.ac.ebi.mnb.core.*;
 import uk.ac.ebi.mnb.view.labels.IconButton;
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -72,7 +72,7 @@ public class MessageBar extends JPanel implements MessageManager {
     private final Paint WARN_PAINT;
     private Paint paint;
     private JLabel iconLabel = new JLabel();
-    private JLabel label = new ThemedLabel();
+    private JLabel label = new MLabel();
     private Stack<Message> stack = new Stack();
 
     public MessageBar() {

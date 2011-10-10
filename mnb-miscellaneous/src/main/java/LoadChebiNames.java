@@ -59,7 +59,7 @@ public class LoadChebiNames {
     public LoadChebiNames() {
 
         if( DB_PROPS.containsKey("chebi.names") ) {
-            load(DB_PROPS.getDatabasePath("chebi.names"));
+            load(DB_PROPS.getFile("chebi.names"));
         }
     }
 

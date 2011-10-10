@@ -13,16 +13,8 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
-import uk.ac.ebi.core.reconstruction.ReconstructionContents;
-import mnb.view.old.TaskManager;
-import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
-import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.metabolomes.resource.BlastMatrix;
-import uk.ac.ebi.metabolomes.run.BlastHomologySearch;
-import uk.ac.ebi.metabolomes.run.BlastHomologySearchFactory;
 import uk.ac.ebi.mnb.main.MainView;
 
 
@@ -125,39 +117,39 @@ public class SwissProtHomologyDialog
     @Override
     public void process() {
 
-        Reconstruction activeProject = ReconstructionManager.getInstance().getActiveReconstruction();
-
-        JobParameters parameters = new JobParameters("Blast Test");
-
-        GeneProteinProduct[] products = activeProject.getGeneProducts().getProteinProducts();
-
-        // if there are no protein products then show a warning message
-        if( products == null || products.length == 0 ) {
-            MainView.getInstance().addWarningMessage(
-              "Cannot run UniProt/SwissProt homology, project contains no protein products.");
-            return;
-        }
-
-        BlastHomologySearchFactory.setMaxSequences((Integer) maxSequenceSpinner.getValue());
-        BlastHomologySearch[] searches =
-                              BlastHomologySearchFactory.getBlastPonSwissProtTasks(products,
-                                                                                   ((BlastMatrix) blosumMatrixThresholdField.
-                                                                                    getValue()),
-                                                                                   expectValueThresholdField.
-          getText(),
-                                                                                   (Integer) cpuSpinner.
-          getValue(),
-                                                                                   parameters);
-
-        // add to the task manager, update the task table and switch the view
-        TaskManager tm = TaskManager.getInstance();
-        tm.add(searches);
-        //MainView.getInstance().setTaskTableView();
-        MainView.getInstance().update(); // only need to to tasks
-
-
-        // todo: need to move to post run in the RunnableTask which means moving the Runnable task...
-        activeProject.addContents(ReconstructionContents.SWISSPROT_HOMOLOGY);
+//        Reconstruction activeProject = ReconstructionManager.getInstance().getActiveReconstruction();
+//
+//        JobParameters parameters = new JobParameters("Blast Test");
+//
+//        GeneProteinProduct[] products = activeProject.getGeneProducts().getProteinProducts();
+//
+//        // if there are no protein products then show a warning message
+//        if( products == null || products.length == 0 ) {
+//            MainView.getInstance().addWarningMessage(
+//              "Cannot run UniProt/SwissProt homology, project contains no protein products.");
+//            return;
+//        }
+//
+//        BlastHomologySearchFactory.setMaxSequences((Integer) maxSequenceSpinner.getValue());
+//        OldBlastHomologySearch[] searches =
+//                              BlastHomologySearchFactory.getBlastPonSwissProtTasks(products,
+//                                                                                   ((BlastMatrix) blosumMatrixThresholdField.
+//                                                                                    getValue()),
+//                                                                                   expectValueThresholdField.
+//          getText(),
+//                                                                                   (Integer) cpuSpinner.
+//          getValue(),
+//                                                                                   parameters);
+//
+//        // add to the task manager, update the task table and switch the view
+//        TaskManager tm = TaskManager.getInstance();
+//        tm.add(searches);
+//        //MainView.getInstance().setTaskTableView();
+//        MainView.getInstance().update(); // only need to to tasks
+//
+//
+//        // todo: need to move to post run in the RunnableTask which means moving the Runnable task...
+//        activeProject.addContents(ReconstructionContents.SWISSPROT_HOMOLOGY);
 
 
 

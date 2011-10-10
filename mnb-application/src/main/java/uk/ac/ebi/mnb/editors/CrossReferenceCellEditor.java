@@ -23,8 +23,10 @@ package uk.ac.ebi.mnb.editors;
 import java.awt.Component;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.EventObject;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -48,6 +50,7 @@ public class CrossReferenceCellEditor extends AnnotationCellRenderer implements 
     private ChangeEvent event = new ChangeEvent(this);
 
     public CrossReferenceCellEditor() {
+
         //  setFont(Settings.getInstance().getTheme().getBodyFont());
         xrefEditor.addComponentListener(new ComponentAdapter() {
 
@@ -65,7 +68,7 @@ public class CrossReferenceCellEditor extends AnnotationCellRenderer implements 
         xrefEditor.pack();
         xrefEditor.setOpenLocation();
         xrefEditor.setVisible(true);
-        return getTableCellRendererComponent(table, value, isSelected, isSelected, row, column);
+        return super.getTableCellRendererComponent(table, value, isSelected, isSelected, row, column);
     }
 
     @Override
@@ -80,8 +83,10 @@ public class CrossReferenceCellEditor extends AnnotationCellRenderer implements 
         }
     }
 
-    @Override
     public boolean isCellEditable(EventObject anEvent) {
+        if (anEvent instanceof MouseEvent) {
+            return ((MouseEvent) anEvent).getClickCount() >= 2;
+        }
         return true;
     }
 

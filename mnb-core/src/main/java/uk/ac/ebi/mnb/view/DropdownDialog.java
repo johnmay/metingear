@@ -17,7 +17,7 @@ import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.interfaces.Theme;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 
 import javax.swing.*;
 
@@ -108,7 +108,7 @@ public abstract class DropdownDialog
      * @return
      */
     public JLabel getDescription() {
-        return new ThemedLabel(getClass().getSimpleName());
+        return new MLabel(getClass().getSimpleName());
     }
 
     /**
@@ -123,7 +123,7 @@ public abstract class DropdownDialog
 
         JPanel options = new DialogPanel();
 
-        options.add(new ThemedLabel("Options", SwingConstants.CENTER));
+        options.add(new MLabel("Options", SwingConstants.CENTER));
 
         return options;
 

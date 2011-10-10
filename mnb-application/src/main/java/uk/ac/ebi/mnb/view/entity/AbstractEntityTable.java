@@ -30,7 +30,7 @@ import java.util.List;
 import javax.swing.JTable;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 /**

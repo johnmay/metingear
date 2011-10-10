@@ -20,7 +20,9 @@
  */
 package uk.ac.ebi.mnb.view;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import org.apache.log4j.Logger;
@@ -44,15 +46,15 @@ public class MComboBox extends JComboBox {
         setFont(theme.getBodyFont());
     }
 
-    public MComboBox(List<String> items) {
-        super(new DefaultComboBoxModel(items.toArray(new String[0])));
+    public MComboBox(Object[] items) {
+        super(items);
         Theme theme = Settings.getInstance().getTheme();
         setForeground(theme.getForeground());
         setFont(theme.getBodyFont());
     }
 
-    public MComboBox(Object... items) {
-        super(items);
+    public MComboBox(Collection<String> items) {
+        super(new DefaultComboBoxModel(items.toArray(new String[0])));
         Theme theme = Settings.getInstance().getTheme();
         setForeground(theme.getForeground());
         setFont(theme.getBodyFont());

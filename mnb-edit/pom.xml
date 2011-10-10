@@ -36,5 +36,10 @@
             <artifactId>CheMet-Core</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mnb-interfaces</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

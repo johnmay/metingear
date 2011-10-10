@@ -16,8 +16,16 @@
  */
 package uk.ac.ebi.mnb.settings;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.Properties;
-import uk.ac.ebi.mnb.view.theme.DarkTheme;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.prefs.Preferences;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
 import uk.ac.ebi.mnb.view.theme.DefaultTheme;
 import uk.ac.ebi.mnb.interfaces.Theme;
 
@@ -32,7 +40,7 @@ public class Settings
         extends Properties {
 
     private static final org.apache.log4j.Logger LOGGER =
-            org.apache.log4j.Logger.getLogger(
+                                                 org.apache.log4j.Logger.getLogger(
             Settings.class);
     private static final String PROPERTIES_FILE = "preferences...";
 
@@ -55,6 +63,52 @@ public class Settings
 
     public Theme getTheme() {
         return theme;
+    }
+
+    public String getBlastVersion() {
+        return Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastall.version", "");
+    }
+
+    public String getBlastPath() {
+        return Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastall.path", "");
+    }
+
+    /**
+     * Sets blast.path and blast.version preferences
+     * @param path Path to a blast executable
+     * @return
+     */
+    public void setBlastPreferences(String path) throws InvalidParameterException {
+        File file = new File(path);
+        if (file.exists()) {
+            Preferences.userNodeForPackage(HomologySearchFactory.class).put("blastall.path", path);
+            Process process;
+            try {
+                process = Runtime.getRuntime().exec(path + " ?");
+                Scanner scanner = new Scanner(process.getInputStream());
+                Pattern version = Pattern.compile("(\\d+.\\d+.\\d+)");
+                String versionNumber = null;
+                while (scanner.hasNext()) {
+                    Matcher regex = version.matcher(scanner.nextLine());
+                    if (regex.find()) {
+                        versionNumber = regex.group(1);
+                        break;
+                    }
+                }
+                scanner.close();
+
+                if (versionNumber == null) {
+                    throw new InvalidParameterException("Unable to determine blast version");
+                } else {
+                    Preferences.userNodeForPackage(HomologySearchFactory.class).put("blastall.version", versionNumber);
+                }
+
+            } catch (IOException ex) {
+                throw new InvalidParameterException("Unable to determine blast version");
+            }
+        } else {
+            throw new InvalidParameterException("Unable to find blastall exectuable at specified path");
+        }
     }
 
     public Boolean getOption(String key) {

@@ -30,7 +30,7 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProductCollection;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.interfaces.Identifier;
@@ -42,7 +42,7 @@ import uk.ac.ebi.metabolomes.descriptor.observation.ObservationCollection;
 import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.BlastHit;
 import uk.ac.ebi.metabolomes.core.reaction.BiochemicalReaction;
 import uk.ac.ebi.metabolomes.descriptor.observation.BlastParamType;
-import uk.ac.ebi.metabolomes.run.RunnableTask;
+import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.metabolomes.run.TaskStatus;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
@@ -62,12 +62,12 @@ public class PredictGPR
 
     private static final org.apache.log4j.Logger LOGGER =
                                                  org.apache.log4j.Logger.getLogger(PredictGPR.class);
-    private GeneProductCollection productCollection;
+    private OldGeneProductCollection productCollection;
     private Reconstruction project;
 
 
     public PredictGPR(JobParameters param,
-                      GeneProductCollection products) {
+                      OldGeneProductCollection products) {
         super(param);
         this.productCollection = products;
         // can change to get this from the gene products in future

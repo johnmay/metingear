@@ -83,16 +83,16 @@ public class CrossReferenceEditor extends PopupDialog {
 
         if (references.isEmpty()) {
             layout.appendRow(new RowSpec(Sizes.PREFERRED));
-            MComboBox box = new MComboBox(map.keySet().toArray());
-            MTextField field = new MTextField(10);
+            MComboBox box = new MComboBox(map.keySet());
+            MTextField field = new MTextField(12);
             fields.add(field);
             comboboxes.add(box);
         } else {
             for (CrossReference reference : references) {
                 layout.appendRow(new RowSpec(Sizes.PREFERRED));
-                MComboBox box = new MComboBox(map.keySet().toArray());
+                MComboBox box = new MComboBox(map.keySet());
                 box.setSelectedItem(reference.getIdentifier().getShortDescription());
-                MTextField field = new MTextField(reference.getIdentifier().getAccession());
+                MTextField field = new MTextField(reference.getIdentifier().getAccession(), 12);
                 fields.add(field);
                 comboboxes.add(box);
             }
@@ -150,11 +150,9 @@ public class CrossReferenceEditor extends PopupDialog {
         public void actionPerformed(ActionEvent e) {
             panel.removeAll();
             layout.removeRow(layout.getRowCount()); // going to repaint all regardless
-            comboboxes.remove(index); // append after
+            comboboxes.remove(index);
             fields.remove(index);
             update();
-
-            dialog.repaint();
             dialog.pack();
         }
     }
@@ -174,12 +172,11 @@ public class CrossReferenceEditor extends PopupDialog {
 
         public void actionPerformed(ActionEvent e) {
             layout.appendRow(new RowSpec(Sizes.PREFERRED));
-            MComboBox box = new MComboBox(map.keySet().toArray());
-            MTextField field = new MTextField(10);
+            MComboBox box = new MComboBox(map.keySet());
+            MTextField field = new MTextField(12);
             comboboxes.add(index + 1, box); // append after
             fields.add(index + 1, field);
             update();
-            dialog.repaint();
             dialog.pack();
         }
     }

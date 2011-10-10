@@ -22,7 +22,8 @@ package uk.ac.ebi.mnb.view;
 
 import java.util.Collection;
 import javax.swing.JFrame;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 

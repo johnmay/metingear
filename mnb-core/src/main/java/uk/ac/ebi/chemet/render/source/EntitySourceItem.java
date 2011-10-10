@@ -24,10 +24,9 @@ package uk.ac.ebi.chemet.render.source;
 import com.explodingpixels.macwidgets.SourceListItem;
 import com.explodingpixels.macwidgets.SourceListModel;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 
 

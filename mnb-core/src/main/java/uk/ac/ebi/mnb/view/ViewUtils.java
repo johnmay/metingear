@@ -87,7 +87,7 @@ public class ViewUtils {
             "images/networkbuilder_512x512.png");
     // colors
     public static final Color BACKGROUND = new Color(237, 237, 237);
-    public static final Color CLEAR_COLOUR = new Color(0, 0, 0, 255);
+    public static final Color CLEAR_COLOUR = new Color(255, 255, 255, 0);
     public static Color DARK_BACKGROUND = new Color(64, 64, 64);
 
     /**

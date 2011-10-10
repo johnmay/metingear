@@ -20,32 +20,28 @@
  */
 package uk.ac.ebi.mnb.dialog.table;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.sun.awt.AWTUtilities;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.Polygon;
+import com.apple.laf.AquaUtils.ShadowBorder;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import org.apache.log4j.Logger;
+
 import uk.ac.ebi.metabonater.components.theme.MRoundButton;
 import uk.ac.ebi.mnb.core.CloseDialogAction;
 import uk.ac.ebi.mnb.interfaces.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.ViewUtils;
+
+import javax.swing.*;
+
+import org.apache.log4j.Logger;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.sun.awt.AWTUtilities;
+import java.awt.image.BufferedImage;
 
 /**
  * @name    PopupDialog - 2011.10.07 <br>
@@ -58,18 +54,13 @@ public class PopupDialog extends JDialog {
 
     private static final Logger LOGGER = Logger.getLogger(PopupDialog.class);
     private JPanel panel = new DialogPanel();
-    private Area callout = getCalloutShape();
+    private BufferedImage bgImage;
     private JPanel background = new JPanel() {
 
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            Theme t = Settings.getInstance().getTheme();
-            Graphics2D g2 = (Graphics2D) g;
-            g2.setColor(t.getDialogBackground());
-            g2.fill(callout);
-            g2.setColor(ViewUtils.shade(t.getDialogBackground(), -0.2f));
-            g2.draw(callout);
+            g.drawImage(bgImage, 0, 0, null);
         }
     };
 
@@ -90,24 +81,24 @@ public class PopupDialog extends JDialog {
         add(background);
         AWTUtilities.setWindowOpaque(this, false);
         panel.setOpaque(false);
-        background.setLayout(new FormLayout("right:13dlu, p, 13dlu", "bottom:13dlu, p, 13dlu"));
+        background.setLayout(new FormLayout("8px, 16px, p, 16px, 8px", "8px, 16px, p, 16px, 8px"));
         CellConstraints cc = new CellConstraints();
-        Icon close = ViewUtils.getIcon("images/cutout/close_12x12.png");
+        Icon close = ViewUtils.getIcon("images/cutout/close_whitebg_16x16.png");
         JButton closeButton = new MRoundButton(close, new CloseDialogAction(this, false));
-        background.add(closeButton, cc.xy(1, 1));
+        background.add(closeButton, cc.xy(2, 2));
         background.setOpaque(true);
-        background.add(panel, cc.xy(2, 2));
+        background.add(panel, cc.xy(3, 3));
         addComponentListener(new ComponentAdapter() {
 
             @Override
             public void componentShown(ComponentEvent e) {
-                callout = getCalloutShape();
+                bgImage = getBackgroundImage();
             }
 
             @Override
             public void componentResized(ComponentEvent e) {
-                setLocation(openingLocation.x - (getWidth() / 2), openingLocation.y - getHeight() - 5);
-                callout = getCalloutShape();
+                setLocation(openingLocation.x - (getWidth() / 2), openingLocation.y - getHeight() + 7);
+                bgImage = getBackgroundImage();
                 repaint();
             }
         });
@@ -124,27 +115,56 @@ public class PopupDialog extends JDialog {
      */
     public void setOpenLocation() {
         openingLocation = MouseInfo.getPointerInfo().getLocation();
-        setLocation(openingLocation.x - (getWidth() / 2), openingLocation.y - getHeight() - 5);
+        setLocation(openingLocation.x - (getWidth() / 2), openingLocation.y - getHeight() + 7);
     }
 
     public JPanel getPanel() {
         return panel;
     }
 
+    public BufferedImage getBackgroundImage() {
+
+        Theme theme = Settings.getInstance().getTheme();
+        Dimension size = getPreferredSize();
+
+        BufferedImage img = new BufferedImage(size.width, size.height, BufferedImage.TYPE_4BYTE_ABGR);
+
+        Graphics2D g2 = img.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        Shape callout = getCalloutShape();
+        int sw = 10 * 2;
+        Color grey = new Color(0, 0, 0, 50);
+        for (int i = sw; i >= 2; i -= 2) {
+            float pct = (float) (sw - i) / (sw - 1);
+            g2.setColor(getMixedColor(grey, pct,
+                    ViewUtils.CLEAR_COLOUR, 1.0f - pct));
+            g2.setStroke(new BasicStroke(i));
+            g2.draw(callout);
+        }
+        g2.setColor(theme.getDialogBackground());
+        g2.fill(callout);
+        g2.dispose();
+
+        return img;
+    }
+
     public Area getCalloutShape() {
-        RoundRectangle2D rect = new RoundRectangle2D.Float(11, 11, getPreferredSize().width - 22, getPreferredSize().height - 22, 15, 15);
+        RoundRectangle2D rect = new RoundRectangle2D.Float(16, 16, getPreferredSize().width - 32, getPreferredSize().height - 32, 16, 16);
+
+        // 16 for corners as icon is 16 rounded
 
         int center = getPreferredSize().width / 2;
 
         int[] x = new int[]{
             center,
-            center - 10,
-            center + 10
+            center - 25,
+            center + 25
         };
         int[] y = new int[]{
-            getPreferredSize().height - 2,
-            getPreferredSize().height - 12,
-            getPreferredSize().height - 12};
+            getPreferredSize().height - 7,
+            getPreferredSize().height - 32,
+            getPreferredSize().height - 32};
         Polygon p = new Polygon(x, y, 3);
 
         Area composite = new Area(rect);

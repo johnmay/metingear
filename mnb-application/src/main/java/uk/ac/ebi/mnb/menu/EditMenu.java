@@ -38,9 +38,9 @@ import uk.ac.ebi.mnb.core.DelayedBuildAction;
 import uk.ac.ebi.mnb.core.UpdatableDialogItem;
 import uk.ac.ebi.mnb.dialog.edit.AddAuthorAnnotation;
 import uk.ac.ebi.mnb.dialog.edit.MergeEntities;
-import uk.ac.ebi.mnb.dialog.edit.NewMetabolite;
-import uk.ac.ebi.mnb.dialog.edit.NewProteinProduct;
-import uk.ac.ebi.mnb.dialog.edit.NewReaction;
+import uk.ac.ebi.mnb.dialog.file.NewMetabolite;
+import uk.ac.ebi.mnb.dialog.file.NewProteinProduct;
+import uk.ac.ebi.mnb.dialog.file.NewReaction;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
 /**
@@ -76,10 +76,6 @@ public class EditMenu extends ClearMenu {
                 MainView.getInstance().update();
             }
         }));
-        add(new JSeparator());
-        add(new UpdatableDialogItem(view, view.getViewController(), NewMetabolite.class));
-        add(new UpdatableDialogItem(view, view.getViewController(), NewReaction.class));
-        add(new UpdatableDialogItem(view, view.getViewController(), NewProteinProduct.class));
         add(new JSeparator());
         add(new ControllerDialogItem(view, MergeEntities.class));
         add(new JSeparator());

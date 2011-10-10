@@ -42,7 +42,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.renderers.FormulaCellRender;

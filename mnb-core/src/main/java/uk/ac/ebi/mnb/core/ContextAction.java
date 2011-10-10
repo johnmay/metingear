@@ -21,7 +21,7 @@
 package uk.ac.ebi.mnb.core;
 
 import java.util.Collection;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.Message;
 

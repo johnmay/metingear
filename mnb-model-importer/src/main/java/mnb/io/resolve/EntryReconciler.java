@@ -22,7 +22,7 @@
 package mnb.io.resolve;
 
 import mnb.io.tabular.preparse.PreparsedEntry;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 
 
 /**
@@ -35,7 +35,7 @@ import uk.ac.ebi.core.AnnotatedEntity;
  */
 public interface EntryReconciler {
 
-    public AnnotatedEntity resolve(PreparsedEntry entry);
+    public AbstractAnnotatedEntity resolve(PreparsedEntry entry);
 
 }
 

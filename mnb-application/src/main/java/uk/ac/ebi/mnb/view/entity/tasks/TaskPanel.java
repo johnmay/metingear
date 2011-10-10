@@ -26,8 +26,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
-import uk.ac.ebi.metabolomes.run.RunnableTask;
+import uk.ac.ebi.chemet.io.external.RunnableTask;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 

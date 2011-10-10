@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.dialog.file;
 import java.util.*;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabonater.components.theme.MTextField;
-import uk.ac.ebi.mnb.core.Labels;
+import uk.ac.ebi.mnb.core.MLabels;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.resource.IdentifierFactory;
@@ -66,7 +66,7 @@ public abstract class NewEntity extends DropdownDialog {
         for (Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers()) {
             nameIndexMap.put(id.getShortDescription(), id.getIndex());
         }
-        type = new MComboBox(nameIndexMap.keySet().toArray());
+        type = new MComboBox(nameIndexMap.keySet());
 
         this.identifier = identifier;
         this.updateable = updateable;
@@ -82,15 +82,17 @@ public abstract class NewEntity extends DropdownDialog {
         JPanel panel = super.getOptions();
 
         panel.setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p",
-                "p, 4dlu, p"));
+                                       "p, 4dlu, p"));
 
         panel.add(type, cc.xy(1, 1));
         panel.add(accession, cc.xy(3, 1));
 
-        panel.add(Labels.newFormLabel("Abbreviation:"), cc.xy(5, 1));
+        panel.add(MLabels.newFormLabel("Abbreviation:",
+                                      "A short 2-5 character abbreviation of the new entity"),
+                  cc.xy(5, 1));
         panel.add(abbreviation, cc.xy(7, 1));
 
-        panel.add(Labels.newFormLabel("Name:"), cc.xy(1, 3));
+        panel.add(MLabels.newFormLabel("Name:", "An offical or trivial name the new metabolite"), cc.xy(1, 3));
         panel.add(name, cc.xyw(3, 3, 5));
 
 

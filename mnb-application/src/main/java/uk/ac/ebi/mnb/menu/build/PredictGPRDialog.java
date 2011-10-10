@@ -12,15 +12,11 @@ import com.sri.biospice.warehouse.database.Warehouse;
 import com.sri.biospice.warehouse.schema.DataSet;
 import java.io.IOException;
 import javax.swing.JSeparator;
-import mnb.view.old.TaskManager;
-import uk.ac.ebi.core.ReconstructionManager;
-import mnb.todo.PredictGPR;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.metabolomes.biowh.BiowhConnection;
 import uk.ac.ebi.metabolomes.biowh.DataSetProvider;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
-import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.main.MainView;
 
 
@@ -53,7 +49,7 @@ public class PredictGPRDialog
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
         builder.setDefaultDialogBorder();
-        builder.add(new ThemedLabel("Gene-Protein-Reaction"), cc.xyw(1, 1, 3));
+        builder.add(new MLabel("Gene-Protein-Reaction"), cc.xyw(1, 1, 3));
         builder.add(new JSeparator(), cc.xyw(1, 3, 3));
         builder.add(getClose(), cc.xy(1, 5));
         builder.add(getActivate(), cc.xy(3, 5));
@@ -79,12 +75,12 @@ public class PredictGPRDialog
             logger.error("Error openning the warehouse connection");
         }
 
-        PredictGPR task = new PredictGPR(params, ReconstructionManager.getInstance().
-          getActiveReconstruction().getGeneProducts());
-
-        // todo.. move some to update..
-        TaskManager.getInstance().add(task);
-        MainView.getInstance().getSourceListController().update();
+//        PredictGPR task = new PredictGPR(params, ReconstructionManager.getInstance().
+//          getActiveReconstruction().getGeneProducts());
+//
+//        // todo.. move some to update..
+//        TaskManager.getInstance().add(task);
+//        MainView.getInstance().getSourceListController().update();
 
     }
 

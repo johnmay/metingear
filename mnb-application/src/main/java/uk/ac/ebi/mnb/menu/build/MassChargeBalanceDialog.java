@@ -22,17 +22,10 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.Sizes;
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
-import javax.swing.border.Border;
-import mnb.view.old.TaskManager;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.metabolomes.core.reaction.ReactionBalancer;
 import uk.ac.ebi.mnb.main.MainView;
 
 

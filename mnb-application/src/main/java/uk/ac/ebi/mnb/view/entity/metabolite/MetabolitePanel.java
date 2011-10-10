@@ -24,6 +24,7 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -32,10 +33,11 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.metabolite.MetaboliteClass;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.GeneralPanel;
@@ -43,7 +45,7 @@ import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.mnb.view.labels.WarningLabel;
 
 /**
@@ -63,15 +65,15 @@ public class MetabolitePanel
     private JLabel structure = new WarningLabel("No Structure");
     // for isGeneric
     private JLabel markush = new BoldLabel("Markush:");
-    private JLabel markushViewer = new ThemedLabel("");
-    private JComboBox markushEditor = new MComboBox("Yes", "No");
+    private JLabel markushViewer = new MLabel("");
+    private JComboBox markushEditor = new MComboBox(Arrays.asList("Yes", "No"));
     // metabolic class
     private JLabel type = new BoldLabel("Type:");
-    private JLabel typeViewer = new ThemedLabel("");
+    private JLabel typeViewer = new MLabel("");
     private JComboBox typeEditor = new MComboBox(MetaboliteClass.values());
     // molecular formula
     private JTextField formulaEditor = new TransparentTextField("", 15, false);
-    private JLabel formularViewer = new ThemedLabel();
+    private JLabel formularViewer = new MLabel();
     // cell constraints
     private CellConstraints cc = new CellConstraints();
 
@@ -189,7 +191,7 @@ public class MetabolitePanel
     }
 
     @Override
-    public Collection<? extends AnnotatedEntity> getReferences() {
+    public Collection<? extends AbstractAnnotatedEntity> getReferences() {
         if (entity != null) {
             return ReconstructionManager.getInstance().getActiveReconstruction().getReactions().getReactions(entity);
         }

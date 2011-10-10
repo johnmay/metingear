@@ -24,7 +24,7 @@ package uk.ac.ebi.mnb.view.labels;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 
@@ -43,10 +43,10 @@ public class InternalLinkLabel extends ActionLabel {
     private static final Logger LOGGER = Logger.getLogger(InternalLinkLabel.class);
 
 
-    public InternalLinkLabel(AnnotatedEntity entity, SelectionController selector) {
+    public InternalLinkLabel(AbstractAnnotatedEntity entity, SelectionController selector) {
         super(entity.getIdentifier().getAccession(), new ShowItem(selector, entity));
     }
-    public InternalLinkLabel(AnnotatedEntity entity, String label, SelectionController selector) {
+    public InternalLinkLabel(AbstractAnnotatedEntity entity, String label, SelectionController selector) {
         super(label, new ShowItem(selector, entity));
     }
 
@@ -54,10 +54,10 @@ public class InternalLinkLabel extends ActionLabel {
 class ShowItem extends AbstractAction {
 
     private SelectionController selector;
-    private AnnotatedEntity entity;
+    private AbstractAnnotatedEntity entity;
 
 
-    public ShowItem(SelectionController selector, AnnotatedEntity entity) {
+    public ShowItem(SelectionController selector, AbstractAnnotatedEntity entity) {
         this.entity = entity;
         this.selector = selector;
     }

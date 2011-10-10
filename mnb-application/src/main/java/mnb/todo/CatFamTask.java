@@ -17,7 +17,7 @@
 package mnb.todo;
 
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
-import uk.ac.ebi.metabolomes.run.RunnableTask;
+import uk.ac.ebi.chemet.io.external.RunnableTask;
 
 /**
  * CatFamTask.java

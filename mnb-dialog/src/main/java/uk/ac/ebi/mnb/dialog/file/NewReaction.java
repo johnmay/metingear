@@ -18,11 +18,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.dialog.edit;
+package uk.ac.ebi.mnb.dialog.file;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
@@ -36,18 +37,18 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class NewMetabolite extends NewEntity {
+public class NewReaction extends NewEntity {
 
-    private static final Logger LOGGER = Logger.getLogger(NewMetabolite.class);
+    private static final Logger LOGGER = Logger.getLogger(NewReaction.class);
 
-    public NewMetabolite(JFrame frame, Updatable updatable) {
+    public NewReaction(JFrame frame, Updatable updatable) {
         super(frame, updatable, new BasicChemicalIdentifier());
     }
 
     @Override
     public JLabel getDescription() {
         JLabel label = super.getDescription();
-        label.setText("Please specify detail for a new metabolite");
+        label.setText("Please specify detail for a new reaction");
         return label;
     }
 
@@ -56,8 +57,8 @@ public class NewMetabolite extends NewEntity {
         ReconstructionManager manager = ReconstructionManager.getInstance();
         if (manager.hasProjects()) {
             Reconstruction reconstruction = manager.getActiveReconstruction();
-            Metabolite m = new Metabolite(getIdentifier(), getAbbreviation(), getName());
-            reconstruction.addMetabolite(m);
+            MetabolicReaction rxn = new MetabolicReaction(getIdentifier(), getAbbreviation(), getName());
+            reconstruction.addReaction(rxn);
         }
     }
 }

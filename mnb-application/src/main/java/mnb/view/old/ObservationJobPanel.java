@@ -12,7 +12,7 @@ import java.awt.Dimension;
 import java.util.List;
 import javax.swing.JPanel;
 import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 
@@ -67,7 +67,7 @@ public class ObservationJobPanel
 
             ObservationRenderer observationRenderer = new ObservationRenderer( observation , new Dimension( 800 , 12 ) );
             int ccy = ( i == 0 ) ? 1 : i * 2 + 1;
-            ThemedLabel label = new ThemedLabel( observation.getObservationName() );
+            MLabel label = new MLabel( observation.getObservationName() );
             label.setToolTipText( observation.getObservationName() );
             add( label , cc.xy( 1 , ccy ) );
             add( observationRenderer , cc.xy( 3 , ccy ) );

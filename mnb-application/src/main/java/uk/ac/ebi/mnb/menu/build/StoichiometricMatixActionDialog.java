@@ -71,21 +71,21 @@ public class StoichiometricMatixActionDialog
     public void process() {
 
         // build tasks and add to queue or just do it on our own without the task manaager
-        MatrixModel s = new MatrixModel();
-
-        Reconstruction activeProject = ReconstructionManager.getInstance().getActiveReconstruction();
-
-        GeneProteinProduct[] proteinProducts = activeProject.getGeneProducts().getProteinProducts();
-
-        for( GeneProteinProduct geneProteinProduct : proteinProducts ) {
-            Collection<EnzymeClassification> ecs =
-                                             geneProteinProduct.getAnnotations(
-              EnzymeClassification.class);
-            if( ecs.size() == 1 ) {
-                ECNumber ec = Iterables.get(ecs, 0).getIdentifier();
-//todo                s.addReaction(ec, (BiochemicalReaction) geneProteinProduct.getReactions().get(0));
-            }
-        }
+//        MatrixModel s = new MatrixModel();
+//
+//        Reconstruction activeProject = ReconstructionManager.getInstance().getActiveReconstruction();
+//
+//        GeneProteinProduct[] proteinProducts = activeProject.getGeneProducts().getProteinProducts();
+//
+//        for( GeneProteinProduct geneProteinProduct : proteinProducts ) {
+//            Collection<EnzymeClassification> ecs =
+//                                             geneProteinProduct.getAnnotations(
+//              EnzymeClassification.class);
+//            if( ecs.size() == 1 ) {
+//                ECNumber ec = Iterables.get(ecs, 0).getIdentifier();
+////todo                s.addReaction(ec, (BiochemicalReaction) geneProteinProduct.getReactions().get(0));
+//            }
+//        }
         // to fix
 
         

@@ -22,7 +22,7 @@ import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 
 /**

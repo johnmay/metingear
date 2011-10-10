@@ -44,6 +44,7 @@ import com.explodingpixels.macwidgets.*;
 import com.jgoodies.forms.factories.Borders;
 import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
@@ -80,7 +81,7 @@ public class MainView
 
     private MainView() {
 
-        super("Metabonater");
+        super("Metabonator");
 
         // mac widgets
         MacUtils.makeWindowLeopardStyle(getRootPane());
@@ -224,6 +225,10 @@ public class MainView
         });
 
         undoManager = new UndoManager();
+
+        // links the task manager with this
+        TaskManager.getInstance().setController(this);
+
     }
 
     public UndoManager getUndoManager() {

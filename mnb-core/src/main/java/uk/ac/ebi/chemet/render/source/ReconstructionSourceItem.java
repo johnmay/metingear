@@ -25,7 +25,7 @@ import com.explodingpixels.macwidgets.SourceListCategory;
 import com.explodingpixels.macwidgets.SourceListItem;
 import com.explodingpixels.macwidgets.SourceListModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
@@ -45,7 +45,7 @@ public class ReconstructionSourceItem
     private static final Logger LOGGER = Logger.getLogger(ReconstructionSourceItem.class);
 
 
-    public ReconstructionSourceItem(AnnotatedEntity entity, Object container) {
+    public ReconstructionSourceItem(AbstractAnnotatedEntity entity, Object container) {
         super(entity, container);
         setIcon(ViewUtils.icon_16x16);
     }

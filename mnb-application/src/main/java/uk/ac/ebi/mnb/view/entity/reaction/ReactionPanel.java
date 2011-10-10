@@ -31,9 +31,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
@@ -41,7 +41,7 @@ import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.ReactionRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -56,7 +56,7 @@ public class ReactionPanel
     private static final Logger LOGGER = Logger.getLogger(ReactionPanel.class);
     private MetabolicReaction entity;
     private ReactionRenderer renderer = new ReactionRenderer();
-    private JLabel reactionLabel = new ThemedLabel();
+    private JLabel reactionLabel = new MLabel();
     private JComponent participantXref;
     private CellConstraints cc = new CellConstraints();
 
@@ -91,7 +91,7 @@ public class ReactionPanel
 
         panel.setBorder(Borders.DLU4_BORDER);
 
-        panel.add(new ThemedLabel("TODO: Reaction Synopsis"));
+        panel.add(new MLabel("TODO: Reaction Synopsis"));
 
         return panel;
 

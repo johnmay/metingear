@@ -41,13 +41,13 @@ public class ProteinInspector
 
 
     public ProteinInspector() {
-        super(new ProteinPanel());
+        super(new ProductPanel());
     }
 
 
     @Override
     public void store() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        super.store();
     }
 
 

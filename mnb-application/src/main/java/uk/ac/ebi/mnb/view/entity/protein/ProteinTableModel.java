@@ -1,4 +1,3 @@
-
 /**
  * ProteinTableModel.java
  *
@@ -21,16 +20,16 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
-
+import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.GeneProduct;
 
 /**
  *          ProteinTableModel – 2011.09.28 <br>
@@ -48,38 +47,31 @@ public class ProteinTableModel extends EntityTableModel {
                              String.class)
     };
 
-
     public ProteinTableModel() {
         super();
         addColumns(Arrays.asList(DEFAULT));
     }
-
 
     @Override
     public void loadComponents() {
 
         Reconstruction recon = ReconstructionManager.getInstance().getActiveReconstruction();
 
-
-        if( recon != null ) {
-            super.setEntities(Arrays.asList(recon.getGeneProducts().getProteinProducts()));
+        if (recon != null) {
+            super.setEntities(new ArrayList<AnnotatedEntity>(recon.getProducts()));
         }
 
     }
 
-
     @Override
     public Object getFixedType(AnnotatedEntity component, String name) {
-        GeneProteinProduct protein = (GeneProteinProduct) component;
+        GeneProduct product = (GeneProduct) component;
 
-        if( name.equals("Sequence") ) {
-            return protein.getSequence();
+        if (name.equals("Sequence")) {
+            return product.getSequence().getSequenceAsString();
         }
 
         return "NA";
 
     }
-
-
 }
-

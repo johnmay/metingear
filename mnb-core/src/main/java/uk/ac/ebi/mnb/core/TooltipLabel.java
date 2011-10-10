@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mnb.core;
 
-import uk.ac.ebi.mnb.view.labels.ThemedLabel;
+import uk.ac.ebi.mnb.view.labels.MLabel;
 
 /**
  * @name    TooltipLabel - 2011.10.03 <br>
@@ -29,7 +29,7 @@ import uk.ac.ebi.mnb.view.labels.ThemedLabel;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class TooltipLabel extends ThemedLabel {
+public class TooltipLabel extends MLabel {
 
     public TooltipLabel(String text, String tooltip, int horizontalAlignment) {
         super(text, horizontalAlignment);

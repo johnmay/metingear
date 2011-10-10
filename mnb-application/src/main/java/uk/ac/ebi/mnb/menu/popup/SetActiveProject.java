@@ -27,7 +27,7 @@ import uk.ac.ebi.core.ReconstructionManager;
 import org.apache.log4j.Logger;
 import org.omg.PortableServer.POA;
 import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.mnb.main.MainView;

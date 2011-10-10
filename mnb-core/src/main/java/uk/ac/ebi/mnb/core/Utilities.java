@@ -23,10 +23,10 @@ package uk.ac.ebi.mnb.core;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.GeneProduct;
 
 /**
  * @name    Utilities - 2011.10.03 <br>
@@ -75,5 +75,18 @@ public class Utilities {
 
         return reactions;
 
+    }
+
+    public static Collection<GeneProduct> getGeneProducts(Collection<AnnotatedEntity> entities) {
+
+        Collection<GeneProduct> products = new ArrayList();
+
+        for (AnnotatedEntity entity : entities) {
+            if (entity instanceof GeneProduct) {
+                products.add((GeneProduct) entity);
+            }
+        }
+
+        return products;
     }
 }
