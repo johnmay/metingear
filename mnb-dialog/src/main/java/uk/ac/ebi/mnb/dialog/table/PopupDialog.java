@@ -20,7 +20,6 @@
  */
 package uk.ac.ebi.mnb.dialog.table;
 
-import com.apple.laf.AquaUtils.ShadowBorder;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -42,6 +41,9 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.sun.awt.AWTUtilities;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
+import uk.ac.ebi.visualisation.ColorUtilities;
 
 /**
  * @name    PopupDialog - 2011.10.07 <br>
@@ -55,6 +57,7 @@ public class PopupDialog extends JDialog {
     private static final Logger LOGGER = Logger.getLogger(PopupDialog.class);
     private JPanel panel = new DialogPanel();
     private BufferedImage bgImage;
+    private Point mouse;
     private JPanel background = new JPanel() {
 
         @Override
@@ -63,16 +66,6 @@ public class PopupDialog extends JDialog {
             g.drawImage(bgImage, 0, 0, null);
         }
     };
-
-    // move to view utils
-    private static Color getMixedColor(Color c1, float pct1, Color c2, float pct2) {
-        float[] clr1 = c1.getComponents(null);
-        float[] clr2 = c2.getComponents(null);
-        for (int i = 0; i < clr1.length; i++) {
-            clr1[i] = (clr1[i] * pct1) + (clr2[i] * pct2);
-        }
-        return new Color(clr1[0], clr1[1], clr1[2], clr1[3]);
-    }
 
     public PopupDialog(JFrame frame) {
         super(frame, ModalityType.APPLICATION_MODAL);
@@ -97,59 +90,71 @@ public class PopupDialog extends JDialog {
 
             @Override
             public void componentResized(ComponentEvent e) {
-                setLocation(openingLocation.x - (getWidth() / 2), openingLocation.y - getHeight() + 7);
+                setLocation(mouse.x - (getWidth() / 2), mouse.y - getHeight() + 7);
                 bgImage = getBackgroundImage();
                 repaint();
             }
         });
     }
 
-    @Override
-    public void repaint() {
-        super.repaint();
-    }
-    private Point openingLocation;
-
     /**
-     * Sets the pop-up location based on mouse position
+     * Sets the pop-up location based on mouse position. The tip of the callout will be at the mouse point
      */
-    public void setOpenLocation() {
-        openingLocation = MouseInfo.getPointerInfo().getLocation();
-        setLocation(openingLocation.x - (getWidth() / 2), openingLocation.y - getHeight() + 7);
+    public void setOnMouse() {
+        mouse = MouseInfo.getPointerInfo().getLocation();
+        setLocation(mouse.x - (getWidth() / 2), mouse.y - getHeight() + 7);
     }
 
     public JPanel getPanel() {
         return panel;
     }
+    private Map<Dimension, BufferedImage> backgroundCache = new HashMap();
 
     public BufferedImage getBackgroundImage() {
 
         Theme theme = Settings.getInstance().getTheme();
         Dimension size = getPreferredSize();
 
+        if (backgroundCache.containsKey(size)) {
+            return backgroundCache.get(size);
+        }
+
+        if (backgroundCache.size() > 200) {
+            LOGGER.warn("Many images are being stored the background caching map has now be reinstantiated" + " considering making your popup discrete sizes prevent constant background re-drawing");
+            backgroundCache = new HashMap();
+        }
+
+        LOGGER.info("Drawing new background image for size: " + size);
+
         BufferedImage img = new BufferedImage(size.width, size.height, BufferedImage.TYPE_4BYTE_ABGR);
 
         Graphics2D g2 = img.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+//        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+//                            RenderingHints.VALUE_ANTIALIAS_ON);
+        
         Shape callout = getCalloutShape();
+        // draws the border
         int sw = 10 * 2;
         Color grey = new Color(0, 0, 0, 50);
         for (int i = sw; i >= 2; i -= 2) {
             float pct = (float) (sw - i) / (sw - 1);
-            g2.setColor(getMixedColor(grey, pct,
-                    ViewUtils.CLEAR_COLOUR, 1.0f - pct));
+            g2.setColor(ColorUtilities.getMixedColor(grey, pct,
+                                                     ViewUtils.CLEAR_COLOUR, 1.0f - pct));
             g2.setStroke(new BasicStroke(i));
             g2.draw(callout);
         }
+
         g2.setColor(theme.getDialogBackground());
         g2.fill(callout);
         g2.dispose();
+
+        backgroundCache.put(size, img);
 
         return img;
     }
 
     public Area getCalloutShape() {
+
         RoundRectangle2D rect = new RoundRectangle2D.Float(16, 16, getPreferredSize().width - 32, getPreferredSize().height - 32, 16, 16);
 
         // 16 for corners as icon is 16 rounded
