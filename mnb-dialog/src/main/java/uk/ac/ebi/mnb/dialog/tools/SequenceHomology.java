@@ -69,6 +69,7 @@ public class SequenceHomology extends ControllerDialog {
     private JSpinner cpu = new JSpinner(new SpinnerNumberModel(1, 1, 4, 1));
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 2500, 50));
     private JTextField field = new MTextField("1e-30");
+    private CheckBox alignments = new CheckBox("Parse alignments (increases save sizes)");
 
     public SequenceHomology(JFrame frame, Updatable updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "BuildDialog");
@@ -88,7 +89,7 @@ public class SequenceHomology extends ControllerDialog {
     public JPanel getOptions() {
         JPanel panel = super.getOptions();
 
-        panel.setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
+        panel.setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
 
         panel.add(MLabels.newFormLabel("Program:"), cc.xy(1, 1));
         panel.add(tool, cc.xy(3, 1));
@@ -111,6 +112,8 @@ public class SequenceHomology extends ControllerDialog {
         panel.add(MLabels.newFormLabel("Max Results"), cc.xy(5, 7));
         panel.add(results, cc.xy(7, 7));
 
+        panel.add(alignments, cc.xyw(1, 9, 7));
+
 
         return panel;
 
@@ -124,7 +127,12 @@ public class SequenceHomology extends ControllerDialog {
         File db = HomologyDatabaseManager.getInstance().getPath((String) database.getSelectedItem());
 
         try {
-            RunnableTask task = factory.getTabularBLASTP(products, db, 1e-30, (Integer) cpu.getValue(), (Integer) results.getValue());
+            RunnableTask task;
+            if (alignments.isSelected()) {
+                task = factory.getBLASTTask(products, db, 1e-30, (Integer) cpu.getValue(), (Integer) results.getValue(), "blastp", 7);
+            } else {
+                task = factory.getTabularBLASTP(products, db, 1e-30, (Integer) cpu.getValue(), (Integer) results.getValue());
+            }
             TaskManager.getInstance().add(task);
         } catch (IOException ex) {
             addMessage(new ErrorMessage("Unable to perform sequence homology search: " + ex.getMessage()));
