@@ -204,22 +204,5 @@ public class ViewUtils {
         return new Font(map);
     }
 
-    /**
-     * Shades a colour by the given amount (0-1). A positive value will lighten the colour whilst a negative value
-     * will darken the colour.The colour is transform from RGB to HSB where the amount is added to the brightness and
-     * subtracted the saturation
-     * @param color The color to shade
-     * @param amount The amount to shade by
-     * @return
-     */
-    public static Color shade(final Color color, final float amount) {
 
-        float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-
-
-        return Color.getHSBColor(hsb[0],
-                Math.max(0f, hsb[1] - amount),  // decrease saturation
-                Math.min(1f, hsb[2] + amount)); // increase brightness
-
-    }
 }
