@@ -1,6 +1,6 @@
 
 /**
- * ProteinInspector.java
+ * ProteinTable.java
  *
  * 2011.09.28
  *
@@ -21,34 +21,27 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
-import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
+import uk.ac.ebi.mnb.view.entity.EntityTableModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 
 /**
- *          ProteinInspector – 2011.09.28 <br>
+ *          ProteinTable – 2011.09.28 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProteinInspector
-  extends AbstractEntityInspector {
+public class ProductTable extends AbstractEntityTable {
 
-    private static final Logger LOGGER = Logger.getLogger(ProteinInspector.class);
+    private static final Logger LOGGER = Logger.getLogger(ProductTable.class);
 
 
-    public ProteinInspector() {
-        super(new ProductPanel());
+    public ProductTable() {
+        super(new ProductTableModel());
     }
 
-
-    @Override
-    public void store() {
-        super.store();
-    }
 
 
 }

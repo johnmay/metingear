@@ -38,16 +38,16 @@ import uk.ac.ebi.interfaces.GeneProduct;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProteinTableModel extends EntityTableModel {
+public class ProductTableModel extends EntityTableModel {
 
-    private static final Logger LOGGER = Logger.getLogger(ProteinTableModel.class);
+    private static final Logger LOGGER = Logger.getLogger(ProductTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
         new ColumnDescriptor("Sequence", null,
                              DataType.FIXED,
                              String.class)
     };
 
-    public ProteinTableModel() {
+    public ProductTableModel() {
         super();
         addColumns(Arrays.asList(DEFAULT));
     }

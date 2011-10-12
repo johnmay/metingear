@@ -1,6 +1,6 @@
 
 /**
- * ProteinTable.java
+ * ProteinView.java
  *
  * 2011.09.28
  *
@@ -21,25 +21,27 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
+import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
-import uk.ac.ebi.mnb.view.entity.EntityTableModel;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityView;
 import org.apache.log4j.Logger;
 
 
 /**
- *          ProteinTable – 2011.09.28 <br>
+ *          ProteinView – 2011.09.28 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProteinTable extends AbstractEntityTable {
+public class ProductView
+    extends AbstractEntityView {
 
-    private static final Logger LOGGER = Logger.getLogger(ProteinTable.class);
+    private static final Logger LOGGER = Logger.getLogger(ProductView.class);
 
 
-    public ProteinTable() {
-        super(new ProteinTableModel());
+    public ProductView() {
+        super(new ProductTable(), new ProductInspector());
     }
 
 
