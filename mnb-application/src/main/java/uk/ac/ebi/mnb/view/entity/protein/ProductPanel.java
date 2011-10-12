@@ -20,33 +20,20 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.Sizes;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.DefaultListModel;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import java.awt.event.*;
+
+import uk.ac.ebi.interfaces.*;
+import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
+
+import javax.swing.*;
+import javax.swing.text.*;
+
+import org.apache.log4j.Logger;
+
+import com.jgoodies.forms.layout.*;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -89,7 +76,7 @@ public class ProductPanel
         sequence.setText(entity.getSequence().getSequenceAsString());
         Style style = sequence.addStyle("Red", null);
         StyleConstants.setForeground(style, Color.red);
-        sequence.getStyledDocument().setCharacterAttributes(10, 10, sequence.getStyle("Red"), true);
+        //   sequence.getStyledDocument().setCharacterAttributes(10, 10, sequence.getStyle("Red"), true);
 
         return super.update();
 
