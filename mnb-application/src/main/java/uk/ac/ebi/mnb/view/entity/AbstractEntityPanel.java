@@ -20,11 +20,6 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import com.jgoodies.forms.factories.Borders;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.Sizes;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -34,45 +29,28 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
-import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
-import javax.swing.undo.UndoableEdit;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.visualisation.AbstractAlignmentRenderer;
-import uk.ac.ebi.chemet.visualisation.BlastAlignmentColor;
-import uk.ac.ebi.chemet.visualisation.LocalAlignmentRenderer;
+import uk.ac.ebi.chemet.visualisation.*;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.interfaces.*;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
-import uk.ac.ebi.mnb.edit.AbbreviationEdit;
-import uk.ac.ebi.mnb.edit.AccessionEdit;
-import uk.ac.ebi.mnb.edit.NameEdit;
+import uk.ac.ebi.mnb.dialog.popup.AlignmentViewer;
+import uk.ac.ebi.mnb.edit.*;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.renderers.ListLinkRenderer;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.TransparentTextField;
-import uk.ac.ebi.mnb.view.ViewUtils;
-import uk.ac.ebi.mnb.edit.DeleteAnnotation;
+import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.observation.ObservationCollection;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
+import uk.ac.ebi.visualisation.ColorUtilities;
+
+import javax.swing.*;
+import javax.swing.undo.UndoableEdit;
+
+import org.apache.log4j.Logger;
+
+import com.jgoodies.forms.factories.Borders;
+import com.jgoodies.forms.layout.*;
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
@@ -158,8 +136,39 @@ public abstract class AbstractEntityPanel
             }
         });
 
+        observationList.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                alignmentView.setVisible(false);
+            }
+        });
+        observationList.addMouseMotionListener(new MouseAdapter() {
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int index = observationList.locationToIndex(e.getPoint());
+                if (index == -1) {
+                    alignmentView.setVisible(false);
+                    return;
+                }
+                Object value = observationModel.get(index);
+                if (value instanceof LocalAlignment) {
+                    LocalAlignment alignment = (LocalAlignment) value;
+                    float location = Math.min(e.getX() / 750f, 1f);
+                    alignmentView.setSequence(alignment, location);
+                    alignmentView.pack();
+                    alignmentView.setOnMouse(20);
+                    if (alignmentView.isVisible() == false) {
+                        alignmentView.setVisible(true);
+                    };
+                }
+            }
+        });
+
 
     }
+    private AlignmentViewer alignmentView = new AlignmentViewer(MainView.getInstance(), 15);
 
     public void setup() {
         // could move
@@ -187,6 +196,8 @@ public abstract class AbstractEntityPanel
         add(middle, cc.xy(1, 2));
         add(new JSeparator(), cc.xy(1, 3));
         add(observations, cc.xy(1, 4));
+
+        
 
     }
 
@@ -278,6 +289,12 @@ public abstract class AbstractEntityPanel
             name.setCaretPosition(0);
             abbreviation.setText(entity.getAbbreviation());
 
+
+            // for sequence rendering
+            if (entity instanceof GeneProduct) {
+                alignmentView.setProduct((GeneProduct) entity);
+            }
+
             // update the internal references
             refModel.removeAllElements();
 
@@ -295,30 +312,38 @@ public abstract class AbstractEntityPanel
 
 
             observationModel.removeAllElements();
+            final ConservationRenderer renderer = new ConservationRenderer(new Rectangle(0, 0, 750, 10),
+                                                                        new BasicAlignmentColor(ColorUtilities.EMBL_PETROL, ColorUtilities.EMBL_PETROL, Color.lightGray),
+                                                                        new BlastConsensusScorer(),
+                                                                        1);
+            renderer.setGranularity(0.8f);
+
+
             observationList.setCellRenderer(new DefaultListCellRenderer() {
 
                 @Override
                 public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                     if (value instanceof LocalAlignment) {
-
                         LocalAlignment alignment = (LocalAlignment) value;
-
-                        LocalAlignmentRenderer renderer = new LocalAlignmentRenderer(new Rectangle(0, 0, 900, 8), new BlastAlignmentColor(), 1);
                         Icon icon = new ImageIcon(renderer.render((LocalAlignment) value, (GeneProduct) entity));
                         this.setIcon(icon);
                         this.setBorder(null);
                         this.setBackground(null);
                         this.setFont(ViewUtils.VERDANA_PLAIN_11);
                         this.setText(alignment.getSubject());
-                        this.setToolTipText(alignment.toString());
+                        this.setToolTipText(ViewUtils.htmlWrapper(alignment.getHTMLSummary()));
                         return this;
                     }
                     return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 }
             });
             ObservationCollection collection = ((AbstractAnnotatedEntity) entity).getObservationCollection();
+            int i = 0;
             for (Observation observation : collection.get(LocalAlignment.class)) {
                 observationModel.addElement(observation);
+                if(i++ > 15){
+                    break;
+                }
             }
 
             middle.remove(annotations);
