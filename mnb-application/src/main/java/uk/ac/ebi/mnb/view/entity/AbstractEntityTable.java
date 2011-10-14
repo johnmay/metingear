@@ -47,7 +47,7 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityTable.class);
     private SelectionManager selection = new SelectionMap();
 
-    public AbstractEntityTable(EntityTableModel model) {
+    public AbstractEntityTable(AbstractEntityTableModel model) {
         super(model);
         setUI(new ITunesTableUI());
         setAutoscrolls(true);
@@ -63,8 +63,8 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
     }
 
     @Override
-    public EntityTableModel getModel() {
-        return (EntityTableModel) super.getModel();
+    public AbstractEntityTableModel getModel() {
+        return (AbstractEntityTableModel) super.getModel();
     }
 
     /**
