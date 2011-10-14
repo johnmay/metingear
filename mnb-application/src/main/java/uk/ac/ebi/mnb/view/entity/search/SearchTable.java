@@ -1,4 +1,3 @@
-
 /**
  * SearchTable.java
  *
@@ -28,7 +27,6 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.main.MainView;
 
-
 /**
  *          SearchTable – 2011.09.29 <br>
  *          Class description
@@ -41,7 +39,6 @@ public class SearchTable extends AbstractEntityTable {
     private static final Logger LOGGER = Logger.getLogger(SearchTable.class);
     private DoubleClickListener listener;
 
-
     public SearchTable() {
         super(new SearchTableModel());
         listener = new DoubleClickListener(this);
@@ -49,30 +46,19 @@ public class SearchTable extends AbstractEntityTable {
 
     }
 
-
     private class DoubleClickListener extends MouseAdapter {
 
         private AbstractEntityTable table;
-
 
         public DoubleClickListener(AbstractEntityTable table) {
             this.table = table;
         }
 
-
         @Override
         public void mouseClicked(MouseEvent e) {
-            if( e.getClickCount() == 2 ) {
-                int index = table.getSelectedRow();
-                if(index != -1){
-                    AnnotatedEntity entity = table.getModel().getEntity(convertRowIndexToModel(index));
-                    MainView.getInstance().getViewController().setSelection(entity);
-                }
+            if (e.getClickCount() == 2) {
+                MainView.getInstance().getViewController().setSelection(table.getSelection());
             }
         }
-
     }
-
-
 }
-

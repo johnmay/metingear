@@ -182,6 +182,10 @@ public abstract class DropdownDialog
             }
         }
         super.setVisible(visible);
+        if(!visible){
+            // return focus to window
+            getParent().requestFocus();
+        }
     }
 
     /**

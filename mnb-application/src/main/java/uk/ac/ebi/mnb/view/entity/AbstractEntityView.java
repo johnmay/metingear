@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
+import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import com.jgoodies.forms.factories.Borders;
 import java.awt.Color;
@@ -32,6 +33,7 @@ import uk.ac.ebi.mnb.view.ViewUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.EntityView;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
 /**
  *          EntityView – 2011.09.06 <br>
@@ -100,27 +102,18 @@ public class AbstractEntityView
         return inspector;
     }
 
-    /**
-     * Returns the currently selected component in the view
-     * @return
-     * @Deprecated use getSelection()
-     */
-    @Deprecated
-    public AnnotatedEntity getSelectedEntity() {
-        return inspector.getSelectedEntity();
-    }
+   
 
-    public Collection<AnnotatedEntity> getSelection() {
+
+
+    public SelectionManager getSelection() {
         return inspector.getSelection();
     }
 
-    public boolean setSelection(AnnotatedEntity annotatedComponent) {
-        return table.setSelection(annotatedComponent);
+    public boolean setSelection(SelectionManager selection) {
+        return table.setSelection(selection);
     }
 
-    public boolean setSelection(Collection<? extends AnnotatedEntity> entities) {
-        return table.setSelection(entities);
-    }
 
     
 

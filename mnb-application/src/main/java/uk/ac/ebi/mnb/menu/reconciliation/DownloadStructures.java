@@ -57,7 +57,7 @@ public class DownloadStructures
     public void activateActions() {
 
         Collection<AnnotatedEntity> components = MainView.getInstance().getViewController().
-          getSelection();
+          getSelection().getEntities();
 
         if( components.isEmpty() == false ) {
             dialog.setComponents(components);

@@ -65,7 +65,7 @@ public class AnnotatedFromAlignments extends ControllerDialog {
 
 
         IdentifierFactory factory = IdentifierFactory.getInstance();
-        for (GeneProduct product : Utilities.getGeneProducts(getSelection())) {
+        for (GeneProduct product : getSelection().getGeneProducts()) {
 
             Set<Identifier> identifiers = new HashSet();
 

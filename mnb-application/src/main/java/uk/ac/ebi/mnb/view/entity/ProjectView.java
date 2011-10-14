@@ -44,7 +44,9 @@ import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RNAProduct;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.mnb.core.SelectionMap;
 import uk.ac.ebi.mnb.interfaces.EntityView;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.search.SearchManager;
@@ -74,6 +76,8 @@ public class ProjectView
     private SearchView search = null;
     private CardLayout layout;
     private Map<String, AbstractEntityView> viewMap;
+    private SelectionManager selection = new SelectionMap();
+
 
     public ProjectView() {
 
@@ -188,31 +192,12 @@ public class ProjectView
     }
 
     /**
-     *
-     * Convenience method for accessing the currently selected entity in the underlying view and
-     * table. If more then one entity is selected the first selection is returned (as per JTable).
-     *
-     * This method combines calls to {@see getActiveView()} and {@see EntityView#getSelectedEntity()}
-     * 
-     * @return
-     *
-     */
-    public AnnotatedEntity getSelectedEntity() {
-        EntityView view = getActiveView();
-        if (view != null) {
-            return view.getSelectedEntity();
-        }
-        return null;
-    }
-
-    /**
-     * 
-     * Returns all currently selected entities in the active child view. 
+     * Returns the selection manager for the active view. If no view is active
+     * then an empty selection is returned
      *
      * @return
-     *
      */
-    public Collection<AnnotatedEntity> getSelection() {
+    public SelectionManager getSelection() {
 
         EntityView view = getActiveView();
 
@@ -220,20 +205,8 @@ public class ProjectView
             return view.getSelection();
         }
 
-        return new ArrayList();
+        return selection.clear();
 
-    }
-
-    /**
-     *
-     * Returns all currently selected entities in the active child view that
-     * are of class 'type'
-     *
-     * @param type
-     * @return
-     */
-    public List<AnnotatedEntity> getActiveEntities(Class type) {
-        throw new UnsupportedOperationException("Not supported yet");
     }
 
     public ProductView getProductView() {
@@ -257,43 +230,26 @@ public class ProjectView
     }
 
     /**
-     * 
-     * Changes the view and selects the given entity
-     *
-     * @param entity
-     * 
-     */
-    public boolean setSelection(AnnotatedEntity entity) {
-
-        AbstractEntityView view = viewMap.get(entity.getBaseType());
-
-        layout.show(this, view.getClass().getSimpleName());
-
-        view.setSelection(entity);
-
-        return true; // succesful
-
-    }
-
-    /**
      * At the moment sets view to that of first item and then selects all provided. This method presumes
      * all entities are the same
      * @param entities
      * @return
      */
-    public boolean setSelection(Collection<? extends AnnotatedEntity> entities) {
+    @Override
+    public boolean setSelection(SelectionManager selection) {
 
-        if (entities.isEmpty()) {
+        if(selection.isEmpty()){
             return false;
         }
 
-        AnnotatedEntity entity = entities.iterator().next();
+        AnnotatedEntity entity = selection.getFirstEntity();
 
         AbstractEntityView view = viewMap.get(entity.getBaseType());
 
         layout.show(this, view.getClass().getSimpleName());
 
-        return view.setSelection(entities);
+        return view.setSelection(selection);
+        
     }
 
     /* deprecated methods */

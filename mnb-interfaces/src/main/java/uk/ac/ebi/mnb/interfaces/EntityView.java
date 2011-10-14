@@ -31,7 +31,7 @@ import uk.ac.ebi.core.AbstractAnnotatedEntity;
  */
 public interface EntityView extends SelectionController {
 
+    public void requestFocus();
 
-    
-
+    public void repaint();
 }

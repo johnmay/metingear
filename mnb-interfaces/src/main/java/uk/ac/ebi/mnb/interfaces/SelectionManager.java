@@ -37,7 +37,7 @@ public interface SelectionManager {
      * Access entire selection
      * @return
      */
-    public Collection<AnnotatedEntity> getSelection();
+    public Collection<AnnotatedEntity> getEntities();
 
     /**
      * Add a component to the selection
@@ -49,12 +49,14 @@ public interface SelectionManager {
      * Add a collection of entities to the selection
      * @return Whether the selection was changed
      */
-    public boolean addAll(Collection<AnnotatedEntity> entities);
+    public boolean addAll(Collection<? extends AnnotatedEntity> entities);
 
     /**
      * Remove all selection objects
+     * @return The manager returns an instance of it's self allow chaining
+     *         (e.g. selection.clear().add())
      */
-    public void clear();
+    public SelectionManager clear();
 
     /**
      * Allows fetching of specified
@@ -68,4 +70,24 @@ public interface SelectionManager {
      * @return
      */
     public Collection<GeneProduct> getGeneProducts();
+
+    /**
+     * Access whether this selection manager has a selection
+     * @return 
+     */
+    public boolean hasSelection();
+
+    /**
+     * Determine whether the selection is empty
+     * @return
+     */
+    public boolean isEmpty();
+
+    /**
+     * Access the first entity of a selection. If there is more then one class
+     * of selection first entity is determined by class with the most entities
+     * @return
+     */
+    public AnnotatedEntity getFirstEntity();
+
 }

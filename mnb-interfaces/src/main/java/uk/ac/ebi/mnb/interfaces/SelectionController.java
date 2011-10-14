@@ -33,15 +33,16 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 public interface SelectionController extends Updatable {
 
     /**
-     * Sets the selection as the provide item
+     * Returns the selection from the current context
      * @return
      */
-    public boolean setSelection(AnnotatedEntity entity);
+    public SelectionManager getSelection();
 
-    public Collection<AnnotatedEntity> getSelection();
-
-    @Deprecated
-    public AnnotatedEntity getSelectedEntity();
-
-    public boolean setSelection(Collection<? extends AnnotatedEntity> entities);
+    /**
+     * Sets the selection on the current context
+     * @param selection
+     * @return
+     */
+    public boolean setSelection(SelectionManager selection);
+    
 }

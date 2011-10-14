@@ -71,7 +71,7 @@ public class ContextDialogItem extends JMenuItem {
 
             @Override
             public void activateActions() {
-                if (dialog.getSelection().isEmpty() == false) {
+                if (dialog.getSelection().hasSelection()) {
                     dialog.setVisible(true);
                 }
             }

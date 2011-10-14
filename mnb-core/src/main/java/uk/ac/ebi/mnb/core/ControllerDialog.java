@@ -31,6 +31,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.Message;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
@@ -62,11 +63,13 @@ public abstract class ControllerDialog extends DropdownDialog {
         this.controller = controller;
     }
 
-    public void setSelection(Collection<AbstractAnnotatedEntity> entities) {
-        this.controller.setSelection(entities);
+    public void setSelection(Collection<AnnotatedEntity> entities) {
+        SelectionManager selection =  new SelectionMap();
+        selection.addAll(entities);
+        this.controller.setSelection(selection);
     }
 
-    public Collection<AnnotatedEntity> getSelection() {
+    public SelectionManager getSelection() {
         return controller.getSelection();
     }
 

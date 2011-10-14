@@ -102,7 +102,7 @@ public class MainView
                 if (recon != null) {
                     try {
                         final String text =
-                                e.getDocument().getText(0, e.getDocument().getLength());
+                                     e.getDocument().getText(0, e.getDocument().getLength());
 
 
                         new Thread(new Runnable() {
@@ -121,7 +121,7 @@ public class MainView
                                     }
 
                                     final List<AnnotatedEntity> entities =
-                                            index.getRankedEntities(SearchManager.getInstance().getQuery(
+                                                                index.getRankedEntities(SearchManager.getInstance().getQuery(
                                             text
                                             + "~"));
 
@@ -221,6 +221,14 @@ public class MainView
             @Override
             public void componentResized(ComponentEvent e) {
                 messages.update();
+            }
+        });
+
+        addFocusListener(new FocusAdapter() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                project.getActiveView().requestFocus();
             }
         });
 

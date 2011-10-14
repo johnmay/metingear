@@ -22,9 +22,9 @@ package uk.ac.ebi.mnb.view;
 
 import java.util.Collection;
 import javax.swing.JFrame;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 
 /**
@@ -46,23 +46,17 @@ public abstract class ContextDialog extends DropdownDialog implements SelectionC
     /**
      * @inheritDoc
      */
-    public Collection<AnnotatedEntity> getSelection() {
+    public SelectionManager getSelection() {
         return controller.getSelection();
     }
 
     /**
      * @inheritDoc
      */
-    public boolean setSelection(AnnotatedEntity entity) {
-        return controller.setSelection(entity);
+    public boolean setSelection(SelectionManager selection) {
+        return controller.setSelection(selection);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public boolean setSelection(Collection<? extends AnnotatedEntity> entities) {
-        return this.controller.setSelection(entities);
-    }
 
     /**
      * @inheritDoc

@@ -56,7 +56,7 @@ public class FormulaSearch extends ContextAction {
 
         chebi = chebi == null ? new ChEBIWebServiceConnection() : chebi;
 
-        for (Metabolite m : Utilities.getMetabolites(getSelection())) {
+        for (Metabolite m : Utilities.getMetabolites(getSelection().getEntities())) {
 
             MolecularFormula annotation = m.getAnnotations(MolecularFormula.class).iterator().next();
 

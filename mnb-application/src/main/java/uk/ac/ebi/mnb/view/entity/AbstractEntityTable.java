@@ -31,7 +31,9 @@ import javax.swing.JTable;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mnb.core.SelectionMap;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
 /**
  *          EntityTable – 2011.09.06 <br>
@@ -43,6 +45,7 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 public abstract class AbstractEntityTable extends JTable implements SelectionController {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityTable.class);
+    private SelectionManager selection = new SelectionMap();
 
     public AbstractEntityTable(EntityTableModel model) {
         super(model);
@@ -73,17 +76,13 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
         return getModel().update();
     }
 
-    @Deprecated
-    public AnnotatedEntity getSelectedEntity() {
-        throw new UnsupportedOperationException("Method deprecated and to be removed");
-    }
-
-    public Collection<AnnotatedEntity> getSelection() {
+    public SelectionManager getSelection() {
         List<AnnotatedEntity> components = new ArrayList();
+        selection.clear();
         for (Integer index : getSelectedRows()) {
-            components.add(getModel().getEntity(convertRowIndexToModel(index)));
+            selection.add(getModel().getEntity(convertRowIndexToModel(index)));
         }
-        return components;
+        return selection;
     }
 
     /**
@@ -93,47 +92,11 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
      * @param component
      *
      */
-    public boolean setSelection(AnnotatedEntity component) {
-
-        int index = convertRowIndexToView(getModel().indexOf(component));
-
-        // could check for -1 but if something is not in the table then it should not be
-        // selectable out of principle
+    public boolean setSelection(SelectionManager selectionManager) {
 
         removeRowSelectionInterval(0, getModel().getRowCount() - 1);
-        addRowSelectionInterval(index, index);
 
-        Container parent = getParent();
-
-        if (parent != null) {
-
-            int y = getTableHeader().getHeight() + (getRowHeight() * index) - ((int) parent.getHeight()
-                    / 2);
-
-            scrollRectToVisible(new Rectangle(0, y,
-                    parent.getWidth(),
-                    parent.getHeight()));
-
-        }
-
-        requestFocusInWindow();
-
-
-        return true;
-
-    }
-
-    /**
-     * Sets the selection in the table to that of the annotated entities. This method
-     * will request the focus of window as to allow easy copying
-     *
-     * @param entities
-     * @return
-     */
-    public boolean setSelection(Collection<? extends AnnotatedEntity> entities) {
-        removeRowSelectionInterval(0, getModel().getRowCount() - 1);
-
-        for (AnnotatedEntity entity : entities) {
+        for (AnnotatedEntity entity : selectionManager.getEntities()) {
             int index = convertRowIndexToView(getModel().indexOf(entity));
             if (index != -1) {
                 addRowSelectionInterval(index, index);
@@ -143,5 +106,32 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
         requestFocusInWindow();
 
         return true;
+
+//        int index = convertRowIndexToView(getModel().indexOf(component));
+//
+//        // could check for -1 but if something is not in the table then it should not be
+//        // selectable out of principle
+//
+//        removeRowSelectionInterval(0, getModel().getRowCount() - 1);
+//        addRowSelectionInterval(index, index);
+//
+//        Container parent = getParent();
+//
+//        if (parent != null) {
+//
+//            int y = getTableHeader().getHeight() + (getRowHeight() * index) - ((int) parent.getHeight()
+//                                                                               / 2);
+//
+//            scrollRectToVisible(new Rectangle(0, y,
+//                                              parent.getWidth(),
+//                                              parent.getHeight()));
+//
+//        }
+//
+//        requestFocusInWindow();
+
+
+
     }
+
 }

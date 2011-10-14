@@ -123,7 +123,7 @@ public class SequenceHomology extends ControllerDialog {
     public void process() {
         HomologySearchFactory factory = HomologySearchFactory.getInstance();
 
-        Collection<GeneProduct> products = Utilities.getGeneProducts(getSelection());
+        Collection<GeneProduct> products = getSelection().getGeneProducts();
         File db = HomologyDatabaseManager.getInstance().getPath((String) database.getSelectedItem());
 
         try {

@@ -57,11 +57,11 @@ import uk.ac.ebi.mnb.view.entity.ProjectView;
  */
 public class SourceController
         implements SourceListSelectionListener,
-        SourceListClickListener,
-        PopupMenuCustomizer {
+                   SourceListClickListener,
+                   PopupMenuCustomizer {
 
     private static final org.apache.log4j.Logger logger =
-            org.apache.log4j.Logger.getLogger(
+                                                 org.apache.log4j.Logger.getLogger(
             SourceController.class);
     public final SourceListModel model;
     private SourceListCategory reconstructions;
@@ -121,7 +121,7 @@ public class SourceController
                 Reconstruction reconstruction = manager.getProject(i);
                 if (itemMap.containsKey(reconstruction) == false) {
                     EntitySourceItem item = new ReconstructionSourceItem(reconstruction,
-                            reconstructions);
+                                                                         reconstructions);
                     itemMap.put(reconstruction, item);
                     model.addItemToCategory(item, reconstructions);
                 }
@@ -218,7 +218,7 @@ public class SourceController
         ProjectView view = (ProjectView) MainView.getInstance().getViewController();
 
         if (item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem)) {
-            view.setSelection(((EntitySourceItem) item).getEntity());
+            view.getSelection().clear().add(((EntitySourceItem) item).getEntity());
         } else if (item instanceof ReconstructionSourceItem && clickCount > 1) {
             setActiveProject.setContext(selected);
             setActiveProject.actionPerformed(null);
@@ -250,7 +250,7 @@ public class SourceController
         // if there's no item add them all
         if (popup.getComponents().length == 0) {
             for (Action action : Arrays.asList(setActiveProject,
-                    new CloseProject())) {
+                                               new CloseProject())) {
                 actions.add((ContextSensitiveAction) action);
                 popup.add(action);
             }

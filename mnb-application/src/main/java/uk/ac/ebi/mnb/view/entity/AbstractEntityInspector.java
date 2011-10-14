@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -141,21 +142,16 @@ public abstract class AbstractEntityInspector
     }
 
     @Override
-    public boolean setSelection(AnnotatedEntity entity) {
-        // do nothing..
-        return true;
-    }
-
-    @Override
-    public boolean setSelection(Collection<? extends AnnotatedEntity> entities) {
+    public boolean setSelection(SelectionManager selection) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    
-
-    public Collection<AnnotatedEntity> getSelection() {
+    @Override
+    public SelectionManager getSelection() {
         return table.getSelection();
     }
+
+
 
     /**
      * Todo should return those containing an annotation of type

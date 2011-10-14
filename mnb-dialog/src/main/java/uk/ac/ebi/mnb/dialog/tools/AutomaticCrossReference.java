@@ -124,7 +124,7 @@ public class AutomaticCrossReference
         chebiClient = chebiClient == null ? new ChEBIWebServiceConnection() : chebiClient;
         keggClient = keggClient == null ? new KeggCompoundWebServiceConnection() : keggClient;
 
-        Collection<Metabolite> metabolties = Utilities.getMetabolites(getSelection());
+        Collection<Metabolite> metabolties = getSelection().get(Metabolite.class);
 
         boolean useChEBI = chebi.isSelected() || chebiAll.isSelected();
         boolean useKegg = kegg.isSelected();

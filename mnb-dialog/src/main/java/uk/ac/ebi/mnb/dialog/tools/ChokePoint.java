@@ -60,7 +60,7 @@ public class ChokePoint extends ContextAction {
 
         Multimap<Metabolite, MetabolicReaction> mToR = HashMultimap.create();
 
-        for (MetabolicReaction rxn : Utilities.getReactions(getSelection())) {
+        for (MetabolicReaction rxn : getSelection().get(MetabolicReaction.class)) {
             for (Metabolite m : rxn.getReactantMolecules()) {
                 rMap.put(m, rMap.containsKey(m) ? rMap.get(m) + 1 : 1);
                 mToR.put(m, rxn);
@@ -83,7 +83,8 @@ public class ChokePoint extends ContextAction {
             }
         }
 
-        setSelection(chokePoints);
+        getSelection().clear();
+        getSelection().addAll(chokePoints);
 
     }
 }

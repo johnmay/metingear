@@ -70,22 +70,22 @@ public class MergeEntities extends ControllerDialog {
     @Override
     public void process() {
 
-        Collection<AnnotatedEntity> entities = getSelection();
-
-
-        // create a new metabolite consisting of the other two.
-        // find them in all reactions and update reactions also
-        Metabolite m = (Metabolite) entities.iterator().next();
-        Metabolite newMetabolite = new Metabolite();
-
-        newMetabolite.setIdentifier(m.getIdentifier());
-        newMetabolite.setName(m.getName());
-        newMetabolite.setAbbreviation(m.getAbbreviation());
-        newMetabolite.addAnnotations(m.getAnnotations());
-
-        // add edit
-        Reconstruction recon = ReconstructionManager.getInstance().getActiveReconstruction();
-        recon.addMetabolite(newMetabolite);
+//        Collection<AnnotatedEntity> entities = getSelection();
+//
+//
+//        // create a new metabolite consisting of the other two.
+//        // find them in all reactions and update reactions also
+//        Metabolite m = (Metabolite) entities.iterator().next();
+//        Metabolite newMetabolite = new Metabolite();
+//
+//        newMetabolite.setIdentifier(m.getIdentifier());
+//        newMetabolite.setName(m.getName());
+//        newMetabolite.setAbbreviation(m.getAbbreviation());
+//        newMetabolite.addAnnotations(m.getAnnotations());
+//
+//        // add edit
+//        Reconstruction recon = ReconstructionManager.getInstance().getActiveReconstruction();
+//        recon.addMetabolite(newMetabolite);
 //        recon.remove // remove metabolite
 
     }
@@ -93,15 +93,15 @@ public class MergeEntities extends ControllerDialog {
     @Override
     public void setVisible(boolean visible) {
 
-        // check they're all the same class
-        Collection<AnnotatedEntity> entities = getSelection();
-        Class entityclass = entities.iterator().next().getClass();
-        for (AnnotatedEntity entity : entities) {
-            if (entityclass == entity.getClass()) {
-                addMessage(new ErrorMessage("Unable to merge items of different type"));
-                return;
-            }
-        }
+//        // check they're all the same class
+//        Collection<AnnotatedEntity> entities = getSelection();
+//        Class entityclass = entities.iterator().next().getClass();
+//        for (AnnotatedEntity entity : entities) {
+//            if (entityclass == entity.getClass()) {
+//                addMessage(new ErrorMessage("Unable to merge items of different type"));
+//                return;
+//            }
+//        }
         super.setVisible(visible);
     }
 }

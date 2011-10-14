@@ -76,7 +76,7 @@ public class AddAuthorAnnotation extends ContextDialog {
 
     @Override
     public void process() {
-        for (AnnotatedEntity entity : getSelection()) {
+        for (AnnotatedEntity entity : getSelection().getEntities()) {
             entity.addAnnotation(new AuthorAnnotation(author.getText().trim(), description.getText().trim()));
         }
     }

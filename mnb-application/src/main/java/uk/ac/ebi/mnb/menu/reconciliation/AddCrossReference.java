@@ -58,7 +58,7 @@ public class AddCrossReference
             MainView.getInstance().addErrorMessage("Unable to add cross reference, no active view available");
 
         } else {
-            AnnotatedEntity reconComponent = view.getSelectedEntity();
+            AnnotatedEntity reconComponent = view.getSelection().getEntities().iterator().next();
             if (reconComponent == null) {
                 MainView.getInstance().addErrorMessage("Unable to add cross reference, no active component available");
             } else {

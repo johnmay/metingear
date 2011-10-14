@@ -20,10 +20,9 @@
  */
 package uk.ac.ebi.mnb.core;
 
-import java.util.Collection;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.Message;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
 /**
  * @name    SelectionAction - 2011.10.03 <br>
@@ -41,12 +40,12 @@ public abstract class ContextAction extends GeneralAction {
         this.controller = controller;
     }
 
-    public Collection<AnnotatedEntity> getSelection() {
+    public SelectionManager getSelection() {
         return controller.getViewController().getSelection();
     }
 
-    public boolean setSelection(Collection<? extends AnnotatedEntity> entities) {
-        return controller.getViewController().setSelection(entities);
+    public boolean setSelection(SelectionManager selection) {
+        return controller.getViewController().setSelection(selection);
     }
 
     public void addMessage(Message mesg){

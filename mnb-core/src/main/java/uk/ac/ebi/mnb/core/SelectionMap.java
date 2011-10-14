@@ -24,6 +24,9 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RNAProduct;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -45,7 +48,7 @@ public class SelectionMap implements SelectionManager {
     /**
      * @inheritDoc
      */
-    public Collection<AnnotatedEntity> getSelection() {
+    public Collection<AnnotatedEntity> getEntities() {
         return map.values();
     }
 
@@ -59,15 +62,16 @@ public class SelectionMap implements SelectionManager {
     /**
      * @inheritDoc
      */
-    public boolean addAll(Collection<AnnotatedEntity> entities) {
+    public boolean addAll(Collection<? extends AnnotatedEntity> entities) {
         return map.putAll(entities.getClass(), entities);
     }
 
     /**
      * @inheritDoc
      */
-    public void clear() {
+    public SelectionManager clear() {
         map.clear();
+        return this;
     }
 
     /**
@@ -81,7 +85,7 @@ public class SelectionMap implements SelectionManager {
      * @inheritDoc
      */
     public Collection<GeneProduct> getGeneProducts() {
-        
+
         Collection<ProteinProduct> proteins = get(ProteinProduct.class);
         Collection<RNAProduct> rnas = get(RNAProduct.class);
 
@@ -90,6 +94,34 @@ public class SelectionMap implements SelectionManager {
         products.addAll(rnas);
 
         return products;
+
+    }
+
+    public boolean hasSelection() {
+        return !map.isEmpty();
+    }
+
+    public boolean isEmpty() {
+        return map.isEmpty();
+    }
+
+    public AnnotatedEntity getFirstEntity() {
+
+        if (map.keySet().size() == 1) {
+            return map.values().iterator().next();
+        }
+
+        List<Class<? extends AnnotatedEntity>> selections = new ArrayList(map.keySet());
+        Collections.sort(selections, new Comparator<Class<? extends AnnotatedEntity>>() {
+
+            public int compare(Class<? extends AnnotatedEntity> o1, Class<? extends AnnotatedEntity> o2) {
+                Integer size1 = map.get(o1).size();
+                Integer size2 = map.get(o2).size();
+                return size1.compareTo(size2);
+            }
+        });
+
+        return map.get(selections.iterator().next()).iterator().next();
 
     }
 }

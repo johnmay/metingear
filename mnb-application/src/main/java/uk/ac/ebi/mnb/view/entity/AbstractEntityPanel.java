@@ -51,6 +51,7 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.*;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
@@ -134,7 +135,8 @@ public abstract class AbstractEntityPanel
             @Override
             public void mouseClicked(MouseEvent e) {
                 int index = references.locationToIndex(e.getPoint());
-                MainView.getInstance().getViewController().setSelection((AnnotatedEntity) refModel.get(index));
+                SelectionManager manager = MainView.getInstance().getViewController().getSelection();
+                manager.clear().add((AnnotatedEntity) refModel.get(index));
             }
         });
 
@@ -330,7 +332,7 @@ public abstract class AbstractEntityPanel
                 public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                     if (value instanceof LocalAlignment) {
                         LocalAlignment alignment = (LocalAlignment) value;
-                        AlignmentRenderer renderer =  alignment.hasSequences() ? complexRenderer : basicRenderer;
+                        AlignmentRenderer renderer = alignment.hasSequences() ? complexRenderer : basicRenderer;
                         Icon icon = new ImageIcon(renderer.render((LocalAlignment) value, (GeneProduct) entity));
                         this.setIcon(icon);
                         this.setBorder(null);
