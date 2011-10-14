@@ -1,7 +1,7 @@
 /**
- * ItemSelector.java
+ * TargetedUpdate.java
  *
- * 2011.10.03
+ * 2011.10.14
  *
  * This file is part of the CheMet library
  * 
@@ -20,29 +20,20 @@
  */
 package uk.ac.ebi.mnb.interfaces;
 
-import java.util.Collection;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-
 /**
- * @name    ItemSelector - 2011.10.03 <br>
- *          Interface description
+ * @name    TargetedUpdate - 2011.10.14 <br>
+ *          Interface extends updatable by allow targeted updates
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface SelectionController extends TargetedUpdate {
+public interface TargetedUpdate extends Updatable {
 
     /**
-     * Returns the selection from the current context
-     * @return
-     */
-    public SelectionManager getSelection();
-
-    /**
-     * Sets the selection on the current context
+     * Targeted update of entities specified in the selection. The update will
+     * not select the provided entities.
      * @param selection
      * @return
      */
-    public boolean setSelection(SelectionManager selection);
-    
+    public boolean update(SelectionManager selection);
 }
