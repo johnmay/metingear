@@ -22,13 +22,17 @@ package uk.ac.ebi.mnb.interfaces;
 
 /**
  * @name    Updatable - 2011.10.03 <br>
- *          Interface description
+ *          An interface to inform graphic objects to update their displays
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
 public interface Updatable {
 
+    /**
+     * Updates all displays this and child components
+     * @return
+     */
     public boolean update();
 
 }

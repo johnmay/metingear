@@ -20,6 +20,8 @@
  */
 package uk.ac.ebi.mnb.interfaces;
 
+import javax.swing.event.UndoableEditListener;
+
 /**
  * @name    MainController - 2011.10.03 <br>
  *          Interface description
@@ -34,5 +36,7 @@ public interface MainController extends Updatable {
     public ViewController getViewController();
 
     public DialogController getDialogController();
+
+    public UndoableEditListener getUndoManager();
 
 }
