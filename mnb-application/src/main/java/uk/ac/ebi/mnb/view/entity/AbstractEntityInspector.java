@@ -40,7 +40,7 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 /**
  *          EntityInspector – 2011.09.06 <br>
- *          Class description
+ *          Displays information on the selected entity in the table
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
@@ -54,11 +54,9 @@ public abstract class AbstractEntityInspector
     private InspectorToolbar toolbar;
     private AbstractEntityTable table;
     private CellConstraints cc = new CellConstraints();
-    private AnnotatedEntity component;
-    private AnnotationRenderer renderer = new AnnotationRenderer();
-    private static final Settings preferences = Settings.getInstance();
-    private static Border PADDING_BORDER = Borders.DLU7_BORDER;
+    private AnnotatedEntity entity;
     private AbstractEntityPanel panel;
+    private static final Settings preferences = Settings.getInstance();
 
     public AbstractEntityInspector(AbstractEntityPanel panel) {
         this.panel = panel;
@@ -96,14 +94,15 @@ public abstract class AbstractEntityInspector
     /**
      * Updates the inspector with the currently selected component
      */
+    @Override
     public boolean update() {
         if (table == null) {
             return false;
         }
         int selected = table.getSelectedRow();
         if (selected != -1) {
-            component = table.getModel().getEntity(table.convertRowIndexToModel(selected));
-            if (panel.setEntity(component)) {
+            entity = table.getModel().getEntity(table.convertRowIndexToModel(selected));
+            if (panel.setEntity(entity)) {
                 panel.update();
             }
             setDisplay();
@@ -111,7 +110,7 @@ public abstract class AbstractEntityInspector
             revalidate();
 
         } else {
-            if (component != null) {
+            if (entity != null) {
                 panel.update();
                 setDisplay();
                 repaint();
@@ -122,13 +121,28 @@ public abstract class AbstractEntityInspector
     }
 
     /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean update(SelectionManager selection) {
+        if (selection.getEntities().contains(entity)) {
+            panel.update();
+            setDisplay();
+            repaint();
+            revalidate();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Access the currently displayed component
      * @return The active component
      * @deprecated use getSelection()
      */
     @Deprecated
     public AnnotatedEntity getSelectedEntity() {
-        return component;
+        return entity;
     }
     private JScrollPane pane;
 
@@ -150,8 +164,6 @@ public abstract class AbstractEntityInspector
     public SelectionManager getSelection() {
         return table.getSelection();
     }
-
-
 
     /**
      * Todo should return those containing an annotation of type

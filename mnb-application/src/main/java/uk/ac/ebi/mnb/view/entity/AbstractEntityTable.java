@@ -76,6 +76,17 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
         return getModel().update();
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean update(SelectionManager selection) {
+        selection.getEntities();
+        // fire indicies and update those only..
+        return true;
+    }
+
+
     public SelectionManager getSelection() {
         List<AnnotatedEntity> components = new ArrayList();
         selection.clear();
@@ -133,5 +144,4 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
 
 
     }
-
 }

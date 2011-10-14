@@ -16,11 +16,8 @@ package uk.ac.ebi.mnb.view.entity;
 
 import java.awt.CardLayout;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import mnb.view.old.MatrixView;
 import javax.swing.JPanel;
@@ -37,13 +34,10 @@ import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.core.AbstractGeneProduct;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RNAProduct;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.mnb.core.SelectionMap;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
@@ -190,6 +184,13 @@ public class ProjectView
         return true; // update successful
 
     }
+
+    @Override
+    public boolean update(SelectionManager selection) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
 
     /**
      * Returns the selection manager for the active view. If no view is active

@@ -51,7 +51,7 @@ public class AbstractEntityView
     private final AbstractEntityInspector inspector;
 
     public AbstractEntityView(AbstractEntityTable table,
-            AbstractEntityInspector inspector) {
+                              AbstractEntityInspector inspector) {
 
         this.table = table;
         this.inspector = inspector;
@@ -92,6 +92,16 @@ public class AbstractEntityView
     }
 
     /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean update(SelectionManager selection) {
+        boolean updated = table.update(selection);
+        updated = inspector.update(selection) || updated;
+        return updated;
+    }
+
+    /**
      *
      * Accessor to the inspector component of the split-pane
      *
@@ -102,10 +112,6 @@ public class AbstractEntityView
         return inspector;
     }
 
-   
-
-
-
     public SelectionManager getSelection() {
         return inspector.getSelection();
     }
@@ -113,9 +119,4 @@ public class AbstractEntityView
     public boolean setSelection(SelectionManager selection) {
         return table.setSelection(selection);
     }
-
-
-    
-
-
 }
