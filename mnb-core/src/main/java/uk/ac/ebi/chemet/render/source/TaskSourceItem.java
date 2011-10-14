@@ -27,7 +27,7 @@ import furbelow.SpinningDial;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.metabolomes.run.TaskStatus;
+import uk.ac.ebi.chemet.io.external.TaskStatus;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 import uk.ac.ebi.mnb.view.ViewUtils;

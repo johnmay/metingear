@@ -75,16 +75,16 @@ public class Settings
 
     /**
      * Sets blast.path and blast.version preferences
-     * @param path Path to a blast executable
+     * @param blastp Path to a blast executable
      * @return
      */
-    public void setBlastPreferences(String path) throws InvalidParameterException {
-        File file = new File(path);
+    public void setBlastPreferences(String blastp) throws InvalidParameterException {
+        File file = new File(blastp);
         if (file.exists()) {
-            Preferences.userNodeForPackage(HomologySearchFactory.class).put("blastall.path", path);
+            Preferences.userNodeForPackage(HomologySearchFactory.class).put("blastp.path", blastp);
             Process process;
             try {
-                process = Runtime.getRuntime().exec(path + " ?");
+                process = Runtime.getRuntime().exec(blastp + " -h");
                 Scanner scanner = new Scanner(process.getInputStream());
                 Pattern version = Pattern.compile("(\\d+.\\d+.\\d+)");
                 String versionNumber = null;
@@ -100,7 +100,7 @@ public class Settings
                 if (versionNumber == null) {
                     throw new InvalidParameterException("Unable to determine blast version");
                 } else {
-                    Preferences.userNodeForPackage(HomologySearchFactory.class).put("blastall.version", versionNumber);
+                    Preferences.userNodeForPackage(HomologySearchFactory.class).put("blastp.version", versionNumber);
                 }
 
             } catch (IOException ex) {

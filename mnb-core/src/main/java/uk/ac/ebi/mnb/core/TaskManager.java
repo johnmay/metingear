@@ -18,12 +18,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.metabolomes.run.TaskStatus;
+import uk.ac.ebi.chemet.io.external.TaskStatus;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 /**
@@ -115,11 +114,6 @@ public class TaskManager
             return;
         }
 
-
-        executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(getUpdateThead(), 0, 1, TimeUnit.SECONDS);
-
-
         // run the tasks while there are queued tasks
         do {
 
@@ -152,33 +146,27 @@ public class TaskManager
                     } else {
                         controller.getMessageManager().addMessage(new WarningMessage("Task " + task.getName() + " finished in error"));
                     }
+                    this.update();
                 }
             }
-
-            System.out.println("queued: " + queuedTasks.size());
-            System.out.println("running: " + runningTasks.size());
 
         } while (queuedTasks.size() > 0
                  || runningTasks.size() > 0);
 
-        executor.shutdown();
-        SwingUtilities.invokeLater(getUpdateThead());
+        this.update();
+
 
     }
 
-    public Runnable getUpdateThead() {
-        return new Runnable() {
+    public void update() {
 
-            public void run() {
-                SwingUtilities.invokeLater(
-                        new Runnable() {
+        SwingUtilities.invokeLater(
+                new Runnable() {
 
-                            public void run() {
-                                controller.update();
-                            }
-                        });
-            }
-        };
+                    public void run() {
+                        controller.update();
+                    }
+                });
     }
 
     public int getMaxSimultaneousJobs() {
@@ -190,11 +178,14 @@ public class TaskManager
 
 
 
+
+
+
+
     }
 
     private static class TaskManagerHolder {
 
         private static final TaskManager INSTANCE = new TaskManager();
     }
-    ScheduledExecutorService executor;
 }
