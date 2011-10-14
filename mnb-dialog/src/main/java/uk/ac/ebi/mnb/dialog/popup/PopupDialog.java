@@ -58,6 +58,7 @@ public class PopupDialog extends JDialog {
     private JPanel panel = new DialogPanel();
     private BufferedImage bgImage;
     private Point mouse;
+    private int offset;
     private JPanel background = new JPanel() {
 
         @Override
@@ -68,7 +69,11 @@ public class PopupDialog extends JDialog {
     };
 
     public PopupDialog(JFrame frame) {
-        super(frame, ModalityType.APPLICATION_MODAL);
+        this(frame, ModalityType.APPLICATION_MODAL);
+    }
+
+    public PopupDialog(JFrame frame, ModalityType modality) {
+        super(frame, modality);
         //  setUndecorated(true);
         setUndecorated(true);
         add(background);
@@ -90,7 +95,7 @@ public class PopupDialog extends JDialog {
 
             @Override
             public void componentResized(ComponentEvent e) {
-                setLocation(mouse.x - (getWidth() / 2), mouse.y - getHeight() + 7);
+                setLocation(mouse.x - (getWidth() / 2), mouse.y - getHeight() + 7 - offset);
                 bgImage = getBackgroundImage();
                 repaint();
             }
@@ -98,11 +103,21 @@ public class PopupDialog extends JDialog {
     }
 
     /**
-     * Sets the pop-up location based on mouse position. The tip of the callout will be at the mouse point
+     * Sets the pop-up location based on mouse position. The tip of the callout will be at the mouse point with no offset
      */
     public void setOnMouse() {
+        setOnMouse(offset);
+    }
+
+    /**
+     * Sets the location on the mouse with a specified offset. This will place the dialog tip at the offset above the
+     * mouse
+     * @param offset
+     */
+    public void setOnMouse(int offset) {
         mouse = MouseInfo.getPointerInfo().getLocation();
-        setLocation(mouse.x - (getWidth() / 2), mouse.y - getHeight() + 7);
+        this.offset = offset;
+        setLocation(mouse.x - (getWidth() / 2), mouse.y - getHeight() + 7 - offset);
     }
 
     public JPanel getPanel() {
@@ -129,9 +144,9 @@ public class PopupDialog extends JDialog {
         BufferedImage img = new BufferedImage(size.width, size.height, BufferedImage.TYPE_4BYTE_ABGR);
 
         Graphics2D g2 = img.createGraphics();
-//        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-//                            RenderingHints.VALUE_ANTIALIAS_ON);
-        
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                            RenderingHints.VALUE_ANTIALIAS_ON);
+
         Shape callout = getCalloutShape();
         // draws the border
         int sw = 10 * 2;

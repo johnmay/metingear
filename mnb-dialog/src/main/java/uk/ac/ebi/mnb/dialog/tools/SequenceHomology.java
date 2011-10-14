@@ -97,7 +97,7 @@ public class SequenceHomology extends ControllerDialog {
 
         panel.add(new JSeparator(), cc.xyw(1, 3, 7));
 
-        panel.add(MLabels.newFormLabel("CPUs:",
+        panel.add(MLabels.newFormLabel("Threads:",
                                        "The number of CPUs to use. Higher numbers improve speed but may slow down the system"),
                   cc.xy(1, 5));
         panel.add(cpu, cc.xy(3, 5));
@@ -129,15 +129,17 @@ public class SequenceHomology extends ControllerDialog {
         try {
             RunnableTask task;
             if (alignments.isSelected()) {
-                task = factory.getBLASTTask(products, db, 1e-30, (Integer) cpu.getValue(), (Integer) results.getValue(), "blastp", 7);
+                task = factory.getBlastP(products, db, 1e-30, (Integer) cpu.getValue(), (Integer) results.getValue(), 5);
             } else {
                 task = factory.getTabularBLASTP(products, db, 1e-30, (Integer) cpu.getValue(), (Integer) results.getValue());
             }
             TaskManager.getInstance().add(task);
         } catch (IOException ex) {
             addMessage(new ErrorMessage("Unable to perform sequence homology search: " + ex.getMessage()));
+            ex.printStackTrace();
         } catch (Exception ex) {
             addMessage(new ErrorMessage("Unable to perform sequence homology search: " + ex.getMessage()));
+            ex.printStackTrace();
         }
     }
 }

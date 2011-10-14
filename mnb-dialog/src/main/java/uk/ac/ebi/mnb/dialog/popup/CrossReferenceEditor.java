@@ -38,7 +38,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabonater.components.theme.MRoundButton;
 import uk.ac.ebi.metabonater.components.theme.MTextField;
 import uk.ac.ebi.mnb.interfaces.Theme;

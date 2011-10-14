@@ -21,7 +21,6 @@
 package uk.ac.ebi.mnb.dialog.file;
 
 import java.util.*;
-import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabonater.components.theme.MTextField;
 import uk.ac.ebi.mnb.core.MLabels;
 import uk.ac.ebi.mnb.interfaces.Updatable;
@@ -33,6 +32,7 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.*;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
  * @name    NewEntity - 2011.10.04 <br>
