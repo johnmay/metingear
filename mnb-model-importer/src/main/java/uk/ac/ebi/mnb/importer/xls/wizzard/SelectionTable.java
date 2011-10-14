@@ -33,6 +33,7 @@ import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ColorUtilities;
 
 /**
  * @name    QuickViewTable - 2011.10.04 <br>
@@ -60,10 +61,10 @@ public class SelectionTable extends JTable {
                 this.setText(value.toString());
                 this.setFont(MacFontUtils.ITUNES_FONT);
                 if (isSelected) {
-                    this.setForeground(row >= start && row <= end ? table.getSelectionForeground() : ViewUtils.shade(table.getSelectionForeground(), 0.6f));
+                    this.setForeground(row >= start && row <= end ? table.getSelectionForeground() : ColorUtilities.shade(table.getSelectionForeground(), 0.6f));
                     this.setBackground(table.getSelectionBackground());
                 } else {
-                    this.setForeground(row >= start && row <= end ? table.getForeground() : ViewUtils.shade(table.getForeground(), 0.6f));
+                    this.setForeground(row >= start && row <= end ? table.getForeground() : ColorUtilities.shade(table.getForeground(), 0.6f));
                     this.setBackground(table.getBackground());
                 }
                 return this;

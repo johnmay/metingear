@@ -31,6 +31,12 @@
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>CheMet-BioWarehouse</artifactId>
             <version>1.2-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jchem</artifactId>
+                    <groupId>chemaxon</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
