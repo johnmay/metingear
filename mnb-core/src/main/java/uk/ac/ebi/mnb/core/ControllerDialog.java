@@ -41,48 +41,53 @@ import uk.ac.ebi.mnb.view.DropdownDialog;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract  class ControllerDialog extends DropdownDialog {
+public abstract class ControllerDialog extends DropdownDialog {
 
     private static final Logger LOGGER = Logger.getLogger(ControllerDialog.class);
-
     private final Updatable updater;
     private final MessageManager messages;
     private final SelectionController controller;
-    private final UndoableEditListener undoableEdits;
+    private final UndoableEditListener undoManager;
 
     public ControllerDialog(JFrame frame,
-                            Updatable updater,          // updatable called on completion
-                            MessageManager messages,      // used to post messages
+                            Updatable updater, // updatable called on completion
+                            MessageManager messages, // used to post messages
                             SelectionController controller,
                             UndoableEditListener undoableEdits,
                             String name) {
         super(frame, name);
-        this.undoableEdits = undoableEdits;
+        this.undoManager = undoableEdits;
         this.updater = updater;
         this.messages = messages;
         this.controller = controller;
     }
 
-
-    public void setSelection(Collection<AbstractAnnotatedEntity> entities){
+    public void setSelection(Collection<AbstractAnnotatedEntity> entities) {
         this.controller.setSelection(entities);
     }
 
-    public Collection<AnnotatedEntity> getSelection(){
+    public Collection<AnnotatedEntity> getSelection() {
         return controller.getSelection();
     }
 
-    public void addMessage(Message message){
+    /**
+     * Add a message to the message manager
+     * @param edit
+     */
+    public void addMessage(Message message) {
         messages.addMessage(message);
     }
 
-    public void addEdit(UndoableEdit edit){
-        undoableEdits.undoableEditHappened(new UndoableEditEvent(this, edit));
+    /**
+     * Add an undoable edit to the undo manager
+     * @param edit
+     */
+    public void addEdit(UndoableEdit edit) {
+        undoManager.undoableEditHappened(new UndoableEditEvent(this, edit));
     }
 
     @Override
     public boolean update() {
         return updater.update();
     }
-
 }
