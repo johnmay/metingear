@@ -61,9 +61,6 @@ public abstract  class ControllerDialog extends DropdownDialog {
         this.updater = updater;
         this.messages = messages;
         this.controller = controller;
-        if(undoableEdits == null){
-            LOGGER.error("Undoable edit support not handled in dialog");
-        }
     }
 
 

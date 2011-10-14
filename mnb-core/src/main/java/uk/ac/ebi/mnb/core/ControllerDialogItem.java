@@ -24,6 +24,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.event.UndoableEditListener;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -43,6 +44,7 @@ public class ControllerDialogItem extends JMenuItem {
         this((JFrame) controller, (Updatable) controller,
              controller.getMessageManager(),
              (SelectionController) controller.getViewController(),
+             controller.getUndoManager(),
              clazz);
     }
 
@@ -60,6 +62,7 @@ public class ControllerDialogItem extends JMenuItem {
                                 final Updatable updater,
                                 final MessageManager mesg,                               
                                 final SelectionController selection,
+                                final UndoableEditListener editListener,
                                 final Class<? extends ControllerDialog> clazz) {
 
         super(new DelayedBuildAction(clazz.getSimpleName()) {
@@ -74,7 +77,7 @@ public class ControllerDialogItem extends JMenuItem {
                                                                         updater,
                                                                         mesg,                                                                
                                                                         selection,
-                                                                        null);
+                                                                        editListener);
                 } catch (InstantiationException ex) {
                     ex.printStackTrace();
                 } catch (IllegalAccessException ex) {
