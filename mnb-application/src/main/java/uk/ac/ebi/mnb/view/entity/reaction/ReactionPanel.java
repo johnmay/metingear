@@ -91,7 +91,7 @@ public class ReactionPanel
 
         panel.setBorder(Borders.DLU4_BORDER);
 
-        panel.add(new MLabel("TODO: Reaction Synopsis"));
+        panel.add(new MLabel("Reaction Synopsis"));
 
         return panel;
 
@@ -173,19 +173,6 @@ public class ReactionPanel
         }
 
 
-
-    }
-
-    /**
-     * Returns the internal reference panel information panel
-     */
-    public JPanel getInternalReferencePanel() {
-
-        JPanel panel = new GeneralPanel();
-        panel.setBorder(Borders.DLU4_BORDER);
-        panel.add(new JLabel(""));
-
-        return panel;
 
     }
 

@@ -59,7 +59,7 @@ public class PreferenceDialog extends DropdownDialog {
     private static final Logger LOGGER = Logger.getLogger(PreferenceDialog.class);
     private JComboBox metSourceView;
     private JComboBox rxnSourceView;
-    private JTextField blastall;
+    private JTextField blastp;
 
     public PreferenceDialog(JFrame frame, DialogController controller) {
         super(frame, controller, "SaveDialog");
@@ -78,15 +78,15 @@ public class PreferenceDialog extends DropdownDialog {
         metSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_METABOLITE));
         rxnSourceView = new MComboBox(SourceItemDisplayType.values());
         rxnSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_REACTION));
-        blastall = new MTextField(15);
-        blastall.setText(Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastall.path", ""));
+        blastp = new MTextField(15);
+        blastp.setText(Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastp.path", ""));
 
         options.add(MLabels.newFormLabel("Metabolite source view:"), cc.xy(1, 1));
         options.add(metSourceView, cc.xy(3, 1));
         options.add(MLabels.newFormLabel("Reaction source view:"), cc.xy(5, 1));
         options.add(rxnSourceView, cc.xy(7, 1));
-        options.add(MLabels.newFormLabel("blastall path:"), cc.xy(1, 3));
-        options.add(blastall, cc.xy(3, 3));
+        options.add(MLabels.newFormLabel("blastp path (2.2.25+ recomended):"), cc.xy(1, 3));
+        options.add(blastp, cc.xy(3, 3));
 
 
 
@@ -102,7 +102,7 @@ public class PreferenceDialog extends DropdownDialog {
 
         //TODO delgate this to a settings class
         try {
-            settings.setBlastPreferences(blastall.getText());
+            settings.setBlastPreferences(blastp.getText());
         } catch (InvalidParameterException ex) {
             MainView.getInstance().addWarningMessage(ex.getMessage());
         }

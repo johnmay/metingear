@@ -9,6 +9,7 @@ import javax.swing.JSeparator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.core.ContextDialogItem;
 import uk.ac.ebi.mnb.core.ControllerDialogItem;
+import uk.ac.ebi.mnb.dialog.tools.AnnotatedFromAlignments;
 import uk.ac.ebi.mnb.dialog.tools.AutomaticCrossReference;
 import uk.ac.ebi.mnb.dialog.tools.ChokePoint;
 import uk.ac.ebi.mnb.dialog.tools.FormulaSearch;
@@ -45,6 +46,7 @@ public class ToolsMenu extends ClearMenu {
         add(new ChokePoint(view));
         add(new JSeparator());
         add(new ControllerDialogItem(view, SequenceHomology.class));
+        add(new ControllerDialogItem(view, AnnotatedFromAlignments.class));
 
 
 

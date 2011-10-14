@@ -31,7 +31,7 @@ import javax.swing.JTextField;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.main.MainView;

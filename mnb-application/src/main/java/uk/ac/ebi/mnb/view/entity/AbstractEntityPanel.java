@@ -54,7 +54,8 @@ import com.jgoodies.forms.layout.*;
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
- *          Displays the basic info on an entity (accession, abbreviation and name)
+ *          Displays the basic info on an entity (accession, abbreviation and name). Additional entries can be added to
+ *          the basic information by overriding the method and adding rows (see ProductPanel or ReactionPanel).
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
@@ -81,9 +82,10 @@ public abstract class AbstractEntityPanel
     private AnnotationRenderer renderer;
     private JPanel middle;
     private JPanel synopsis;
-    private List<JButton> deleteButtons = new ArrayList();
+    private List<JButton> removeAnnotationButtons = new ArrayList();
     private JList references = new JList();
     private DefaultListModel refModel = new DefaultListModel();
+    private boolean editable;
 
     public AnnotationVisitor getRenderer() {
         return renderer;
@@ -101,7 +103,7 @@ public abstract class AbstractEntityPanel
 
         // internal references
         references.setModel(refModel);
-        references.setVisibleRowCount(5);
+        references.setVisibleRowCount(10);
         references.setCellRenderer(new ListLinkRenderer());
         references.addMouseMotionListener(new MouseAdapter() {
 
@@ -197,7 +199,7 @@ public abstract class AbstractEntityPanel
         add(new JSeparator(), cc.xy(1, 3));
         add(observations, cc.xy(1, 4));
 
-        
+
 
     }
 
@@ -228,7 +230,7 @@ public abstract class AbstractEntityPanel
         JPanel panel = new GeneralPanel();
         panel.setBorder(Borders.DLU4_BORDER);
 
-        deleteButtons = new ArrayList(); // todo use a pool
+        removeAnnotationButtons = new ArrayList(); // todo use a pool
 
         MainView view = MainView.getInstance();
         Icon closeIcon = ViewUtils.getIcon("images/cutout/close_16x16.png", "Remove annotation");
@@ -248,7 +250,7 @@ public abstract class AbstractEntityPanel
                                                                view.getUndoManager());
                 JButton remove = new IconButton(closeIcon, action);
                 remove.setVisible(editable);
-                deleteButtons.add(remove);
+                removeAnnotationButtons.add(remove);
                 panel.add(remove, cc.xy(2, layout.getRowCount()));
             }
         }
@@ -312,11 +314,14 @@ public abstract class AbstractEntityPanel
 
 
             observationModel.removeAllElements();
-            final ConservationRenderer renderer = new ConservationRenderer(new Rectangle(0, 0, 750, 10),
-                                                                        new BasicAlignmentColor(ColorUtilities.EMBL_PETROL, ColorUtilities.EMBL_PETROL, Color.lightGray),
-                                                                        new BlastConsensusScorer(),
-                                                                        1);
-            renderer.setGranularity(0.8f);
+            final ConservationRenderer complexRenderer = new ConservationRenderer(new Rectangle(0, 0, 750, 10),
+                                                                                  new BasicAlignmentColor(ColorUtilities.EMBL_PETROL, ColorUtilities.EMBL_PETROL, Color.lightGray),
+                                                                                  new BlastConsensusScorer(),
+                                                                                  1);
+            complexRenderer.setGranularity(0.8f);
+            final AlignmentRenderer basicRenderer = new AlignmentRenderer(new Rectangle(0, 0, 750, 10),
+                                                                          new BasicAlignmentColor(ColorUtilities.EMBL_PETROL, ColorUtilities.EMBL_PETROL, Color.lightGray),
+                                                                          1);
 
 
             observationList.setCellRenderer(new DefaultListCellRenderer() {
@@ -325,6 +330,7 @@ public abstract class AbstractEntityPanel
                 public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                     if (value instanceof LocalAlignment) {
                         LocalAlignment alignment = (LocalAlignment) value;
+                        AlignmentRenderer renderer =  alignment.hasSequences() ? complexRenderer : basicRenderer;
                         Icon icon = new ImageIcon(renderer.render((LocalAlignment) value, (GeneProduct) entity));
                         this.setIcon(icon);
                         this.setBorder(null);
@@ -341,7 +347,7 @@ public abstract class AbstractEntityPanel
             int i = 0;
             for (Observation observation : collection.get(LocalAlignment.class)) {
                 observationModel.addElement(observation);
-                if(i++ > 15){
+                if (i++ > 15) {
                     break;
                 }
             }
@@ -357,8 +363,11 @@ public abstract class AbstractEntityPanel
     }
 
     /**
+     * 
      * Sets if the info is editable
+     *
      * @param editable
+     * 
      */
     public void setEditable(boolean editable) {
 
@@ -368,13 +377,19 @@ public abstract class AbstractEntityPanel
         name.setEditable(editable);
         abbreviation.setEditable(editable);
 
-        for (JButton label : deleteButtons) {
+        for (JButton label : removeAnnotationButtons) {
             label.setVisible(editable);
         }
 
-
     }
-    private boolean editable;
+
+    /**
+     * Access whether the panel is editable or not.
+     * @return
+     */
+    public boolean isEditable() {
+        return editable;
+    }
 
     /**
      * Persists changed information in the currently selected entity
@@ -406,8 +421,6 @@ public abstract class AbstractEntityPanel
     }
 
     public abstract JPanel getSynopsis();
-
-    public abstract JPanel getInternalReferencePanel();
 
     public Collection<? extends AnnotatedEntity> getReferences() {
         return new ArrayList<AnnotatedEntity>();

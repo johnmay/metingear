@@ -1,4 +1,3 @@
-
 /**
  * TaskTableModel.java
  *
@@ -21,6 +20,8 @@
  */
 package uk.ac.ebi.mnb.view.entity.tasks;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
@@ -29,9 +30,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParamType;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.metabolomes.run.TaskStatus;
+import uk.ac.ebi.chemet.io.external.TaskStatus;
 import uk.ac.ebi.mnb.core.TaskManager;
-
 
 /**
  *          TaskTableModel – 2011.09.28 <br>
@@ -44,26 +44,22 @@ public class TaskTableModel extends EntityTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(TaskTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
-        new ColumnDescriptor("Description", null,
-                             DataType.FIXED,
-                             String.class),
-        new ColumnDescriptor("Job Id", null,
-                             DataType.FIXED,
-                             String.class),
         new ColumnDescriptor("Date", null,
                              DataType.FIXED,
                              Date.class),
-        new ColumnDescriptor("Status", null,
+        new ColumnDescriptor("Elapsed Time (mins)", null,
                              DataType.FIXED,
-                             TaskStatus.class)
+                             Integer.class),
+        new ColumnDescriptor(
+        "Status", null,
+        DataType.FIXED,
+        TaskStatus.class)
     };
-
 
     public TaskTableModel() {
         super();
         addColumn(DEFAULT);
     }
-
 
     /**
      * @inheridDoc
@@ -76,32 +72,25 @@ public class TaskTableModel extends EntityTableModel {
 
     }
 
-
     /**
      * @inheridDoc
      */
     @Override
     public Object getFixedType(AnnotatedEntity entity, String name) {
 
-        if( entity instanceof RunnableTask ) {
+        if (entity instanceof RunnableTask) {
 
             RunnableTask task = (RunnableTask) entity;
-
-            if( name.equals("Description") ) {
-                return task.getName();
-            } else if( name.equals("Job Id") ) {
-                return task.getAccession();
-            } else if( name.equals("Date") ) {
-                return task.getOptions().getInitialisationDate();
-            } else if( name.equals("Status") ) {
+            if (name.equals("Date")) {
+                return task.getStart();
+            } else if (name.equals("Status")) {
                 return task.getStatus();
+            } else if (name.equals("Elapsed Time (mins)")) {
+                return task.getElapesedTime().getMinutes(); // stupid jdk... don't want to use Calandar.setTime(Data);
             }
         }
 
         return "NA";
 
     }
-
-
 }
-

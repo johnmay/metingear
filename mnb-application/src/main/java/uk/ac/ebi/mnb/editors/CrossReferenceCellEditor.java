@@ -32,7 +32,7 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.dialog.table.CrossReferenceEditor;
+import uk.ac.ebi.mnb.dialog.popup.CrossReferenceEditor;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
 
@@ -50,10 +50,8 @@ public class CrossReferenceCellEditor extends AnnotationCellRenderer implements 
     private ChangeEvent event = new ChangeEvent(this);
 
     public CrossReferenceCellEditor() {
-
         //  setFont(Settings.getInstance().getTheme().getBodyFont());
         xrefEditor.addComponentListener(new ComponentAdapter() {
-
             @Override
             public void componentHidden(ComponentEvent e) {
                 fireEditingStopped();
@@ -66,7 +64,7 @@ public class CrossReferenceCellEditor extends AnnotationCellRenderer implements 
         Collection refs = (Collection) value;
         xrefEditor.setup(refs);
         xrefEditor.pack();
-        xrefEditor.setOpenLocation();
+        xrefEditor.setOnMouse();
         xrefEditor.setVisible(true);
         return super.getTableCellRendererComponent(table, value, isSelected, isSelected, row, column);
     }

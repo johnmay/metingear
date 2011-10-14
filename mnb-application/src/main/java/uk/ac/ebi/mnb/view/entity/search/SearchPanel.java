@@ -77,28 +77,11 @@ public class SearchPanel
 
         JPanel panel = new JPanel();
 
-        panel.setBackground(Color.LIGHT_GRAY);
-        panel.add(new JLabel("Metabolic Specifics"));
-
 
         return panel;
 
     }
 
-
-    /**
-     * Returns the internal reference panel information panel
-     */
-    public JPanel getInternalReferencePanel() {
-
-        JPanel panel = new JPanel();
-
-        panel.setBackground(Color.DARK_GRAY);
-        panel.add(new JLabel("Internal references"));
-
-        return panel;
-
-    }
 
 
 }

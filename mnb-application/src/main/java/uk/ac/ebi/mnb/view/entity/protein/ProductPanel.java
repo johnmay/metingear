@@ -34,6 +34,7 @@ import javax.swing.text.*;
 import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.*;
+import uk.ac.ebi.mnb.core.MLabels;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -50,6 +51,7 @@ public class ProductPanel
     private JLabel formula;
     private JTextField generic;
     //
+    private JScrollPane sequencePane;
     private JTextPane sequence;
     private DefaultListModel sequenceListModel;
     //
@@ -58,28 +60,36 @@ public class ProductPanel
     public ProductPanel() {
         super("Gene Product", new AnnotationRenderer());
         sequenceListModel = new DefaultListModel();
+
         sequence = new JTextPane();
         sequence.setFont(ViewUtils.COURIER_NEW_PLAIN_11);
-        sequence.addMouseListener(new MouseAdapter() {
 
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println(sequence.viewToModel(e.getPoint()));
-            }
-        });
+
+//        sequence.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                System.out.println(sequence.viewToModel(e.getPoint()));
+//            }
+//        });
 
     }
 
+    /**
+     *
+     * Updates the displayed sequence
+     * Sends update signal to AbstractEntityPanel to update Name, Abbreviation and Identifier
+     *
+     * @return
+     * 
+     */
     @Override
     public boolean update() {
 
+        // set the sequence
         sequence.setText(entity.getSequence().getSequenceAsString());
-        Style style = sequence.addStyle("Red", null);
-        StyleConstants.setForeground(style, Color.red);
-        //   sequence.getStyledDocument().setCharacterAttributes(10, 10, sequence.getStyle("Red"), true);
 
         return super.update();
-
+        
     }
 
     @Override
@@ -87,8 +97,14 @@ public class ProductPanel
         this.entity = (GeneProduct) entity;
         return super.setEntity(entity);
     }
-    private JScrollPane pane;
 
+    /**
+     * 
+     * Appends a JTextPane displaying the product sequence to the basic information panel
+     *
+     * @return
+     * 
+     */
     @Override
     public JPanel getBasicPanel() {
 
@@ -96,9 +112,9 @@ public class ProductPanel
 
         FormLayout layout = (FormLayout) panel.getLayout();
         layout.appendRow(new RowSpec(Sizes.PREFERRED));
-        pane = new BorderlessScrollPane(sequence);
-        pane.setPreferredSize(new Dimension(500, 110));
-        panel.add(pane, cc.xyw(1, layout.getRowCount(), 5));
+        sequencePane = new BorderlessScrollPane(sequence);
+        sequencePane.setPreferredSize(new Dimension(500, 110));
+        panel.add(sequencePane, cc.xyw(1, layout.getRowCount(), 5));
         layout.appendRow(new RowSpec(Sizes.DLUY4));
 
         return panel;
@@ -106,27 +122,16 @@ public class ProductPanel
     }
 
     /**
-     * Returns the specific information panel
+     *
+     * Returns the synopsis information panel for the gene product
+     *
      */
     public JPanel getSynopsis() {
 
         JPanel panel = new GeneralPanel();
-        panel.setBackground(Color.YELLOW);
+        panel.add(MLabels.newLabel("No synopsis implemented"));
         return panel;
 
     }
 
-    /**
-     * Returns the internal reference panel information panel
-     */
-    public JPanel getInternalReferencePanel() {
-
-        JPanel panel = new JPanel();
-
-        panel.setBackground(Color.WHITE);
-        panel.add(new JLabel("Internal references"));
-
-        return panel;
-
-    }
-}
+ }

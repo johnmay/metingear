@@ -1,4 +1,3 @@
-
 /**
  * MetabolitePanel.java
  *
@@ -21,16 +20,23 @@
  */
 package uk.ac.ebi.mnb.view.entity.tasks;
 
-import java.awt.Color;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.Sizes;
+import java.util.Collection;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JTextArea;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mnb.core.MLabels;
+import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
+import uk.ac.ebi.mnb.view.GeneralPanel;
+import uk.ac.ebi.mnb.view.ViewUtils;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
-
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -40,29 +46,34 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
  * @author  $Author$ (this version)
  */
 public class TaskPanel
-  extends AbstractEntityPanel {
+        extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(TaskPanel.class);
     private RunnableTask entity;
     private JLabel formula;
-    private JTextField generic;
-
+    private JTextArea command = new JTextArea();
+    private CellConstraints cc = new CellConstraints();
 
     public TaskPanel() {
-        super("Metabolite", new AnnotationRenderer());
+        super("Task", new AnnotationRenderer());
     }
 
-
+    /**
+     * Updates the command text
+     * @return
+     */
     @Override
     public boolean update() {
 
-
-        // update all fields and labels...
+        command.setText(entity.getCommand());
+        command.setFont(ViewUtils.COURIER_NEW_PLAIN_11);
+        command.setForeground(Settings.getInstance().getTheme().getForeground());
+        command.setEditable(false);
+        command.setLineWrap(true);
 
         return super.update();
 
     }
-
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
@@ -70,37 +81,33 @@ public class TaskPanel
         return super.setEntity(entity);
     }
 
+    @Override
+    public JPanel getBasicPanel() {
+        JPanel panel = super.getBasicPanel();
+        FormLayout layout = (FormLayout) panel.getLayout();
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
+        panel.add(command, cc.xyw(1, layout.getRowCount(), 5));
+        return panel;
+    }
 
     /**
      * Returns the specific information panel
      */
     public JPanel getSynopsis() {
 
-        JPanel panel = new JPanel();
-
-        panel.setBackground(Color.LIGHT_GRAY);
-        panel.add(new JLabel("Metabolic Specifics"));
-
-
+        JPanel panel = new GeneralPanel();
+        panel.add(MLabels.newLabel("No synopsis"));
         return panel;
 
     }
 
 
-    /**
-     * Returns the internal reference panel information panel
-     */
-    public JPanel getInternalReferencePanel() {
-
-        JPanel panel = new JPanel();
-
-        panel.setBackground(Color.DARK_GRAY);
-        panel.add(new JLabel("Internal references"));
-
-        return panel;
-
+    @Override
+    public Collection<? extends AnnotatedEntity> getReferences() {
+        return entity.getEntities();
     }
+
+
 
 
 }
-

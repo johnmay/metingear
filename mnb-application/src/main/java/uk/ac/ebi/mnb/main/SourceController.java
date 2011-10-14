@@ -178,7 +178,6 @@ public class SourceController
         // task are independant from reconstruction
         // products
         for (RunnableTask t : TaskManager.getInstance().getTasks()) {
-            System.out.println("task: " + t);
             if (itemMap.containsKey(t) == false) {
                 EntitySourceItem item = new TaskSourceItem(t, tasks);
                 itemMap.put(t, item);

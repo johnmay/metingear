@@ -28,7 +28,7 @@ import javax.swing.JScrollPane;
 import uk.ac.ebi.core.ReconstructionManager;
 import mnb.view.old.MatrixModel;
 import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
-import uk.ac.ebi.mnb.view.entity.protein.ProteinView;
+import uk.ac.ebi.mnb.view.entity.protein.ProductView;
 import uk.ac.ebi.mnb.view.entity.reaction.ReactionView;
 import uk.ac.ebi.mnb.view.entity.search.SearchView;
 import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
@@ -69,7 +69,7 @@ public class ProjectView
     private ReactionView reactions = null;
     private MetaboliteView metabolites = null;
 //    private BrowserSplitPane productBrowser;
-    private ProteinView products = null;
+    private ProductView products = null;
     private TaskView tasks = null;
     private SearchView search = null;
     private CardLayout layout;
@@ -78,7 +78,7 @@ public class ProjectView
     public ProjectView() {
 
 //        productBrowser = BrowserSplitPane.getInstance();
-        products = new ProteinView();
+        products = new ProductView();
         reactions = new ReactionView();
         metabolites = new MetaboliteView();
         tasks = new TaskView();
@@ -236,7 +236,7 @@ public class ProjectView
         throw new UnsupportedOperationException("Not supported yet");
     }
 
-    public ProteinView getProductView() {
+    public ProductView getProductView() {
         return products;
     }
 

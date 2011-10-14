@@ -33,14 +33,14 @@ import uk.ac.ebi.chemet.io.external.RunnableTask;
 public class ReactionBalancerTask
         extends RunnableTask {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( ReactionBalancerTask.class );
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ReactionBalancerTask.class);
     private final static IMolecule proton = ModelUtils.makeProton();
     private final static IMolecule water = ModelUtils.makeWater();
     private final static IMolecule oxygen = ModelUtils.makeOxygen();
     private List<IMolecule> intialBalancingMolecules;
-  
-    public ReactionBalancerTask( JobParameters params ) {
-        super( params );
+
+    public ReactionBalancerTask() {
+        super(null);
 
         // instantiate collections here
         intialBalancingMolecules = new ArrayList<IMolecule>();
@@ -49,19 +49,19 @@ public class ReactionBalancerTask
 
     @Override
     public void prerun() {
-
-        // set up the balancing molecule
-        JobParameters params = super.getJobParameters();
-
-        if ( params.containsKey( ReactionBalancerParamType.USE_WATER ) ) {
-            intialBalancingMolecules.add( water );
-        }
-        if ( params.containsKey( ReactionBalancerParamType.USE_OXYGEN ) ) {
-            intialBalancingMolecules.add( oxygen );
-        }
-        if ( params.containsKey( ReactionBalancerParamType.USE_PROTON ) ) {
-            intialBalancingMolecules.add( proton );
-        }
+//
+//        // set up the balancing molecule
+//        JobParameters params = super.getJobParameters();
+//
+//        if (params.containsKey(ReactionBalancerParamType.USE_WATER)) {
+//            intialBalancingMolecules.add(water);
+//        }
+//        if (params.containsKey(ReactionBalancerParamType.USE_OXYGEN)) {
+//            intialBalancingMolecules.add(oxygen);
+//        }
+//        if (params.containsKey(ReactionBalancerParamType.USE_PROTON)) {
+//            intialBalancingMolecules.add(proton);
+//        }
 
 //todo//        ReactionList reactionCollection = ( ReactionList ) params.get( JobParamType.REACTION_COLLECTION );
 //        if ( reactionCollection == null ) {
@@ -86,15 +86,5 @@ public class ReactionBalancerTask
     @Override
     public void postrun() {
         //   throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
-    @Override
-    public String getTaskDescription() {
-        return "Using linear programming to balance reaction reactants/products";
-    }
-
-    @Override
-    public String getTaskCommand() {
-        return "Stoichiometry Balance";
     }
 }

@@ -43,10 +43,7 @@ public class TaskInspector extends AbstractEntityInspector {
         super(new TaskPanel());
     }
 
-
-
-
-    
+   
 
     @Override
     public void store() {

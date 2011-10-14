@@ -177,19 +177,6 @@ public class MetabolitePanel
         specific.add(typeEditor, cc.xy(7, 5));
     }
 
-    /**
-     * Returns the internal reference panel information panel
-     */
-    public JPanel getInternalReferencePanel() {
-
-        JPanel panel = new GeneralPanel();
-
-        panel.setBorder(Borders.DLU7_BORDER);
-
-        return panel;
-
-    }
-
     @Override
     public Collection<? extends AbstractAnnotatedEntity> getReferences() {
         if (entity != null) {
