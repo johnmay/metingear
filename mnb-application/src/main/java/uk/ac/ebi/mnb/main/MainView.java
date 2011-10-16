@@ -236,7 +236,6 @@ public class MainView
 
         // links the task manager with this
         TaskManager.getInstance().setController(this);
-
     }
 
     public UndoManager getUndoManager() {

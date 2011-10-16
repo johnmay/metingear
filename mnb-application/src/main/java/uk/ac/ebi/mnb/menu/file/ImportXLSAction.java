@@ -73,7 +73,7 @@ public class ImportXLSAction
                 ExcelHelper importer = name.endsWith(".xls")
                         ? new ExcelXLSHelper(stream) : null;
                 MainView view = MainView.getInstance();
-                ExcelImportDialog wizzard = new ExcelImportDialog(view, view, view.getMessageManager(), view.getViewController(), view.getUndoManager(), reconstruction, choosenFile, importer);
+                ExcelImportDialog wizzard = new ExcelImportDialog(view, view.getViewController(), view.getMessageManager(), view.getViewController(), view.getUndoManager(), reconstruction, choosenFile, importer);
                 wizzard.setVisible(true);
 
                 // update the views

@@ -104,7 +104,7 @@ public abstract class AbstractEntityPanel
 
         // internal references
         references.setModel(refModel);
-        references.setVisibleRowCount(10);
+        references.setVisibleRowCount(8);
         references.setCellRenderer(new ListLinkRenderer());
         references.addMouseMotionListener(new MouseAdapter() {
 
@@ -187,16 +187,12 @@ public abstract class AbstractEntityPanel
 
         add(getBasicPanel(), cc.xy(1, 1));
 
-        middle = new GeneralPanel(new FormLayout("p, 30dlu, p", "p"));
-        info = new GeneralPanel(new FormLayout("p", "p, p, p"));
+        middle = new GeneralPanel(new FormLayout("p, 5dlu, p, 5dlu, p", "p"));
 
-        info.add(synopsis, cc.xy(1, 1));
-        info.add(new JSeparator(), cc.xy(1, 2));
-        info.add(new BorderlessScrollPane(references), cc.xy(1, 3));
+        middle.add(synopsis, cc.xy(1, 1));
+        middle.add(new BorderlessScrollPane(references), cc.xy(3, 1));
+        middle.add(annotations, cc.xy(5, 1));
 
-
-        middle.add(info, cc.xy(1, 1));
-        middle.add(annotations, cc.xy(3, 1));
         add(middle, cc.xy(1, 2));
         add(new JSeparator(), cc.xy(1, 3));
         add(observations, cc.xy(1, 4));
@@ -291,6 +287,7 @@ public abstract class AbstractEntityPanel
             accession.setText(entity.getAccession());
             name.setText(entity.getName());
             name.setCaretPosition(0);
+
             abbreviation.setText(entity.getAbbreviation());
 
 
@@ -356,7 +353,7 @@ public abstract class AbstractEntityPanel
 
             middle.remove(annotations);
             annotations = getAnnotationPanel();
-            middle.add(annotations, cc.xy(3, 1, CellConstraints.CENTER, CellConstraints.TOP));
+            middle.add(annotations, cc.xy(5, 1, CellConstraints.CENTER, CellConstraints.TOP));
             return true;
         }
 

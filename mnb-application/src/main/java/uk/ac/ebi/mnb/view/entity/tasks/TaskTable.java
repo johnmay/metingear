@@ -22,7 +22,7 @@
 package uk.ac.ebi.mnb.view.entity.tasks;
 
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
-import uk.ac.ebi.mnb.view.entity.EntityTableModel;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
 
 

@@ -20,21 +20,17 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import java.lang.Object;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.swing.table.AbstractTableModel;
-import uk.ac.ebi.core.ReconstructionManager;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.source.AbbreviationAccessor;
-import uk.ac.ebi.chemet.render.source.AccessionAccessor;
-import uk.ac.ebi.chemet.render.source.Accessor;
-import uk.ac.ebi.chemet.render.source.NameAccessor;
+import java.util.*;
+
+import uk.ac.ebi.chemet.render.source.*;
 import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+
+import javax.swing.table.AbstractTableModel;
+
+import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
 /**
  *          EntityTableModel – 2011.09.06 <br>
@@ -102,7 +98,10 @@ public abstract class AbstractEntityTableModel
         long start = System.currentTimeMillis();
         for (int i = 0; i < components.size(); i++) {
             for (int j = 0; j < getColumnCount(); j++) {
-                data[i][j] = getValue(components.get(i), j);
+                Object newValue = getValue(components.get(i), j);
+                if (!newValue.equals(data[i][j])) {
+                    data[i][j] = newValue;
+                }
             }
         }
         long end = System.currentTimeMillis();
@@ -111,25 +110,53 @@ public abstract class AbstractEntityTableModel
         return true;
     }
 
+    /**
+     * Updates only a subset of table data
+     */
+    public boolean update(SelectionManager selection) {
+
+        long start = System.currentTimeMillis();
+
+        for (AnnotatedEntity entity : selection.getEntities()) {
+            int index = indexOf(entity);
+            if (index == -1) {
+                LOGGER.error("Skiping update on item: " + entity);
+            }
+
+            for (int j = 0; j < getColumnCount(); j++) {
+                Object newValue = getValue(components.get(index), j);
+                if (!newValue.equals(data[index][j])) {
+                    // do this and providing the equals method isn't to tasking 
+                    // there is little effect on speed and no user interuption
+                    // (i.e. an object won't change that a user is updating)
+                    data[index][j] = newValue;
+                }
+            }
+
+            fireTableRowsUpdated(index, index);
+
+        }
+
+        long end = System.currentTimeMillis();
+
+        LOGGER.info((end - start) + " (ms) ");
+
+        return true;
+
+    }
+
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return false;
     }
 
-    /*
-     *
+    /**
      * Method is called on update before cells are copied over to data[][]
-     *
      */
     public abstract void loadComponents();
 
     public void setEntities(List<? extends AnnotatedEntity> components) {
         this.components = components;
-    }
-
-    private boolean displayNewReconstruction() {
-        Reconstruction reconstruction = pm.getActiveReconstruction();
-        return reconstruction instanceof Reconstruction && reconstruction != currentReconstruction;
     }
 
     @Override
@@ -166,6 +193,7 @@ public abstract class AbstractEntityTableModel
         return components.size();
     }
 
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         return data[rowIndex][columnIndex];
     }

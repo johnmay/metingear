@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
-import uk.ac.ebi.mnb.view.entity.EntityTableModel;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParamType;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
@@ -40,7 +40,7 @@ import uk.ac.ebi.mnb.core.TaskManager;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class TaskTableModel extends EntityTableModel {
+public class TaskTableModel extends AbstractEntityTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(TaskTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{

@@ -89,7 +89,7 @@ public class InspectorToolbar
             @Override
             public void actionPerformed(ActionEvent e) {
                 inspector.store();
-                MainView.getInstance().getViewController().update();
+                MainView.getInstance().getViewController().update(inspector.getSelection());
                 setViewMode();
             }
 

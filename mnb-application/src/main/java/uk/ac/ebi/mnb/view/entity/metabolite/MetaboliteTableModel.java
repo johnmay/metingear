@@ -28,7 +28,7 @@ import java.util.List;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
-import uk.ac.ebi.mnb.view.entity.EntityTableModel;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
@@ -46,7 +46,7 @@ import uk.ac.ebi.interfaces.Annotation;
  * @author  $Author$ (this version)
  */
 public class MetaboliteTableModel
-        extends EntityTableModel {
+        extends AbstractEntityTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
-import uk.ac.ebi.mnb.view.entity.EntityTableModel;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.search.SearchManager;
@@ -38,7 +38,7 @@ import uk.ac.ebi.search.SearchManager;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class SearchTableModel extends EntityTableModel {
+public class SearchTableModel extends AbstractEntityTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(SearchTableModel.class);
 

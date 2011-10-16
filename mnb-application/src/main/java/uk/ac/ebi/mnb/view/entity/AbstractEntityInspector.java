@@ -165,17 +165,4 @@ public abstract class AbstractEntityInspector
         return table.getSelection();
     }
 
-    /**
-     * Todo should return those containing an annotation of type
-     * @param type
-     * @return
-     */
-    public List<AnnotatedEntity> getActiveComponents(Class annotationType) {
-        throw new UnsupportedOperationException("Not supported");
-//        List<AnnotatedComponent> components = new ArrayList();
-//        for( Integer index : table.getSelectedRows() ) {
-//            components.add(table.getComponentTableModel().getEntity(index));
-//        }
-//        return components;
-    }
 }

@@ -81,11 +81,8 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
      */
     @Override
     public boolean update(SelectionManager selection) {
-        selection.getEntities();
-        // fire indicies and update those only..
-        return true;
+        return getModel().update(selection);
     }
-
 
     public SelectionManager getSelection() {
         List<AnnotatedEntity> components = new ArrayList();
@@ -114,33 +111,29 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
             }
         }
 
-        requestFocusInWindow();
+        int selected = getSelectedRow();
+
+        if(selected == -1){
+            return false;
+        }
+
+        removeRowSelectionInterval(0, getModel().getRowCount() - 1);
+        addRowSelectionInterval(selected, selected);
+
+        Container parent = getParent();
+
+        if (parent != null) {
+
+            int y = getTableHeader().getHeight() + (getRowHeight() * selected) - ((int) parent.getHeight()
+                                                                               / 2);
+
+            scrollRectToVisible(new Rectangle(0, y,
+                                              parent.getWidth(),
+                                              parent.getHeight()));
+
+        }
 
         return true;
-
-//        int index = convertRowIndexToView(getModel().indexOf(component));
-//
-//        // could check for -1 but if something is not in the table then it should not be
-//        // selectable out of principle
-//
-//        removeRowSelectionInterval(0, getModel().getRowCount() - 1);
-//        addRowSelectionInterval(index, index);
-//
-//        Container parent = getParent();
-//
-//        if (parent != null) {
-//
-//            int y = getTableHeader().getHeight() + (getRowHeight() * index) - ((int) parent.getHeight()
-//                                                                               / 2);
-//
-//            scrollRectToVisible(new Rectangle(0, y,
-//                                              parent.getWidth(),
-//                                              parent.getHeight()));
-//
-//        }
-//
-//        requestFocusInWindow();
-
 
 
     }

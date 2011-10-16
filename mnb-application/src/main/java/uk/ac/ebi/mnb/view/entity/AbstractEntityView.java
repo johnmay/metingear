@@ -64,6 +64,7 @@ public class AbstractEntityView
         setBorders();
         inspector.setTable(table);
         table.getSelectionModel().addListSelectionListener(inspector);
+        setDividerLocation(350);
 
     }
 
@@ -86,19 +87,17 @@ public class AbstractEntityView
     }
 
     public boolean update() {
-        table.update();
-        inspector.update();
-        return true; // ? what return
+        boolean updated = table.update();
+        return inspector.update() || updated;
     }
 
     /**
      * @inheritDoc
      */
-    @Override
+     @Override
     public boolean update(SelectionManager selection) {
         boolean updated = table.update(selection);
-        updated = inspector.update(selection) || updated;
-        return updated;
+        return inspector.update(selection) || updated;
     }
 
     /**
@@ -112,10 +111,12 @@ public class AbstractEntityView
         return inspector;
     }
 
+    @Override
     public SelectionManager getSelection() {
         return inspector.getSelection();
     }
 
+    @Override
     public boolean setSelection(SelectionManager selection) {
         return table.setSelection(selection);
     }

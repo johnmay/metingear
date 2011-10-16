@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.*;
 import uk.ac.ebi.mnb.core.MLabels;
+import uk.ac.ebi.visualisation.ColorUtilities;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -89,7 +90,7 @@ public class ProductPanel
         sequence.setText(entity.getSequence().getSequenceAsString());
 
         return super.update();
-        
+
     }
 
     @Override
@@ -113,9 +114,11 @@ public class ProductPanel
         FormLayout layout = (FormLayout) panel.getLayout();
         layout.appendRow(new RowSpec(Sizes.PREFERRED));
         sequencePane = new BorderlessScrollPane(sequence);
-        sequencePane.setPreferredSize(new Dimension(500, 110));
+        sequencePane.setPreferredSize(new Dimension(500, 80));
         panel.add(sequencePane, cc.xyw(1, layout.getRowCount(), 5));
-        layout.appendRow(new RowSpec(Sizes.DLUY4));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
+        panel.add(new JSeparator(), cc.xyw(1, layout.getRowCount(), 5));
+
 
         return panel;
 
@@ -133,5 +136,4 @@ public class ProductPanel
         return panel;
 
     }
-
- }
+}

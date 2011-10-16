@@ -25,7 +25,7 @@ import java.util.Arrays;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
-import uk.ac.ebi.mnb.view.entity.EntityTableModel;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -38,7 +38,7 @@ import uk.ac.ebi.interfaces.GeneProduct;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProductTableModel extends EntityTableModel {
+public class ProductTableModel extends AbstractEntityTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(ProductTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{

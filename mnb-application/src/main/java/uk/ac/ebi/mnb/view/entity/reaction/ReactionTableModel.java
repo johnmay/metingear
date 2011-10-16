@@ -25,7 +25,7 @@ import java.util.Arrays;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
-import uk.ac.ebi.mnb.view.entity.EntityTableModel;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Subsystem;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
@@ -41,7 +41,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ReactionTableModel extends EntityTableModel {
+public class ReactionTableModel extends AbstractEntityTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{

@@ -45,6 +45,7 @@ import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.mnb.core.TaskManager;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
 import uk.ac.ebi.mnb.menu.popup.SetActiveProject;
 import uk.ac.ebi.mnb.menu.popup.ContextSensitiveAction;
@@ -218,7 +219,9 @@ public class SourceController
         ProjectView view = (ProjectView) MainView.getInstance().getViewController();
 
         if (item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem)) {
-            view.getSelection().clear().add(((EntitySourceItem) item).getEntity());
+            SelectionManager selection = view.getSelection();// reuse view selection object
+            selection.clear().add(((EntitySourceItem) item).getEntity());
+            view.setSelection(selection);
         } else if (item instanceof ReconstructionSourceItem && clickCount > 1) {
             setActiveProject.setContext(selected);
             setActiveProject.actionPerformed(null);

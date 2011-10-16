@@ -35,6 +35,7 @@ import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
+import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RNAProduct;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -72,7 +73,6 @@ public class ProjectView
     private Map<String, AbstractEntityView> viewMap;
     private SelectionManager selection = new SelectionMap();
 
-
     public ProjectView() {
 
 //        productBrowser = BrowserSplitPane.getInstance();
@@ -95,7 +95,7 @@ public class ProjectView
         viewMap = new HashMap();
         viewMap.put(Metabolite.BASE_TYPE, metabolites);
         viewMap.put(Reaction.BASE_TYPE, reactions);
-        
+
         viewMap.put(ProteinProduct.BASE_TYPE, products);
         viewMap.put(RNAProduct.BASE_TYPE, products);
 
@@ -187,10 +187,26 @@ public class ProjectView
 
     @Override
     public boolean update(SelectionManager selection) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        logger.info("sending targeted updated...");
+
+        if (selection.getGeneProducts().isEmpty() == false) {
+            products.update(selection);
+        }
+        if (selection.hasSelection(Metabolite.class)) {
+                    logger.info("metabolites");
+
+            metabolites.update(selection);
+        }
+        if (selection.hasSelection(MetabolicReaction.class)) {
+            reactions.update(selection);
+        }
+        if (selection.hasSelection(RunnableTask.class)) {
+            tasks.update(selection);
+        }
+
+        return true; // for now
     }
-
-
 
     /**
      * Returns the selection manager for the active view. If no view is active
@@ -239,7 +255,7 @@ public class ProjectView
     @Override
     public boolean setSelection(SelectionManager selection) {
 
-        if(selection.isEmpty()){
+        if (selection.isEmpty()) {
             return false;
         }
 
@@ -250,7 +266,7 @@ public class ProjectView
         layout.show(this, view.getClass().getSimpleName());
 
         return view.setSelection(selection);
-        
+
     }
 
     /* deprecated methods */
