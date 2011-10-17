@@ -33,10 +33,9 @@ import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.Updatable;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
@@ -53,7 +52,7 @@ public class AnnotatedFromAlignments extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(AnnotatedFromAlignments.class);
 
-    public AnnotatedFromAlignments(JFrame frame, Updatable updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+    public AnnotatedFromAlignments(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
         setDefaultLayout();
     }
@@ -75,7 +74,10 @@ public class AnnotatedFromAlignments extends ControllerDialog {
                 IdentifierSet set = factory.resolveSequenceHeader(alignment.getSubject());
                 for (Identifier identifier : set.getSubIdentifiers(UniProtIdentifier.class)) {
                     if (loader.getMap().containsKey(identifier)) {
+                        System.out.println(loader.getMap().get((UniProtIdentifier) identifier));
                         identifiers.addAll(loader.getMap().get((UniProtIdentifier) identifier));
+                    } else {
+                        System.out.println(loader.getMap().keySet());
                     }
                 }
             }

@@ -74,6 +74,7 @@ import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
@@ -100,7 +101,7 @@ public class ExcelImportDialog
     private CellConstraints cc = new CellConstraints();
     private JLabel label;
 
-    public ExcelImportDialog(JFrame frame, Updatable updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits, Reconstruction reconstruction, File file, ExcelHelper helper) {
+    public ExcelImportDialog(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits, Reconstruction reconstruction, File file, ExcelHelper helper) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
 
 

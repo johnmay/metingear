@@ -44,10 +44,9 @@ import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.MLabels;
 import uk.ac.ebi.mnb.core.TaskManager;
-import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.Updatable;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.view.CheckBox;
 import uk.ac.ebi.mnb.view.MComboBox;
 
@@ -71,7 +70,7 @@ public class SequenceHomology extends ControllerDialog {
     private JTextField field = new MTextField("1e-30");
     private CheckBox alignments = new CheckBox("Parse alignments (increases save sizes)");
 
-    public SequenceHomology(JFrame frame, Updatable updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+    public SequenceHomology(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "BuildDialog");
 
         remote.setEnabled(false);

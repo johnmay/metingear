@@ -78,6 +78,13 @@ public interface SelectionManager {
     public boolean hasSelection();
 
     /**
+     * Access whether this selection manager has a selection of the specified
+     * class type
+     * @return
+     */
+    public boolean hasSelection(Class<?> type);
+
+    /**
      * Determine whether the selection is empty
      * @return
      */

@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.Updatable;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 /**
  * @name    AddCitation - 2011.10.07 <br>
@@ -43,7 +43,7 @@ public class AddCitation extends ControllerDialog {
     private static final Logger LOGGER = Logger.getLogger(AddCitation.class);
     private JTextField field = new JTextField(25);
 
-    public AddCitation(JFrame frame, Updatable updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+    public AddCitation(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "SaveDialog");
     }
 

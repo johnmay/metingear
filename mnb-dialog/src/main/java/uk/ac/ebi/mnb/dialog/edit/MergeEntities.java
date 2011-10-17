@@ -26,15 +26,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.Updatable;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 /**
  * @name    MergeEntities - 2011.10.04 <br>
@@ -48,11 +45,12 @@ public class MergeEntities extends ControllerDialog {
     private static final Logger LOGGER = Logger.getLogger(MergeEntities.class);
 
     public MergeEntities(JFrame frame,
-            Updatable updater,
-            MessageManager messages,
-            SelectionController controller,
-            UndoableEditListener undoableEdits) {
+                         TargetedUpdate updater,
+                         MessageManager messages,
+                         SelectionController controller,
+                         UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, MergeEntities.class.getSimpleName());
+        setDefaultLayout();
     }
 
     @Override
@@ -70,7 +68,12 @@ public class MergeEntities extends ControllerDialog {
     @Override
     public void process() {
 
-//        Collection<AnnotatedEntity> entities = getSelection();
+        Collection<AnnotatedEntity> entities = getSelection().getEntities();
+
+        for (AnnotatedEntity entity : entities) {
+            entity.setAbbreviation("updated");
+        }
+
 //
 //
 //        // create a new metabolite consisting of the other two.
@@ -91,17 +94,23 @@ public class MergeEntities extends ControllerDialog {
     }
 
     @Override
+    public boolean update() {
+        return super.update(getSelection());
+    }
+
+    @Override
     public void setVisible(boolean visible) {
 
 //        // check they're all the same class
-//        Collection<AnnotatedEntity> entities = getSelection();
-//        Class entityclass = entities.iterator().next().getClass();
-//        for (AnnotatedEntity entity : entities) {
-//            if (entityclass == entity.getClass()) {
-//                addMessage(new ErrorMessage("Unable to merge items of different type"));
-//                return;
-//            }
-//        }
+        Collection<AnnotatedEntity> entities = getSelection().getEntities();
+        Class entityclass = entities.iterator().next().getClass();
+        for (AnnotatedEntity entity : entities) {
+            if (entityclass != entity.getClass()) {
+                System.out.println(entityclass + " and " + entity.getClass());
+                addMessage(new ErrorMessage("Unable to merge items of different type"));
+                return;
+            }
+        }
         super.setVisible(visible);
     }
 }
