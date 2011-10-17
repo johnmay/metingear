@@ -66,8 +66,7 @@ class ShowItem extends AbstractAction {
 
     public void actionPerformed(ActionEvent e) {
         SelectionManager manager = selector.getSelection();
-        manager.clear();
-        manager.add(entity);
+        manager.clear().add(entity);
         selector.setSelection(manager); // push updates
     }
 

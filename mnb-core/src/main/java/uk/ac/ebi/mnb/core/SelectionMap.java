@@ -97,14 +97,30 @@ public class SelectionMap implements SelectionManager {
 
     }
 
+    /**
+     * @inheritDoc
+     */
     public boolean hasSelection() {
         return !map.isEmpty();
     }
 
+    /**
+     * @inheritDoc
+     */
+    public boolean hasSelection(Class<?> type) {
+        return !map.get(type).isEmpty();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public boolean isEmpty() {
         return map.isEmpty();
     }
 
+    /**
+     * @inheritDoc
+     */
     public AnnotatedEntity getFirstEntity() {
 
         if (map.keySet().size() == 1) {

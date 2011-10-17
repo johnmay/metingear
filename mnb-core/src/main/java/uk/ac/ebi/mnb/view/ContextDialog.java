@@ -72,4 +72,10 @@ public abstract class ContextDialog extends DropdownDialog implements SelectionC
     public boolean update() {
         return controller.update();
     }
+
+    public boolean update(SelectionManager selection) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
 }

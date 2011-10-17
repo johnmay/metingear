@@ -32,6 +32,7 @@ import uk.ac.ebi.mnb.interfaces.Message;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
@@ -45,13 +46,13 @@ import uk.ac.ebi.mnb.view.DropdownDialog;
 public abstract class ControllerDialog extends DropdownDialog {
 
     private static final Logger LOGGER = Logger.getLogger(ControllerDialog.class);
-    private final Updatable updater;
+    private final TargetedUpdate updater;
     private final MessageManager messages;
     private final SelectionController controller;
     private final UndoableEditListener undoManager;
 
     public ControllerDialog(JFrame frame,
-                            Updatable updater, // updatable called on completion
+                            TargetedUpdate updater, // updatable called on completion
                             MessageManager messages, // used to post messages
                             SelectionController controller,
                             UndoableEditListener undoableEdits,
@@ -64,7 +65,7 @@ public abstract class ControllerDialog extends DropdownDialog {
     }
 
     public void setSelection(Collection<AnnotatedEntity> entities) {
-        SelectionManager selection =  new SelectionMap();
+        SelectionManager selection = new SelectionMap();
         selection.addAll(entities);
         this.controller.setSelection(selection);
     }
@@ -89,8 +90,17 @@ public abstract class ControllerDialog extends DropdownDialog {
         undoManager.undoableEditHappened(new UndoableEditEvent(this, edit));
     }
 
+    /**
+     * Class update() on the provided TargetedUpdate. Override this to provide
+     * more efficient updating
+     * @return
+     */
     @Override
     public boolean update() {
         return updater.update();
+    }
+
+    public boolean update(SelectionManager selection) {
+        return updater.update(selection);
     }
 }
