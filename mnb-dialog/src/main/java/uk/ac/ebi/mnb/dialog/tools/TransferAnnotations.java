@@ -48,11 +48,11 @@ import uk.ac.ebi.xml.uniprot.UniProtAnnoationLoader;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AnnotatedFromAlignments extends ControllerDialog {
+public class TransferAnnotations extends ControllerDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(AnnotatedFromAlignments.class);
+    private static final Logger LOGGER = Logger.getLogger(TransferAnnotations.class);
 
-    public AnnotatedFromAlignments(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+    public TransferAnnotations(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
         setDefaultLayout();
     }
