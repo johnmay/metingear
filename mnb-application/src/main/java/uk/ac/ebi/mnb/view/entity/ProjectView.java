@@ -35,15 +35,18 @@ import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
+import uk.ac.ebi.core.GeneImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RNAProduct;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.mnb.core.SelectionMap;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.view.entity.gene.GeneView;
 import uk.ac.ebi.search.SearchManager;
 
 /**
@@ -65,6 +68,7 @@ public class ProjectView
     private MatrixView matrix = null;
     private ReactionView reactions = null;
     private MetaboliteView metabolites = null;
+    private GeneView genes = null;
 //    private BrowserSplitPane productBrowser;
     private ProductView products = null;
     private TaskView tasks = null;
@@ -81,6 +85,7 @@ public class ProjectView
         metabolites = new MetaboliteView();
         tasks = new TaskView();
         search = new SearchView();
+        genes = new GeneView();
 
         layout = new CardLayout();
         setLayout(layout);
@@ -90,6 +95,7 @@ public class ProjectView
         add(metabolites, metabolites.getClass().getSimpleName());
         add(tasks, tasks.getClass().getSimpleName());
         add(search, search.getClass().getSimpleName());
+        add(genes, genes.getClass().getSimpleName());
 
 
         viewMap = new HashMap();
@@ -100,6 +106,7 @@ public class ProjectView
         viewMap.put(RNAProduct.BASE_TYPE, products);
 
         viewMap.put(RunnableTask.BASE_TYPE, tasks);
+        viewMap.put(GeneImplementation.BASE_TYPE, genes);
 
 
     }
@@ -110,7 +117,7 @@ public class ProjectView
      */
     public EntityView getActiveView() {
 
-        for (AbstractEntityView pane : Arrays.asList(reactions, metabolites, products)) {
+        for (AbstractEntityView pane : Arrays.asList(reactions, metabolites, products, genes)) {
             if (pane != null && pane.isVisible()) {
                 return pane;
             }
@@ -131,6 +138,10 @@ public class ProjectView
 
     public void setMetaboliteView() {
         layout.show(this, metabolites.getClass().getSimpleName());
+    }
+
+    public void setGeneView() {
+        layout.show(this, genes.getClass().getSimpleName());
     }
 
     public void setTaskView() {
@@ -162,6 +173,7 @@ public class ProjectView
         metabolites.update();
         reactions.update();
         tasks.update();
+        genes.update();
 
 
 
@@ -194,7 +206,7 @@ public class ProjectView
             products.update(selection);
         }
         if (selection.hasSelection(Metabolite.class)) {
-                    logger.info("metabolites");
+            logger.info("metabolites");
 
             metabolites.update(selection);
         }
@@ -203,6 +215,9 @@ public class ProjectView
         }
         if (selection.hasSelection(RunnableTask.class)) {
             tasks.update(selection);
+        }
+        if (selection.hasSelection(Gene.class)) {
+            genes.update(selection);
         }
 
         return true; // for now
@@ -261,6 +276,7 @@ public class ProjectView
 
         AnnotatedEntity entity = selection.getFirstEntity();
 
+
         AbstractEntityView view = viewMap.get(entity.getBaseType());
 
         layout.show(this, view.getClass().getSimpleName());
@@ -298,4 +314,6 @@ public class ProjectView
     public MatrixView getMatrixView() {
         return matrix;
     }
+
+
 }

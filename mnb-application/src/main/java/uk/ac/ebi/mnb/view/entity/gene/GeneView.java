@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view.entity.protein;
+package uk.ac.ebi.mnb.view.entity.gene;
 
+import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityView;
 import org.apache.log4j.Logger;
 
@@ -32,14 +34,14 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProductView
+public class GeneView
     extends AbstractEntityView {
 
-    private static final Logger LOGGER = Logger.getLogger(ProductView.class);
+    private static final Logger LOGGER = Logger.getLogger(GeneView.class);
 
 
-    public ProductView() {
-        super(new ProductTable(), new ProductInspector());
+    public GeneView() {
+        super(new GeneTable(), new GeneInspector());
     }
 
 

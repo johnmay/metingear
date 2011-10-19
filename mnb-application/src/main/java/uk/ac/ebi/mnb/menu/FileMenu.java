@@ -20,6 +20,7 @@ import uk.ac.ebi.mnb.dialog.file.NewReaction;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.file.ExportSIFAction;
 import uk.ac.ebi.mnb.menu.file.ExportSBMLAction;
+import uk.ac.ebi.mnb.menu.file.ImportENAXML;
 import uk.ac.ebi.mnb.menu.file.ImportPeptidesAction;
 import uk.ac.ebi.mnb.menu.file.ImportXLSAction;
 import uk.ac.ebi.mnb.menu.file.NewProjectAction;
@@ -61,6 +62,7 @@ public class FileMenu
         add(new ImportMenu());
         add(new DynamicMenuItem(new ImportSBMLAction()));
         add(new DynamicMenuItem(new ImportXLSAction()));
+        add(new DynamicMenuItem(new ImportENAXML()));
         add(new JSeparator());
         add(new ExportMenu());
         add(new ExportSBMLAction());

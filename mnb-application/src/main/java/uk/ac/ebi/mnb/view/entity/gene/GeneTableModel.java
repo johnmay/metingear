@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view.entity.protein;
+package uk.ac.ebi.mnb.view.entity.gene;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,11 +27,10 @@ import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
-import org.biojava3.core.sequence.template.CompoundSet;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.Gene;
 
 /**
  *          ProteinTableModel – 2011.09.28 <br>
@@ -40,16 +39,16 @@ import uk.ac.ebi.interfaces.GeneProduct;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProductTableModel extends AbstractEntityTableModel {
+public class GeneTableModel extends AbstractEntityTableModel {
 
-    private static final Logger LOGGER = Logger.getLogger(ProductTableModel.class);
+    private static final Logger LOGGER = Logger.getLogger(GeneTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
         new ColumnDescriptor("Sequence", null,
                              DataType.FIXED,
                              String.class)
     };
 
-    public ProductTableModel() {
+    public GeneTableModel() {
         super();
         addColumns(Arrays.asList(DEFAULT));
     }
@@ -60,17 +59,17 @@ public class ProductTableModel extends AbstractEntityTableModel {
         Reconstruction recon = ReconstructionManager.getInstance().getActiveReconstruction();
 
         if (recon != null) {
-            super.setEntities(new ArrayList<AnnotatedEntity>(recon.getProducts()));
+            super.setEntities(new ArrayList<AnnotatedEntity>(recon.getGenes()));
         }
 
     }
 
     @Override
     public Object getFixedType(AnnotatedEntity component, String name) {
-        GeneProduct product = (GeneProduct) component;
+        Gene gene = (Gene) component;
 
         if (name.equals("Sequence")) {
-            Sequence sequence = product.getSequence();
+            Sequence sequence = gene.getSequence();
             return sequence != null ? sequence.getSequenceAsString() : "";
         }
 

@@ -1,6 +1,6 @@
 
 /**
- * ProteinView.java
+ * ProteinInspector.java
  *
  * 2011.09.28
  *
@@ -19,29 +19,36 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view.entity.protein;
+package uk.ac.ebi.mnb.view.entity.gene;
 
-import uk.ac.ebi.mnb.view.entity.AbstractEntityView;
+import uk.ac.ebi.mnb.view.GeneralPanel;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 
 /**
- *          ProteinView – 2011.09.28 <br>
+ *          ProteinInspector – 2011.09.28 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProductView
-    extends AbstractEntityView {
+public class GeneInspector
+  extends AbstractEntityInspector {
 
-    private static final Logger LOGGER = Logger.getLogger(ProductView.class);
+    private static final Logger LOGGER = Logger.getLogger(GeneInspector.class);
 
 
-    public ProductView() {
-        super(new ProductTable(), new ProductInspector());
+    public GeneInspector() {
+        super(new GenePanel());
     }
 
+
+    @Override
+    public void store() {
+        super.store();
+    }
 
 
 }

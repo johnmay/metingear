@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view.entity.protein;
+package uk.ac.ebi.mnb.view.entity.gene;
 
 import java.awt.Dimension;
 
@@ -43,11 +43,11 @@ import uk.ac.ebi.mnb.core.MLabels;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProductPanel
+public class GenePanel
         extends AbstractEntityPanel {
 
-    private static final Logger LOGGER = Logger.getLogger(ProductPanel.class);
-    private GeneProduct entity;
+    private static final Logger LOGGER = Logger.getLogger(GenePanel.class);
+    private Gene entity;
     private JLabel formula;
     private JTextField generic;
     //
@@ -57,8 +57,8 @@ public class ProductPanel
     //
     private CellConstraints cc = new CellConstraints();
 
-    public ProductPanel() {
-        super("Gene Product", new AnnotationRenderer());
+    public GenePanel() {
+        super("Gene", new AnnotationRenderer());
         sequenceListModel = new DefaultListModel();
 
         sequence = new JTextPane();
@@ -96,7 +96,7 @@ public class ProductPanel
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
-        this.entity = (GeneProduct) entity;
+        this.entity = (Gene) entity;
         return super.setEntity(entity);
     }
 
@@ -138,8 +138,4 @@ public class ProductPanel
 
     }
 
-    @Override
-    public Collection<? extends AnnotatedEntity> getReferences() {
-        return Arrays.asList(entity.getGene());
-    }
 }

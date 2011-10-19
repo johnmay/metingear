@@ -137,6 +137,7 @@ public abstract class AbstractEntityPanel
                 int index = references.locationToIndex(e.getPoint());
                 SelectionManager manager = MainView.getInstance().getViewController().getSelection();
                 manager.clear().add((AnnotatedEntity) refModel.get(index));
+                MainView.getInstance().getViewController().setSelection(manager);
             }
         });
 

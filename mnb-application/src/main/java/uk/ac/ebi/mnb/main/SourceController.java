@@ -66,12 +66,13 @@ public class SourceController
             SourceController.class);
     public final SourceListModel model;
     private SourceListCategory reconstructions;
-    private SourceListCategory activeProject;
+    private SourceListCategory reconstruction;
     private SourceListItem products;
     private SourceListItem metabolites;
     private SourceListItem reactions;
     private SourceListItem pathways;
     private SourceListCategory tasks;
+    private SourceListItem genes;
     private SetActiveProject setActiveProject = new SetActiveProject();
     private Object selected;
     private List<EntitySourceItem> items = new ArrayList(); // list of items to update
@@ -82,20 +83,22 @@ public class SourceController
         model = new SourceListModel();
 
         reconstructions = new SourceListCategory("Reconstructions");
-        activeProject = new SourceListCategory("Active Reconstruction");
+        reconstruction = new SourceListCategory("Active Reconstruction");
         products = new SourceListItem("Gene Products");
         metabolites = new SourceListItem("Metabolites");
         reactions = new SourceListItem("Reactions");
         pathways = new SourceListItem("Pathways");
         tasks = new SourceListCategory("Tasks");
+        genes = new SourceListItem("Genes");
 
         // could put genes/metabolites ect under an active project category
         model.addCategory(reconstructions);
-        model.addCategory(activeProject);
-        model.addItemToCategory(products, activeProject);
-        model.addItemToCategory(metabolites, activeProject);
-        model.addItemToCategory(reactions, activeProject);
-        model.addItemToCategory(pathways, activeProject);
+        model.addCategory(reconstruction);
+        model.addItemToCategory(genes, reconstruction);
+        model.addItemToCategory(products, reconstruction);
+        model.addItemToCategory(metabolites, reconstruction);
+        model.addItemToCategory(reactions, reconstruction);
+        model.addItemToCategory(pathways, reconstruction);
         model.addCategory(tasks);
 
 
@@ -130,10 +133,10 @@ public class SourceController
                 itemMap.get(reconstruction).update();
             }
 
-            Reconstruction reconstruction = manager.getActiveReconstruction();
+            Reconstruction recon = manager.getActiveReconstruction();
 
             // metabolites
-            for (Metabolite m : reconstruction.getMetabolites()) {
+            for (Metabolite m : recon.getMetabolites()) {
                 if (itemMap.containsKey(m) == false) {
                     EntitySourceItem item = new MetaboliteSourceItem(m, metabolites);
                     itemMap.put(m, item);
@@ -143,11 +146,11 @@ public class SourceController
                 itemCollector.remove(m);
 
             }
-            metabolites.setCounterValue(reconstruction.getMetabolites().size());
+            metabolites.setCounterValue(recon.getMetabolites().size());
 
             // reactions
 
-            for (Reaction r : reconstruction.getReactions()) {
+            for (Reaction r : recon.getReactions()) {
                 if (itemMap.containsKey(r) == false) {
                     EntitySourceItem item = new ReactionSourceItem(r, reactions);
                     itemMap.put(r, item);
@@ -156,11 +159,11 @@ public class SourceController
                 itemMap.get(r).update();
                 itemCollector.remove(r);
             }
-            reactions.setCounterValue(reconstruction.getReactions().size());
+            reactions.setCounterValue(recon.getReactions().size());
 
 
             // products
-            for (GeneProduct p : reconstruction.getProducts()) {
+            for (GeneProduct p : recon.getProducts()) {
                 if (itemMap.containsKey(p) == false) {
                     EntitySourceItem item = new ProductSourceItem(p, products);
                     itemMap.put(p, item);
@@ -232,6 +235,8 @@ public class SourceController
                 view.setReactionView();
             } else if (item == products) {
                 view.setProductView();
+            } else if (item == genes) {
+                view.setGeneView();
             } else {
                 System.out.println("Unhandled item clicked: " + item.getText());
             }
