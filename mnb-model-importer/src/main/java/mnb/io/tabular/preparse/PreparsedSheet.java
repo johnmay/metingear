@@ -45,7 +45,7 @@ public abstract class PreparsedSheet {
     private final int maxIndex;
     private ExcelModelProperties properties;
     private Rectangle bounds;
-    private List<TableDescription> providedColumns;
+    private List<TableDescription> columns;
 
     public PreparsedSheet(ExcelModelProperties properties,
             TableDescription bounds) {
@@ -54,7 +54,7 @@ public abstract class PreparsedSheet {
         this.bounds = properties.getDataBounds(bounds.getKey());
         this.rowIndex = this.bounds.y - 1;
         this.maxIndex = this.bounds.y + this.bounds.height;
-        this.providedColumns = this.properties.getDefinedColumns(bounds.getClass());
+        this.columns = this.properties.getDefinedColumns(bounds.getClass());
 
     }
 
@@ -104,7 +104,7 @@ public abstract class PreparsedSheet {
      *
      */
     public PreparsedEntry next() {
-        return getEntry(++rowIndex, providedColumns);
+        return getEntry(++rowIndex, columns);
     }
 
     /**

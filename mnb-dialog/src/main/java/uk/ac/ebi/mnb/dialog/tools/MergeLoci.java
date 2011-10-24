@@ -23,9 +23,12 @@ package uk.ac.ebi.mnb.dialog.tools;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.Multimer;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.product.ProductCollection;
@@ -51,29 +54,51 @@ public class MergeLoci extends ContextAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        Reconstruction recon = ReconstructionManager.getInstance().getActiveReconstruction();
+        Reconstruction recon = ReconstructionManager.getInstance().getActive();
 
-        Multimap<String, MetabolicReaction> map = HashMultimap.create();
+        Multimap<String, MetabolicReaction> monomeric = HashMultimap.create();
+        Multimap<String, MetabolicReaction> multimeric = HashMultimap.create();
 
         ReactionList rxns = recon.getReactions();
         for (MetabolicReaction rxn : rxns) {
             for (Locus locus : rxn.getAnnotations(Locus.class)) {
-                map.put(locus.toString(), rxn);
+                if (locus.containsMultiple()) {
+                    multimeric.put(locus.toString(), rxn);
+                } else {
+                    monomeric.put(locus.toString(), rxn);
+                }
             }
         }
 
         ProductCollection products = recon.getProducts();
 
-        for (GeneProduct product : products) {
-            String accession = product.getAccession();
-            if (map.containsKey(accession)) {
-                for (MetabolicReaction rxn : map.get(accession)) {
+        // monomeric
+        for (String locus : monomeric.keySet()) {
+            for (GeneProduct product : products.get(locus)) {
+                for (MetabolicReaction rxn : monomeric.get(locus)) {
                     rxn.addModifier(product); // needs to be an add
                 }
-            } else {
-                System.out.println("no match found: MergeLoci");
             }
         }
+
+        // multimeric
+        for (String locusAnnotation : multimeric.keySet()) {
+
+            String[] loci = locusAnnotation.split("\\+");
+            GeneProduct[] subunits = new GeneProduct[loci.length];
+            for (int i = 0; i < loci.length; i++) {
+                subunits[i] = products.get(loci[i]).iterator().next();
+            }
+
+            GeneProduct product = new Multimer(subunits);
+            recon.getProducts().add(product);
+
+            for (MetabolicReaction rxn : multimeric.get(locusAnnotation)) {
+                rxn.addModifier(product);
+            }
+        }
+
+        update();
 
     }
 }

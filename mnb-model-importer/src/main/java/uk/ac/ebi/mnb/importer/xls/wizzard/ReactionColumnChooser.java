@@ -20,17 +20,10 @@
  */
 package uk.ac.ebi.mnb.importer.xls.wizzard;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.factories.ComponentFactory;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -160,7 +153,7 @@ public class ReactionColumnChooser
 
         table = new SelectionTable(helper);
 
-        JScrollPane pane = new BorderlessScrollPane(table);
+        JScrollPane pane = new BorderlessScrollPane(table, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         RowNumberTable rnt = new RowNumberTable(table);
         pane.setRowHeaderView(rnt);
         pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,

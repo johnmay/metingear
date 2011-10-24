@@ -53,7 +53,7 @@ public class SelectionTable extends JTable {
 
         this.helper = helper;
 //        super(helper.getSheetData(i), new String[]{"A", "B", "C", "D", "E", "F", "G"});
-
+        setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
 
             @Override
@@ -76,6 +76,9 @@ public class SelectionTable extends JTable {
         String[][] data = helper.getSheetData(index);
         super.setModel(new DefaultTableModel(data, ExcelUtilities.buildHeaders(0, data[0].length)));
         end = super.getRowCount();
+        for (int i = 0; i < getColumnCount(); i++) {
+            this.getColumnModel().getColumn(index).setWidth(80);
+        }
     }
 
     public void setStart(int start) {

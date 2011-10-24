@@ -44,7 +44,7 @@ public class PreparsedEntry {
     private static final Logger LOGGER = Logger.getLogger(PreparsedEntry.class);
     private Map<TableDescription, Integer> columnTypeMap;
     private List<String> coloumnValues = new ArrayList<String>();
-    private Pattern listPattern = Pattern.compile("\\s*(?:[|,;]|and|or|&)\\s*");
+    private Pattern listPattern = Pattern.compile("\\s*(?:[|;]|\\sand\\s|\\sor\\s|&)\\s*");
 
     public PreparsedEntry(Class<? extends TableDescription> clazz) {
         columnTypeMap = new EnumMap(clazz);
@@ -84,6 +84,10 @@ public class PreparsedEntry {
         return getValue(columnTypeMap.get(column));
     }
 
+    public boolean hasValue(TableDescription column){
+        return columnTypeMap.containsKey(column);
+    }
+
     public Set<Entry<TableDescription, Integer>> getColumnSet() {
         return columnTypeMap.entrySet();
     }
@@ -95,11 +99,11 @@ public class PreparsedEntry {
      */
     public Matcher getListMatcher(TableDescription column) {
         String str = getValue(column);
-        return listPattern.matcher(str);
+        return listPattern.matcher(str == null ? "" : str);
     }
 
     /**
-     * Returns multiple values split on list chars '|', ',' ';'
+     * Returns multiple values split on list chars '|' ';'
      * @param column
      * @return
      */

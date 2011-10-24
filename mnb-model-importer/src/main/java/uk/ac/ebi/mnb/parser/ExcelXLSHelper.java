@@ -102,6 +102,26 @@ public class ExcelXLSHelper extends ExcelHelper {
         return getSheetData(workbook.getSheetAt(index));
     }
 
+    public String getCellString(HSSFCell cell) {
+        if (cell == null) {
+            return "";
+        }
+
+        int type = cell.getCellType();
+        if (type == HSSFCell.CELL_TYPE_NUMERIC) {
+            return Double.toString(cell.getNumericCellValue());
+        } else if (type == HSSFCell.CELL_TYPE_ERROR) {
+            return "ERROR!";
+        } else if (type == HSSFCell.CELL_TYPE_STRING) {
+            return cell.getStringCellValue().trim();
+        } else if (type == HSSFCell.CELL_TYPE_BLANK) {
+            return "";
+        } else {
+            LOGGER.info("Unhandled cell type: " + cell.getCellType());
+            return "";
+        }
+    }
+
     public String[][] getSheetData(HSSFSheet sheet) {
 
 
@@ -114,16 +134,16 @@ public class ExcelXLSHelper extends ExcelHelper {
         List<String> block_xy2 = new ArrayList<String>();
 
         int prevLastFilledColumn = -1;
-
+        int emptyRows = 0;
         LOGGER.info("getting sheet data");
 
         for (int i = 0; i < maxRow; i++) {
 
             HSSFRow row = sheet.getRow(i);
+            int lastFilledColumn = -1;
 
             if (row != null) {
 
-                int lastFilledColumn = -1;
 
                 // convert to 1D array
                 if (row.getLastCellNum() > 0) {
@@ -131,7 +151,7 @@ public class ExcelXLSHelper extends ExcelHelper {
                     for (int j = 0; j < row.getLastCellNum(); j++) {
                         // check for empty rows
                         HSSFCell cell = row.getCell(j);
-                        rowData[j] = cell == null ? "" : cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC ? Double.toString(cell.getNumericCellValue()) : cell.getStringCellValue().trim();
+                        rowData[j] = getCellString(cell).trim();
                         if (rowData[j].isEmpty() == Boolean.FALSE) {
                             lastFilledColumn = j;
                         }
@@ -171,6 +191,13 @@ public class ExcelXLSHelper extends ExcelHelper {
 
                 prevLastFilledColumn = lastFilledColumn;
 
+
+            }
+
+            emptyRows = lastFilledColumn <= 0 ? emptyRows + 1 : 0;
+
+            if (emptyRows > 5) {
+                return Arrays.copyOf(data, i - 5);
             }
         }
 

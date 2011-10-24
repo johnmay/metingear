@@ -58,7 +58,7 @@ public class ProductTableModel extends AbstractEntityTableModel {
     @Override
     public void loadComponents() {
 
-        Reconstruction recon = ReconstructionManager.getInstance().getActiveReconstruction();
+        Reconstruction recon = ReconstructionManager.getInstance().getActive();
 
         if (recon != null) {
             super.setEntities(new ArrayList<AnnotatedEntity>(recon.getProducts()));

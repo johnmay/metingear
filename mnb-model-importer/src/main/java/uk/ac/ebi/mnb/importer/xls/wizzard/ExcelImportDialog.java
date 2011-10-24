@@ -294,8 +294,6 @@ public class ExcelImportDialog
         shiftSize = shiftSize == null ? shiftPanel.getPreferredSize() : shiftSize;
 
         Dimension actualSize = ((DialogPanel) stages[activeStage]).getPreferredSize();
-        System.out.println(((DialogPanel) stages[activeStage]).getBorder());
-
         shiftPanel.setPreferredSize(actualSize);
 
         return new Dimension(orgSize.width - shiftSize.width + actualSize.width, orgSize.height - shiftSize.height + actualSize.height + 20);

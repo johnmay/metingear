@@ -26,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import mnb.io.tabular.EntityResolver;
 import mnb.io.tabular.preparse.PreparsedReaction;
+import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.annotation.Subsystem;
@@ -57,7 +58,7 @@ public class ReactionParser {
     private static final Pattern REACTION_COMPARTMENT =
                                  Pattern.compile("\\A\\[(\\w{1,2})\\]\\s*:");
     public static final Pattern COEFFICIENT_PATTERN =
-                                Pattern.compile("\\((\\d+(?:.\\d+)?)\\)");
+                                Pattern.compile("\\A(\\(\\d+(?:.\\d+)?\\)|\\d+(?:.\\d+)?\\s+)");
     public static final Pattern ENTITY_COMPARTMENT =
                                 Pattern.compile("\\[(\\w{1,2})\\]");
     private static final Reversibility[] NORMALISED_ARROWS =
@@ -122,9 +123,9 @@ public class ReactionParser {
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSides[0]);
         equationSides[0] = reactionCompartment.replaceAll("");
         MetabolicReaction rxn = new MetabolicReaction();
-        rxn.setIdentifier(new BasicReactionIdentifier("mnb_rxn_" + ++ticker));
-        rxn.setAbbreviation(reaction.getIdentifier());
-        rxn.setName(reaction.getDescription());
+        rxn.setIdentifier(new BasicReactionIdentifier("r_" + ++ticker));
+        rxn.setAbbreviation(reaction.hasValue(ReactionColumn.IDENTIFIER) ? reaction.getIdentifier() : "");
+        rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
         for (MetaboliteParticipant p :
              parseParticipants(equationSides[0],
                                Compartment.CYTOPLASM)) {
@@ -139,9 +140,11 @@ public class ReactionParser {
         rxn.setReversibility(Reversibility.REVERSIBLE);
 
         // add subsytem annotation
-        for (String subsytem : reaction.getSubsystems()) {
+        String subsytem = reaction.getSubsystem();
+        if (subsytem != null && subsytem.isEmpty() == false) {
             rxn.addAnnotation(new Subsystem(subsytem));
         }
+
 
         // add classification
         for (String classification : reaction.getClassifications()) {
@@ -156,6 +159,8 @@ public class ReactionParser {
         for (String locus : reaction.getLoci()) {
             rxn.addAnnotation(new Locus(locus));
         }
+
+        
 
         return rxn;
 
@@ -185,8 +190,8 @@ public class ReactionParser {
     public MetaboliteParticipant parseParticipant(final String participant,
                                                   final Compartment defaultCompartment) throws UnparsableReactionError {
 
-        String entityAbbr = participant;
-        String entityAbbrComp = participant;
+        String entityAbbr = participant.trim();
+        String entityAbbrComp = entityAbbr;
         Compartment compartment = defaultCompartment;
         Double coef = 1d;
 

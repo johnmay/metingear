@@ -34,6 +34,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import mnb.io.tabular.ExcelModelProperties;
+import mnb.io.tabular.type.EntityColumn;
 import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
@@ -169,14 +170,14 @@ public class MetaboliteColumnChooser
 
         properties.put("ent.data.bounds", "A" + start.getValue() + ":" + "A" + end.getValue());
 
-        setProperty("ent.col.abbreviation", abbreviation);
-        setProperty("ent.col.name", name);
-        setProperty("ent.col.compartment", compartment);
-        setProperty("ent.col.charge", charge);
-        setProperty("ent.col.formula", formula);
-        setProperty("ent.col.xref.kegg", kegg);
-        setProperty("ent.col.xref.chebi", chebi);
-        setProperty("ent.col.xref.chebi", chebi);
+        setProperty(EntityColumn.ABBREVIATION.getKey(), abbreviation);
+        setProperty(EntityColumn.NAME.getKey(), name);
+        setProperty(EntityColumn.COMPARTMENT.getKey(), compartment);
+        setProperty(EntityColumn.CHARGE.getKey(), charge);
+        setProperty(EntityColumn.FORMULA.getKey(), formula);
+        setProperty(EntityColumn.KEGG_XREF.getKey(), kegg);
+        setProperty(EntityColumn.CHEBI_XREF.getKey(), chebi);
+        setProperty(EntityColumn.PUBCHEM_XREF.getKey(), pubchem);
 
 
         return true;

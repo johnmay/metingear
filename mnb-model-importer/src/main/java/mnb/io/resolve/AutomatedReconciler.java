@@ -1,4 +1,3 @@
-
 /**
  * AutomatedReconciler.java
  *
@@ -22,11 +21,14 @@
 package mnb.io.resolve;
 
 import com.google.common.collect.Multimap;
+import java.io.IOException;
 import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -34,7 +36,6 @@ import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-
 
 /**
  *          AutomatedReconciler – 2011.09.23 <br>
@@ -44,18 +45,16 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  * @author  $Author$ (this version)
  */
 public class AutomatedReconciler
-  implements EntryReconciler {
+        implements EntryReconciler {
 
     private static final Logger LOGGER = Logger.getLogger(AutomatedReconciler.class);
     private CandidateFactory factory;
     private Identifier template;
 
-
     public AutomatedReconciler(CandidateFactory factory, Identifier factoryIdClass) {
         this.factory = factory;
         this.template = factoryIdClass;
     }
-
 
     /**
      * @param entry
@@ -63,15 +62,12 @@ public class AutomatedReconciler
      * @inheritDoc
      */
     public AbstractAnnotatedEntity resolve(PreparsedEntry entry) {
-        if( entry instanceof PreparsedMetabolite ) {
+        if (entry instanceof PreparsedMetabolite) {
             return resolve((PreparsedMetabolite) entry);
         }
         return null;
     }
-
-
     private static int ticker = 0;
-
 
     /**
      * Automatically resolves
@@ -80,42 +76,48 @@ public class AutomatedReconciler
      */
     public Metabolite resolve(PreparsedMetabolite entry) {
 
-        String name = entry.getName();
+        String[] names = entry.getNames();
 
-        Multimap<Integer, SynonymCandidateEntry> map = factory.getSynonymCandidates(name);
+        String name = names.length > 0 ? names[0] : "Unamed metabolite";
         Metabolite metabolite = new Metabolite();
 
+        for (int i = 1; i < names.length; i++) {
+            metabolite.addAnnotation(new Synonym(names[i]));
+        }
+
         // add the annotations to a new metabolite
-        metabolite.setIdentifier(new BasicChemicalIdentifier("Met" + ++ticker));
+        metabolite.setIdentifier(BasicChemicalIdentifier.nextIdentifier());
         metabolite.setAbbreviation(entry.getAbbreviation());
         metabolite.setName(name);
 
+        try {
+            Multimap<Integer, SynonymCandidateEntry> map = factory.getSynonymCandidates(name);
 
-        // contains a candidate with a score of 0
-        if( map.containsKey(0) ) {
-            for( SynonymCandidateEntry candidate : map.get(0) ) {
-                Identifier id = template.newInstance();
-                id.setAccession(candidate.getId());
-                metabolite.addAnnotation(new CrossReference(id));
+            // contains a candidate with a score of 0
+            if (map.containsKey(0)) {
+                for (SynonymCandidateEntry candidate : map.get(0)) {
+                    Identifier id = template.newInstance();
+                    id.setAccession(candidate.getId());
+                    metabolite.addAnnotation(new CrossReference(id));
+                }
             }
+        } catch (ExceptionInInitializerError ex) {
+            LOGGER.info("Unable to resolve candidates: " + ex.getMessage() );
         }
 
         // molecula formula
-        if( entry.getFormula() != null ) {
+        if (entry.getFormula() != null) {
             metabolite.addAnnotation(new MolecularFormula(entry.getFormula()));
         }
 
         // adds the kegg xref
-        if( entry.getKEGGXREF() != null ) {
-            KEGGCompoundIdentifier keggId = new KEGGCompoundIdentifier(entry.getKEGGXREF());
-            metabolite.addAnnotation(new CrossReference<KEGGCompoundIdentifier>(keggId));
+        for (String xref : entry.getKEGGXREFs()) {
+            KEGGCompoundIdentifier keggId = new KEGGCompoundIdentifier(xref);
+            metabolite.addAnnotation(new KEGGCrossReference(keggId));
         }
 
 
         return metabolite;
 
     }
-
-
 }
-

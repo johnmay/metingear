@@ -21,6 +21,7 @@
  */
 package mnb.io.tabular.preparse;
 
+import com.google.common.base.Joiner;
 import java.util.ArrayList;
 import java.util.Collection;
 import mnb.io.tabular.type.EntityColumn;
@@ -52,13 +53,13 @@ public class PreparsedMetabolite extends PreparsedEntry {
     }
 
 
-    public String getName() {
-        return getValue(EntityColumn.NAME);
+    public String[] getNames() {
+        return getValues(EntityColumn.NAME);
     }
 
 
-    public String getKEGGXREF() {
-        return getValue(EntityColumn.KEGG_XREF);
+    public String[] getKEGGXREFs() {
+        return getValues(EntityColumn.KEGG_XREF);
     }
 
 
@@ -74,7 +75,7 @@ public class PreparsedMetabolite extends PreparsedEntry {
 
     @Override
     public String toString() {
-        return getName();
+        return Joiner.on(", ").join(getNames());
     }
 
 

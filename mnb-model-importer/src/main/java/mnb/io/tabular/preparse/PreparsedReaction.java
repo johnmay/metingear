@@ -71,8 +71,8 @@ public class PreparsedReaction extends PreparsedEntry {
         return super.getValue(ReactionColumn.EQUATION);
     }
 
-    public String[] getSubsystems() {
-        return super.getValues(ReactionColumn.SUBSYSTEM);
+    public String getSubsystem() {
+        return super.getValue(ReactionColumn.SUBSYSTEM);
     }
 
     public String getDirection() {

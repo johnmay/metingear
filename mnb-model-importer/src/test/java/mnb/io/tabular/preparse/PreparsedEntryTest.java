@@ -52,10 +52,7 @@ public class PreparsedEntryTest {
     public void testGetValues() {
 
         PreparsedReaction entry = new PreparsedReaction();
-
-        entry.addValue(ReactionColumn.SUBSYSTEM, "one, two and three");
-        assertArrayEquals(new String[]{"one", "two", "three"}, entry.getSubsystems());
-
+      
         entry.addValue(ReactionColumn.CLASSIFICATION, "EC:1.1.1.1;EC:2.2.1.2");
         assertArrayEquals(new String[]{"EC:1.1.1.1", "EC:2.2.1.2"}, entry.getClassifications());
 

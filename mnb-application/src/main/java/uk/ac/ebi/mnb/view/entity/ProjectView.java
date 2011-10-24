@@ -37,6 +37,7 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.GeneImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.Multimer;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RNAProduct;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -104,6 +105,7 @@ public class ProjectView
 
         viewMap.put(ProteinProduct.BASE_TYPE, products);
         viewMap.put(RNAProduct.BASE_TYPE, products);
+        viewMap.put(Multimer.BASE_TYPE, products);
 
         viewMap.put(RunnableTask.BASE_TYPE, tasks);
         viewMap.put(GeneImplementation.BASE_TYPE, genes);
