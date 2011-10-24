@@ -44,7 +44,7 @@ public class PreparsedEntry {
     private static final Logger LOGGER = Logger.getLogger(PreparsedEntry.class);
     private Map<TableDescription, Integer> columnTypeMap;
     private List<String> coloumnValues = new ArrayList<String>();
-    private Pattern listPattern = Pattern.compile("[|,;]|\\sand\\s|\\sor\\s|&");
+    private Pattern listPattern = Pattern.compile("\\s*(?:[|,;]|and|or|&)\\s*");
 
     public PreparsedEntry(Class<? extends TableDescription> clazz) {
         columnTypeMap = new EnumMap(clazz);
