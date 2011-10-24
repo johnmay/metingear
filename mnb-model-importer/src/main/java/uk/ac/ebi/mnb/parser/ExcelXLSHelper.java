@@ -175,10 +175,9 @@ public class ExcelXLSHelper extends ExcelHelper {
         }
 
         for (int i = 0;
-                i < block_xy2.size();
-                i++) {
+             i < block_xy2.size();
+             i++) {
             //System.out.println(block_xy1.get(i) + " to " + block_xy2.get(i));
-
         }
 
         return data;
@@ -193,10 +192,10 @@ public class ExcelXLSHelper extends ExcelHelper {
     public String[][] resize(String[][] data, int requiredCols) {
 
         int new_size = requiredCols + 1;
-        for (int row_i = 0; row_i < data.length; row_i++) {
-            data[row_i] = Arrays.copyOf(data[row_i], new_size);
-            for (int row_j = 0; row_j < data[row_i].length; row_j++) {
-                data[row_i][row_j] = "";
+        for (int i = 0; i < data.length; i++) {
+            data[i] = Arrays.copyOf(data[i], new_size);
+            for (int j = 0; j < data[i].length; j++) {
+                data[i][j] = data[i][j] == null ? "" : data[i][j];
             }
         }
 

@@ -1,4 +1,3 @@
-
 /**
  * PreparsedEntry.java
  *
@@ -28,8 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
-
 
 /**
  *          PreparsedEntry – 2011.08.29 <br>
@@ -41,31 +41,29 @@ import org.apache.log4j.Logger;
  */
 public class PreparsedEntry {
 
-    private static final Logger LOGGER = Logger.getLogger( PreparsedEntry.class );
+    private static final Logger LOGGER = Logger.getLogger(PreparsedEntry.class);
     private Map<TableDescription, Integer> columnTypeMap;
     private List<String> coloumnValues = new ArrayList<String>();
+    private Pattern listPattern = Pattern.compile("[|,;]|\\sand\\s|\\sor\\s|&");
 
-
-    public PreparsedEntry( Class<? extends TableDescription> clazz ) {
-        columnTypeMap = new EnumMap( clazz );
+    public PreparsedEntry(Class<? extends TableDescription> clazz) {
+        columnTypeMap = new EnumMap(clazz);
     }
 
-
-    public void addValue( TableDescription column, String value ) {
+    public void addValue(TableDescription column, String value) {
 
 
         // warn about clashing type
-        if( columnTypeMap.containsKey( column ) ) {
-            LOGGER.warn( String.format( "Clashing column types %s. values: %s and %s",
-                                        column,
-                                        coloumnValues.get( columnTypeMap.get( column ) ),
-                                        value ) );
+        if (columnTypeMap.containsKey(column)) {
+            LOGGER.warn(String.format("Clashing column types %s. values: %s and %s",
+                                      column,
+                                      coloumnValues.get(columnTypeMap.get(column)),
+                                      value));
         }
-        columnTypeMap.put( column, coloumnValues.size() );
-        coloumnValues.add( value );
+        columnTypeMap.put(column, coloumnValues.size());
+        coloumnValues.add(value);
 
     }
-
 
     /**
      *
@@ -75,23 +73,41 @@ public class PreparsedEntry {
      * @return
      *
      */
-    public String getValue( Integer index ) {
-        if( index == null ) {
+    public String getValue(Integer index) {
+        if (index == null) {
             return null;
         }
-        return coloumnValues.get( index );
+        return coloumnValues.get(index);
     }
 
-
-    public String getValue( TableDescription column ) {
-        return getValue( columnTypeMap.get( column ) );
+    public String getValue(TableDescription column) {
+        return getValue(columnTypeMap.get(column));
     }
-
 
     public Set<Entry<TableDescription, Integer>> getColumnSet() {
         return columnTypeMap.entrySet();
     }
 
+    /**
+     * Returns the compiled list pattern matcher for the given column.
+     * @param column
+     * @return 
+     */
+    public Matcher getListMatcher(TableDescription column) {
+        String str = getValue(column);
+        return listPattern.matcher(str);
+    }
 
+    /**
+     * Returns multiple values split on list chars '|', ',' ';'
+     * @param column
+     * @return
+     */
+    public String[] getValues(TableDescription column){
+        Matcher matcher = getListMatcher(column);
+        if( matcher.find() ){
+            return listPattern.split(getValue(column));
+        }
+        return new String[0];
+    }
 }
-

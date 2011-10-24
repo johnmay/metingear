@@ -48,6 +48,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import mnb.io.tabular.ExcelModelProperties;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.core.MLabels;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.MComboBox;
@@ -78,8 +79,8 @@ public class ReactionColumnChooser
     private Map<String, JComboBox> comboBoxes = new HashMap();
     private ExcelModelProperties properties;
     private String[] colNames = new String[]{"Abbreviation", "Description", "Equation",
-        "Classification",
-        "Subsystem", "Source"};
+                                             "Classification",
+                                             "Subsystem", "Source"};
     private List<String> columns = new ArrayList();
     private JTextField field = new JTextField(20);
     // start end
@@ -92,12 +93,13 @@ public class ReactionColumnChooser
     private JComboBox classification;
     private JComboBox subsystem;
     private JComboBox source;
+    private JComboBox locus;
     //
     private SelectionTable table;
 
     public ReactionColumnChooser(ExcelHelper helper,
-            ImporterOptions options,
-            ExcelModelProperties properties) {
+                                 ImporterOptions options,
+                                 ExcelModelProperties properties) {
         super();
 
         this.helper = helper;
@@ -121,8 +123,10 @@ public class ReactionColumnChooser
         subsystem = new MComboBox(columns);
         source = new MComboBox(columns);
 
+        locus = new MComboBox(columns);
+
         // content panel
-        setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p"));
+        setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p"));
 
         removeAll();
 
@@ -148,7 +152,10 @@ public class ReactionColumnChooser
         add(new DialogLabel("Source/Reference:", SwingConstants.RIGHT), cc.xy(5, 9));
         add(source, cc.xy(7, 9));
 
-        add(new JSeparator(), cc.xyw(1, 11, 7));
+        add(MLabels.newFormLabel("Locus"), cc.xy(1, 11));
+        add(locus, cc.xy(3, 11));
+
+        add(new JSeparator(), cc.xyw(1, 13, 7));
 
 
         table = new SelectionTable(helper);
@@ -157,9 +164,9 @@ public class ReactionColumnChooser
         RowNumberTable rnt = new RowNumberTable(table);
         pane.setRowHeaderView(rnt);
         pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
-                rnt.getTableHeader());
+                       rnt.getTableHeader());
         pane.setPreferredSize(new Dimension(800, table.getRowHeight() * 10));
-        add(pane, cc.xyw(1, 13, 7));
+        add(pane, cc.xyw(1, 15, 7));
 
 
         // listeners to change table header name
@@ -216,6 +223,7 @@ public class ReactionColumnChooser
         properties.put("rxn.col.classification", classification.getSelectedItem());
         properties.put("rxn.col.subsystem", subsystem.getSelectedItem());
         properties.put("rxn.col.source", source.getSelectedItem());
+        properties.put("rxn.col.locus", locus.getSelectedItem());
 
         return true;
 
@@ -230,6 +238,6 @@ public class ReactionColumnChooser
 
     public String getDescription() {
         return "<html>Please confirm the appropiate columns in the reaction sheet. Please note that the<br>"
-                + "data bounds should <b>not</b> include the table header</html>";
+               + "data bounds should <b>not</b> include the table header</html>";
     }
 }

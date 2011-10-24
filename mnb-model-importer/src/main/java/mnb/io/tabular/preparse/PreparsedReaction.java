@@ -1,4 +1,3 @@
-
 /**
  * PreparsedReaction.java
  *
@@ -24,8 +23,9 @@ package mnb.io.tabular.preparse;
 import mnb.io.tabular.type.TableDescription;
 import mnb.io.tabular.type.ReactionColumn;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
-
 
 /**
  *          PreparsedReaction – 2011.08.30 <br>
@@ -36,13 +36,11 @@ import org.apache.log4j.Logger;
  */
 public class PreparsedReaction extends PreparsedEntry {
 
-    private static final Logger LOGGER = Logger.getLogger( PreparsedReaction.class );
-
+    private static final Logger LOGGER = Logger.getLogger(PreparsedReaction.class);
 
     public PreparsedReaction() {
-        super( ReactionColumn.class );
+        super(ReactionColumn.class);
     }
-
 
     /**
      *
@@ -50,43 +48,41 @@ public class PreparsedReaction extends PreparsedEntry {
      *
      * @param entry
      */
-    public PreparsedReaction( PreparsedEntry entry ) {
-        super( ReactionColumn.class );
-        for( Entry<TableDescription, Integer> e : entry.getColumnSet() ) {
-            super.addValue( e.getKey(), entry.getValue( e.getKey() ) );
+    public PreparsedReaction(PreparsedEntry entry) {
+        super(ReactionColumn.class);
+        for (Entry<TableDescription, Integer> e : entry.getColumnSet()) {
+            super.addValue(e.getKey(), entry.getValue(e.getKey()));
         }
     }
 
-
     public String getIdentifier() {
-        return super.getValue( ReactionColumn.IDENTIFIER );
+        return super.getValue(ReactionColumn.IDENTIFIER);
     }
-
 
     public String getDescription() {
-        return super.getValue( ReactionColumn.DESCRIPTION );
+        return super.getValue(ReactionColumn.DESCRIPTION);
     }
 
-
-    public String getClassification() {
-        return super.getValue( ReactionColumn.CLASSIFICATION );
+    public String[] getClassifications() {
+        return super.getValues(ReactionColumn.CLASSIFICATION);
     }
-
 
     public String getEquation() {
-        return super.getValue( ReactionColumn.EQUATION );
+        return super.getValue(ReactionColumn.EQUATION);
     }
 
-
-    public String getSubsystem() {
-        return super.getValue( ReactionColumn.SUBSYSTEM );
+    public String[] getSubsystems() {
+        return super.getValues(ReactionColumn.SUBSYSTEM);
     }
-
 
     public String getDirection() {
-        return super.getValue( ReactionColumn.DIRECTION );
+        return super.getValue(ReactionColumn.DIRECTION);
     }
 
+    public String[] getLoci() {
+        return super.getValues(ReactionColumn.LOCUS);
+    }
+
+   
 
 }
-
