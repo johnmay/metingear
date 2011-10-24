@@ -25,13 +25,13 @@ import com.explodingpixels.widgets.TableUtils;
 import java.awt.Container;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.swing.JTable;
 import uk.ac.ebi.mnb.view.ViewUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.SelectionMap;
+import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
@@ -42,7 +42,7 @@ import uk.ac.ebi.mnb.interfaces.SelectionManager;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class AbstractEntityTable extends JTable implements SelectionController {
+public abstract class AbstractEntityTable extends JTable implements EntityTable, SelectionController {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityTable.class);
     private SelectionManager selection = new SelectionMap();
@@ -113,7 +113,7 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
 
         int selected = getSelectedRow();
 
-        if(selected == -1){
+        if (selected == -1) {
             return false;
         }
 
@@ -125,7 +125,7 @@ public abstract class AbstractEntityTable extends JTable implements SelectionCon
         if (parent != null) {
 
             int y = getTableHeader().getHeight() + (getRowHeight() * selected) - ((int) parent.getHeight()
-                                                                               / 2);
+                                                                                  / 2);
 
             scrollRectToVisible(new Rectangle(0, y,
                                               parent.getWidth(),

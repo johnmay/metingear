@@ -79,11 +79,11 @@ public class DocumentFactory {
     public static Document getDocument(MetabolicReaction reaction) {
 
         Document document = getDocument(new Document(),
-                (AnnotatedEntity) reaction);
+                (AnnotatedEntity) reaction, true);
 
         // add metabolite data
         for (Metabolite m : reaction.getAllReactionMolecules()) {
-            document = getDocument(document, m);
+            document = getDocument(document, m, false);
         }
 
         return document;
@@ -98,7 +98,7 @@ public class DocumentFactory {
     public static Document getDocument(Metabolite metabolite) {
 
         Document entry = getDocument(new Document(),
-                (AnnotatedEntity) metabolite);
+                (AnnotatedEntity) metabolite, true);
 
 
         return entry;
@@ -108,16 +108,17 @@ public class DocumentFactory {
     /**
      * Returns a searchable lucene document for an AnnotatedEntity
      * @param entity
+     * @param  root whether this is the route object (defines type)
      * @return
      */
     public static Document getDocument(Document document,
-            AnnotatedEntity entity) {
+            AnnotatedEntity entity, boolean root) {
 
 
         document.add(new Field(FieldType.ACCESSION.getName(), entity.getAccession(),
                 Field.Store.YES,
                 Field.Index.ANALYZED));
-        document.add(new Field(FieldType.TYPE.getName(),
+        if(root)document.add(new Field(FieldType.TYPE.getName(),
                 entity.getBaseType(),
                 Field.Store.YES,
                 Field.Index.ANALYZED));

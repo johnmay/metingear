@@ -26,11 +26,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 /**
@@ -43,6 +49,7 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 public class MergeEntities extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(MergeEntities.class);
+    private SelectionManager selection;
 
     public MergeEntities(JFrame frame,
                          TargetedUpdate updater,
@@ -68,49 +75,47 @@ public class MergeEntities extends ControllerDialog {
     @Override
     public void process() {
 
-        Collection<AnnotatedEntity> entities = getSelection().getEntities();
+        selection = getSelection();
+        Collection<Metabolite> entities = selection.get(Metabolite.class);
+        // create a new metabolite consisting of the other two.
+        // find them in all reactions and update reactions also
+        Metabolite n = new Metabolite();
+        Reconstruction recon = ReconstructionManager.getInstance().getActive();
 
-        for (AnnotatedEntity entity : entities) {
-            entity.setAbbreviation("updated");
+        for (Metabolite m : entities) {
+
+            if (n.getIdentifier() == null) {
+                n.setIdentifier(m.getIdentifier());
+            }
+            if (n.getName() == null) {
+                n.setName(m.getName());
+            }
+            if (n.getAbbreviation() == null) {
+                n.setAbbreviation(m.getAbbreviation());
+            }
+            n.addAnnotations(m.getAnnotations());
+
+            for (MetabolicReaction rxn : recon.getReactions().getReactions(m)) {
+                for (Participant p : rxn.getAllReactionParticipants()) {
+                    if (p.getMolecule() == m) { // do a direct reference compare
+                        p.setMolecule(n);
+                    }
+                }
+            }
+            recon.getMetabolites().remove(m);
         }
 
-//
-//
-//        // create a new metabolite consisting of the other two.
-//        // find them in all reactions and update reactions also
-//        Metabolite m = (Metabolite) entities.iterator().next();
-//        Metabolite newMetabolite = new Metabolite();
-//
-//        newMetabolite.setIdentifier(m.getIdentifier());
-//        newMetabolite.setName(m.getName());
-//        newMetabolite.setAbbreviation(m.getAbbreviation());
-//        newMetabolite.addAnnotations(m.getAnnotations());
-//
-//        // add edit
-//        Reconstruction recon = ReconstructionManager.getInstance().getActiveReconstruction();
-//        recon.addMetabolite(newMetabolite);
-//        recon.remove // remove metabolite
+        recon.addMetabolite(n);
+        recon.getReactions().rebuildParticipantMap();
+        //        recon.remove // remove metabolite
 
-    }
-
-    @Override
-    public boolean update() {
-        return super.update(getSelection());
     }
 
     @Override
     public void setVisible(boolean visible) {
 
 //        // check they're all the same class
-        Collection<AnnotatedEntity> entities = getSelection().getEntities();
-        Class entityclass = entities.iterator().next().getClass();
-        for (AnnotatedEntity entity : entities) {
-            if (entityclass != entity.getClass()) {
-                System.out.println(entityclass + " and " + entity.getClass());
-                addMessage(new ErrorMessage("Unable to merge items of different type"));
-                return;
-            }
-        }
+
         super.setVisible(visible);
     }
 }

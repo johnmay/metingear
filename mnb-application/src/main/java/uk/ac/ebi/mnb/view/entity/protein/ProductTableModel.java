@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
+import com.google.common.base.Joiner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import uk.ac.ebi.core.ReconstructionManager;
@@ -70,8 +71,7 @@ public class ProductTableModel extends AbstractEntityTableModel {
         GeneProduct product = (GeneProduct) component;
 
         if (name.equals("Sequence")) {
-            Sequence sequence = product.getSequence();
-            return sequence != null ? sequence.getSequenceAsString() : "";
+            return Joiner.on("/").join(product.getSequences());
         }
 
         return "NA";

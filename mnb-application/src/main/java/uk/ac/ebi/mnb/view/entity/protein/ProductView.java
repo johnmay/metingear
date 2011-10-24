@@ -36,8 +36,7 @@ public class ProductView
     extends AbstractEntityView {
 
     private static final Logger LOGGER = Logger.getLogger(ProductView.class);
-
-
+   
     public ProductView() {
         super(new ProductTable(), new ProductInspector());
     }

@@ -20,11 +20,16 @@
  */
 package uk.ac.ebi.mnb.dialog.file;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.Sizes;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.interfaces.Updatable;
@@ -40,6 +45,8 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 public class NewReaction extends NewEntity {
 
     private static final Logger LOGGER = Logger.getLogger(NewReaction.class);
+    private ReactionTextField equation;
+    private static CellConstraints cc = new CellConstraints();
 
     public NewReaction(JFrame frame, Updatable updatable) {
         super(frame, updatable, new BasicChemicalIdentifier());
@@ -53,11 +60,29 @@ public class NewReaction extends NewEntity {
     }
 
     @Override
+    public JPanel getOptions() {
+
+        JPanel panel = super.getOptions();
+
+        equation = new ReactionTextField(this);
+
+        FormLayout layout = (FormLayout) panel.getLayout();
+        layout.appendRow(new RowSpec(Sizes.DLUY4));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
+        panel.add(equation, cc.xyw(1, layout.getRowCount(), 7));
+
+        return panel;
+    }
+
+    @Override
     public void process() {
         ReconstructionManager manager = ReconstructionManager.getInstance();
         if (manager.hasProjects()) {
             Reconstruction reconstruction = manager.getActiveReconstruction();
-            MetabolicReaction rxn = new MetabolicReaction(getIdentifier(), getAbbreviation(), getName());
+            MetabolicReaction rxn = equation.getReaction();
+            rxn.setIdentifier(getIdentifier());
+            rxn.setAbbreviation(getAbbreviation());
+            rxn.setName(getName());
             reconstruction.addReaction(rxn);
         }
     }

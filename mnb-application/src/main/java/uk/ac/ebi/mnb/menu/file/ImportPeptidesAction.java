@@ -51,7 +51,7 @@ public class ImportPeptidesAction extends FileChooserAction {
     public void activateActions() {
 
         // add the peptides to the active project and updateObservations the annotations table
-        Reconstruction recon = ReconstructionManager.getInstance().getActiveReconstruction();
+        Reconstruction recon = ReconstructionManager.getInstance().getActive();
 
         if (recon == null) {
             MainView.getInstance().addErrorMessage("No active reconstruction to import peptides into");
@@ -89,14 +89,14 @@ public class ImportPeptidesAction extends FileChooserAction {
                         GeneProduct p = new ProteinProduct(identifer,
                                                            "",
                                                            description);
-                        p.setSequence(entry.getValue());
+                        p.addSequence(entry.getValue());
                         peptides.add(p);
                     } else {
                         ProteinIdentifier identifer = new BasicProteinIdentifier(header);
                         GeneProduct p = new ProteinProduct(identifer,
                                                            "",
                                                            "");
-                        p.setSequence(entry.getValue());
+                        p.addSequence(entry.getValue());
                     }
 
                 }

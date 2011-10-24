@@ -55,7 +55,7 @@ public class NewMetabolite extends NewEntity {
     public void process() {
         ReconstructionManager manager = ReconstructionManager.getInstance();
         if (manager.hasProjects()) {
-            Reconstruction reconstruction = manager.getActiveReconstruction();
+            Reconstruction reconstruction = manager.getActive();
             Metabolite m = new Metabolite(getIdentifier(), getAbbreviation(), getName());
             reconstruction.addMetabolite(m);
         }

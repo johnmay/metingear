@@ -55,4 +55,10 @@ public abstract class ContextAction extends GeneralAction {
     public boolean update(){
         return controller.update();
     }
+
+    public MainController getController() {
+        return controller;
+    }
+
+    
 }

@@ -29,19 +29,12 @@ import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
-import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.core.ContextDialogItem;
-import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ControllerDialogItem;
-import uk.ac.ebi.mnb.core.DelayedBuildAction;
-import uk.ac.ebi.mnb.core.UpdatableDialogItem;
 import uk.ac.ebi.mnb.dialog.edit.AddAuthorAnnotation;
+import uk.ac.ebi.mnb.dialog.edit.DeleteEntities;
 import uk.ac.ebi.mnb.dialog.edit.MergeEntities;
-import uk.ac.ebi.mnb.dialog.file.NewMetabolite;
-import uk.ac.ebi.mnb.dialog.file.NewProteinProduct;
-import uk.ac.ebi.mnb.dialog.file.NewReaction;
-import uk.ac.ebi.mnb.view.DropdownDialog;
 
 /**
  *          EditMenu – 2011.09.26 <br>
@@ -78,6 +71,7 @@ public class EditMenu extends ClearMenu {
         }));
         add(new JSeparator());
         add(new ControllerDialogItem(view, MergeEntities.class));
+        add(new DeleteEntities(MainView.getInstance()));
         add(new JSeparator());
         add(new ContextDialogItem(view, view.getViewController(), AddAuthorAnnotation.class));
         // add citation

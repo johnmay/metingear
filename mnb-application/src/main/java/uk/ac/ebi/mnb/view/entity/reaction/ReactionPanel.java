@@ -25,6 +25,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -34,6 +36,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
@@ -166,7 +169,8 @@ public class ReactionPanel
         for (int i = 0; i < products.size(); i++) {
             Metabolite m = products.get(i);
             participantXref.add(
-                    new InternalLinkLabel(m, m.getName(), (SelectionController) MainView.getInstance().getViewController()),
+                    new InternalLinkLabel(m, m.getName(),
+                                          (SelectionController) MainView.getInstance().getViewController()),
                     cc.xy(
                     columnIndex, 1));
             columnIndex += i + 1 < products.size() ? 2 : 1;
@@ -176,7 +180,8 @@ public class ReactionPanel
 
     }
 
-
-
-
+    @Override
+    public Collection<? extends AnnotatedEntity> getReferences() {
+        return entity.getModifiers();
+    }
 }

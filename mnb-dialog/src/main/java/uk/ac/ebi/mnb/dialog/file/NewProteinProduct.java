@@ -29,6 +29,7 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 
 /**
  * @name    NewMetabolite - 2011.10.04 <br>
@@ -42,13 +43,13 @@ public class NewProteinProduct extends NewEntity {
     private static final Logger LOGGER = Logger.getLogger(NewProteinProduct.class);
 
     public NewProteinProduct(JFrame frame, Updatable updatable) {
-        super(frame, updatable, new BasicChemicalIdentifier());
+        super(frame, updatable, BasicProteinIdentifier.nextIdentifier());
     }
 
     @Override
     public JLabel getDescription() {
         JLabel label = super.getDescription();
-        label.setText("Please specify detail for a new product");
+        label.setText("Please specify detail for a new protein");
         return label;
     }
 
@@ -56,7 +57,7 @@ public class NewProteinProduct extends NewEntity {
     public void process() {
         ReconstructionManager manager = ReconstructionManager.getInstance();
         if (manager.hasProjects()) {
-            Reconstruction reconstruction = manager.getActiveReconstruction();
+            Reconstruction reconstruction = manager.getActive();
             ProteinProduct prod = new ProteinProduct(getIdentifier(), getAbbreviation(), getName());
 //            reconstruction.addP(prod);
         }

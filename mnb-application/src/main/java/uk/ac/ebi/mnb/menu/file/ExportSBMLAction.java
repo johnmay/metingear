@@ -26,7 +26,7 @@ import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.xml.stax.SBMLWriter;
 
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
-import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
+import uk.ac.ebi.core.metabolite.MetaboliteCollection;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.metabolomes.identifier.UniqueIdentifier;
 import uk.ac.ebi.mnb.main.MainView;

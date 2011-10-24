@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
+import com.google.common.base.Joiner;
 import java.awt.Dimension;
 
 import java.util.Collection;
@@ -32,7 +33,8 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.*;
-import java.util.Arrays;
+import java.util.List;
+import org.biojava3.core.sequence.template.AbstractSequence;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.mnb.core.MLabels;
 
@@ -86,9 +88,9 @@ public class ProductPanel
     public boolean update() {
 
         // set the sequence
-        Sequence seq = entity.getSequence();
+        List<? extends Sequence> seq = entity.getSequences();
 
-        sequence.setText(seq != null ? seq.getSequenceAsString() : "no sequence set");
+        sequence.setText(seq != null ? Joiner.on("/").join(seq) : "no sequence set");
 
         return super.update();
 
@@ -140,6 +142,6 @@ public class ProductPanel
 
     @Override
     public Collection<? extends AnnotatedEntity> getReferences() {
-        return Arrays.asList(entity.getGene());
+        return entity.getGenes();
     }
 }

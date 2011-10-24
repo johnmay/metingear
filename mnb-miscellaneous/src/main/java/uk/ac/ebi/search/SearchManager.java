@@ -187,6 +187,5 @@ public class SearchManager {
         return new MultiFieldQueryParser(Version.LUCENE_34, fields, analyzer).parse(query);
     }
 
-
 }
 

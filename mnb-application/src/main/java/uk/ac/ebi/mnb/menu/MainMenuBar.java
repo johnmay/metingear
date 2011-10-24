@@ -26,7 +26,6 @@ public class MainMenuBar
     private BuildMenu build = new BuildMenu();
     private ClearMenu view = new ViewMenu();
     private EditMenu edit = new EditMenu();
-    private ClearMenu select = new ClearMenu( "Select" );
     private RunMenu run = new RunMenu();
     private ToolsMenu tools = new ToolsMenu();
 
@@ -37,7 +36,6 @@ public class MainMenuBar
         add( run );
         add( view );
         add( tools );
-        add( select );
         setBorderPainted( false );
     }
 

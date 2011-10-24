@@ -1,4 +1,3 @@
-
 /**
  * SearchableIndex.java
  *
@@ -34,7 +33,6 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 
-
 /**
  *          SearchableIndex – 2011.09.29 <br>
  *          Class description
@@ -48,41 +46,49 @@ public class SearchableIndex {
     private final Directory index;
     private final Map<UUID, AnnotatedEntity> map;
 
-
     public SearchableIndex(Directory index, Map map) {
         this.index = index;
         this.map = map;
     }
 
-
     public Map<UUID, AnnotatedEntity> getMap() {
         return map;
     }
-
 
     public Directory getIndex() {
         return index;
     }
 
-
     public List<AnnotatedEntity> getRankedEntities(Query query) throws IOException {
         return getRankedEntities(query, 25);
     }
 
-
     public List<AnnotatedEntity> getRankedEntities(Query query, Integer number) throws IOException {
 
+        return getRankedEntities(query, number, AnnotatedEntity.class);
+
+    }
+
+    public List<AnnotatedEntity> getRankedEntities(Query query, Integer number, Class filter) throws IOException {
+
         IndexSearcher searcher = new IndexSearcher(index, true);
-        TopScoreDocCollector collector = TopScoreDocCollector.create(number, true);
+        TopScoreDocCollector collector = TopScoreDocCollector.create(number * 4, true); // * 4 to get more qureires. The number is for all queries when in fact we only want a certain number
         searcher.search(query, collector);
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
         List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>();
 
-        for( ScoreDoc scoreDoc : hits ) {
+        for (ScoreDoc scoreDoc : hits) {
             UUID uuid = UUID.fromString(searcher.doc(scoreDoc.doc).get("uuid"));
-            if( map.containsKey(uuid) ) {
-                entities.add(map.get(uuid));
+            if (map.containsKey(uuid)) {
+                AnnotatedEntity entity = map.get(uuid);
+                if (filter.isInstance(entity)) {
+                    entities.add(entity);
+                    // reached limit
+                    if(entities.size() == number){
+                        return entities;
+                    }
+                }
             } else {
                 LOGGER.error("Null object in UUID -> Entity map");
             }
@@ -92,11 +98,7 @@ public class SearchableIndex {
 
     }
 
-
     public void close() throws IOException {
         index.close();
     }
-
-
 }
-

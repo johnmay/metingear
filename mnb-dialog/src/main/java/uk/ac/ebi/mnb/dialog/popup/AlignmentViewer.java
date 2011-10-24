@@ -69,6 +69,8 @@ public final class AlignmentViewer extends PopupDialog {
         sequence.setBackground(getPanel().getBackground());
         setAlwaysOnTop(rootPaneCheckingEnabled);
         setColor(defaultColor);
+        setFocusable(false);
+        setFocusableWindowState(false);
     }
 
     public void setColor(AbstractAlignmentColor color) {
@@ -103,12 +105,12 @@ public final class AlignmentViewer extends PopupDialog {
             return;
         }
 
-        String querySequence = product.getSequence().getSequenceAsString();
+        String querySequence = product.getSequences().iterator().next().getSequenceAsString();
         String targetSequence = alignment.getSubjectSequence();
         String alignmentSequence = alignment.getAlignmentSequence();
 
 
-        int length = product.getSequence().getLength();
+        int length = product.getSequences().iterator().next().getLength();
 
         int index = (int) Math.floor(length * location);
 

@@ -14,6 +14,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.core.UpdatableDialogItem;
+import uk.ac.ebi.mnb.dialog.file.ExportMetabolitesMDL;
 import uk.ac.ebi.mnb.dialog.file.NewMetabolite;
 import uk.ac.ebi.mnb.dialog.file.NewProteinProduct;
 import uk.ac.ebi.mnb.dialog.file.NewReaction;
@@ -135,11 +136,11 @@ public class FileMenu
         public ExportMenu() {
             super("Export...");
             add(new DynamicMenuItem(new ExportSIFAction()));
-            add(new JMenuItem("Selected Metabolites (.mdl)"));
-            add(new JMenuItem("Selected Metabolites (.sbml)"));
-            add(new JMenuItem("Selected Proteins (.fasta)"));
-            add(new JMenuItem("Selected Reactions (.sbml)"));
-            add(new JMenuItem("Selected Reactions (.rxn)"));
+            add(new JMenuItem(new ExportMetabolitesMDL(MainView.getInstance())));
+            add(new JMenuItem("Metabolites (.sbml)"));
+            add(new JMenuItem("Proteins (.fasta)"));
+            add(new JMenuItem("Reactions (.sbml)"));
+            add(new JMenuItem("Reactions (.rxn)"));
         }
     }
 }

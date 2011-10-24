@@ -206,8 +206,6 @@ public class ProjectView
             products.update(selection);
         }
         if (selection.hasSelection(Metabolite.class)) {
-            logger.info("metabolites");
-
             metabolites.update(selection);
         }
         if (selection.hasSelection(MetabolicReaction.class)) {

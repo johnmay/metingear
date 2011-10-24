@@ -50,7 +50,7 @@ public abstract class NewEntity extends DropdownDialog {
     private JTextField accession = new MTextField(6);
     private JTextField name = new MTextField(20);
     private JTextField abbreviation = new MTextField(4);
-    private CellConstraints cc = new CellConstraints();
+    private   CellConstraints cc = new CellConstraints();
     private Updatable updateable;
     private static final Map<String, Byte> nameIndexMap = new HashMap();
 
@@ -89,10 +89,10 @@ public abstract class NewEntity extends DropdownDialog {
 
         panel.add(MLabels.newFormLabel("Abbreviation:",
                                       "A short 2-5 character abbreviation of the new entity"),
-                  cc.xy(5, 1));
+                  cc.xy(6, 1));
         panel.add(abbreviation, cc.xy(7, 1));
 
-        panel.add(MLabels.newFormLabel("Name:", "An offical or trivial name the new metabolite"), cc.xy(1, 3));
+        panel.add(MLabels.newFormLabel("Name:", "An offical or trivial name the new entity"), cc.xy(1, 3));
         panel.add(name, cc.xyw(3, 3, 5));
 
 

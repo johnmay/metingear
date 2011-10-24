@@ -1,4 +1,3 @@
-
 /**
  * BorderlessScrollPane.java
  *
@@ -23,9 +22,9 @@ package uk.ac.ebi.mnb.view;
 
 import com.jgoodies.forms.factories.Borders;
 import java.awt.Component;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import org.apache.log4j.Logger;
-
 
 /**
  *          BorderlessScrollPane – 2011.09.07 <br>
@@ -38,13 +37,16 @@ public class BorderlessScrollPane extends JScrollPane {
 
     private static final Logger LOGGER = Logger.getLogger(BorderlessScrollPane.class);
 
-
     public BorderlessScrollPane(Component view) {
         super(view);
         setBorder(Borders.EMPTY_BORDER);
         setViewportBorder(Borders.EMPTY_BORDER);
     }
 
-
+    public BorderlessScrollPane(Component view, int horizontalBar) {
+        super(view);
+        setBorder(Borders.EMPTY_BORDER);
+        setViewportBorder(Borders.EMPTY_BORDER);
+        setHorizontalScrollBarPolicy(horizontalBar);
+    }
 }
-

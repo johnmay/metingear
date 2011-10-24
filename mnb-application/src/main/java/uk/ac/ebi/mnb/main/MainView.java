@@ -224,13 +224,13 @@ public class MainView
             }
         });
 
-        addFocusListener(new FocusAdapter() {
-
-            @Override
-            public void focusGained(FocusEvent e) {
-                project.getActiveView().requestFocus();
-            }
-        });
+//        addFocusListener(new FocusAdapter() {
+//
+//            @Override
+//            public void focusGained(FocusEvent e) {
+//                project.getActiveView().requestFocus();
+//            }
+//        });
 
         undoManager = new UndoManager();
 
