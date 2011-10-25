@@ -56,7 +56,7 @@ public class PreparsedReaction extends PreparsedEntry {
     }
 
     public String getIdentifier() {
-        return super.getValue(ReactionColumn.IDENTIFIER);
+        return super.getValue(ReactionColumn.ABBREVIATION);
     }
 
     public String getDescription() {

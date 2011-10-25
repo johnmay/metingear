@@ -124,7 +124,7 @@ public class ReactionParser {
         equationSides[0] = reactionCompartment.replaceAll("");
         MetabolicReaction rxn = new MetabolicReaction();
         rxn.setIdentifier(new BasicReactionIdentifier("r_" + ++ticker));
-        rxn.setAbbreviation(reaction.hasValue(ReactionColumn.IDENTIFIER) ? reaction.getIdentifier() : "");
+        rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
         rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
         for (MetaboliteParticipant p :
              parseParticipants(equationSides[0],

@@ -54,7 +54,7 @@ public class PreparsedMetabolite extends PreparsedEntry {
 
 
     public String[] getNames() {
-        return getValues(EntityColumn.NAME);
+        return getValues(EntityColumn.DESCRIPTION);
     }
 
 

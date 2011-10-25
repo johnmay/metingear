@@ -112,10 +112,10 @@ public class ExcelImportDialog
 
         ImporterOptions options = new ImporterOptions();
         properties = new ExcelModelProperties();
-        properties.put("reconstruction.file.name", file.getAbsolutePath());
+        properties.setFile(file);
 
-        stages[0] = new SheetChooserDialog(helper, options, properties);
-        stages[1] = new ReactionColumnChooser(helper, options, properties);
+        stages[0] = new SheetChooserDialog(helper, properties);
+        stages[1] = new ReactionColumnChooser(helper, properties);
         stages[2] = new MetaboliteColumnChooser(helper, properties);
         stages[3] = new AdditionalOptions(properties);
 
@@ -184,32 +184,32 @@ public class ExcelImportDialog
             // final stage
             LOGGER.info("Begining import of excel document");
 
-            File xls = new File(properties.getProperty("reconstruction.file.name"));
+            File xls = new File(properties.getFilePath());
             HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(xls));
 
             Integer rxnI = Integer.parseInt(properties.getProperty("rxn.sheet"));
             Integer metI = Integer.parseInt(properties.getProperty("ent.sheet"));
 
             final PreparsedSheet rxnSht = new HSSFPreparsedSheet(workbook.getSheetAt(rxnI),
-                    properties,
-                    ReactionColumn.DATA_BOUNDS);
+                                                                 properties,
+                                                                 ReactionColumn.DATA_BOUNDS);
             PreparsedSheet entSht = new HSSFPreparsedSheet(workbook.getSheetAt(metI),
-                    properties,
-                    EntityColumn.DATA_BOUNDS);
+                                                           properties,
+                                                           EntityColumn.DATA_BOUNDS);
             waitIndicator.setText(String.format("importing."));
 
             ChemicalDBWebService ws =
-                    new CachedChemicalWS(
+                                 new CachedChemicalWS(
                     new ChEBIWebServiceConnection(StarsCategory.ALL, 10));
 
             waitIndicator.setText(String.format("importing.."));
 
             CandidateFactory factory =
-                    new CandidateFactory(ws,
-                    new ChemicalFingerprintEncoder());
+                             new CandidateFactory(ws,
+                                                  new ChemicalFingerprintEncoder());
 
             EntryReconciler reconciler = new AutomatedReconciler(factory,
-                    new ChEBIIdentifier());
+                                                                 new ChEBIIdentifier());
 
             EntityResolver entitySheet = new EntityResolver(entSht, reconciler);
             ReactionParser parser = new ReactionParser(entitySheet);
@@ -252,7 +252,7 @@ public class ExcelImportDialog
             addMessage(new ErrorMessage("Unable to import document " + ex.getMessage()));
         }
 
-        addMessage(new WarningMessage("The following reaction were not loaded: "+ Joiner.on(", ").join(problemReactions)));
+        addMessage(new WarningMessage("The following reaction were not loaded: " + Joiner.on(", ").join(problemReactions)));
 
     }
 

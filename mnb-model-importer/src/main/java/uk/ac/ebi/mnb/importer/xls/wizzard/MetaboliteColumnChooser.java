@@ -24,6 +24,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.util.prefs.Preferences;
 import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
@@ -35,6 +36,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.type.EntityColumn;
+import mnb.io.tabular.type.ReactionColumn;
 import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
@@ -55,14 +57,13 @@ public class MetaboliteColumnChooser
         implements WizzardStage {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteColumnChooser.class);
-
     private ExcelModelProperties properties = new ExcelModelProperties();
     // spinners
     private JSpinner start;
     private JSpinner end;
     // combo boxes
     private JComboBox abbreviation;
-    private JComboBox name;
+    private JComboBox description;
     private JComboBox compartment;
     private JComboBox charge;
     private JComboBox formula;
@@ -86,7 +87,7 @@ public class MetaboliteColumnChooser
         end = new JSpinner(new SpinnerNumberModel(1, 1, 4000, 1));
 
         abbreviation = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        name = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        description = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
         compartment = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
         charge = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
         formula = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
@@ -97,7 +98,7 @@ public class MetaboliteColumnChooser
 
 
         setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p",
-                "p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p"));
+                                 "p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p"));
 //
         add(new DialogLabel("Data starts (excluding header):", SwingConstants.RIGHT), cc.xy(1, 1));
         add(start, cc.xy(3, 1));
@@ -109,7 +110,7 @@ public class MetaboliteColumnChooser
         add(new DialogLabel("Abbreviation:", SwingConstants.RIGHT), cc.xy(1, 5));
         add(abbreviation, cc.xy(3, 5));
         add(new DialogLabel("Name:", SwingConstants.RIGHT), cc.xy(5, 5));
-        add(name, cc.xy(7, 5));
+        add(description, cc.xy(7, 5));
         add(new DialogLabel("Compartment:", SwingConstants.RIGHT), cc.xy(1, 7));
         add(compartment, cc.xy(3, 7));
         add(new DialogLabel("Charge:", SwingConstants.RIGHT), cc.xy(5, 7));
@@ -132,9 +133,24 @@ public class MetaboliteColumnChooser
         RowNumberTable rnt = new RowNumberTable(table);
         pane.setRowHeaderView(rnt);
         pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
-                rnt.getTableHeader());
+                       rnt.getTableHeader());
         pane.setPreferredSize(new Dimension(800, table.getRowHeight() * 10));
         add(pane, cc.xyw(1, 19, 7));
+
+
+        // set previous selections
+        Preferences pref = Preferences.systemNodeForPackage(MetaboliteColumnChooser.class);
+        start.setValue(pref.getInt(properties.getPreferenceKey("start"), 1));
+        end.setValue(pref.getInt(properties.getPreferenceKey("end"), 10));
+        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.ABBREVIATION), 0));
+        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.DESCRIPTION), 0));
+        compartment.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.COMPARTMENT), 0));
+        charge.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.CHARGE), 0));
+        formula.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.FORMULA), 0));
+        kegg.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.KEGG_XREF), 0));
+        chebi.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.CHEBI_XREF), 0));
+        pubchem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.PUBCHEM_XREF), 0));
+
 
 
         // action listeners
@@ -155,7 +171,7 @@ public class MetaboliteColumnChooser
         });
 
         abbreviation.addActionListener(new TableHeaderChanger(abbreviation, "Abbreviation"));
-        name.addActionListener(new TableHeaderChanger(name, "Name"));
+        description.addActionListener(new TableHeaderChanger(description, "Name"));
         compartment.addActionListener(new TableHeaderChanger(compartment, "Compartment"));
         charge.addActionListener(new TableHeaderChanger(charge, "Charge"));
         formula.addActionListener(new TableHeaderChanger(formula, "Formula"));
@@ -171,7 +187,7 @@ public class MetaboliteColumnChooser
         properties.put("ent.data.bounds", "A" + start.getValue() + ":" + "A" + end.getValue());
 
         setProperty(EntityColumn.ABBREVIATION.getKey(), abbreviation);
-        setProperty(EntityColumn.NAME.getKey(), name);
+        setProperty(EntityColumn.DESCRIPTION.getKey(), description);
         setProperty(EntityColumn.COMPARTMENT.getKey(), compartment);
         setProperty(EntityColumn.CHARGE.getKey(), charge);
         setProperty(EntityColumn.FORMULA.getKey(), formula);
@@ -179,6 +195,19 @@ public class MetaboliteColumnChooser
         setProperty(EntityColumn.CHEBI_XREF.getKey(), chebi);
         setProperty(EntityColumn.PUBCHEM_XREF.getKey(), pubchem);
 
+
+        // set selections for next time
+        Preferences pref = Preferences.systemNodeForPackage(MetaboliteColumnChooser.class);
+        pref.putInt(properties.getPreferenceKey("start"), (Integer) start.getValue());
+        pref.putInt(properties.getPreferenceKey("end"), (Integer) end.getValue());
+        pref.putInt(properties.getPreferenceKey(EntityColumn.ABBREVIATION), abbreviation.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(EntityColumn.DESCRIPTION), description.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(EntityColumn.COMPARTMENT), compartment.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(EntityColumn.CHARGE), charge.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(EntityColumn.FORMULA), formula.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(EntityColumn.KEGG_XREF), kegg.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(EntityColumn.CHEBI_XREF), chebi.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(EntityColumn.PUBCHEM_XREF), pubchem.getSelectedIndex());
 
         return true;
 

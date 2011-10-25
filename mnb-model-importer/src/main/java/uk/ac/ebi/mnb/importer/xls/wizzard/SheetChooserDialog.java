@@ -58,11 +58,10 @@ public class SheetChooserDialog
     private JComboBox geneCB;
     private ExcelModelProperties properties;
 
-    public SheetChooserDialog(ExcelHelper excelImporter, ImporterOptions options,
+    public SheetChooserDialog(ExcelHelper excelImporter,
             ExcelModelProperties properties) {
         super();
         this.excelHelper = excelImporter;
-        this.options = options;
         this.properties = properties;
 
         // get all sheet names

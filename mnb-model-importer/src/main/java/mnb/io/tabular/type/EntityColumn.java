@@ -13,7 +13,7 @@ package mnb.io.tabular.type;
 public enum EntityColumn implements TableDescription {
 
     ABBREVIATION( "ent.col.abbreviation" ),
-    NAME( "ent.col.name" ),
+    DESCRIPTION( "ent.col.name" ),
     SYNONYMS( "ent.col.synonyms" ),
     FORMULA( "ent.col.formula" ),
     FORMULA_CHARGED( "ent.col.formula.charged" ),

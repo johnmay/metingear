@@ -12,7 +12,7 @@ package mnb.io.tabular.type;
  */
 public enum ReactionColumn implements TableDescription {
 
-    IDENTIFIER( "rxn.col.identifier" ),
+    ABBREVIATION( "rxn.col.identifier" ),
     DESCRIPTION( "rxn.col.description" ),
     EQUATION( "rxn.col.equation" ),
     DIRECTION( "rxn.col.direction" ),

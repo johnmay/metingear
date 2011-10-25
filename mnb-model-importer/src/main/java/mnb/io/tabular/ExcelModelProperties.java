@@ -1,4 +1,3 @@
-
 /**
  * ExcelModelProperties.java
  *
@@ -23,12 +22,12 @@ package mnb.io.tabular;
 
 import mnb.io.tabular.type.*;
 import java.awt.Rectangle;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
-
 
 /**
  *          ExcelModelProperties – 2011.08.30 <br>
@@ -39,7 +38,7 @@ import org.apache.log4j.Logger;
  */
 public class ExcelModelProperties extends Properties {
 
-    private static final Logger LOGGER = Logger.getLogger( ExcelModelProperties.class );
+    private static final Logger LOGGER = Logger.getLogger(ExcelModelProperties.class);
     /**
      * Which sheets contain the reactions and metabolites
      */
@@ -49,18 +48,36 @@ public class ExcelModelProperties extends Properties {
     public ExcelModelProperties() {
     }
 
-
-    public ExcelModelProperties( Properties defaults ) {
-        super( defaults );
+    public ExcelModelProperties(Properties defaults) {
+        super(defaults);
     }
 
+    public void setFile(File f){
+        setProperty("reconstruction.file.path", f.getAbsolutePath());
+        setProperty("reconstruction.file.name", f.getName().replaceAll(" ", "_"));
+    }
 
-    public List<TableDescription> getDefinedColumns( Class<? extends TableDescription> clazz ) {
+    public String getFilePath() {
+        return getProperty("reconstruction.file.path");
+    }
+    public String getFileName() {
+        return getProperty("reconstruction.file.name");
+    }
+
+    public String getPreferenceKey(TableDescription col) {
+        return getPreferenceKey(col.getKey());
+    }
+
+    public String getPreferenceKey(String key) {
+        return getFileName() + "." + key;
+    }
+
+    public List<TableDescription> getDefinedColumns(Class<? extends TableDescription> clazz) {
 
         List<TableDescription> rxnColumns = new ArrayList<TableDescription>();
-        for( TableDescription c : clazz.getEnumConstants() ) {
-            if( isDefined( c ) ) {
-                rxnColumns.add( c );
+        for (TableDescription c : clazz.getEnumConstants()) {
+            if (isDefined(c)) {
+                rxnColumns.add(c);
             }
         }
 
@@ -80,23 +97,23 @@ public class ExcelModelProperties extends Properties {
      *            found or value is empty)
      *
      */
-    public Integer getColumnIndex( TableDescription columnType ) {
+    public Integer getColumnIndex(TableDescription columnType) {
 
 
-        if( isDefined( columnType.getKey() ) ) {
+        if (isDefined(columnType.getKey())) {
 
-            String value = super.getProperty( columnType.getKey() );
+            String value = super.getProperty(columnType.getKey());
             Integer index = null;
 
             try {
 
                 // first try as integer
-                index = Integer.parseInt( value );
+                index = Integer.parseInt(value);
 
-            } catch( NumberFormatException ex ) {
+            } catch (NumberFormatException ex) {
 
                 // then try as excel index
-                index = ExcelUtilities.stringToIndex( value );
+                index = ExcelUtilities.stringToIndex(value);
             }
 
             return index;
@@ -106,9 +123,8 @@ public class ExcelModelProperties extends Properties {
 
     }
 
-
-    private boolean isDefined( TableDescription c ) {
-        return isDefined( c.getKey() );
+    private boolean isDefined(TableDescription c) {
+        return isDefined(c.getKey());
     }
 
     /*
@@ -119,11 +135,9 @@ public class ExcelModelProperties extends Properties {
      * @return Whether the properties provide the column location
      *
      */
-
-    public Boolean isDefined( String key ) {
-        return super.containsKey( key ) && super.getProperty( key ) != null;
+    public Boolean isDefined(String key) {
+        return super.containsKey(key) && super.getProperty(key) != null;
     }
-
 
     /**
      *
@@ -136,15 +150,14 @@ public class ExcelModelProperties extends Properties {
      * @return Rectangle instance providing the x1, y2, width and height of the data bounds
      *
      */
-    public Rectangle getDataBounds( String key ) {
+    public Rectangle getDataBounds(String key) {
 
-        Integer[][] indices = this.getDataIndices( key );
+        Integer[][] indices = this.getDataIndices(key);
 
-        return new Rectangle( indices[0][0], indices[0][1],
-                              indices[1][0] - indices[0][0], indices[1][1] - indices[0][1] );
+        return new Rectangle(indices[0][0], indices[0][1],
+                             indices[1][0] - indices[0][0], indices[1][1] - indices[0][1]);
 
     }
-
 
     /**
      *
@@ -156,35 +169,34 @@ public class ExcelModelProperties extends Properties {
      * @return 2D array of indicies x1 = [0,0] y1 = [0,1] x2 = [1,0] y2 = [1,1]
      *
      */
-    public Integer[][] getDataIndices( String key ) {
+    public Integer[][] getDataIndices(String key) {
 
-        if( isDefined( key ) ) {
-            String[] bounds = super.getProperty( key ).split( ":" );
+        if (isDefined(key)) {
+            String[] bounds = super.getProperty(key).split(":");
             return new Integer[][]{
-                  ExcelUtilities.getIndices( bounds[0] ),
-                  ExcelUtilities.getIndices( bounds[1] )
-              };
+                        ExcelUtilities.getIndices(bounds[0]),
+                        ExcelUtilities.getIndices(bounds[1])
+                    };
         }
 
-        throw new UnsupportedOperationException( "No bounds specified in properties" );
+        throw new UnsupportedOperationException("No bounds specified in properties");
 
         // todo: throw more meaningful exception
 
     }
 
-
     public static ExcelModelProperties createTemplate() {
 
         ExcelModelProperties properties = new ExcelModelProperties();
 
-        for( TableDescription type : EntityColumn.values() ) {
-            properties.put( type.getKey(), "" );
+        for (TableDescription type : EntityColumn.values()) {
+            properties.put(type.getKey(), "");
         }
-        for( TableDescription type : ReactionColumn.values() ) {
-            properties.put( type.getKey(), "" );
+        for (TableDescription type : ReactionColumn.values()) {
+            properties.put(type.getKey(), "");
         }
-        for( String type : Arrays.asList( REACTION_SHEET, METABOLITE_SHEET ) ) {
-            properties.put( type, "" );
+        for (String type : Arrays.asList(REACTION_SHEET, METABOLITE_SHEET)) {
+            properties.put(type, "");
         }
 
 
@@ -192,17 +204,13 @@ public class ExcelModelProperties extends Properties {
 
     }
 
-
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         try {
-            createTemplate().storeToXML( new FileOutputStream(
-              "/Users/johnmay/Desktop/model.properites" ),
-                                         "Template Model Properties File" );
-        } catch( IOException ex ) {
+            createTemplate().storeToXML(new FileOutputStream(
+                    "/Users/johnmay/Desktop/model.properites"),
+                                        "Template Model Properties File");
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
-
-
 }
-

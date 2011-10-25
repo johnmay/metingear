@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.prefs.Preferences;
 import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
@@ -40,6 +41,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import mnb.io.tabular.ExcelModelProperties;
+import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.core.MLabels;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
@@ -91,12 +93,10 @@ public class ReactionColumnChooser
     private SelectionTable table;
 
     public ReactionColumnChooser(ExcelHelper helper,
-                                 ImporterOptions options,
                                  ExcelModelProperties properties) {
         super();
 
         this.helper = helper;
-        this.options = options;
         this.properties = properties;
 
         columns.add("-"); // no selection
@@ -117,6 +117,8 @@ public class ReactionColumnChooser
         source = new MComboBox(columns);
 
         locus = new MComboBox(columns);
+
+
 
         // content panel
         setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p"));
@@ -162,6 +164,20 @@ public class ReactionColumnChooser
         add(pane, cc.xyw(1, 15, 7));
 
 
+
+        // set previous selections
+        Preferences pref = Preferences.systemNodeForPackage(ReactionColumnChooser.class);
+        start.setValue(pref.getInt(properties.getPreferenceKey("start"), 1));
+        end.setValue(pref.getInt(properties.getPreferenceKey("end"), 10));
+        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.ABBREVIATION), 0));
+        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.DESCRIPTION), 0));
+        equation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.EQUATION), 0));
+        classification.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.CLASSIFICATION), 0));
+        subsystem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SUBSYSTEM), 0));
+        source.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SOURCE), 0));
+        locus.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.LOCUS), 0));
+
+
         // listeners to change table header name
         abbreviation.addActionListener(new TableHeaderChanger(abbreviation, "Abbreviation"));
         description.addActionListener(new TableHeaderChanger(description, "Description"));
@@ -185,6 +201,7 @@ public class ReactionColumnChooser
                 repaint();
             }
         });
+
 
     }
 
@@ -217,6 +234,19 @@ public class ReactionColumnChooser
         properties.put("rxn.col.subsystem", subsystem.getSelectedItem());
         properties.put("rxn.col.source", source.getSelectedItem());
         properties.put("rxn.col.locus", locus.getSelectedItem());
+
+        // set selections for next time
+        Preferences pref = Preferences.systemNodeForPackage(ReactionColumnChooser.class);
+        pref.putInt(properties.getPreferenceKey("start"), (Integer) start.getValue());
+        pref.putInt(properties.getPreferenceKey("end"), (Integer) end.getValue());
+        pref.putInt(properties.getPreferenceKey(ReactionColumn.ABBREVIATION), abbreviation.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(ReactionColumn.DESCRIPTION), description.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(ReactionColumn.EQUATION), equation.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(ReactionColumn.CLASSIFICATION), classification.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(ReactionColumn.SUBSYSTEM), subsystem.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(ReactionColumn.SOURCE), source.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(ReactionColumn.LOCUS), locus.getSelectedIndex());
+
 
         return true;
 

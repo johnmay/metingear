@@ -100,11 +100,14 @@ public class HSSFPreparsedSheet extends PreparsedSheet {
                 int type = cell.getCellType();
                 if( type == HSSFCell.CELL_TYPE_NUMERIC ) {
                     entry.addValue( col, Double.toString( cell.getNumericCellValue() ) );
-                } else {
+                } else if (type != HSSFCell.CELL_TYPE_BLANK) {
+                    cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     entry.addValue( col, cell.getStringCellValue() );
+                    System.out.print(cell.getStringCellValue() + "\t");
                 }
             }
-        }
+        }            System.out.println("");
+
 
         return entry;
     }
