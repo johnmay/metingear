@@ -22,6 +22,7 @@ import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.file.ExportSIFAction;
 import uk.ac.ebi.mnb.menu.file.ExportSBMLAction;
 import uk.ac.ebi.mnb.menu.file.ImportENAXML;
+import uk.ac.ebi.mnb.menu.file.ImportKGML;
 import uk.ac.ebi.mnb.menu.file.ImportPeptidesAction;
 import uk.ac.ebi.mnb.menu.file.ImportXLSAction;
 import uk.ac.ebi.mnb.menu.file.NewProjectAction;
@@ -125,6 +126,7 @@ public class FileMenu
 
             super("Import...");
             add(new DynamicMenuItem(new ImportPeptidesAction()));
+            add(new JMenuItem(new ImportKGML()));
         }
     }
 
