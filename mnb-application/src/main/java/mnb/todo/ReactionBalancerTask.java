@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import uk.ac.ebi.mnb.core.ModelUtils;
 import org.openscience.cdk.interfaces.IMolecule;
-import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 
 /**

@@ -29,7 +29,7 @@ public class ExpandButton
         close = ViewUtils.getIcon( a.getValue( GeneralAction.EXPAND_BUTTON_CLOSE_ICON ).toString() , "" );
         setIcon( open );
         setText( null );
-        a.setButton( this );
+      //  a.setButton( this );
     }
 
     public void setOpen() {

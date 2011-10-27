@@ -16,7 +16,6 @@ import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.metabolomes.biowh.BiowhConnection;
 import uk.ac.ebi.metabolomes.biowh.DataSetProvider;
-import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.mnb.main.MainView;
 
 
@@ -61,19 +60,19 @@ public class PredictGPRDialog
     public void process() {
 
         setVisible(false);
-
-        JobParameters params = new JobParameters("Gene-Protein-Reaction");
-
-        // need to establish connection before we create the task
-        try {
-            logger.debug("Connecting to biowarehouse...");
-            BiowhConnection bwhc = new BiowhConnection();
-            Warehouse bwh = bwhc.getWarehouseObject();
-            DataSetProvider.loadPropsForCurrentSchema();
-            DataSet ds = DataSetProvider.getDataSetObject(DataSetProvider.DataSetEnum.KEGG);
-        } catch( IOException ex ) {
-            logger.error("Error openning the warehouse connection");
-        }
+//
+//        JobParameters params = new JobParameters("Gene-Protein-Reaction");
+//
+//        // need to establish connection before we create the task
+//        try {
+//            logger.debug("Connecting to biowarehouse...");
+//            BiowhConnection bwhc = new BiowhConnection();
+//            Warehouse bwh = bwhc.getWarehouseObject();
+//            DataSetProvider.loadPropsForCurrentSchema();
+//            DataSet ds = DataSetProvider.getDataSetObject(DataSetProvider.DataSetEnum.KEGG);
+//        } catch( IOException ex ) {
+//            logger.error("Error openning the warehouse connection");
+//        }
 
 //        PredictGPR task = new PredictGPR(params, ReconstructionManager.getInstance().
 //          getActiveReconstruction().getGeneProducts());

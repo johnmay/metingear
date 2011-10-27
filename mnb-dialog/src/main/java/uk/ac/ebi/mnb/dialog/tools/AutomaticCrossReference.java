@@ -41,6 +41,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.io.service.ChEBINameService;
+import uk.ac.ebi.io.service.KEGGCompoundNameService;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
@@ -66,24 +68,13 @@ public class AutomaticCrossReference
         extends ContextDialog {
 
     private static final Logger LOGGER = Logger.getLogger(AutomaticCrossReference.class);
-    private List<AbstractAnnotatedEntity> components;
-    private ChEBIWebServiceConnection chebiClient;
-    private KeggCompoundWebServiceConnection keggClient;
-    private JCheckBox chebi = new CheckBox("ChEBI (currated)");
+    private JCheckBox chebi = new CheckBox("ChEBI");
     private JCheckBox kegg = new CheckBox("KEGG Compound");
-    private JCheckBox chebiAll = new CheckBox("ChEBI (all)");
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 200, 10));
 
     public AutomaticCrossReference(JFrame frame, ViewController controller) {
 
         super(frame, controller, "RunDialog");
-
-        chebiAll.addItemListener(new ItemListener() {
-
-            public void itemStateChanged(ItemEvent ie) {
-                chebi.setSelected(chebiAll.isSelected());
-            }
-        });
 
         setDefaultLayout();
 
@@ -105,56 +96,51 @@ public class AutomaticCrossReference
 
         options.setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
         options.add(chebi, cc.xy(1, 1));
-        options.add(chebiAll, cc.xy(3, 1));
-        options.add(kegg, cc.xy(1, 3));
+        options.add(kegg, cc.xy(3, 1));
 
-        options.add(results, cc.xy(1, 5));
+        options.add(results, cc.xyw(1, 3, 3));
 
-        options.add(new JSeparator(), cc.xyw(1, 7, 3));
+        options.add(new JSeparator(), cc.xyw(1, 5, 3));
         JLabel label = new TooltipLabel("Method", "<html>The method to use for name matching, Generally they<br> aim to improve recall at the cost of precision</html>", SwingConstants.RIGHT);
-        options.add(label, cc.xy(1, 9));
-        options.add(new MComboBox(Arrays.asList("Direct", "Fingerprint", "N-gram")), cc.xy(3, 9));
+        options.add(label, cc.xy(1, 7));
+        options.add(new MComboBox(Arrays.asList("Direct", "Fingerprint", "N-gram")), cc.xy(3, 7));
 
         return options;
     }
 
     @Override
     public void process() {
-
-        chebiClient = chebiClient == null ? new ChEBIWebServiceConnection() : chebiClient;
-        keggClient = keggClient == null ? new KeggCompoundWebServiceConnection() : keggClient;
-
         Collection<Metabolite> metabolties = getSelection().get(Metabolite.class);
 
-        boolean useChEBI = chebi.isSelected() || chebiAll.isSelected();
+        boolean useChEBI = chebi.isSelected();
         boolean useKegg = kegg.isSelected();
 
-        chebiClient.setStarsCategory(chebiAll.isSelected() ? StarsCategory.ALL : StarsCategory.THREE_ONLY);
-
-        chebiClient.setMaxResults((Integer) results.getValue());
-        keggClient.setMaxResults((Integer) results.getValue());
+        ChEBINameService.getInstance().setMaxResults((Integer) results.getValue());
+        KEGGCompoundNameService.getInstance().setMaxResults((Integer) results.getValue());
 
         List<CandidateFactory> factories = new ArrayList<CandidateFactory>();
         if (useChEBI) {
-//            factories.add(new CandidateFactory(chebiClient, new ChemicalFingerprintEncoder()));
+            factories.add(new CandidateFactory(ChEBINameService.getInstance(), new ChemicalFingerprintEncoder()));
         }
         if (useKegg) {
-//            factories.add(new CandidateFactory(keggClient, new ChemicalFingerprintEncoder()));
+            factories.add(new CandidateFactory(KEGGCompoundNameService.getInstance(), new ChemicalFingerprintEncoder()));
         }
 
         for (Metabolite metabolite : metabolties) {
             for (CandidateFactory factory : factories) {
-                Multimap<Integer, CandidateEntry> map = factory.getCandidates(metabolite.getName());
+                Multimap<Integer, CandidateEntry> map = factory.getSynonymCandidates(metabolite.getName());
                 if (map.containsKey(0)) {
                     for (CandidateEntry entry : map.get(0)) {
                         metabolite.addAnnotation(factory.getCrossReference(entry));
                     }
                 } else {
-                    Multimap<Integer, SynonymCandidateEntry> synonymMap = factory.getSynonymCandidates(metabolite.getName());
+                    Multimap<Integer, SynonymCandidateEntry> synonymMap = factory.getFuzzySynonymCandidates(metabolite.getName());
                     if (synonymMap.containsKey(0)) {
                         for (CandidateEntry entry : synonymMap.get(0)) {
                             metabolite.addAnnotation(factory.getCrossReference(entry));
                         }
+                    } else {
+                        System.out.println(synonymMap);
                     }
                 }
             }

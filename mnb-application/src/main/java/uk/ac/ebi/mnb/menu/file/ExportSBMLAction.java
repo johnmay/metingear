@@ -34,7 +34,7 @@ import uk.ac.ebi.mnb.core.FileChooserAction;
 import org.apache.commons.lang.StringUtils;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.io.sbml.SBMLIOUtil;
+import uk.ac.ebi.io.xml.SBMLIOUtil;
 
 
 /**

@@ -39,7 +39,7 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
-import uk.ac.ebi.xml.uniprot.UniProtAnnoationLoader;
+import uk.ac.ebi.io.xml.UniProtAnnoationLoader;
 
 /**
  * @name    Annotate - 2011.10.13 <br>

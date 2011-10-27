@@ -36,7 +36,7 @@ import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.chemet.entities.reaction.AtomContainerReaction;
 import uk.ac.ebi.chemet.exceptions.*;
-import uk.ac.ebi.io.sbml.SBMLReactionReader;
+import uk.ac.ebi.io.xml.SBMLReactionReader;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.metabolomes.execs.CommandLineMain;
 import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
