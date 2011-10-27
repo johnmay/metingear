@@ -84,7 +84,7 @@ public class PreparsedEntry {
         return getValue(columnTypeMap.get(column));
     }
 
-    public boolean hasValue(TableDescription column){
+    public boolean hasValue(TableDescription column) {
         return columnTypeMap.containsKey(column);
     }
 
@@ -107,11 +107,15 @@ public class PreparsedEntry {
      * @param column
      * @return
      */
-    public String[] getValues(TableDescription column){
+    public String[] getValues(TableDescription column) {
         Matcher matcher = getListMatcher(column);
-        if( matcher.find() ){
-            return listPattern.split(getValue(column));
+
+        String value = getValue(column);
+
+        if (matcher.find()) {
+            return listPattern.split(value);
         }
-        return new String[0];
+
+        return value != null ? new String[]{value} : new String[0];
     }
 }

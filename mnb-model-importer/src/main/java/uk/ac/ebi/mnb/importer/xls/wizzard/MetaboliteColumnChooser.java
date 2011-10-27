@@ -139,9 +139,9 @@ public class MetaboliteColumnChooser
 
 
         // set previous selections
-        Preferences pref = Preferences.systemNodeForPackage(MetaboliteColumnChooser.class);
-        start.setValue(pref.getInt(properties.getPreferenceKey("start"), 1));
-        end.setValue(pref.getInt(properties.getPreferenceKey("end"), 10));
+        Preferences pref = Preferences.userNodeForPackage(MetaboliteColumnChooser.class);
+        start.setValue(pref.getInt(properties.getPreferenceKey("ent.start"), 1));
+        end.setValue(pref.getInt(properties.getPreferenceKey("ent.end"), 10));
         abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.ABBREVIATION), 0));
         description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.DESCRIPTION), 0));
         compartment.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.COMPARTMENT), 0));
@@ -197,9 +197,9 @@ public class MetaboliteColumnChooser
 
 
         // set selections for next time
-        Preferences pref = Preferences.systemNodeForPackage(MetaboliteColumnChooser.class);
-        pref.putInt(properties.getPreferenceKey("start"), (Integer) start.getValue());
-        pref.putInt(properties.getPreferenceKey("end"), (Integer) end.getValue());
+        Preferences pref = Preferences.userNodeForPackage(MetaboliteColumnChooser.class);
+        pref.putInt(properties.getPreferenceKey("ent.start"), (Integer) start.getValue());
+        pref.putInt(properties.getPreferenceKey("ent.end"), (Integer) end.getValue());
         pref.putInt(properties.getPreferenceKey(EntityColumn.ABBREVIATION), abbreviation.getSelectedIndex());
         pref.putInt(properties.getPreferenceKey(EntityColumn.DESCRIPTION), description.getSelectedIndex());
         pref.putInt(properties.getPreferenceKey(EntityColumn.COMPARTMENT), compartment.getSelectedIndex());

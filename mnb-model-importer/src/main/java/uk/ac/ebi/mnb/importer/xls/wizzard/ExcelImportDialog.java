@@ -52,7 +52,6 @@ import java.awt.CardLayout;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
-import javax.mail.Message;
 import javax.swing.SwingUtilities;
 import mnb.io.resolve.AutomatedReconciler;
 import mnb.io.resolve.EntryReconciler;
@@ -68,12 +67,14 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.chemet.ws.CachedChemicalWS;
 import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
+import uk.ac.ebi.mnb.interfaces.Message;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
@@ -172,14 +173,11 @@ public class ExcelImportDialog
         }
 
         List<String> problemReactions = new ArrayList();
+        ReactionParser parser = null;
 
         try {
 
-            waitIndicator.setText(String.format("importing"));
-
-            // do nothing
-
-
+            waitIndicator.setText(String.format("initialising"));
 
             // final stage
             LOGGER.info("Begining import of excel document");
@@ -196,25 +194,25 @@ public class ExcelImportDialog
             PreparsedSheet entSht = new HSSFPreparsedSheet(workbook.getSheetAt(metI),
                                                            properties,
                                                            EntityColumn.DATA_BOUNDS);
-            waitIndicator.setText(String.format("importing."));
+            waitIndicator.setText(String.format("initialising."));
 
-            ChemicalDBWebService ws =
-                                 new CachedChemicalWS(
-                    new ChEBIWebServiceConnection(StarsCategory.ALL, 10));
+//            ChemicalDBWebService ws =
+//                                 new CachedChemicalWS(
+//                    new ChEBIWebServiceConnection(StarsCategory.ALL, 10));
 
-            waitIndicator.setText(String.format("importing.."));
+            waitIndicator.setText(String.format("initialising.."));
 
             CandidateFactory factory =
-                             new CandidateFactory(ws,
+                             new CandidateFactory( ChEBINameService.getInstance(),
                                                   new ChemicalFingerprintEncoder());
 
             EntryReconciler reconciler = new AutomatedReconciler(factory,
                                                                  new ChEBIIdentifier());
 
             EntityResolver entitySheet = new EntityResolver(entSht, reconciler);
-            ReactionParser parser = new ReactionParser(entitySheet);
+            parser = new ReactionParser(entitySheet);
 
-            waitIndicator.setText(String.format("importing..."));
+            waitIndicator.setText(String.format("initialising..."));
 
             int completed = 0;
             while (rxnSht.hasNext()) {
@@ -252,7 +250,15 @@ public class ExcelImportDialog
             addMessage(new ErrorMessage("Unable to import document " + ex.getMessage()));
         }
 
-        addMessage(new WarningMessage("The following reaction were not loaded: " + Joiner.on(", ").join(problemReactions)));
+        if (!problemReactions.isEmpty()) {
+            addMessage(new WarningMessage("The following reaction producted errors whilst loading: " + Joiner.on(", ").join(problemReactions)));
+        }
+
+        if(parser != null){
+            for(Message m : parser.collectMessages()){
+                addMessage(m);
+            }
+        }
 
     }
 

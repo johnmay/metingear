@@ -166,9 +166,9 @@ public class ReactionColumnChooser
 
 
         // set previous selections
-        Preferences pref = Preferences.systemNodeForPackage(ReactionColumnChooser.class);
-        start.setValue(pref.getInt(properties.getPreferenceKey("start"), 1));
-        end.setValue(pref.getInt(properties.getPreferenceKey("end"), 10));
+        Preferences pref = Preferences.userNodeForPackage(ReactionColumnChooser.class);
+        start.setValue(pref.getInt(properties.getPreferenceKey("rxn.start"), 1));
+        end.setValue(pref.getInt(properties.getPreferenceKey("rxn.end"), 10));
         abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.ABBREVIATION), 0));
         description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.DESCRIPTION), 0));
         equation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.EQUATION), 0));
@@ -236,9 +236,9 @@ public class ReactionColumnChooser
         properties.put("rxn.col.locus", locus.getSelectedItem());
 
         // set selections for next time
-        Preferences pref = Preferences.systemNodeForPackage(ReactionColumnChooser.class);
-        pref.putInt(properties.getPreferenceKey("start"), (Integer) start.getValue());
-        pref.putInt(properties.getPreferenceKey("end"), (Integer) end.getValue());
+        Preferences pref = Preferences.userNodeForPackage(ReactionColumnChooser.class);
+        pref.putInt(properties.getPreferenceKey("rxn.start"), (Integer) start.getValue());
+        pref.putInt(properties.getPreferenceKey("rxn.end"), (Integer) end.getValue());
         pref.putInt(properties.getPreferenceKey(ReactionColumn.ABBREVIATION), abbreviation.getSelectedIndex());
         pref.putInt(properties.getPreferenceKey(ReactionColumn.DESCRIPTION), description.getSelectedIndex());
         pref.putInt(properties.getPreferenceKey(ReactionColumn.EQUATION), equation.getSelectedIndex());

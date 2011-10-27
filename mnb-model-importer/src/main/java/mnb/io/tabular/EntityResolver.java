@@ -1,4 +1,3 @@
-
 /**
  * EntityResolver.java
  *
@@ -36,7 +35,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.core.Metabolite;
-
+import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 /**
  *          EntityResolver – 2011.08.29 <br>
@@ -50,10 +49,10 @@ public class EntityResolver {
     private static final Logger LOGGER = Logger.getLogger(EntityResolver.class);
     private List<PreparsedMetabolite> entities = new ArrayList();
     private Map<String, PreparsedMetabolite> entityMap = new HashMap(); // abbreviation -> entitiy
+    private Map<String, Metabolite> nonReconciled = new HashMap();
     private Properties p;
     private PreparsedSheet sheet;
     private EntryReconciler reconciler;
-
 
     public EntityResolver(PreparsedSheet sheet,
                           EntryReconciler reconciler) {
@@ -62,24 +61,23 @@ public class EntityResolver {
         load();
     }
 
-
     private final void load() {
 
         double found = 0;
         double total = 0;
 
         sheet.reset();
-        while( sheet.hasNext() ) {
+        while (sheet.hasNext()) {
             PreparsedMetabolite entity = (PreparsedMetabolite) sheet.next();
 
             Matcher compartment =
                     ReactionParser.ENTITY_COMPARTMENT.matcher(entity.getAbbreviation());
 
             // if contains a compartment identifier remove it
-            if( compartment.find() ) {
+            if (compartment.find()) {
                 String abbreviation = compartment.replaceAll("");
                 // only put if we don't have the slot already
-                if( !entityMap.containsKey(abbreviation.trim()) ) {
+                if (!entityMap.containsKey(abbreviation.trim())) {
                     entityMap.put(abbreviation.trim(), entity);
                 }
             } else {
@@ -90,11 +88,22 @@ public class EntityResolver {
         sheet.reset();
     }
 
-
     public PreparsedMetabolite getEntity(String abbreviation) {
         return entityMap.get(abbreviation);
     }
 
+    public Metabolite getNonReconciledMetabolite(String name) {
+
+        if (nonReconciled.containsKey(name)) {
+            return nonReconciled.get(name);
+        }
+
+        Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), name, name);
+
+        nonReconciled.put(name, m);
+
+        return m;
+    }
 
     /**
      * 
@@ -104,7 +113,7 @@ public class EntityResolver {
     public Metabolite getReconciledMetabolite(String abbreviation) {
 
         // new resolution
-        if( resolved.containsKey(abbreviation) == false ) {
+        if (resolved.containsKey(abbreviation) == false) {
             Metabolite entry = (Metabolite) reconciler.resolve(getEntity(abbreviation));
             resolved.put(abbreviation, entry);
         }
@@ -112,8 +121,5 @@ public class EntityResolver {
         return resolved.get(abbreviation);
 
     }
-
-
     private Map<String, Metabolite> resolved = new HashMap();
 }
-

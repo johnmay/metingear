@@ -83,6 +83,9 @@ public class PreparsedReaction extends PreparsedEntry {
         return super.getValues(ReactionColumn.LOCUS);
     }
 
-   
-
+    @Override
+    public String toString() {
+        return getIdentifier() != null ? getIdentifier()
+               : getDescription() != null ? getDescription() : "unamed reaction";
+    }
 }

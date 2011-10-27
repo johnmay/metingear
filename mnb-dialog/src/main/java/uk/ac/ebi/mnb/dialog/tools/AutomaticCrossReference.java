@@ -136,10 +136,10 @@ public class AutomaticCrossReference
 
         List<CandidateFactory> factories = new ArrayList<CandidateFactory>();
         if (useChEBI) {
-            factories.add(new CandidateFactory(chebiClient, new ChemicalFingerprintEncoder()));
+//            factories.add(new CandidateFactory(chebiClient, new ChemicalFingerprintEncoder()));
         }
         if (useKegg) {
-            factories.add(new CandidateFactory(keggClient, new ChemicalFingerprintEncoder()));
+//            factories.add(new CandidateFactory(keggClient, new ChemicalFingerprintEncoder()));
         }
 
         for (Metabolite metabolite : metabolties) {

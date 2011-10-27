@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocsCollector;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -72,7 +73,7 @@ public class SearchableIndex {
     public List<AnnotatedEntity> getRankedEntities(Query query, Integer number, Class filter) throws IOException {
 
         IndexSearcher searcher = new IndexSearcher(index, true);
-        TopScoreDocCollector collector = TopScoreDocCollector.create(number * 4, true); // * 4 to get more qureires. The number is for all queries when in fact we only want a certain number
+        TopDocsCollector collector = TopScoreDocCollector.create(number * 4, true); // * 4 to get more qureires. The number is for all queries when in fact we only want a certain number
         searcher.search(query, collector);
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
