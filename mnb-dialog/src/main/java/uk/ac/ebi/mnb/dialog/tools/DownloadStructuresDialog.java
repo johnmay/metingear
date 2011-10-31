@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.menu.reconciliation;
+package uk.ac.ebi.mnb.dialog.tools;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -26,26 +26,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JSeparator;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.event.UndoableEditListener;
 import org.apache.commons.lang.StringUtils;
-import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.mnb.view.labels.MLabel;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
-import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
+import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.io.service.KEGGCompoundStructureService;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
-import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.DialogPanel;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.view.CheckBox;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
@@ -58,7 +61,7 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  * @author  $Author$ (this version)
  */
 public class DownloadStructuresDialog
-        extends DropdownDialog {
+        extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(DownloadStructuresDialog.class);
     private Collection<AnnotatedEntity> components;
@@ -68,48 +71,29 @@ public class DownloadStructuresDialog
     private JCheckBox keggCheckBox;
     private JCheckBox chebiAllStarCheckBox;
 
-    public DownloadStructuresDialog() {
-        super(MainView.getInstance(), MainView.getInstance(), "DownloadStructures");
-
-
+    public DownloadStructuresDialog(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+        super(frame, updater, messages, controller, undoableEdits, "RunDialog");
 
         chebiCheckBox = new CheckBox("ChEBI (currated only)");
         keggCheckBox = new CheckBox("KEGG Compound");
         chebiAllStarCheckBox = new CheckBox("ChEBI (All)");
 
-
-        layoutOptions();
+        setDefaultLayout();
     }
 
-    private void layoutOptions() {
-        setLayout(new FormLayout("10dlu, pref, 10dlu",
-                "10dlu, pref, 2dlu, pref, 2dlu, pref, 4dlu, pref, 10dlu"));
-
+    public JPanel getOptions() {
+        JPanel panel = super.getOptions();
         CellConstraints cc = new CellConstraints();
 
-        // options
-        JComponent selection = new DialogPanel();
 
-        selection.setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p"));
-        selection.add(chebiCheckBox, cc.xy(1, 1));
-        selection.add(chebiAllStarCheckBox, cc.xy(3, 1));
-        selection.add(keggCheckBox, cc.xy(1, 3));
 
-        // close and run buttons
-        JComponent component = new DialogPanel();
-        component.setLayout(new FormLayout("left:p, pref:grow, right:p", "p"));
-        component.add(getClose(), cc.xy(1, 1));
-        component.add(getActivate(), cc.xy(3, 1));
+        panel.setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p"));
+        panel.add(chebiCheckBox, cc.xy(1, 1));
+        panel.add(chebiAllStarCheckBox, cc.xy(3, 1));
+        panel.add(keggCheckBox, cc.xy(1, 3));
 
-        add(new MLabel("Please select which web services should be used"), cc.xy(2, 2));
-        add(new JSeparator(JSeparator.HORIZONTAL), cc.xy(2, 4));
-        add(selection, cc.xy(2, 6));
-        add(component, cc.xy(2, 8));
 
-    }
-
-    public void setComponents(Collection<AnnotatedEntity> components) {
-        this.components = components;
+        return panel;
     }
 
     @Override
@@ -119,9 +103,9 @@ public class DownloadStructuresDialog
         if (chebi == null) {
             chebi = new ChEBIWebServiceConnection();
         }
-        if (kegg == null) {
-            kegg = new KeggCompoundWebServiceConnection();
-        }
+//        if (kegg == null) {
+//            kegg = new KeggCompoundWebServiceConnection();
+//        }
 
         boolean useChEBI = chebiAllStarCheckBox.isSelected() || chebiCheckBox.isSelected();
         boolean useKEGG = keggCheckBox.isSelected();
@@ -135,11 +119,19 @@ public class DownloadStructuresDialog
 
         List<Identifier> problemIdentifiers = new ArrayList();
 
-        for (AnnotatedEntity component : components) {
+        for (AnnotatedEntity component : getSelection().get(Metabolite.class)) {
+
+            for(Annotation ann : component.getAnnotations() ){
+                System.out.println(ann.getClass() + " : " + (ann instanceof CrossReference) + " : " + AnnotationLoader.getInstance().getIndex(CrossReference.class).getClass());;
+            }
+
 
             for (Annotation xref : component.getAnnotationsExtending(CrossReference.class)) {
 
                 Identifier id = ((CrossReference) xref).getIdentifier();
+
+                System.out.println(id.getShortDescription() + ":" + id);
+
                 if (useChEBI && id instanceof ChEBIIdentifier) {
                     try {
                         IAtomContainer molecule = chebi.getAtomContainer(id.getAccession());
@@ -154,11 +146,10 @@ public class DownloadStructuresDialog
                 } else if (useKEGG && id instanceof KEGGCompoundIdentifier) {
                     IAtomContainer molecule;
                     try {
-                        molecule = kegg.getAtomContainer(id.getAccession());
+                        molecule = KEGGCompoundStructureService.getInstance().getStructure((KEGGCompoundIdentifier) id);
+                        System.out.println(molecule);
                         component.addAnnotation(new ChemicalStructure(molecule));
                     } catch (UnfetchableEntry ex) {
-                        problemIdentifiers.add(id);
-                    } catch (MissingStructureException ex) {
                         problemIdentifiers.add(id);
                     }
                 }
@@ -167,8 +158,7 @@ public class DownloadStructuresDialog
 
 
         if (problemIdentifiers.isEmpty() == false) {
-            MainView.getInstance().addWarningMessage("Unable to download structure for; "
-                    + StringUtils.join(problemIdentifiers, ", "));
+            addMessage(new WarningMessage("Unable to download structure for " + StringUtils.join(problemIdentifiers, ", ")));
         }
 
 
@@ -176,6 +166,6 @@ public class DownloadStructuresDialog
 
     @Override
     public boolean update() {
-        return MainView.getInstance().getViewController().update();
+        return update(getSelection());
     }
 }

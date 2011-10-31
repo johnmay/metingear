@@ -12,11 +12,12 @@ import uk.ac.ebi.mnb.core.ControllerDialogItem;
 import uk.ac.ebi.mnb.dialog.tools.TransferAnnotations;
 import uk.ac.ebi.mnb.dialog.tools.AutomaticCrossReference;
 import uk.ac.ebi.mnb.dialog.tools.ChokePoint;
+import uk.ac.ebi.mnb.dialog.tools.CollapseStructures;
+import uk.ac.ebi.mnb.dialog.tools.DownloadStructuresDialog;
 import uk.ac.ebi.mnb.dialog.tools.MergeLoci;
 import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
-import uk.ac.ebi.mnb.menu.reconciliation.DownloadStructures;
 
 /**
  * FileMenu.java
@@ -39,7 +40,7 @@ public class ToolsMenu extends ClearMenu {
         add(new ContextDialogItem(view,
                                   view.getViewController(),
                                   AutomaticCrossReference.class));
-        add(new DynamicMenuItem(new DownloadStructures()));
+        add(new ControllerDialogItem(view, DownloadStructuresDialog.class));
 
         add(new JSeparator());
 
@@ -49,9 +50,7 @@ public class ToolsMenu extends ClearMenu {
         add(new ControllerDialogItem(view, TransferAnnotations.class));
         add(new JSeparator());
         add(new JMenuItem(new MergeLoci(MainView.getInstance())));
-
-
-
+        add(new ControllerDialogItem(view, CollapseStructures.class));
 
 
     }

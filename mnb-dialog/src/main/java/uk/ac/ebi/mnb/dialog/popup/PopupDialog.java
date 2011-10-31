@@ -39,7 +39,6 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.sun.awt.AWTUtilities;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,7 +76,9 @@ public class PopupDialog extends JDialog {
         //  setUndecorated(true);
         setUndecorated(true);
         add(background);
-        AWTUtilities.setWindowOpaque(this, false);
+
+       //  AWTAccessor.getWindowAccessor().setOpaque(this, false);
+
         panel.setOpaque(false);
         background.setLayout(new FormLayout("8px, 16px, p, 16px, 8px", "8px, 16px, p, 16px, 8px"));
         CellConstraints cc = new CellConstraints();

@@ -23,11 +23,8 @@ import java.util.List;
 import uk.ac.ebi.core.*;
 import uk.ac.ebi.mnb.core.*;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
-import uk.ac.ebi.mnb.menu.file.NewProjectAction;
-import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
 import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
-import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.search.*;
 
 import javax.swing.*;
@@ -90,8 +87,34 @@ public class MainView
         toolbar = new UnifiedToolBar();
         searchField.putClientProperty("JTextField.variant", "search"); // makes the search bar rounded
         toolbar.addComponentToRight(new LabeledComponentGroup("Search", searchField).getComponent());
-        toolbar.addComponentToCenter(new IconButton(new NewProjectAction()));
-        toolbar.addComponentToCenter(new IconButton(new AddCrossReference()));
+//        toolbar.addComponentToCenter(new IconButton(new NewProjectAction()));
+//        toolbar.addComponentToCenter(new IconButton(new AddCrossReference()));
+        JToggleButton genView = new JToggleButton(ViewUtils.getIcon("images/toolbar/gen.png"));
+        JToggleButton metView = new JToggleButton(ViewUtils.getIcon("images/toolbar/met.png"));
+        JToggleButton rxnView = new JToggleButton(ViewUtils.getIcon("images/toolbar/rxn.png"));
+
+        genView.setSelectedIcon(ViewUtils.getIcon("images/toolbar/gen-selected.png"));
+        metView.setSelectedIcon(ViewUtils.getIcon("images/toolbar/met-selected.png"));
+        rxnView.setSelectedIcon(ViewUtils.getIcon("images/toolbar/rxn-selected.png"));
+
+        genView.putClientProperty("JButton.buttonType", "segmentedTextured");
+        genView.putClientProperty("JButton.segmentPosition", "first");
+        genView.setFocusable(false);
+        
+        metView.putClientProperty("JButton.buttonType", "segmentedTextured");
+        metView.putClientProperty("JButton.segmentPosition", "middle");
+        metView.setFocusable(false);
+
+        rxnView.putClientProperty("JButton.buttonType", "segmentedTextured");
+        rxnView.putClientProperty("JButton.segmentPosition", "last");
+        rxnView.setFocusable(false);
+
+        ButtonGroup group = new ButtonGroup();
+        group.add(genView);
+        group.add(metView);
+        group.add(rxnView);
+
+        toolbar.addComponentToLeft(new LabeledComponentGroup("View", genView, metView, rxnView).getComponent());
 
         // search field
         searchField.getDocument().addDocumentListener(new DocumentListener() {
@@ -224,13 +247,13 @@ public class MainView
             }
         });
 
-//        addFocusListener(new FocusAdapter() {
-//
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//                project.getActiveView().requestFocus();
-//            }
-//        });
+        addFocusListener(new FocusAdapter() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                getJMenuBar().repaint();
+            }
+        });
 
         undoManager = new UndoManager();
 

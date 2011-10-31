@@ -37,4 +37,11 @@
                 <exec.executable>${profiler.java}</exec.executable>
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-Assemble</actionName>
+            <displayName>Assemble</displayName>
+            <goals>
+                <goal>assembly:assembly</goal>
+            </goals>
+        </action>
     </actions>

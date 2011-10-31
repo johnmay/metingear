@@ -30,28 +30,28 @@ public class Main {
 
         // set the OS X properties for screen menubar etc to make it better integrated
         if (os.equals("Mac OS X")) {
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name",
-                    "Metabonator");
-            // MainView.getInstance().getRootPane().putClientProperty( "apple.awt.brushMetalLook" , Boolean.TRUE );
-            // Set the doc image
-            com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-            app.setDockIconImage(ViewUtils.logo_512x512);
-            app.setAboutHandler(new com.apple.eawt.AboutHandler() {
-
-                public void handleAbout(com.apple.eawt.AppEvent.AboutEvent ae) {
-                    AboutDialog dialog = new AboutDialog(false);
-                    dialog.setVisible(true);
-                }
-            });
-            app.setPreferencesHandler(new com.apple.eawt.PreferencesHandler() {
-
-                public void handlePreferences(com.apple.eawt.AppEvent.PreferencesEvent pe) {
-                    PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
-                            MainView.getInstance());
-                    pref.setVisible(true);
-                }
-            });
+//           // System.setProperty("apple.laf.useScreenMenuBar", "true");
+//            System.setProperty("com.apple.mrj.application.apple.menu.about.name",
+//                    "Metabonator");
+//            // MainView.getInstance().getRootPane().putClientProperty( "apple.awt.brushMetalLook" , Boolean.TRUE );
+//            // Set the doc image
+//            com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
+//            app.setDockIconImage(ViewUtils.logo_512x512);
+//            app.setAboutHandler(new com.apple.eawt.AboutHandler() {
+//
+//                public void handleAbout(com.apple.eawt.AppEvent.AboutEvent ae) {
+//                    AboutDialog dialog = new AboutDialog(false);
+//                    dialog.setVisible(true);
+//                }
+//            });
+//            app.setPreferencesHandler(new com.apple.eawt.PreferencesHandler() {
+//
+//                public void handlePreferences(com.apple.eawt.AppEvent.PreferencesEvent pe) {
+//                    PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
+//                            MainView.getInstance());
+//                    pref.setVisible(true);
+//                }
+//            });
         }
 
         try {
