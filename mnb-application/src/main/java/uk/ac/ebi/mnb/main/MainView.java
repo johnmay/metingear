@@ -78,8 +78,7 @@ public class MainView
 
     private MainView() {
 
-        super("Metabonator");
-
+        super("Mb-models");
         // mac widgets
         MacUtils.makeWindowLeopardStyle(getRootPane());
 
