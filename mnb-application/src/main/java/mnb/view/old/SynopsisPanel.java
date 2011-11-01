@@ -17,7 +17,7 @@ import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.mnb.view.TransparentTextArea;
 import uk.ac.ebi.mnb.view.TransparentTextField;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
 import org.apache.commons.lang.StringUtils;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;

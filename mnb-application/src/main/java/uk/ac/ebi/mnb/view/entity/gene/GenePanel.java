@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.gene;
 
+import uk.ac.ebi.visualisation.ViewUtils;
 import java.awt.Dimension;
 
 import java.util.Collection;

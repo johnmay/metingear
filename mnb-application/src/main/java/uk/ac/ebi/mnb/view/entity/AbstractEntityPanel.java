@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
+import uk.ac.ebi.visualisation.ViewUtils;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;

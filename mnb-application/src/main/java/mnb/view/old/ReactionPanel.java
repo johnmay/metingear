@@ -26,7 +26,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.view.labels.MLabel;
 import mnb.view.old.CachedMoleculeRenderer;
 import mnb.view.old.ReactionArrow;

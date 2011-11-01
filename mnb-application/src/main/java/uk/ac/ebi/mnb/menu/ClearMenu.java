@@ -18,7 +18,7 @@ package uk.ac.ebi.mnb.menu;
 
 import javax.swing.ButtonModel;
 import javax.swing.JMenu;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  * ClearMenu.java – MetabolicDevelopmentKit – Jun 3, 2011

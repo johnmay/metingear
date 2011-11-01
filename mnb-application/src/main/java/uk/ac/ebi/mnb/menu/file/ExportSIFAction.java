@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 import mnb.view.old.MatrixModel;
 import mnb.view.old.MatrixView;
 import uk.ac.ebi.mnb.main.MainView;

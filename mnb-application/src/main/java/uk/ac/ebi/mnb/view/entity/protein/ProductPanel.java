@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
+import uk.ac.ebi.visualisation.ViewUtils;
 import com.google.common.base.Joiner;
 import java.awt.Dimension;
 

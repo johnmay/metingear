@@ -14,6 +14,7 @@
  */
 package uk.ac.ebi.mnb.main;
 
+import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import java.awt.*;
 import java.awt.event.*;

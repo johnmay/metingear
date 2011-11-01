@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.menu;
 import java.awt.event.ActionEvent;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;

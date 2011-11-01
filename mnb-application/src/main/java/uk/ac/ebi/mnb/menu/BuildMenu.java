@@ -12,7 +12,7 @@ import uk.ac.ebi.mnb.menu.build.PriamAction;
 import uk.ac.ebi.mnb.menu.build.StoichiometricMatixAction;
 import uk.ac.ebi.mnb.menu.build.StoichiometryAction;
 import uk.ac.ebi.mnb.menu.build.SwissProtHomology;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  * FileMenu.java

@@ -5,7 +5,7 @@
 package mnb.view.old;
 
 import javax.swing.ImageIcon;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 

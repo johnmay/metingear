@@ -35,7 +35,7 @@ import uk.ac.ebi.mnb.core.MLabels;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 /**

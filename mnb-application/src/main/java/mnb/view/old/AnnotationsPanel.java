@@ -11,7 +11,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.awt.Color;
 import java.util.Collection;
 import javax.swing.JPanel;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.view.labels.BoldLabel;
 import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.interfaces.Annotation;
