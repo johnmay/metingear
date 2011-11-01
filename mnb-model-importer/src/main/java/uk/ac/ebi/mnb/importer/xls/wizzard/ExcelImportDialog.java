@@ -31,7 +31,6 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
@@ -53,8 +52,8 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingUtilities;
-import mnb.io.resolve.AutomatedReconciler;
 import mnb.io.resolve.EntryReconciler;
+import mnb.io.resolve.ListSelectionReconciler;
 import mnb.io.tabular.EntityResolver;
 import mnb.io.tabular.parser.ReactionParser;
 import mnb.io.tabular.parser.UnparsableReactionError;
@@ -64,12 +63,8 @@ import mnb.io.tabular.type.EntityColumn;
 import mnb.io.tabular.type.ReactionColumn;
 import mnb.io.tabular.xls.HSSFPreparsedSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
-import uk.ac.ebi.chemet.ws.CachedChemicalWS;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.io.service.ChEBINameService;
-import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
-import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
@@ -101,11 +96,12 @@ public class ExcelImportDialog
     private Reconstruction reconstruction;
     private CellConstraints cc = new CellConstraints();
     private JLabel label;
+    private JFrame frame;
 
     public ExcelImportDialog(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits, Reconstruction reconstruction, File file, ExcelHelper helper) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
 
-
+        this.frame = frame;
         this.reconstruction = reconstruction;
 
         // card layout for stages...
@@ -203,11 +199,13 @@ public class ExcelImportDialog
             waitIndicator.setText(String.format("initialising.."));
 
             CandidateFactory factory =
-                             new CandidateFactory( ChEBINameService.getInstance(),
+                             new CandidateFactory(ChEBINameService.getInstance(),
                                                   new ChemicalFingerprintEncoder());
 
-            EntryReconciler reconciler = new AutomatedReconciler(factory,
-                                                                 new ChEBIIdentifier());
+            // todo should be selectable
+            EntryReconciler reconciler = new ListSelectionReconciler(frame,
+                                                                     factory,
+                                                                     new ChEBIIdentifier());
 
             EntityResolver entitySheet = new EntityResolver(entSht, reconciler);
             parser = new ReactionParser(entitySheet);
@@ -254,8 +252,8 @@ public class ExcelImportDialog
             addMessage(new WarningMessage("The following reaction producted errors whilst loading: " + Joiner.on(", ").join(problemReactions)));
         }
 
-        if(parser != null){
-            for(Message m : parser.collectMessages()){
+        if (parser != null) {
+            for (Message m : parser.collectMessages()) {
                 addMessage(m);
             }
         }

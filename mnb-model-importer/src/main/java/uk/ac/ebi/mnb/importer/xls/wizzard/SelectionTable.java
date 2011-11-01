@@ -32,7 +32,7 @@ import javax.swing.table.TableColumn;
 import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.visualisation.ColorUtilities;
 
 /**

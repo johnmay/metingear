@@ -125,7 +125,7 @@ public class ExcelXLSHelper extends ExcelHelper {
     public String[][] getSheetData(HSSFSheet sheet) {
 
 
-        int maxRow = sheet.getLastRowNum();
+        int maxRow = sheet.getLastRowNum() + 1;
         int colNumber = INTIAL_COLUMN_NUMBER;
 
         String[][] data = new String[maxRow][colNumber];

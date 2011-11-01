@@ -25,7 +25,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import mnb.io.tabular.ExcelModelProperties;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.view.labels.MLabel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.view.DialogPanel;
