@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import uk.ac.ebi.mnb.core.*;
 import uk.ac.ebi.mnb.interfaces.DialogController;
-import uk.ac.ebi.mnb.interfaces.Theme;
+import uk.ac.ebi.interfaces.Theme;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.labels.MLabel;

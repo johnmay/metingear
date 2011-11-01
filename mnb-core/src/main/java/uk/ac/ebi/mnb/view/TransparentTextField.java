@@ -8,7 +8,7 @@ package uk.ac.ebi.mnb.view;
 import java.awt.Color;
 import javax.swing.JTextField;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.interfaces.Theme;
+import uk.ac.ebi.interfaces.Theme;
 
 
 /**

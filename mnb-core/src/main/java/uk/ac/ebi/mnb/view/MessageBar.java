@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view;
 
+import uk.ac.ebi.visualisation.ViewUtils;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GradientPaint;

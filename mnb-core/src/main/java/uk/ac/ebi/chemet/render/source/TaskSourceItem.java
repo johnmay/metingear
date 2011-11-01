@@ -30,7 +30,7 @@ import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.chemet.io.external.TaskStatus;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 
 /**

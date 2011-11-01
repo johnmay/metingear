@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 
 /**

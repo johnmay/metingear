@@ -29,7 +29,7 @@ import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 
 /**

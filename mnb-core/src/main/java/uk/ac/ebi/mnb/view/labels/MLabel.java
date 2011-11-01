@@ -7,7 +7,7 @@ package uk.ac.ebi.mnb.view.labels;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  * Label.java

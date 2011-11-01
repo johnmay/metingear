@@ -23,7 +23,7 @@ package uk.ac.ebi.metabonater.components.theme;
 import javax.swing.JTextField;
 import javax.swing.text.Document;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.interfaces.Theme;
+import uk.ac.ebi.interfaces.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
 
 /**

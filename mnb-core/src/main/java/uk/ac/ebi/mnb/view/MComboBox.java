@@ -27,7 +27,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.interfaces.Theme;
+import uk.ac.ebi.interfaces.Theme;
 
 /**
  *          ComboBox – 2011.09.30 <br>

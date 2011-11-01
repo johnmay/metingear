@@ -8,7 +8,7 @@ import java.lang.String;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  * GeneralAction.java
