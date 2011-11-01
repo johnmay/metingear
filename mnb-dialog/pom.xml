@@ -29,8 +29,23 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>mnb-importer</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>mnb-importer</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>mnb-miscellaneous</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>uk.ac.ebi.chemet</groupId>
+      <artifactId>CheMet-Visualisation</artifactId>
+      <version>1.2-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

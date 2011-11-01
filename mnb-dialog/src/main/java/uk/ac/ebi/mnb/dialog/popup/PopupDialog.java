@@ -28,10 +28,10 @@ import java.awt.geom.RoundRectangle2D;
 
 import uk.ac.ebi.metabonater.components.theme.MRoundButton;
 import uk.ac.ebi.mnb.core.CloseDialogAction;
-import uk.ac.ebi.mnb.interfaces.Theme;
+import uk.ac.ebi.interfaces.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.DialogPanel;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 import javax.swing.*;
 

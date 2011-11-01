@@ -41,7 +41,7 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabonater.components.theme.MRoundButton;
 import uk.ac.ebi.metabonater.components.theme.MTextField;
-import uk.ac.ebi.mnb.interfaces.Theme;
+import uk.ac.ebi.interfaces.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.resource.IdentifierFactory;
