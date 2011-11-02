@@ -47,7 +47,7 @@ import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.mnb.view.CheckBox;
+import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.mnb.view.MComboBox;
 
 /**
@@ -62,13 +62,13 @@ public class SequenceHomology extends ControllerDialog {
     private static final Logger LOGGER = Logger.getLogger(SequenceHomology.class);
     private CellConstraints cc = new CellConstraints();
     // options
-    private CheckBox remote = new CheckBox("Remote (webservices)");
+    private MCheckBox remote = new MCheckBox("Remote (webservices)");
     private MComboBox tool = new MComboBox(Arrays.asList("BLAST", "FASTA"));
     private MComboBox database = new MComboBox(HomologyDatabaseManager.getInstance().getNames());
     private JSpinner cpu = new JSpinner(new SpinnerNumberModel(1, 1, 4, 1));
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 2500, 50));
     private JTextField field = new MTextField("1e-30");
-    private CheckBox alignments = new CheckBox("Parse alignments (increases save sizes)");
+    private MCheckBox alignments = new MCheckBox("Parse alignments (increases save sizes)");
 
     public SequenceHomology(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "BuildDialog");

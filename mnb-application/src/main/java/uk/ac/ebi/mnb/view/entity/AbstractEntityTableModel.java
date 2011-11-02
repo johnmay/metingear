@@ -207,14 +207,14 @@ public abstract class AbstractEntityTableModel
         } else if (type == DataType.BASIC) {
             return getBasicInfo(entity, getColumnName(columnIndex));
         } else if (type == DataType.ANNOTATION) {
-            return entity.getAnnotations(columnDescriptors.get(columnIndex).getAccessClass());
+            return entity.getAnnotationsExtending(columnDescriptors.get(columnIndex).getAccessClass());
         } else if (type == DataType.OBSERVATION) {
             return null;
 //            return entity.getObservationCollection().get(
 //                    columnDescriptors.get(columnIndex).getAccessClass());
         }
 
-        // will never happen...
+        // will never happen... i hope :-)
         LOGGER.error("Unknown ColumnAccessType?");
 
         return "";

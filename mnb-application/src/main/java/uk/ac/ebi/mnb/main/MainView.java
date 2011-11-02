@@ -46,6 +46,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
+import uk.ac.ebi.mnb.menu.ViewSelector;
 
 /**
  * MainView.java
@@ -88,33 +89,13 @@ public class MainView
         searchField.putClientProperty("JTextField.variant", "search"); // makes the search bar rounded
         toolbar.addComponentToRight(new LabeledComponentGroup("Search", searchField).getComponent());
 //        toolbar.addComponentToCenter(new IconButton(new NewProjectAction()));
-//        toolbar.addComponentToCenter(new IconButton(new AddCrossReference()));
-        JToggleButton genView = new JToggleButton(ViewUtils.getIcon("images/toolbar/gen.png"));
-        JToggleButton metView = new JToggleButton(ViewUtils.getIcon("images/toolbar/met.png"));
-        JToggleButton rxnView = new JToggleButton(ViewUtils.getIcon("images/toolbar/rxn.png"));
+//     
 
-        genView.setSelectedIcon(ViewUtils.getIcon("images/toolbar/gen-selected.png"));
-        metView.setSelectedIcon(ViewUtils.getIcon("images/toolbar/met-selected.png"));
-        rxnView.setSelectedIcon(ViewUtils.getIcon("images/toolbar/rxn-selected.png"));
+       
+        ViewSelector selector = new ViewSelector(project);       
 
-        genView.putClientProperty("JButton.buttonType", "segmentedTextured");
-        genView.putClientProperty("JButton.segmentPosition", "first");
-        genView.setFocusable(false);
-        
-        metView.putClientProperty("JButton.buttonType", "segmentedTextured");
-        metView.putClientProperty("JButton.segmentPosition", "middle");
-        metView.setFocusable(false);
-
-        rxnView.putClientProperty("JButton.buttonType", "segmentedTextured");
-        rxnView.putClientProperty("JButton.segmentPosition", "last");
-        rxnView.setFocusable(false);
-
-        ButtonGroup group = new ButtonGroup();
-        group.add(genView);
-        group.add(metView);
-        group.add(rxnView);
-
-        toolbar.addComponentToLeft(new LabeledComponentGroup("View", genView, metView, rxnView).getComponent());
+        toolbar.addComponentToLeft(new Box.Filler(new Dimension(30, 10), new Dimension(50, 10), new Dimension(75, 10)));
+        toolbar.addComponentToLeft(selector.getComponent());
 
         // search field
         searchField.getDocument().addDocumentListener(new DocumentListener() {

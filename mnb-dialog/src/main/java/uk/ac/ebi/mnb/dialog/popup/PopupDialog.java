@@ -73,12 +73,11 @@ public class PopupDialog extends JDialog {
 
     public PopupDialog(JFrame frame, ModalityType modality) {
         super(frame, modality);
-        //  setUndecorated(true);
         setUndecorated(true);
         add(background);
 
-       //  AWTAccessor.getWindowAccessor().setOpaque(this, false);
-
+        getRootPane().setOpaque(false);
+        getRootPane().setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
         panel.setOpaque(false);
         background.setLayout(new FormLayout("8px, 16px, p, 16px, 8px", "8px, 16px, p, 16px, 8px"));
         CellConstraints cc = new CellConstraints();

@@ -49,7 +49,7 @@ import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.mnb.view.CheckBox;
+import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
@@ -74,9 +74,9 @@ public class DownloadStructuresDialog
     public DownloadStructuresDialog(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
 
-        chebiCheckBox = new CheckBox("ChEBI (currated only)");
-        keggCheckBox = new CheckBox("KEGG Compound");
-        chebiAllStarCheckBox = new CheckBox("ChEBI (All)");
+        chebiCheckBox = new MCheckBox("ChEBI (currated only)");
+        keggCheckBox = new MCheckBox("KEGG Compound");
+        chebiAllStarCheckBox = new MCheckBox("ChEBI (All)");
 
         setDefaultLayout();
     }

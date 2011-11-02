@@ -36,19 +36,19 @@ import uk.ac.ebi.interfaces.Theme;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class CheckBox extends JCheckBox {
+public class MCheckBox extends JCheckBox {
 
-    private static final Logger LOGGER = Logger.getLogger(CheckBox.class);
+    private static final Logger LOGGER = Logger.getLogger(MCheckBox.class);
 
 
-    public CheckBox() {
+    public MCheckBox() {
         Theme theme = Settings.getInstance().getTheme();
         setFont(theme.getBodyFont());
         setForeground(theme.getForeground());
     }
 
 
-    public CheckBox(Action a) {
+    public MCheckBox(Action a) {
         super(a);
         Theme theme = Settings.getInstance().getTheme();
         setFont(theme.getBodyFont());
@@ -56,7 +56,7 @@ public class CheckBox extends JCheckBox {
     }
 
 
-    public CheckBox(String text) {
+    public MCheckBox(String text) {
         super(text);
         Theme theme = Settings.getInstance().getTheme();
         setFont(theme.getBodyFont());

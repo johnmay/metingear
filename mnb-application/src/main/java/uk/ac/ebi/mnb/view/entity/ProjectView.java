@@ -47,6 +47,7 @@ import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.menu.ViewSelector;
 import uk.ac.ebi.mnb.view.entity.gene.GeneView;
 import uk.ac.ebi.search.SearchManager;
 
@@ -77,6 +78,7 @@ public class ProjectView
     private CardLayout layout;
     private Map<String, AbstractEntityView> viewMap;
     private SelectionManager selection = new SelectionMap();
+    private ViewSelector selector;
 
     public ProjectView() {
 
@@ -110,7 +112,14 @@ public class ProjectView
         viewMap.put(RunnableTask.BASE_TYPE, tasks);
         viewMap.put(GeneImplementation.BASE_TYPE, genes);
 
+    }
 
+    /**
+     * Sets the association with the buttons to change the view
+     * @param selector
+     */
+    public void setViewSelector(ViewSelector selector) {
+        this.selector = selector;
     }
 
     /**
@@ -132,18 +141,22 @@ public class ProjectView
 
     public void setProductView() {
         layout.show(this, products.getClass().getSimpleName());
+        selector.setSelected(ProteinProduct.BASE_TYPE);
     }
 
     public void setReactionView() {
         layout.show(this, reactions.getClass().getSimpleName());
+        selector.setSelected(Reaction.BASE_TYPE);
     }
 
     public void setMetaboliteView() {
         layout.show(this, metabolites.getClass().getSimpleName());
+        selector.setSelected(Metabolite.BASE_TYPE);
     }
 
     public void setGeneView() {
         layout.show(this, genes.getClass().getSimpleName());
+        selector.setSelected(GeneImplementation.BASE_TYPE);
     }
 
     public void setTaskView() {
@@ -280,6 +293,8 @@ public class ProjectView
         AbstractEntityView view = viewMap.get(entity.getBaseType());
 
         layout.show(this, view.getClass().getSimpleName());
+        selector.setSelected(entity.getBaseType());
+
 
         return view.setSelection(selection);
 
@@ -314,6 +329,4 @@ public class ProjectView
     public MatrixView getMatrixView() {
         return matrix;
     }
-
-
 }

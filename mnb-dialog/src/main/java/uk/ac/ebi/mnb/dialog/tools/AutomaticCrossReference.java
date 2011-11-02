@@ -52,7 +52,7 @@ import uk.ac.ebi.mnb.core.TooltipLabel;
 import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.view.DialogPanel;
-import uk.ac.ebi.mnb.view.CheckBox;
+import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.ContextDialog;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
@@ -68,8 +68,8 @@ public class AutomaticCrossReference
         extends ContextDialog {
 
     private static final Logger LOGGER = Logger.getLogger(AutomaticCrossReference.class);
-    private JCheckBox chebi = new CheckBox("ChEBI");
-    private JCheckBox kegg = new CheckBox("KEGG Compound");
+    private JCheckBox chebi = new MCheckBox("ChEBI");
+    private JCheckBox kegg = new MCheckBox("KEGG Compound");
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 200, 10));
 
     public AutomaticCrossReference(JFrame frame, ViewController controller) {
