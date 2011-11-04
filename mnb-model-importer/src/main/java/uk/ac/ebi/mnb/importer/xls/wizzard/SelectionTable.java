@@ -31,6 +31,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
+import org.pushingpixels.substance.internal.ui.SubstanceTableUI;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.visualisation.ColorUtilities;
@@ -52,6 +53,7 @@ public class SelectionTable extends JTable {
     public SelectionTable(ExcelHelper helper) {
 
         this.helper = helper;
+        setUI(new SubstanceTableUI());
 //        super(helper.getSheetData(i), new String[]{"A", "B", "C", "D", "E", "F", "G"});
         setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {

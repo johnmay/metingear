@@ -14,7 +14,6 @@
  */
 package uk.ac.ebi.mnb.main;
 
-import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import java.awt.*;
 import java.awt.event.*;
@@ -46,7 +45,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
-import uk.ac.ebi.mnb.menu.ViewSelector;
+import uk.ac.ebi.mnb.menu.ViewInfo;
 
 /**
  * MainView.java
@@ -59,11 +58,12 @@ import uk.ac.ebi.mnb.menu.ViewSelector;
  */
 public class MainView
         extends JFrame
-        implements DialogController, MainController {
+        implements DialogController,
+                   MainController {
 
     private static final Logger LOGGER = Logger.getLogger(MainView.class);
     private UndoManager undoManager;
-    private UnifiedToolBar toolbar; //TODO: wrap in class
+    private Toolbar toolbar; //TODO: wrap in class
     private JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT); //TODO wrap
     private ProjectView project = new ProjectView();
     private MessageManager messages = new MessageBar();
@@ -82,20 +82,18 @@ public class MainView
 
         super("Mb-models");
         // mac widgets
-        MacUtils.makeWindowLeopardStyle(getRootPane());
+        //MacUtils.makeWindowLeopardStyle(getRootPane());
 
         // toolbar
-        toolbar = new UnifiedToolBar();
-        searchField.putClientProperty("JTextField.variant", "search"); // makes the search bar rounded
-        toolbar.addComponentToRight(new LabeledComponentGroup("Search", searchField).getComponent());
-//        toolbar.addComponentToCenter(new IconButton(new NewProjectAction()));
-//     
+        toolbar = new Toolbar();
+        //  searchField.putClientProperty("JTextField.variant", "search"); // makes the search bar rounded
+        toolbar.addComponentToRight("Search", searchField);
 
-       
-        ViewSelector selector = new ViewSelector(project);       
+
+        ViewInfo selector = new ViewInfo(project);
 
         toolbar.addComponentToLeft(new Box.Filler(new Dimension(30, 10), new Dimension(50, 10), new Dimension(75, 10)));
-        toolbar.addComponentToLeft(selector.getComponent());
+        toolbar.addComponentToLeft(selector.getButtonGroup());
 
         // search field
         searchField.getDocument().addDocumentListener(new DocumentListener() {
@@ -180,7 +178,6 @@ public class MainView
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-
         // source list (todo: wrap in a class MNBSourceList)
         sourceController = new SourceController();
         SourceList source = new SourceList(sourceController.model);
@@ -204,8 +201,6 @@ public class MainView
         ((BasicSplitPaneUI) pane.getUI()).getDivider().setBorder(
                 BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
 
-        // Bottom bar – purely aesthetic atm
-        BottomBar bottombar = new BottomBar(BottomBarSize.SMALL);
 
         Box topbar = Box.createVerticalBox();
         topbar.add(toolbar.getComponent());
@@ -214,7 +209,7 @@ public class MainView
         // main layout
         this.add(topbar, BorderLayout.NORTH);
         this.add(pane, BorderLayout.CENTER);
-        this.add(bottombar.getComponent(), BorderLayout.SOUTH);
+        this.add(selector.getBottomBar().getComponent(), BorderLayout.SOUTH);
         addComponentListener(new ComponentAdapter() {
 
             @Override
@@ -225,14 +220,6 @@ public class MainView
             @Override
             public void componentResized(ComponentEvent e) {
                 messages.update();
-            }
-        });
-
-        addFocusListener(new FocusAdapter() {
-
-            @Override
-            public void focusGained(FocusEvent e) {
-                getJMenuBar().repaint();
             }
         });
 
@@ -354,7 +341,7 @@ public class MainView
      * Access the displayed tool-bar
      * @return
      */
-    public UnifiedToolBar getToolbar() {
+    public Toolbar getToolbar() {
         return toolbar;
     }
 

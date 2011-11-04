@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.prefs.Preferences;
 import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
@@ -47,7 +48,6 @@ import uk.ac.ebi.mnb.core.MLabels;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.MComboBox;
-import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.labels.DialogLabel;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
 
@@ -61,7 +61,7 @@ import uk.ac.ebi.mnb.xls.options.ImporterOptions;
  *
  */
 public class ReactionColumnChooser
-        extends DialogPanel
+        extends JPanel
         implements WizzardStage {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionColumnChooser.class);
@@ -156,10 +156,10 @@ public class ReactionColumnChooser
         table = new SelectionTable(helper);
 
         JScrollPane pane = new BorderlessScrollPane(table, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        RowNumberTable rnt = new RowNumberTable(table);
-        pane.setRowHeaderView(rnt);
-        pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
-                       rnt.getTableHeader());
+//        RowNumberTable rnt = new RowNumberTable(table);
+//        pane.setRowHeaderView(rnt);
+//        pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
+//                       rnt.getTableHeader());
         pane.setPreferredSize(new Dimension(800, table.getRowHeight() * 10));
         add(pane, cc.xyw(1, 15, 7));
 

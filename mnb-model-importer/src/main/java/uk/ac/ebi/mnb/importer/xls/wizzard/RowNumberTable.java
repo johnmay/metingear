@@ -20,7 +20,7 @@ import javax.swing.table.*;
 public class RowNumberTable extends JTable
 	implements ChangeListener, PropertyChangeListener
 {
-	private JTable main;
+	private JTable main = new JTable();
 
 	public RowNumberTable(JTable table)
 	{
@@ -63,7 +63,7 @@ public class RowNumberTable extends JTable
 	@Override
 	public int getRowCount()
 	{
-		return main.getRowCount();
+		return  main.getRowCount();
 	}
 
 	@Override

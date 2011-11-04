@@ -47,7 +47,7 @@ public abstract class DropdownDialog
     private JButton active;
     private DialogController controller;
     private Theme theme = Settings.getInstance().getTheme();
-    private Paint paint = new GradientPaint(0, 0, Color.LIGHT_GRAY, 0, 10, Settings.getInstance().getTheme().getDialogBackground());
+    private Paint paint = new GradientPaint(0, 0, getBackground().darker(), 0, 10, getBackground());
     private CellConstraints cc = new CellConstraints();
 
     public DropdownDialog(JFrame frame,
@@ -90,17 +90,7 @@ public abstract class DropdownDialog
         setUndecorated(true);
     }
 
-    /**
-     * Updates the theme to that current stored in {@see ApplicationPreferences} and sets values on affected
-     * components
-     */
-    public void updateTheme() {
-        this.theme = Settings.getInstance().getTheme();
-        AWTUtilities.setWindowOpacity(this, theme.getDialogOpacity());
-        setBackground(theme.getDialogBackground());
-        this.paint = new GradientPaint(0, 0, Color.LIGHT_GRAY, 0, 10, Settings.getInstance().getTheme().getDialogBackground());
 
-    }
 
     /**
      * Returns the dialog description label. By default the description is the Class name and should
@@ -108,7 +98,7 @@ public abstract class DropdownDialog
      * @return
      */
     public JLabel getDescription() {
-        return new MLabel(getClass().getSimpleName());
+        return new JLabel(getClass().getSimpleName());
     }
 
     /**
@@ -121,7 +111,7 @@ public abstract class DropdownDialog
      */
     public JPanel getOptions() {
 
-        JPanel options = new DialogPanel();
+        JPanel options = new JPanel();
 
         options.add(new MLabel("Options", SwingConstants.CENTER));
 
@@ -131,7 +121,7 @@ public abstract class DropdownDialog
 
     public JPanel getNavigation() {
 
-        JPanel navigation = new DialogPanel(new FormLayout("p:grow, right:min, 4dlu ,right:min",
+        JPanel navigation = new JPanel(new FormLayout("p:grow, right:min, 4dlu ,right:min",
                 "p"));
 
         navigation.add(getClose(), cc.xy(2, 1));
@@ -151,7 +141,7 @@ public abstract class DropdownDialog
 
         LayoutManager layout = new FormLayout("p:grow",
                 "p, 4dlu, p, 4dlu, p, 4dlu, p");
-        JPanel panel = new DialogPanel(layout);
+        JPanel panel = new JPanel(layout);
 
         panel.setBorder(Borders.DLU7_BORDER);
 
@@ -176,10 +166,7 @@ public abstract class DropdownDialog
     public void setVisible(boolean visible) {
         if (visible) {
             this.pack();
-            this.setLocation();
-            if (theme != Settings.getInstance().getTheme()) {
-                updateTheme();
-            }
+            this.setLocation();      
         }
         super.setVisible(visible);
         

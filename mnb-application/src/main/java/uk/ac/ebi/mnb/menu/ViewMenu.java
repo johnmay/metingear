@@ -7,6 +7,7 @@ package uk.ac.ebi.mnb.menu;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import uk.ac.ebi.mnb.main.MainView;
@@ -22,7 +23,7 @@ import uk.ac.ebi.mnb.view.entity.ProjectView;
  * @date Apr 28, 2011
  */
 public class ViewMenu
-        extends ClearMenu {
+        extends JMenu {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(ViewMenu.class);

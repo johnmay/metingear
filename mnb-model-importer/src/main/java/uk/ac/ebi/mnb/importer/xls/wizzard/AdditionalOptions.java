@@ -21,14 +21,14 @@
 package uk.ac.ebi.mnb.importer.xls.wizzard;
 
 import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import mnb.io.tabular.ExcelModelProperties;
-import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.view.labels.MLabel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.view.DialogPanel;
+import uk.ac.ebi.mnb.view.MCheckBox;
 
 /**
  *          ImportPanel – 2011.09.26 <br>
@@ -38,26 +38,33 @@ import uk.ac.ebi.mnb.view.DialogPanel;
  * @author  $Author$ (this version)
  */
 public class AdditionalOptions
-        extends DialogPanel
+        extends JPanel
         implements WizzardStage {
 
     private static final Logger LOGGER = Logger.getLogger(AdditionalOptions.class);
     private ExcelModelProperties properties;
-    private JCheckBox chebi = new JCheckBox();
-    private JCheckBox kegg = new JCheckBox();
+    private JCheckBox chebi = new MCheckBox("chebi");
+    private JCheckBox kegg = new MCheckBox("kegg");
+    private JCheckBox skip = new MCheckBox("Skip Manual Assignment (can be completed manual)");
 
     public AdditionalOptions(ExcelModelProperties properties) {
         this.properties = properties;
     }
 
+
+
     private void init() {
-        setLayout(ViewUtils.formLayoutHelper(2, 5, 4, 4));
+        setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p, 4dlu, p"));
         CellConstraints cc = new CellConstraints();
-        add(new JLabel("Please select web services to reconcile chemical names"), cc.xy(1, 1));
-        add(new MLabel("ChEBI (recomended)"), cc.xy(1, 3));
-        add(chebi, cc.xy(3, 3));
-        add(new MLabel("KEGG"), cc.xy(1, 5));
+
+        add(new MLabel("<html>Please select which resources should be<br>"
+                       + "used to reconcile chemical names</html>"), cc.xy(1, 1));
+
+        add(chebi, cc.xy(1, 5));
         add(kegg, cc.xy(3, 5));
+
+        add(skip, cc.xyw(1, 3, 3));
+
     }
 
     public Boolean updateSelection() {

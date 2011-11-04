@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.util.prefs.Preferences;
 import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
@@ -36,13 +37,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.type.EntityColumn;
-import mnb.io.tabular.type.ReactionColumn;
 import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.MComboBox;
-import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.labels.DialogLabel;
 
 /**
@@ -53,7 +52,7 @@ import uk.ac.ebi.mnb.view.labels.DialogLabel;
  * @author  $Author$ (this version)
  */
 public class MetaboliteColumnChooser
-        extends DialogPanel
+        extends JPanel
         implements WizzardStage {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteColumnChooser.class);
@@ -130,10 +129,10 @@ public class MetaboliteColumnChooser
         add(new JSeparator(), cc.xyw(1, 17, 7));
 
         pane = new BorderlessScrollPane(table);
-        RowNumberTable rnt = new RowNumberTable(table);
-        pane.setRowHeaderView(rnt);
-        pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
-                       rnt.getTableHeader());
+//        RowNumberTable rnt = new RowNumberTable(table);
+//        pane.setRowHeaderView(rnt);
+//        pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
+//                       rnt.getTableHeader());
         pane.setPreferredSize(new Dimension(800, table.getRowHeight() * 10));
         add(pane, cc.xyw(1, 19, 7));
 

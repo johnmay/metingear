@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import uk.ac.ebi.core.ReconstructionManager;
@@ -35,7 +36,7 @@ import uk.ac.ebi.resource.ReconstructionIdentifier;
 public class NewProject extends DropdownDialog {
 
     private static final org.apache.log4j.Logger logger =
-            org.apache.log4j.Logger.getLogger(
+                                                 org.apache.log4j.Logger.getLogger(
             NewProject.class);
     private boolean fieldsAreValid = true;
     private JTextField idField;
@@ -61,7 +62,7 @@ public class NewProject extends DropdownDialog {
     @Override
     public JLabel getDescription() {
         JLabel label = super.getDescription();
-        label.setText("Create a new project");
+        label.setText("Create a new reconstruction");
         return label;
     }
 
@@ -71,21 +72,22 @@ public class NewProject extends DropdownDialog {
         FormLayout layout = new FormLayout(
                 "right:p, 4dlu, p, 4dlu, p, 4dlu, p",
                 "p, 4dlu, p, 4dlu, p");
-        JPanel panel = new DialogPanel(layout);
+        JPanel panel = super.getOptions();
+        panel.setLayout(layout);
         CellConstraints cc = new CellConstraints();
 
-        panel.add(new BoldLabel("Reconstuction Accession:"), cc.xyw(1, 1, 3));
+        panel.add(new JLabel("Reconstruction Id:", SwingConstants.RIGHT), cc.xyw(1, 1, 3));
         panel.add(idField, cc.xyw(5, 1, 3));
 
 
-        panel.add(new BoldLabel("Code:"), cc.xy(1, 3));
+        panel.add(new JLabel("Code:", SwingConstants.RIGHT), cc.xy(1, 3));
         panel.add(codeField, cc.xy(3, 3));
-        panel.add(new BoldLabel("Name:"), cc.xy(5, 3));
+        panel.add(new JLabel("Name:", SwingConstants.RIGHT), cc.xy(5, 3));
         panel.add(nameField, cc.xy(7, 3));
 
-        panel.add(new BoldLabel("Taxon:"), cc.xy(1, 5));
+        panel.add(new JLabel("Taxon:", SwingConstants.RIGHT), cc.xy(1, 5));
         panel.add(taxonField, cc.xy(3, 5));
-        panel.add(new BoldLabel("Kingdom:"), cc.xy(5, 5));
+        panel.add(new JLabel("Kingdom:", SwingConstants.RIGHT), cc.xy(5, 5));
         panel.add(kingdomField, cc.xy(7, 5));
 
 
@@ -137,7 +139,7 @@ public class NewProject extends DropdownDialog {
         // could check against db also
         if (code.isEmpty() || code.length() != 5) {
             flagAsInvalidInput("Organism code", code,
-                    "five letter code for organism (e.g. MYTUB, SPEPQ)");
+                               "five letter code for organism (e.g. MYTUB, SPEPQ)");
         }
         return code;
     }
@@ -146,7 +148,7 @@ public class NewProject extends DropdownDialog {
         String type = kingdomField.getText();
         if (type.isEmpty()) {
             flagAsInvalidInput("Kingdom type", kingdomField.getText(),
-                    "type of organism (A) Archea, (B) Bacteria, (V) Virus etc.");
+                               "type of organism (A) Archea, (B) Bacteria, (V) Virus etc.");
             return Kingdom.UNDEFINED;
         }
         return Kingdom.getKingdom(type);
@@ -167,7 +169,7 @@ public class NewProject extends DropdownDialog {
             return Integer.parseInt(taxonField.getText());
         } catch (NumberFormatException ex) {
             flagAsInvalidInput("Taxon code", taxonField.getText(),
-                    "five digit taxon code (e.g. 12342)");
+                               "five digit taxon code (e.g. 12342)");
             return 0;
         }
     }
@@ -181,10 +183,10 @@ public class NewProject extends DropdownDialog {
 
     public void flagAsInvalidInput(String label, String found, String expected) {
         JOptionPane.showMessageDialog(this, label
-                + " input '"
-                + found
-                + "' is not a valid. Expected '"
-                + expected + "'!");
+                                            + " input '"
+                                            + found
+                                            + "' is not a valid. Expected '"
+                                            + expected + "'!");
         fieldsAreValid = false;
     }
 

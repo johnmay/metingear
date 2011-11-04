@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.mnb.menu;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import org.apache.log4j.Logger;
@@ -26,7 +27,7 @@ import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
  * @author johnmay
  * @date Apr 28, 2011
  */
-public class ToolsMenu extends ClearMenu {
+public class ToolsMenu extends JMenu {
 
     private static final Logger logger = Logger.getLogger(ToolsMenu.class);
 

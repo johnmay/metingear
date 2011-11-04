@@ -38,7 +38,6 @@ import uk.ac.ebi.mnb.dialog.popup.AlignmentViewer;
 import uk.ac.ebi.mnb.edit.*;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.renderers.ListLinkRenderer;
-import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.observation.ObservationCollection;
@@ -53,6 +52,9 @@ import org.apache.log4j.Logger;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.*;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.mnb.view.AnnotationRenderer;
+import uk.ac.ebi.mnb.view.BorderlessScrollPane;
+import uk.ac.ebi.mnb.view.TransparentTextField;
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
@@ -63,12 +65,11 @@ import uk.ac.ebi.mnb.interfaces.SelectionManager;
  * @author  $Author$ (this version)
  */
 public abstract class AbstractEntityPanel
-        extends GeneralPanel {
+        extends JPanel {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityPanel.class);
     private String type;
-    private GeneralPanel basic = new GeneralPanel(
-            new FormLayout("p, p:grow, p, p:grow, p", "p, 4dlu, p"));
+    private JPanel basic = new JPanel(new FormLayout("p, p:grow, p, p:grow, p", "p, 4dlu, p"));
     private MLabel typeLabel = new MLabel();
     private JSeparator seperator = new JSeparator(JSeparator.HORIZONTAL);
     private JTextField accession = new TransparentTextField("", 10, false);
@@ -189,7 +190,7 @@ public abstract class AbstractEntityPanel
 
         add(getBasicPanel(), cc.xy(1, 1));
 
-        middle = new GeneralPanel(new FormLayout("p, 5dlu, p, 5dlu, p", "p"));
+        middle = new JPanel(new FormLayout("p, 5dlu, p, 5dlu, p", "p"));
 
         middle.add(synopsis, cc.xy(1, 1));
         middle.add(new BorderlessScrollPane(references), cc.xy(3, 1));
@@ -204,7 +205,7 @@ public abstract class AbstractEntityPanel
     }
 
     public JPanel getObservationPanel() {
-        JPanel panel = new GeneralPanel();
+        JPanel panel = new JPanel();
         observationList.setModel(observationModel);
         panel.add(observationList);
         return panel;
@@ -227,7 +228,7 @@ public abstract class AbstractEntityPanel
 
     public JPanel getAnnotationPanel() {
 
-        JPanel panel = new GeneralPanel();
+        JPanel panel = new JPanel();
         panel.setBorder(Borders.DLU4_BORDER);
 
         removeAnnotationButtons = new ArrayList(); // todo use a pool

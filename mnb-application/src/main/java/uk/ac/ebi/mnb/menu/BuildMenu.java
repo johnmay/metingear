@@ -5,6 +5,7 @@
 package uk.ac.ebi.mnb.menu;
 
 import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.JSeparator;
 import uk.ac.ebi.mnb.menu.build.PredictGPR;
 import uk.ac.ebi.mnb.menu.build.CatFamAction;
@@ -12,7 +13,6 @@ import uk.ac.ebi.mnb.menu.build.PriamAction;
 import uk.ac.ebi.mnb.menu.build.StoichiometricMatixAction;
 import uk.ac.ebi.mnb.menu.build.StoichiometryAction;
 import uk.ac.ebi.mnb.menu.build.SwissProtHomology;
-import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  * FileMenu.java
@@ -22,7 +22,7 @@ import uk.ac.ebi.visualisation.ViewUtils;
  * @date Apr 13, 2011
  */
 public class BuildMenu
-    extends ClearMenu {
+    extends JMenu {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( BuildMenu.class );
     private SwissProtHomology enzymeHomologyAction;
@@ -31,8 +31,7 @@ public class BuildMenu
     public BuildMenu() {
 
         super( "Build" );
-        setBackground(ViewUtils.CLEAR_COLOUR);
-        setBorderPainted(false);
+
 
         enzymeHomologyAction = new SwissProtHomology();
         int index = 0;

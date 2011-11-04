@@ -25,11 +25,11 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import mnb.io.tabular.ExcelModelProperties;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
-import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.labels.DialogLabel;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
 
@@ -43,7 +43,7 @@ import uk.ac.ebi.mnb.xls.options.ImporterOptions;
  *
  */
 public class SheetChooserDialog
-        extends DialogPanel
+        extends JPanel
         implements WizzardStage {
 
     private static final Logger LOGGER = Logger.getLogger(SheetChooserDialog.class);

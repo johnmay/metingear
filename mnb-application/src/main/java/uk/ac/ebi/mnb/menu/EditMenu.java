@@ -26,6 +26,7 @@ import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.visualisation.ViewUtils;
 
 import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
@@ -43,15 +44,13 @@ import uk.ac.ebi.mnb.dialog.edit.MergeEntities;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class EditMenu extends ClearMenu {
+public class EditMenu extends JMenu {
 
     private static final Logger LOGGER = Logger.getLogger(EditMenu.class);
     private JComponent items[] = new JComponent[3];
 
     public EditMenu() {
         super("Edit");
-        setBackground(ViewUtils.CLEAR_COLOUR);
-        setBorderPainted(false);
 
         final MainView view = MainView.getInstance();
 

@@ -20,16 +20,18 @@
  */
 package uk.ac.ebi.mnb.menu;
 
+import com.explodingpixels.macwidgets.BottomBar;
+import com.explodingpixels.macwidgets.BottomBarSize;
 import com.explodingpixels.macwidgets.LabeledComponentGroup;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.GeneImplementation;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Multimer;
@@ -46,19 +48,21 @@ import uk.ac.ebi.visualisation.ViewUtils;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ViewSelector {
+public class ViewInfo {
 
-    private static final Logger LOGGER = Logger.getLogger(ViewSelector.class);
+    private static final Logger LOGGER = Logger.getLogger(ViewInfo.class);
     private JToggleButton genes = new JToggleButton(new ViewGenes());
     private JToggleButton products = new JToggleButton(new ViewProducts());
     private JToggleButton metabolites = new JToggleButton(new ViewMetabolites());
     private JToggleButton reactions = new JToggleButton(new ViewReactions());
     private ProjectView controller;
     private Map<String, JToggleButton> buttonMap = new HashMap();
+    private BottomBar bottombar = new BottomBar(BottomBarSize.SMALL);
+    private JLabel info;
 
-    public ViewSelector(ProjectView controller) {
+    public ViewInfo(ProjectView controller) {
         this.controller = controller;
-        
+
         controller.setViewSelector(this);
 
         genes.setSelectedIcon(ViewUtils.getIcon("images/toolbar/gen-selected.png"));
@@ -99,23 +103,31 @@ public class ViewSelector {
 //        buttonMap.put(RunnableTask.BASE_TYPE, tasks);
         buttonMap.put(GeneImplementation.BASE_TYPE, genes);
 
+        info = new JLabel();
+        bottombar.addComponentToCenter(info);
+
     }
 
-    public JComponent getComponent() {
+    public JComponent getButtonGroup() {
         return new LabeledComponentGroup("View", genes, products, metabolites, reactions).getComponent();
+    }
+
+    public BottomBar getBottomBar(){
+        return bottombar;
     }
 
     /**
      * Sets the toggle for the provided base type
      */
     public void setSelected(String type) {
-        if( buttonMap.get(type) != null){
-            for(JToggleButton button : buttonMap.values()){
+        if (buttonMap.get(type) != null) {
+            for (JToggleButton button : buttonMap.values()) {
                 button.setSelected(false);
             }
             buttonMap.get(type).setSelected(true);
+            info.setText(type);
         }
-    }
+    }    
 
     private class ViewGenes
             extends GeneralAction {

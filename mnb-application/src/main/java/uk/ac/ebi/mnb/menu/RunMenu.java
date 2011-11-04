@@ -5,6 +5,7 @@
 package uk.ac.ebi.mnb.menu;
 
 
+import javax.swing.JMenu;
 import uk.ac.ebi.mnb.menu.build.RunTasksAction;
 
 /**
@@ -14,7 +15,7 @@ import uk.ac.ebi.mnb.menu.build.RunTasksAction;
  * @author johnmay
  * @date Apr 28, 2011
  */
-public class RunMenu extends ClearMenu {
+public class RunMenu extends JMenu {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( RunMenu.class );
     private RunTasksAction runTasksAction;

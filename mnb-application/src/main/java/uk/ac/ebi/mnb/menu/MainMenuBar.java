@@ -24,7 +24,7 @@ public class MainMenuBar
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MainMenuBar.class);
     private FileMenu file = new FileMenu();
     private BuildMenu build = new BuildMenu();
-    private ClearMenu view = new ViewMenu();
+    private ViewMenu view = new ViewMenu();
     private EditMenu edit = new EditMenu();
     private RunMenu run = new RunMenu();
     private ToolsMenu tools = new ToolsMenu();
@@ -36,9 +36,8 @@ public class MainMenuBar
         add(run);
         add(view);
         add(tools);
-        setBorderPainted(false);
-        WindowUtils.installJComponentRepainterOnWindowFocusChanged(this);
-
+//        setBorderPainted(false);
+//        WindowUtils.installJComponentRepainterOnWindowFocusChanged(this);
     }
 
     public EditMenu getEditMenu() {
@@ -60,21 +59,21 @@ public class MainMenuBar
     public void setActiveDependingOnRequirements() {
         build.setActiveDependingOnRequirements();
     }
-    private Color DEFAULT_BACKGROUND = new Color(237, 237, 237);
-    private Color ACTIVE_TOP_GRADIENT_COLOR = new Color(0xc8c8c8);
-    private Color ACTIVE_BOTTOM_GRADIENT_COLOR = new Color(0xbcbcbc);
-    private Color INACTIVE_TOP_GRADIENT_COLOR = new Color(0xe9e9e9);
-    private Color INACTIVE_BOTTOM_GRADIENT_COLOR = new Color(0xe4e4e4);
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        boolean containedInActiveWindow = WindowUtils.isParentWindowFocused( this );
-        Color topColor = containedInActiveWindow
-                         ? ACTIVE_TOP_GRADIENT_COLOR : INACTIVE_TOP_GRADIENT_COLOR;
-        Color bottomColor = containedInActiveWindow
-                            ? ACTIVE_BOTTOM_GRADIENT_COLOR : INACTIVE_BOTTOM_GRADIENT_COLOR;
-        GradientPaint paint = new GradientPaint( 0 , 1 , topColor , 0 , getHeight() , bottomColor );
-        g2.setPaint( paint );
-        g2.fillRect(0, 0, getWidth(), getHeight());
-    }
+//    private Color DEFAULT_BACKGROUND = new Color(237, 237, 237);
+//    private Color ACTIVE_TOP_GRADIENT_COLOR = new Color(0xc8c8c8);
+//    private Color ACTIVE_BOTTOM_GRADIENT_COLOR = new Color(0xbcbcbc);
+//    private Color INACTIVE_TOP_GRADIENT_COLOR = new Color(0xe9e9e9);
+//    private Color INACTIVE_BOTTOM_GRADIENT_COLOR = new Color(0xe4e4e4);
+//    @Override
+//    protected void paintComponent(Graphics g) {
+//        Graphics2D g2 = (Graphics2D) g;
+//        boolean containedInActiveWindow = WindowUtils.isParentWindowFocused( this );
+//        Color topColor = containedInActiveWindow
+//                         ? ACTIVE_TOP_GRADIENT_COLOR : INACTIVE_TOP_GRADIENT_COLOR;
+//        Color bottomColor = containedInActiveWindow
+//                            ? ACTIVE_BOTTOM_GRADIENT_COLOR : INACTIVE_BOTTOM_GRADIENT_COLOR;
+//        GradientPaint paint = new GradientPaint( 0 , 1 , topColor , 0 , getHeight() , bottomColor );
+//        g2.setPaint( paint );
+//        g2.fillRect(0, 0, getWidth(), getHeight());
+//    }
 }

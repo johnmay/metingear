@@ -47,7 +47,7 @@ import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.menu.ViewSelector;
+import uk.ac.ebi.mnb.menu.ViewInfo;
 import uk.ac.ebi.mnb.view.entity.gene.GeneView;
 import uk.ac.ebi.search.SearchManager;
 
@@ -78,7 +78,7 @@ public class ProjectView
     private CardLayout layout;
     private Map<String, AbstractEntityView> viewMap;
     private SelectionManager selection = new SelectionMap();
-    private ViewSelector selector;
+    private ViewInfo selector;
 
     public ProjectView() {
 
@@ -118,7 +118,7 @@ public class ProjectView
      * Sets the association with the buttons to change the view
      * @param selector
      */
-    public void setViewSelector(ViewSelector selector) {
+    public void setViewSelector(ViewInfo selector) {
         this.selector = selector;
     }
 

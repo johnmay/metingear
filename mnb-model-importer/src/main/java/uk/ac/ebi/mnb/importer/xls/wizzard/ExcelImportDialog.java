@@ -52,6 +52,7 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingUtilities;
+import mnb.io.resolve.AutomatedReconciler;
 import mnb.io.resolve.EntryReconciler;
 import mnb.io.resolve.ListSelectionReconciler;
 import mnb.io.tabular.EntityResolver;
@@ -203,9 +204,8 @@ public class ExcelImportDialog
                                                   new ChemicalFingerprintEncoder());
 
             // todo should be selectable
-            EntryReconciler reconciler = new ListSelectionReconciler(frame,
-                                                                     factory,
-                                                                     new ChEBIIdentifier());
+            EntryReconciler reconciler = //new AutomatedReconciler(factory, new ChEBIIdentifier());
+                            new ListSelectionReconciler(frame, factory, new ChEBIIdentifier());
 
             EntityResolver entitySheet = new EntityResolver(entSht, reconciler);
             parser = new ReactionParser(entitySheet);
@@ -297,7 +297,7 @@ public class ExcelImportDialog
         orgSize = orgSize == null ? super.getPreferredSize() : orgSize;
         shiftSize = shiftSize == null ? shiftPanel.getPreferredSize() : shiftSize;
 
-        Dimension actualSize = ((DialogPanel) stages[activeStage]).getPreferredSize();
+        Dimension actualSize = ((JPanel) stages[activeStage]).getPreferredSize();
         shiftPanel.setPreferredSize(actualSize);
 
         return new Dimension(orgSize.width - shiftSize.width + actualSize.width, orgSize.height - shiftSize.height + actualSize.height + 20);

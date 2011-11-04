@@ -38,7 +38,7 @@ import uk.ac.ebi.mnb.menu.popup.CloseProject;
  * @date Apr 13, 2011
  */
 public class FileMenu
-        extends ClearMenu {
+        extends JMenu {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FileMenu.class);
     private SaveAsProjectAction saveAs = new SaveAsProjectAction();
