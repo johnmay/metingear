@@ -21,9 +21,6 @@ import uk.ac.ebi.mnb.io.TaxonomyMap;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.DialogPanel;
-import uk.ac.ebi.mnb.view.labels.BoldLabel;
-import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 
 /**
@@ -208,7 +205,6 @@ public class NewProject extends DropdownDialog {
             Reconstruction proj = new Reconstruction(proId, orgId);
             ReconstructionManager.getInstance().setActiveReconstruction(proj);
 
-            setVisible(false);
         }
     }
 

@@ -14,6 +14,7 @@
  */
 package uk.ac.ebi.mnb.main;
 
+import com.apple.laf.AquaRootPaneUI;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import java.awt.*;
 import java.awt.event.*;
@@ -38,6 +39,7 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.store.LockObtainFailedException;
 
 import com.explodingpixels.macwidgets.*;
+import com.explodingpixels.widgets.WindowUtils;
 import com.jgoodies.forms.factories.Borders;
 import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
@@ -80,27 +82,28 @@ public class MainView
 
     private MainView() {
 
-        super("Mb-models");
+        super("Metagineer");
+
         // mac widgets
-        //MacUtils.makeWindowLeopardStyle(getRootPane());
+        getLayeredPane().getRootPane().setUI(new AquaRootPaneUI());
+
+        MacUtils.makeWindowLeopardStyle(getRootPane());
 
         // toolbar
         toolbar = new Toolbar();
         //  searchField.putClientProperty("JTextField.variant", "search"); // makes the search bar rounded
-        toolbar.addComponentToRight("Search", searchField);
 
 
         ViewInfo selector = new ViewInfo(project);
 
-        toolbar.addComponentToLeft(new Box.Filler(new Dimension(30, 10), new Dimension(50, 10), new Dimension(75, 10)));
-        toolbar.addComponentToLeft(selector.getButtonGroup());
+        toolbar.addComponentToRight(selector.getButtonGroup());
+        toolbar.addComponentToRight("Search", searchField);
 
         // search field
         searchField.getDocument().addDocumentListener(new DocumentListener() {
 
             public void insertUpdate(DocumentEvent e) {
-                final Reconstruction recon = ReconstructionManager.getInstance().
-                        getActiveReconstruction();
+                final Reconstruction recon = ReconstructionManager.getInstance().getActive();
                 if (recon != null) {
                     try {
                         final String text =
@@ -180,7 +183,8 @@ public class MainView
 
         // source list (todo: wrap in a class MNBSourceList)
         sourceController = new SourceController();
-        SourceList source = new SourceList(sourceController.model);
+        final SourceList source = new SourceList(sourceController.model);
+        WindowUtils.installJComponentRepainterOnWindowFocusChanged(source.getComponent());
         SourceListControlBar controlBar = new SourceListControlBar();
         controlBar.installDraggableWidgetOnSplitPane(pane);
         controlBar.createAndAddButton(MacIcons.PLUS, null);
@@ -206,6 +210,7 @@ public class MainView
         topbar.add(toolbar.getComponent());
         topbar.add((MessageBar) messages);
 
+
         // main layout
         this.add(topbar, BorderLayout.NORTH);
         this.add(pane, BorderLayout.CENTER);
@@ -227,6 +232,28 @@ public class MainView
 
         // links the task manager with this
         TaskManager.getInstance().setController(this);
+
+        addFocusListener(new FocusListener() {
+
+            public void focusGained(FocusEvent e) {
+                source.getComponent().repaint();
+                project.repaint();
+            }
+
+            public void focusLost(FocusEvent e) {
+                source.getComponent().repaint();
+                project.repaint();
+            }
+        });
+
+    }
+
+    public void listColors(Container component) {
+        System.out.println(component.getClass() + " " + component.getBackground() + " " + component.isOpaque());
+        while (component.getParent() != null) {
+            component = component.getParent();
+            System.out.println(component.getClass() + " " + component.getBackground() + " " + component.isOpaque());
+        }
     }
 
     public UndoManager getUndoManager() {

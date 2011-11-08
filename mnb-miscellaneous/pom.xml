@@ -73,5 +73,24 @@
             <artifactId>mnb-importer</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <artifactId>biojava3-core</artifactId>
+            <groupId>org.biojava</groupId>
+            <type>jar</type>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
+            <artifactId>biojava3-alignment</artifactId>
+            <groupId>org.biojava</groupId>
+            <type>jar</type>
+            <version>3.0.1</version>
+        </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>biojava-maven-repo</id>
+            <name>BioJava repository</name>
+            <url>http://www.biojava.org/download/maven/</url>
+        </repository>
+    </repositories>
 </project>

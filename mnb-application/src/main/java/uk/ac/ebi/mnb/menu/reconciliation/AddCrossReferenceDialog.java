@@ -1,4 +1,3 @@
-
 /**
  * AddCrossReferenceDialog.java
  *
@@ -27,17 +26,16 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.DialogPanel;
+import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.resource.IdentifierFactory;
-
 
 /**
  *          AddCrossReferenceDialog – 2011.09.26 <br>
@@ -52,54 +50,37 @@ public class AddCrossReferenceDialog extends DropdownDialog {
     private static final Map<String, Byte> nameIndexMap = new HashMap();
     private JComboBox type;
     private JTextField accession;
+    private CellConstraints cc = new CellConstraints();
     private AnnotatedEntity entity = null;
-
 
     public AddCrossReferenceDialog() {
 
         super(MainView.getInstance(), MainView.getInstance(), "AddCrossReference");
-        for( Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers() ) {
+        for (Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers()) {
             nameIndexMap.put(id.getShortDescription(), id.getIndex());
         }
         type = new JComboBox(nameIndexMap.keySet().toArray());
         accession = new JTextField(20);
 
-
-        layoutComponents();
-        pack();
-
+        setDefaultLayout();
     }
-
 
     public void setComponent(AnnotatedEntity reconComponent) {
         this.entity = reconComponent;
     }
 
+    @Override
+    public JPanel getOptions() {
 
-    private void layoutComponents() {
+        JPanel panel = super.getOptions();
 
-        setLayout(new FormLayout("10dlu, pref, 10dlu", "10dlu, pref, 4dlu, pref, 10dlu"));
+        panel.setLayout(new FormLayout("p, 4dlu, p", "p"));
 
-        CellConstraints cc = new CellConstraints();
+        panel.add(type, cc.xy(1, 1));
+        panel.add(accession, cc.xy(3, 1));
 
-        // options
-        JComponent selection = new DialogPanel();
-        selection.setLayout(new FormLayout("p, 4dlu, p", "p"));
-        selection.add(type, cc.xy(1, 1));
-        selection.add(accession, cc.xy(3, 1));
-
-
-        // close and run buttons
-        JComponent component = new DialogPanel();
-        component.setLayout(new FormLayout("left:p, pref:grow, right:p", "p"));
-        component.add(getClose(), cc.xy(1, 1));
-        component.add(getActivate(), cc.xy(3, 1));
-
-        add(selection, cc.xy(2, 2));
-        add(component, cc.xy(2, 4));
-
+        return panel;
     }
-
 
     @Override
     public void process() {
@@ -115,12 +96,8 @@ public class AddCrossReferenceDialog extends DropdownDialog {
 
     }
 
-
     @Override
     public boolean update() {
         return MainView.getInstance().getViewController().update();
     }
-
-
 }
-

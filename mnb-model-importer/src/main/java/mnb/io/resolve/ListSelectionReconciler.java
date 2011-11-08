@@ -58,7 +58,9 @@ public class ListSelectionReconciler implements EntryReconciler {
     private JFrame frame;
     private CandidateSelector dialog;
 
-    public ListSelectionReconciler(JFrame frame, CandidateFactory factory, Identifier factoryIdClass) {
+    public ListSelectionReconciler(JFrame frame,
+                                   CandidateFactory factory,
+                                   Identifier factoryIdClass) {
         this.factory = factory;
         this.template = factoryIdClass;
         this.frame = frame;

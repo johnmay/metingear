@@ -20,7 +20,6 @@ import uk.ac.ebi.mnb.view.DropdownDialog;
 
 import javax.swing.SwingUtilities;
 
-
 /**
  * ProcessDialogAction <br>
  * Class to handling the processing step of a dialog (b).
@@ -55,13 +54,10 @@ public class ProcessDialogAction extends GeneralAction {
         final SpinningDialWaitIndicator waiter = new SpinningDialWaitIndicator(dialog);
 
         new Thread(new Runnable() {
-
             public void run() {
-
-                dialog.process(waiter);
-
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
+                        dialog.process(waiter);
                         waiter.dispose();
                         dialog.setVisible(false);
                         dialog.update();

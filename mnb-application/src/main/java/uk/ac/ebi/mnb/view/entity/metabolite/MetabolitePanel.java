@@ -20,7 +20,6 @@
  */
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
-import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.util.ArrayList;
@@ -40,6 +39,7 @@ import uk.ac.ebi.core.metabolite.MetaboliteClass;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.MComboBox;
+import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
@@ -154,7 +154,7 @@ public class MetabolitePanel
      * Builds entity specific panel
      */
     private void buildSynopsis() {
-        specific = new JPanel();
+        specific = PanelFactory.createInfoPanel();
         specific.setLayout(new FormLayout("p:grow, 4dlu, p:grow, 4dlu, p:grow, 4dlu, p:grow",
                 "p, 4dlu, p, 4dlu, p"));
 

@@ -21,15 +21,8 @@
 package uk.ac.ebi.mnb.menu.file;
 
 import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import java.io.File;
-import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.Scanner;
-import java.util.logging.Level;
 import java.util.prefs.Preferences;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -39,12 +32,12 @@ import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
 import uk.ac.ebi.metabonater.components.theme.MTextField;
 import uk.ac.ebi.mnb.core.MLabels;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 import uk.ac.ebi.mnb.view.DropdownDialog;
+import uk.ac.ebi.mnb.view.PanelFactory;
 
 /**
  *          Preferences - 2011.10.02 <br>
@@ -69,7 +62,7 @@ public class PreferenceDialog extends DropdownDialog {
     @Override
     public JPanel getOptions() {
 
-        JPanel options = new DialogPanel(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 4dlu, p"));
+        JPanel options = PanelFactory.createDialogPanel("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 4dlu, p");
         CellConstraints cc = new CellConstraints();
 
 

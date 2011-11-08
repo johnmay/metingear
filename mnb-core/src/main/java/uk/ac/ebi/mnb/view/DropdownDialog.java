@@ -51,8 +51,8 @@ public abstract class DropdownDialog
     private CellConstraints cc = new CellConstraints();
 
     public DropdownDialog(JFrame frame,
-            DialogController controller,
-            String type) {
+                          DialogController controller,
+                          String type) {
 
         super(frame, ModalityType.APPLICATION_MODAL);
 
@@ -74,7 +74,7 @@ public abstract class DropdownDialog
      * @param dialogName
      */
     public DropdownDialog(JFrame frame,
-            String dialogName) {
+                          String dialogName) {
 
         super(frame, ModalityType.APPLICATION_MODAL);
 
@@ -89,8 +89,6 @@ public abstract class DropdownDialog
         active = new JButton(new ProcessDialogAction(dialogName + ".DialogButton", this));
         setUndecorated(true);
     }
-
-
 
     /**
      * Returns the dialog description label. By default the description is the Class name and should
@@ -111,9 +109,9 @@ public abstract class DropdownDialog
      */
     public JPanel getOptions() {
 
-        JPanel options = new JPanel();
+        JPanel options = PanelFactory.createDialogPanel();
 
-        options.add(new MLabel("Options", SwingConstants.CENTER));
+        options.add(new MLabel("Dialog options are place here", SwingConstants.CENTER));
 
         return options;
 
@@ -121,8 +119,8 @@ public abstract class DropdownDialog
 
     public JPanel getNavigation() {
 
-        JPanel navigation = new JPanel(new FormLayout("p:grow, right:min, 4dlu ,right:min",
-                "p"));
+        JPanel navigation = PanelFactory.createDialogPanel("p:grow, right:min, 4dlu ,right:min",
+                                                      "p");
 
         navigation.add(getClose(), cc.xy(2, 1));
         navigation.add(getActivate(), cc.xy(4, 1));
@@ -139,9 +137,8 @@ public abstract class DropdownDialog
      */
     public void setDefaultLayout() {
 
-        LayoutManager layout = new FormLayout("p:grow",
-                "p, 4dlu, p, 4dlu, p, 4dlu, p");
-        JPanel panel = new JPanel(layout);
+        JPanel panel = PanelFactory.createDialogPanel("p:grow",
+                                                      "p, 4dlu, p, 4dlu, p, 4dlu, p");
 
         panel.setBorder(Borders.DLU7_BORDER);
 
@@ -166,11 +163,11 @@ public abstract class DropdownDialog
     public void setVisible(boolean visible) {
         if (visible) {
             this.pack();
-            this.setLocation();      
+            this.setLocation();
         }
         super.setVisible(visible);
-        
-        if(!visible){
+
+        if (!visible) {
             // return focus to parent
             getParent().requestFocusInWindow();
         }
@@ -220,7 +217,7 @@ public abstract class DropdownDialog
      */
     public void drawDialog() {
         BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
-        Graphics2D g2 = (Graphics2D)img.createGraphics();
+        Graphics2D g2 = (Graphics2D) img.createGraphics();
         super.setLocation(0, 0);
         super.setVisible(true);
         super.setVisible(false);

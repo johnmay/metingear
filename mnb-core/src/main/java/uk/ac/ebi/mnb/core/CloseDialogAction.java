@@ -4,9 +4,13 @@
  */
 package uk.ac.ebi.mnb.core;
 
+import com.community.xanadu.components.transition.CloseTransition;
+import com.community.xanadu.components.transition.impl.FadeOutTransition;
+import com.community.xanadu.components.transition.impl.PinchTransition;
+import com.community.xanadu.utils.ThreadUtils;
 import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
 import javax.swing.JDialog;
-import uk.ac.ebi.mnb.core.GeneralAction;
 
 /**
  * CloseDialogAction.java

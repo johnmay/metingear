@@ -24,6 +24,7 @@ import com.explodingpixels.macwidgets.SourceListItem;
 import com.explodingpixels.macwidgets.SourceListModel;
 import com.explodingpixels.macwidgets.SourceListSelectionListener;
 import com.explodingpixels.widgets.PopupMenuCustomizer;
+import com.explodingpixels.widgets.WindowUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -100,6 +101,7 @@ public class SourceController
         model.addItemToCategory(reactions, reconstruction);
         model.addItemToCategory(pathways, reconstruction);
         model.addCategory(tasks);
+
 
 
     }

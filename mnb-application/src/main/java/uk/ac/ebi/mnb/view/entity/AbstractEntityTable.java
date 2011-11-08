@@ -50,7 +50,7 @@ public abstract class AbstractEntityTable extends JTable implements EntityTable,
 
     public AbstractEntityTable(AbstractEntityTableModel model) {
         super(model);
-        setUI(new SubstanceTableUI());
+        setUI(new ITunesTableUI());
         setAutoscrolls(true);
         setFont(ViewUtils.DEFAULT_BODY_FONT);
         setAutoCreateRowSorter(true);

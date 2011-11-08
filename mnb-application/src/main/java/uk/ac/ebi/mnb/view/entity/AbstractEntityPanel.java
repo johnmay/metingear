@@ -54,6 +54,7 @@ import com.jgoodies.forms.layout.*;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
+import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.mnb.view.TransparentTextField;
 
 /**
@@ -69,22 +70,21 @@ public abstract class AbstractEntityPanel
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityPanel.class);
     private String type;
-    private JPanel basic = new JPanel(new FormLayout("p, p:grow, p, p:grow, p", "p, 4dlu, p"));
     private MLabel typeLabel = new MLabel();
     private JSeparator seperator = new JSeparator(JSeparator.HORIZONTAL);
     private JTextField accession = new TransparentTextField("", 10, false);
     private JTextField name = new TransparentTextField("", 35, false);
     private JTextField abbreviation = new TransparentTextField("", 10, false);
     private AnnotatedEntity entity;
-    private JPanel info;
-    private JPanel annotations;
-    private JPanel observations;
     private JList observationList = new JList();
     private DefaultListModel observationModel = new DefaultListModel();
     private CellConstraints cc = new CellConstraints();
     private AnnotationRenderer renderer;
     private JPanel middle;
     private JPanel synopsis;
+    private JPanel basic = PanelFactory.createInfoPanel("p, p:grow, p, p:grow, p", "p, 4dlu, p");
+    private JPanel annotations;
+    private JPanel observations;
     private List<JButton> removeAnnotationButtons = new ArrayList();
     private JList references = new JList();
     private DefaultListModel refModel = new DefaultListModel();
@@ -95,6 +95,7 @@ public abstract class AbstractEntityPanel
     }
 
     public AbstractEntityPanel(String type, AnnotationRenderer renderer) {
+        setBackground(Color.WHITE);
         this.type = type;
         typeLabel.setText(type);
         layoutBasicPanel();
@@ -190,7 +191,7 @@ public abstract class AbstractEntityPanel
 
         add(getBasicPanel(), cc.xy(1, 1));
 
-        middle = new JPanel(new FormLayout("p, 5dlu, p, 5dlu, p", "p"));
+        middle = PanelFactory.createInfoPanel("p, 5dlu, p, 5dlu, p", "p");
 
         middle.add(synopsis, cc.xy(1, 1));
         middle.add(new BorderlessScrollPane(references), cc.xy(3, 1));
@@ -205,7 +206,7 @@ public abstract class AbstractEntityPanel
     }
 
     public JPanel getObservationPanel() {
-        JPanel panel = new JPanel();
+        JPanel panel = PanelFactory.createInfoPanel();
         observationList.setModel(observationModel);
         panel.add(observationList);
         return panel;
@@ -228,7 +229,7 @@ public abstract class AbstractEntityPanel
 
     public JPanel getAnnotationPanel() {
 
-        JPanel panel = new JPanel();
+        JPanel panel = PanelFactory.createInfoPanel();
         panel.setBorder(Borders.DLU4_BORDER);
 
         removeAnnotationButtons = new ArrayList(); // todo use a pool
