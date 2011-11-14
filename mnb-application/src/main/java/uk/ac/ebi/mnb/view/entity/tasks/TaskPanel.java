@@ -34,7 +34,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.MLabels;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.GeneralPanel;
+import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
@@ -95,7 +95,7 @@ public class TaskPanel
      */
     public JPanel getSynopsis() {
 
-        JPanel panel = new GeneralPanel();
+        JPanel panel = PanelFactory.createInfoPanel();
         panel.add(MLabels.newLabel("No synopsis"));
         return panel;
 

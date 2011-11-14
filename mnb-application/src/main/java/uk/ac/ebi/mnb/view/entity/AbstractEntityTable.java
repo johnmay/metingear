@@ -29,7 +29,6 @@ import java.util.List;
 import javax.swing.JTable;
 import uk.ac.ebi.visualisation.ViewUtils;
 import org.apache.log4j.Logger;
-import org.pushingpixels.substance.internal.ui.SubstanceTableUI;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.SelectionMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;

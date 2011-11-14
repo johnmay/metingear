@@ -30,7 +30,6 @@ import uk.ac.ebi.metabonater.components.theme.MRoundButton;
 import uk.ac.ebi.mnb.core.CloseDialogAction;
 import uk.ac.ebi.interfaces.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.visualisation.ViewUtils;
 
 import javax.swing.*;
@@ -42,6 +41,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.visualisation.ColorUtilities;
 
 /**
@@ -54,7 +54,7 @@ import uk.ac.ebi.visualisation.ColorUtilities;
 public class PopupDialog extends JDialog {
 
     private static final Logger LOGGER = Logger.getLogger(PopupDialog.class);
-    private JPanel panel = new DialogPanel();
+    private JPanel panel = PanelFactory.createDialogPanel();
     private BufferedImage bgImage;
     private Point mouse;
     private int offset;

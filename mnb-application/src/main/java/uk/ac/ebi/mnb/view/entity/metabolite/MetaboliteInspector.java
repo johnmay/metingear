@@ -21,16 +21,8 @@
  */
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import javax.swing.JTextField;
-import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.TransparentTextField;
-import uk.ac.ebi.mnb.view.labels.BoldLabel;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.mnb.main.MainView;
 
 
 /**

@@ -32,7 +32,6 @@ import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
-import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
 
 import javax.swing.JButton;
@@ -72,6 +71,7 @@ import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.Message;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
@@ -92,7 +92,7 @@ public class ExcelImportDialog
     private int activeStage = 0;
     private SheetChooserDialog sheetChooserDialog;
     private ReactionColumnChooser reactionColumnChooser;
-    private JPanel shiftPanel = new DialogPanel();
+    private JPanel shiftPanel = PanelFactory.createDialogPanel();
     private WizzardStage[] stages = new WizzardStage[4];
     private Reconstruction reconstruction;
     private CellConstraints cc = new CellConstraints();

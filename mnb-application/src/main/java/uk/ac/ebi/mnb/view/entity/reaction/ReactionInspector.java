@@ -21,18 +21,8 @@
 package uk.ac.ebi.mnb.view.entity.reaction;
 
 import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import java.util.Collection;
-import java.util.List;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.mnb.view.GeneralPanel;
-import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.main.MainView;
 
 /**
  *          ReactionInspector – 2011.09.26 <br>

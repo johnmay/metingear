@@ -156,10 +156,10 @@ public class ReactionColumnChooser
         table = new SelectionTable(helper);
 
         JScrollPane pane = new BorderlessScrollPane(table, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-//        RowNumberTable rnt = new RowNumberTable(table);
-//        pane.setRowHeaderView(rnt);
-//        pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
-//                       rnt.getTableHeader());
+        RowNumberTable rnt = new RowNumberTable(table);
+        pane.setRowHeaderView(rnt);
+        pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
+                       rnt.getTableHeader());
         pane.setPreferredSize(new Dimension(800, table.getRowHeight() * 10));
         add(pane, cc.xyw(1, 15, 7));
 

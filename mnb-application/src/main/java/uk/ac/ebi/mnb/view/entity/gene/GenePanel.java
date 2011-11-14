@@ -23,7 +23,6 @@ package uk.ac.ebi.mnb.view.entity.gene;
 import uk.ac.ebi.visualisation.ViewUtils;
 import java.awt.Dimension;
 
-import java.util.Collection;
 import uk.ac.ebi.interfaces.*;
 import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
@@ -33,7 +32,6 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.*;
-import java.util.Arrays;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.mnb.core.MLabels;
 
@@ -133,7 +131,7 @@ public class GenePanel
      */
     public JPanel getSynopsis() {
 
-        JPanel panel = new GeneralPanel();
+        JPanel panel = PanelFactory.createInfoPanel();
         panel.add(MLabels.newLabel("No synopsis implemented"));
         return panel;
 

@@ -22,18 +22,13 @@ package uk.ac.ebi.mnb.view.entity;
 
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import java.awt.BorderLayout;
-import java.util.Collection;
-import java.util.List;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.GeneralPanel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -46,7 +41,7 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
  * @author  $Author$ (this version)
  */
 public abstract class AbstractEntityInspector
-        extends GeneralPanel
+        extends JPanel
         implements ListSelectionListener, SelectionController {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityInspector.class);

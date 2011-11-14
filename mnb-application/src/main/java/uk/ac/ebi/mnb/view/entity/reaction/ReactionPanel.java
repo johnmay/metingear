@@ -25,7 +25,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.JComponent;
@@ -36,11 +35,10 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.GeneralPanel;
+import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.mnb.view.ReactionRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
@@ -90,8 +88,7 @@ public class ReactionPanel
      */
     public JPanel getSynopsis() {
 
-        JPanel panel = new GeneralPanel();
-
+        JPanel panel = PanelFactory.createInfoPanel();
         panel.setBorder(Borders.DLU4_BORDER);
 
         panel.add(new MLabel("Reaction Synopsis"));
@@ -107,7 +104,7 @@ public class ReactionPanel
 
         FormLayout layout = (FormLayout) panel.getLayout();
 
-        participantXref = new GeneralPanel();
+        participantXref =PanelFactory.createInfoPanel();
 
         // add a row
         layout.appendRow(new RowSpec(RowSpec.CENTER, Sizes.PREFERRED, RowSpec.DEFAULT_GROW));

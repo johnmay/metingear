@@ -21,10 +21,8 @@
  */
 package uk.ac.ebi.mnb.view.entity.tasks;
 
-import uk.ac.ebi.mnb.view.GeneralPanel;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 
 /**

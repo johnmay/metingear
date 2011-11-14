@@ -39,11 +39,6 @@
             <version>1.2-SNAPSHOT</version>
         </dependency>
         <!-- mnb -->
-        <dependency>
-            <groupId>uk.ac.ebi.mnb</groupId>
-            <artifactId>mnb-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
         <!-- external -->
         <dependency>
             <groupId>org.apache.poi</groupId>

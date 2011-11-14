@@ -23,8 +23,6 @@ package uk.ac.ebi.mnb.dialog.tools;
 import com.google.common.collect.Multimap;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,23 +36,18 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.io.service.KEGGCompoundNameService;
-import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
-import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
 import uk.ac.ebi.mnb.core.TooltipLabel;
-import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.interfaces.ViewController;
-import uk.ac.ebi.mnb.view.DialogPanel;
 import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.ContextDialog;
+import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 
 /**
@@ -90,7 +83,7 @@ public class AutomaticCrossReference
     @Override
     public JPanel getOptions() {
 
-        JPanel options = new DialogPanel();
+        JPanel options = PanelFactory.createDialogPanel();
 
         CellConstraints cc = new CellConstraints();
 

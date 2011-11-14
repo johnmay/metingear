@@ -49,6 +49,7 @@ public class AdditionalOptions
 
     public AdditionalOptions(ExcelModelProperties properties) {
         this.properties = properties;
+        init();
     }
 
 
@@ -57,8 +58,8 @@ public class AdditionalOptions
         setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p, 4dlu, p"));
         CellConstraints cc = new CellConstraints();
 
-        add(new MLabel("<html>Please select which resources should be<br>"
-                       + "used to reconcile chemical names</html>"), cc.xy(1, 1));
+        add(new MLabel("<html>Please select which resources should be"
+                       + "used to reconcile chemical <br> names</html>"), cc.xy(1, 1));
 
         add(chebi, cc.xy(1, 5));
         add(kegg, cc.xy(3, 5));

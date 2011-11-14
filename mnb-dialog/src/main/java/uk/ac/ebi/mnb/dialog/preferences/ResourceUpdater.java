@@ -22,8 +22,8 @@ package uk.ac.ebi.mnb.dialog.preferences;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.JPanel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.view.DialogPanel;
 
 /**
  * @name    ResourceUpdater - 2011.10.15 <br>
@@ -33,7 +33,7 @@ import uk.ac.ebi.mnb.view.DialogPanel;
  * @author  $Author$ (this version)
  */
 public class ResourceUpdater
-        extends DialogPanel {
+        extends JPanel {
 
     private static final Logger LOGGER = Logger.getLogger(ResourceUpdater.class);
     private CellConstraints cc = new CellConstraints();
