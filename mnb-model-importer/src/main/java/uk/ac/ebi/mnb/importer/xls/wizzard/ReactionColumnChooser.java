@@ -44,7 +44,7 @@ import javax.swing.event.ChangeListener;
 import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.MLabels;
+import uk.ac.ebi.mnb.core.LabelFactory;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.MComboBox;
@@ -147,7 +147,7 @@ public class ReactionColumnChooser
         add(new DialogLabel("Source/Reference:", SwingConstants.RIGHT), cc.xy(5, 9));
         add(source, cc.xy(7, 9));
 
-        add(MLabels.newFormLabel("Locus"), cc.xy(1, 11));
+        add(LabelFactory.newFormLabel("Locus"), cc.xy(1, 11));
         add(locus, cc.xy(3, 11));
 
         add(new JSeparator(), cc.xyw(1, 13, 7));

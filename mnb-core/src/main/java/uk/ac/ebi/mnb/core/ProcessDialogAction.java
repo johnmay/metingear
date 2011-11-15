@@ -16,6 +16,7 @@ package uk.ac.ebi.mnb.core;
 
 import furbelow.SpinningDialWaitIndicator;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
 import javax.swing.SwingUtilities;
@@ -53,17 +54,24 @@ public class ProcessDialogAction extends GeneralAction {
         // a wait indicator is shown whilst processing
         final SpinningDialWaitIndicator waiter = new SpinningDialWaitIndicator(dialog);
 
-        new Thread(new Runnable() {
+
+        Thread t = new Thread(new Runnable() {
+
             public void run() {
+                dialog.process(waiter);
+
                 SwingUtilities.invokeLater(new Runnable() {
+
                     public void run() {
-                        dialog.process(waiter);
                         waiter.dispose();
                         dialog.setVisible(false);
                         dialog.update();
                     }
                 });
             }
-        }).start();
+        });
+        t.setName(getClass().getSimpleName() + "-PROCESSING");
+        t.start();
+
     }
 }

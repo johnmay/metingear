@@ -42,7 +42,7 @@ import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.metabonater.components.theme.MTextField;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.mnb.core.MLabels;
+import uk.ac.ebi.mnb.core.LabelFactory;
 import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -90,25 +90,25 @@ public class SequenceHomology extends ControllerDialog {
 
         panel.setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
 
-        panel.add(MLabels.newFormLabel("Program:"), cc.xy(1, 1));
+        panel.add(LabelFactory.newFormLabel("Program:"), cc.xy(1, 1));
         panel.add(tool, cc.xy(3, 1));
         panel.add(remote, cc.xyw(5, 1, 3));
 
         panel.add(new JSeparator(), cc.xyw(1, 3, 7));
 
-        panel.add(MLabels.newFormLabel("Threads:",
+        panel.add(LabelFactory.newFormLabel("Threads:",
                                        "The number of CPUs to use. Higher numbers improve speed but may slow down the system"),
                   cc.xy(1, 5));
         panel.add(cpu, cc.xy(3, 5));
-        panel.add(MLabels.newFormLabel("Expected Value:",
+        panel.add(LabelFactory.newFormLabel("Expected Value:",
                                        "Lower numbers will improve performance but may decrease the number of returned results"),
                   cc.xy(5, 5));
         panel.add(field, cc.xy(7, 5));
 
-        panel.add(MLabels.newFormLabel("Database:"), cc.xy(1, 7));
+        panel.add(LabelFactory.newFormLabel("Database:"), cc.xy(1, 7));
         panel.add(database, cc.xy(3, 7));
 
-        panel.add(MLabels.newFormLabel("Max Results"), cc.xy(5, 7));
+        panel.add(LabelFactory.newFormLabel("Max Results"), cc.xy(5, 7));
         panel.add(results, cc.xy(7, 7));
 
         panel.add(alignments, cc.xyw(1, 9, 7));

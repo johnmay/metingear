@@ -20,33 +20,52 @@ package mnb.io.resolve;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
+import com.google.common.base.Joiner;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.Sizes;
-import java.awt.Component;
-import java.awt.Graphics;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.border.AbstractBorder;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
-import javax.swing.border.SoftBevelBorder;
+import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.Element;
+import org.openscience.cdk.Isotope;
+import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.interfaces.IElement;
+import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+import uk.ac.ebi.annotation.Synonym;
+import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
+import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.io.service.ChEBIChemicalDataService;
+import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
+import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.DropdownDialog;
+import uk.ac.ebi.mnb.view.PanelFactory;
+import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.visualisation.MatchIndication;
 import uk.ac.ebi.visualisation.molecule.MoleculeTable;
 
 /**
@@ -77,21 +96,87 @@ public class CandidateSelector
         getClose().setText("Skip");
         table.getSelectionModel().addListSelectionListener(this);
     }
+    private MatchIndication nameMatch = new MatchIndication(200, 200);
+    private MatchIndication formulaMatch = new MatchIndication(200, 200);
+    private MatchIndication chargeMatch = new MatchIndication(200, 200);
+    private Map<Metabolite, CandidateEntry> map = new HashMap();
+    private Metabolite query;
 
-    public void setNameAndCandidates(String name, Collection<SynonymCandidateEntry> candidates) {
+    public void setup(Metabolite query,
+                      Collection<SynonymCandidateEntry> candidates) {
 
-        this.name = name;
+        this.query = query;
 
-        desc.setText(String.format("The molecule '%s' was not found:", name));
-        nameLabel.setText(name);
+        String descText = String.format("The molecule '%s' was not found:", query.getName());
 
-        this.table.getModel().setCandidates(candidates);
+        desc.setText(descText);
+        desc.setToolTipText(descText);
+
+        this.nameMatch.setLeft(query.getName());
+        this.nameMatch.setRight("");
+        this.nameMatch.setDifference("");
+
+        Collection<MolecularFormula> thismfs = query.getAnnotationsExtending(MolecularFormula.class);
+        this.formulaMatch.setLeft(thismfs.isEmpty() ? "" : Joiner.on(",").join(thismfs));
+        this.formulaMatch.setDifference("");
+        this.formulaMatch.setRight("");
+
+        this.chargeMatch.setLeft(query.getCharge().toString());
+        this.chargeMatch.setDifference("");
+        this.chargeMatch.setRight("");
+
+        List<Metabolite> tmp = new ArrayList();
+
+        map.clear();
+        for (SynonymCandidateEntry candidate : candidates) {
+
+            String accession = candidate.getId();
+            Metabolite m = new Metabolite("", "", candidate.getDescription());
+
+            m.setName(candidate.getDesc());
+
+            if (accession.startsWith("ChEBI") || accession.startsWith("CHEBI")) {
+                ChEBIIdentifier id = new ChEBIIdentifier(accession);
+                m.addAnnotation(new ChEBICrossReference(id));
+
+                Double c = ChEBIChemicalDataService.getInstance().getCharge(id);
+                if (c != null) {
+                    m.setCharge(c);
+                } else {
+                    System.out.println("null charge for: " + id);
+                }
+
+                Collection<IMolecularFormula> mfs = ChEBIChemicalDataService.getInstance().getFormulas(id);
+                if (mfs.isEmpty()) {
+                    System.out.println("no mf for " + id);
+                }
+                for (IMolecularFormula mf : mfs) {
+                    m.addAnnotation(new MolecularFormula(mf));
+                }
+
+            } else if (accession.startsWith("C")) {
+                m.addAnnotation(new KEGGCrossReference(new KEGGCompoundIdentifier(accession)));
+            } else {
+                throw new UnsupportedOperationException("Need to add new identifier!");
+            }
+
+            for (String synonym : candidate.getSynonyms()) {
+                m.addAnnotation(new Synonym(synonym));
+            }
+
+            map.put(m, candidate);
+            tmp.add(m);
+
+        }
+
+        this.table.getModel().set(tmp);
 
     }
 
     @Override
     public JLabel getDescription() {
         desc = super.getDescription();
+        desc.setPreferredSize(new Dimension(500, 16));
         desc.setText(String.format("The molecule '%s' was not found:", name));
         return desc;
     }
@@ -101,26 +186,42 @@ public class CandidateSelector
 
         options = super.getOptions();
         options.setLayout(new FormLayout("p:grow, 4dlu, p, 4dlu, p:grow",
-                                         "p, 4dlu, p, 4dlu, p"));
+                                         "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
 
         nameLabel.setText(name);
-        nameLabel.setBorder(BorderFactory.createCompoundBorder(new AbstractBorder() {
-
-            @Override
-            public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-                g.setColor(c.getForeground());
-                g.drawRoundRect(x, y, width, height, 16, 16);
-            }
-        }, BorderFactory.createBevelBorder(BevelBorder.LOWERED) ));
         matchLabel.setText("?");
 
-        options.add(nameLabel, cc.xy(1, 1));
-        options.add(new JLabel("="), cc.xy(3, 1));
-        options.add(matchLabel, cc.xy(5, 1));
-        options.add(new JSeparator(), cc.xyw(1, 3, 5));
-        options.add(new BorderlessScrollPane(table), cc.xyw(1, 5, 5));
+        nameMatch.setLeft(name);
+        nameMatch.setDifference("?");
+        nameMatch.setRight("...");
 
-        return options;
+        nameLabel.setPreferredSize(new Dimension(32, 100));
+        matchLabel.setPreferredSize(new Dimension(32, 100));
+
+        options.add(nameMatch.getComponent(), cc.xyw(1, 1, 5));
+        options.add(formulaMatch.getComponent(), cc.xyw(1, 3, 5));
+        options.add(chargeMatch.getComponent(), cc.xyw(1, 5, 5));
+
+        Box tablePanel = Box.createVerticalBox();
+        tablePanel.add(table.getTableHeader());
+        tablePanel.add(table);
+
+        options.add(new ExpandableComponentGroup("Suggested Matches", tablePanel), cc.xyw(1, 7, 5));
+
+        DipeptideMaker dipeptide = new DipeptideMaker();
+
+        options.add(new ExpandableComponentGroup("Dipeptide", dipeptide.getComponent()), cc.xyw(1, 9, 5));
+
+        JPanel panel = PanelFactory.createDialogPanel();
+
+        JScrollPane pane = new BorderlessScrollPane(options);
+
+        pane.getViewport().setBackground(panel.getBackground());
+        pane.setPreferredSize(new Dimension(500, 400));
+
+        panel.add(pane);
+
+        return panel;
 
     }
 
@@ -164,8 +265,12 @@ public class CandidateSelector
         selected = true;
     }
 
+    public boolean okaySelected() {
+        return selected;
+    }
+
     public Collection<Metabolite> getSelected() {
-        return selected ? table.getSelectedEntities() : new ArrayList();
+        return table.getSelectedEntities();
     }
 
     @Override
@@ -177,8 +282,65 @@ public class CandidateSelector
     public void valueChanged(ListSelectionEvent e) {
         Collection<Metabolite> selection = getSelected();
         if (selection.iterator().hasNext()) {
-            Metabolite m = selection.iterator().next();
-            matchLabel.setText(m.getName());
+            try {
+                Metabolite m = selection.iterator().next();
+                nameMatch.setRight(m.getName());
+                Integer diff = map.containsKey(m) ? map.get(m).getDistance() : 100;
+                nameMatch.setDifference(diff.toString());
+                nameMatch.setQuality(diff <= 2 ? MatchIndication.Quality.Good
+                                     : diff <= 5 ? MatchIndication.Quality.Okay
+                                       : MatchIndication.Quality.Bad);
+
+                Collection<MolecularFormula> mfs = m.getAnnotationsExtending(MolecularFormula.class);
+                formulaMatch.setRight(mfs.isEmpty() ? "" : Joiner.on(", ").join(mfs));
+                formulaMatch.setQuality(MatchIndication.Quality.Bad);
+
+                Isotope hydrogen = new Isotope(new Element("H"));
+
+                for (MolecularFormula mf : query.getAnnotationsExtending(MolecularFormula.class)) {
+                    for (MolecularFormula mfo : mfs) {
+                        if (MolecularFormulaManipulator.compare(mf.getFormula(), mfo.getFormula())) {
+                            formulaMatch.setQuality(MatchIndication.Quality.Good);
+                        } else {
+                            IMolecularFormula mf1 = mf.getFormula();
+                            IMolecularFormula mf2 = mfo.getFormula();
+
+                            int mf1hc = MolecularFormulaManipulator.getElementCount(mf1, hydrogen);
+                            int mf2hc = MolecularFormulaManipulator.getElementCount(mf2, hydrogen);
+
+                            mf1 = MolecularFormulaManipulator.removeElement(mf1, hydrogen);
+                            mf2 = MolecularFormulaManipulator.removeElement(mf2, hydrogen);
+
+
+                            if (MolecularFormulaManipulator.compare(mf1, mf2)) {
+                                formulaMatch.setQuality(MatchIndication.Quality.Okay);
+                            }
+
+                            mf1.addIsotope(hydrogen, mf1hc);
+                            mf2.addIsotope(hydrogen, mf2hc);
+
+                        }
+                    }
+                }
+
+                chargeMatch.setRight(m.getCharge().toString());
+                double chDiff = Math.abs(query.getCharge() - m.getCharge());
+                chargeMatch.setQuality(chDiff < 1 ? MatchIndication.Quality.Good
+                                       : chDiff < 2 ? MatchIndication.Quality.Okay
+                                         : MatchIndication.Quality.Bad);
+
+                nameMatch.getComponent().repaint();
+                formulaMatch.getComponent().repaint();
+                chargeMatch.getComponent().repaint();
+
+                nameMatch.getComponent().revalidate();
+                formulaMatch.getComponent().revalidate();
+                chargeMatch.getComponent().revalidate();
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(CandidateSelector.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+
         }
     }
 }

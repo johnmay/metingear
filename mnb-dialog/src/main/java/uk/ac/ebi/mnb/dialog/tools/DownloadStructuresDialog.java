@@ -41,6 +41,7 @@ import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -121,11 +122,6 @@ public class DownloadStructuresDialog
 
         for (AnnotatedEntity component : getSelection().get(Metabolite.class)) {
 
-            for(Annotation ann : component.getAnnotations() ){
-                System.out.println(ann.getClass() + " : " + (ann instanceof CrossReference) + " : " + AnnotationLoader.getInstance().getIndex(CrossReference.class).getClass());;
-            }
-
-
             for (Annotation xref : component.getAnnotationsExtending(CrossReference.class)) {
 
                 Identifier id = ((CrossReference) xref).getIdentifier();
@@ -162,10 +158,16 @@ public class DownloadStructuresDialog
         }
 
 
+
     }
 
     @Override
     public boolean update() {
+
+        // rebuild the map to avoid problems with non-equal hashes
+        ReconstructionManager.getInstance().getActive().getReactions().rebuildParticipantMap();
+
         return update(getSelection());
+
     }
 }

@@ -31,7 +31,7 @@ import javax.swing.JTextArea;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.mnb.core.MLabels;
+import uk.ac.ebi.mnb.core.LabelFactory;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.PanelFactory;
@@ -96,7 +96,7 @@ public class TaskPanel
     public JPanel getSynopsis() {
 
         JPanel panel = PanelFactory.createInfoPanel();
-        panel.add(MLabels.newLabel("No synopsis"));
+        panel.add(LabelFactory.newLabel("No synopsis"));
         return panel;
 
     }

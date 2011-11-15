@@ -104,7 +104,7 @@ public class ReactionPanel
 
         FormLayout layout = (FormLayout) panel.getLayout();
 
-        participantXref =PanelFactory.createInfoPanel();
+        participantXref = PanelFactory.createInfoPanel();
 
         // add a row
         layout.appendRow(new RowSpec(RowSpec.CENTER, Sizes.PREFERRED, RowSpec.DEFAULT_GROW));
@@ -158,8 +158,7 @@ public class ReactionPanel
             Metabolite m = reactants.get(i);
             participantXref.add(
                     new InternalLinkLabel(m, m.getName(), (SelectionController) MainView.getInstance().getViewController()),
-                    cc.xy(
-                    columnIndex, 1));
+                    cc.xy(columnIndex, 1));
             columnIndex += i + 1 < reactants.size() ? 2 : 1;
         }
         columnIndex += 1; // hop over reaction arrow

@@ -22,7 +22,7 @@ package uk.ac.ebi.mnb.dialog.file;
 
 import java.util.*;
 import uk.ac.ebi.metabonater.components.theme.MTextField;
-import uk.ac.ebi.mnb.core.MLabels;
+import uk.ac.ebi.mnb.core.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.resource.IdentifierFactory;
@@ -87,12 +87,12 @@ public abstract class NewEntity extends DropdownDialog {
         panel.add(type, cc.xy(1, 1));
         panel.add(accession, cc.xy(3, 1));
 
-        panel.add(MLabels.newFormLabel("Abbreviation:",
+        panel.add(LabelFactory.newFormLabel("Abbreviation:",
                                       "A short 2-5 character abbreviation of the new entity"),
                   cc.xy(6, 1));
         panel.add(abbreviation, cc.xy(7, 1));
 
-        panel.add(MLabels.newFormLabel("Name:", "An offical or trivial name the new entity"), cc.xy(1, 3));
+        panel.add(LabelFactory.newFormLabel("Name:", "An offical or trivial name the new entity"), cc.xy(1, 3));
         panel.add(name, cc.xyw(3, 3, 5));
 
 

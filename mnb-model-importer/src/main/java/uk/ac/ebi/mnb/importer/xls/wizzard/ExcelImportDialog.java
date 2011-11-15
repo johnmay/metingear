@@ -192,12 +192,15 @@ public class ExcelImportDialog
                                                            properties,
                                                            EntityColumn.DATA_BOUNDS);
             waitIndicator.setText(String.format("initialising."));
+            waitIndicator.repaint();
 
 //            ChemicalDBWebService ws =
 //                                 new CachedChemicalWS(
 //                    new ChEBIWebServiceConnection(StarsCategory.ALL, 10));
 
             waitIndicator.setText(String.format("initialising.."));
+            waitIndicator.repaint();
+
 
             CandidateFactory factory =
                              new CandidateFactory(ChEBINameService.getInstance(),
@@ -211,6 +214,8 @@ public class ExcelImportDialog
             parser = new ReactionParser(entitySheet);
 
             waitIndicator.setText(String.format("initialising..."));
+            waitIndicator.repaint();
+
 
             int completed = 0;
             while (rxnSht.hasNext()) {
@@ -234,12 +239,9 @@ public class ExcelImportDialog
                 completed++;
 
                 final int done = (int) (((float) completed / (float) rxnSht.getRowCount()) * 100);
-                SwingUtilities.invokeLater(new Runnable() {
 
-                    public void run() {
-                        waitIndicator.setText(String.format("importing... %d%%", done));
-                    }
-                });
+                waitIndicator.setText(String.format("importing... %d%%", done));
+                waitIndicator.repaint();
 
             }
 

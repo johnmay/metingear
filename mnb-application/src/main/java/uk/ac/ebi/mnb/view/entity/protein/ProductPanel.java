@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
 import com.jgoodies.forms.layout.*;
 import java.util.List;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.mnb.core.MLabels;
+import uk.ac.ebi.mnb.core.LabelFactory;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -135,7 +135,7 @@ public class ProductPanel
     public JPanel getSynopsis() {
 
         JPanel panel = PanelFactory.createInfoPanel();
-        panel.add(MLabels.newLabel("No synopsis implemented"));
+        panel.add(LabelFactory.newLabel("No synopsis implemented"));
         return panel;
 
     }

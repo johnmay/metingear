@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mnb.view.old;
+package uk.ac.ebi.mnb.core;
 
 import javax.swing.ImageIcon;
+import javax.swing.JToggleButton;
+import javax.swing.plaf.basic.BasicButtonUI;
 import uk.ac.ebi.visualisation.ViewUtils;
-import uk.ac.ebi.mnb.core.GeneralAction;
-import uk.ac.ebi.mnb.view.labels.IconButton;
 
 /**
  * ExpandButton.java
@@ -17,7 +17,7 @@ import uk.ac.ebi.mnb.view.labels.IconButton;
  * @date May 9, 2011
  */
 public class ExpandButton
-        extends IconButton {
+        extends JToggleButton {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( ExpandButton.class );
     private ImageIcon open;
@@ -27,16 +27,13 @@ public class ExpandButton
         super( a );
         open = ViewUtils.getIcon( a.getValue( GeneralAction.EXPAND_BUTTON_OPEN_ICON ).toString() , "" );
         close = ViewUtils.getIcon( a.getValue( GeneralAction.EXPAND_BUTTON_CLOSE_ICON ).toString() , "" );
-        setIcon( open );
+        setUI(new BasicButtonUI());
+        setIcon(close);
+        setBorder(null);
+        setBackground(null);
+        setFocusable(false);
+        setSelectedIcon( open );
         setText( null );
-      //  a.setButton( this );
-    }
-
-    public void setOpen() {
-        setIcon( open );
-    }
-
-    public void setClose() {
-        setIcon( close );
+        a.setButton(this);
     }
 }

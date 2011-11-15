@@ -30,7 +30,7 @@ import javax.swing.JTextField;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
 import uk.ac.ebi.metabonater.components.theme.MTextField;
-import uk.ac.ebi.mnb.core.MLabels;
+import uk.ac.ebi.mnb.core.LabelFactory;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.interfaces.DialogController;
@@ -74,11 +74,11 @@ public class PreferenceDialog extends DropdownDialog {
         blastp = new MTextField(15);
         blastp.setText(Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastp.path", ""));
 
-        options.add(MLabels.newFormLabel("Metabolite source view:"), cc.xy(1, 1));
+        options.add(LabelFactory.newFormLabel("Metabolite source view:"), cc.xy(1, 1));
         options.add(metSourceView, cc.xy(3, 1));
-        options.add(MLabels.newFormLabel("Reaction source view:"), cc.xy(5, 1));
+        options.add(LabelFactory.newFormLabel("Reaction source view:"), cc.xy(5, 1));
         options.add(rxnSourceView, cc.xy(7, 1));
-        options.add(MLabels.newFormLabel("blastp path (2.2.25+ recomended):"), cc.xy(1, 3));
+        options.add(LabelFactory.newFormLabel("blastp path (2.2.25+ recomended):"), cc.xy(1, 3));
         options.add(blastp, cc.xy(3, 3));
 
 

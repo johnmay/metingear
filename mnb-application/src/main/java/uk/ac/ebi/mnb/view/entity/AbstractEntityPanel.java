@@ -304,16 +304,11 @@ public abstract class AbstractEntityPanel
             refModel.removeAllElements();
 
 
-            new SwingWorker() {
 
-                @Override
-                protected Object doInBackground() throws Exception {
-                    for (AnnotatedEntity ref : getReferences()) {
-                        refModel.addElement(ref);
-                    }
-                    return null;
-                }
-            }.run();
+            for (AnnotatedEntity ref : getReferences()) {
+                refModel.addElement(ref);
+            }
+
 
 
             observationModel.removeAllElements();

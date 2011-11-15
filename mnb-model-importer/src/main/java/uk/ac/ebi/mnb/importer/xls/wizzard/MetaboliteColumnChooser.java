@@ -129,10 +129,10 @@ public class MetaboliteColumnChooser
         add(new JSeparator(), cc.xyw(1, 17, 7));
 
         pane = new BorderlessScrollPane(table);
-//        RowNumberTable rnt = new RowNumberTable(table);
-//        pane.setRowHeaderView(rnt);
-//        pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
-//                       rnt.getTableHeader());
+        RowNumberTable rnt = new RowNumberTable(table);
+        pane.setRowHeaderView(rnt);
+        pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
+                       rnt.getTableHeader());
         pane.setPreferredSize(new Dimension(800, table.getRowHeight() * 10));
         add(pane, cc.xyw(1, 19, 7));
 

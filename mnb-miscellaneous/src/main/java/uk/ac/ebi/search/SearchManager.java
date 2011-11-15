@@ -140,6 +140,9 @@ public class SearchManager {
     public SearchableIndex getIndex(Reconstruction reconstruction) throws CorruptIndexException,
                                                                           LockObtainFailedException,
                                                                           IOException {
+
+        System.out.println("Search Re-index invoked!");
+
         Directory index = new RAMDirectory();
         IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34,
                                                                           analyzer));

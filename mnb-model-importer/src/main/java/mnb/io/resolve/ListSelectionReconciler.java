@@ -29,6 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
+import mnb.io.tabular.type.EntityColumn;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
@@ -41,7 +42,6 @@ import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.visualisation.molecule.MoleculeTable;
 
 /**
  *          UserReconciler - 2011.10.31 <br>
@@ -101,6 +101,14 @@ public class ListSelectionReconciler implements EntryReconciler {
         metabolite.setAbbreviation(entry.getAbbreviation());
         metabolite.setName(name);
 
+
+        if (entry.hasValue(EntityColumn.FORMULA)) {
+            metabolite.addAnnotation(new MolecularFormula(entry.getFormula()));
+        }
+        if (entry.hasValue(EntityColumn.CHARGE)) {
+            metabolite.setCharge(Double.parseDouble(entry.getValue(EntityColumn.CHARGE)));
+        }
+
         try {
             Multimap<Integer, SynonymCandidateEntry> map = factory.getSynonymCandidates(name);
 
@@ -120,12 +128,22 @@ public class ListSelectionReconciler implements EntryReconciler {
                     candidates.addAll(map.get(score));
                 }
                 if (!candidates.isEmpty()) {
-                    dialog.setNameAndCandidates(name, candidates);
-                    dialog.setVisible(true);
-                    Collection<Metabolite> selected = dialog.getSelected();
-                    for (Metabolite m : selected) {
-                        metabolite.addAnnotations(m.getAnnotations());
-                        m.addAnnotation(new CrossReference(m.getIdentifier()));
+                    if (map.containsKey(0)) {
+                        for (SynonymCandidateEntry candidate : map.get(0)) {
+                            Identifier id = template.newInstance();
+                            id.setAccession(candidate.getId());
+                            metabolite.addAnnotation(new CrossReference(id));
+                        }
+                    } else {
+                        dialog.setup(metabolite, candidates);
+                        dialog.setVisible(true);
+                        if (dialog.okaySelected()) {
+                            Collection<Metabolite> selected = dialog.getSelected();
+                            for (Metabolite m : selected) {
+                                metabolite.addAnnotations(m.getAnnotations());
+                                m.addAnnotation(new CrossReference(m.getIdentifier()));
+                            }
+                        }
                     }
                 }
             }

@@ -96,7 +96,7 @@ public abstract class DropdownDialog
      * @return
      */
     public JLabel getDescription() {
-        return new JLabel(getClass().getSimpleName());
+        return LabelFactory.newLabel(getClass().getSimpleName());
     }
 
     /**
