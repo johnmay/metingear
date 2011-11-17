@@ -20,10 +20,25 @@
  */
 package uk.ac.ebi.mnb.core;
 
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.font.TextAttribute;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.view.labels.MLabel;
+import uk.ac.ebi.interfaces.Theme;
+import uk.ac.ebi.mnb.settings.Settings;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  * @name    LabelFactory - 2011.10.08 <br>
@@ -35,9 +50,42 @@ import uk.ac.ebi.mnb.view.labels.MLabel;
 public class LabelFactory {
 
     private static final Logger LOGGER = Logger.getLogger(LabelFactory.class);
+    private static Theme theme = Settings.getInstance().getTheme();
+
+    public enum Size {
+
+        SMALL(11.0f),
+        NORMAL(12.0f),
+        LARGE(14.0f),
+        HUGE(16.0f);
+        private final float size;
+
+        private Size(float size) {
+            this.size = size;
+        }
+    };
 
     public static JLabel newLabel(String text) {
-        return new MLabel(text);
+        return newLabel(text, Size.NORMAL);
+    }
+
+    public static JLabel newLabel(String text, Size size) {
+
+        JLabel label = new JLabel(text);
+        label.setForeground(theme.getForeground());
+        label.setFont(theme.getBodyFont().deriveFont(size.size));
+
+        return label;
+
+    }
+
+    /**
+     * Wtaps the text in {@code <HTML>} tags
+     * @param text
+     * @return
+     */
+    public static JLabel newHTMLLabel(String text) {
+        return newLabel(ViewUtils.htmlWrapper(text));
     }
 
     /**
@@ -45,8 +93,11 @@ public class LabelFactory {
      * @param text
      * @return
      */
-    public static  JLabel newFormLabel(String text) {
-        return new MLabel(text, SwingConstants.RIGHT);
+    public static JLabel newFormLabel(String text) {
+        JLabel label = newLabel(text);
+        label.setHorizontalAlignment(SwingConstants.RIGHT);
+        label.setForeground(label.getForeground().brighter());
+        return label;
     }
 
     /**
@@ -56,8 +107,72 @@ public class LabelFactory {
      * @return
      */
     public static JLabel newFormLabel(String text, String tooltip) {
-        JLabel label =  new MLabel(text, SwingConstants.RIGHT);
+        JLabel label = newFormLabel(text);
         label.setToolTipText(tooltip);
         return label;
+    }
+
+    /**
+     * Creates a label that when clicked opens the web browser on the provided
+     * URL
+     * @param url
+     * @param text
+     * @return
+     */
+    public static JLabel newHyperlinkLabel(final URI uri, String text) {
+        final JLabel label = newLabel(text);
+
+
+        Map<TextAttribute, Object> map = new HashMap();
+        map.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_LOW_ONE_PIXEL);
+        final Font def = label.getFont();
+        final Font hover = def.deriveFont(map);
+
+        label.addMouseListener(
+                new MouseAdapter() {
+
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+
+                        try {
+                            Desktop.getDesktop().browse(uri);
+                        } catch (IOException ex) {
+                            LOGGER.error("Could not open browser");
+                        }
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        label.setFont(hover);
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        label.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        label.setFont(def);
+                    }
+                });
+
+        return label;
+    }
+
+    public static JLabel newHyperlinkLabel(URL url, String text) {
+        try {
+            return newHyperlinkLabel(url.toURI(), text);
+        } catch (Exception ex) {
+            LOGGER.error(ex.getMessage());
+        }
+        return newLabel(text);
+    }
+
+    public static JLabel newHyperlinkLabel(String address, String text) {
+        try {
+            return newHyperlinkLabel(new URL(address), text);
+        } catch (MalformedURLException ex) {
+            LOGGER.error("Malformed URL: " + address);
+        }
+        return newLabel(text);
+
     }
 }

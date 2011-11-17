@@ -7,7 +7,6 @@ package uk.ac.ebi.mnb.view;
 import furbelow.SpinningDialWaitIndicator;
 
 import java.awt.*;
-import java.awt.Color;
 import java.awt.Dialog.ModalityType;
 
 import java.io.IOException;
@@ -17,7 +16,6 @@ import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.interfaces.Theme;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.labels.MLabel;
 
 import javax.swing.*;
 
@@ -25,7 +23,6 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.*;
-import com.sun.awt.AWTUtilities;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -96,7 +93,7 @@ public abstract class DropdownDialog
      * @return
      */
     public JLabel getDescription() {
-        return LabelFactory.newLabel(getClass().getSimpleName());
+        return LabelFactory.newLabel(getClass().getSimpleName(), LabelFactory.Size.LARGE);
     }
 
     /**
@@ -110,8 +107,6 @@ public abstract class DropdownDialog
     public JPanel getOptions() {
 
         JPanel options = PanelFactory.createDialogPanel();
-
-        options.add(new MLabel("Dialog options are place here", SwingConstants.CENTER));
 
         return options;
 

@@ -8,6 +8,7 @@ import com.jgoodies.forms.factories.Borders;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 /**
  * IconButton.java
@@ -23,6 +24,7 @@ public class IconButton extends JButton {
     public IconButton(Icon icon, Action a) {
         super(a);
         setIcon(icon);
+        setUI(new BasicButtonUI());
         setBorder(Borders.EMPTY_BORDER);
         if (getIcon() != null) {
             setText(null);
@@ -32,6 +34,7 @@ public class IconButton extends JButton {
     public IconButton(Action a) {
         super(a);
         setBorder(Borders.EMPTY_BORDER);
+        setUI(new BasicButtonUI());
         if (getIcon() != null) {
             setText(null);
         }

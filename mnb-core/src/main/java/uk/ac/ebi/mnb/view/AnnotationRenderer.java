@@ -1,4 +1,3 @@
-
 /**
  * AnnotationRenderer.java
  *
@@ -30,8 +29,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import uk.ac.ebi.mnb.view.labels.MLabel;
-import uk.ac.ebi.mnb.view.labels.URLLabel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
@@ -49,7 +46,7 @@ import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
-
+import uk.ac.ebi.mnb.core.LabelFactory;
 
 /**
  *          AnnotationRenderer – 2011.09.26 <br>
@@ -63,23 +60,19 @@ public class AnnotationRenderer implements AnnotationVisitor {
     private static final Logger LOGGER = Logger.getLogger(AnnotationRenderer.class);
     private AtomContainerRenderer renderer =
                                   new AtomContainerRenderer(
-      Arrays.asList(new BasicSceneGenerator(),
-                    new BasicBondGenerator(),
-                    new BasicAtomGenerator()),
-      new AWTFontManager());
+            Arrays.asList(new BasicSceneGenerator(),
+                          new BasicBondGenerator(),
+                          new BasicAtomGenerator()),
+            new AWTFontManager());
     private StructureDiagramGenerator sdg = new StructureDiagramGenerator();
-
 
     public AnnotationRenderer() {
     }
 
-
     public JLabel getLabel(Annotation annotation) {
-        JLabel label = new MLabel(annotation.getShortDescription() + ":", SwingConstants.RIGHT);
-        label.setToolTipText(annotation.getLongDescription());
+        JLabel label = LabelFactory.newFormLabel(annotation.getShortDescription(), annotation.getLongDescription());
         return label;
     }
-
 
     /**
      * Visits the annotation an returns a subpanel
@@ -100,7 +93,7 @@ public class AnnotationRenderer implements AnnotationVisitor {
             renderer.paint(sdg.getMolecule(), new AWTDrawVisitor(g2), new Rectangle(0, 0, 128, 128),
                            true);
             g2.dispose();
-        } catch( CDKException ex ) {
+        } catch (CDKException ex) {
             ex.printStackTrace();
         }
 
@@ -109,7 +102,6 @@ public class AnnotationRenderer implements AnnotationVisitor {
 
     }
 
-
     /**
      * Visits the annotation an returns a subpanel
      * @param annotation
@@ -117,11 +109,10 @@ public class AnnotationRenderer implements AnnotationVisitor {
      */
     public JComponent visit(CrossReference annotation) {
 
-        return new URLLabel(annotation.getIdentifier().getURL(),
-                            annotation.getIdentifier().getAccession());
+        return LabelFactory.newHyperlinkLabel(annotation.getIdentifier().getURL(),
+                                              annotation.getIdentifier().getAccession());
 
     }
-
 
     /**
      * Visits the annotation an returns a subpanel
@@ -130,11 +121,9 @@ public class AnnotationRenderer implements AnnotationVisitor {
      */
     public JComponent visit(MolecularFormula annotation) {
 
-        return new MLabel(ViewUtils.htmlWrapper(MolecularFormulaManipulator.getHTML(annotation.
-          getFormula())));
+        return LabelFactory.newHTMLLabel(MolecularFormulaManipulator.getHTML(annotation.getFormula()));
 
     }
-
 
     /**
      * Visits the annotation an returns a subpanel
@@ -143,18 +132,15 @@ public class AnnotationRenderer implements AnnotationVisitor {
      */
     public JComponent visit(Annotation annotation) {
 
-        if( annotation instanceof CrossReference ) {
+        if (annotation instanceof CrossReference) {
             return visit((CrossReference) annotation);
-        } else if( annotation instanceof MolecularFormula ) {
+        } else if (annotation instanceof MolecularFormula) {
             return visit((MolecularFormula) annotation);
-        } else if( annotation instanceof ChemicalStructure ) {
+        } else if (annotation instanceof ChemicalStructure) {
             return visit((ChemicalStructure) annotation);
         }
 
-        return new MLabel(annotation.toString());
+        return LabelFactory.newLabel(annotation.toString());
 
     }
-
-
 }
-
