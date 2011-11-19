@@ -29,8 +29,12 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 import javax.swing.table.AbstractTableModel;
 
+import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.edit.entity.AbbreviationSetter;
+import uk.ac.ebi.edit.entity.NameSetter;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.mnb.main.MainView;
 
 /**
  *          EntityTableModel – 2011.09.06 <br>
@@ -49,11 +53,11 @@ public abstract class AbstractEntityTableModel
     private List<? extends AnnotatedEntity> components = new ArrayList<AnnotatedEntity>();
     private static List<ColumnDescriptor> defaultColumns = new ArrayList(
             Arrays.asList(new ColumnDescriptor("Accession", String.class,
-                                               DataType.BASIC, String.class),
+                                               DataType.BASIC, String.class, false),
                           new ColumnDescriptor("Abbreviation", String.class,
-                                               DataType.BASIC, String.class),
+                                               DataType.BASIC, String.class, new AbbreviationSetter()),
                           new ColumnDescriptor("Name", String.class, DataType.BASIC,
-                                               String.class)));
+                                               String.class, new NameSetter())));
     private Map<String, Accessor> accessMap = new HashMap();
 
     public AbstractEntityTableModel() {
@@ -147,7 +151,7 @@ public abstract class AbstractEntityTableModel
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return false;
+        return columnDescriptors.get(columnIndex).isEditable();
     }
 
     /**
@@ -191,6 +195,22 @@ public abstract class AbstractEntityTableModel
 
     public int getRowCount() {
         return components.size();
+    }
+
+    @Override
+    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+        AnnotatedEntity entity = components.get(rowIndex);
+        ColumnDescriptor desc = columnDescriptors.get(columnIndex);
+
+        System.out.println(desc.getName() + ":" + desc.hasSetter());
+
+        if (desc.hasSetter()) {
+            UndoManager undoManager = MainView.getInstance().getUndoManager();
+            undoManager.addEdit(desc.getUndoableEdit(entity, value));
+            desc.set(entity, value);
+            update();
+        }
+
     }
 
     @Override

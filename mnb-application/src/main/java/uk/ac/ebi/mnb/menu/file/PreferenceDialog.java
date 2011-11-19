@@ -29,8 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
-import uk.ac.ebi.metabonater.components.theme.MTextField;
-import uk.ac.ebi.mnb.core.LabelFactory;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.interfaces.DialogController;
@@ -38,6 +37,7 @@ import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.mnb.view.PanelFactory;
+import uk.ac.ebi.ui.component.factory.FieldFactory;
 
 /**
  *          Preferences - 2011.10.02 <br>
@@ -71,7 +71,7 @@ public class PreferenceDialog extends DropdownDialog {
         metSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_METABOLITE));
         rxnSourceView = new MComboBox(SourceItemDisplayType.values());
         rxnSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_REACTION));
-        blastp = new MTextField(15);
+        blastp = FieldFactory.newField(15);
         blastp.setText(Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastp.path", ""));
 
         options.add(LabelFactory.newFormLabel("Metabolite source view:"), cc.xy(1, 1));

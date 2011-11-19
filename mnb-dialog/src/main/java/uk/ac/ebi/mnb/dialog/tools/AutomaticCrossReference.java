@@ -42,13 +42,14 @@ import uk.ac.ebi.io.service.KEGGCompoundNameService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
-import uk.ac.ebi.mnb.core.TooltipLabel;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.ContextDialog;
 import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  *          AutomaticCrossReferenceDialog – 2011.09.30 <br>
@@ -94,7 +95,7 @@ public class AutomaticCrossReference
         options.add(results, cc.xyw(1, 3, 3));
 
         options.add(new JSeparator(), cc.xyw(1, 5, 3));
-        JLabel label = new TooltipLabel("Method", "<html>The method to use for name matching, Generally they<br> aim to improve recall at the cost of precision</html>", SwingConstants.RIGHT);
+        JLabel label = LabelFactory.newFormLabel("Method", ViewUtils.htmlWrapper("The method to use for name matching, Generally they<br> aim to improve recall at the cost of precision"));
         options.add(label, cc.xy(1, 7));
         options.add(new MComboBox(Arrays.asList("Direct", "Fingerprint", "N-gram")), cc.xy(3, 7));
 

@@ -40,7 +40,7 @@ public class WarningMessage extends AbstractMessage {
 
     @Override
     public String getMessage() {
-        return "Warning:" + super.getMessage();
+        return "Warning: " + super.getMessage();
     }
 
 

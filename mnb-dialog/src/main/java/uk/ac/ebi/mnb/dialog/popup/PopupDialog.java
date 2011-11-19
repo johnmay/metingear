@@ -26,7 +26,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 
-import uk.ac.ebi.metabonater.components.theme.MRoundButton;
 import uk.ac.ebi.mnb.core.CloseDialogAction;
 import uk.ac.ebi.interfaces.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
@@ -38,10 +37,13 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.sun.awt.AWTUtilities;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
+import uk.ac.ebi.mnb.core.ActionProperties;
 import uk.ac.ebi.mnb.view.PanelFactory;
+import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.visualisation.ColorUtilities;
 
 /**
@@ -75,14 +77,21 @@ public class PopupDialog extends JDialog {
         super(frame, modality);
         setUndecorated(true);
         add(background);
-
-//        getRootPane().setOpaque(false);
-//        getRootPane().setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
+        AWTUtilities.setWindowOpaque(this, false);
+        //getRootPane().setOpaque(false);
+        //getRootPane().setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
         panel.setOpaque(false);
         background.setLayout(new FormLayout("8px, 16px, p, 16px, 8px", "8px, 16px, p, 16px, 8px"));
         CellConstraints cc = new CellConstraints();
         Icon close = ViewUtils.getIcon("images/cutout/close_whitebg_16x16.png");
-        JButton closeButton = new MRoundButton(close, new CloseDialogAction(this, false));
+
+        Action closeAction = new CloseDialogAction(this, false);
+        JButton closeButton = new IconButton(close, closeAction);
+        closeButton.registerKeyboardAction(closeButton.getAction(),
+                                           KeyStroke.getKeyStroke(
+                                           ActionProperties.getInstance().getProperty("CloseDialog.Action." + Action.ACCELERATOR_KEY)),
+                                           JComponent.WHEN_IN_FOCUSED_WINDOW);
+
         background.add(closeButton, cc.xy(2, 2));
         background.setOpaque(true);
         background.add(panel, cc.xy(3, 3));

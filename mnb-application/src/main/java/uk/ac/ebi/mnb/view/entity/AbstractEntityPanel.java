@@ -39,7 +39,6 @@ import uk.ac.ebi.mnb.edit.*;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.renderers.ListLinkRenderer;
 import uk.ac.ebi.mnb.view.labels.IconButton;
-import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.observation.ObservationCollection;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 import uk.ac.ebi.visualisation.ColorUtilities;
@@ -51,11 +50,15 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.*;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.PanelFactory;
-import uk.ac.ebi.mnb.view.TransparentTextField;
+import uk.ac.ebi.ui.component.factory.FieldFactory;
+import uk.ac.ebi.visualisation.VerticalLabelUI;
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
@@ -70,11 +73,11 @@ public abstract class AbstractEntityPanel
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityPanel.class);
     private String type;
-    private MLabel typeLabel = new MLabel();
+    private JLabel typeLabel = LabelFactory.newLabel("");
     private JSeparator seperator = new JSeparator(JSeparator.HORIZONTAL);
-    private JTextField accession = new TransparentTextField("", 10, false);
-    private JTextField name = new TransparentTextField("", 35, false);
-    private JTextField abbreviation = new TransparentTextField("", 10, false);
+    private JTextField accession = FieldFactory.newTransparentField(10, false);
+    private JTextField name = FieldFactory.newTransparentField(30, false);
+    private JTextField abbreviation = FieldFactory.newTransparentField(10, false);
     private AnnotatedEntity entity;
     private JList observationList = new JList();
     private DefaultListModel observationModel = new DefaultListModel();
@@ -82,9 +85,12 @@ public abstract class AbstractEntityPanel
     private AnnotationRenderer renderer;
     private JPanel middle;
     private JPanel synopsis;
-    private JPanel basic = PanelFactory.createInfoPanel("p, p:grow, p, p:grow, p", "p, 4dlu, p");
+    private JPanel basic = PanelFactory.createInfoPanel("p, p:grow, p, p:grow, p", "p");
     private JPanel annotations;
     private JPanel observations;
+    private JLabel refLabel;
+    private JLabel synLabel;
+    private JScrollPane refPane;
     private List<JButton> removeAnnotationButtons = new ArrayList();
     private JList references = new JList();
     private DefaultListModel refModel = new DefaultListModel();
@@ -186,19 +192,44 @@ public abstract class AbstractEntityPanel
         observations = getObservationPanel();
         //references = getInternalReferencePanel();
 
-        setLayout(new FormLayout("p:grow", "p,p,p,p"));
+        setLayout(new FormLayout("p:grow", "p,p,p,p,p"));
         setBorder(Borders.DLU7_BORDER);
 
         add(getBasicPanel(), cc.xy(1, 1));
+        basic.setBorder(Borders.DLU4_BORDER);
 
-        middle = PanelFactory.createInfoPanel("p, 5dlu, p, 5dlu, p", "p");
+        middle = PanelFactory.createInfoPanel("p, p:grow, p, p:grow, p, p:grow", "p");
+        middle.setBorder(Borders.DLU4_BORDER);
 
-        middle.add(synopsis, cc.xy(1, 1));
-        middle.add(new BorderlessScrollPane(references), cc.xy(3, 1));
+        Box synBox = Box.createHorizontalBox();
+        synLabel = LabelFactory.newVerticalFormLabel("SYNOPSIS",
+                                                     VerticalLabelUI.Rotation.ANTICLOCKWISE);
+        synBox.add(synLabel);
+        synBox.add(Box.createHorizontalGlue());
+        synBox.add(synopsis);
+        middle.add(synBox, cc.xy(1, 1, cc.CENTER, cc.TOP));
+
+        Box refBox = Box.createHorizontalBox();
+        refLabel = LabelFactory.newVerticalFormLabel("REFERENCES",
+                                                     VerticalLabelUI.Rotation.ANTICLOCKWISE);
+        refLabel.setFont(refLabel.getFont().deriveFont(40.0f));
+        synLabel.setFont(synLabel.getFont().deriveFont(40.0f));
+        refLabel.setForeground(ColorUtilities.shade(refLabel.getForeground(), 0.4f));
+        synLabel.setForeground(ColorUtilities.shade(synLabel.getForeground(), 0.4f));
+
+        refPane = new BorderlessScrollPane(references);
+        refBox.add(refLabel);
+        refBox.add(Box.createHorizontalGlue());
+        refBox.add(refPane);
+        middle.add(refBox, cc.xy(3, 1, cc.CENTER, cc.TOP));
         middle.add(annotations, cc.xy(5, 1));
 
-        add(middle, cc.xy(1, 2));
-        add(new JSeparator(), cc.xy(1, 3));
+
+
+
+        add(new JSeparator(), cc.xy(1, 2));
+        add(middle, cc.xy(1, 3));
+        add(new JSeparator(), cc.xy(1, 4));
         add(observations, cc.xy(1, 4));
 
 
@@ -219,7 +250,6 @@ public abstract class AbstractEntityPanel
         basic.add(accession, cc.xy(1, 1));
         basic.add(name, cc.xy(3, 1));
         basic.add(abbreviation, cc.xy(5, 1));
-        basic.add(seperator, cc.xyw(1, 3, 5));
     }
 
     public JPanel getBasicPanel() {
@@ -308,6 +338,31 @@ public abstract class AbstractEntityPanel
             for (AnnotatedEntity ref : getReferences()) {
                 refModel.addElement(ref);
             }
+
+//
+//            // resize ref label
+//            {
+//                FontMetrics fm = refLabel.getFontMetrics(refLabel.getFont());
+//                int width = fm.stringWidth(refLabel.getText());
+//                int desired = (int) Math.min(refPane.getViewport().getSize().height, refPane.getSize().height);
+//                float resizeFactor = (float) desired / (float) width;
+//                Font font = refLabel.getFont();
+//                refLabel.setFont(font.deriveFont(font.getSize() * resizeFactor));
+//            }
+//            {
+//                FontMetrics fm = synopsis.getFontMetrics(synLabel.getFont());
+//                int width = fm.stringWidth(synLabel.getText());
+//                int desired = (int) synopsis.getSize().height;
+//                System.out.println(desired);
+//                System.out.println(width);
+//
+//                float resizeFactor = (float) desired / (float) width;
+//                System.out.println(resizeFactor);
+//
+//                Font font = synLabel.getFont();
+//                synLabel.setFont(font.deriveFont(font.getSize() * resizeFactor));
+//            }
+
 
 
 

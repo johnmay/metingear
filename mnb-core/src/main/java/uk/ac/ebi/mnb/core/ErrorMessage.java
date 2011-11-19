@@ -41,7 +41,7 @@ public class ErrorMessage extends AbstractMessage{
 
     @Override
     public String getMessage() {
-        return "Error:" + super.getMessage();
+        return "Error: " + super.getMessage();
     }
 
 

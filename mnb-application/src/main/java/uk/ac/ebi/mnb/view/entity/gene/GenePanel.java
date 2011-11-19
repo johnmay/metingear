@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.*;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.mnb.core.LabelFactory;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -116,9 +116,6 @@ public class GenePanel
         sequencePane = new BorderlessScrollPane(sequence);
         sequencePane.setPreferredSize(new Dimension(500, 80));
         panel.add(sequencePane, cc.xyw(1, layout.getRowCount(), 5));
-        layout.appendRow(new RowSpec(Sizes.PREFERRED));
-        panel.add(new JSeparator(), cc.xyw(1, layout.getRowCount(), 5));
-
 
         return panel;
 

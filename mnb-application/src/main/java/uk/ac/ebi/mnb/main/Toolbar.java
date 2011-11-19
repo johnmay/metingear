@@ -27,6 +27,7 @@ import java.awt.Color;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 
 /**
  *          Toolbar - 2011.11.03 <br>
@@ -47,7 +48,7 @@ public class Toolbar extends UnifiedToolBar {
     }
 
     public void addComponentToRight(String text, JComponent... components) {
-        JLabel label = new JLabel(text);
+        JLabel label = LabelFactory.newLabel(text);
         label.setFont(label.getFont().deriveFont(11.0f));
         label.setUI(new EmphasizedLabelUI());
         addComponentToRight(new LabeledComponentGroup(label, components).getComponent());

@@ -37,15 +37,13 @@ import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.metabolite.MetaboliteClass;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.PanelFactory;
-import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.visualisation.ViewUtils;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
-import uk.ac.ebi.mnb.view.labels.BoldLabel;
-import uk.ac.ebi.mnb.view.labels.MLabel;
-import uk.ac.ebi.mnb.view.labels.WarningLabel;
+import uk.ac.ebi.ui.component.factory.FieldFactory;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -60,19 +58,19 @@ public class MetabolitePanel
     private static final Logger LOGGER = Logger.getLogger(MetabolitePanel.class);
     private Metabolite entity;
     // chemical structure
-    private JLabel structureWarning = new WarningLabel("No Structure");
-    private JLabel structure = new WarningLabel("No Structure");
+    private JLabel structureWarning = LabelFactory.newLabel("No Structure");
+    private JLabel structure = LabelFactory.newLabel("No Structure");
     // for isGeneric
-    private JLabel markush = new BoldLabel("Markush:");
-    private JLabel markushViewer = new MLabel("");
+    private JLabel markush = LabelFactory.newFormLabel("Markush:");
+    private JLabel markushViewer = LabelFactory.newLabel("");
     private JComboBox markushEditor = new MComboBox(Arrays.asList("Yes", "No"));
     // metabolic class
-    private JLabel type = new BoldLabel("Type:");
-    private JLabel typeViewer = new MLabel("");
+    private JLabel type = LabelFactory.newFormLabel("Type:");
+    private JLabel typeViewer = LabelFactory.newLabel("");
     private JComboBox typeEditor = new MComboBox(MetaboliteClass.values());
     // molecular formula
-    private JTextField formulaEditor = new TransparentTextField("", 15, false);
-    private JLabel formularViewer = new MLabel();
+    private JTextField formulaEditor = FieldFactory.newTransparentField(15, false);
+    private JLabel formularViewer = LabelFactory.newLabel("");
     // cell constraints
     private CellConstraints cc = new CellConstraints();
 
@@ -156,14 +154,14 @@ public class MetabolitePanel
     private void buildSynopsis() {
         specific = PanelFactory.createInfoPanel();
         specific.setLayout(new FormLayout("p:grow, 4dlu, p:grow, 4dlu, p:grow, 4dlu, p:grow",
-                "p, 4dlu, p, 4dlu, p"));
+                                          "p, 4dlu, p, 4dlu, p"));
 
 
         specific.add(structure, cc.xyw(1, 1, 7, CellConstraints.CENTER, CellConstraints.CENTER));
         specific.add(formularViewer, cc.xyw(1, 3, 7, CellConstraints.CENTER,
-                CellConstraints.CENTER));
+                                            CellConstraints.CENTER));
         specific.add(formulaEditor, cc.xyw(1, 3, 7, CellConstraints.CENTER,
-                CellConstraints.CENTER));
+                                           CellConstraints.CENTER));
         formulaEditor.setHorizontalAlignment(SwingConstants.CENTER);
 
 

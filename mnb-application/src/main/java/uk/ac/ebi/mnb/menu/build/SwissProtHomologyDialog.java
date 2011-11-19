@@ -16,6 +16,7 @@ import javax.swing.SpinnerNumberModel;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.metabolomes.resource.BlastMatrix;
 import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.ui.component.factory.FieldFactory;
 
 
 /**
@@ -56,7 +57,7 @@ public class SwissProtHomologyDialog
      */
     private void buildComponents() {
 
-        expectValueThresholdField = new JTextField("1e-30");
+        expectValueThresholdField = FieldFactory.newField("1e-30");
 
         cpuSpinner = new JSpinner(new SpinnerNumberModel(2, 1, 8, 1));
         maxSequenceValues = new Integer[]{ 16, 32, 64, 128, 256 };

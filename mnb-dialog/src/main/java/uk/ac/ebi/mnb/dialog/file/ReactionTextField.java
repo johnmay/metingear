@@ -36,6 +36,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -50,7 +51,7 @@ import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.metabonater.components.theme.MTextField;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.search.FieldType;
@@ -64,7 +65,7 @@ import uk.ac.ebi.search.SearchableIndex;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ReactionTextField extends MTextField implements DocumentListener {
+public class ReactionTextField extends JTextField implements DocumentListener {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionTextField.class);
     private JDialog dialog;
@@ -130,12 +131,12 @@ public class ReactionTextField extends MTextField implements DocumentListener {
         super.setVisible(aFlag);
     }
 
-    public MetabolicReaction getReaction() {
+    public MetabolicReaction getReaction(Identifier id) {
 
         int nR = counts.get(0); // reac
         int nP = counts.get(1); // prod
 
-        MetabolicReaction rxn = new MetabolicReaction();
+        MetabolicReaction rxn = new MetabolicReaction(id, null, null);
 
         for (int i = 0; i < nR; i++) {
             Object p = participants.get(i);

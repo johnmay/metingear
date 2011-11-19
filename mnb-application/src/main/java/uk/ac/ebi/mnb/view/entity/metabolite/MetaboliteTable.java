@@ -81,7 +81,6 @@ public class MetaboliteTable extends AbstractEntityTable {
         //addMouseListener(new DoubleClickListener(this));
 
     }
-    private JLabel nullLabel = new JLabel("-");
 
 //    private class ChemStructureRenderer extends DefaultTableCellRenderer {
 //

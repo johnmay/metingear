@@ -29,9 +29,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import uk.ac.ebi.annotation.AuthorAnnotation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.view.ContextDialog;
-import uk.ac.ebi.mnb.view.labels.DialogLabel;
+import uk.ac.ebi.ui.component.factory.FieldFactory;
 
 /**
  * @name    AddAuthorAnnotation - 2011.10.04 <br>
@@ -48,8 +49,8 @@ public class AddAuthorAnnotation extends ContextDialog {
 
     public AddAuthorAnnotation(JFrame frame, ViewController controller) {
         super(frame, controller, "SaveDialog");
-        description = new JTextField(30);
-        author = new JTextField(System.getProperties().getProperty("user.name"));
+        description = FieldFactory.newField(30);
+        author = FieldFactory.newField(System.getProperties().getProperty("user.name"));
         setDefaultLayout();
     }
 
@@ -64,11 +65,12 @@ public class AddAuthorAnnotation extends ContextDialog {
     public JPanel getOptions() {
         JPanel panel = super.getOptions();
 
-        panel.setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p"));
+        panel.setLayout(new FormLayout("p, 4dlu, p",
+                                       "p, 4dlu, p"));
 
-        panel.add(new DialogLabel("Author:", SwingConstants.RIGHT), cc.xy(1, 1));
+        panel.add(LabelFactory.newFormLabel("Author"), cc.xy(1, 1));
         panel.add(author, cc.xy(3, 1));
-        panel.add(new DialogLabel("Description:", SwingConstants.RIGHT), cc.xy(1, 3));
+        panel.add(LabelFactory.newFormLabel("Description"), cc.xy(1, 3));
         panel.add(description, cc.xy(3, 3));
 
         return panel;

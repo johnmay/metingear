@@ -54,7 +54,7 @@ public class Main {
     private static void setupOSX() {
 
         System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Metagineer");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Metingeer");
         // Set the doc image
 
         com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();

@@ -39,16 +39,16 @@ import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.HomologyDatabaseManager;
 import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.metabonater.components.theme.MTextField;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.mnb.core.LabelFactory;
 import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.mnb.view.MComboBox;
+import uk.ac.ebi.ui.component.factory.FieldFactory;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 
 /**
  * @name    SequenceComparisson - 2011.10.07 <br>
@@ -67,7 +67,7 @@ public class SequenceHomology extends ControllerDialog {
     private MComboBox database = new MComboBox(HomologyDatabaseManager.getInstance().getNames());
     private JSpinner cpu = new JSpinner(new SpinnerNumberModel(1, 1, 4, 1));
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 2500, 50));
-    private JTextField field = new MTextField("1e-30");
+    private JTextField field = FieldFactory.newField("1e-30");
     private MCheckBox alignments = new MCheckBox("Parse alignments (increases save sizes)");
 
     public SequenceHomology(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {

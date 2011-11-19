@@ -36,6 +36,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.ui.component.factory.FieldFactory;
 
 /**
  *          AddCrossReferenceDialog – 2011.09.26 <br>
@@ -60,7 +61,7 @@ public class AddCrossReferenceDialog extends DropdownDialog {
             nameIndexMap.put(id.getShortDescription(), id.getIndex());
         }
         type = new JComboBox(nameIndexMap.keySet().toArray());
-        accession = new JTextField(20);
+        accession = FieldFactory.newField(20);
 
         setDefaultLayout();
     }

@@ -79,16 +79,12 @@ public class AutomatedReconciler
         String[] names = entry.getNames();
 
         String name = names.length > 0 ? names[0] : "Unamed metabolite";
-        Metabolite metabolite = new Metabolite();
+        Metabolite metabolite = new Metabolite(BasicChemicalIdentifier.nextIdentifier(),
+                                               entry.getAbbreviation(), name);
 
         for (int i = 1; i < names.length; i++) {
             metabolite.addAnnotation(new Synonym(names[i]));
         }
-
-        // add the annotations to a new metabolite
-        metabolite.setIdentifier(BasicChemicalIdentifier.nextIdentifier());
-        metabolite.setAbbreviation(entry.getAbbreviation());
-        metabolite.setName(name);
 
         try {
             Multimap<Integer, SynonymCandidateEntry> map = factory.getSynonymCandidates(name);
@@ -102,7 +98,7 @@ public class AutomatedReconciler
                 }
             }
         } catch (ExceptionInInitializerError ex) {
-            LOGGER.info("Unable to resolve candidates: " + ex.getMessage() );
+            LOGGER.info("Unable to resolve candidates: " + ex.getMessage());
         }
 
         // molecula formula

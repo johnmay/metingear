@@ -26,8 +26,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import mnb.io.tabular.ExcelModelProperties;
-import uk.ac.ebi.mnb.view.labels.MLabel;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.MCheckBox;
 
 /**
@@ -58,8 +58,8 @@ public class AdditionalOptions
         setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p, 4dlu, p"));
         CellConstraints cc = new CellConstraints();
 
-        add(new MLabel("<html>Please select which resources should be"
-                       + "used to reconcile chemical <br> names</html>"), cc.xy(1, 1));
+        add(LabelFactory.newHTMLLabel("Please select which resources should be"
+                       + "used to reconcile chemical <br> names"), cc.xy(1, 1));
 
         add(chebi, cc.xy(1, 5));
         add(kegg, cc.xy(3, 5));

@@ -79,13 +79,13 @@ public class MergeEntities extends ControllerDialog {
         Collection<Metabolite> entities = selection.get(Metabolite.class);
         // create a new metabolite consisting of the other two.
         // find them in all reactions and update reactions also
-        Metabolite n = new Metabolite();
+        Metabolite n = null;
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
 
         for (Metabolite m : entities) {
 
-            if (n.getIdentifier() == null) {
-                n.setIdentifier(m.getIdentifier());
+            if (n == null) {
+                n = new Metabolite(m.getIdentifier(), null, null);
             }
             if (n.getName() == null) {
                 n.setName(m.getName());

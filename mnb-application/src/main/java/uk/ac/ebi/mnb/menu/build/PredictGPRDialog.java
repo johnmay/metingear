@@ -8,14 +8,9 @@ package uk.ac.ebi.mnb.menu.build;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.sri.biospice.warehouse.database.Warehouse;
-import com.sri.biospice.warehouse.schema.DataSet;
-import java.io.IOException;
 import javax.swing.JSeparator;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.mnb.view.labels.MLabel;
-import uk.ac.ebi.metabolomes.biowh.BiowhConnection;
-import uk.ac.ebi.metabolomes.biowh.DataSetProvider;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.main.MainView;
 
 
@@ -48,7 +43,7 @@ public class PredictGPRDialog
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
         builder.setDefaultDialogBorder();
-        builder.add(new MLabel("Gene-Protein-Reaction"), cc.xyw(1, 1, 3));
+        builder.add(LabelFactory.newFormLabel("Gene-Protein-Reaction"), cc.xyw(1, 1, 3));
         builder.add(new JSeparator(), cc.xyw(1, 3, 3));
         builder.add(getClose(), cc.xy(1, 5));
         builder.add(getActivate(), cc.xy(3, 5));

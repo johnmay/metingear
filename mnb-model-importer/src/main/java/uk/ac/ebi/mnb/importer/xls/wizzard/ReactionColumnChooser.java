@@ -44,12 +44,11 @@ import javax.swing.event.ChangeListener;
 import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.LabelFactory;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.MComboBox;
-import uk.ac.ebi.mnb.view.labels.DialogLabel;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 
 /**
  * @name    SheetChooserDialog
@@ -125,26 +124,26 @@ public class ReactionColumnChooser
 
         removeAll();
 
-        add(new DialogLabel("Start Row:", SwingConstants.RIGHT), cc.xy(1, 1));
+        add(LabelFactory.newFormLabel("Start Row"), cc.xy(1, 1));
         add(start, cc.xy(3, 1));
-        add(new DialogLabel("End Row:", SwingConstants.RIGHT), cc.xy(5, 1));
+        add(LabelFactory.newFormLabel("End Row"), cc.xy(5, 1));
         add(end, cc.xy(7, 1));
 
         add(new JSeparator(), cc.xyw(1, 3, 7));
 
-        add(new DialogLabel("Identifier/Abbreviation:", SwingConstants.RIGHT), cc.xy(1, 5));
+        add(LabelFactory.newFormLabel("Identifier/Abbreviation"), cc.xy(1, 5));
         add(abbreviation, cc.xy(3, 5));
-        add(new DialogLabel("Name/Description:", SwingConstants.RIGHT), cc.xy(5, 5));
+        add(LabelFactory.newFormLabel("Name/Description"), cc.xy(5, 5));
         add(description, cc.xy(7, 5));
 
-        add(new DialogLabel("Reaction Equation:", SwingConstants.RIGHT), cc.xy(1, 7));
+        add(LabelFactory.newFormLabel("Reaction Equation"), cc.xy(1, 7));
         add(equation, cc.xy(3, 7));
-        add(new DialogLabel("Classification (EC/TC Number):", SwingConstants.RIGHT), cc.xy(5, 7));
+        add(LabelFactory.newFormLabel("Classification (EC/TC Number)"), cc.xy(5, 7));
         add(classification, cc.xy(7, 7));
 
-        add(new DialogLabel("Subsystem/Reaction type:", SwingConstants.RIGHT), cc.xy(1, 9));
+        add(LabelFactory.newFormLabel("Subsystem/Reaction type"), cc.xy(1, 9));
         add(subsystem, cc.xy(3, 9));
-        add(new DialogLabel("Source/Reference:", SwingConstants.RIGHT), cc.xy(5, 9));
+        add(LabelFactory.newFormLabel("Source/Reference:"), cc.xy(5, 9));
         add(source, cc.xy(7, 9));
 
         add(LabelFactory.newFormLabel("Locus"), cc.xy(1, 11));

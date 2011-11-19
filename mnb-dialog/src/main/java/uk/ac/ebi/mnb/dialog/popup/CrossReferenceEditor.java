@@ -36,15 +36,16 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabonater.components.theme.MRoundButton;
-import uk.ac.ebi.metabonater.components.theme.MTextField;
 import uk.ac.ebi.interfaces.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.MComboBox;
+import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.ui.component.factory.FieldFactory;
 
 /**
  * @name    CrossReferenceEditor - 2011.10.07 <br>
@@ -60,7 +61,7 @@ public class CrossReferenceEditor extends PopupDialog {
     private Map<String, Byte> map = new HashMap();
     private FormLayout layout;
     private List<MComboBox> comboboxes = new LinkedList();
-    private List<MTextField> fields = new LinkedList();
+    private List<JTextField> fields = new LinkedList();
     private JPanel panel;
 
     public CrossReferenceEditor(JFrame frame) {
@@ -84,7 +85,7 @@ public class CrossReferenceEditor extends PopupDialog {
         if (references.isEmpty()) {
             layout.appendRow(new RowSpec(Sizes.PREFERRED));
             MComboBox box = new MComboBox(map.keySet());
-            MTextField field = new MTextField(12);
+            JTextField field = FieldFactory.newField(12);
             fields.add(field);
             comboboxes.add(box);
         } else {
@@ -92,7 +93,8 @@ public class CrossReferenceEditor extends PopupDialog {
                 layout.appendRow(new RowSpec(Sizes.PREFERRED));
                 MComboBox box = new MComboBox(map.keySet());
                 box.setSelectedItem(reference.getIdentifier().getShortDescription());
-                MTextField field = new MTextField(reference.getIdentifier().getAccession(), 12);
+                JTextField field = FieldFactory.newField(reference.getIdentifier().getAccession());
+                field.setColumns(12);
                 fields.add(field);
                 comboboxes.add(box);
             }
@@ -106,8 +108,8 @@ public class CrossReferenceEditor extends PopupDialog {
         panel.removeAll();
         Theme theme = Settings.getInstance().getTheme();
         for (int i = 0; i < fields.size(); i++) {
-            JButton minus = new MRoundButton(theme.getMinusIcon(), new RemoveCrossReference(this, i));
-            JButton plus = new MRoundButton(theme.getPlusIcon(), new AddCrossReference(this, i));
+            JButton minus = new IconButton(theme.getMinusIcon(), new RemoveCrossReference(this, i));
+            JButton plus = new IconButton(theme.getPlusIcon(), new AddCrossReference(this, i));
             minus.setEnabled(!(fields.size() == 1));
             panel.add(comboboxes.get(i), cc.xy(1, i + 1));
             panel.add(fields.get(i), cc.xy(2, i + 1));
@@ -122,7 +124,7 @@ public class CrossReferenceEditor extends PopupDialog {
 
         for (int i = 0; i < fields.size(); i++) {
             MComboBox box = comboboxes.get(i);
-            MTextField field = fields.get(i);
+            JTextField field = fields.get(i);
             String accession = field.getText().trim();
             if (box.getSelectedIndex() != 0 && accession.isEmpty() == false) {
                 String desc = (String) box.getSelectedItem();
@@ -173,7 +175,7 @@ public class CrossReferenceEditor extends PopupDialog {
         public void actionPerformed(ActionEvent e) {
             layout.appendRow(new RowSpec(Sizes.PREFERRED));
             MComboBox box = new MComboBox(map.keySet());
-            MTextField field = new MTextField(12);
+            JTextField field = FieldFactory.newField(12);
             comboboxes.add(index + 1, box); // append after
             fields.add(index + 1, field);
             update();

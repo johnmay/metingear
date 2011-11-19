@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view;
 
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.visualisation.ViewUtils;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -48,6 +49,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import uk.ac.ebi.mnb.interfaces.Message;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.visualisation.ColorUtilities;
 
 /**
  *          MessageManager – 2011.09.30 <br>
@@ -59,39 +61,39 @@ import uk.ac.ebi.mnb.interfaces.MessageManager;
 public class MessageBar extends JPanel implements MessageManager {
 
     private static final Logger LOGGER = Logger.getLogger(MessageBar.class);
-    private final Color warningColor = Color.YELLOW;
     private final ImageIcon warningIcon = ViewUtils.getIcon("images/cutout/warning_16x16.png",
-            "Warning");
+                                                            "Warning");
     private final ImageIcon errorIcon =
-            ViewUtils.getIcon("images/cutout/error_16x16.png", "Error");
-    private final Color WARN_HIGH = new Color(240, 240, 100);
-    private final Color WARN_LOW = new Color(240, 240, 40);
-    private final Color ERROR_HIGH = new Color(230, 100, 100);
+                            ViewUtils.getIcon("images/cutout/error_16x16.png", "Error");
+    private final Color WARN_LOW = new Color(240, 240, 30);
+    private final Color WARN_HIGH = ColorUtilities.shade(WARN_LOW, 0.3f);
     private final Color ERROR_LOW = new Color(230, 40, 60);
+    private final Color ERROR_HIGH = ColorUtilities.shade(ERROR_LOW, 0.3f);
     private final Paint ERROR_PAINT;
     private final Paint WARN_PAINT;
     private Paint paint;
-    private JLabel iconLabel = new JLabel();
+    private JLabel iconLabel = LabelFactory.newLabel("");
     private JLabel label = LabelFactory.newLabel("");
     private Stack<Message> stack = new Stack();
 
     public MessageBar() {
         super(
-                new FormLayout("1dlu, min, 1dlu, min, 4dlu, p:grow, 1dlu", "1dlu, center:p, 1dlu"));
+                new FormLayout("1dlu, min, 1dlu, min, 4dlu, p:grow, 1dlu", "0dlu, center:p, 0dlu"));
         CellConstraints cc = new CellConstraints();
         label.setForeground(Color.BLACK);
-        this.add(new IconButton(new HideMessage()), cc.xy(2, 2, CellConstraints.CENTER,
-                CellConstraints.CENTER));
+        this.add(new IconButton(new HideMessage()),
+                 cc.xy(2, 2, CellConstraints.CENTER,
+                       CellConstraints.CENTER));
         this.add(iconLabel, cc.xy(4, 2, CellConstraints.CENTER, CellConstraints.CENTER));
         this.add(label, cc.xy(6, 2, CellConstraints.CENTER, CellConstraints.CENTER));
-     
+
 
         this.addMouseListener(new CopyPopup());
         // set the paints
         ERROR_PAINT = new GradientPaint(0, 0, ERROR_LOW, 0,
-                getPreferredSize().height / 2, ERROR_HIGH, true);
+                                        getPreferredSize().height / 2, ERROR_HIGH, true);
         WARN_PAINT = new GradientPaint(0, 0, WARN_LOW, 0,
-                getPreferredSize().height / 2, WARN_HIGH, true);
+                                       getPreferredSize().height / 2, WARN_HIGH, true);
 
         this.setVisible(false);
     }

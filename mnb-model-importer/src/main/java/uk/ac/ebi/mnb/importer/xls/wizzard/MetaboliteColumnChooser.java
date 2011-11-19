@@ -32,7 +32,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import mnb.io.tabular.ExcelModelProperties;
@@ -42,7 +41,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.MComboBox;
-import uk.ac.ebi.mnb.view.labels.DialogLabel;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 
 /**
  *          MetaboliteColumnChooser – 2011.09.26 <br>
@@ -99,31 +98,31 @@ public class MetaboliteColumnChooser
         setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p",
                                  "p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p"));
 //
-        add(new DialogLabel("Data starts (excluding header):", SwingConstants.RIGHT), cc.xy(1, 1));
+        add(LabelFactory.newFormLabel("Data starts (excluding header):"), cc.xy(1, 1));
         add(start, cc.xy(3, 1));
-        add(new DialogLabel("Data ends:", SwingConstants.RIGHT), cc.xy(5, 1));
+        add(LabelFactory.newFormLabel("Data ends:"), cc.xy(5, 1));
         add(end, cc.xy(7, 1));
 //
         add(new JSeparator(), cc.xyw(1, 3, 7));
 
-        add(new DialogLabel("Abbreviation:", SwingConstants.RIGHT), cc.xy(1, 5));
+        add(LabelFactory.newFormLabel("Abbreviation"), cc.xy(1, 5));
         add(abbreviation, cc.xy(3, 5));
-        add(new DialogLabel("Name:", SwingConstants.RIGHT), cc.xy(5, 5));
+        add(LabelFactory.newFormLabel("Name"), cc.xy(5, 5));
         add(description, cc.xy(7, 5));
-        add(new DialogLabel("Compartment:", SwingConstants.RIGHT), cc.xy(1, 7));
+        add(LabelFactory.newFormLabel("Compartment"), cc.xy(1, 7));
         add(compartment, cc.xy(3, 7));
-        add(new DialogLabel("Charge:", SwingConstants.RIGHT), cc.xy(5, 7));
+        add(LabelFactory.newFormLabel("Charge"), cc.xy(5, 7));
         add(charge, cc.xy(7, 7));
-        add(new DialogLabel("Molecular formula:", SwingConstants.RIGHT), cc.xy(1, 9));
+        add(LabelFactory.newFormLabel("Molecular formula"), cc.xy(1, 9));
         add(formula, cc.xy(3, 9));
 
         add(new JSeparator(), cc.xyw(1, 11, 7));
 
-        add(new DialogLabel("KEGG cross-reference:", SwingConstants.RIGHT), cc.xy(1, 13));
+        add(LabelFactory.newFormLabel("KEGG cross-reference"), cc.xy(1, 13));
         add(kegg, cc.xy(3, 13));
-        add(new DialogLabel("ChEBI cross-reference:", SwingConstants.RIGHT), cc.xy(5, 13));
+        add(LabelFactory.newFormLabel("ChEBI cross-reference"), cc.xy(5, 13));
         add(chebi, cc.xy(7, 13));
-        add(new DialogLabel("PubChem cross-reference:", SwingConstants.RIGHT), cc.xy(1, 15));
+        add(LabelFactory.newFormLabel("PubChem cross-reference"), cc.xy(1, 15));
         add(pubchem, cc.xy(3, 15));
 
         add(new JSeparator(), cc.xyw(1, 17, 7));

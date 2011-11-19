@@ -11,17 +11,18 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.io.TaxonomyMap;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
+import uk.ac.ebi.ui.component.factory.FieldFactory;
 
 /**
  * NewProjectDialog.java
@@ -46,11 +47,11 @@ public class NewProject extends DropdownDialog {
 
         super(MainView.getInstance(), "NewProject");
 
-        idField = new JTextField(15);
-        codeField = new JTextField(5);
-        taxonField = new JTextField(5);
-        nameField = new JTextField(20);
-        kingdomField = new JTextField(10);
+        idField = FieldFactory.newField(15);
+        codeField = FieldFactory.newField(5);
+        taxonField = FieldFactory.newField(5);
+        nameField = FieldFactory.newField(20);
+        kingdomField = FieldFactory.newField(10);
 
         setDefaultLayout();
 
@@ -73,18 +74,18 @@ public class NewProject extends DropdownDialog {
         panel.setLayout(layout);
         CellConstraints cc = new CellConstraints();
 
-        panel.add(new JLabel("Reconstruction Id:", SwingConstants.RIGHT), cc.xyw(1, 1, 3));
+        panel.add(LabelFactory.newFormLabel("Identifier:"), cc.xyw(1, 1, 3));
         panel.add(idField, cc.xyw(5, 1, 3));
 
 
-        panel.add(new JLabel("Code:", SwingConstants.RIGHT), cc.xy(1, 3));
+        panel.add(LabelFactory.newFormLabel("Code:"), cc.xy(1, 3));
         panel.add(codeField, cc.xy(3, 3));
-        panel.add(new JLabel("Name:", SwingConstants.RIGHT), cc.xy(5, 3));
+        panel.add(LabelFactory.newFormLabel("Name:"), cc.xy(5, 3));
         panel.add(nameField, cc.xy(7, 3));
 
-        panel.add(new JLabel("Taxon:", SwingConstants.RIGHT), cc.xy(1, 5));
+        panel.add(LabelFactory.newFormLabel("Taxon:"), cc.xy(1, 5));
         panel.add(taxonField, cc.xy(3, 5));
-        panel.add(new JLabel("Kingdom:", SwingConstants.RIGHT), cc.xy(5, 5));
+        panel.add(LabelFactory.newFormLabel("Kingdom:"), cc.xy(5, 5));
         panel.add(kingdomField, cc.xy(7, 5));
 
 

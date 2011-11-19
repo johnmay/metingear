@@ -131,8 +131,7 @@ public class ReactionParser {
         // todo
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSides[0]);
         equationSides[0] = reactionCompartment.replaceAll("");
-        MetabolicReaction rxn = new MetabolicReaction();
-        rxn.setIdentifier(new BasicReactionIdentifier("r_" + ++ticker));
+        MetabolicReaction rxn = new MetabolicReaction(new BasicReactionIdentifier("{rxn/" + ++ticker + "}"), null, null);
         rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
         rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
         for (MetaboliteParticipant p :
@@ -242,7 +241,7 @@ public class ReactionParser {
         } else {
             messages.add(new WarningMessage("The metabolite "
                                             + entityAbbr.trim()
-                                            + " was not found in the metabolite sheet for reaction " + rxn ));
+                                            + " was not found in the metabolite sheet for reaction " + rxn));
             entity = entites.getNonReconciledMetabolite(entityAbbr);
             return new MetaboliteParticipant(entity,
                                              coef,

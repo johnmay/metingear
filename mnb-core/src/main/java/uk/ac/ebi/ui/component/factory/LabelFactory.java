@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.core;
+package uk.ac.ebi.ui.component.factory;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -38,11 +38,13 @@ import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
+import uk.ac.ebi.visualisation.ColorUtilities;
+import uk.ac.ebi.visualisation.VerticalLabelUI;
 import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  * @name    LabelFactory - 2011.10.08 <br>
- *          Class description
+ *          Class to handle label creation
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
@@ -80,7 +82,7 @@ public class LabelFactory {
     }
 
     /**
-     * Wtaps the text in {@code <HTML>} tags
+     * Wraps the text in {@code <HTML>} tags
      * @param text
      * @return
      */
@@ -96,7 +98,7 @@ public class LabelFactory {
     public static JLabel newFormLabel(String text) {
         JLabel label = newLabel(text);
         label.setHorizontalAlignment(SwingConstants.RIGHT);
-        label.setForeground(label.getForeground().brighter());
+        label.setForeground(ColorUtilities.shade(label.getForeground(), 0.2f));
         return label;
     }
 
@@ -174,5 +176,18 @@ public class LabelFactory {
         }
         return newLabel(text);
 
+    }
+
+    public static JLabel newVerticalLabel(String text,
+                                          VerticalLabelUI.Rotation rotation) {
+        JLabel label = newLabel(text);
+        label.setUI(new VerticalLabelUI(rotation));
+        return label;
+    }
+    public static JLabel newVerticalFormLabel(String text,
+                                          VerticalLabelUI.Rotation rotation) {
+        JLabel label = newFormLabel(text);
+        label.setUI(new VerticalLabelUI(rotation));
+        return label;
     }
 }

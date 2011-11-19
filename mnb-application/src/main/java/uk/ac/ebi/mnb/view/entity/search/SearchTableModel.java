@@ -59,6 +59,14 @@ public class SearchTableModel extends AbstractEntityTableModel {
 
 
     @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return false; // display table only
+    }
+
+
+
+
+    @Override
     public Object getFixedType(AnnotatedEntity component, String name) {
         if( name.equals("Rank") ) {
             return indexOf(component) + 1;

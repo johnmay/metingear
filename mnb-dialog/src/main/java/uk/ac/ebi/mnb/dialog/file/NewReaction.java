@@ -79,8 +79,8 @@ public class NewReaction extends NewEntity {
         ReconstructionManager manager = ReconstructionManager.getInstance();
         if (manager.hasProjects()) {
             Reconstruction reconstruction = manager.getActiveReconstruction();
-            MetabolicReaction rxn = equation.getReaction();
-            rxn.setIdentifier(getIdentifier());
+            MetabolicReaction rxn = equation.getReaction(getIdentifier());
+            //rxn.setIdentifier();
             rxn.setAbbreviation(getAbbreviation());
             rxn.setName(getName());
             reconstruction.addReaction(rxn);

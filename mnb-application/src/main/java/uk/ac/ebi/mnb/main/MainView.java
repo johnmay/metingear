@@ -82,7 +82,7 @@ public class MainView
 
     private MainView() {
 
-        super("Metagineer");
+        super("Metingeer");
 
         // mac widgets
         getLayeredPane().getRootPane().setUI(new AquaRootPaneUI());

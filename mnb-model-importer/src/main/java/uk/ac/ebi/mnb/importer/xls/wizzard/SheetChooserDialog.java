@@ -29,8 +29,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import mnb.io.tabular.ExcelModelProperties;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
-import uk.ac.ebi.mnb.view.labels.DialogLabel;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
 
 /**
@@ -88,11 +88,11 @@ public class SheetChooserDialog
 
         geneCB = new JComboBox(new DefaultComboBoxModel(names.toArray()));
 
-        add(new DialogLabel("Reactions are in sheet named:",  SwingConstants.RIGHT), cc.xy(1, 1));
+        add(LabelFactory.newFormLabel("Reactions sheet:"), cc.xy(1, 1));
         add(reactionCB, cc.xy(3, 1));
-        add(new DialogLabel("Metabolite are in sheet named:", SwingConstants.RIGHT), cc.xy(1, 3));
+        add(LabelFactory.newFormLabel("Metabolite sheet:"), cc.xy(1, 3));
         add(metaboliteCB, cc.xy(3, 3));
-        add(new DialogLabel("Genes/Protein/Locus are in sheet named:", SwingConstants.RIGHT), cc.xy(1, 5));
+        add(LabelFactory.newFormLabel("Genes/Protein/Locus are in sheet:"), cc.xy(1, 5));
         add(geneCB, cc.xy(3, 5));
 
     }

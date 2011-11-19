@@ -21,8 +21,6 @@
 package uk.ac.ebi.mnb.dialog.file;
 
 import java.util.*;
-import uk.ac.ebi.metabonater.components.theme.MTextField;
-import uk.ac.ebi.mnb.core.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.resource.IdentifierFactory;
@@ -33,6 +31,8 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.*;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.ui.component.factory.FieldFactory;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 
 /**
  * @name    NewEntity - 2011.10.04 <br>
@@ -47,9 +47,9 @@ public abstract class NewEntity extends DropdownDialog {
     private static final Logger LOGGER = Logger.getLogger(NewEntity.class);
     private Identifier identifier;
     private JComboBox type;
-    private JTextField accession = new MTextField(6);
-    private JTextField name = new MTextField(20);
-    private JTextField abbreviation = new MTextField(4);
+    private JTextField accession = FieldFactory.newField(6);
+    private JTextField name = FieldFactory.newField(20);
+    private JTextField abbreviation = FieldFactory.newField(4);
     private   CellConstraints cc = new CellConstraints();
     private Updatable updateable;
     private static final Map<String, Byte> nameIndexMap = new HashMap();

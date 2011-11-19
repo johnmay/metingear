@@ -1,4 +1,3 @@
-
 /**
  * ColumnDescriptor.java
  *
@@ -21,9 +20,11 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
+import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.edit.entity.FieldManager;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
-
 
 /**
  *          ColumnDescriptor – 2011.09.06 <br>
@@ -40,7 +41,8 @@ public class ColumnDescriptor {
     private DataType accessType;
     private Class dataClass;
     private Object instance;
-
+    private boolean editable;
+    private FieldManager setter;
 
     public ColumnDescriptor(Annotation annotation) {
         this.name = annotation.getShortDescription();
@@ -50,32 +52,61 @@ public class ColumnDescriptor {
         this.instance = annotation;
     }
 
-
     public ColumnDescriptor(String name,
                             Class accessClass,
                             DataType type,
                             Class dataClass) {
+        this(name, accessClass, type, dataClass, false);
+    }
+
+    public ColumnDescriptor(String name,
+                            Class accessClass,
+                            DataType type,
+                            Class dataClass,
+                            boolean editable) {
         this.name = name;
         this.accessClass = accessClass;
         this.accessType = type;
         this.dataClass = dataClass;
+        this.editable = editable;
     }
 
+    public ColumnDescriptor(String name,
+                            Class accessClass,
+                            DataType type,
+                            Class dataClass,
+                            FieldManager setter) {
+        this.name = name;
+        this.accessClass = accessClass;
+        this.accessType = type;
+        this.dataClass = dataClass;
+        this.setter = setter;
+        this.editable = true; // have a setter
+    }
+
+    public boolean hasSetter() {
+        return setter != null;
+    }
+
+    public UndoableEdit getUndoableEdit(AnnotatedEntity entity, Object value) {
+        return setter.getUndoableEdit(entity, value);
+    }
+
+    public boolean set(AnnotatedEntity entity, Object value) {
+        return setter.set(entity, value);
+    }
 
     public Class getAccessClass() {
         return accessClass;
     }
 
-
     public String getName() {
         return name;
     }
 
-
     public DataType getType() {
         return accessType;
     }
-
 
     public Class getDataClass() {
         return dataClass;
@@ -90,10 +121,7 @@ public class ColumnDescriptor {
         return "Column: " + accessClass;
     }
 
-
-
-
-    
-
+    public boolean isEditable() {
+        return editable;
+    }
 }
-

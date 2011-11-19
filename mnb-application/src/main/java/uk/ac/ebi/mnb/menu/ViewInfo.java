@@ -38,6 +38,7 @@ import uk.ac.ebi.core.Multimer;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RNAProduct;
 import uk.ac.ebi.mnb.core.GeneralAction;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
 import uk.ac.ebi.visualisation.ViewUtils;
 
@@ -103,7 +104,7 @@ public class ViewInfo {
 //        buttonMap.put(RunnableTask.BASE_TYPE, tasks);
         buttonMap.put(GeneImplementation.BASE_TYPE, genes);
 
-        info = new JLabel();
+        info = LabelFactory.newLabel("");
         bottombar.addComponentToCenter(info);
 
     }

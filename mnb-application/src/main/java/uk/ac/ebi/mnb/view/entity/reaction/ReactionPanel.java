@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
@@ -42,7 +43,6 @@ import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.mnb.view.ReactionRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
-import uk.ac.ebi.mnb.view.labels.MLabel;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -57,7 +57,7 @@ public class ReactionPanel
     private static final Logger LOGGER = Logger.getLogger(ReactionPanel.class);
     private MetabolicReaction entity;
     private ReactionRenderer renderer = new ReactionRenderer();
-    private JLabel reactionLabel = new MLabel();
+    private JLabel reactionLabel = LabelFactory.newLabel("");
     private JComponent participantXref;
     private CellConstraints cc = new CellConstraints();
 
@@ -91,7 +91,7 @@ public class ReactionPanel
         JPanel panel = PanelFactory.createInfoPanel();
         panel.setBorder(Borders.DLU4_BORDER);
 
-        panel.add(new MLabel("Reaction Synopsis"));
+        panel.add(LabelFactory.newLabel("Reaction Synopsis"));
 
         return panel;
 
@@ -107,15 +107,12 @@ public class ReactionPanel
         participantXref = PanelFactory.createInfoPanel();
 
         // add a row
+        layout.appendRow(new RowSpec(RowSpec.CENTER, Sizes.DLUY4, RowSpec.DEFAULT_GROW));
         layout.appendRow(new RowSpec(RowSpec.CENTER, Sizes.PREFERRED, RowSpec.DEFAULT_GROW));
         panel.add(reactionLabel, cc.xyw(1, layout.getRowCount(), layout.getColumnCount(), cc.CENTER, cc.CENTER));
 
         layout.appendRow(new RowSpec(RowSpec.CENTER, Sizes.PREFERRED, RowSpec.NO_GROW));
         panel.add(participantXref, cc.xyw(1, layout.getRowCount(), layout.getColumnCount(), cc.CENTER, cc.CENTER));
-        layout.appendRow(new RowSpec(Sizes.DLUY4));
-        layout.appendRow(new RowSpec(Sizes.PREFERRED));
-        panel.add(new JSeparator(JSeparator.HORIZONTAL), cc.xyw(1, layout.getRowCount(), layout.getColumnCount()));
-        layout.appendRow(new RowSpec(Sizes.DLUY4));
 
 
         return panel;

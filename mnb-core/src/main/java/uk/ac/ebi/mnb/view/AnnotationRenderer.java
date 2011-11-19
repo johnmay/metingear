@@ -46,7 +46,7 @@ import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
-import uk.ac.ebi.mnb.core.LabelFactory;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 
 /**
  *          AnnotationRenderer – 2011.09.26 <br>

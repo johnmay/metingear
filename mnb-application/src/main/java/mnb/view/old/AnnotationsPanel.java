@@ -12,9 +12,8 @@ import java.awt.Color;
 import java.util.Collection;
 import javax.swing.JPanel;
 import uk.ac.ebi.visualisation.ViewUtils;
-import uk.ac.ebi.mnb.view.labels.BoldLabel;
-import uk.ac.ebi.mnb.view.labels.MLabel;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 
 
 /**
@@ -35,7 +34,7 @@ public class AnnotationsPanel
 
 
     public AnnotationsPanel() {
-        add(new BoldLabel("Annotations"));
+        add(LabelFactory.newLabel("Annotations"));
         setBackground(Color.WHITE);
     }
 
@@ -62,7 +61,7 @@ public class AnnotationsPanel
             Annotation annotation = Iterables.get(annotations, i);
             int ccy = (i == 0) ? 1 : i * 2 + 1;
             //add(new ActionLabel(annotation.toString() + ":", new HighLightObservations(annotation)),  cc.xy(1, ccy));
-            add(new MLabel(annotation.toString()), cc.xy(3, ccy));
+            add(LabelFactory.newLabel(annotation.toString()), cc.xy(3, ccy));
         }
         //  add( new JSeparator( JSeparator.HORIZONTAL ) , cc.xyw( 1 , ( ( nrow == 0 ) ? 1 : nrow * 2 + 1 ) , 3 ) );
 

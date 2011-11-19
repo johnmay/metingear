@@ -11,16 +11,18 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Collection;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.mnb.view.TransparentTextArea;
-import uk.ac.ebi.mnb.view.TransparentTextField;
 import uk.ac.ebi.visualisation.ViewUtils;
-import uk.ac.ebi.mnb.view.labels.BoldLabel;
 import org.apache.commons.lang.StringUtils;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
+import uk.ac.ebi.ui.component.factory.FieldFactory;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 
 
 /**
@@ -37,14 +39,14 @@ public class SynopsisPanel
                                                  org.apache.log4j.Logger.getLogger(
       SynopsisPanel.class);
     private OldGeneProduct displayedProduct = null;
-    private TransparentTextField identifierField = null;
+    private JTextField identifierField = null;
     private TransparentTextArea descriptionField = null;
-    private TransparentTextField sequenceLengthField = null;
+    private JTextField sequenceLengthField = null;
     private TransparentTextArea sequenceField = null;
     private JScrollPane sequencePane = null;
-    private BoldLabel enzymeLabel = null;
+    private JLabel enzymeLabel = null;
     private TransparentTextArea enzymeField = null;
-    private BoldLabel enzymeNameLabel = null;
+    private JLabel enzymeNameLabel = null;
     private TransparentTextArea enzymeNameField = null;
     private FormLayout layout;
     private CellConstraints cc = new CellConstraints();
@@ -68,15 +70,15 @@ public class SynopsisPanel
           "right:p, 4dlu, p",
           "p,4dlu,p,4dlu,top:p,4dlu,p,4dlu,top:p,4dlu,top:p,4dlu,top:p:grow, 4dlu, p");
         setLayout(layout);
-        identifierField = new TransparentTextField("", 15);
-        sequenceLengthField = new TransparentTextField("", 15);
+        identifierField = FieldFactory.newTransparentField(15);
+        sequenceLengthField = FieldFactory.newTransparentField( 15);
         descriptionField = new TransparentTextArea(2, 60);
         descriptionField.setWrapStyleWord(true);
-        enzymeLabel = new BoldLabel("EC:");
+        enzymeLabel = LabelFactory.newLabel("EC:");
         enzymeField = new TransparentTextArea(1, 20);
         enzymeField.setVisible(false);
         enzymeLabel.setVisible(false);
-        enzymeNameLabel = new BoldLabel("Enzyme Name:");
+        enzymeNameLabel = LabelFactory.newLabel("Enzyme Name:");
         enzymeNameField = new TransparentTextArea(1, 60);
         enzymeNameField.setWrapStyleWord(true);
         enzymeNameField.setVisible(false);
@@ -90,11 +92,11 @@ public class SynopsisPanel
 
         // layout
         // add( new JSeparator( JSeparator.HORIZONTAL ) , cc.xyw( 1 , 1 , layout.getColumnCount() ) );
-        add(new BoldLabel("Identifier:"), cc.xy(1, 3));
+        add(LabelFactory.newLabel("Identifier:"), cc.xy(1, 3));
         add(identifierField, cc.xy(3, 3));
-        add(new BoldLabel("Description:"), cc.xy(1, 5));
+        add(LabelFactory.newLabel("Description:"), cc.xy(1, 5));
         add(descriptionField, cc.xy(3, 5));
-        add(new BoldLabel("Sequence Length:"), cc.xy(1, 7));
+        add(LabelFactory.newLabel("Sequence Length:"), cc.xy(1, 7));
         add(sequenceLengthField, cc.xy(3, 7));
 
         add(enzymeLabel, cc.xy(1, 9));
@@ -102,7 +104,7 @@ public class SynopsisPanel
         add(enzymeNameLabel, cc.xy(1, 11));
         add(enzymeNameField, cc.xy(3, 11));
 
-        add(new BoldLabel("Sequence:"), cc.xy(1, 13));
+        add(LabelFactory.newLabel("Sequence:"), cc.xy(1, 13));
         add(sequenceField, cc.xy(3, 13));
         // add( new JSeparator( JSeparator.HORIZONTAL ) , cc.xyw( 1 , 15 , layout.getColumnCount() ) );
 
