@@ -20,6 +20,8 @@
  */
 package uk.ac.ebi.mnb.edit;
 
+import java.util.Arrays;
+import java.util.Collection;
 import javax.swing.undo.*;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
@@ -67,4 +69,10 @@ public class NameEdit extends UndoableEntityEdit {
     public String getPresentationName() {
         return "Set name ";
     }
+
+    @Override
+    public Collection<AnnotatedEntity> getEntities() {
+        return Arrays.asList(entity);
+    }
+
 }
