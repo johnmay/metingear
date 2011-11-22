@@ -50,8 +50,6 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.*;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
@@ -90,6 +88,7 @@ public abstract class AbstractEntityPanel
     private JPanel observations;
     private JLabel refLabel;
     private JLabel synLabel;
+    private JLabel annLabel;
     private JScrollPane refPane;
     private List<JButton> removeAnnotationButtons = new ArrayList();
     private JList references = new JList();
@@ -212,19 +211,30 @@ public abstract class AbstractEntityPanel
         Box refBox = Box.createHorizontalBox();
         refLabel = LabelFactory.newVerticalFormLabel("REFERENCES",
                                                      VerticalLabelUI.Rotation.ANTICLOCKWISE);
-        refLabel.setFont(refLabel.getFont().deriveFont(40.0f));
-        synLabel.setFont(synLabel.getFont().deriveFont(40.0f));
-        refLabel.setForeground(ColorUtilities.shade(refLabel.getForeground(), 0.4f));
-        synLabel.setForeground(ColorUtilities.shade(synLabel.getForeground(), 0.4f));
+
+
 
         refPane = new BorderlessScrollPane(references);
         refBox.add(refLabel);
         refBox.add(Box.createHorizontalGlue());
         refBox.add(refPane);
         middle.add(refBox, cc.xy(3, 1, cc.CENTER, cc.TOP));
-        middle.add(annotations, cc.xy(5, 1));
 
 
+        Box annBox = Box.createHorizontalBox();
+        annLabel = LabelFactory.newVerticalFormLabel("ANNOTATIONS",
+                                                     VerticalLabelUI.Rotation.ANTICLOCKWISE);
+        annBox.add(annLabel);
+        annBox.add(annotations);
+        middle.add(annBox, cc.xy(5, 1));
+
+
+        refLabel.setFont(refLabel.getFont().deriveFont(35.0f));
+        synLabel.setFont(synLabel.getFont().deriveFont(35.0f));
+        annLabel.setFont(annLabel.getFont().deriveFont(35.0f));
+        refLabel.setForeground(ColorUtilities.shade(refLabel.getForeground(), 0.4f));
+        synLabel.setForeground(ColorUtilities.shade(synLabel.getForeground(), 0.4f));
+        annLabel.setForeground(ColorUtilities.shade(annLabel.getForeground(), 0.4f));
 
 
         add(new JSeparator(), cc.xy(1, 2));
@@ -407,7 +417,8 @@ public abstract class AbstractEntityPanel
 
             middle.remove(annotations);
             annotations = getAnnotationPanel();
-            middle.add(annotations, cc.xy(5, 1, CellConstraints.CENTER, CellConstraints.TOP));
+            ((Box)middle.getComponent(2)).remove(1);
+            ((Box)middle.getComponent(2)).add(annotations);
             return true;
         }
 

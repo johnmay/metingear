@@ -20,8 +20,11 @@
  */
 package uk.ac.ebi.mnb.edit;
 
+import java.util.Arrays;
+import java.util.Collection;
 import javax.swing.undo.*;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
 
 /**
  * @name   NameEdit - 2011.10.02 <br>
@@ -30,7 +33,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AccessionEdit extends AbstractUndoableEdit {
+public class AccessionEdit extends UndoableEntityEdit {
 
     private AnnotatedEntity entity;
     private String oldAccession;
@@ -65,5 +68,8 @@ public class AccessionEdit extends AbstractUndoableEdit {
     @Override
     public String getPresentationName() {
         return "Set name ";
+    }   @Override
+    public Collection<AnnotatedEntity> getEntities() {
+        return Arrays.asList(entity);
     }
 }

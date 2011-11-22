@@ -22,6 +22,7 @@ package uk.ac.ebi.mnb.edit;
 
 import javax.swing.undo.*;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
 
 /**
  * @name   NameEdit - 2011.10.02 <br>
@@ -30,7 +31,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class NameEdit extends AbstractUndoableEdit {
+public class NameEdit extends UndoableEntityEdit {
 
     private AnnotatedEntity entity;
     private String oldName;

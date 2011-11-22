@@ -22,12 +22,12 @@ package uk.ac.ebi.mnb.edit;
 
 import java.util.Arrays;
 import java.util.Collection;
-import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
 
 /**
  * @name    RemoveAnnotations - 2011.10.02 <br>
@@ -37,7 +37,7 @@ import uk.ac.ebi.interfaces.Annotation;
  * @author  $Author$ (this version)
  */
 public class AnnotationRemoval
-        extends AbstractUndoableEdit {
+        extends UndoableEntityEdit {
 
     private static final Logger LOGGER = Logger.getLogger(AnnotationRemoval.class);
     private AnnotatedEntity entity;
@@ -80,5 +80,10 @@ public class AnnotationRemoval
     @Override
     public boolean canRedo() {
         return true;
+    }
+
+    @Override
+    public Collection<AnnotatedEntity> getEntities() {
+        return Arrays.asList(entity);
     }
 }
