@@ -1,0 +1,120 @@
+/**
+ * CreateMatrix.java
+ *
+ * 2011.11.24
+ *
+ * This file is part of the CheMet library
+ * 
+ * The CheMet library is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * CheMet is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package uk.ac.ebi.mnb.dialog.tools.stoichiometry;
+
+import java.awt.Dimension;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Collection;
+import java.util.logging.Level;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.event.UndoableEditListener;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+import uk.ac.ebi.metabolomes.io.homology.ReactionMatrixIO;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+
+/**
+ *          CreateMatrix - 2011.11.24 <br>
+ *          Class creates a stoichiometric matrix
+ * @version $Rev$ : Last Changed $Date$
+ * @author  johnmay
+ * @author  $Author$ (this version)
+ */
+public class CreateMatrix extends ControllerDialog {
+
+    private static final Logger LOGGER = Logger.getLogger(CreateMatrix.class);
+
+    public CreateMatrix(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+        super(frame, updater, messages, controller, undoableEdits, "RunDialog");
+        setDefaultLayout();
+    }
+
+    @Override
+    public JLabel getDescription() {
+        JLabel label = super.getDescription();
+        label.setText("<html>Create the stoichiometric matrix for this model</html>");
+        label.setPreferredSize(new Dimension(300, 32));
+        return label;
+    }
+
+    @Override
+    public JPanel getOptions() {
+        JPanel panel = super.getOptions();
+
+        return panel;
+    }
+
+    @Override
+    public void process() {
+            StoichiometricMatrix<Metabolite, MetabolicReaction> matrix;
+
+            SelectionManager manager = getSelection();
+            Reconstruction recon = ReconstructionManager.getInstance().getActive();
+
+            Collection<MetabolicReaction> rxns = manager.hasSelection(MetabolicReaction.class)
+                                                 ? manager.get(MetabolicReaction.class)
+                                                 : recon.getReactions();
+
+            LOGGER.info("Creating reaction matrix for " + rxns.size() + " reactions");
+
+            matrix = new StoichiometricMatrix<Metabolite, MetabolicReaction>((int) (rxns.size() * 1.5),
+                                                                             rxns.size());
+
+            for (MetabolicReaction rxn : rxns) {
+                matrix.addReaction(rxn, rxn.getAllReactionMolecules().toArray(new Metabolite[0]), getStoichiometries(rxn));
+            }
+
+            for (int i = 0; i < matrix.getMoleculeCount(); i++) {
+                for (int j = 0; j < matrix.getReactionCount(); j++) {
+                    System.out.print(matrix.get(i, j));
+                }
+                System.out.println("");
+            }
+
+
+
+    }
+
+    public Double[] getStoichiometries(MetabolicReaction rxn) {
+
+        Double[] coefs = new Double[rxn.getAllReactionParticipants().size()];
+        int i = 0;
+        for (Double d : rxn.getReactantStoichiometries()) {
+            coefs[i++] = -d;
+        }
+        for (Double d : rxn.getProductStoichiometries()) {
+            coefs[i++] = +d;
+        }
+
+        return coefs;
+    }
+}
