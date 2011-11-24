@@ -27,7 +27,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.Sizes;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,11 +43,8 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Element;
 import org.openscience.cdk.Isotope;
-import org.openscience.cdk.config.IsotopeFactory;
-import org.openscience.cdk.interfaces.IElement;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.annotation.Synonym;
@@ -67,6 +63,8 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.visualisation.MatchIndication;
 import uk.ac.ebi.visualisation.molecule.MoleculeTable;
+import uk.ac.ebi.visualisation.molecule.access.CrossReferenceAccessor;
+import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
 
 /**
  *          CandidateSelector - 2011.10.31 <br>
@@ -80,7 +78,7 @@ public class CandidateSelector
         implements ListSelectionListener {
 
     private static final Logger LOGGER = Logger.getLogger(CandidateSelector.class);
-    private MoleculeTable table = new MoleculeTable();
+    private MoleculeTable table = new MoleculeTable(new CrossReferenceAccessor(), new NameAccessor());
     private CellConstraints cc = new CellConstraints();
     private JLabel desc;
     private JLabel nameLabel = new JLabel();

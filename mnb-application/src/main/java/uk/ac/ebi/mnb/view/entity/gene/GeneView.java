@@ -41,7 +41,7 @@ public class GeneView
 
 
     public GeneView() {
-        super(new GeneTable(), new GeneInspector());
+        super("Genes", new GeneTable(), new GeneInspector());
     }
 
 

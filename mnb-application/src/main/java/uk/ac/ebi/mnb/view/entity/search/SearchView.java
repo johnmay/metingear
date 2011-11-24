@@ -1,4 +1,3 @@
-
 /**
  * SearchView.java
  *
@@ -26,7 +25,6 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityView;
 import org.apache.log4j.Logger;
 
-
 /**
  *          SearchView – 2011.09.29 <br>
  *          Class description
@@ -38,11 +36,7 @@ public class SearchView extends AbstractEntityView {
 
     private static final Logger LOGGER = Logger.getLogger(SearchView.class);
 
-
     public SearchView() {
-        super(new SearchTable(), new SearchInspector());
+        super("Search Results", new SearchTable(), new SearchInspector());
     }
-
-
 }
-

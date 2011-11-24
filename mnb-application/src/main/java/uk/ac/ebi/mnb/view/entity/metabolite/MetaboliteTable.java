@@ -23,28 +23,13 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 import com.explodingpixels.data.Rating;
 import com.explodingpixels.macwidgets.ITunesRatingTableCellEditor;
 import com.explodingpixels.macwidgets.ITunesRatingTableCellRenderer;
-import java.awt.Component;
-import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.util.Set;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.mnb.renderers.BooleanCellRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
-import mnb.view.old.CachedMoleculeRenderer;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
-import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.renderers.FormulaCellRender;
 
 /**

@@ -20,18 +20,22 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
+import javax.swing.JLabel;
+import javax.swing.event.ListSelectionEvent;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import com.jgoodies.forms.factories.Borders;
 import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import uk.ac.ebi.visualisation.ViewUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.ui.component.factory.LabelFactory;
 
 /**
  *          EntityView – 2011.09.06 <br>
@@ -47,12 +51,15 @@ public class AbstractEntityView
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityView.class);
     private final AbstractEntityTable table;
     private final AbstractEntityInspector inspector;
+    private JLabel label = LabelFactory.emptyLabel(); // avoid null pointers
 
-    public AbstractEntityView(AbstractEntityTable table,
+    public AbstractEntityView(String name,
+                              AbstractEntityTable entityTable,
                               AbstractEntityInspector inspector) {
 
-        this.table = table;
+        this.table = entityTable;
         this.inspector = inspector;
+        setName(name);
         setOrientation(JSplitPane.VERTICAL_SPLIT);
         setDividerSize(10);
         setBackground(ViewUtils.BACKGROUND);
@@ -60,9 +67,18 @@ public class AbstractEntityView
         add(tablePane, JSplitPane.TOP);
         add(this.inspector, JSplitPane.BOTTOM);
         setBorders();
-        inspector.setTable(table);
-        table.getSelectionModel().addListSelectionListener(inspector);
+        inspector.setTable(entityTable);
+        entityTable.getSelectionModel().addListSelectionListener(inspector);
         setDividerLocation(350);
+
+        // action listener changes text on the bottom-bar
+        entityTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            public void valueChanged(ListSelectionEvent e) {
+                label.setText(table.getSelectedRowCount() + " of " + table.getRowCount() + " " + getName() + " selected");
+                label.repaint();
+            }
+        });
 
     }
 
@@ -92,7 +108,7 @@ public class AbstractEntityView
     /**
      * @inheritDoc
      */
-     @Override
+    @Override
     public boolean update(SelectionManager selection) {
         boolean updated = table.update(selection);
         return inspector.update(selection) || updated;
@@ -117,5 +133,9 @@ public class AbstractEntityView
     @Override
     public boolean setSelection(SelectionManager selection) {
         return table.setSelection(selection);
+    }
+
+    void setBottomBarLabel(JLabel label) {
+        this.label = label;
     }
 }

@@ -17,6 +17,7 @@ import uk.ac.ebi.mnb.dialog.tools.CollapseStructures;
 import uk.ac.ebi.mnb.dialog.tools.DownloadStructuresDialog;
 import uk.ac.ebi.mnb.dialog.tools.MergeLoci;
 import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
+import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
 
@@ -52,6 +53,8 @@ public class ToolsMenu extends JMenu {
         add(new JSeparator());
         add(new JMenuItem(new MergeLoci(MainView.getInstance())));
         add(new ControllerDialogItem(view, CollapseStructures.class));
+        add(new JSeparator());
+        add(new ControllerDialogItem(view, CreateMatrix.class));
 
 
     }

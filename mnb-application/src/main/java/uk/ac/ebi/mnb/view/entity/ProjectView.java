@@ -19,11 +19,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import mnb.view.old.MatrixView;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import uk.ac.ebi.core.ReconstructionManager;
-import mnb.view.old.MatrixModel;
 import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
 import uk.ac.ebi.mnb.view.entity.protein.ProductView;
 import uk.ac.ebi.mnb.view.entity.reaction.ReactionView;
@@ -65,13 +64,10 @@ public class ProjectView
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
             ProjectView.class);
-    // underlying tab components
-    private JScrollPane matrixPane;
-    private MatrixView matrix = null;
+    // underlying  components
     private ReactionView reactions = null;
     private MetaboliteView metabolites = null;
     private GeneView genes = null;
-//    private BrowserSplitPane productBrowser;
     private ProductView products = null;
     private TaskView tasks = null;
     private SearchView search = null;
@@ -82,7 +78,6 @@ public class ProjectView
 
     public ProjectView() {
 
-//        productBrowser = BrowserSplitPane.getInstance();
         products = new ProductView();
         reactions = new ReactionView();
         metabolites = new MetaboliteView();
@@ -92,7 +87,6 @@ public class ProjectView
 
         layout = new CardLayout();
         setLayout(layout);
-//        add(productBrowser, productBrowser.getName());
         add(products, products.getClass().getSimpleName());
         add(reactions, reactions.getClass().getSimpleName());
         add(metabolites, metabolites.getClass().getSimpleName());
@@ -112,6 +106,12 @@ public class ProjectView
         viewMap.put(RunnableTask.BASE_TYPE, tasks);
         viewMap.put(GeneImplementation.BASE_TYPE, genes);
 
+    }
+
+    public void setBottomBarLabel(JLabel label) {
+        for (AbstractEntityView view : viewMap.values()) {
+            view.setBottomBarLabel(label);
+        }
     }
 
     /**
@@ -300,33 +300,6 @@ public class ProjectView
 
     }
 
-    /* deprecated methods */
-    /**
-     * Sets the tabbed pane view to the matrix view
-     */
-    @Deprecated
-    public void setMatrixView() {
-        if (matrix == null) {
-            return;
-        }
-        //setSelectedComponent( matrixPane );
-    }
 
-    @Deprecated
-    public void addMatrixView(MatrixModel model) {
-        matrix = new MatrixView(model);
-        matrixPane = new JScrollPane(matrix);
-        //addTab( "Matrix View" , matrixPane );
-        setMatrixView();
-    }
 
-    /**
-     * Returns the instance of matrix view currently held in the project panel. This
-     * will return null if no matrix view is instantiated
-     * @return MatrixView object
-     */
-    @Deprecated
-    public MatrixView getMatrixView() {
-        return matrix;
-    }
 }

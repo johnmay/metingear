@@ -33,7 +33,7 @@ public class ReactionView
     private static final Logger LOGGER = Logger.getLogger(ReactionView.class);
 
     public ReactionView() {
-        super(new ReactionTable(), new ReactionInspector());
+        super("Reactions", new ReactionTable(), new ReactionInspector());
     }
 
     /**

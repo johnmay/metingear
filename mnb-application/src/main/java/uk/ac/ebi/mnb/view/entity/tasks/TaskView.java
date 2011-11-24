@@ -1,4 +1,3 @@
-
 /**
  * TaskView.java
  *
@@ -26,7 +25,6 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import org.apache.log4j.Logger;
 
-
 /**
  *          TaskView – 2011.09.28 <br>
  *          Class description
@@ -39,33 +37,21 @@ public class TaskView extends AbstractEntityView {
     private static final Logger LOGGER = Logger.getLogger(TaskView.class);
 
     public TaskView() {
-        super(new TaskTable(), new TaskInspector());
+        super("Tasks", new TaskTable(), new TaskInspector());
     }
-
 
     @Override
     public TaskTable getTable() {
         return (TaskTable) super.getTable();
     }
 
-
     @Override
     public TaskInspector getInspector() {
         return (TaskInspector) super.getInspector();
     }
 
-
     @Override
     public String getName() {
         return "Tasks";
     }
-
-
-
-    
-
-
-
-
 }
-

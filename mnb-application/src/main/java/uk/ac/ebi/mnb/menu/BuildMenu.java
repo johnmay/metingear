@@ -10,7 +10,6 @@ import javax.swing.JSeparator;
 import uk.ac.ebi.mnb.menu.build.PredictGPR;
 import uk.ac.ebi.mnb.menu.build.CatFamAction;
 import uk.ac.ebi.mnb.menu.build.PriamAction;
-import uk.ac.ebi.mnb.menu.build.StoichiometricMatixAction;
 import uk.ac.ebi.mnb.menu.build.StoichiometryAction;
 import uk.ac.ebi.mnb.menu.build.SwissProtHomology;
 
@@ -26,7 +25,7 @@ public class BuildMenu
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( BuildMenu.class );
     private SwissProtHomology enzymeHomologyAction;
-    private JComponent items[] = new JComponent[ 8 ];
+    private JComponent items[] = new JComponent[ 7 ];
 
     public BuildMenu() {
 
@@ -41,7 +40,6 @@ public class BuildMenu
         items[index++] = new DynamicMenuItem( new CatFamAction() );
         items[index++] = new JSeparator();
         items[index++] = new DynamicMenuItem( new StoichiometryAction() );
-        items[index++] = new DynamicMenuItem( new StoichiometricMatixAction() );
         items[index++] = new JSeparator();
 
         for ( JComponent component : items ) {

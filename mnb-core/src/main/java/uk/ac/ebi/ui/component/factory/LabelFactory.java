@@ -53,6 +53,11 @@ public class LabelFactory {
 
     private static final Logger LOGGER = Logger.getLogger(LabelFactory.class);
     private static Theme theme = Settings.getInstance().getTheme();
+    public static JLabel empty = LabelFactory.newLabel("");
+
+    public static JLabel emptyLabel() {
+        return empty;
+    }
 
     public enum Size {
 
@@ -184,8 +189,9 @@ public class LabelFactory {
         label.setUI(new VerticalLabelUI(rotation));
         return label;
     }
+
     public static JLabel newVerticalFormLabel(String text,
-                                          VerticalLabelUI.Rotation rotation) {
+                                              VerticalLabelUI.Rotation rotation) {
         JLabel label = newFormLabel(text);
         label.setUI(new VerticalLabelUI(rotation));
         return label;

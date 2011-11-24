@@ -1,4 +1,3 @@
-
 /**
  * ProteinView.java
  *
@@ -24,7 +23,6 @@ package uk.ac.ebi.mnb.view.entity.protein;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityView;
 import org.apache.log4j.Logger;
 
-
 /**
  *          ProteinView – 2011.09.28 <br>
  *          Class description
@@ -33,15 +31,11 @@ import org.apache.log4j.Logger;
  * @author  $Author$ (this version)
  */
 public class ProductView
-    extends AbstractEntityView {
+        extends AbstractEntityView {
 
     private static final Logger LOGGER = Logger.getLogger(ProductView.class);
-   
+
     public ProductView() {
-        super(new ProductTable(), new ProductInspector());
+        super("Gene Products", new ProductTable(), new ProductInspector());
     }
-
-
-
 }
-

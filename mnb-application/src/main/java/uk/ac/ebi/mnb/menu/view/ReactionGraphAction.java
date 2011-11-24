@@ -16,17 +16,8 @@
  */
 package uk.ac.ebi.mnb.menu.view;
 
-import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
-import uk.ac.ebi.core.ReconstructionManager;
-import mnb.view.old.ReactionGraph;
-import mnb.view.old.GraphPanel;
-import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
-import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.core.GeneralAction;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
 
 /**
  * ReactionGraphAction.java

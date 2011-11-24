@@ -59,10 +59,11 @@ public class ViewInfo {
     private ProjectView controller;
     private Map<String, JToggleButton> buttonMap = new HashMap();
     private BottomBar bottombar = new BottomBar(BottomBarSize.SMALL);
-    private JLabel info;
+    private JLabel info = LabelFactory.newLabel("");
 
     public ViewInfo(ProjectView controller) {
         this.controller = controller;
+        controller.setBottomBarLabel(info);
 
         controller.setViewSelector(this);
 
@@ -104,7 +105,6 @@ public class ViewInfo {
 //        buttonMap.put(RunnableTask.BASE_TYPE, tasks);
         buttonMap.put(GeneImplementation.BASE_TYPE, genes);
 
-        info = LabelFactory.newLabel("");
         bottombar.addComponentToCenter(info);
 
     }
@@ -113,7 +113,7 @@ public class ViewInfo {
         return new LabeledComponentGroup("View", genes, products, metabolites, reactions).getComponent();
     }
 
-    public BottomBar getBottomBar(){
+    public BottomBar getBottomBar() {
         return bottombar;
     }
 
@@ -126,9 +126,10 @@ public class ViewInfo {
                 button.setSelected(false);
             }
             buttonMap.get(type).setSelected(true);
-            info.setText(type);
+            info.setText("");
+            info.repaint();
         }
-    }    
+    }
 
     private class ViewGenes
             extends GeneralAction {

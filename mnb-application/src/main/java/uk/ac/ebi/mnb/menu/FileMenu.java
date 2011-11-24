@@ -19,7 +19,6 @@ import uk.ac.ebi.mnb.dialog.file.NewMetabolite;
 import uk.ac.ebi.mnb.dialog.file.NewProteinProduct;
 import uk.ac.ebi.mnb.dialog.file.NewReaction;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.menu.file.ExportSIFAction;
 import uk.ac.ebi.mnb.menu.file.ExportSBMLAction;
 import uk.ac.ebi.mnb.menu.file.ImportENAXML;
 import uk.ac.ebi.mnb.menu.file.ImportKGML;
@@ -137,7 +136,6 @@ public class FileMenu
 
         public ExportMenu() {
             super("Export...");
-            add(new DynamicMenuItem(new ExportSIFAction()));
             add(new JMenuItem(new ExportMetabolitesMDL(MainView.getInstance())));
             add(new JMenuItem("Metabolites (.sbml)"));
             add(new JMenuItem("Proteins (.fasta)"));

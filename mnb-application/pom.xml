@@ -39,51 +39,11 @@
             <artifactId>CheMet-Visualisation</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>CheMet-BioWarehouse</artifactId>
-            <version>1.2-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jchem</artifactId>
-                    <groupId>chemaxon</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jaxws-rt</artifactId>
-                    <groupId>com.sun.xml.ws</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
         <dependency>
             <groupId>com.jgoodies</groupId>
             <artifactId>forms</artifactId>
             <version>1.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.jung</groupId>
-            <artifactId>jung-algorithms</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.jung</groupId>
-            <artifactId>jung-api</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.jung</groupId>
-            <artifactId>jung-graph-impl</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.jung</groupId>
-            <artifactId>jung-visualization</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience</groupId>
-            <artifactId>jchempaint</artifactId>
-            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>com.explodingpixels</groupId>
@@ -145,7 +105,7 @@
                     </archive>
                 </configuration>
             </plugin>
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>osxappbundle-maven-plugin</artifactId>
                 <version>1.0-alpha-2</version>
@@ -154,15 +114,15 @@
                     <iconFile>/Users/johnmay/EBI/illustrations/mnb/icons/mnb.icns</iconFile>
                     <buildDirectory>/Users/johnmay/Applications/</buildDirectory>
                 </configuration>
-                <!--<executions>
+                <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>bundle</goal>
                         </goals>
                     </execution>
-                </executions>-->
-            </plugin>
+                </executions>
+            </plugin> -->
        <!--     <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

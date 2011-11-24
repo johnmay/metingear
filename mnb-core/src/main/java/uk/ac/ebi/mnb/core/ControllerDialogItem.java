@@ -61,7 +61,7 @@ public class ControllerDialogItem extends JMenuItem {
      */
     public ControllerDialogItem(final JFrame frame,
                                 final TargetedUpdate updater,
-                                final MessageManager mesg,                               
+                                final MessageManager mesg,
                                 final SelectionController selection,
                                 final UndoableEditListener editListener,
                                 final Class<? extends ControllerDialog> clazz) {
@@ -76,7 +76,7 @@ public class ControllerDialogItem extends JMenuItem {
                     Constructor constructor = clazz.getConstructors()[0];
                     dialog = (ControllerDialog) constructor.newInstance(frame,
                                                                         updater,
-                                                                        mesg,                                                                
+                                                                        mesg,
                                                                         selection,
                                                                         editListener);
                 } catch (InstantiationException ex) {
@@ -92,9 +92,7 @@ public class ControllerDialogItem extends JMenuItem {
 
             @Override
             public void activateActions() {
-                if (dialog.getSelection().hasSelection()) {
-                    dialog.setVisible(true);
-                }
+                dialog.setVisible(true);
             }
         });
     }

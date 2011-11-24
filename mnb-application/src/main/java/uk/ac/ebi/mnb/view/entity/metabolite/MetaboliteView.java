@@ -33,7 +33,7 @@ public class MetaboliteView
       MetaboliteView.class);
 
     public MetaboliteView() {
-        super(new MetaboliteTable(), new MetaboliteInspector());
+        super("Metabolites", new MetaboliteTable(), new MetaboliteInspector());
     }
 
 
