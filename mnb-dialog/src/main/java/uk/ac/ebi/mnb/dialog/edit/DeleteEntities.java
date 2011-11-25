@@ -29,7 +29,7 @@ import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.mnb.core.ContextAction;
+import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
@@ -40,7 +40,7 @@ import uk.ac.ebi.mnb.interfaces.SelectionManager;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class DeleteEntities extends ContextAction {
+public class DeleteEntities extends ControllerAction {
 
     private static final Logger LOGGER = Logger.getLogger(DeleteEntities.class);
 

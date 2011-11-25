@@ -21,10 +21,7 @@
 package uk.ac.ebi.mnb.dialog.tools.stoichiometry;
 
 import java.awt.Dimension;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Collection;
-import java.util.logging.Level;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,12 +32,12 @@ import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
-import uk.ac.ebi.metabolomes.io.homology.ReactionMatrixIO;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+import uk.ac.ebi.visualisation.matrix.MatrixPane;
 
 /**
  *          CreateMatrix - 2011.11.24 <br>
@@ -52,6 +49,7 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 public class CreateMatrix extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(CreateMatrix.class);
+    private StoichiometricMatrix<Metabolite, MetabolicReaction> matrix; // tempoary storage
 
     public CreateMatrix(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
@@ -75,33 +73,30 @@ public class CreateMatrix extends ControllerDialog {
 
     @Override
     public void process() {
-            StoichiometricMatrix<Metabolite, MetabolicReaction> matrix;
 
-            SelectionManager manager = getSelection();
-            Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        SelectionManager manager = getSelection();
+        Reconstruction recon = ReconstructionManager.getInstance().getActive();
 
-            Collection<MetabolicReaction> rxns = manager.hasSelection(MetabolicReaction.class)
-                                                 ? manager.get(MetabolicReaction.class)
-                                                 : recon.getReactions();
+        Collection<MetabolicReaction> rxns = manager.hasSelection(MetabolicReaction.class)
+                                             ? manager.get(MetabolicReaction.class)
+                                             : recon.getReactions();
 
-            LOGGER.info("Creating reaction matrix for " + rxns.size() + " reactions");
+        LOGGER.info("Creating reaction matrix for " + rxns.size() + " reactions");
+        matrix = new StoichiometricMatrix<Metabolite, MetabolicReaction>((int) (rxns.size() * 1.5),
+                                                                         rxns.size());
+        for (MetabolicReaction rxn : rxns) {
+            matrix.addReaction(rxn, rxn.getAllReactionMolecules().toArray(new Metabolite[0]), getStoichiometries(rxn));
+        }
+    }
 
-            matrix = new StoichiometricMatrix<Metabolite, MetabolicReaction>((int) (rxns.size() * 1.5),
-                                                                             rxns.size());
-
-            for (MetabolicReaction rxn : rxns) {
-                matrix.addReaction(rxn, rxn.getAllReactionMolecules().toArray(new Metabolite[0]), getStoichiometries(rxn));
-            }
-
-            for (int i = 0; i < matrix.getMoleculeCount(); i++) {
-                for (int j = 0; j < matrix.getReactionCount(); j++) {
-                    System.out.print(matrix.get(i, j));
-                }
-                System.out.println("");
-            }
-
-
-
+    @Override
+    public boolean update() {
+        JFrame frame = new JFrame("Matrix");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(500, 500);
+        frame.add(new MatrixPane(matrix));
+        frame.setVisible(true);
+        return true;
     }
 
     public Double[] getStoichiometries(MetabolicReaction rxn) {

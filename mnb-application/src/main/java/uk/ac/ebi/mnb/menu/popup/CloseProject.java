@@ -29,6 +29,7 @@ import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.mnb.interfaces.ContextAction;
 import uk.ac.ebi.mnb.main.MainView;
 
 /**
@@ -38,7 +39,7 @@ import uk.ac.ebi.mnb.main.MainView;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class CloseProject extends GeneralAction implements ContextSensitiveAction {
+public class CloseProject extends GeneralAction implements ContextAction {
 
     private static final Logger LOGGER = Logger.getLogger(CloseProject.class);
     private Reconstruction reconstruction;
@@ -66,10 +67,17 @@ public class CloseProject extends GeneralAction implements ContextSensitiveActio
     /**
      * @inheritDoc
      */
-    public void setContext(Object entity) {
+    public boolean setContext(Object entity) {
         setEnabled(entity instanceof ReconstructionSourceItem);
         if (isEnabled()) {
             reconstruction = ((ReconstructionSourceItem) entity).getEntity();
+            return true;
         }
+        return false;
     }
+
+    public boolean setContext() {
+        return false;
+    }
+
 }

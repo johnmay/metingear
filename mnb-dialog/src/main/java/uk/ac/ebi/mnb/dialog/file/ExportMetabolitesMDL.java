@@ -37,7 +37,7 @@ import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.core.ContextAction;
+import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
@@ -48,7 +48,7 @@ import uk.ac.ebi.mnb.interfaces.SelectionManager;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ExportMetabolitesMDL extends ContextAction {
+public class ExportMetabolitesMDL extends ControllerAction {
 
     private static final Logger LOGGER = Logger.getLogger(ExportMetabolitesMDL.class);
     private JFileChooser fileChooser;

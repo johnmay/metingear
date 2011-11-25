@@ -26,12 +26,15 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.event.UndoableEditListener;
 import uk.ac.ebi.annotation.AuthorAnnotation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.ui.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.ViewController;
-import uk.ac.ebi.mnb.view.ContextDialog;
 import uk.ac.ebi.ui.component.factory.FieldFactory;
 
 /**
@@ -41,14 +44,14 @@ import uk.ac.ebi.ui.component.factory.FieldFactory;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AddAuthorAnnotation extends ContextDialog {
+public class AddAuthorAnnotation extends ControllerDialog {
 
     private JTextField author;
     private JTextField description;
     private CellConstraints cc = new CellConstraints();
 
-    public AddAuthorAnnotation(JFrame frame, ViewController controller) {
-        super(frame, controller, "SaveDialog");
+    public AddAuthorAnnotation(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+        super(frame, updater, messages, controller, undoableEdits, "SaveDialog");
         description = FieldFactory.newField(30);
         author = FieldFactory.newField(System.getProperties().getProperty("user.name"));
         setDefaultLayout();
@@ -85,6 +88,6 @@ public class AddAuthorAnnotation extends ContextDialog {
 
     @Override
     public boolean update() {
-        return getController().update();
+        return update(getSelection());
     }
 }

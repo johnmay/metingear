@@ -8,7 +8,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.ContextDialogItem;
 import uk.ac.ebi.mnb.core.ControllerDialogItem;
 import uk.ac.ebi.mnb.dialog.tools.TransferAnnotations;
 import uk.ac.ebi.mnb.dialog.tools.AutomaticCrossReference;
@@ -39,9 +38,8 @@ public class ToolsMenu extends JMenu {
         MainView view = MainView.getInstance();
 
         add(new DynamicMenuItem(new AddCrossReference()));
-        add(new ContextDialogItem(view,
-                                  view.getViewController(),
-                                  AutomaticCrossReference.class));
+        add(new ControllerDialogItem(view,
+                                     AutomaticCrossReference.class));
         add(new ControllerDialogItem(view, DownloadStructuresDialog.class));
 
         add(new JSeparator());

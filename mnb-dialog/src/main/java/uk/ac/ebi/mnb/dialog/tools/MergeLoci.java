@@ -34,7 +34,7 @@ import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.mnb.core.ContextAction;
+import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 /**
@@ -44,7 +44,7 @@ import uk.ac.ebi.mnb.interfaces.MainController;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MergeLoci extends ContextAction {
+public class MergeLoci extends ControllerAction {
 
     private static final Logger LOGGER = Logger.getLogger(MergeLoci.class);
 

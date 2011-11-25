@@ -23,7 +23,6 @@ package uk.ac.ebi.mnb.menu;
 import java.awt.event.ActionEvent;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.visualisation.ViewUtils;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
@@ -31,7 +30,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.ContextDialogItem;
 import uk.ac.ebi.mnb.core.ControllerDialogItem;
 import uk.ac.ebi.mnb.dialog.edit.AddAuthorAnnotation;
 import uk.ac.ebi.mnb.dialog.edit.DeleteEntities;
@@ -72,7 +70,7 @@ public class EditMenu extends JMenu {
         add(new ControllerDialogItem(view, MergeEntities.class));
         add(new DeleteEntities(MainView.getInstance()));
         add(new JSeparator());
-        add(new ContextDialogItem(view, view.getViewController(), AddAuthorAnnotation.class));
+        add(new ControllerDialogItem(view, AddAuthorAnnotation.class));
         // add citation
         //add(new ContextDialogItem(view, view.getViewController(), ContextDialog.class));
 

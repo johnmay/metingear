@@ -34,7 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
+import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.io.service.ChEBINameService;
@@ -42,11 +42,13 @@ import uk.ac.ebi.io.service.KEGGCompoundNameService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.ui.component.factory.LabelFactory;
-import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.mnb.view.MComboBox;
-import uk.ac.ebi.mnb.view.ContextDialog;
 import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.visualisation.ViewUtils;
@@ -59,19 +61,16 @@ import uk.ac.ebi.visualisation.ViewUtils;
  * @author  $Author$ (this version)
  */
 public class AutomaticCrossReference
-        extends ContextDialog {
+        extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(AutomaticCrossReference.class);
     private JCheckBox chebi = new MCheckBox("ChEBI");
     private JCheckBox kegg = new MCheckBox("KEGG Compound");
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 200, 10));
 
-    public AutomaticCrossReference(JFrame frame, ViewController controller) {
-
-        super(frame, controller, "RunDialog");
-
+    public AutomaticCrossReference(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+        super(frame, updater, messages, controller, undoableEdits, "RunDialog");
         setDefaultLayout();
-
     }
 
     @Override
@@ -142,9 +141,4 @@ public class AutomaticCrossReference
 
     }
 
-    @Override
-    public boolean update() {
-        getController().update();
-        return true;
-    }
 }

@@ -1,8 +1,7 @@
-
 /**
- * ContextSensitiveAction.java
+ * ContextAction.java
  *
- * 2011.10.01
+ * 2011.11.25
  *
  * This file is part of the CheMet library
  * 
@@ -19,26 +18,29 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.menu.popup;
-
-import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
-
+package uk.ac.ebi.mnb.interfaces;
 
 /**
- *          ContextSensitiveAction – 2011.10.01 <br>
- *          Class description
+ *          ContextAction - 2011.11.25 <br>
+ *          Context action defines a way to test whether an action is available
+ *          based on project contents/selection
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface ContextSensitiveAction {
+public interface ContextAction {
 
     /**
-     * Given the entity set the context e.g. enabled/disabled
+     * Sets the context based on properties of the project or current selection
+     * (if available)
+     * @return
      */
-    public void setContext(Object entity);
+    public boolean setContext();
 
-
+    /**
+     * Sets the context given a specific object
+     * @param obj
+     * @return 
+     */
+    public boolean setContext(Object obj);
 }
-

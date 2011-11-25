@@ -26,20 +26,26 @@ import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
 /**
  * @name    SelectionAction - 2011.10.03 <br>
- *          Class description
+ *          Controller action is action that delegates calls to MainController
+ *          enabling access to methods such as {@see getSelection()}
+ *
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class ContextAction extends GeneralAction {
+public abstract class ControllerAction extends GeneralAction {
 
     private MainController controller;
 
-    public ContextAction(String command, MainController controller) {
+    public ControllerAction(String command, MainController controller) {
         super(command);
         this.controller = controller;
     }
 
+    /**
+     * Access the selection from the MainController child, ViewController.
+     * @return
+     */
     public SelectionManager getSelection() {
         return controller.getViewController().getSelection();
     }
@@ -48,17 +54,15 @@ public abstract class ContextAction extends GeneralAction {
         return controller.getViewController().setSelection(selection);
     }
 
-    public void addMessage(Message mesg){
+    public void addMessage(Message mesg) {
         controller.getMessageManager().addMessage(mesg);
     }
 
-    public boolean update(){
+    public boolean update() {
         return controller.update();
     }
 
     public MainController getController() {
         return controller;
     }
-
-    
 }

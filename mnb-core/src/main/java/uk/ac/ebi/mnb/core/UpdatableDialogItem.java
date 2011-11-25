@@ -25,7 +25,6 @@ import java.lang.reflect.InvocationTargetException;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import uk.ac.ebi.mnb.interfaces.Updatable;
-import uk.ac.ebi.mnb.view.ContextDialog;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
 /**

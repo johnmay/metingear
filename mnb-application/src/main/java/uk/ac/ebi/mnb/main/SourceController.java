@@ -24,7 +24,6 @@ import com.explodingpixels.macwidgets.SourceListItem;
 import com.explodingpixels.macwidgets.SourceListModel;
 import com.explodingpixels.macwidgets.SourceListSelectionListener;
 import com.explodingpixels.widgets.PopupMenuCustomizer;
-import com.explodingpixels.widgets.WindowUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,10 +45,10 @@ import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.mnb.core.TaskManager;
+import uk.ac.ebi.mnb.interfaces.ContextAction;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
 import uk.ac.ebi.mnb.menu.popup.SetActiveProject;
-import uk.ac.ebi.mnb.menu.popup.ContextSensitiveAction;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
 
 /**
@@ -251,7 +250,7 @@ public class SourceController
             ((ProjectView) MainView.getInstance().getViewController()).setTaskView();
         }
     }
-    List<ContextSensitiveAction> actions = new ArrayList();
+    List<ContextAction> actions = new ArrayList();
 
     public void customizePopup(JPopupMenu popup) {
 
@@ -261,13 +260,13 @@ public class SourceController
         if (popup.getComponents().length == 0) {
             for (Action action : Arrays.asList(setActiveProject,
                                                new CloseProject())) {
-                actions.add((ContextSensitiveAction) action);
+                actions.add((ContextAction) action);
                 popup.add(action);
             }
         }
 
         // set active/inactive given the context of the current selection
-        for (ContextSensitiveAction action : actions) {
+        for (ContextAction action : actions) {
             action.setContext(selected);
         }
 

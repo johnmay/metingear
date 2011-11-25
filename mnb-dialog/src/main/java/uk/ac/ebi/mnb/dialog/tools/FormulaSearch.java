@@ -28,7 +28,7 @@ import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
-import uk.ac.ebi.mnb.core.ContextAction;
+import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
@@ -41,7 +41,7 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class FormulaSearch extends ContextAction {
+public class FormulaSearch extends ControllerAction {
 
     private static final Logger LOGGER = Logger.getLogger(FormulaSearch.class);
     private ChEBIWebServiceConnection chebi = null;

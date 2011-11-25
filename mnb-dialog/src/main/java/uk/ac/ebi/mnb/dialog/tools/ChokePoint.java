@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.mnb.core.ContextAction;
+import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
@@ -45,7 +45,7 @@ import uk.ac.ebi.annotation.AuthorAnnotation;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ChokePoint extends ContextAction {
+public class ChokePoint extends ControllerAction {
 
     private static final Logger LOGGER = Logger.getLogger(ChokePoint.class);
 
