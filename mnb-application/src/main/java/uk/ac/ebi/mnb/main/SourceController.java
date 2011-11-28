@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.Action;
+import javax.swing.JMenuItem;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.render.source.EntitySourceItem;
 import uk.ac.ebi.chemet.render.source.MetaboliteSourceItem;
@@ -44,8 +45,8 @@ import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.core.TaskManager;
-import uk.ac.ebi.mnb.interfaces.ContextAction;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
 import uk.ac.ebi.mnb.menu.popup.SetActiveProject;
@@ -227,7 +228,7 @@ public class SourceController
             selection.clear().add(((EntitySourceItem) item).getEntity());
             view.setSelection(selection);
         } else if (item instanceof ReconstructionSourceItem && clickCount > 1) {
-            setActiveProject.setContext(selected);
+            setActiveProject.setEnabled(setActiveProject.getContext(selected));
             setActiveProject.actionPerformed(null);
         } else if (item instanceof SourceListItem) {
             if (item == metabolites) {
@@ -267,7 +268,7 @@ public class SourceController
 
         // set active/inactive given the context of the current selection
         for (ContextAction action : actions) {
-            action.setContext(selected);
+            ((JMenuItem) action).setEnabled(action.getContext(selected));
         }
 
     }

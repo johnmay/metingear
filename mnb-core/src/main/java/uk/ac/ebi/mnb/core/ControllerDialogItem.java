@@ -29,8 +29,7 @@ import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.mnb.interfaces.Updatable;
-import uk.ac.ebi.mnb.interfaces.ViewController;
+
 
 /**
  * @name    SelectionMenuItem - 2011.10.03 <br>
@@ -42,7 +41,8 @@ import uk.ac.ebi.mnb.interfaces.ViewController;
 public class ControllerDialogItem extends JMenuItem {
 
     public ControllerDialogItem(MainController controller, Class<? extends ControllerDialog> clazz) {
-        this((JFrame) controller, (TargetedUpdate) controller.getViewController(),
+        this((JFrame) controller,
+             (TargetedUpdate) controller.getViewController(),
              controller.getMessageManager(),
              (SelectionController) controller.getViewController(),
              controller.getUndoManager(),

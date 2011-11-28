@@ -30,6 +30,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.metingeer.menu.ContextMenu;
 import uk.ac.ebi.mnb.core.ControllerDialogItem;
 import uk.ac.ebi.mnb.dialog.edit.AddAuthorAnnotation;
 import uk.ac.ebi.mnb.dialog.edit.DeleteEntities;
@@ -42,13 +43,13 @@ import uk.ac.ebi.mnb.dialog.edit.MergeEntities;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class EditMenu extends JMenu {
+public class EditMenu extends ContextMenu {
 
     private static final Logger LOGGER = Logger.getLogger(EditMenu.class);
     private JComponent items[] = new JComponent[3];
 
     public EditMenu() {
-        super("Edit");
+        super("Edit", MainView.getInstance());
 
         final MainView view = MainView.getInstance();
 

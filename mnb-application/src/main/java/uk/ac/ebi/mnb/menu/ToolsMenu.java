@@ -4,10 +4,17 @@
  */
 package uk.ac.ebi.mnb.menu;
 
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.ProteinProduct;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
+import uk.ac.ebi.metingeer.menu.ContextMenu;
 import uk.ac.ebi.mnb.core.ControllerDialogItem;
 import uk.ac.ebi.mnb.dialog.tools.TransferAnnotations;
 import uk.ac.ebi.mnb.dialog.tools.AutomaticCrossReference;
@@ -17,6 +24,7 @@ import uk.ac.ebi.mnb.dialog.tools.DownloadStructuresDialog;
 import uk.ac.ebi.mnb.dialog.tools.MergeLoci;
 import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReferenceDialog;
 
@@ -27,31 +35,87 @@ import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReferenceDialog;
  * @author johnmay
  * @date Apr 28, 2011
  */
-public class ToolsMenu extends JMenu {
+public class ToolsMenu extends ContextMenu {
 
     private static final Logger logger = Logger.getLogger(ToolsMenu.class);
 
     public ToolsMenu() {
 
-        super("Tools");
+        super("Tools", MainView.getInstance());
 
         MainView view = MainView.getInstance();
 
-        add(new ControllerDialogItem(view, AddCrossReferenceDialog.class));
-        add(new ControllerDialogItem(view, AutomaticCrossReference.class));
-        add(new ControllerDialogItem(view, DownloadStructuresDialog.class));
+        add(create(AddCrossReferenceDialog.class), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                return selection.hasSelection() && selection.getEntities().size() == 1;
+            }
+        });
+
+        add(create(AutomaticCrossReference.class), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                return selection.hasSelection(Metabolite.class);
+            }
+        });
+        add(create(DownloadStructuresDialog.class), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                return selection.hasSelection(Metabolite.class);
+            }
+        });
 
         add(new JSeparator());
 
-        add(new ChokePoint(view));
+        add(new ChokePoint(view), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                return selection.hasSelection(MetabolicReaction.class);
+            }
+        });
         add(new JSeparator());
-        add(new ControllerDialogItem(view, SequenceHomology.class));
-        add(new ControllerDialogItem(view, TransferAnnotations.class));
+
+        /***********************
+         * Sequence annotation *
+         ***********************/
+        add(create(SequenceHomology.class), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                return selection.hasSelection(ProteinProduct.class);
+            }
+        });
+        add(create(TransferAnnotations.class), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                return selection.hasSelection(ProteinProduct.class);
+            }
+        });
+
         add(new JSeparator());
+
+        /***********************
+         * Merging             *
+         ***********************/
         add(new JMenuItem(new MergeLoci(MainView.getInstance())));
-        add(new ControllerDialogItem(view, CollapseStructures.class));
+
+        add(create(CollapseStructures.class), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                return selection.hasSelection(Metabolite.class);
+
+            }
+        });
+
         add(new JSeparator());
-        add(new ControllerDialogItem(view, CreateMatrix.class));
+        /************************
+         * Stoichometric Matrix *
+         ************************/
+        add(create(CreateMatrix.class), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                return selection.hasSelection(MetabolicReaction.class) || (active != null && active.getReactions().isEmpty() == false);
+            }
+        });
 
 
     }

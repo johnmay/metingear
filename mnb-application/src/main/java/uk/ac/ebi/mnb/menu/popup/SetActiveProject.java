@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.mnb.interfaces.ContextAction;
+import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.main.MainView;
 
 /**
@@ -53,7 +53,7 @@ public class SetActiveProject extends GeneralAction implements ContextAction {
     /**
      * @inheritDoc
      */
-    public boolean setContext(Object entity) {
+    public boolean getContext(Object entity) {
         setEnabled(entity instanceof ReconstructionSourceItem);
         if (isEnabled()) {
             reconstruction = ((ReconstructionSourceItem) entity).getEntity();
@@ -62,9 +62,6 @@ public class SetActiveProject extends GeneralAction implements ContextAction {
         return false;
     }
 
-    public boolean setContext() {
-        return false;
-    }
 
 
 }

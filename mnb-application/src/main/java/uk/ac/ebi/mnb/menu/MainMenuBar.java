@@ -10,6 +10,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JMenuBar;
+import uk.ac.ebi.mnb.main.MainView;
 
 /**
  * MainMenuBar.java
@@ -56,9 +57,11 @@ public class MainMenuBar
         return run;
     }
 
-    public void setActiveDependingOnRequirements() {
-        build.setActiveDependingOnRequirements();
+    public void updateContext(){
+        tools.updateContext();
     }
+
+
 //    private Color DEFAULT_BACKGROUND = new Color(237, 237, 237);
 //    private Color ACTIVE_TOP_GRADIENT_COLOR = new Color(0xc8c8c8);
 //    private Color ACTIVE_BOTTOM_GRADIENT_COLOR = new Color(0xbcbcbc);

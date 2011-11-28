@@ -49,7 +49,6 @@ import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.mnb.interfaces.ContextAction;
 import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
@@ -63,7 +62,7 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  */
 public class DownloadStructuresDialog
         extends ControllerDialog
-        implements ContextAction {
+          {
 
     private static final Logger LOGGER = Logger.getLogger(DownloadStructuresDialog.class);
     private Collection<AnnotatedEntity> components;
@@ -172,11 +171,4 @@ public class DownloadStructuresDialog
 
     }
 
-    public boolean setContext() {
-        return getSelection().hasSelection(Metabolite.class);
-    }
-
-    public boolean setContext(Object obj) {
-        return setContext();
-    }
 }

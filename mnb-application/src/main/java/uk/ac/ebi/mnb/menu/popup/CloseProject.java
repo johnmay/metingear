@@ -21,15 +21,12 @@
 package uk.ac.ebi.mnb.menu.popup;
 
 import java.awt.event.ActionEvent;
-import javax.swing.JPopupMenu;
 import uk.ac.ebi.core.ReconstructionManager;
 import org.apache.log4j.Logger;
-import org.omg.PortableServer.POA;
 import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.mnb.interfaces.ContextAction;
+import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.main.MainView;
 
 /**
@@ -67,7 +64,7 @@ public class CloseProject extends GeneralAction implements ContextAction {
     /**
      * @inheritDoc
      */
-    public boolean setContext(Object entity) {
+    public boolean getContext(Object entity) {
         setEnabled(entity instanceof ReconstructionSourceItem);
         if (isEnabled()) {
             reconstruction = ((ReconstructionSourceItem) entity).getEntity();
@@ -76,8 +73,5 @@ public class CloseProject extends GeneralAction implements ContextAction {
         return false;
     }
 
-    public boolean setContext() {
-        return false;
-    }
 
 }

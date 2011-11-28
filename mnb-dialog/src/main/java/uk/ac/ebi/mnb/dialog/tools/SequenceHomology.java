@@ -43,7 +43,6 @@ import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
-import uk.ac.ebi.mnb.interfaces.ContextAction;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -61,7 +60,7 @@ import uk.ac.ebi.ui.component.factory.LabelFactory;
  */
 public class SequenceHomology
         extends ControllerDialog
-        implements ContextAction {
+          {
 
     private static final Logger LOGGER = Logger.getLogger(SequenceHomology.class);
     private CellConstraints cc = new CellConstraints();

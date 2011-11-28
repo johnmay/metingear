@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
+import com.explodingpixels.macwidgets.plaf.EmphasizedLabelUI;
 import javax.swing.JLabel;
 import javax.swing.event.ListSelectionEvent;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
@@ -35,6 +36,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.ui.component.factory.LabelFactory;
 
 /**
@@ -71,12 +73,15 @@ public class AbstractEntityView
         entityTable.getSelectionModel().addListSelectionListener(inspector);
         setDividerLocation(350);
 
+
         // action listener changes text on the bottom-bar
         entityTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent e) {
                 label.setText(table.getSelectedRowCount() + " of " + table.getRowCount() + " " + getName() + " selected");
                 label.repaint();
+                // set updater for context
+                MainView.getInstance().getJMenuBar().updateContext();
             }
         });
 
@@ -137,5 +142,6 @@ public class AbstractEntityView
 
     void setBottomBarLabel(JLabel label) {
         this.label = label;
+        label.setUI(new EmphasizedLabelUI());
     }
 }
