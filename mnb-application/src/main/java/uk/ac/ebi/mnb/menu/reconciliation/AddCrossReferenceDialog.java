@@ -26,13 +26,20 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.UndoableEditListener;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.interfaces.ContextAction;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.PanelFactory;
 import uk.ac.ebi.resource.IdentifierFactory;
@@ -45,7 +52,9 @@ import uk.ac.ebi.ui.component.factory.FieldFactory;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AddCrossReferenceDialog extends DropdownDialog {
+public class AddCrossReferenceDialog
+        extends ControllerDialog
+        implements ContextAction {
 
     private static final Logger LOGGER = Logger.getLogger(AddCrossReferenceDialog.class);
     private static final Map<String, Byte> nameIndexMap = new HashMap();
@@ -54,9 +63,8 @@ public class AddCrossReferenceDialog extends DropdownDialog {
     private CellConstraints cc = new CellConstraints();
     private AnnotatedEntity entity = null;
 
-    public AddCrossReferenceDialog() {
-
-        super(MainView.getInstance(), MainView.getInstance(), "AddCrossReference");
+    public AddCrossReferenceDialog(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+        super(frame, updater, messages, controller, undoableEdits, "AddCrossReference");
         for (Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers()) {
             nameIndexMap.put(id.getShortDescription(), id.getIndex());
         }
@@ -100,5 +108,13 @@ public class AddCrossReferenceDialog extends DropdownDialog {
     @Override
     public boolean update() {
         return MainView.getInstance().getViewController().update();
+    }
+
+    public boolean setContext() {
+        return getSelection().hasSelection() && getSelection().getEntities().size() == 1;
+    }
+
+    public boolean setContext(Object obj) {
+        return setContext();
     }
 }

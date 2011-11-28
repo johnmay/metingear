@@ -18,7 +18,7 @@ import uk.ac.ebi.mnb.dialog.tools.MergeLoci;
 import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReference;
+import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReferenceDialog;
 
 /**
  * FileMenu.java
@@ -37,9 +37,8 @@ public class ToolsMenu extends JMenu {
 
         MainView view = MainView.getInstance();
 
-        add(new DynamicMenuItem(new AddCrossReference()));
-        add(new ControllerDialogItem(view,
-                                     AutomaticCrossReference.class));
+        add(new ControllerDialogItem(view, AddCrossReferenceDialog.class));
+        add(new ControllerDialogItem(view, AutomaticCrossReference.class));
         add(new ControllerDialogItem(view, DownloadStructuresDialog.class));
 
         add(new JSeparator());

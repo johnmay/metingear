@@ -1,7 +1,7 @@
 /**
- * ContextAction.java
+ * ContextResponder.java
  *
- * 2011.11.25
+ * 2011.11.28
  *
  * This file is part of the CheMet library
  * 
@@ -18,29 +18,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.interfaces;
+package uk.ac.ebi.metingeer.interfaces.menu;
+
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
 /**
- *          ContextAction - 2011.11.25 <br>
- *          Context action defines a way to test whether an action is available
- *          based on project contents/selection
+ *          ContextResponder - 2011.11.28 <br>
+ *          Interface responds as to whether the menu item/action should be
+ *          enabled given the selection and the active reconstruction/
+ *          reconstruction manager
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface ContextAction {
+public interface ContextResponder {
 
-    /**
-     * Sets the context based on properties of the project or current selection
-     * (if available)
-     * @return
-     */
-    public boolean setContext();
-
-    /**
-     * Sets the context given a specific object
-     * @param obj
-     * @return 
-     */
-    public boolean setContext(Object obj);
+    public boolean getContext(ReconstructionManager reconstructions,
+                              Reconstruction active,
+                              SelectionManager selection);
 }

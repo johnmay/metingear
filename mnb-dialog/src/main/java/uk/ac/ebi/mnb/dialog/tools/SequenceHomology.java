@@ -38,10 +38,12 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.HomologyDatabaseManager;
+import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
+import uk.ac.ebi.mnb.interfaces.ContextAction;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -57,7 +59,9 @@ import uk.ac.ebi.ui.component.factory.LabelFactory;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class SequenceHomology extends ControllerDialog {
+public class SequenceHomology
+        extends ControllerDialog
+        implements ContextAction {
 
     private static final Logger LOGGER = Logger.getLogger(SequenceHomology.class);
     private CellConstraints cc = new CellConstraints();
@@ -97,11 +101,11 @@ public class SequenceHomology extends ControllerDialog {
         panel.add(new JSeparator(), cc.xyw(1, 3, 7));
 
         panel.add(LabelFactory.newFormLabel("Threads:",
-                                       "The number of CPUs to use. Higher numbers improve speed but may slow down the system"),
+                                            "The number of CPUs to use. Higher numbers improve speed but may slow down the system"),
                   cc.xy(1, 5));
         panel.add(cpu, cc.xy(3, 5));
         panel.add(LabelFactory.newFormLabel("Expected Value:",
-                                       "Lower numbers will improve performance but may decrease the number of returned results"),
+                                            "Lower numbers will improve performance but may decrease the number of returned results"),
                   cc.xy(5, 5));
         panel.add(field, cc.xy(7, 5));
 
@@ -140,5 +144,13 @@ public class SequenceHomology extends ControllerDialog {
             addMessage(new ErrorMessage("Unable to perform sequence homology search: " + ex.getMessage()));
             ex.printStackTrace();
         }
+    }
+
+    public boolean setContext() {
+        return getSelection().hasSelection(ProteinProduct.class);
+    }
+
+    public boolean setContext(Object obj) {
+        return setContext();
     }
 }

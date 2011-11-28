@@ -33,6 +33,7 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.interfaces.ContextAction;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
@@ -46,7 +47,9 @@ import uk.ac.ebi.visualisation.matrix.MatrixPane;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class CreateMatrix extends ControllerDialog {
+public class CreateMatrix
+        extends ControllerDialog
+        implements ContextAction {
 
     private static final Logger LOGGER = Logger.getLogger(CreateMatrix.class);
     private StoichiometricMatrix<Metabolite, MetabolicReaction> matrix; // tempoary storage
@@ -111,5 +114,18 @@ public class CreateMatrix extends ControllerDialog {
         }
 
         return coefs;
+    }
+
+    public boolean setContext() {
+
+        ReconstructionManager manager = ReconstructionManager.getInstance();
+
+        return getSelection().hasSelection(MetabolicReaction.class)
+               || (manager.hasProjects()
+                   && manager.getActive().getReactions().isEmpty());
+    }
+
+    public boolean setContext(Object obj) {
+        return setContext();
     }
 }

@@ -37,7 +37,6 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.Metabolite;
@@ -50,6 +49,7 @@ import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.WarningMessage;
+import uk.ac.ebi.mnb.interfaces.ContextAction;
 import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
@@ -62,7 +62,8 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  * @author  $Author$ (this version)
  */
 public class DownloadStructuresDialog
-        extends ControllerDialog {
+        extends ControllerDialog
+        implements ContextAction {
 
     private static final Logger LOGGER = Logger.getLogger(DownloadStructuresDialog.class);
     private Collection<AnnotatedEntity> components;
@@ -169,5 +170,13 @@ public class DownloadStructuresDialog
 
         return update(getSelection());
 
+    }
+
+    public boolean setContext() {
+        return getSelection().hasSelection(Metabolite.class);
+    }
+
+    public boolean setContext(Object obj) {
+        return setContext();
     }
 }

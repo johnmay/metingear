@@ -40,6 +40,7 @@ import uk.ac.ebi.observation.sequence.LocalAlignment;
 import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.io.xml.UniProtAnnoationLoader;
+import uk.ac.ebi.mnb.interfaces.ContextAction;
 
 /**
  * @name    Annotate - 2011.10.13 <br>
@@ -48,7 +49,9 @@ import uk.ac.ebi.io.xml.UniProtAnnoationLoader;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class TransferAnnotations extends ControllerDialog {
+public class TransferAnnotations
+        extends ControllerDialog
+        implements ContextAction {
 
     private static final Logger LOGGER = Logger.getLogger(TransferAnnotations.class);
 
@@ -87,5 +90,13 @@ public class TransferAnnotations extends ControllerDialog {
             }
 
         }
+    }
+
+    public boolean setContext() {
+        return getSelection().hasSelection(ProteinProduct.class);
+    }
+
+    public boolean setContext(Object obj) {
+        return setContext();
     }
 }
