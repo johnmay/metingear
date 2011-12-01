@@ -46,7 +46,11 @@ public class FileMenu
     private SaveAsProjectAction saveAs = new SaveAsProjectAction();
     private NewProjectAction newProjectAction = new NewProjectAction();
     private JMenu recent = new JMenu("Open Recent...");
+    private ContextMenu importMenu;
+    private ContextMenu exportMenu;
+
     private ContextResponder activeProject = new ContextResponder() {
+
         public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
             return active != null;
         }
@@ -68,13 +72,17 @@ public class FileMenu
         add(new SaveProjectAction(), activeProject);
         add(saveAs, activeProject);
         add(new JSeparator());
-        add(new ImportMenu());
+
+        importMenu = new ImportMenu();
+        exportMenu = new ExportMenu();
+        add(importMenu);
         add(new ImportSBMLAction(), activeProject);
         add(new ImportXLSAction(), activeProject);
         add(new ImportENAXML(), activeProject);
         add(new JSeparator());
-        add(new ExportMenu());
+        add(exportMenu);
         add(new ExportSBMLAction(), new ContextResponder() {
+
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
                 return active != null && (!active.getReactions().isEmpty() || !active.getMetabolites().isEmpty());
             }
@@ -128,6 +136,15 @@ public class FileMenu
         saveAs.activateActions();
     }
 
+    @Override
+    public void updateContext() {
+        super.updateContext();
+        importMenu.updateContext();
+        exportMenu.updateContext();
+    }
+
+
+
     /**
      * Import sub menu of File
      */
@@ -135,9 +152,9 @@ public class FileMenu
 
         public ImportMenu() {
 
-            super("Import...");
-            add(new DynamicMenuItem(new ImportPeptidesAction()));
-            add(new JMenuItem(new ImportKGML()));
+            super("Import...", MainView.getInstance());
+            add(new ImportPeptidesAction(), activeProject);
+            add(new JMenuItem(new ImportKGML()), activeProject);
         }
     }
 
@@ -147,8 +164,8 @@ public class FileMenu
     private class ExportMenu extends ContextMenu {
 
         public ExportMenu() {
-            super("Export...");
-            add(new JMenuItem(new ExportMetabolitesMDL(MainView.getInstance())));
+            super("Export...", MainView.getInstance());
+            add(new ExportMetabolitesMDL(MainView.getInstance()), activeProject);
             add(new JMenuItem("Metabolites (.sbml)"));
             add(new JMenuItem("Proteins (.fasta)"));
             add(new JMenuItem("Reactions (.sbml)"));
