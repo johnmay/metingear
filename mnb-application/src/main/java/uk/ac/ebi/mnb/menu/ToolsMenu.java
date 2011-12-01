@@ -12,17 +12,9 @@ import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.metingeer.menu.ContextMenu;
-import uk.ac.ebi.mnb.core.ControllerDialogItem;
-import uk.ac.ebi.mnb.dialog.tools.TransferAnnotations;
-import uk.ac.ebi.mnb.dialog.tools.AutomaticCrossReference;
-import uk.ac.ebi.mnb.dialog.tools.ChokePoint;
-import uk.ac.ebi.mnb.dialog.tools.CollapseStructures;
-import uk.ac.ebi.mnb.dialog.tools.DownloadStructuresDialog;
-import uk.ac.ebi.mnb.dialog.tools.MergeLoci;
-import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
+import uk.ac.ebi.mnb.dialog.tools.*;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.main.MainView;
@@ -107,13 +99,20 @@ public class ToolsMenu extends ContextMenu {
         });
 
         add(new JSeparator());
-        /************************
-         * Stoichometric Matrix *
-         ************************/
+        /*************************
+         * Stoichiometric Matrix *
+         *************************/
         add(create(CreateMatrix.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
                 return selection.hasSelection(MetabolicReaction.class) || (active != null && active.getReactions().isEmpty() == false);
+            }
+        });      
+
+
+        add(create(CompareReconstruction.class), new ContextResponder() {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                return reconstructions.size() > 1;
             }
         });
 

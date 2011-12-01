@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JMenuItem;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
@@ -198,7 +199,9 @@ public class SourceController
         // remove collected items
         for (AnnotatedEntity deprecatedEntity : itemCollector) {
             EntitySourceItem item = itemMap.get(deprecatedEntity);
-            item.remove(model);
+            if (item != null) {
+                item.remove(model);
+            }
             itemMap.remove(deprecatedEntity);
         }
 
@@ -268,7 +271,7 @@ public class SourceController
 
         // set active/inactive given the context of the current selection
         for (ContextAction action : actions) {
-            ((JMenuItem) action).setEnabled(action.getContext(selected));
+            ((AbstractAction) action).setEnabled(action.getContext(selected));
         }
 
     }

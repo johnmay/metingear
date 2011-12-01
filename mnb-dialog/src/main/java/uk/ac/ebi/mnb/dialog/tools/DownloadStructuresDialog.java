@@ -22,12 +22,14 @@ package uk.ac.ebi.mnb.dialog.tools;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import furbelow.SpinningDialWaitIndicator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditListener;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -61,8 +63,7 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  * @author  $Author$ (this version)
  */
 public class DownloadStructuresDialog
-        extends ControllerDialog
-          {
+        extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(DownloadStructuresDialog.class);
     private Collection<AnnotatedEntity> components;
@@ -98,7 +99,7 @@ public class DownloadStructuresDialog
     }
 
     @Override
-    public void process() {
+    public void process(final SpinningDialWaitIndicator wait) {
 
 
         if (chebi == null) {
@@ -120,7 +121,21 @@ public class DownloadStructuresDialog
 
         List<Identifier> problemIdentifiers = new ArrayList();
 
+        int completed = 0;
+        int size = getSelection().get(Metabolite.class).size();
+
         for (AnnotatedEntity component : getSelection().get(Metabolite.class)) {
+
+            completed++;
+
+            final float perc = completed / (float) size;
+
+            SwingUtilities.invokeLater(new Runnable() {
+
+                public void run() {
+                    wait.setText(String.format("Downloading... %.1f%%", perc * 100));
+                }
+            });
 
             for (Annotation xref : component.getAnnotationsExtending(CrossReference.class)) {
 
@@ -162,6 +177,11 @@ public class DownloadStructuresDialog
     }
 
     @Override
+    public void process() {
+        // do nothing
+    }
+
+    @Override
     public boolean update() {
 
         // rebuild the map to avoid problems with non-equal hashes
@@ -170,5 +190,4 @@ public class DownloadStructuresDialog
         return update(getSelection());
 
     }
-
 }

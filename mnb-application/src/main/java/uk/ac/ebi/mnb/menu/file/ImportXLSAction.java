@@ -30,7 +30,7 @@ public class ImportXLSAction
         extends FileChooserAction {
 
     private static final org.apache.log4j.Logger logger =
-            org.apache.log4j.Logger.getLogger(
+                                                 org.apache.log4j.Logger.getLogger(
             ImportXLSAction.class);
 
     public ImportXLSAction() {
@@ -71,7 +71,7 @@ public class ImportXLSAction
                 // todo. add XLSX implementation
                 InputStream stream = new FileInputStream(choosenFile);
                 ExcelHelper importer = name.endsWith(".xls")
-                        ? new ExcelXLSHelper(stream) : null;
+                                       ? new ExcelXLSHelper(stream) : null;
                 MainView view = MainView.getInstance();
                 ExcelImportDialog wizzard = new ExcelImportDialog(view, view.getViewController(), view.getMessageManager(), view.getViewController(), view.getUndoManager(), reconstruction, choosenFile, importer);
                 wizzard.setVisible(true);
@@ -85,6 +85,8 @@ public class ImportXLSAction
                 MainView.getInstance().addErrorMessage("Unable to import Excel file: " + ex.getMessage());
             }
         }
+        MainView.getInstance().getJMenuBar().updateContext();
+
 
     }
 }

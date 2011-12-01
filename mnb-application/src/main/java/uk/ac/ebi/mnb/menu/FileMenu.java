@@ -7,13 +7,16 @@ package uk.ac.ebi.mnb.menu;
 import java.awt.Color;
 import java.io.File;
 import java.util.LinkedList;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.menu.file.ImportSBMLAction;
 import uk.ac.ebi.mnb.menu.file.SaveAsProjectAction;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.core.UpdatableDialogItem;
+import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
+import uk.ac.ebi.metingeer.menu.ContextMenu;
 import uk.ac.ebi.mnb.dialog.file.ExportMetabolitesMDL;
 import uk.ac.ebi.mnb.dialog.file.NewMetabolite;
 import uk.ac.ebi.mnb.dialog.file.NewProteinProduct;
@@ -37,36 +40,45 @@ import uk.ac.ebi.mnb.menu.popup.CloseProject;
  * @date Apr 13, 2011
  */
 public class FileMenu
-        extends JMenu {
+        extends ContextMenu {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FileMenu.class);
     private SaveAsProjectAction saveAs = new SaveAsProjectAction();
     private NewProjectAction newProjectAction = new NewProjectAction();
     private JMenu recent = new JMenu("Open Recent...");
+    private ContextResponder activeProject = new ContextResponder() {
+        public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            return active != null;
+        }
+    };
 
     public FileMenu() {
-        super("File");
+        super("File", MainView.getInstance());
 
         MainView view = MainView.getInstance();
 
         add(new DynamicMenuItem(newProjectAction));
-        add(new UpdatableDialogItem(view, view.getViewController(), NewMetabolite.class));
-        add(new UpdatableDialogItem(view, view.getViewController(), NewReaction.class));
-        add(new UpdatableDialogItem(view, view.getViewController(), NewProteinProduct.class));
-        add(new DynamicMenuItem(new OpenProjectAction(this)));
+        add(create(NewMetabolite.class), activeProject);
+        add(create(NewReaction.class), activeProject);
+        add(create(NewProteinProduct.class), activeProject);
+        add(new OpenProjectAction(this));
         add(recent);
         add(new JSeparator());
-        add(new JMenuItem(new CloseProject(true)));
-        add(new DynamicMenuItem(new SaveProjectAction()));
-        add(new DynamicMenuItem(saveAs));
+        add(new CloseProject(true), activeProject);
+        add(new SaveProjectAction(), activeProject);
+        add(saveAs, activeProject);
         add(new JSeparator());
         add(new ImportMenu());
-        add(new DynamicMenuItem(new ImportSBMLAction()));
-        add(new DynamicMenuItem(new ImportXLSAction()));
-        add(new DynamicMenuItem(new ImportENAXML()));
+        add(new ImportSBMLAction(), activeProject);
+        add(new ImportXLSAction(), activeProject);
+        add(new ImportENAXML(), activeProject);
         add(new JSeparator());
         add(new ExportMenu());
-        add(new ExportSBMLAction());
+        add(new ExportSBMLAction(), new ContextResponder() {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                return active != null && (!active.getReactions().isEmpty() || !active.getMetabolites().isEmpty());
+            }
+        });
 
 
         rebuildRecentlyOpen();
@@ -119,7 +131,7 @@ public class FileMenu
     /**
      * Import sub menu of File
      */
-    private class ImportMenu extends JMenu {
+    private class ImportMenu extends ContextMenu {
 
         public ImportMenu() {
 
@@ -132,7 +144,7 @@ public class FileMenu
     /**
      * Export sub menu of File
      */
-    private class ExportMenu extends JMenu {
+    private class ExportMenu extends ContextMenu {
 
         public ExportMenu() {
             super("Export...");

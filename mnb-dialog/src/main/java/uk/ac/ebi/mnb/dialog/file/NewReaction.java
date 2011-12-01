@@ -28,10 +28,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
@@ -48,8 +52,8 @@ public class NewReaction extends NewEntity {
     private ReactionTextField equation;
     private static CellConstraints cc = new CellConstraints();
 
-    public NewReaction(JFrame frame, Updatable updatable) {
-        super(frame, updatable, new BasicChemicalIdentifier());
+    public NewReaction(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+        super(frame, updater, messages, controller, undoableEdits);
     }
 
     @Override

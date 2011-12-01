@@ -21,6 +21,10 @@
 package uk.ac.ebi.mnb.dialog.file;
 
 import java.util.*;
+import javax.swing.event.UndoableEditListener;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.resource.IdentifierFactory;
@@ -31,6 +35,7 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.*;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.ui.component.factory.FieldFactory;
 import uk.ac.ebi.ui.component.factory.LabelFactory;
 
@@ -42,7 +47,7 @@ import uk.ac.ebi.ui.component.factory.LabelFactory;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class NewEntity extends DropdownDialog {
+public abstract class NewEntity extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(NewEntity.class);
     private Identifier identifier;
@@ -50,7 +55,7 @@ public abstract class NewEntity extends DropdownDialog {
     private JTextField accession = FieldFactory.newField(6);
     private JTextField name = FieldFactory.newField(20);
     private JTextField abbreviation = FieldFactory.newField(4);
-    private   CellConstraints cc = new CellConstraints();
+    private CellConstraints cc = new CellConstraints();
     private Updatable updateable;
     private static final Map<String, Byte> nameIndexMap = new HashMap();
 
@@ -60,8 +65,12 @@ public abstract class NewEntity extends DropdownDialog {
      * @param frame
      * @param identifier
      */
-    public NewEntity(JFrame frame, Updatable updateable, Identifier identifier) {
-        super(frame, "SaveDialog");
+    public NewEntity(JFrame frame,
+                     TargetedUpdate updater,
+                     MessageManager messages,
+                     SelectionController controller,
+                     UndoableEditListener undoableEdits) {
+        super(frame, updater, messages, controller, undoableEdits, "SaveDialog");
 
         for (Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers()) {
             nameIndexMap.put(id.getShortDescription(), id.getIndex());
@@ -88,7 +97,7 @@ public abstract class NewEntity extends DropdownDialog {
         panel.add(accession, cc.xy(3, 1));
 
         panel.add(LabelFactory.newFormLabel("Abbreviation:",
-                                      "A short 2-5 character abbreviation of the new entity"),
+                                            "A short 2-5 character abbreviation of the new entity"),
                   cc.xy(6, 1));
         panel.add(abbreviation, cc.xy(7, 1));
 

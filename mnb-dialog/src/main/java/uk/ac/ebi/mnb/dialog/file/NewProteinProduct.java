@@ -22,11 +22,15 @@ package uk.ac.ebi.mnb.dialog.file;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
@@ -42,8 +46,8 @@ public class NewProteinProduct extends NewEntity {
 
     private static final Logger LOGGER = Logger.getLogger(NewProteinProduct.class);
 
-    public NewProteinProduct(JFrame frame, Updatable updatable) {
-        super(frame, updatable, BasicProteinIdentifier.nextIdentifier());
+    public NewProteinProduct(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+        super(frame, updater, messages, controller, undoableEdits);
     }
 
     @Override

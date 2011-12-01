@@ -211,6 +211,7 @@ public class NewProject extends DropdownDialog {
 
     @Override
     public boolean update() {
+        MainView.getInstance().getJMenuBar().updateContext();
         return MainView.getInstance().update();
     }
 }

@@ -4,13 +4,7 @@
  */
 package uk.ac.ebi.mnb.menu;
 
-import com.explodingpixels.widgets.WindowUtils;
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import javax.swing.JMenuBar;
-import uk.ac.ebi.mnb.main.MainView;
 
 /**
  * MainMenuBar.java
@@ -22,7 +16,7 @@ import uk.ac.ebi.mnb.main.MainView;
 public class MainMenuBar
         extends JMenuBar {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MainMenuBar.class);
+    private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(MainMenuBar.class);
     private FileMenu file = new FileMenu();
     private BuildMenu build = new BuildMenu();
     private ViewMenu view = new ViewMenu();
@@ -57,26 +51,12 @@ public class MainMenuBar
         return run;
     }
 
-    public void updateContext(){
+    public void updateContext() {
+        long start = System.currentTimeMillis();
+        file.updateContext();
         tools.updateContext();
+        long end = System.currentTimeMillis();
+        LOGGER.debug("Menu context updated " + (end - start) + " (ms)");
     }
 
-
-//    private Color DEFAULT_BACKGROUND = new Color(237, 237, 237);
-//    private Color ACTIVE_TOP_GRADIENT_COLOR = new Color(0xc8c8c8);
-//    private Color ACTIVE_BOTTOM_GRADIENT_COLOR = new Color(0xbcbcbc);
-//    private Color INACTIVE_TOP_GRADIENT_COLOR = new Color(0xe9e9e9);
-//    private Color INACTIVE_BOTTOM_GRADIENT_COLOR = new Color(0xe4e4e4);
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        Graphics2D g2 = (Graphics2D) g;
-//        boolean containedInActiveWindow = WindowUtils.isParentWindowFocused( this );
-//        Color topColor = containedInActiveWindow
-//                         ? ACTIVE_TOP_GRADIENT_COLOR : INACTIVE_TOP_GRADIENT_COLOR;
-//        Color bottomColor = containedInActiveWindow
-//                            ? ACTIVE_BOTTOM_GRADIENT_COLOR : INACTIVE_BOTTOM_GRADIENT_COLOR;
-//        GradientPaint paint = new GradientPaint( 0 , 1 , topColor , 0 , getHeight() , bottomColor );
-//        g2.setPaint( paint );
-//        g2.fillRect(0, 0, getWidth(), getHeight());
-//    }
 }

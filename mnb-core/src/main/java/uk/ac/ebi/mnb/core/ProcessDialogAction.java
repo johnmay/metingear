@@ -55,23 +55,23 @@ public class ProcessDialogAction extends GeneralAction {
         final SpinningDialWaitIndicator waiter = new SpinningDialWaitIndicator(dialog);
 
 
-//        Thread t = new Thread(new Runnable() {
-//
-//            public void run() {
-        dialog.process(waiter);
+        Thread t = new Thread(new Runnable() {
 
-  //              SwingUtilities.invokeLater(new Runnable() {
-//
-  //                  public void run() {
+            public void run() {
+                dialog.process(waiter);
+
+                SwingUtilities.invokeLater(new Runnable() {
+
+                    public void run() {
                         waiter.dispose();
                         dialog.setVisible(false);
                         dialog.update();
-//                    }
-//                });
-//            }
-//        });
-//        t.setName(getClass().getSimpleName() + "-PROCESSING");
-//        t.start();
+                    }
+                });
+            }
+        });
+        t.setName(getClass().getSimpleName() + "-PROCESSING");
+        t.start();
 
     }
 }
