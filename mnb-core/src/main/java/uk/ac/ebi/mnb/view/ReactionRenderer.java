@@ -49,7 +49,12 @@ import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
+import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.reaction.MetaboliteParticipant;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  *          ReactionRenderer – 2011.09.27 <br>
@@ -62,14 +67,14 @@ public class ReactionRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionRenderer.class);
     private AtomContainerRenderer renderer =
-            new AtomContainerRenderer(
+                                  new AtomContainerRenderer(
             Arrays.asList(new BasicSceneGenerator(),
-            new BasicBondGenerator(),
-            new BasicAtomGenerator()),
+                          new BasicBondGenerator(),
+                          new BasicAtomGenerator()),
             new AWTFontManager());
     private StructureDiagramGenerator sdg = new StructureDiagramGenerator();
 
-    public ImageIcon getReaction(Reaction<Metabolite, ?, ?> rxn) {
+    public ImageIcon getReaction(Reaction<Metabolite, Double, Compartment> rxn) {
 
         int nParticipants = rxn.getAllReactionParticipants().size();
 
@@ -79,44 +84,45 @@ public class ReactionRenderer {
 
         int height = 128;
         int width = (nParticipants * 128)
-                + (128) // arrow
-                + (nParticipants > 2 ? ((nParticipants - 2) * 15) : 0);
+                    + (128) // arrow
+                    + (nParticipants > 2 ? ((nParticipants - 2) * 15) : 0);
 
         BufferedImage masterImg = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g2 = (Graphics2D) masterImg.getGraphics();
 
         Rectangle2D bounds = new Rectangle2D.Double(-128, 0, 128, 128);
 
-        List<Metabolite> reactants = rxn.getReactantMolecules();
+        List<Participant<Metabolite, Double, Compartment>> reactants = rxn.getReactantParticipants();
         for (int i = 0; i < reactants.size(); i++) {
 
             bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
-                    0, 128, 128);
+                                            0, 128, 128);
             BufferedImage subImage = new BufferedImage(128, 128, BufferedImage.TYPE_4BYTE_ABGR);
             drawMolecule((Graphics2D) subImage.getGraphics(), new Rectangle(0, 0, 128, 128),
-                    reactants.get(i));
+                         (MetaboliteParticipant) reactants.get(i));
             g2.drawImage(subImage, (int) bounds.getX(), (int) bounds.getY(), null);
 
             if (i + 1 < reactants.size()) {
                 bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
-                        0, 15, 128);
+                                                0, 15, 128);
                 drawPlus(g2, bounds);
             }
         }
+
         bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
-                0, 128, 128);
-        drawArrow(g2, bounds, Reversibility.REVERSIBLE);
-        List<Metabolite> products = rxn.getProductMolecules();
+                                        0, 128, 128);
+        drawArrow(g2, bounds, rxn.getReversibility());
+        List<Participant<Metabolite, Double, Compartment>> products = rxn.getProductParticipants();
         for (int i = 0; i < products.size(); i++) {
             bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
-                    0, 128, 128);
+                                            0, 128, 128);
             BufferedImage subImage = new BufferedImage(128, 128, BufferedImage.TYPE_4BYTE_ABGR);
             drawMolecule((Graphics2D) subImage.getGraphics(), new Rectangle(0, 0, 128, 128),
-                    products.get(i));
+                         (MetaboliteParticipant) products.get(i));
             g2.drawImage(subImage, (int) bounds.getX(), (int) bounds.getY(), null);
             if (i + 1 < products.size()) {
                 bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
-                        0, 15, 128);
+                                                0, 15, 128);
                 drawPlus(g2, bounds);
             }
         }
@@ -126,10 +132,18 @@ public class ReactionRenderer {
 
     }
 
-    public void drawMolecule(Graphics2D g2, Rectangle2D bounds, Metabolite metabolite) {
+    public void drawMolecule(Graphics2D g2, Rectangle2D bounds, MetaboliteParticipant p) {
 
         g2.setColor(Color.WHITE);
         g2.fill(bounds);
+
+        Metabolite metabolite = p.getMolecule();
+        g2.setColor(Color.LIGHT_GRAY);
+        String compartment = "[" + p.getCompartment().getAbbreviation() + "]";
+        g2.setFont(ViewUtils.DEFAULT_MONO_SPACE_FONT.deriveFont(11.0f));
+        int compartmentWidth = g2.getFontMetrics().stringWidth(compartment);
+        int compartmentHeight = g2.getFontMetrics().getHeight();
+        g2.drawString(compartment, (int) bounds.getWidth() - compartmentWidth, compartmentHeight);
 
 
         if (metabolite.getChemicalStructures().iterator().hasNext()) {
@@ -146,10 +160,13 @@ public class ReactionRenderer {
                 ex.printStackTrace();
             }
         } else {
-            g2.setColor(Color.DARK_GRAY);
-            String na = "Unavailable";
-            int strWdth = g2.getFontMetrics().stringWidth(na);
-            g2.drawString(na, (int) bounds.getCenterX() - (strWdth / 2), (int) bounds.getCenterY());
+            g2.setColor(Color.LIGHT_GRAY);
+            g2.setFont(ViewUtils.DEFAULT_BODY_FONT.deriveFont(18.0f));
+            String na = "unavailable";
+            int mW = g2.getFontMetrics().stringWidth(na);
+            int mH = g2.getFontMetrics().getHeight();
+
+            g2.drawString(na, (int) bounds.getCenterX() - (mW / 2), (int) bounds.getCenterY() + (mH / 2));
         }
 
     }
@@ -161,56 +178,32 @@ public class ReactionRenderer {
         double centreY = (bounds.getHeight() / 2d) + bounds.getY();
         g2.setColor(Color.WHITE);
         g2.fill(bounds);
-        g2.setColor(Color.DARK_GRAY);
+        g2.setColor(Color.LIGHT_GRAY);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setStroke(new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-
-        g2.draw(new Line2D.Double(centreX - length, centreY, centreX + length, centreY));
-        g2.draw(new Line2D.Double(centreX, centreY - length, centreX, centreY + length));
+        String direction = "+";
+        g2.setFont(ViewUtils.DEFAULT_BODY_FONT.deriveFont(34.0f));
+        int width = g2.getFontMetrics().stringWidth(direction);
+        int height = g2.getFontMetrics().getHeight();
+        g2.drawString(direction, (int) bounds.getCenterX() - (width / 2), (int) bounds.getCenterY() + (height / 2));
 
     }
 
     public void drawArrow(Graphics2D g2, Rectangle2D bounds, Reversibility reversibility) {
         double length = (bounds.getWidth() / 2) * 0.8;
 
-        double centreX = (bounds.getWidth() / 2d) + bounds.getX();
-        double centreY = (bounds.getHeight() / 2d) + bounds.getY();
         g2.setColor(Color.WHITE);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.fill(bounds);
-        g2.setColor(Color.DARK_GRAY);
+        g2.setColor(Color.LIGHT_GRAY);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setStroke(new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-
-        g2.draw(new Line2D.Double(centreX - (length * 0.65), centreY, centreX + (length * 0.65),
-                centreY));
-
-        int rightX[] = new int[]{
-            (int) (centreX + (length * 0.7)),
-            (int) (centreX + (length * 0.7)),
-            (int) (centreX + length)
-        };
-        int y[] = new int[]{
-            (int) (centreY + (length * 0.11)),
-            (int) (centreY - (length * 0.11)),
-            (int) (centreY)
-        };
 
 
-        int leftX[] = new int[]{
-            (int) (centreX - (length * 0.7)),
-            (int) (centreX - (length * 0.7)),
-            (int) (centreX - length)
-        };
+        String direction = reversibility.toString();
+        g2.setFont(ViewUtils.DEFAULT_BODY_FONT.deriveFont(34.0f));
+        int width = g2.getFontMetrics().stringWidth(direction);
+        int height = g2.getFontMetrics().getHeight();
 
-        if (reversibility != Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT) {
-            g2.fillPolygon(new Polygon(rightX, y, 3));
-            g2.drawPolygon(new Polygon(rightX, y, 3));
-        }
-        if (reversibility != Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT) {
-            g2.fillPolygon(new Polygon(leftX, y, 3));
-            g2.drawPolygon(new Polygon(leftX, y, 3));
-        }
+        g2.drawString(direction, (int) bounds.getCenterX() - (width / 2), (int) bounds.getCenterY() + (height / 2));
 
 
     }

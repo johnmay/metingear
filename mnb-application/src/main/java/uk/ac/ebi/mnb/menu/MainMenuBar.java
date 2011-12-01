@@ -5,6 +5,7 @@
 package uk.ac.ebi.mnb.menu;
 
 import javax.swing.JMenuBar;
+import org.apache.log4j.Logger;
 
 /**
  * MainMenuBar.java
@@ -16,7 +17,7 @@ import javax.swing.JMenuBar;
 public class MainMenuBar
         extends JMenuBar {
 
-    private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(MainMenuBar.class);
+    private static final Logger LOGGER = Logger.getLogger(MainMenuBar.class);
     private FileMenu file = new FileMenu();
     private BuildMenu build = new BuildMenu();
     private ViewMenu view = new ViewMenu();

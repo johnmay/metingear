@@ -1,4 +1,3 @@
-
 /**
  * Message.java
  *
@@ -23,7 +22,6 @@ package uk.ac.ebi.mnb.core;
 
 import uk.ac.ebi.mnb.interfaces.Message;
 
-
 /**
  *          Message – 2011.09.30 <br>
  *          Class description
@@ -33,23 +31,33 @@ import uk.ac.ebi.mnb.interfaces.Message;
  */
 public class AbstractMessage implements Message {
 
-   
     private final String mesage;
-
-
-    
 
     public AbstractMessage(String mesage) {
         this.mesage = mesage;
     }
 
-
-
     public String getMessage() {
         return mesage;
     }
 
-    
+    @Override
+    public int hashCode() {
+        return mesage.hashCode();
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AbstractMessage other = (AbstractMessage) obj;
+        if ((this.mesage == null) ? (other.mesage != null) : !this.mesage.equals(other.mesage)) {
+            return false;
+        }
+        return true;
+    }
 }
-

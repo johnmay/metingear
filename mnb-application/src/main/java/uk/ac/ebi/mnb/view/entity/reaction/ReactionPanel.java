@@ -27,6 +27,7 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
 import java.util.Collection;
 import java.util.List;
+import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -153,19 +154,32 @@ public class ReactionPanel
         int columnIndex = 1;
         for (int i = 0; i < reactants.size(); i++) {
             Metabolite m = reactants.get(i);
+            Double coef = entity.getReactantStoichiometries().get(i);
+            String coefString = coef == 1d ? "" : coef % 1 == 0 ? String.format("%.0f ", coef) : coef.toString() + " ";
+
+           Box box = Box.createHorizontalBox();
+            box.add(LabelFactory.newFormLabel(coefString));
+            box.add(new InternalLinkLabel(m, m.getName(), (SelectionController) MainView.getInstance().getViewController()));
+
+
             participantXref.add(
-                    new InternalLinkLabel(m, m.getName(), (SelectionController) MainView.getInstance().getViewController()),
-                    cc.xy(columnIndex, 1));
+                    box,
+                    cc.xy(columnIndex, 1, cc.CENTER, cc.CENTER));
             columnIndex += i + 1 < reactants.size() ? 2 : 1;
         }
         columnIndex += 1; // hop over reaction arrow
         for (int i = 0; i < products.size(); i++) {
             Metabolite m = products.get(i);
+            Double coef = entity.getProductStoichiometries().get(i);
+            String coefString = coef == 1d ? "" : coef % 1 == 0 ? String.format("%.0f ", coef) : coef.toString() + " ";
+
+            Box box = Box.createHorizontalBox();
+            box.add(LabelFactory.newFormLabel(coefString));
+            box.add(new InternalLinkLabel(m, m.getName(), (SelectionController) MainView.getInstance().getViewController()));
+
             participantXref.add(
-                    new InternalLinkLabel(m, m.getName(),
-                                          (SelectionController) MainView.getInstance().getViewController()),
-                    cc.xy(
-                    columnIndex, 1));
+                    box,
+                    cc.xy(columnIndex, 1, cc.CENTER, cc.CENTER));
             columnIndex += i + 1 < products.size() ? 2 : 1;
         }
 

@@ -12,6 +12,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import uk.ac.ebi.mnb.settings.Settings;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  * ActionLabel.java
@@ -28,7 +29,6 @@ public class ActionLabel
 
     public ActionLabel(String text,
             AbstractAction action) {
-
         super(action);
         setBorder(Borders.EMPTY_BORDER);
         setText(text);
