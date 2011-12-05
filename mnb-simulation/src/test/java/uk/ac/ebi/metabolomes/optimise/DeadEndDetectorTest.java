@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.metabolomes.optimise;
 
+import uk.ac.ebi.optimise.gap.GapFind;
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
@@ -93,7 +94,7 @@ public class DeadEndDetectorTest
     public void testFindNonProductionMetabolites(  )
                                           throws Exception
     {
-        DeadEndDetector deadEndDetector = new DeadEndDetector( s );
+        GapFind deadEndDetector = new GapFind( s );
         Integer[] allNCIndicies = deadEndDetector.findNonProductionMetabolites(  );
 
         // drain E and F
@@ -110,7 +111,7 @@ public class DeadEndDetectorTest
         // allow influx of A
         s.addReaction( new String[0],
                        new String[] { "A" } );
-        deadEndDetector = new DeadEndDetector( s );
+        deadEndDetector = new GapFind( s );
         allNCIndicies = deadEndDetector.findNonProductionMetabolites(  );
 
         // should only be 1 which is F
@@ -123,7 +124,7 @@ public class DeadEndDetectorTest
     public void testFindNonConsumptionMetabolites(  )
                                            throws Exception
     {
-        DeadEndDetector deadEndDetector = new DeadEndDetector( s );
+        GapFind deadEndDetector = new GapFind( s );
         Integer[] allNCIndicies = deadEndDetector.findNonConsumptionMetabolites(  );
 
         // allow influx of A
@@ -141,7 +142,7 @@ public class DeadEndDetectorTest
         s.addReaction( new String[] { "E" },
                        new String[0] );
         //   s.addReaction( new String[]{ "F" } , new String[ 0 ] );
-        deadEndDetector = new DeadEndDetector( s );
+        deadEndDetector = new GapFind( s );
         allNCIndicies = deadEndDetector.findNonConsumptionMetabolites(  );
 
         // should only be 1 which is F
@@ -155,7 +156,7 @@ public class DeadEndDetectorTest
      */
     public void testGetTerminalNCMetabolites(  )
     {
-        DeadEndDetector deadEndDetector = new DeadEndDetector( s );
+        GapFind deadEndDetector = new GapFind( s );
         Integer[] terminalNCIndicies = deadEndDetector.getTerminalNCMetabolites(  );
 
         // there should be 2 root non-production metabolites, E and C
@@ -168,7 +169,7 @@ public class DeadEndDetectorTest
         // drain E via exchange reaction
         s.addReaction( new String[] { "E" },
                        new String[0] );
-        deadEndDetector = new DeadEndDetector( s );
+        deadEndDetector = new GapFind( s );
         terminalNCIndicies = deadEndDetector.getTerminalNCMetabolites(  );
 
         // there should be one dead end metabolite which is C
@@ -182,7 +183,7 @@ public class DeadEndDetectorTest
      */
     public void testGetRootNPMetabolites(  )
     {
-        DeadEndDetector deadEndDetector = new DeadEndDetector( s );
+        GapFind deadEndDetector = new GapFind( s );
         Integer[] rootNPIndicies = deadEndDetector.getRootNPMetabolites(  );
 
         // check there should be 2 root non-production metabolites, A and B
@@ -193,7 +194,7 @@ public class DeadEndDetectorTest
         //  produce A via exchange reaction
         s.addReaction( new String[0],
                        new String[] { "A" } );
-        deadEndDetector = new DeadEndDetector( s );
+        deadEndDetector = new GapFind( s );
         rootNPIndicies = deadEndDetector.getRootNPMetabolites(  );
 
         // there should be no NP dead end metabolites

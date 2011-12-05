@@ -9,7 +9,7 @@ import uk.ac.ebi.metabolomes.gap.filling.GapFillingFactory;
 import uk.ac.ebi.metabolomes.gap.filling.GapFillingMethod;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 import uk.ac.ebi.metabolomes.io.homology.ReactionMatrixIO;
-import uk.ac.ebi.metabolomes.optimise.DeadEndDetector;
+import uk.ac.ebi.optimise.gap.GapFind;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class GapMethodsMain {
         InChIStoichiometricMatrix s =
                                   ReactionMatrixIO.readInChIStoichiometricMatrix(new FileReader(
           "/Users/johnmay/Desktop/s.tsv"));
-        DeadEndDetector locator = new DeadEndDetector(s);
+        GapFind locator = new GapFind(s);
         Integer[] nonConsumptionIs = locator.getTerminalNCMetabolites();
         GapFillingMethod gapFiller = GapFillingFactory.getSingleExpansion(s);
 

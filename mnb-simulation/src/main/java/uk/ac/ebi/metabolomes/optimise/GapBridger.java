@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.metabolomes.optimise;
 
+import uk.ac.ebi.optimise.gap.GapFind;
 import com.sri.biospice.warehouse.database.Warehouse;
 
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.RegularExpression;
@@ -108,7 +109,7 @@ public class GapBridger {
         InChIStoichiometricMatrix s =
                                   ReactionMatrixIO.readInChIStoichiometricMatrix(new FileReader(
           "/Users/johnmay/Desktop/s.tsv"));
-        DeadEndDetector locator = new DeadEndDetector(s);
+        GapFind locator = new GapFind(s);
         Integer[] nonConsumptionIs = locator.getTerminalNCMetabolites();
         GapBridger bridger = new GapBridger(s);
 

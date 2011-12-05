@@ -20,8 +20,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with ChemMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package uk.ac.ebi.metabolomes.optimise;
+package uk.ac.ebi.optimise.gap;
 
 import ilog.concert.*;
 import ilog.cplex.IloCplex;
@@ -29,7 +28,9 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.*;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.*;
+import uk.ac.ebi.optimise.SimulationUtil;
 
 /**
  * DeadEndDetector
@@ -43,9 +44,9 @@ import java.util.*;
  *          non-consumption. Upstream and down-stream are identified using
  *          Mixed Integer Linear Programming using CPLEX ILOG library
  */
-public class DeadEndDetector {
+public class GapFind {
 
-    private static final Logger LOGGER = Logger.getLogger( DeadEndDetector.class );
+    private static final Logger LOGGER = Logger.getLogger(GapFind.class);
     private IloCplex cplex;
     private StoichiometricMatrix s; // Stoichiometric matrix
     private IloIntVar[] v; // flux vector (size = n reactions)
@@ -58,16 +59,16 @@ public class DeadEndDetector {
      *
      * @param s Matrix of stoichiometries, a column per reaction
      */
-    public DeadEndDetector( StoichiometricMatrix s ) {
+    public GapFind(StoichiometricMatrix s) {
         // todo handle our custom stoichiometric
         this.s = s;
 
         try {
             cplex = new IloCplex();
-            cplex.setOut( null );
+            cplex.setOut(null);
             setupConstraints();
-        } catch ( IloException ex ) {
-            LOGGER.error( "Could no create instance of IloCplex: " , ex );
+        } catch (IloException ex) {
+            LOGGER.error("Could no create instance of IloCplex: ", ex);
         }
     }
 
@@ -78,17 +79,17 @@ public class DeadEndDetector {
     private void setupConstraints()
             throws IloException {
         // value to optimize
-        xnp = cplex.intVarArray( s.getMoleculeCount() ,
-                                 0 ,
-                                 1 );
+        xnp = cplex.intVarArray(s.getMoleculeCount(),
+                                0,
+                                1);
         // flux can take any value between 0 and 100
         // LB ≤ v ≤ UB , j ∈ Model
-        v = cplex.intVarArray( s.getReactionCount() ,
-                               0 ,
-                               100 );
+        v = cplex.intVarArray(s.getReactionCount(),
+                              0,
+                              100);
 
         // objective function
-        cplex.addMaximize( cplex.sum( xnp ) );
+        cplex.addMaximize(cplex.sum(xnp));
 
         // add the binary constraints
         binaryConstraints();
@@ -108,24 +109,24 @@ public class DeadEndDetector {
      */
     private void binaryConstraints()
             throws IloException {
-        w = new IloIntVar[ s.getMoleculeCount() ][ s.getReactionCount() ];
+        w = new IloIntVar[s.getMoleculeCount()][s.getReactionCount()];
 
-        for ( int i = 0; i < s.getMoleculeCount(); i++ ) {
+        for (int i = 0; i < s.getMoleculeCount(); i++) {
             w[i] =
-            cplex.intVarArray( s.getReactionCount() ,
-                               0 ,
-                               1 );
+            cplex.intVarArray(s.getReactionCount(),
+                              0,
+                              1);
 
             IloLinearIntExpr term = cplex.linearIntExpr();
 
-            for ( int j = 0; j < s.getReactionCount(); j++ ) {
-                if ( s.get( i , j ) > 0 ) {
-                    term.addTerm( s.get( i , j ).intValue() ,
-                                  w[i][j] );
+            for (int j = 0; j < s.getReactionCount(); j++) {
+                if (s.get(i, j) > 0) {
+                    term.addTerm(s.get(i, j).intValue(),
+                                 w[i][j]);
                 }
             }
 
-            cplex.addEq( term , xnp[i] ).setName( "Binary Constraints" );
+            cplex.addEq(term, xnp[i]).setName("Binary Constraints");
         }
     }
 
@@ -137,18 +138,18 @@ public class DeadEndDetector {
      */
     public void productionConstraints()
             throws IloException {
-        for ( int i = 0; i < s.getMoleculeCount(); i++ ) {
-            for ( int j = 0; j < s.getReactionCount(); j++ ) {
-                if ( s.get( i , j ) > 0 ) { // and belongs to irreversible set
+        for (int i = 0; i < s.getMoleculeCount(); i++) {
+            for (int j = 0; j < s.getReactionCount(); j++) {
+                if (s.get(i, j) > 0) { // and belongs to irreversible set
                     // min production limit
-                    cplex.addGe( cplex.prod( s.get( i , j ).intValue() ,
-                                             v[j] ) , // Sijvj
-                                 cplex.prod( 0.001 , w[i][j] ) ); // εwij
+                    cplex.addGe(cplex.prod(s.get(i, j).intValue(),
+                                           v[j]), // Sijvj
+                                cplex.prod(0.001, w[i][j])); // εwij
                     //     // max production limit
 
-                    cplex.addLe( cplex.prod( s.get( i , j ).intValue() ,
-                                             v[j] ) , // Sijvj
-                                 cplex.prod( 100 , w[i][j] ) ); // εwij
+                    cplex.addLe(cplex.prod(s.get(i, j).intValue(),
+                                           v[j]), // Sijvj
+                                cplex.prod(100, w[i][j])); // εwij
                 }
             }
         }
@@ -164,22 +165,22 @@ public class DeadEndDetector {
      */
     public IloAddable[] nonProductionMassBalanceConstraint()
             throws IloException {
-        IloAddable[] positiveFlux = new IloAddable[ s.getMoleculeCount() ];
+        IloAddable[] positiveFlux = new IloAddable[s.getMoleculeCount()];
 
-        for ( int i = 0; i < s.getMoleculeCount(); i++ ) {
-            IloNumExpr[] values = new IloNumExpr[ s.getReactionCount() ];
+        for (int i = 0; i < s.getMoleculeCount(); i++) {
+            IloNumExpr[] values = new IloNumExpr[s.getReactionCount()];
 
-            for ( int j = 0; j < s.getReactionCount(); j++ ) {
+            for (int j = 0; j < s.getReactionCount(); j++) {
                 values[j] =
-                cplex.prod( v[j] ,
-                            s.get( i , j ) );
+                cplex.prod(v[j],
+                           s.get(i, j));
             }
 
             // The sum of the reaction flux for this metabolite should
             // be greater then zero
             positiveFlux[i] =
-            cplex.ge( cplex.sum( values ) ,
-                      0 );
+            cplex.ge(cplex.sum(values),
+                     0);
         }
 
         return positiveFlux;
@@ -192,20 +193,20 @@ public class DeadEndDetector {
      */
     public IloAddable[] nonConsumtionMassBalanceConstraint()
             throws IloException {
-        IloAddable[] negFlux = new IloAddable[ s.getMoleculeCount() ];
+        IloAddable[] negFlux = new IloAddable[s.getMoleculeCount()];
 
-        for ( int i = 0; i < s.getMoleculeCount(); i++ ) {
-            IloNumExpr[] values = new IloNumExpr[ s.getReactionCount() ];
+        for (int i = 0; i < s.getMoleculeCount(); i++) {
+            IloNumExpr[] values = new IloNumExpr[s.getReactionCount()];
 
-            for ( int j = 0; j < s.getReactionCount(); j++ ) {
+            for (int j = 0; j < s.getReactionCount(); j++) {
                 values[j] =
-                cplex.prod( v[j] ,
-                            s.get( i , j ) );
+                cplex.prod(v[j],
+                           s.get(i, j));
             }
 
             negFlux[i] =
-            cplex.le( cplex.sum( values ) ,
-                      0 );
+            cplex.le(cplex.sum(values),
+                     0);
         }
 
         return negFlux;
@@ -213,16 +214,16 @@ public class DeadEndDetector {
 
     public Integer[] findNonProductionMetabolites()
             throws IloException {
-        cplex.remove( negMassBalance );
-        cplex.add( posMassBalance );
+        cplex.remove(negMassBalance);
+        cplex.add(posMassBalance);
 
         return solve();
     }
 
     public Integer[] findNonConsumptionMetabolites()
             throws IloException {
-        cplex.remove( posMassBalance );
-        cplex.add( negMassBalance );
+        cplex.remove(posMassBalance);
+        cplex.add(negMassBalance);
 
         return solve();
     }
@@ -234,51 +235,53 @@ public class DeadEndDetector {
     public Integer[] getTerminalNCMetabolites() {
         List<Integer> rootNonProductionMetabolites = new ArrayList<Integer>();
 
-        for ( int i = 0; i < s.getMoleculeCount(); i++ ) {
+        for (int i = 0; i < s.getMoleculeCount(); i++) {
             int positiveStoichiometry = 0;
             int negitiveStoichiometry = 0;
 
-            for ( int j = 0; j < s.getReactionCount(); j++ ) {
-                if ( s.get( i , j ) > 0 ) {
+            for (int j = 0; j < s.getReactionCount(); j++) {
+                if (s.get(i, j) > 0) {
                     positiveStoichiometry++;
-                } else if ( s.get( i , j ) < 0 ) {
+                } else if (s.get(i, j) < 0) {
                     negitiveStoichiometry++;
                 }
             }
 
-            if ( ( positiveStoichiometry > 0 ) && ( negitiveStoichiometry == 0 ) ) {
-                rootNonProductionMetabolites.add( i );
+            if ((positiveStoichiometry > 0) && (negitiveStoichiometry == 0)) {
+                rootNonProductionMetabolites.add(i);
             }
         }
 
-        return rootNonProductionMetabolites.toArray( new Integer[ 0 ] );
+        return rootNonProductionMetabolites.toArray(new Integer[0]);
     }
 
     /**
-     * Gets the terminal non-consumption metabolites
+     * Access the terminal non-consumption metabolites
      * @return
      */
     public Integer[] getRootNPMetabolites() {
+
         List<Integer> rootNonProductionMetabolites = new ArrayList<Integer>();
 
-        for ( int i = 0; i < s.getMoleculeCount(); i++ ) {
+        for (int i = 0; i < s.getMoleculeCount(); i++) {
             int positiveStoichiometry = 0;
             int negitiveStoichiometry = 0;
 
-            for ( int j = 0; j < s.getReactionCount(); j++ ) {
-                if ( s.get( i , j ) > 0 ) {
+            for (int j = 0; j < s.getReactionCount(); j++) {
+                if (s.get(i, j) > 0) {
                     positiveStoichiometry++;
-                } else if ( s.get( i , j ) < 0 ) {
+                } else if (s.get(i, j) < 0) {
                     negitiveStoichiometry++;
                 }
             }
 
-            if ( ( positiveStoichiometry == 0 ) && ( negitiveStoichiometry > 0 ) ) {
-                rootNonProductionMetabolites.add( i );
+            if ((positiveStoichiometry == 0) && (negitiveStoichiometry > 0)) {
+                rootNonProductionMetabolites.add(i);
             }
         }
 
-        return rootNonProductionMetabolites.toArray( new Integer[ 0 ] );
+        return rootNonProductionMetabolites.toArray(new Integer[0]);
+        
     }
 
     private Integer[] solve()
@@ -286,36 +289,42 @@ public class DeadEndDetector {
         cplex.solve();
 
         List<Integer> problemMetabolites = new ArrayList<Integer>();
-        double[] xSolutions = cplex.getValues( xnp );
+        double[] xSolutions = cplex.getValues(xnp);
 
-        for ( int i = 0; i < xSolutions.length; i++ ) {
-            if ( xSolutions[i] == 0.0d ) {
-                problemMetabolites.add( i );
+        for (int i = 0; i < xSolutions.length; i++) {
+            if (xSolutions[i] == 0.0d) {
+                problemMetabolites.add(i);
             }
         }
 
-        return problemMetabolites.toArray( new Integer[ 0 ] );
-    }
+        return problemMetabolites.toArray(new Integer[0]);
+    }  
 
-    public static void main( String[] args )
-            throws IloException , FileNotFoundException , IOException {
-        System.out.println( System.getProperties().getProperty( "java.library.path" ) );
+    public static void main(String[] args)
+            throws IloException, FileNotFoundException, IOException {
 
-//        BasicStoichiometricMatrix s = new BasicStoichiometricMatrix();
-//        // internal reactions
-//        s.addReaction( "A => B" );
-//        s.addReaction( "B => C" );
-//        s.addReaction( "B => D" );
-//        s.addReaction( "D => E" );
-//        s.addReaction( "F => G" );
-//        s.addReaction( "G => C" );
-//
-//        // exchange reactions
-//        s.addReaction( new String[]{} , new String[]{ "A" } );
-//        s.addReaction( new String[]{ "C" } , new String[]{} );
-//        // print
-//        s.display( System.out , ' ' , "0" , null , 2 , 2 );
+//        SimulationUtil.setCPLEXLibraryPath("/Users/johnmay/ILOG/CPLEX_Studio_AcademicResearch122/cplex/bin/x86-64_darwin9_gcc4.0");
+        SimulationUtil.setup();
+
+        BasicStoichiometricMatrix s = new BasicStoichiometricMatrix();
+        // internal reactions
+        s.addReaction("A => B");
+        s.addReaction("B => C");
+        s.addReaction("B => D");
+        s.addReaction("D => E");
+        s.addReaction("F => G");
+        s.addReaction("G => C");
+
+        // exchange reactions
+        s.addReaction(new String[]{}, new String[]{"A"});
+        s.addReaction(new String[]{"C"}, new String[]{});
+        // print
+        s.display(System.out, ' ', "0", null, 2, 2);
         // gap find
+
+
+
+        System.out.println(Arrays.asList(new GapFind(s).solve()));
 
         /** USAGE: */
 //        BasicStoichiometricMatrix s = ReactionMatrixIO.readBasicStoichiometricMatrix(
