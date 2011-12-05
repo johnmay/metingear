@@ -1,4 +1,3 @@
-
 /**
  * FieldType.java
  *
@@ -21,8 +20,7 @@
  */
 package uk.ac.ebi.search;
 
-import org.apache.log4j.Logger;
-
+import org.apache.lucene.index.Term;
 
 /**
  *          FieldType – 2011.09.29 <br>
@@ -38,39 +36,35 @@ public enum FieldType {
     ABBREVIATION("Abbreviation"),
     ANNOTATION("Annotation"),
     TYPE("Type");
-    
     public final String name;
-
+    public final Term term;
 
     private FieldType(String name) {
         this.name = name;
+        this.term = new Term(name);
     }
-
 
     public String getName() {
         return name;
     }
 
-
+    public Term getTerm(String text) {
+        return term.createTerm(text);
+    }
     private static String[] allFields;
 
-
     public static String[] getAllFields() {
-        if( allFields == null ) {
+        if (allFields == null) {
             allFields = getArray(values());
         }
         return allFields;
     }
 
-
     public static String[] getArray(FieldType[] types) {
         String[] names = new String[types.length];
-        for( int i = 0 ; i < types.length ; i++ ) {
+        for (int i = 0; i < types.length; i++) {
             names[i] = types[i].getName();
         }
         return names;
     }
-
-
 }
-
