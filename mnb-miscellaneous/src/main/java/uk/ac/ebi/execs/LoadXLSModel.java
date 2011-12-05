@@ -34,7 +34,7 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Map;
 import mnb.io.resolve.AutomatedReconciler;
-import mnb.io.tabular.EntityResolver;
+import mnb.io.tabular.ExcelEntityResolver;
 import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.parser.ReactionParser;
 import mnb.io.tabular.parser.UnparsableReactionError;
@@ -122,8 +122,8 @@ public class LoadXLSModel extends CommandLineMain {
             CandidateFactory factory = new CandidateFactory( ChEBINameService.getInstance(),
                                                             new ChemicalFingerprintEncoder());
 
-            EntityResolver entitySheet =
-                           new EntityResolver(entSht, new AutomatedReconciler(factory,
+            ExcelEntityResolver entitySheet =
+                           new ExcelEntityResolver(entSht, new AutomatedReconciler(factory,
                                                                               new ChEBIIdentifier()));
 
             ReactionParser parser = new ReactionParser(entitySheet);

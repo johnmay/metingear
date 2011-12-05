@@ -7,7 +7,7 @@ package mnb.io.tabular.parser;
 
 import java.util.Arrays;
 import junit.framework.TestCase;
-import mnb.io.tabular.EntityResolver;
+import mnb.io.tabular.ExcelEntityResolver;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import static junit.framework.Assert.*;
 
