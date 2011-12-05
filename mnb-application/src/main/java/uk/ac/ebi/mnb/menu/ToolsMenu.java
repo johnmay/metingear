@@ -19,6 +19,7 @@ import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReferenceDialog;
+import uk.ac.ebi.mnb.menu.tool.GapAnalysis;
 
 /**
  * FileMenu.java
@@ -107,14 +108,22 @@ public class ToolsMenu extends ContextMenu {
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
                 return selection.hasSelection(MetabolicReaction.class) || (active != null && active.getReactions().isEmpty() == false);
             }
-        });      
+        });
 
+        add(new GapAnalysis(view));
+
+        /*************************
+         * Comparisson           *
+         *************************/
+        add(new JSeparator());
 
         add(create(CompareReconstruction.class), new ContextResponder() {
+
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
                 return reconstructions.size() > 1;
             }
         });
+
 
 
     }

@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.menu.file.PreferenceDialog;
 import uk.ac.ebi.mnb.view.AboutDialog;

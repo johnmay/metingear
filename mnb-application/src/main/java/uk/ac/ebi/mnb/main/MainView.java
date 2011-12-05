@@ -121,7 +121,7 @@ public class MainView
                                     if (index == null) {
                                         Thread t = SearchManager.getInstance().updateCurrentIndex(
                                                 recon);
-                                        t.wait();
+                                        t.join();
                                         index = SearchManager.getInstance().getCurrentIndex();
                                     }
 
