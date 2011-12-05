@@ -50,6 +50,7 @@ import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.reaction.MetaboliteParticipant;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
@@ -65,28 +66,30 @@ import uk.ac.ebi.search.SearchableIndex;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ReactionTextField extends JTextField implements DocumentListener {
+public class OldReactionTextField
+        extends JTextField
+        implements DocumentListener {
 
-    private static final Logger LOGGER = Logger.getLogger(ReactionTextField.class);
-    private JDialog dialog;
+    private static final Logger LOGGER = Logger.getLogger(OldReactionTextField.class);
+    private JDialog autocomplete;
     private DefaultListModel model = new DefaultListModel();
     private JList list = new JList(model);
     private static SearchManager search = SearchManager.getInstance();
     private static Pattern REMOVE_TRAILING_CHARS = Pattern.compile("[-=+]+\\s?\\z");
-    private static int N_SUGGESTIONS = Preferences.userNodeForPackage(ReactionTextField.class).getInt("reaction.form.suggestions", 15);
+    private static int N_SUGGESTIONS = Preferences.userNodeForPackage(OldReactionTextField.class).getInt("reaction.form.suggestions", 15);
     private static String[] fields = new String[]{FieldType.NAME.getName(), FieldType.ACCESSION.getName(), FieldType.ABBREVIATION.getName()};
     private int previousCount = 0;
     private List<Object> participants = new ArrayList();
 
-    public ReactionTextField(JDialog parent) {
+    public OldReactionTextField(JDialog parent) {
 
-        dialog = new JDialog(parent);
-        dialog.setFocusable(false);
-        dialog.setFocusableWindowState(false);
-        dialog.setUndecorated(true);
-        dialog.setAlwaysOnTop(true);
-        dialog.setResizable(false);
-        dialog.add(new BorderlessScrollPane(list, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+        autocomplete = new JDialog(parent);
+        autocomplete.setFocusable(false);
+        autocomplete.setFocusableWindowState(false);
+        autocomplete.setUndecorated(true);
+        autocomplete.setAlwaysOnTop(true);
+        autocomplete.setResizable(false);
+        autocomplete.add(new BorderlessScrollPane(list, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
         list.setVisibleRowCount(5);
         setFocusTraversalKeysEnabled(false);
         getDocument().addDocumentListener(this);
@@ -119,7 +122,7 @@ public class ReactionTextField extends JTextField implements DocumentListener {
         getInputMap().put(KeyStroke.getKeyStroke("ESCAPE"), new AbstractAction() {
 
             public void actionPerformed(ActionEvent e) {
-                dialog.setVisible(false);
+                autocomplete.setVisible(false);
             }
         });
 
@@ -141,19 +144,19 @@ public class ReactionTextField extends JTextField implements DocumentListener {
         for (int i = 0; i < nR; i++) {
             Object p = participants.get(i);
             if (p instanceof Metabolite) {
-                rxn.addReactant(new Participant<Metabolite, Double, Compartment>((Metabolite) p));
+                rxn.addReactant(new MetaboliteParticipant((Metabolite) p));
             } else {
                 Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
-                rxn.addReactant(new Participant<Metabolite, Double, Compartment>(m));
+                rxn.addReactant(new MetaboliteParticipant(m));
             }
         }
         for (int i = 0; i < nP; i++) {
             Object p = participants.get(i + nR);
             if (p instanceof Metabolite) {
-                rxn.addProduct(new Participant<Metabolite, Double, Compartment>((Metabolite) p));
+                rxn.addProduct(new MetaboliteParticipant((Metabolite) p));
             } else {
                 Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
-                rxn.addProduct(new Participant<Metabolite, Double, Compartment>(m));
+                rxn.addProduct(new MetaboliteParticipant(m));
             }
         }
 
@@ -171,7 +174,7 @@ public class ReactionTextField extends JTextField implements DocumentListener {
         int i = getEntityCount() - 1;
         participants.add(i, entity);
         previousCount = getEntityCount();
-        dialog.setVisible(false);
+        autocomplete.setVisible(false);
     }
 
     public void moveSelectionDown() {
@@ -216,9 +219,9 @@ public class ReactionTextField extends JTextField implements DocumentListener {
                 for (AnnotatedEntity entity : entities) {
                     model.addElement(entity);
                 }
-                dialog.pack();
-                if (!dialog.isVisible()) {
-                    dialog.setVisible(true);
+                autocomplete.pack();
+                if (!autocomplete.isVisible()) {
+                    autocomplete.setVisible(true);
                 }
             }
 
@@ -226,14 +229,14 @@ public class ReactionTextField extends JTextField implements DocumentListener {
             Point p = location.getLocation();
             SwingUtilities.convertPointToScreen(p, this);
             p.setLocation(p.x + 20, p.y);
-            dialog.setLocation(p);
+            autocomplete.setLocation(p);
 
         } catch (BadLocationException ex) {
-            java.util.logging.Logger.getLogger(ReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OldReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(ReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OldReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
-            java.util.logging.Logger.getLogger(ReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OldReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
         }
 
 

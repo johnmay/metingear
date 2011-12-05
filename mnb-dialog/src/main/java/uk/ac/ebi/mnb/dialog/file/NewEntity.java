@@ -50,7 +50,6 @@ import uk.ac.ebi.ui.component.factory.LabelFactory;
 public abstract class NewEntity extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(NewEntity.class);
-    private Identifier identifier;
     private JComboBox type;
     private JTextField accession = FieldFactory.newField(6);
     private JTextField name = FieldFactory.newField(20);
@@ -63,7 +62,6 @@ public abstract class NewEntity extends ControllerDialog {
      * Provide the frame to attach the dialog to and the default identifier type
      * BasicChemicalIdentifier, BasicProteinIdentifier BasicReactionIdentifier
      * @param frame
-     * @param identifier
      */
     public NewEntity(JFrame frame,
                      TargetedUpdate updater,
@@ -77,8 +75,7 @@ public abstract class NewEntity extends ControllerDialog {
         }
         type = new MComboBox(nameIndexMap.keySet());
 
-        this.identifier = identifier;
-        this.updateable = updateable;
+        this.updateable = updater;
 
         setDefaultLayout();
 

@@ -24,7 +24,7 @@ package mnb.io.tabular.xls;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import mnb.io.tabular.type.EntityColumn;
-import mnb.io.tabular.EntityResolver;
+import mnb.io.tabular.ExcelEntityResolver;
 import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import mnb.io.tabular.type.TableDescription;

@@ -54,7 +54,7 @@ import javax.swing.SwingUtilities;
 import mnb.io.resolve.AutomatedReconciler;
 import mnb.io.resolve.EntryReconciler;
 import mnb.io.resolve.ListSelectionReconciler;
-import mnb.io.tabular.EntityResolver;
+import mnb.io.tabular.ExcelEntityResolver;
 import mnb.io.tabular.parser.ReactionParser;
 import mnb.io.tabular.parser.UnparsableReactionError;
 import mnb.io.tabular.preparse.PreparsedReaction;
@@ -210,7 +210,7 @@ public class ExcelImportDialog
             EntryReconciler reconciler = //new AutomatedReconciler(factory, new ChEBIIdentifier());
                             new ListSelectionReconciler(frame, factory, new ChEBIIdentifier());
 
-            EntityResolver entitySheet = new EntityResolver(entSht, reconciler);
+            ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler);
             parser = new ReactionParser(entitySheet);
 
             waitIndicator.setText(String.format("initialising..."));

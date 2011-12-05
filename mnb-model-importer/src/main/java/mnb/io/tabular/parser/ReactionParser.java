@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import mnb.io.tabular.EntityResolver;
+import mnb.io.tabular.ExcelEntityResolver;
 import mnb.io.tabular.preparse.PreparsedReaction;
 import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
@@ -43,7 +44,6 @@ import uk.ac.ebi.core.reaction.MetaboliteParticipant;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.Message;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
@@ -67,7 +67,7 @@ public class ReactionParser {
                                 Pattern.compile("([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?)");
     public static final Pattern COEFFICIENT_PATTERN =
                                 Pattern.compile("\\A" + DOUBLE_PATTERN.pattern() + "\\s+" + "|\\(" + DOUBLE_PATTERN.pattern() + "\\)");
-    public static final Pattern ENTITY_COMPARTMENT =
+    public static final Pattern COMPARTMENT_PATTERN =
                                 Pattern.compile("\\[(\\w{1,2})\\]");
     private static final Reversibility[] NORMALISED_ARROWS =
                                          new Reversibility[]{Reversibility.REVERSIBLE,
@@ -128,26 +128,33 @@ public class ReactionParser {
 
     public MetabolicReaction parseTwoSidedReaction(PreparsedReaction reaction,
                                                    String[] equationSides) throws UnparsableReactionError {
-        // todo
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSides[0]);
-        equationSides[0] = reactionCompartment.replaceAll("");
+
         MetabolicReaction rxn = new MetabolicReaction(new BasicReactionIdentifier("{rxn/" + ++ticker + "}"), null, null);
         rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
         rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
+
+        Compartment defaultCompartment = Compartment.CYTOPLASM;
+
+        if (reactionCompartment.find()) {
+            defaultCompartment = Compartment.getCompartment(reactionCompartment.group(1));
+            equationSides[0] = reactionCompartment.replaceAll("");
+        }
+
         for (MetaboliteParticipant p :
              parseParticipants(equationSides[0],
-                               Compartment.CYTOPLASM,
+                               defaultCompartment,
                                reaction)) {
             rxn.addReactant(p);
         }
         for (MetaboliteParticipant p :
              parseParticipants(equationSides[1],
-                               Compartment.CYTOPLASM,
+                               defaultCompartment,
                                reaction)) {
             rxn.addProduct(p);
         }
 
-        rxn.setReversibility(Reversibility.REVERSIBLE);
+        rxn.setReversibility(getReactionArrow(reaction.getEquation()));
 
         // add subsytem annotation
         String subsytem = reaction.getSubsystem();
@@ -223,7 +230,7 @@ public class ReactionParser {
         }
 
         // compartment
-        Matcher compartmentMatcher = ENTITY_COMPARTMENT.matcher(entityAbbr);
+        Matcher compartmentMatcher = COMPARTMENT_PATTERN.matcher(entityAbbr);
         if (compartmentMatcher.find()) {
             compartment = Compartment.getCompartment(compartmentMatcher.group(1));
             entityAbbr = compartmentMatcher.replaceAll("");

@@ -69,12 +69,25 @@ public class PopupDialog extends JDialog {
         }
     };
 
+    public PopupDialog(JDialog dialog) {
+        this(dialog, ModalityType.APPLICATION_MODAL);
+    }
+
+    public PopupDialog(JDialog dialog, ModalityType modality) {
+        super(dialog, modality);
+        setup();
+    }
+
     public PopupDialog(JFrame frame) {
         this(frame, ModalityType.APPLICATION_MODAL);
     }
 
     public PopupDialog(JFrame frame, ModalityType modality) {
         super(frame, modality);
+        setup();
+    }
+
+    private void setup() {
         setUndecorated(true);
         add(background);
         AWTUtilities.setWindowOpaque(this, false);
@@ -89,7 +102,7 @@ public class PopupDialog extends JDialog {
         JButton closeButton = new IconButton(close, closeAction);
         closeButton.registerKeyboardAction(closeButton.getAction(),
                                            KeyStroke.getKeyStroke(
-                                           ActionProperties.getInstance().getProperty("CloseDialog.Action." + Action.ACCELERATOR_KEY)),
+                ActionProperties.getInstance().getProperty("CloseDialog.Action." + Action.ACCELERATOR_KEY)),
                                            JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         background.add(closeButton, cc.xy(2, 2));
@@ -110,6 +123,8 @@ public class PopupDialog extends JDialog {
             }
         });
     }
+
+
 
     /**
      * Sets the pop-up location based on mouse position. The tip of the callout will be at the mouse point with no offset
