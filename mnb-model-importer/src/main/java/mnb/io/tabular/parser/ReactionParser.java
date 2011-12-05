@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import mnb.io.tabular.EntityResolver;
-import mnb.io.tabular.ExcelEntityResolver;
 import mnb.io.tabular.preparse.PreparsedReaction;
 import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
@@ -103,20 +102,12 @@ public class ReactionParser {
 
         } else if (rxnSides.length == 1) {
 
-
             // exchange reaction
-            if (getReactionArrow(equation) == Reversibility.UNKNOWN) {
-
-                throw new UnparsableReactionError("Unparsable reaction arrow, rxn id"
-                                                  + reaction.getIdentifier());
-            }
-
-            parseExchangeReaction(reaction, rxnSides[0]);
-            return null;
+            return parseExchangeReaction(reaction, rxnSides[0]);
 
         } else {
 
-            throw new UnparsableReactionError("Equation is empty, rxn id: "
+            throw new UnparsableReactionError("No equation found for rxn: "
                                               + reaction.getIdentifier());
         }
     }
@@ -128,6 +119,7 @@ public class ReactionParser {
 
     public MetabolicReaction parseTwoSidedReaction(PreparsedReaction reaction,
                                                    String[] equationSides) throws UnparsableReactionError {
+
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSides[0]);
 
         MetabolicReaction rxn = new MetabolicReaction(new BasicReactionIdentifier("{rxn/" + ++ticker + "}"), null, null);
@@ -186,8 +178,55 @@ public class ReactionParser {
     /**
      * Only have left side (or some weird reaction operator)
      */
-    public void parseExchangeReaction(PreparsedReaction reaction,
-                                      String equationSide) {
+    public MetabolicReaction parseExchangeReaction(PreparsedReaction reaction,
+                                                   String equationSide) throws UnparsableReactionError {
+        Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSide);
+
+        MetabolicReaction rxn = new MetabolicReaction(new BasicReactionIdentifier("{rxn/" + ++ticker + "}"), null, null);
+        rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
+        rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
+
+        Compartment defaultCompartment = Compartment.CYTOPLASM;
+
+        if (reactionCompartment.find()) {
+            defaultCompartment = Compartment.getCompartment(reactionCompartment.group(1));
+            equationSide = reactionCompartment.replaceAll("");
+        }
+
+        for (MetaboliteParticipant p :
+             parseParticipants(equationSide,
+                               defaultCompartment,
+                               reaction)) {
+            rxn.addReactant(p);
+        }
+        
+
+        rxn.setReversibility(getReactionArrow(reaction.getEquation()));
+
+        // add subsytem annotation
+        String subsytem = reaction.getSubsystem();
+        if (subsytem != null && subsytem.isEmpty() == false) {
+            rxn.addAnnotation(new Subsystem(subsytem));
+        }
+
+
+        // add classification
+        for (String classification : reaction.getClassifications()) {
+            // load EC code
+            if (classification.matches("(?:\\d+\\.){3}\\d+") || classification.contains("EC")) {
+                rxn.addAnnotation(new EnzymeClassification(new ECNumber(classification)));
+            } else if (classification.contains("TC")) {
+                rxn.addAnnotation(new Classification(new BasicProteinIdentifier(classification)));
+            }
+        }
+
+        for (String locus : reaction.getLoci()) {
+            rxn.addAnnotation(new Locus(locus));
+        }
+
+
+
+        return rxn;
     }
 
     public List<MetaboliteParticipant> parseParticipants(String equationSide,
