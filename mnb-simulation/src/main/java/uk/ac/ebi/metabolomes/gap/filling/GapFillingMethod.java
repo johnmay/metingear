@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface GapFillingMethod
 {
-    /**
-     * Suggest solutions to remove dead-end metabolite n
-     */
-    public List getFillingCandidates( Integer n );
-
-    // todo
-    public void fillGap( List l );
+//    /**
+//     * Suggest solutions to remove dead-end metabolite n
+//     */
+//    public List getFillingCandidates( Integer n );
+//
+//    // todo
+//    public void fillGap( List l );
 }

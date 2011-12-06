@@ -31,6 +31,7 @@ import uk.ac.ebi.mnb.menu.tool.GapAnalysis;
 public class ToolsMenu extends ContextMenu {
 
     private static final Logger logger = Logger.getLogger(ToolsMenu.class);
+    private GapAnalysis gapMenu;
 
     public ToolsMenu() {
 
@@ -110,7 +111,8 @@ public class ToolsMenu extends ContextMenu {
             }
         });
 
-        add(new GapAnalysis(view));
+        gapMenu = new GapAnalysis(view);
+        add(gapMenu);
 
         /*************************
          * Comparisson           *
@@ -127,4 +129,12 @@ public class ToolsMenu extends ContextMenu {
 
 
     }
+
+    @Override
+    public void updateContext() {
+        super.updateContext();
+        gapMenu.updateContext();
+    }
+
+
 }

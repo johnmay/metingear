@@ -33,7 +33,7 @@
             <version>4.8.2</version>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>CheMet-BioWarehouse</artifactId>
             <version>1.2-SNAPSHOT</version>
@@ -42,7 +42,26 @@
                     <artifactId>jchem</artifactId>
                     <groupId>chemaxon</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>jaxws-api</artifactId>
+                    <groupId>javax.xml.ws</groupId>
+                </exclusion>          
             </exclusions>
+        </dependency>-->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CheMet-Core</artifactId>
+            <version>1.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>sf.net</groupId>
+            <artifactId>lpsolve</artifactId>
+            <version>5.5</version>
         </dependency>
     </dependencies>
 </project>

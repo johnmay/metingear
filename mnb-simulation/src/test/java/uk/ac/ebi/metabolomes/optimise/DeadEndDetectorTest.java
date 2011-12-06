@@ -4,6 +4,8 @@
  */
 package uk.ac.ebi.metabolomes.optimise;
 
+import ilog.concert.IloException;
+import java.util.logging.Level;
 import uk.ac.ebi.optimise.gap.GapFind;
 import junit.framework.TestCase;
 
@@ -156,26 +158,32 @@ public class DeadEndDetectorTest
      */
     public void testGetTerminalNCMetabolites(  )
     {
-        GapFind deadEndDetector = new GapFind( s );
-        Integer[] terminalNCIndicies = deadEndDetector.getTerminalNCMetabolites(  );
+        try {
+            GapFind deadEndDetector = new GapFind( s );
+            Integer[] terminalNCIndicies = deadEndDetector.getTerminalNCMetabolites(  );
 
-        // there should be 2 root non-production metabolites, E and C
-        assertEquals( terminalNCIndicies.length, 2 );
-        assertEquals( "E",
-                      s.getMolecule( terminalNCIndicies[0] ) );
-        assertEquals( "F",
-                      s.getMolecule( terminalNCIndicies[1] ) );
+            // there should be 2 root non-production metabolites, E and C
+            assertEquals( terminalNCIndicies.length, 2 );
+            assertEquals( "E",
+                          s.getMolecule( terminalNCIndicies[0] ) );
+            assertEquals( "F",
+                          s.getMolecule( terminalNCIndicies[1] ) );
 
-        // drain E via exchange reaction
-        s.addReaction( new String[] { "E" },
-                       new String[0] );
-        deadEndDetector = new GapFind( s );
-        terminalNCIndicies = deadEndDetector.getTerminalNCMetabolites(  );
+            // drain E via exchange reaction
+            s.addReaction( new String[] { "E" },
+                           new String[0] );
+            deadEndDetector = new GapFind( s );
+            terminalNCIndicies = deadEndDetector.getTerminalNCMetabolites(  );
 
-        // there should be one dead end metabolite which is C
-        assertEquals( terminalNCIndicies.length, 1 );
-        assertEquals( "F",
-                      s.getMolecule( terminalNCIndicies[0] ) );
+            // there should be one dead end metabolite which is C
+            assertEquals( terminalNCIndicies.length, 1 );
+            assertEquals( "F",
+                          s.getMolecule( terminalNCIndicies[0] ) );
+        } catch (IloException ex) {
+            java.util.logging.Logger.getLogger(DeadEndDetectorTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsatisfiedLinkError ex) {
+            java.util.logging.Logger.getLogger(DeadEndDetectorTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -183,21 +191,27 @@ public class DeadEndDetectorTest
      */
     public void testGetRootNPMetabolites(  )
     {
-        GapFind deadEndDetector = new GapFind( s );
-        Integer[] rootNPIndicies = deadEndDetector.getRootNPMetabolites(  );
+        try {
+            GapFind deadEndDetector = new GapFind( s );
+            Integer[] rootNPIndicies = deadEndDetector.getRootNPMetabolites(  );
 
-        // check there should be 2 root non-production metabolites, A and B
-        assertEquals( rootNPIndicies.length, 1 );
-        assertEquals( "A",
-                      s.getMolecule( rootNPIndicies[0] ) );
+            // check there should be 2 root non-production metabolites, A and B
+            assertEquals( rootNPIndicies.length, 1 );
+            assertEquals( "A",
+                          s.getMolecule( rootNPIndicies[0] ) );
 
-        //  produce A via exchange reaction
-        s.addReaction( new String[0],
-                       new String[] { "A" } );
-        deadEndDetector = new GapFind( s );
-        rootNPIndicies = deadEndDetector.getRootNPMetabolites(  );
+            //  produce A via exchange reaction
+            s.addReaction( new String[0],
+                           new String[] { "A" } );
+            deadEndDetector = new GapFind( s );
+            rootNPIndicies = deadEndDetector.getRootNPMetabolites(  );
 
-        // there should be no NP dead end metabolites
-        assertEquals( rootNPIndicies.length, 0 );
+            // there should be no NP dead end metabolites
+            assertEquals( rootNPIndicies.length, 0 );
+        } catch (IloException ex) {
+            java.util.logging.Logger.getLogger(DeadEndDetectorTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsatisfiedLinkError ex) {
+            java.util.logging.Logger.getLogger(DeadEndDetectorTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

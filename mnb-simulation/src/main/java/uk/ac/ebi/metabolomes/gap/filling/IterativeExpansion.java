@@ -4,20 +4,10 @@
  */
 package uk.ac.ebi.metabolomes.gap.filling;
 
-import java.sql.SQLException;
-import org.apache.log4j.Logger;
-import org.openscience.cdk.exception.CDKException;
 
-import uk.ac.ebi.metabolomes.core.reaction.matrix.InChIStoichiometricMatrix;
-import uk.ac.ebi.metabolomes.identifier.InChI;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import uk.ac.ebi.metabolomes.core.reaction.BiochemicalReaction;
-import uk.ac.ebi.warehouse.exceptions.UnknownStructureException;
-import uk.ac.ebi.warehouse.util.ReactionLoader;
 
 /**
  * IterativeExpansion.java – 2011-07-06
@@ -37,12 +27,12 @@ import uk.ac.ebi.warehouse.util.ReactionLoader;
 public class IterativeExpansion
         implements GapFillingMethod {
 
-    private static final Logger LOGGER = Logger.getLogger( IterativeExpansion.class );
-    private InChIStoichiometricMatrix s;
-
-    protected IterativeExpansion( InChIStoichiometricMatrix s ) {
-        this.s = s;
-    }
+//    private static final Logger LOGGER = Logger.getLogger( IterativeExpansion.class );
+//    private InChIStoichiometricMatrix s;
+//
+//    protected IterativeExpansion( InChIStoichiometricMatrix s ) {
+//        this.s = s;
+//    }
 
     /**s
      * @inheritDoc

@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.*;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.util.*;
 import uk.ac.ebi.optimise.SimulationUtil;
 
@@ -59,17 +58,14 @@ public class GapFind {
      *
      * @param s Matrix of stoichiometries, a column per reaction
      */
-    public GapFind(StoichiometricMatrix s) {
+    public GapFind(StoichiometricMatrix s) throws IloException, UnsatisfiedLinkError {
         // todo handle our custom stoichiometric
         this.s = s;
 
-        try {
-            cplex = new IloCplex();
-            cplex.setOut(null);
-            setupConstraints();
-        } catch (IloException ex) {
-            LOGGER.error("Could no create instance of IloCplex: ", ex);
-        }
+        cplex = new IloCplex();
+        cplex.setOut(null);
+        setupConstraints();
+
     }
 
     /**
@@ -281,7 +277,7 @@ public class GapFind {
         }
 
         return rootNonProductionMetabolites.toArray(new Integer[0]);
-        
+
     }
 
     private Integer[] solve()
@@ -298,7 +294,7 @@ public class GapFind {
         }
 
         return problemMetabolites.toArray(new Integer[0]);
-    }  
+    }
 
     public static void main(String[] args)
             throws IloException, FileNotFoundException, IOException {

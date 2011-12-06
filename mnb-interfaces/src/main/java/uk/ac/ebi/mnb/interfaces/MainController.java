@@ -39,4 +39,6 @@ public interface MainController extends Updatable {
 
     public UndoableEditListener getUndoManager();
 
+    public void updateMenuContext();
+
 }

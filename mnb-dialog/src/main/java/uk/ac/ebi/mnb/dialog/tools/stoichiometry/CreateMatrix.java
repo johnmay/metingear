@@ -21,12 +21,19 @@
 package uk.ac.ebi.mnb.dialog.tools.stoichiometry;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.entities.reaction.Reversibility;
+import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentalisedMetabolite;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
@@ -47,11 +54,10 @@ import uk.ac.ebi.visualisation.matrix.MatrixPane;
  * @author  $Author$ (this version)
  */
 public class CreateMatrix
-        extends ControllerDialog
-          {
+        extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(CreateMatrix.class);
-    private StoichiometricMatrix<Metabolite, MetabolicReaction> matrix; // tempoary storage
+    private StoichiometricMatrix<CompartmentalisedMetabolite, MetabolicReaction> matrix; // tempoary storage
 
     public CreateMatrix(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
@@ -79,26 +85,54 @@ public class CreateMatrix
         SelectionManager manager = getSelection();
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
 
-        Collection<MetabolicReaction> rxns = manager.hasSelection(MetabolicReaction.class)
+        Collection<MetabolicReaction> rxns = manager.hasSelection(MetabolicReaction.class) && manager.get(MetabolicReaction.class).size() > 1
                                              ? manager.get(MetabolicReaction.class)
                                              : recon.getReactions();
 
         LOGGER.info("Creating reaction matrix for " + rxns.size() + " reactions");
-        matrix = new StoichiometricMatrix<Metabolite, MetabolicReaction>((int) (rxns.size() * 1.5),
-                                                                         rxns.size());
+        matrix = new StoichiometricMatrix<CompartmentalisedMetabolite, MetabolicReaction>((int) (rxns.size() * 1.5),
+                                                                                          rxns.size());
         for (MetabolicReaction rxn : rxns) {
-            matrix.addReaction(rxn, rxn.getAllReactionMolecules().toArray(new Metabolite[0]), getStoichiometries(rxn));
+
+            // transpose
+            if (rxn.getReversibility() == Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT) {
+                rxn.transpose();
+                rxn.setReversibility(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
+            }
+
+            matrix.addReaction(rxn,
+                               getMetabolites(rxn),
+                               getStoichiometries(rxn),
+                               rxn.getReversibility() == Reversibility.REVERSIBLE);
         }
     }
 
     @Override
     public boolean update() {
-        JFrame frame = new JFrame("Matrix");
+
+        JFrame frame = new JFrame("S");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(500, 500);
         frame.add(new MatrixPane(matrix));
         frame.setVisible(true);
+
+        Reconstruction active = ReconstructionManager.getInstance().getActive();
+
+        active.setMatix(matrix);
+        
+        updateMenuContext();
+
         return true;
+    }
+
+    public CompartmentalisedMetabolite[] getMetabolites(MetabolicReaction rxn) {
+
+        List<CompartmentalisedMetabolite> list = new ArrayList<CompartmentalisedMetabolite>();
+        for (Participant<Metabolite, ?, Compartment> p : rxn.getAllReactionParticipants()) {
+            list.add(new CompartmentalisedMetabolite(p.getMolecule(), p.getCompartment()));
+        }
+
+        return list.toArray(new CompartmentalisedMetabolite[0]);
     }
 
     public Double[] getStoichiometries(MetabolicReaction rxn) {
@@ -114,6 +148,4 @@ public class CreateMatrix
 
         return coefs;
     }
-
-
 }

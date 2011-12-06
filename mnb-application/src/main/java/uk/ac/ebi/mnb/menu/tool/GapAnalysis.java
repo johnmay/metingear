@@ -23,10 +23,18 @@ package uk.ac.ebi.mnb.menu.tool;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuItem;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.metingeer.menu.ContextMenu;
 import uk.ac.ebi.mnb.core.GeneralAction;
 import uk.ac.ebi.mnb.core.WarningMessage;
+import uk.ac.ebi.mnb.dialog.tools.gap.NonConsumptionMetabolites;
+import uk.ac.ebi.mnb.dialog.tools.gap.NonProductionMetabolites;
+import uk.ac.ebi.mnb.dialog.tools.gap.RootNonProductionMetabolites;
+import uk.ac.ebi.mnb.dialog.tools.gap.TerminalNonConsumptionMetabolites;
 import uk.ac.ebi.mnb.interfaces.MainController;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
 /**
  *          GapAnalysis - 2011.12.02 <br>
@@ -64,26 +72,35 @@ public class GapAnalysis extends ContextMenu {
         public FindGap(final MainController controller) {
             super("Find", controller);
 
-            add(new GeneralAction("NonProduction") {
-                public void actionPerformed(ActionEvent e) {
-                    controller.getMessageManager().addMessage(new WarningMessage("Not yet implemented"));
+            add(new NonProductionMetabolites(controller), new ContextResponder() {
+                public boolean getContext(ReconstructionManager reconstructions,
+                                          Reconstruction active,
+                                          SelectionManager selection) {                  
+                    return active != null && active.hasMatrix();
                 }
             });
-            add(new GeneralAction("RootNonProduction") {
-                public void actionPerformed(ActionEvent e) {
-                    controller.getMessageManager().addMessage(new WarningMessage("Not yet implemented"));
+            add(new RootNonProductionMetabolites(controller), new ContextResponder() {
+                public boolean getContext(ReconstructionManager reconstructions,
+                                          Reconstruction active,
+                                          SelectionManager selection) {
+                    return active != null && active.hasMatrix();
                 }
             });
-            add(new GeneralAction("NonConsumption") {
-                public void actionPerformed(ActionEvent e) {
-                    controller.getMessageManager().addMessage(new WarningMessage("Not yet implemented"));
+            add(new NonConsumptionMetabolites(controller), new ContextResponder() {
+                public boolean getContext(ReconstructionManager reconstructions,
+                                          Reconstruction active,
+                                          SelectionManager selection) {
+                    return active != null && active.hasMatrix();
                 }
             });
-            add(new GeneralAction("TermainalNonConsumption") {
-                public void actionPerformed(ActionEvent e) {
-                    controller.getMessageManager().addMessage(new WarningMessage("Not yet implemented"));
+            add(new TerminalNonConsumptionMetabolites(controller), new ContextResponder() {
+                public boolean getContext(ReconstructionManager reconstructions,
+                                          Reconstruction active,
+                                          SelectionManager selection) {
+                    return active != null && active.hasMatrix();
                 }
             });
+            
             
 
         }

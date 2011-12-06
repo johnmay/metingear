@@ -28,6 +28,7 @@ import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.Message;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -46,6 +47,7 @@ import uk.ac.ebi.mnb.view.DropdownDialog;
 public abstract class ControllerDialog extends DropdownDialog {
 
     private static final Logger LOGGER = Logger.getLogger(ControllerDialog.class);
+    private final JFrame frame;
     private final TargetedUpdate updater;
     private final MessageManager messages;
     private final SelectionController controller;
@@ -58,6 +60,7 @@ public abstract class ControllerDialog extends DropdownDialog {
                             UndoableEditListener undoableEdits,
                             String name) {
         super(frame, name);
+        this.frame = frame;
         this.undoManager = undoableEdits;
         this.updater = updater;
         this.messages = messages;
@@ -102,5 +105,13 @@ public abstract class ControllerDialog extends DropdownDialog {
 
     public boolean update(SelectionManager selection) {
         return updater.update(selection);
+    }
+
+    public void updateMenuContext() {
+        if (frame instanceof MainController) {
+            ((MainController) frame).updateMenuContext();
+        } else {
+           LOGGER.error("Can't fire menu update as frame is not a MainController!");
+        }
     }
 }

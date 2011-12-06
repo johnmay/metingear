@@ -383,4 +383,10 @@ public class MainView
     public DialogController getDialogController() {
         return this;
     }
+
+    public void updateMenuContext() {
+        if(getJMenuBar() != null) getJMenuBar().updateContext();
+    }
+
+
 }
