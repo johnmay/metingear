@@ -20,7 +20,6 @@
  */
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
-import com.explodingpixels.data.Rating;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,8 +34,10 @@ import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.StarRating;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.Rating;
 
 /**
  *          MetaboliteTableModel – 2011.09.06 <br>
@@ -51,8 +52,8 @@ public class MetaboliteTableModel
     private static final Logger LOGGER = Logger.getLogger(MetaboliteTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
         new ColumnDescriptor("Generic", null,
-        DataType.FIXED,
-        Boolean.class),
+                             DataType.FIXED,
+                             Boolean.class),
         new ColumnDescriptor(new CrossReference()),
         new ColumnDescriptor(new ChemicalStructure()),
         new ColumnDescriptor(new MolecularFormula()),
@@ -78,7 +79,8 @@ public class MetaboliteTableModel
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
 
-        if (getColumnClass(columnIndex) == CrossReference.class) {
+        if (getColumnClass(columnIndex) == CrossReference.class
+            || getColumnClass(columnIndex) == Rating.class) {
             return true;
         }
 
@@ -90,12 +92,17 @@ public class MetaboliteTableModel
 
         if (getColumnClass(columnIndex) == CrossReference.class) {
             AnnotatedEntity entity = getEntity(rowIndex);
-            List<Annotation> annotations = new ArrayList( entity.getAnnotations(CrossReference.class) );
+            List<Annotation> annotations = new ArrayList(entity.getAnnotations(CrossReference.class));
             for (int i = 0; i < annotations.size(); i++) {
                 entity.removeAnnotation(annotations.get(i));
             }
             entity.addAnnotations((Collection<Annotation>) aValue);
-            update();
+            update(entity);
+            return;
+        } else if (getColumnClass(columnIndex) == Rating.class) {
+            AnnotatedEntity entity = getEntity(rowIndex);
+            entity.setRating((StarRating) aValue);
+            update(entity);
             return;
         }
 
@@ -111,7 +118,7 @@ public class MetaboliteTableModel
 
             return metabolicEntity.isGeneric();
         } else if (name.equals("Rating")) {
-            return Rating.FOUR_STARS;
+            return component.getRating();
         }
 
         return "NA";

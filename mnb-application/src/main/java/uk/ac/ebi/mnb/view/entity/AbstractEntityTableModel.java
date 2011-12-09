@@ -114,6 +114,26 @@ public abstract class AbstractEntityTableModel
         return true;
     }
 
+    public boolean update(AnnotatedEntity entity) {
+        int index = indexOf(entity);
+        if (index == -1) {
+            LOGGER.error("Skiping update on item: " + entity);
+        }
+
+        for (int j = 0; j < getColumnCount(); j++) {
+            Object newValue = getValue(components.get(index), j);
+            if (!newValue.equals(data[index][j])) {
+                // do this and providing the equals method isn't to tasking
+                // there is little effect on speed and no user interuption
+                // (i.e. an object won't change that a user is updating)
+                data[index][j] = newValue;
+            }
+        }
+
+        fireTableRowsUpdated(index, index);
+        return true;
+    }
+
     /**
      * Updates only a subset of table data
      */
@@ -122,23 +142,7 @@ public abstract class AbstractEntityTableModel
         long start = System.currentTimeMillis();
 
         for (AnnotatedEntity entity : selection.getEntities()) {
-            int index = indexOf(entity);
-            if (index == -1) {
-                LOGGER.error("Skiping update on item: " + entity);
-            }
-
-            for (int j = 0; j < getColumnCount(); j++) {
-                Object newValue = getValue(components.get(index), j);
-                if (!newValue.equals(data[index][j])) {
-                    // do this and providing the equals method isn't to tasking 
-                    // there is little effect on speed and no user interuption
-                    // (i.e. an object won't change that a user is updating)
-                    data[index][j] = newValue;
-                }
-            }
-
-            fireTableRowsUpdated(index, index);
-
+            update(entity);
         }
 
         long end = System.currentTimeMillis();

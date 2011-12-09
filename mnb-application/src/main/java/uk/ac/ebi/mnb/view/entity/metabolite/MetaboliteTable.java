@@ -20,17 +20,21 @@
  */
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
-import com.explodingpixels.data.Rating;
-import com.explodingpixels.macwidgets.ITunesRatingTableCellEditor;
 import com.explodingpixels.macwidgets.ITunesRatingTableCellRenderer;
+import java.awt.Component;
+import javax.swing.JTable;
 import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.mnb.renderers.BooleanCellRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.core.StarRating;
+import uk.ac.ebi.interfaces.Rating;
 import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
 import uk.ac.ebi.mnb.renderers.FormulaCellRender;
+import uk.ac.ebi.mnb.renderers.RatingCellRenderer;
+import uk.ac.ebi.visualisation.editors.RatingCellEditor;
 
 /**
  *          MetaboliteTable – 2011.09.05 <br>
@@ -50,23 +54,23 @@ public class MetaboliteTable extends AbstractEntityTable {
         AnnotationCellRenderer annotationRenderer = new AnnotationCellRenderer();
         BooleanCellRenderer booleanRenderer = new BooleanCellRenderer();
         setDefaultRenderer(Boolean.class,
-                booleanRenderer);
+                           booleanRenderer);
         setDefaultRenderer(CrossReference.class,
-                annotationRenderer);
+                           annotationRenderer);
         setDefaultEditor(CrossReference.class, new CrossReferenceCellEditor());
 
         setDefaultRenderer(MolecularFormula.class,
-                new FormulaCellRender());
+                           new FormulaCellRender());
 
-        setDefaultRenderer(Rating.class, new ITunesRatingTableCellRenderer());
-        setDefaultEditor(Rating.class, new ITunesRatingTableCellEditor());
+        setDefaultRenderer(Rating.class, new RatingCellRenderer());
+        setDefaultEditor(Rating.class, new RatingCellEditor());
+        // setDefaultEditor(Rating.class, new ITunesRatingTableCellEditor());
 
 //        setRowHeight(64);// only set when chem structure is to be displayed
 
         //addMouseListener(new DoubleClickListener(this));
 
     }
-
 //    private class ChemStructureRenderer extends DefaultTableCellRenderer {
 //
 //        private CachedMoleculeRenderer cmr = new CachedMoleculeRenderer();

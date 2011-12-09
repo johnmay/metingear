@@ -63,11 +63,11 @@ public class ExportSBMLAction
 
             File sbmlOut = getFile(showSaveDialog());
             int level = 2;
-            int version = 1;
+            int version = 2;
 
             SBMLIOUtil util = new SBMLIOUtil(level, version);
 
-            SBMLDocument document = util.getDocument(ReconstructionManager.getInstance().getActiveReconstruction());
+            SBMLDocument document = util.getDocument(ReconstructionManager.getInstance().getActive());
 
             SBMLWriter writer = new SBMLWriter();
 
