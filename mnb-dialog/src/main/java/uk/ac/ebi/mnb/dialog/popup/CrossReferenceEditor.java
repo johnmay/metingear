@@ -32,11 +32,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.AbstractAction;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -62,6 +65,7 @@ public class CrossReferenceEditor extends PopupDialog {
     private FormLayout layout;
     private List<MComboBox> comboboxes = new LinkedList();
     private List<JTextField> fields = new LinkedList();
+    private IdentifierFactory ID_FACTORY = IdentifierFactory.getInstance();
     private JPanel panel;
 
     public CrossReferenceEditor(JFrame frame) {
@@ -174,10 +178,30 @@ public class CrossReferenceEditor extends PopupDialog {
 
         public void actionPerformed(ActionEvent e) {
             layout.appendRow(new RowSpec(Sizes.PREFERRED));
-            MComboBox box = new MComboBox(map.keySet());
-            JTextField field = FieldFactory.newField(12);
+            final MComboBox box = new MComboBox(map.keySet());
+            final JTextField field = FieldFactory.newField(12);
             comboboxes.add(index + 1, box); // append after
             fields.add(index + 1, field);
+
+            field.getDocument().addDocumentListener(new DocumentListener() {
+
+                public void insertUpdate(DocumentEvent e) {
+                    String accession = field.getText().trim();
+                    DefaultComboBoxModel model = (DefaultComboBoxModel) box.getModel();
+                    model.removeAllElements();
+                    for (Identifier id : ID_FACTORY.getMatchingIdentifiers(accession)) {
+                        model.addElement(id.getShortDescription());
+                    }
+                    box.repaint();
+                }
+
+                public void removeUpdate(DocumentEvent e) {
+                }
+
+                public void changedUpdate(DocumentEvent e) {
+                }
+            });
+
             update();
             dialog.pack();
         }
