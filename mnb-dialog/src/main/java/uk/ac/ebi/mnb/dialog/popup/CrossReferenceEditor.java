@@ -198,7 +198,12 @@ public class CrossReferenceEditor extends PopupDialog {
                 public void removeUpdate(DocumentEvent e) {
                     DefaultComboBoxModel model = (DefaultComboBoxModel) box.getModel();
                     model.removeAllElements();
-                    for (Identifier id : ID_FACTORY.getSupportedIdentifiers()) {
+
+                    String accession = field.getText().trim();
+                    
+                    for (Identifier id : accession.isEmpty()
+                                         ? ID_FACTORY.getSupportedIdentifiers()
+                                         : ID_FACTORY.getMatchingIdentifiers(accession)) {
                         model.addElement(id.getShortDescription());
                     }
                     box.repaint();
