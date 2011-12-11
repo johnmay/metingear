@@ -196,9 +196,23 @@ public class CrossReferenceEditor extends PopupDialog {
                 }
 
                 public void removeUpdate(DocumentEvent e) {
+                    DefaultComboBoxModel model = (DefaultComboBoxModel) box.getModel();
+                    model.removeAllElements();
+                    for (Identifier id : ID_FACTORY.getSupportedIdentifiers()) {
+                        model.addElement(id.getShortDescription());
+                    }
+                    box.repaint();
+
                 }
 
                 public void changedUpdate(DocumentEvent e) {
+                    String accession = field.getText().trim();
+                    DefaultComboBoxModel model = (DefaultComboBoxModel) box.getModel();
+                    model.removeAllElements();
+                    for (Identifier id : ID_FACTORY.getMatchingIdentifiers(accession)) {
+                        model.addElement(id.getShortDescription());
+                    }
+                    box.repaint();
                 }
             });
 
