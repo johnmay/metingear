@@ -1,4 +1,3 @@
-
 /**
  * SearchManager.java
  *
@@ -43,7 +42,6 @@ import org.apache.lucene.util.Version;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 
-
 /**
  *          SearchManager – 2011.09.29 <br>
  *          Class description
@@ -58,33 +56,27 @@ public class SearchManager {
     private List<AnnotatedEntity> currentResults = new ArrayList();
     private SearchableIndex currentIndex = null;
 
-
     private SearchManager() {
         analyzer = new StandardAnalyzer(Version.LUCENE_34);
 
     }
 
-
     public void setPreviousEntries(List<AnnotatedEntity> previousEntries) {
         this.currentResults = previousEntries;
     }
 
-
     public List<AnnotatedEntity> getPreviousEntries() {
         return currentResults;
     }
-
 
     private static class SearchManagerHolder {
 
         private static SearchManager INSTANCE = new SearchManager();
     }
 
-
     public static SearchManager getInstance() {
         return SearchManagerHolder.INSTANCE;
     }
-
 
     /**
      * Updates the current index. The updating thead is return thus the invoker can choose to wait
@@ -105,16 +97,14 @@ public class SearchManager {
             public void run() {
                 try {
                     currentIndex = getIndex(recon);
-                } catch( CorruptIndexException ex ) {
+                } catch (CorruptIndexException ex) {
                     ex.printStackTrace();
-                } catch( LockObtainFailedException ex ) {
+                } catch (LockObtainFailedException ex) {
                     ex.printStackTrace();
-                } catch( IOException ex ) {
+                } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
-
-
         });
 
         t.start();
@@ -123,11 +113,9 @@ public class SearchManager {
 
     }
 
-
     public SearchableIndex getCurrentIndex() {
         return currentIndex;
     }
-
 
     /**
      * Updates the underlying getIndex
@@ -141,7 +129,7 @@ public class SearchManager {
                                                                           LockObtainFailedException,
                                                                           IOException {
 
-        System.out.println("Search Re-index invoked!");
+        LOGGER.debug("Invoking search re-index");
 
         Directory index = new RAMDirectory();
         IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34,
@@ -150,13 +138,12 @@ public class SearchManager {
         Map<UUID, AnnotatedEntity> map = DocumentFactory.write(writer,
                                                                reconstruction);
         long end = System.currentTimeMillis();
-        LOGGER.info("Built search index in " + (end - start) + " (ms)");
+        LOGGER.debug("Built search index in " + (end - start) + " (ms)");
         writer.close();
 
         return new SearchableIndex(index, map);
 
     }
-
 
     /**
      * Searches all fields
@@ -167,7 +154,6 @@ public class SearchManager {
     public Query getQuery(String query) throws ParseException {
         return getQuery(FieldType.getAllFields(), query);
     }
-
 
     /**
      * Searches query in specified field
@@ -180,7 +166,6 @@ public class SearchManager {
         return new QueryParser(Version.LUCENE_34, field.getName(), analyzer).parse(query);
     }
 
-
     /**
      * Searches query in specified fields
      * @param fields
@@ -189,6 +174,4 @@ public class SearchManager {
     public Query getQuery(String[] fields, String query) throws ParseException {
         return new MultiFieldQueryParser(Version.LUCENE_34, fields, analyzer).parse(query);
     }
-
 }
-

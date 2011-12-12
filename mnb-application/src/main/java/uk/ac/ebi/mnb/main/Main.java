@@ -4,13 +4,14 @@
  */
 package uk.ac.ebi.mnb.main;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.apache.log4j.PropertyConfigurator;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.menu.file.PreferenceDialog;
 import uk.ac.ebi.mnb.view.AboutDialog;
@@ -28,6 +29,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
+        loadLogging();
 
         setupOSX();
 
@@ -51,6 +54,19 @@ public class Main {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    /**
+     * Ensure use of our own Log4J file
+     */
+    private static void loadLogging() {
+        try {
+            Properties properites = new Properties();
+            properites.load(Main.class.getResourceAsStream("/config/metingeer-log.properties"));
+            PropertyConfigurator.configure(properites);
+        } catch (IOException ex) {
+            System.err.println("Unable to load logging configuration file");
+        }
     }
 
     private static void setupOSX() {

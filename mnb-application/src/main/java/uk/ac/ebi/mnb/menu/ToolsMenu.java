@@ -4,6 +4,8 @@
  */
 package uk.ac.ebi.mnb.menu;
 
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import org.apache.log4j.Logger;
@@ -124,9 +126,7 @@ public class ToolsMenu extends ContextMenu {
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
                 return reconstructions.size() > 1;
             }
-        });
-
-
+        });        
 
     }
 
@@ -135,6 +135,4 @@ public class ToolsMenu extends ContextMenu {
         super.updateContext();
         gapMenu.updateContext();
     }
-
-
 }

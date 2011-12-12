@@ -99,7 +99,14 @@ public class MessageBar extends JPanel implements MessageManager {
     }
 
     public void addMessage(Message message) {
-        LOGGER.info("Adding message to manager: " + message.getMessage());
+
+
+        if (message instanceof ErrorMessage) {
+            LOGGER.error("Displaying error message: " + message.getMessage());
+        } else if (message instanceof WarningMessage) {
+            LOGGER.warn("Displaying warning message: " + message.getMessage());
+        }
+
         stack.push(message);
         update();
         setVisible(true);
