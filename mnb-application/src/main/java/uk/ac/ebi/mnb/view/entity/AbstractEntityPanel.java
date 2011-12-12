@@ -99,7 +99,8 @@ public abstract class AbstractEntityPanel
         return renderer;
     }
 
-    public AbstractEntityPanel(String type, AnnotationRenderer renderer) {
+    public AbstractEntityPanel(String type,
+                               AnnotationRenderer renderer) {
         setBackground(Color.WHITE);
         this.type = type;
         typeLabel.setText(type);
@@ -240,7 +241,7 @@ public abstract class AbstractEntityPanel
         add(new JSeparator(), cc.xy(1, 2));
         add(middle, cc.xy(1, 3));
         add(new JSeparator(), cc.xy(1, 4));
-        add(observations, cc.xy(1, 4));
+        add(observations, cc.xy(1, 5));
 
 
 
@@ -278,13 +279,14 @@ public abstract class AbstractEntityPanel
         Icon closeIcon = ViewUtils.getIcon("images/cutout/close_16x16.png", "Remove annotation");
 
         if (entity != null) {
-            FormLayout layout = new FormLayout("p:grow, min, 4dlu, p, 4dlu, left:p:grow", "");
+            FormLayout layout = new FormLayout("p:grow, min, 4dlu, p, 4dlu, left:p, 20dlu, right:p", "");
             panel.setLayout(layout);
             for (Annotation annotation : entity.getAnnotations()) {
                 layout.appendRow(new RowSpec(Sizes.PREFERRED));
                 panel.add(renderer.getLabel(annotation), cc.xy(4, layout.getRowCount()));
                 panel.add((JComponent) renderer.visit(annotation), cc.xy(6, layout.getRowCount())); // better way to do this would be with a method similar to table e.g. this.setText(), this.setLabel()
 
+                panel.add(LabelFactory.newFormLabel("show"), cc.xy(8, layout.getRowCount()));
 
                 DeleteAnnotation action = new DeleteAnnotation(entity,
                                                                annotation,
@@ -378,26 +380,33 @@ public abstract class AbstractEntityPanel
 
             observationModel.removeAllElements();
             final ConservationRenderer complexRenderer = new ConservationRenderer(new Rectangle(0, 0, 750, 10),
-                                                                                  new BasicAlignmentColor(ColorUtilities.EMBL_PETROL, ColorUtilities.EMBL_PETROL, Color.lightGray),
+                                                                                  new BasicAlignmentColor(
+                    ColorUtilities.EMBL_PETROL, ColorUtilities.EMBL_PETROL, Color.lightGray),
                                                                                   new BlastConsensusScorer(),
                                                                                   1);
             complexRenderer.setGranularity(0.8f);
             final AlignmentRenderer basicRenderer = new AlignmentRenderer(new Rectangle(0, 0, 750, 10),
-                                                                          new BasicAlignmentColor(ColorUtilities.EMBL_PETROL, ColorUtilities.EMBL_PETROL, Color.lightGray),
+                                                                          new BasicAlignmentColor(
+                    ColorUtilities.EMBL_PETROL, ColorUtilities.EMBL_PETROL, Color.lightGray),
                                                                           1);
 
 
             observationList.setCellRenderer(new DefaultListCellRenderer() {
 
                 @Override
-                public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                public Component getListCellRendererComponent(JList list,
+                                                              Object value,
+                                                              int index,
+                                                              boolean isSelected,
+                                                              boolean cellHasFocus) {
                     if (value instanceof LocalAlignment) {
                         LocalAlignment alignment = (LocalAlignment) value;
                         AlignmentRenderer renderer = alignment.hasSequences() ? complexRenderer : basicRenderer;
                         Icon icon = new ImageIcon(renderer.render((LocalAlignment) value, (GeneProduct) entity));
                         this.setIcon(icon);
                         this.setBorder(null);
-                        this.setBackground(null);
+                        this.setBackground(isSelected ? Color.BLACK : Color.WHITE);
+                        this.setForeground(isSelected ? Color.WHITE : Color.BLACK);
                         this.setFont(ViewUtils.VERDANA_PLAIN_11);
                         this.setText(alignment.getSubject());
                         this.setToolTipText(ViewUtils.htmlWrapper(alignment.getHTMLSummary()));
@@ -417,8 +426,8 @@ public abstract class AbstractEntityPanel
 
             middle.remove(annotations);
             annotations = getAnnotationPanel();
-            ((Box)middle.getComponent(2)).remove(1);
-            ((Box)middle.getComponent(2)).add(annotations);
+            ((Box) middle.getComponent(2)).remove(1);
+            ((Box) middle.getComponent(2)).add(annotations);
             return true;
         }
 

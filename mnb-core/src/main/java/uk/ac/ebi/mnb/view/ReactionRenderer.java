@@ -20,22 +20,25 @@
  */
 package uk.ac.ebi.mnb.view;
 
+import com.google.common.collect.BiMap;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.geom.Area;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
@@ -51,9 +54,10 @@ import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.Compartment;
-import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.reaction.MetaboliteParticipant;
+import uk.ac.ebi.core.tools.TransportReactionUtil;
+import uk.ac.ebi.core.tools.TransportReactionUtil.*;
 import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
@@ -74,21 +78,119 @@ public class ReactionRenderer {
             new AWTFontManager());
     private StructureDiagramGenerator sdg = new StructureDiagramGenerator();
 
+    public ImageIcon renderTransportReaction(Reaction<Metabolite, Double, Compartment> rxn) {
+
+        if (!rxn.isTransport()) {
+            throw new InvalidParameterException("Provided reaction is not a transport reaction");
+        }
+
+
+        Classification classification = TransportReactionUtil.getClassification(rxn);
+
+        switch (classification) {
+            case ANTIPORTER:
+                return null;
+            case SYMPORTER:
+                return null;
+            case UNIPORTER:
+                return renderUniporterReaction(rxn);
+        }
+
+        return null;
+
+    }
+
+    /**
+     * Draws a transport uniporter reaction
+     * @param rxn
+     * @return
+     */
+    public ImageIcon renderUniporterReaction(Reaction<Metabolite, Double, Compartment> rxn) {
+
+        BiMap<Participant<Metabolite, ?, Compartment>, Participant<Metabolite, ?, Compartment>> mapping = TransportReactionUtil.getMappings(
+                rxn);
+
+        Participant<Metabolite, ?, Compartment> left = mapping.keySet().iterator().next();
+        Participant<Metabolite, ?, Compartment> right = mapping.get(left);
+
+        int n = mapping.size();
+
+        int width = (n * 128) + (128); // arrow
+        int height = 128;
+
+        BufferedImage base = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+        Graphics2D g2 = (Graphics2D) base.getGraphics();
+        g2.setColor(Color.WHITE);
+        g2.fill(new Rectangle(0, 0, width, height));
+
+        drawMolecule(g2, new Rectangle(0, 0, 128, 128),
+                     (MetaboliteParticipant) left);
+
+        drawCompartmentSeperator(g2, new Rectangle(128, 0, 128, 128));
+
+        drawArrow(g2, new Rectangle(128, 0, 128, 128), rxn.getReversibility(), 1.25f);
+
+        drawMolecule(g2, new Rectangle(256, 0, 128, 128),
+                     (MetaboliteParticipant) right);
+
+        g2.dispose();
+
+        return new ImageIcon(base);
+
+    }
+
+    public void drawCompartmentSeperator(Graphics2D g2,
+                                         Rectangle bounds) {
+
+        double cx = bounds.getCenterX();
+        double cy = bounds.getCenterY();
+
+        g2.setColor(Color.LIGHT_GRAY);
+        g2.setStroke(new BasicStroke(2f,
+                                     BasicStroke.CAP_ROUND,
+                                     BasicStroke.JOIN_ROUND,
+                                     1f,
+                                     new float[]{5f},
+                                     2.5f));
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+
+        GeneralPath lp = new GeneralPath();
+        lp.moveTo(cx - 25, 5);
+        lp.quadTo(cx - 5, 5, cx - 5, 25);
+        lp.lineTo(cx - 5, bounds.getHeight() - 25);
+        lp.quadTo(cx - 5, bounds.getHeight() - 5, cx - 25, bounds.getHeight() - 5);
+
+        GeneralPath rp = new GeneralPath();
+        rp.moveTo(cx + 25, 5);
+        rp.quadTo(cx + 5, 5, cx + 5, 25);
+        rp.lineTo(cx + 5, bounds.getHeight() - 25);
+        rp.quadTo(cx + 5, bounds.getHeight() - 5, cx + 25, bounds.getHeight() - 5);
+
+        g2.draw(lp);
+
+        g2.draw(rp);
+
+
+    }
+
     public ImageIcon getReaction(Reaction<Metabolite, Double, Compartment> rxn) {
 
-        int nParticipants = rxn.getAllReactionParticipants().size();
+        int n = rxn.getAllReactionParticipants().size();
 
-        if (nParticipants == 0) {
+        if (n == 0) {
             return new ImageIcon();
         }
 
         int height = 128;
-        int width = (nParticipants * 128)
+        int width = (n * 128)
                     + (128) // arrow
-                    + (nParticipants > 2 ? ((nParticipants - 2) * 15) : 0);
+                    + (n > 2 ? ((n - 2) * 15) : 0);
 
         BufferedImage masterImg = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g2 = (Graphics2D) masterImg.getGraphics();
+        g2.setColor(Color.WHITE);
+        g2.fill(new Rectangle(0, 0, width, height));
 
         Rectangle2D bounds = new Rectangle2D.Double(-128, 0, 128, 128);
 
@@ -127,15 +229,15 @@ public class ReactionRenderer {
             }
         }
 
+        g2.dispose();
 
         return new ImageIcon(masterImg);
 
     }
 
-    public void drawMolecule(Graphics2D g2, Rectangle2D bounds, MetaboliteParticipant p) {
-
-        g2.setColor(Color.WHITE);
-        g2.fill(bounds);
+    public void drawMolecule(Graphics2D g2,
+                             Rectangle2D bounds,
+                             MetaboliteParticipant p) {
 
         Metabolite metabolite = p.getMolecule();
         g2.setColor(Color.LIGHT_GRAY);
@@ -171,13 +273,13 @@ public class ReactionRenderer {
 
     }
 
-    public void drawPlus(Graphics2D g2, Rectangle2D bounds) {
+    public void drawPlus(Graphics2D g2,
+                         Rectangle2D bounds) {
         double length = (bounds.getWidth() / 2) * 0.8;
 
         double centreX = (bounds.getWidth() / 2d) + bounds.getX();
         double centreY = (bounds.getHeight() / 2d) + bounds.getY();
-        g2.setColor(Color.WHITE);
-        g2.fill(bounds);
+
         g2.setColor(Color.LIGHT_GRAY);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         String direction = "+";
@@ -188,22 +290,32 @@ public class ReactionRenderer {
 
     }
 
-    public void drawArrow(Graphics2D g2, Rectangle2D bounds, Reversibility reversibility) {
+    public void drawArrow(Graphics2D g2,
+                          Rectangle2D bounds,
+                          Reversibility reversibility) {
+        drawArrow(g2, bounds, reversibility, 1f);
+    }
+
+    public void drawArrow(Graphics2D g2,
+                          Rectangle2D bounds,
+                          Reversibility reversibility,
+                          float scale) {
         double length = (bounds.getWidth() / 2) * 0.8;
 
-        g2.setColor(Color.WHITE);
+
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.fill(bounds);
         g2.setColor(Color.LIGHT_GRAY);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 
         String direction = reversibility.toString();
-        g2.setFont(ViewUtils.DEFAULT_BODY_FONT.deriveFont(34.0f));
-        int width = g2.getFontMetrics().stringWidth(direction);
-        int height = g2.getFontMetrics().getHeight();
+        g2.setFont(ViewUtils.DEFAULT_BODY_FONT.deriveFont(34.0f * scale));
+        Rectangle2D sBounds = g2.getFontMetrics().getStringBounds(direction, g2);
+        int width = (int) sBounds.getWidth();
+        int height = (int) sBounds.getHeight();
 
-        g2.drawString(direction, (int) bounds.getCenterX() - (width / 2), (int) bounds.getCenterY() + (height / 2));
+        g2.drawString(direction, (int) bounds.getCenterX() - (width / 2),
+                      (int) bounds.getCenterY() + (height / 2));
 
 
     }
