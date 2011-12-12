@@ -42,11 +42,13 @@ import com.explodingpixels.macwidgets.*;
 import com.explodingpixels.widgets.WindowUtils;
 import com.jgoodies.forms.factories.Borders;
 import javax.swing.undo.UndoManager;
+import jena.sparql;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
+import uk.ac.ebi.mnb.menu.EditUndoButtons;
 import uk.ac.ebi.mnb.menu.ViewInfo;
 
 /**
@@ -95,8 +97,10 @@ public class MainView
 
 
         ViewInfo selector = new ViewInfo(project);
-
-        toolbar.addComponentToRight(selector.getButtonGroup());
+        final JComponent spacer = MacWidgetFactory.createSpacer(205, 0);
+        toolbar.addComponentToLeft(new EditUndoButtons().getButtonGroup().getComponent());
+        toolbar.addComponentToLeft(spacer);
+        toolbar.addComponentToLeft(selector.getButtonGroup());
         toolbar.addComponentToRight("Search", searchField);
 
         // search field
@@ -204,7 +208,6 @@ public class MainView
         // paint hairline border
         ((BasicSplitPaneUI) pane.getUI()).getDivider().setBorder(
                 BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
-
 
         Box topbar = Box.createVerticalBox();
         topbar.add(toolbar.getComponent());
@@ -385,8 +388,8 @@ public class MainView
     }
 
     public void updateMenuContext() {
-        if(getJMenuBar() != null) getJMenuBar().updateContext();
+        if (getJMenuBar() != null) {
+            getJMenuBar().updateContext();
+        }
     }
-
-
 }

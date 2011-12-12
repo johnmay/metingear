@@ -104,8 +104,10 @@ public abstract class AbstractEntityTable extends JTable implements EntityTable,
 
         removeRowSelectionInterval(0, getModel().getRowCount() - 1);
 
-        for (AnnotatedEntity entity : selectionManager.getEntities()) {
-            int index = convertRowIndexToView(getModel().indexOf(entity));
+        List<AnnotatedEntity> entities = new ArrayList(selectionManager.getEntities());
+
+        for (int i = 0; i < entities.size(); i++) {
+            int index = convertRowIndexToView(getModel().indexOf(entities.get(i)));
             if (index != -1) {
                 addRowSelectionInterval(index, index);
             }
@@ -117,16 +119,12 @@ public abstract class AbstractEntityTable extends JTable implements EntityTable,
             return false;
         }
 
-        removeRowSelectionInterval(0, getModel().getRowCount() - 1);
-        addRowSelectionInterval(selected, selected);
-
         Container parent = getParent();
 
         if (parent != null) {
 
             int y = getTableHeader().getHeight() + (getRowHeight() * selected) - ((int) parent.getHeight()
                                                                                   / 2);
-
             scrollRectToVisible(new Rectangle(0, y,
                                               parent.getWidth(),
                                               parent.getHeight()));

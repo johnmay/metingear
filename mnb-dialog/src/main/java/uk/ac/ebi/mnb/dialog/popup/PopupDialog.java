@@ -124,8 +124,6 @@ public class PopupDialog extends JDialog {
         });
     }
 
-
-
     /**
      * Sets the pop-up location based on mouse position. The tip of the callout will be at the mouse point with no offset
      */
@@ -147,7 +145,11 @@ public class PopupDialog extends JDialog {
     public JPanel getPanel() {
         return panel;
     }
+    // rendering maps
     private Map<Dimension, BufferedImage> backgroundCache = new HashMap();
+    private Map<Integer, Stroke> strokeMap = new HashMap<Integer, Stroke>();
+    private Map<Float, Color> colorMap = new HashMap<Float, Color>();
+    private Color grey = new Color(0, 0, 0, 50);
 
     public BufferedImage getBackgroundImage() {
 
@@ -173,13 +175,15 @@ public class PopupDialog extends JDialog {
 
         Shape callout = getCalloutShape();
         // draws the border
-        int sw = 10 * 2;
-        Color grey = new Color(0, 0, 0, 50);
+        int sw = 5 * 2;
         for (int i = sw; i >= 2; i -= 2) {
             float pct = (float) (sw - i) / (sw - 1);
-            g2.setColor(ColorUtilities.getMixedColor(grey, pct,
-                                                     ViewUtils.CLEAR_COLOUR, 1.0f - pct));
-            g2.setStroke(new BasicStroke(i));
+
+            Color color = getShadowColor(pct);
+            Stroke stroke = getShadowStroke(i);
+
+            g2.setColor(color);
+            g2.setStroke(stroke);
             g2.draw(callout);
         }
 
@@ -190,6 +194,23 @@ public class PopupDialog extends JDialog {
         backgroundCache.put(size, img);
 
         return img;
+    }
+
+    public Stroke getShadowStroke(int i) {
+        if (strokeMap.containsKey(i)) {
+            return strokeMap.get(i);
+        }
+        strokeMap.put(i, new BasicStroke(i));
+        return strokeMap.get(i);
+    }
+
+    public Color getShadowColor(float pct) {
+        if (colorMap.containsKey(pct)) {
+            return colorMap.get(pct);
+        }
+        colorMap.put(pct, ColorUtilities.getMixedColor(grey, pct,
+                                                       ViewUtils.CLEAR_COLOUR, 1.0f - pct));
+        return colorMap.get(pct);
     }
 
     public Area getCalloutShape() {

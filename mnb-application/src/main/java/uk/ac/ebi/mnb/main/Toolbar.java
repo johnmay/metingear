@@ -23,7 +23,6 @@ package uk.ac.ebi.mnb.main;
 import com.explodingpixels.macwidgets.LabeledComponentGroup;
 import com.explodingpixels.macwidgets.UnifiedToolBar;
 import com.explodingpixels.macwidgets.plaf.EmphasizedLabelUI;
-import java.awt.Color;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import org.apache.log4j.Logger;
