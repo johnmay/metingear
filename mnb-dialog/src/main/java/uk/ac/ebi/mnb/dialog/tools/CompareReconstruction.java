@@ -4,17 +4,17 @@
  * 2011.11.28
  *
  * This file is part of the CheMet library
- *
+ * 
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -40,8 +40,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Reconstruction;
@@ -85,7 +85,6 @@ public class CompareReconstruction
     private JCheckBox stereo = new MCheckBox("stereochemical bonds");
     // output
     private JTextArea output = new JTextArea(7, 40);
-    private JLabel label = new JLabel();
 
     public CompareReconstruction(JFrame frame,
                                  TargetedUpdate updater,
@@ -145,17 +144,17 @@ public class CompareReconstruction
                                                                    AtomicNumberSeed.class,
                                                                    ConnectedAtomSeed.class);
         if (stereo.isSelected()) {
-            LOGGER.debug("Using StereoSeed");
             methods.add(SeedFactory.getInstance().getSeed(StereoSeed.class));
         }
-        if (charge.isSelected()) {
-            LOGGER.debug("Using ChargeSeed");
+        if (stereo.isSelected()) {
             methods.add(SeedFactory.getInstance().getSeed(ChargeSeed.class));
         }
 
         c = null;
         if (reconC == null) {
-            c = new ReconstructionComparison(methods, hydrogen.isSelected(), reconA, reconB);
+            c = new ReconstructionComparison(reconA, reconB);
+            c.setMethods(methods);
+            c.setIncludeHydrogens(hydrogen.isSelected());
 
             double[] data = new double[]{
                 c.getMetaboliteTotal(reconA),
@@ -172,32 +171,15 @@ public class CompareReconstruction
                                           0);
             venn.setCircleLegends(reconA.getAccession(), reconB.getAccession(), "-");
             venn.setSize(540, 540);
-<<<<<<< .mine
-
-            label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
-                          + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
-                          + reconA.getAccession() + " ‚à© " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconA, reconB) + "<br></html>");
-
-=======
-
-            label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
-                          + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
-                          + reconA.getAccession() + " ∩ " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconA, reconB) + "<br></html>");
-
->>>>>>> .r1055
 //            output.setText(
 //                    reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "\n"
 //                    + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "\n"
 //                    + reconA.getAccession() + "+" + reconB.getAccession() + ": " + c.getMetaboliteInstersect(reconA, reconB) + "\n");
         } else {
-<<<<<<< .mine
-            c = new ReconstructionComparison(methods, hydrogen.isSelected(), reconA, reconB, reconC);
-=======
-            c = new ReconstructionComparison(methods, hydrogen.isSelected(), reconA, reconB, reconC);
-          
->>>>>>> .r1055
+            c = new ReconstructionComparison(reconA, reconB, reconC);
+            c.setMethods(methods);
+            c.setIncludeHydrogens(hydrogen.isSelected());
+
 
             int ab = c.getMetaboliteInstersect(reconA, reconB);
             int bc = c.getMetaboliteInstersect(reconB, reconC);
@@ -229,33 +211,6 @@ public class CompareReconstruction
             venn.setCircleLegends(reconA.getAccession(), reconB.getAccession(), reconC.getAccession());
 
             venn.setSize(540, 540);
-<<<<<<< .mine
-            label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
-                          + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
-                          + reconC.getAccession() + ": " + c.getMetaboliteTotal(reconC) + "<br>"
-                          + reconA.getAccession() + " ‚à© " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconA, reconB)
-                          + reconA.getAccession() + " ‚à© " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconA, reconC)
-                          + reconB.getAccession() + " ‚à© " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconB, reconC)
-                          + reconA.getAccession() + " ‚à© " + reconB.getAccession() + "‚à©" + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconA, reconB, reconC)
-                          + "<br></html>");
-=======
-            label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
-                          + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
-                          + reconC.getAccession() + ": " + c.getMetaboliteTotal(reconC) + "<br>"
-                          + reconA.getAccession() + " ∩ " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconA, reconB)
-                          + reconA.getAccession() + " ∩ " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconA, reconC)
-                          + reconB.getAccession() + " ∩ " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconB, reconC)
-                          + reconA.getAccession() + " ∩ " + reconB.getAccession() + "∩" + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconA, reconB, reconC)
-                          + "<br></html>");
->>>>>>> .r1055
 
         }
 
@@ -280,34 +235,27 @@ public class CompareReconstruction
             BufferedImage img = ViewUtilities.convertRenderedImage(JAI.create("url", url));
             JFrame frame = new JFrame();
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setLayout(new FormLayout("p", "p, 4dlu, p, 4dlu,  p, 4dlu, p"));
+            frame.setLayout(new FormLayout("p", "p, 4dlu,p, 4dlu, p"));
             CellConstraints cc = new CellConstraints();
 
             final JScrollPane pane = new JScrollPane();
             final JComboBox box = new JComboBox(MetaboliteComparison.TableData.values());
-            pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
 
             box.addItemListener(new ItemListener() {
 
                 public void itemStateChanged(ItemEvent e) {
-                    JTable table = (JTable) pane.getViewport().getView();
-                    int[] selections = table.getSelectedRows();
-                    JTable newTable = metComp.getComparisconTable(
-                            (MetaboliteComparison.TableData) box.getSelectedItem());
-                    for (int i : selections) {
-                        newTable.addRowSelectionInterval(i, i);
-                    }
-                    pane.setViewportView(newTable);
+                    pane.setViewportView(metComp.getComparisconTable(
+                            (MetaboliteComparison.TableData) box.getSelectedItem()));
                     pane.repaint();
                     pane.revalidate();
                 }
             });
 
+            pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
 
             frame.add(new JLabel(new ImageIcon(img)), cc.xy(1, 1));
-            frame.add(label, cc.xy(1, 3));
-            frame.add(box, cc.xy(1, 5));
-            frame.add(pane, cc.xy(1, 7));
+            frame.add(box, cc.xy(1, 3));
+            frame.add(pane, cc.xy(1, 5));
             frame.pack();
             frame.setVisible(true);
         } catch (IOException ex) {

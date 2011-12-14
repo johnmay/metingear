@@ -73,9 +73,6 @@ public class ReactionPanel
     @Override
     public boolean update() {
 
-        if(entity == null){
-            return false;
-        }
 
         // update all fields and labels...
         reactionLabel.setIcon(renderer.getReaction(entity));
