@@ -26,7 +26,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  *          EditUndoButtons - 2011.12.09 <br>
@@ -60,7 +60,7 @@ public class EditUndoButtons {
                 MainView.getInstance().update();
             }
         });
-        back.setIcon(ViewUtils.getIcon("images/toolbar/back.png"));
+        back.setIcon(ViewUtilities.getIcon("images/toolbar/back.png"));
         forward.setAction(new AbstractAction() {
 
             public void actionPerformed(ActionEvent e) {
@@ -68,7 +68,7 @@ public class EditUndoButtons {
                 MainView.getInstance().update();
             }
         });
-        forward.setIcon(ViewUtils.getIcon("images/toolbar/forward.png"));
+        forward.setIcon(ViewUtilities.getIcon("images/toolbar/forward.png"));
 
 
 

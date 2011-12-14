@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mnb.dialog.file.importation;
 
-import furbelow.SpinningDialWaitIndicator;
+import net.sf.furbelow.SpinningDialWaitIndicator;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;

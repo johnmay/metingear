@@ -23,14 +23,14 @@ package uk.ac.ebi.chemet.render.source;
 
 import com.explodingpixels.macwidgets.SourceListCategory;
 import com.explodingpixels.macwidgets.SourceListModel;
-import furbelow.SpinningDial;
+import net.sf.furbelow.SpinningDial;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.chemet.io.external.TaskStatus;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 
 /**
@@ -71,7 +71,7 @@ public class TaskSourceItem
         if( getEntity().getStatus() == TaskStatus.RUNNING ) {
             setIcon(new SpinningDial(16, 16, 12));
         } else if( getEntity().getStatus() == TaskStatus.ERROR ) {
-            setIcon(ViewUtils.WARNING_ICON_16x16);
+            setIcon(ViewUtilities.WARNING_ICON_16x16);
         } else {
             setIcon(null);
         }

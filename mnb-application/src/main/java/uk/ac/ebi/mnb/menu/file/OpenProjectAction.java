@@ -12,7 +12,7 @@ import javax.swing.Icon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileView;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.io.FileFilterManager;
@@ -115,7 +115,7 @@ public class OpenProjectAction
         @Override
         public Icon getIcon(File f) {
             if (projFilter.accept(f)) {
-                return ViewUtils.icon_16x16;
+                return ViewUtilities.icon_16x16;
             }
             return super.getIcon(f);
         }

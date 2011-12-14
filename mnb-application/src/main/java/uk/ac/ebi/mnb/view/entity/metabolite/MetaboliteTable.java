@@ -23,8 +23,10 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 import com.explodingpixels.macwidgets.ITunesRatingTableCellRenderer;
 import java.awt.Component;
 import javax.swing.JTable;
-import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
-import uk.ac.ebi.mnb.renderers.BooleanCellRenderer;
+import javax.swing.KeyStroke;
+import javax.swing.table.DefaultTableColumnModel;
+import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
+import uk.ac.ebi.chemet.render.table.renderers.BooleanCellRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
@@ -32,9 +34,9 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.StarRating;
 import uk.ac.ebi.interfaces.Rating;
 import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
-import uk.ac.ebi.mnb.renderers.FormulaCellRender;
-import uk.ac.ebi.mnb.renderers.RatingCellRenderer;
-import uk.ac.ebi.visualisation.editors.RatingCellEditor;
+import uk.ac.ebi.chemet.render.table.renderers.FormulaCellRender;
+import uk.ac.ebi.chemet.render.table.renderers.RatingCellRenderer;
+import uk.ac.ebi.chemet.render.table.editors.RatingCellEditor;
 
 /**
  *          MetaboliteTable – 2011.09.05 <br>
@@ -43,7 +45,8 @@ import uk.ac.ebi.visualisation.editors.RatingCellEditor;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetaboliteTable extends AbstractEntityTable {
+public class MetaboliteTable
+        extends AbstractEntityTable {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteTable.class);
 
@@ -53,6 +56,7 @@ public class MetaboliteTable extends AbstractEntityTable {
         //                          new ChemStructureRenderer());
         AnnotationCellRenderer annotationRenderer = new AnnotationCellRenderer();
         BooleanCellRenderer booleanRenderer = new BooleanCellRenderer();
+
         setDefaultRenderer(Boolean.class,
                            booleanRenderer);
         setDefaultRenderer(CrossReference.class,
@@ -61,6 +65,11 @@ public class MetaboliteTable extends AbstractEntityTable {
 
         setDefaultRenderer(MolecularFormula.class,
                            new FormulaCellRender());
+
+
+
+
+
 
         setDefaultRenderer(Rating.class, new RatingCellRenderer());
         setDefaultEditor(Rating.class, new RatingCellEditor());
@@ -71,65 +80,5 @@ public class MetaboliteTable extends AbstractEntityTable {
         //addMouseListener(new DoubleClickListener(this));
 
     }
-//    private class ChemStructureRenderer extends DefaultTableCellRenderer {
-//
-//        private CachedMoleculeRenderer cmr = new CachedMoleculeRenderer();
-//
-//        @Override
-//        public Component getTableCellRendererComponent(JTable table,
-//                Object value,
-//                boolean isSelected,
-//                boolean hasFocus,
-//                int row,
-//                int column) {
-//
-//            JLabel label = nullLabel;
-//            if (value instanceof Set) {
-//
-//                Set values = ((Set) value);
-//
-//                if (values.isEmpty() == false) {
-//                    ChemicalStructure obj = ((ChemicalStructure) values.iterator().next());
-//                    IAtomContainer molecule = obj.getMolecule();
-//                    if (molecule != null) {
-//                        BufferedImage img = cmr.getImage(molecule, new Rectangle(0, 0, 64,
-//                                64));
-//                        label = new JLabel(new ImageIcon(img));
-//                    } else {
-//                        label = new JLabel("No Structure");
-//                    }
-//                }
-//            }
-//            if (isSelected) {
-//                label.setBackground(getSelectionBackground());
-//            } else {
-//                label.setBackground(getBackground());
-//            }
-//
-//            return label;
-//
-//        }
-//    }
-//
-//    private class DoubleClickListener extends MouseAdapter {
-//
-//        private AbstractEntityTable table;
-//
-//        public DoubleClickListener(AbstractEntityTable table) {
-//            this.table = table;
-//        }
-//
-//        @Override
-//        public void mouseClicked(MouseEvent e) {
-//            if (e.getClickCount() == 2) {
-//                int rowIndex = table.getSelectedRow();
-//                int cellIndex = table.getSelectedColumn();
-//                System.out.println(rowIndex + "," + cellIndex);
-////                if (index != -1) {
-////                    AnnotatedEntity entity = table.getModel().getEntity(convertRowIndexToModel(index));
-////                    MainView.getInstance().getViewController().setSelection(entity);
-////                }
-//            }
-//        }
-//    }
+
 }

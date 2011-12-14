@@ -27,7 +27,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import uk.ac.ebi.mnb.main.MainView;
 
@@ -60,7 +60,7 @@ public class InspectorToolbar
         setUpEditPanel();
         add(editPanel.getComponent(), EDIT_PANEL_NAME);
         add(viewPanel.getComponent(), VIEW_PANEL_NAME);
-        setBackground(ViewUtils.DARK_BACKGROUND);
+        setBackground(ViewUtilities.DARK_BACKGROUND);
         setBorder(Borders.DLU2_BORDER);
     }
 

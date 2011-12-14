@@ -10,7 +10,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import javax.swing.JSeparator;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
 import uk.ac.ebi.mnb.main.MainView;
 
 

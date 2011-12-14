@@ -20,9 +20,9 @@
  */
 package uk.ac.ebi.mnb.dialog.tools.gap;
 
+import com.google.common.base.Joiner;
 import ilog.concert.IloException;
 import java.awt.event.ActionEvent;
-import java.util.Arrays;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
 import uk.ac.ebi.core.MetabolicReaction;
@@ -44,7 +44,8 @@ import uk.ac.ebi.optimise.gap.GapFind;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class NonConsumptionMetabolites extends GeneralAction {
+public class NonConsumptionMetabolites
+        extends GeneralAction {
 
     private static final Logger LOGGER = Logger.getLogger(NonConsumptionMetabolites.class);
     private MainController controller;
@@ -67,7 +68,10 @@ public class NonConsumptionMetabolites extends GeneralAction {
             SelectionManager manager = controller.getViewController().getSelection();
             manager.clear();
 
-            for (Integer i : gf.findNonConsumptionMetabolites()) {
+            Integer[] indices = gf.findNonConsumptionMetabolites();
+            LOGGER.debug("Root Non-Consumption Metabolites: " + Joiner.on(", ").join(indices));
+
+            for (Integer i : indices) {
                 Metabolite metabolite = s.getMolecule(i).metabolite;
                 manager.add(metabolite);
             }
@@ -78,7 +82,8 @@ public class NonConsumptionMetabolites extends GeneralAction {
             controller.getMessageManager().addMessage(new ErrorMessage(ex.getLocalizedMessage()));
 
         } catch (UnsatisfiedLinkError ex) {
-            controller.getMessageManager().addMessage(new ErrorMessage("Please ensure the CPLEX library path is set correctly"));
+            controller.getMessageManager().addMessage(new ErrorMessage(
+                    "Please ensure the CPLEX library path is set correctly"));
         }
     }
 }

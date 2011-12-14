@@ -23,6 +23,7 @@ import java.util.List;
 
 import uk.ac.ebi.core.*;
 import uk.ac.ebi.mnb.core.*;
+import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
@@ -73,6 +74,7 @@ public class MainView
     private MessageManager messages = new MessageBar();
     private SourceController sourceController; //TODO:  move to SourceList wrapping class
     private JTextField searchField = new JTextField(10); //TODO:  move to a toolbar wraping class
+    private final SourceList source;
 
     /**
      * Inner class holding the instance
@@ -187,7 +189,7 @@ public class MainView
 
         // source list (todo: wrap in a class MNBSourceList)
         sourceController = new SourceController();
-        final SourceList source = new SourceList(sourceController.model);
+        source = new SourceList(sourceController.model);
         WindowUtils.installJComponentRepainterOnWindowFocusChanged(source.getComponent());
         SourceListControlBar controlBar = new SourceListControlBar();
         controlBar.installDraggableWidgetOnSplitPane(pane);
@@ -308,7 +310,14 @@ public class MainView
     public boolean update() {
         project.update();
         sourceController.update();
+        source.getComponent().repaint();
         return true; // need way of neatly combinding
+    }
+
+    public boolean update(SelectionManager selection) {
+        project.update(selection);
+        sourceController.update();
+        return true;
     }
 
     /** Message delegation **/

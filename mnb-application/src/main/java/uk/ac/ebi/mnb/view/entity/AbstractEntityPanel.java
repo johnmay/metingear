@@ -20,28 +20,22 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.mnb.view.entity.components.AnnotationTable;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import uk.ac.ebi.chemet.visualisation.*;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.*;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
 import uk.ac.ebi.mnb.dialog.popup.AlignmentViewer;
 import uk.ac.ebi.mnb.edit.*;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.renderers.ListLinkRenderer;
-import uk.ac.ebi.mnb.view.labels.IconButton;
-import uk.ac.ebi.observation.ObservationCollection;
+import uk.ac.ebi.chemet.render.table.renderers.ListLinkRenderer;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
-import uk.ac.ebi.visualisation.ColorUtilities;
+import uk.ac.ebi.chemet.render.ColorUtilities;
 
 import javax.swing.*;
 import javax.swing.undo.UndoableEdit;
@@ -50,13 +44,18 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.*;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.mnb.view.PanelFactory;
-import uk.ac.ebi.ui.component.factory.FieldFactory;
-import uk.ac.ebi.visualisation.VerticalLabelUI;
+import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.observation.ObservationCollection;
+import uk.ac.ebi.chemet.render.list.renderers.LocalAlignmentListCellRenderer;
+import uk.ac.ebi.chemet.render.factory.FieldFactory;
+import uk.ac.ebi.chemet.render.PooledClassBasedListCellDRR;
+import uk.ac.ebi.chemet.render.ui.VerticalLabelUI;
+import uk.ac.ebi.mnb.view.entity.components.InternalReferences;
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
@@ -72,27 +71,27 @@ public abstract class AbstractEntityPanel
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityPanel.class);
     private String type;
     private JLabel typeLabel = LabelFactory.newLabel("");
-    private JSeparator seperator = new JSeparator(JSeparator.HORIZONTAL);
     private JTextField accession = FieldFactory.newTransparentField(10, false);
     private JTextField name = FieldFactory.newTransparentField(30, false);
     private JTextField abbreviation = FieldFactory.newTransparentField(10, false);
     private AnnotatedEntity entity;
+    //
     private JList observationList = new JList();
+    private InternalReferences references = new InternalReferences();
+    private AnnotationTable annotationTable;
+    //
     private DefaultListModel observationModel = new DefaultListModel();
     private CellConstraints cc = new CellConstraints();
     private AnnotationRenderer renderer;
     private JPanel middle;
     private JPanel synopsis;
     private JPanel basic = PanelFactory.createInfoPanel("p, p:grow, p, p:grow, p", "p");
-    private JPanel annotations;
     private JPanel observations;
     private JLabel refLabel;
     private JLabel synLabel;
     private JLabel annLabel;
     private JScrollPane refPane;
     private List<JButton> removeAnnotationButtons = new ArrayList();
-    private JList references = new JList();
-    private DefaultListModel refModel = new DefaultListModel();
     private boolean editable;
 
     public AnnotationVisitor getRenderer() {
@@ -111,45 +110,7 @@ public abstract class AbstractEntityPanel
         accession.setHorizontalAlignment(SwingConstants.CENTER);
         abbreviation.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // internal references
-        references.setModel(refModel);
-        references.setVisibleRowCount(8);
-        references.setCellRenderer(new ListLinkRenderer());
-        references.addMouseMotionListener(new MouseAdapter() {
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                int index = references.locationToIndex(e.getPoint());
-                if (index == -1) {
-                    return;
-                }
-                if (references.getCellBounds(index, index).contains(e.getPoint())) {
-                    references.setSelectedIndex(index);
-                    setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                } else {
-                    references.removeSelectionInterval(0, references.getModel().getSize());
-                    setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                }
-            }
-        });
-        references.addMouseListener(new MouseAdapter() {
-
-            // need to monitor when we leave (mouseMoved no longer inside JList)
-            @Override
-            public void mouseExited(MouseEvent e) {
-                references.removeSelectionInterval(0, references.getModel().getSize());
-                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int index = references.locationToIndex(e.getPoint());
-                SelectionManager manager = MainView.getInstance().getViewController().getSelection();
-                manager.clear().add((AnnotatedEntity) refModel.get(index));
-                MainView.getInstance().getViewController().setSelection(manager);
-            }
-        });
-
+        observationList.setModel(observationModel);
         observationList.addMouseListener(new MouseAdapter() {
 
             @Override
@@ -180,17 +141,25 @@ public abstract class AbstractEntityPanel
             }
         });
 
+        annotationTable = new AnnotationTable();
+        annotationTable.getModel().setObservationList(observationList);
+
+
+        OBSERVATION_RENDERING_POOL = new PooledClassBasedListCellDRR();
+
+        OBSERVATION_RENDERING_POOL.setRenderer(LocalAlignment.class, new LocalAlignmentListCellRenderer());
+
+        observationList.setCellRenderer(OBSERVATION_RENDERING_POOL);
+
 
     }
+    private PooledClassBasedListCellDRR OBSERVATION_RENDERING_POOL;
     private AlignmentViewer alignmentView = new AlignmentViewer(MainView.getInstance(), 15);
 
     public void setup() {
-        // could move
 
         synopsis = getSynopsis();
-        annotations = getAnnotationPanel();
         observations = getObservationPanel();
-        //references = getInternalReferencePanel();
 
         setLayout(new FormLayout("p:grow", "p,p,p,p,p"));
         setBorder(Borders.DLU7_BORDER);
@@ -214,7 +183,6 @@ public abstract class AbstractEntityPanel
                                                      VerticalLabelUI.Rotation.ANTICLOCKWISE);
 
 
-
         refPane = new BorderlessScrollPane(references);
         refBox.add(refLabel);
         refBox.add(Box.createHorizontalGlue());
@@ -226,7 +194,7 @@ public abstract class AbstractEntityPanel
         annLabel = LabelFactory.newVerticalFormLabel("ANNOTATIONS",
                                                      VerticalLabelUI.Rotation.ANTICLOCKWISE);
         annBox.add(annLabel);
-        annBox.add(annotations);
+        annBox.add(annotationTable);
         middle.add(annBox, cc.xy(5, 1));
 
 
@@ -244,18 +212,16 @@ public abstract class AbstractEntityPanel
         add(observations, cc.xy(1, 5));
 
 
-
     }
 
     public JPanel getObservationPanel() {
         JPanel panel = PanelFactory.createInfoPanel();
-        observationList.setModel(observationModel);
         panel.add(observationList);
         return panel;
     }
 
     /**
-     * lays out the labels of the basic panel
+     * layout the labels of the basic panel
      */
     private void layoutBasicPanel() {
         basic.add(accession, cc.xy(1, 1));
@@ -273,33 +239,20 @@ public abstract class AbstractEntityPanel
         JPanel panel = PanelFactory.createInfoPanel();
         panel.setBorder(Borders.DLU4_BORDER);
 
-        removeAnnotationButtons = new ArrayList(); // todo use a pool
-
-        MainView view = MainView.getInstance();
-        Icon closeIcon = ViewUtils.getIcon("images/cutout/close_16x16.png", "Remove annotation");
-
-        if (entity != null) {
-            FormLayout layout = new FormLayout("p:grow, min, 4dlu, p, 4dlu, left:p, 20dlu, right:p", "");
-            panel.setLayout(layout);
-            for (Annotation annotation : entity.getAnnotations()) {
-                layout.appendRow(new RowSpec(Sizes.PREFERRED));
-                panel.add(renderer.getLabel(annotation), cc.xy(4, layout.getRowCount()));
-                panel.add((JComponent) renderer.visit(annotation), cc.xy(6, layout.getRowCount())); // better way to do this would be with a method similar to table e.g. this.setText(), this.setLabel()
-
-                panel.add(LabelFactory.newFormLabel("show"), cc.xy(8, layout.getRowCount()));
-
-                DeleteAnnotation action = new DeleteAnnotation(entity,
-                                                               annotation,
-                                                               view.getViewController().getActiveView(),
-                                                               view.getUndoManager());
-                JButton remove = new IconButton(closeIcon, action);
-                remove.setVisible(editable);
-                removeAnnotationButtons.add(remove);
-                panel.add(remove, cc.xy(2, layout.getRowCount()));
-            }
-        }
-
         return panel;
+
+    }
+
+    /**
+     * Clears all displayed components
+     */
+    public void clear() {
+        accession.setText("");
+        name.setText("");
+        abbreviation.setText("");
+        annotationTable.clear();
+        references.clear();
+        observationModel.removeAllElements();
     }
 
     /**
@@ -311,11 +264,15 @@ public abstract class AbstractEntityPanel
      */
     public boolean setEntity(AnnotatedEntity entity) {
 
+
         if (this.entity == entity) { // don't reset
             return false;
         }
 
         this.entity = entity;
+
+        annotationTable.setEntity(entity);
+        annotationTable.getModel().fireTableDataChanged();
 
         return true;
     }
@@ -336,99 +293,45 @@ public abstract class AbstractEntityPanel
 
             abbreviation.setText(entity.getAbbreviation());
 
-
             // for sequence rendering
             if (entity instanceof GeneProduct) {
                 alignmentView.setProduct((GeneProduct) entity);
             }
 
-            // update the internal references
-            refModel.removeAllElements();
+            // update internal references
+            references.getModel().setEntities(getReferences());
 
+            // Update obserations
+            {
+                // check the objects back in to the pool
+                for (int i = 0; i < observationModel.getSize(); i++) {
+                    Observation o = (Observation) observationModel.remove(i);
+                    OBSERVATION_RENDERING_POOL.checkIn(o);
+                }
 
+                observationModel.removeAllElements();
+                ObservationCollection collection = ((AbstractAnnotatedEntity) entity).getObservationCollection();
 
-            for (AnnotatedEntity ref : getReferences()) {
-                refModel.addElement(ref);
+                Collection<Observation> observationCollection = collection.get(LocalAlignment.class);
+                if (!observationCollection.isEmpty()) {
+                    LOGGER.debug("Displying " + observationCollection.size() + " observations");
+                }
+
+                for (Observation observation : observationCollection) {
+                    observationModel.addElement(observation);
+                }
+
             }
 
-//
-//            // resize ref label
-//            {
-//                FontMetrics fm = refLabel.getFontMetrics(refLabel.getFont());
-//                int width = fm.stringWidth(refLabel.getText());
-//                int desired = (int) Math.min(refPane.getViewport().getSize().height, refPane.getSize().height);
-//                float resizeFactor = (float) desired / (float) width;
-//                Font font = refLabel.getFont();
-//                refLabel.setFont(font.deriveFont(font.getSize() * resizeFactor));
-//            }
-//            {
-//                FontMetrics fm = synopsis.getFontMetrics(synLabel.getFont());
-//                int width = fm.stringWidth(synLabel.getText());
-//                int desired = (int) synopsis.getSize().height;
-//                System.out.println(desired);
-//                System.out.println(width);
-//
-//                float resizeFactor = (float) desired / (float) width;
-//                System.out.println(resizeFactor);
-//
-//                Font font = synLabel.getFont();
-//                synLabel.setFont(font.deriveFont(font.getSize() * resizeFactor));
-//            }
+            annotationTable.getModel().fireTableDataChanged();
 
-
-
-
-            observationModel.removeAllElements();
-            final ConservationRenderer complexRenderer = new ConservationRenderer(new Rectangle(0, 0, 750, 10),
-                                                                                  new BasicAlignmentColor(
-                    ColorUtilities.EMBL_PETROL, ColorUtilities.EMBL_PETROL, Color.lightGray),
-                                                                                  new BlastConsensusScorer(),
-                                                                                  1);
-            complexRenderer.setGranularity(0.8f);
-            final AlignmentRenderer basicRenderer = new AlignmentRenderer(new Rectangle(0, 0, 750, 10),
-                                                                          new BasicAlignmentColor(
-                    ColorUtilities.EMBL_PETROL, ColorUtilities.EMBL_PETROL, Color.lightGray),
-                                                                          1);
-
-
-            observationList.setCellRenderer(new DefaultListCellRenderer() {
-
-                @Override
-                public Component getListCellRendererComponent(JList list,
-                                                              Object value,
-                                                              int index,
-                                                              boolean isSelected,
-                                                              boolean cellHasFocus) {
-                    if (value instanceof LocalAlignment) {
-                        LocalAlignment alignment = (LocalAlignment) value;
-                        AlignmentRenderer renderer = alignment.hasSequences() ? complexRenderer : basicRenderer;
-                        Icon icon = new ImageIcon(renderer.render((LocalAlignment) value, (GeneProduct) entity));
-                        this.setIcon(icon);
-                        this.setBorder(null);
-                        this.setBackground(isSelected ? Color.BLACK : Color.WHITE);
-                        this.setForeground(isSelected ? Color.WHITE : Color.BLACK);
-                        this.setFont(ViewUtils.VERDANA_PLAIN_11);
-                        this.setText(alignment.getSubject());
-                        this.setToolTipText(ViewUtils.htmlWrapper(alignment.getHTMLSummary()));
-                        return this;
-                    }
-                    return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                }
-            });
-            ObservationCollection collection = ((AbstractAnnotatedEntity) entity).getObservationCollection();
-            int i = 0;
-            for (Observation observation : collection.get(LocalAlignment.class)) {
-                observationModel.addElement(observation);
-                if (i++ > 15) {
-                    break;
-                }
-            }
-
-            middle.remove(annotations);
-            annotations = getAnnotationPanel();
-            ((Box) middle.getComponent(2)).remove(1);
-            ((Box) middle.getComponent(2)).add(annotations);
+//            middle.remove(annotations);
+//            annotations = getAnnotationPanel();
+//            ((Box) middle.getComponent(2)).remove(1);
+//            ((Box) middle.getComponent(2)).add(annotations);
             return true;
+        } else{
+            clear();
         }
 
         return false;
@@ -450,9 +353,7 @@ public abstract class AbstractEntityPanel
         name.setEditable(editable);
         abbreviation.setEditable(editable);
 
-        for (JButton label : removeAnnotationButtons) {
-            label.setVisible(editable);
-        }
+        annotationTable.setEditable(editable);
 
     }
 

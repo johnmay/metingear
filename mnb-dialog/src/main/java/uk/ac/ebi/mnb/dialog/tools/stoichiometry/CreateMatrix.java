@@ -44,7 +44,7 @@ import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.visualisation.matrix.MatrixPane;
+import uk.ac.ebi.chemet.render.matrix.MatrixPane;
 
 /**
  *          CreateMatrix - 2011.11.24 <br>

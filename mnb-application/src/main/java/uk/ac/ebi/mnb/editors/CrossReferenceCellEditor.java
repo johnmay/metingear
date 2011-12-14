@@ -34,7 +34,8 @@ import javax.swing.table.TableCellEditor;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.dialog.popup.CrossReferenceEditor;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
+import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
+import uk.ac.ebi.chemet.render.table.renderers.DefaultRenderer;
 
 /**
  * @name    CrossReferenceCellEditor - 2011.10.07 <br>
@@ -43,7 +44,9 @@ import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class CrossReferenceCellEditor extends AnnotationCellRenderer implements TableCellEditor {
+public class CrossReferenceCellEditor
+        extends AnnotationCellRenderer
+        implements TableCellEditor {
 
     private static final Logger LOGGER = Logger.getLogger(CrossReferenceCellEditor.class);
     private static CrossReferenceEditor xrefEditor = new CrossReferenceEditor(MainView.getInstance());
@@ -52,6 +55,7 @@ public class CrossReferenceCellEditor extends AnnotationCellRenderer implements 
     public CrossReferenceCellEditor() {
         //  setFont(Settings.getInstance().getTheme().getBodyFont());
         xrefEditor.addComponentListener(new ComponentAdapter() {
+
             @Override
             public void componentHidden(ComponentEvent e) {
                 fireEditingStopped();
@@ -60,7 +64,11 @@ public class CrossReferenceCellEditor extends AnnotationCellRenderer implements 
     }
 
     @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+    public Component getTableCellEditorComponent(JTable table,
+                                                 Object value,
+                                                 boolean isSelected,
+                                                 int row,
+                                                 int column) {
         Collection refs = (Collection) value;
         xrefEditor.setup(refs);
         xrefEditor.pack();

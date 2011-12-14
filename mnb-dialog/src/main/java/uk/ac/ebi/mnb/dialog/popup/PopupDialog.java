@@ -29,7 +29,7 @@ import java.awt.geom.RoundRectangle2D;
 import uk.ac.ebi.mnb.core.CloseDialogAction;
 import uk.ac.ebi.interfaces.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 import javax.swing.*;
 
@@ -42,9 +42,9 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 import uk.ac.ebi.mnb.core.ActionProperties;
-import uk.ac.ebi.mnb.view.PanelFactory;
+import uk.ac.ebi.chemet.render.factory.PanelFactory;
 import uk.ac.ebi.mnb.view.labels.IconButton;
-import uk.ac.ebi.visualisation.ColorUtilities;
+import uk.ac.ebi.chemet.render.ColorUtilities;
 
 /**
  * @name    PopupDialog - 2011.10.07 <br>
@@ -96,7 +96,7 @@ public class PopupDialog extends JDialog {
         panel.setOpaque(false);
         background.setLayout(new FormLayout("8px, 16px, p, 16px, 8px", "8px, 16px, p, 16px, 8px"));
         CellConstraints cc = new CellConstraints();
-        Icon close = ViewUtils.getIcon("images/cutout/close_whitebg_16x16.png");
+        Icon close = ViewUtilities.getIcon("images/cutout/close_whitebg_16x16.png");
 
         Action closeAction = new CloseDialogAction(this, false);
         JButton closeButton = new IconButton(close, closeAction);
@@ -209,7 +209,7 @@ public class PopupDialog extends JDialog {
             return colorMap.get(pct);
         }
         colorMap.put(pct, ColorUtilities.getMixedColor(grey, pct,
-                                                       ViewUtils.CLEAR_COLOUR, 1.0f - pct));
+                                                       ViewUtilities.CLEAR_COLOUR, 1.0f - pct));
         return colorMap.get(pct);
     }
 

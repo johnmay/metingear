@@ -1,4 +1,3 @@
-
 /**
  * ProteinInspector.java
  *
@@ -21,9 +20,10 @@
  */
 package uk.ac.ebi.mnb.view.entity.gene;
 
+import javax.swing.undo.UndoManager;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import org.apache.log4j.Logger;
-
+import uk.ac.ebi.mnb.interfaces.EntityView;
 
 /**
  *          ProteinInspector – 2011.09.28 <br>
@@ -33,21 +33,16 @@ import org.apache.log4j.Logger;
  * @author  $Author$ (this version)
  */
 public class GeneInspector
-  extends AbstractEntityInspector {
+        extends AbstractEntityInspector {
 
     private static final Logger LOGGER = Logger.getLogger(GeneInspector.class);
-
 
     public GeneInspector() {
         super(new GenePanel());
     }
 
-
     @Override
     public void store() {
         super.store();
     }
-
-
 }
-

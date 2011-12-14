@@ -30,7 +30,7 @@ import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.ui.component.factory.FieldFactory;
+import uk.ac.ebi.chemet.render.factory.FieldFactory;
 
 /**
  * @name    AddCitation - 2011.10.07 <br>

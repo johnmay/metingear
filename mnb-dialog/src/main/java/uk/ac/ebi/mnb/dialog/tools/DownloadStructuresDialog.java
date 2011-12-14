@@ -22,7 +22,7 @@ package uk.ac.ebi.mnb.dialog.tools;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import furbelow.SpinningDialWaitIndicator;
+import net.sf.furbelow.SpinningDialWaitIndicator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -73,7 +73,11 @@ public class DownloadStructuresDialog
     private JCheckBox keggCheckBox;
     private JCheckBox chebiAllStarCheckBox;
 
-    public DownloadStructuresDialog(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+    public DownloadStructuresDialog(JFrame frame,
+                                    TargetedUpdate updater,
+                                    MessageManager messages,
+                                    SelectionController controller,
+                                    UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
 
         chebiCheckBox = new MCheckBox("ChEBI (currated only)");
@@ -158,8 +162,9 @@ public class DownloadStructuresDialog
                     IAtomContainer molecule;
                     try {
                         molecule = KEGGCompoundStructureService.getInstance().getStructure((KEGGCompoundIdentifier) id);
-                        System.out.println(molecule);
-                        component.addAnnotation(new ChemicalStructure(molecule));
+                        if (molecule != null) {
+                            component.addAnnotation(new ChemicalStructure(molecule));
+                        }
                     } catch (UnfetchableEntry ex) {
                         problemIdentifiers.add(id);
                     }
@@ -169,7 +174,8 @@ public class DownloadStructuresDialog
 
 
         if (problemIdentifiers.isEmpty() == false) {
-            addMessage(new WarningMessage("Unable to download structure for " + StringUtils.join(problemIdentifiers, ", ")));
+            addMessage(new WarningMessage("Unable to download structure for " + StringUtils.join(problemIdentifiers,
+                                                                                                 ", ")));
         }
 
 

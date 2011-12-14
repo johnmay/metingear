@@ -21,13 +21,13 @@
 package uk.ac.ebi.mnb.view.entity;
 
 import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
-import com.explodingpixels.widgets.TableUtils;
 import java.awt.Container;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
-import uk.ac.ebi.visualisation.ViewUtils;
+import javax.swing.KeyStroke;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.SelectionMap;
@@ -42,7 +42,10 @@ import uk.ac.ebi.mnb.interfaces.SelectionManager;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class AbstractEntityTable extends JTable implements EntityTable, SelectionController {
+public abstract class AbstractEntityTable
+        extends JTable
+        implements EntityTable,
+                   SelectionController {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityTable.class);
     private SelectionManager selection = new SelectionMap();
@@ -51,14 +54,8 @@ public abstract class AbstractEntityTable extends JTable implements EntityTable,
         super(model);
         setUI(new ITunesTableUI());
         setAutoscrolls(true);
-        setFont(ViewUtils.DEFAULT_BODY_FONT);
+        setFont(ViewUtilities.DEFAULT_BODY_FONT);
         setAutoCreateRowSorter(true);
-        TableUtils.makeSortable(this, new TableUtils.SortDelegate() {
-
-            public void sort(int columnModelIndex, TableUtils.SortDirection sortDirection) {
-                // no implementation.
-            }
-        });
         setColumnModel(columnModel);
     }
 
@@ -102,9 +99,10 @@ public abstract class AbstractEntityTable extends JTable implements EntityTable,
      */
     public boolean setSelection(SelectionManager selectionManager) {
 
-        removeRowSelectionInterval(0, getModel().getRowCount() - 1);
 
         List<AnnotatedEntity> entities = new ArrayList(selectionManager.getEntities());
+
+        clearSelection();
 
         for (int i = 0; i < entities.size(); i++) {
             int index = convertRowIndexToView(getModel().indexOf(entities.get(i)));
@@ -134,5 +132,9 @@ public abstract class AbstractEntityTable extends JTable implements EntityTable,
         return true;
 
 
+    }
+
+    public void clear() {
+        getModel().clear();
     }
 }

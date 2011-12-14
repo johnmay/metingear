@@ -20,8 +20,8 @@
  */
 package uk.ac.ebi.mnb.view;
 
-import uk.ac.ebi.ui.component.factory.LabelFactory;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GradientPaint;
@@ -49,7 +49,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import uk.ac.ebi.mnb.interfaces.Message;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
-import uk.ac.ebi.visualisation.ColorUtilities;
+import uk.ac.ebi.chemet.render.ColorUtilities;
 
 /**
  *          MessageManager – 2011.09.30 <br>
@@ -61,10 +61,10 @@ import uk.ac.ebi.visualisation.ColorUtilities;
 public class MessageBar extends JPanel implements MessageManager {
 
     private static final Logger LOGGER = Logger.getLogger(MessageBar.class);
-    private final ImageIcon warningIcon = ViewUtils.getIcon("images/cutout/warning_16x16.png",
+    private final ImageIcon warningIcon = ViewUtilities.getIcon("images/cutout/warning_16x16.png",
                                                             "Warning");
     private final ImageIcon errorIcon =
-                            ViewUtils.getIcon("images/cutout/error_16x16.png", "Error");
+                            ViewUtilities.getIcon("images/cutout/error_16x16.png", "Error");
     private final Color WARN_LOW = new Color(240, 240, 30);
     private final Color WARN_HIGH = ColorUtilities.shade(WARN_LOW, 0.3f);
     private final Color ERROR_LOW = new Color(230, 40, 60);
@@ -145,7 +145,7 @@ public class MessageBar extends JPanel implements MessageManager {
 
                 public void actionPerformed(ActionEvent e) {
                     if (!stack.isEmpty()) {
-                        ViewUtils.setClipboard(stack.peek().getMessage());
+                        ViewUtilities.setClipboard(stack.peek().getMessage());
                     }
                     menu.setVisible(false);
                 }

@@ -20,7 +20,8 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import com.google.common.base.Joiner;
 import java.awt.Dimension;
 
@@ -36,7 +37,7 @@ import org.apache.log4j.Logger;
 import com.jgoodies.forms.layout.*;
 import java.util.List;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -64,7 +65,7 @@ public class ProductPanel
         sequenceListModel = new DefaultListModel();
 
         sequence = new JTextPane();
-        sequence.setFont(ViewUtils.COURIER_NEW_PLAIN_11);
+        sequence.setFont(ViewUtilities.COURIER_NEW_PLAIN_11);
 
 
 //        sequence.addMouseListener(new MouseAdapter() {

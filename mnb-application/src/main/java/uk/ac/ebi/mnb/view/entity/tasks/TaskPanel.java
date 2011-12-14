@@ -31,11 +31,11 @@ import javax.swing.JTextArea;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.PanelFactory;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 /**
@@ -66,7 +66,7 @@ public class TaskPanel
     public boolean update() {
 
         command.setText(entity.getCommand());
-        command.setFont(ViewUtils.COURIER_NEW_PLAIN_11);
+        command.setFont(ViewUtilities.COURIER_NEW_PLAIN_11);
         command.setForeground(Settings.getInstance().getTheme().getForeground());
         command.setEditable(false);
         command.setLineWrap(true);

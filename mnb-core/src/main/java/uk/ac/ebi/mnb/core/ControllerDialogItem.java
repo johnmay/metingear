@@ -42,7 +42,7 @@ public class ControllerDialogItem extends JMenuItem {
 
     public ControllerDialogItem(MainController controller, Class<? extends ControllerDialog> clazz) {
         this((JFrame) controller,
-             (TargetedUpdate) controller.getViewController(),
+             (TargetedUpdate) controller,
              controller.getMessageManager(),
              (SelectionController) controller.getViewController(),
              controller.getUndoManager(),

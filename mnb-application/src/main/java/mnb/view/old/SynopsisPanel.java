@@ -18,11 +18,11 @@ import javax.swing.JTextField;
 import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.mnb.view.TransparentTextArea;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import org.apache.commons.lang.StringUtils;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.ui.component.factory.FieldFactory;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.factory.FieldFactory;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
 
 
 /**
@@ -87,7 +87,7 @@ public class SynopsisPanel
 
 
         sequenceField = new TransparentTextArea();
-        sequenceField.setFont(ViewUtils.COURIER_NEW_PLAIN_11);
+        sequenceField.setFont(ViewUtilities.COURIER_NEW_PLAIN_11);
 
 
         // layout

@@ -14,7 +14,7 @@
  */
 package uk.ac.ebi.mnb.core;
 
-import furbelow.SpinningDialWaitIndicator;
+import net.sf.furbelow.SpinningDialWaitIndicator;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import uk.ac.ebi.mnb.view.DropdownDialog;

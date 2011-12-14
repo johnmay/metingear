@@ -12,7 +12,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  * ActionLabel.java

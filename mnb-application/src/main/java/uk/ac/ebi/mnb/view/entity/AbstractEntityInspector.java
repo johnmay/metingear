@@ -130,15 +130,6 @@ public abstract class AbstractEntityInspector
         return false;
     }
 
-    /**
-     * Access the currently displayed component
-     * @return The active component
-     * @deprecated use getSelection()
-     */
-    @Deprecated
-    public AnnotatedEntity getSelectedEntity() {
-        return entity;
-    }
     private JScrollPane pane;
 
     private void setDisplay() {
@@ -152,12 +143,19 @@ public abstract class AbstractEntityInspector
 
     @Override
     public boolean setSelection(SelectionManager selection) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported");
     }
 
     @Override
     public SelectionManager getSelection() {
         return table.getSelection();
+    }
+
+    public void clear() {
+        panel.setEntity(null);
+        panel.clear();
+        panel.revalidate();
+        panel.repaint();
     }
 
 }

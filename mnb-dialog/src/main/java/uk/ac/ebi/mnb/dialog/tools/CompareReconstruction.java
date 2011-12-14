@@ -40,8 +40,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Reconstruction;
@@ -60,8 +60,8 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.mnb.view.MComboBox;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.visualisation.molecule.MetaboliteComparison;
 
 /**
@@ -71,7 +71,8 @@ import uk.ac.ebi.visualisation.molecule.MetaboliteComparison;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class CompareReconstruction extends ControllerDialog {
+public class CompareReconstruction
+        extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(CompareReconstruction.class);
     private MComboBox recon1 = new MComboBox();
@@ -84,8 +85,13 @@ public class CompareReconstruction extends ControllerDialog {
     private JCheckBox stereo = new MCheckBox("stereochemical bonds");
     // output
     private JTextArea output = new JTextArea(7, 40);
+    private JLabel label = new JLabel();
 
-    public CompareReconstruction(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+    public CompareReconstruction(JFrame frame,
+                                 TargetedUpdate updater,
+                                 MessageManager messages,
+                                 SelectionController controller,
+                                 UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
         setDefaultLayout();
     }
@@ -98,7 +104,7 @@ public class CompareReconstruction extends ControllerDialog {
         CellConstraints cc = new CellConstraints();
 
         panel.setLayout(new FormLayout("p, 4dlu, p, 4dlu, p",
-                                       ViewUtils.goodiesFormHelper(6, 4, false)));
+                                       ViewUtilities.goodiesFormHelper(6, 4, false)));
         panel.add(LabelFactory.newLabel("Reconstructions"), cc.xyw(1, 1, 5));
         panel.add(recon1, cc.xy(1, 3));
         panel.add(recon2, cc.xy(3, 3));
@@ -139,17 +145,17 @@ public class CompareReconstruction extends ControllerDialog {
                                                                    AtomicNumberSeed.class,
                                                                    ConnectedAtomSeed.class);
         if (stereo.isSelected()) {
+            LOGGER.debug("Using StereoSeed");
             methods.add(SeedFactory.getInstance().getSeed(StereoSeed.class));
         }
-        if (stereo.isSelected()) {
+        if (charge.isSelected()) {
+            LOGGER.debug("Using ChargeSeed");
             methods.add(SeedFactory.getInstance().getSeed(ChargeSeed.class));
         }
 
-        ReconstructionComparison c;
+        c = null;
         if (reconC == null) {
-            c = new ReconstructionComparison(reconA, reconB);
-            c.setMethods(methods);
-            c.setIncludeHydrogens(hydrogen.isSelected());
+            c = new ReconstructionComparison(methods, hydrogen.isSelected(), reconA, reconB);
 
             double[] data = new double[]{
                 c.getMetaboliteTotal(reconA),
@@ -166,15 +172,19 @@ public class CompareReconstruction extends ControllerDialog {
                                           0);
             venn.setCircleLegends(reconA.getAccession(), reconB.getAccession(), "-");
             venn.setSize(540, 540);
+
+            label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
+                          + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
+                          + reconA.getAccession() + " ∩ " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconA, reconB) + "<br></html>");
+
 //            output.setText(
 //                    reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "\n"
 //                    + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "\n"
 //                    + reconA.getAccession() + "+" + reconB.getAccession() + ": " + c.getMetaboliteInstersect(reconA, reconB) + "\n");
         } else {
-            c = new ReconstructionComparison(reconA, reconB, reconC);
-            c.setMethods(methods);
-            c.setIncludeHydrogens(hydrogen.isSelected());
-
+            c = new ReconstructionComparison(methods, hydrogen.isSelected(), reconA, reconB, reconC);
+          
 
             int ab = c.getMetaboliteInstersect(reconA, reconB);
             int bc = c.getMetaboliteInstersect(reconB, reconC);
@@ -206,60 +216,77 @@ public class CompareReconstruction extends ControllerDialog {
             venn.setCircleLegends(reconA.getAccession(), reconB.getAccession(), reconC.getAccession());
 
             venn.setSize(540, 540);
-//
-//            output.setText(
-//                    reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "\n"
-//                    + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "\n"
-//                    + reconC.getAccession() + ": " + c.getMetaboliteTotal(reconC) + "\n"
-//                    + reconA.getAccession() + "+" + reconB.getAccession() + ": " + ab + "\n"
-//                    + reconB.getAccession() + "+" + reconC.getAccession() + ": " + bc + "\n"
-//                    + reconA.getAccession() + "+" + reconC.getAccession() + ": " + ac + "\n"
-//                    + reconA.getAccession() + "+" + reconB.getAccession() + "+" + reconC.getAccession() + ": " + abc);
+            label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
+                          + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
+                          + reconC.getAccession() + ": " + c.getMetaboliteTotal(reconC) + "<br>"
+                          + reconA.getAccession() + " ∩ " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconA, reconB)
+                          + reconA.getAccession() + " ∩ " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconA, reconC)
+                          + reconB.getAccession() + " ∩ " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconB, reconC)
+                          + reconA.getAccession() + " ∩ " + reconB.getAccession() + "∩" + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconA, reconB, reconC)
+                          + "<br></html>");
 
         }
 
 
-        if (venn != null && c != null) {
-            System.out.println("methods:" + methods);
-            try {
-                final URL url = new URL(venn.toURLString());
-                final MetaboliteComparison metComp = new MetaboliteComparison(c);
-                SwingUtilities.invokeLater(new Runnable() {
 
-                    public void run() {
-                        BufferedImage img = ViewUtils.convertRenderedImage(JAI.create("url", url));
-                        JFrame frame = new JFrame();
-                        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                        frame.setLayout(new FormLayout("p", "p, 4dlu,p, 4dlu, p"));
-                        CellConstraints cc = new CellConstraints();
 
-                        final JScrollPane pane = new JScrollPane();
-                        final JComboBox box = new JComboBox(MetaboliteComparison.TableData.values());
 
-                        box.addItemListener(new ItemListener() {
+    }
+    private ReconstructionComparison c;
 
-                            public void itemStateChanged(ItemEvent e) {
-                                pane.setViewportView(metComp.getComparisconTable((MetaboliteComparison.TableData) box.getSelectedItem()));
-                                pane.repaint();
-                                pane.revalidate();
-                            }
-                        });
+    @Override
+    public boolean update() {
 
-                        pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
+        if (c == null || venn == null) {
+            return false;
+        }
 
-                        frame.add(new JLabel(new ImageIcon(img)), cc.xy(1, 1));
-                        frame.add(box, cc.xy(1, 3));
-                        frame.add(pane, cc.xy(1, 5));
-                        frame.pack();
-                        frame.setVisible(true);
+        try {
+            final URL url = new URL(venn.toURLString());
+            final MetaboliteComparison metComp = new MetaboliteComparison(c);
+
+            BufferedImage img = ViewUtilities.convertRenderedImage(JAI.create("url", url));
+            JFrame frame = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setLayout(new FormLayout("p", "p, 4dlu, p, 4dlu,  p, 4dlu, p"));
+            CellConstraints cc = new CellConstraints();
+
+            final JScrollPane pane = new JScrollPane();
+            final JComboBox box = new JComboBox(MetaboliteComparison.TableData.values());
+            pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
+
+            box.addItemListener(new ItemListener() {
+
+                public void itemStateChanged(ItemEvent e) {
+                    JTable table = (JTable) pane.getViewport().getView();
+                    int[] selections = table.getSelectedRows();
+                    JTable newTable = metComp.getComparisconTable(
+                            (MetaboliteComparison.TableData) box.getSelectedItem());
+                    for (int i : selections) {
+                        newTable.addRowSelectionInterval(i, i);
                     }
-                });
-            } catch (IOException ex) {
-                LOGGER.info("IO Exception when reading stream");
-            }
+                    pane.setViewportView(newTable);
+                    pane.repaint();
+                    pane.revalidate();
+                }
+            });
 
+
+            frame.add(new JLabel(new ImageIcon(img)), cc.xy(1, 1));
+            frame.add(label, cc.xy(1, 3));
+            frame.add(box, cc.xy(1, 5));
+            frame.add(pane, cc.xy(1, 7));
+            frame.pack();
+            frame.setVisible(true);
+        } catch (IOException ex) {
+            LOGGER.info("IO Exception when reading stream");
         }
 
 
+        return true;
     }
 }

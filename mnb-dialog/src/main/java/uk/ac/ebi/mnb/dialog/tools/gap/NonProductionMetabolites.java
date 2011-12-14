@@ -20,11 +20,13 @@
  */
 package uk.ac.ebi.mnb.dialog.tools.gap;
 
+import com.google.common.base.Joiner;
 import ilog.concert.IloException;
 import java.awt.event.ActionEvent;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
 import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
@@ -42,7 +44,8 @@ import uk.ac.ebi.optimise.gap.GapFind;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class NonProductionMetabolites extends GeneralAction {
+public class NonProductionMetabolites
+        extends GeneralAction {
 
     private static final Logger LOGGER = Logger.getLogger(NonProductionMetabolites.class);
     private MainController controller;
@@ -65,8 +68,12 @@ public class NonProductionMetabolites extends GeneralAction {
             SelectionManager manager = controller.getViewController().getSelection();
             manager.clear();
 
-            for (Integer i : gf.findNonProductionMetabolites()) {
-                manager.add(s.getMolecule(i).metabolite);
+            Integer[] indices = gf.findNonProductionMetabolites();
+            LOGGER.debug("Root Non-Production Metabolites: " + Joiner.on(", ").join(indices));
+
+            for (Integer i : indices) {
+                Metabolite metabolite = s.getMolecule(i).metabolite;
+                manager.add(metabolite);
             }
 
             controller.getViewController().setSelection(manager);
@@ -75,7 +82,8 @@ public class NonProductionMetabolites extends GeneralAction {
             controller.getMessageManager().addMessage(new ErrorMessage(ex.getLocalizedMessage()));
 
         } catch (UnsatisfiedLinkError ex) {
-            controller.getMessageManager().addMessage(new ErrorMessage("Please ensure the CPLEX library path is set correctly"));
+            controller.getMessageManager().addMessage(new ErrorMessage(
+                    "Please ensure the CPLEX library path is set correctly"));
         }
     }
 }

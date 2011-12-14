@@ -20,9 +20,9 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
@@ -49,12 +49,15 @@ import uk.ac.ebi.io.xml.UniProtAnnoationLoader;
  * @author  $Author$ (this version)
  */
 public class TransferAnnotations
-        extends ControllerDialog
-          {
+        extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(TransferAnnotations.class);
 
-    public TransferAnnotations(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+    public TransferAnnotations(JFrame frame,
+                               TargetedUpdate updater,
+                               MessageManager messages,
+                               SelectionController controller,
+                               UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
         setDefaultLayout();
     }
@@ -68,24 +71,28 @@ public class TransferAnnotations
         IdentifierFactory factory = IdentifierFactory.getInstance();
         for (GeneProduct product : getSelection().getGeneProducts()) {
 
-            Set<Identifier> identifiers = new HashSet();
+            Multimap<Identifier, Observation> identifiers = HashMultimap.create();
 
-            Collection<Observation> alignments = ((ProteinProduct) product).getObservationCollection().get(LocalAlignment.class);
+            Collection<Observation> alignments = ((ProteinProduct) product).getObservationCollection().get(
+                    LocalAlignment.class);
             for (Observation observation : alignments) {
                 LocalAlignment alignment = (LocalAlignment) observation;
                 IdentifierSet set = factory.resolveSequenceHeader(alignment.getSubject());
                 for (Identifier identifier : set.getSubIdentifiers(UniProtIdentifier.class)) {
                     if (loader.getMap().containsKey(identifier)) {
-                        System.out.println(loader.getMap().get((UniProtIdentifier) identifier));
-                        identifiers.addAll(loader.getMap().get((UniProtIdentifier) identifier));
+                        for (Identifier mapedId : loader.getMap().get((UniProtIdentifier) identifier)) {
+                            identifiers.put(mapedId, observation);
+                        }
                     } else {
-                        System.out.println(loader.getMap().keySet());
+                        LOGGER.warn("Unable to find mapping for: " + loader.getMap().keySet());
                     }
                 }
             }
 
-            for (Identifier identifier : identifiers) {
-                product.addAnnotation(new CrossReference(identifier));
+            for (Identifier identifier : identifiers.keySet()) {
+                CrossReference xref = new CrossReference(identifier);
+                xref.addObservations(identifiers.get(identifier));
+                product.addAnnotation(xref);
             }
 
         }

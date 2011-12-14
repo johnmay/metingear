@@ -16,7 +16,7 @@ import javax.swing.SpinnerNumberModel;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.metabolomes.resource.BlastMatrix;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.ui.component.factory.FieldFactory;
+import uk.ac.ebi.chemet.render.factory.FieldFactory;
 
 
 /**

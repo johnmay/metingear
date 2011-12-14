@@ -38,9 +38,9 @@ import uk.ac.ebi.core.Multimer;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RNAProduct;
 import uk.ac.ebi.mnb.core.GeneralAction;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  *          ViewSelector - 2011.11.01 <br>
@@ -67,10 +67,10 @@ public class ViewInfo {
 
         controller.setViewSelector(this);
 
-        genes.setSelectedIcon(ViewUtils.getIcon("images/toolbar/gen-selected.png"));
-        products.setSelectedIcon(ViewUtils.getIcon("images/toolbar/pro-selected.png"));
-        metabolites.setSelectedIcon(ViewUtils.getIcon("images/toolbar/met-selected.png"));
-        reactions.setSelectedIcon(ViewUtils.getIcon("images/toolbar/rxn-selected.png"));
+        genes.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/gen-selected.png"));
+        products.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/pro-selected.png"));
+        metabolites.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/met-selected.png"));
+        reactions.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/rxn-selected.png"));
 
         genes.putClientProperty("JButton.buttonType", "segmentedTextured");
         genes.putClientProperty("JButton.segmentPosition", "first");

@@ -8,7 +8,7 @@ import java.lang.String;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  * GeneralAction.java
@@ -67,7 +67,7 @@ public abstract class GeneralAction extends AbstractAction {
             putValue(key, propertyValue.toString());
         } else if (key.equals(Action.LARGE_ICON_KEY)) {
 
-            putValue(key, ViewUtils.getIcon(propertyValue.toString(), ""));
+            putValue(key, ViewUtilities.getIcon(propertyValue.toString(), ""));
         } else {
             Object alteredvalue = key.equals(Action.ACCELERATOR_KEY) ? KeyStroke.getKeyStroke(
                     (String) propertyValue) : propertyValue;

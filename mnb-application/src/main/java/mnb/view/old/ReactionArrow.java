@@ -21,7 +21,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import javax.swing.JComponent;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  * ReactionArrow.java
@@ -53,7 +53,7 @@ public class ReactionArrow
         arrowHead = new Polygon( new int[]{ x2 , x2 - gap , x2 - gap } ,
                                  new int[]{ y2 , y2 + ( gap / 2 ) , y2 - ( gap / 2 ) } ,
                                  3 );
-        setBackground(ViewUtils.BACKGROUND);
+        setBackground(ViewUtilities.BACKGROUND);
     }
 
     public ReactionArrow( Dimension d ) {

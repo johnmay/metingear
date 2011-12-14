@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import javax.swing.border.Border;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  * IconButton.java
@@ -31,7 +31,7 @@ public class IconButton extends JButton {
         super(a);
         setUI(ui);
         setIcon(icon);
-        setBackground(ViewUtils.CLEAR_COLOUR);
+        setBackground(ViewUtilities.CLEAR_COLOUR);
         setBorder(border);
         if (getIcon() != null) {
             setText(null);
@@ -42,7 +42,7 @@ public class IconButton extends JButton {
         super(a);
         setUI(ui);
         setBorder(border);
-        setBackground(ViewUtils.CLEAR_COLOUR);
+        setBackground(ViewUtilities.CLEAR_COLOUR);
         if (getIcon() != null) {
             setText(null);
         }

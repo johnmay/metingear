@@ -21,15 +21,14 @@
 package uk.ac.ebi.mnb.importer.xls.wizzard;
 
 import com.explodingpixels.macwidgets.MacFontUtils;
-import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
 import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.render.ColorUtilities;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
-import uk.ac.ebi.visualisation.ColorUtilities;
 
 /**
  * @name    QuickViewTable - 2011.10.04 <br>

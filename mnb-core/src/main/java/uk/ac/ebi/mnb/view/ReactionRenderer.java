@@ -26,19 +26,20 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
@@ -58,7 +59,7 @@ import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.reaction.MetaboliteParticipant;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
 import uk.ac.ebi.core.tools.TransportReactionUtil.*;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  *          ReactionRenderer – 2011.09.27 <br>
@@ -77,6 +78,17 @@ public class ReactionRenderer {
                           new BasicAtomGenerator()),
             new AWTFontManager());
     private StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+    private Map<TransportReactionUtil.Classification, ImageIcon> tClassMap = new EnumMap<TransportReactionUtil.Classification, ImageIcon>(
+            TransportReactionUtil.Classification.class);
+
+    public ReactionRenderer() {
+
+        tClassMap.put(Classification.UNKNOWN, ViewUtilities.getIcon("images/classification/noport.png"));
+        tClassMap.put(Classification.SYMPORTER, ViewUtilities.getIcon("images/classification/symport.png"));
+        tClassMap.put(Classification.ANTIPORTER, ViewUtilities.getIcon("images/classification/antiport.png"));
+        tClassMap.put(Classification.UNIPORTER, ViewUtilities.getIcon("images/classification/uniport.png"));
+
+    }
 
     public ImageIcon renderTransportReaction(Reaction<Metabolite, Double, Compartment> rxn) {
 
@@ -242,7 +254,7 @@ public class ReactionRenderer {
         Metabolite metabolite = p.getMolecule();
         g2.setColor(Color.LIGHT_GRAY);
         String compartment = "[" + p.getCompartment().getAbbreviation() + "]";
-        g2.setFont(ViewUtils.DEFAULT_MONO_SPACE_FONT.deriveFont(11.0f));
+        g2.setFont(ViewUtilities.DEFAULT_MONO_SPACE_FONT.deriveFont(11.0f));
         int compartmentWidth = g2.getFontMetrics().stringWidth(compartment);
         int compartmentHeight = g2.getFontMetrics().getHeight();
         g2.drawString(compartment, (int) bounds.getWidth() - compartmentWidth, compartmentHeight);
@@ -263,7 +275,7 @@ public class ReactionRenderer {
             }
         } else {
             g2.setColor(Color.LIGHT_GRAY);
-            g2.setFont(ViewUtils.DEFAULT_BODY_FONT.deriveFont(18.0f));
+            g2.setFont(ViewUtilities.DEFAULT_BODY_FONT.deriveFont(18.0f));
             String na = "unavailable";
             int mW = g2.getFontMetrics().stringWidth(na);
             int mH = g2.getFontMetrics().getHeight();
@@ -283,7 +295,7 @@ public class ReactionRenderer {
         g2.setColor(Color.LIGHT_GRAY);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         String direction = "+";
-        g2.setFont(ViewUtils.DEFAULT_BODY_FONT.deriveFont(34.0f));
+        g2.setFont(ViewUtilities.DEFAULT_BODY_FONT.deriveFont(34.0f));
         int width = g2.getFontMetrics().stringWidth(direction);
         int height = g2.getFontMetrics().getHeight();
         g2.drawString(direction, (int) bounds.getCenterX() - (width / 2), (int) bounds.getCenterY() + (height / 2));
@@ -309,7 +321,7 @@ public class ReactionRenderer {
 
 
         String direction = reversibility.toString();
-        g2.setFont(ViewUtils.DEFAULT_BODY_FONT.deriveFont(34.0f * scale));
+        g2.setFont(ViewUtilities.DEFAULT_BODY_FONT.deriveFont(34.0f * scale));
         Rectangle2D sBounds = g2.getFontMetrics().getStringBounds(direction, g2);
         int width = (int) sBounds.getWidth();
         int height = (int) sBounds.getHeight();
@@ -318,6 +330,10 @@ public class ReactionRenderer {
                       (int) bounds.getCenterY() + (height / 2));
 
 
+    }
+
+    public ImageIcon getTransportClassificationIcon(TransportReactionUtil.Classification classification) {
+        return tClassMap.get(classification);
     }
 
     public static void main(String[] args) throws IOException {

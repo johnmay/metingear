@@ -20,11 +20,14 @@
  */
 package uk.ac.ebi.mnb.dialog.tools.gap;
 
+import com.google.common.base.Joiner;
 import ilog.concert.IloException;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
 import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
@@ -42,7 +45,8 @@ import uk.ac.ebi.optimise.gap.GapFind;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class TerminalNonConsumptionMetabolites extends GeneralAction {
+public class TerminalNonConsumptionMetabolites
+        extends GeneralAction {
 
     private static final Logger LOGGER = Logger.getLogger(TerminalNonConsumptionMetabolites.class);
     private MainController controller;
@@ -65,8 +69,11 @@ public class TerminalNonConsumptionMetabolites extends GeneralAction {
             SelectionManager manager = controller.getViewController().getSelection();
             manager.clear();
 
-            for (Integer i : gf.getTerminalNCMetabolites()) {
-                manager.add(s.getMolecule(i).metabolite);
+            Integer[] indices = gf.getTerminalNCMetabolites();
+            LOGGER.debug("Terminal Non-Consumption Metabolites: " + Joiner.on(", ").join(indices));
+            for (Integer i : indices) {
+                Metabolite metabolite = s.getMolecule(i).metabolite;
+                manager.add(metabolite);
             }
 
             controller.getViewController().setSelection(manager);
@@ -75,7 +82,8 @@ public class TerminalNonConsumptionMetabolites extends GeneralAction {
             controller.getMessageManager().addMessage(new ErrorMessage(ex.getLocalizedMessage()));
 
         } catch (UnsatisfiedLinkError ex) {
-            controller.getMessageManager().addMessage(new ErrorMessage("Please ensure the CPLEX library path is set correctly"));
+            controller.getMessageManager().addMessage(new ErrorMessage(
+                    "Please ensure the CPLEX library path is set correctly"));
         }
     }
 }

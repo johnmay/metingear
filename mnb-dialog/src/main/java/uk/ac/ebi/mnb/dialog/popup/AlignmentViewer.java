@@ -28,12 +28,12 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.visualisation.AbstractAlignmentColor;
-import uk.ac.ebi.chemet.visualisation.BasicAlignmentColor;
+import uk.ac.ebi.chemet.render.alignment.AbstractAlignmentColor;
+import uk.ac.ebi.chemet.render.alignment.BasicAlignmentColor;
 import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
-import uk.ac.ebi.visualisation.ColorUtilities;
+import uk.ac.ebi.chemet.render.ColorUtilities;
 
 /**
  * @name    AlignmentViewer - 2011.10.11 <br>
@@ -65,7 +65,7 @@ public final class AlignmentViewer extends PopupDialog {
 
         this.buffer = buffer;
         getPanel().add(sequence);
-        sequence.setFont(ViewUtils.COURIER_NEW_PLAIN_11);
+        sequence.setFont(ViewUtilities.COURIER_NEW_PLAIN_11);
         sequence.setBackground(getPanel().getBackground());
         setAlwaysOnTop(rootPaneCheckingEnabled);
         setColor(defaultColor);

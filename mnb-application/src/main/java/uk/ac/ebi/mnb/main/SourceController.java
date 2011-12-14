@@ -26,6 +26,7 @@ import com.explodingpixels.macwidgets.SourceListSelectionListener;
 import com.explodingpixels.widgets.PopupMenuCustomizer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +34,6 @@ import java.util.Map;
 import java.util.Set;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JMenuItem;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.render.source.EntitySourceItem;
 import uk.ac.ebi.chemet.render.source.MetaboliteSourceItem;
@@ -66,7 +66,7 @@ public class SourceController
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
             SourceController.class);
-    public final SourceListModel model;
+    public SourceListModel model;
     private SourceListCategory reconstructions;
     private SourceListCategory reconstruction;
     private SourceListItem products;
@@ -107,6 +107,31 @@ public class SourceController
 
     }
 
+    public void cleanModel() {
+
+        for (SourceListItem item : Arrays.asList(genes, products, metabolites, reactions)) {
+            removeLeaves(item);
+        }
+
+    }
+
+    public void removeLeaves(SourceListItem item) {
+        List<SourceListItem> children = item.getChildItems();
+
+        for (int i = 0; i < children.size(); i++) {
+            SourceListItem child = children.get(i);
+//            List<SourceListItem> grandchildren = child.getChildItems();
+//            if (!grandchildren.isEmpty()) {
+//                removeLeaves(child);
+//            } else {
+            model.removeItemFromItem(child, item);
+            // }
+        }
+
+
+
+    }
+
     /**
      * Updates all currently available items to that in the active reconstruction.
      */
@@ -120,6 +145,9 @@ public class SourceController
         // still in the collector are removed
         Set<AnnotatedEntity> itemCollector = new HashSet();
         itemCollector.addAll(itemMap.keySet());
+        products.setCounterValue(0);
+        metabolites.setCounterValue(0);
+        reactions.setCounterValue(0);
 
         if (manager.hasProjects()) {
 
@@ -195,7 +223,7 @@ public class SourceController
 
         }
 
-
+        logger.debug("Removing objects: " + itemCollector.size());
         // remove collected items
         for (AnnotatedEntity deprecatedEntity : itemCollector) {
             EntitySourceItem item = itemMap.get(deprecatedEntity);
@@ -219,7 +247,9 @@ public class SourceController
     }
 
     @Override
-    public void sourceListItemClicked(SourceListItem item, Button button, int clickCount) {
+    public void sourceListItemClicked(SourceListItem item,
+                                      Button button,
+                                      int clickCount) {
 
 
         selected = item;
@@ -249,7 +279,9 @@ public class SourceController
     }
 
     @Override
-    public void sourceListCategoryClicked(SourceListCategory category, Button button, int clickCount) {
+    public void sourceListCategoryClicked(SourceListCategory category,
+                                          Button button,
+                                          int clickCount) {
         if (category.equals(tasks)) {
             ((ProjectView) MainView.getInstance().getViewController()).setTaskView();
         }

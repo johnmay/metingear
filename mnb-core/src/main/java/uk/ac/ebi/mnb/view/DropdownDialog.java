@@ -4,8 +4,9 @@
  */
 package uk.ac.ebi.mnb.view;
 
-import uk.ac.ebi.ui.component.factory.LabelFactory;
-import furbelow.SpinningDialWaitIndicator;
+import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import net.sf.furbelow.SpinningDialWaitIndicator;
 
 import java.awt.*;
 import java.awt.Dialog.ModalityType;

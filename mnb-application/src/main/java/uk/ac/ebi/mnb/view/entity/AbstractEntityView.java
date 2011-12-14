@@ -31,13 +31,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
 
 /**
  *          EntityView – 2011.09.06 <br>
@@ -64,7 +64,7 @@ public class AbstractEntityView
         setName(name);
         setOrientation(JSplitPane.VERTICAL_SPLIT);
         setDividerSize(10);
-        setBackground(ViewUtils.BACKGROUND);
+        setBackground(ViewUtilities.BACKGROUND);
         JScrollPane tablePane = new BorderlessScrollPane(this.table);
         add(tablePane, JSplitPane.TOP);
         add(this.inspector, JSplitPane.BOTTOM);
@@ -92,6 +92,12 @@ public class AbstractEntityView
         ((BasicSplitPaneUI) getUI()).getDivider().setBorder(
                 BorderFactory.createMatteBorder(1, 0, 1, 0, new Color(0xa5a5a5)));
         setBorder(Borders.EMPTY_BORDER);
+    }
+
+    public void clear() {
+        inspector.clear();
+        table.clear();
+        repaint();
     }
 
     /**

@@ -11,9 +11,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.awt.Color;
 import java.util.Collection;
 import javax.swing.JPanel;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
 
 
 /**
@@ -52,7 +52,7 @@ public class AnnotationsPanel
         }
 
         int nrow = annotations.size();
-        FormLayout layout = new FormLayout("right:80dlu, 4dlu, left:150dlu", ViewUtils.
+        FormLayout layout = new FormLayout("right:80dlu, 4dlu, left:150dlu", ViewUtilities.
           goodiesFormHelper(nrow + 1, 4, false));
         setLayout(layout);
 

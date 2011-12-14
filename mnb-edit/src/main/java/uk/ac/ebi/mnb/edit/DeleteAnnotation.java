@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.mnb.interfaces.Updatable;
@@ -42,12 +43,16 @@ public class DeleteAnnotation extends AbstractAction {
     private final AnnotatedEntity entity;
     private final Annotation annotation;
 
-    public DeleteAnnotation(AnnotatedEntity entity, Annotation annotation, Updatable updatable, UndoableEditListener editListener) {
+    public DeleteAnnotation(AnnotatedEntity entity,
+                            Annotation annotation,
+                            Updatable updatable,
+                            UndoableEditListener editListener) {
         this.editListener = editListener;
         this.updatable = updatable;
         this.entity = entity;
         this.annotation = annotation;
         putValue(SHORT_DESCRIPTION, "Removes selected annotation");
+        putValue(LARGE_ICON_KEY, ViewUtilities.getIcon("images/cutout/close_16x16.png", "Remove annotation"));
     }
 
     public void actionPerformed(ActionEvent ae) {

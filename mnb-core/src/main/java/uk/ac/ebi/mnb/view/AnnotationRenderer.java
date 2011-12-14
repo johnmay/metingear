@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mnb.view;
 
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -46,7 +46,7 @@ import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
 
 /**
  *          AnnotationRenderer – 2011.09.26 <br>

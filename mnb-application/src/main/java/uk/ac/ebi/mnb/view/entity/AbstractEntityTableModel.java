@@ -154,7 +154,8 @@ public abstract class AbstractEntityTableModel
     }
 
     @Override
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
+    public boolean isCellEditable(int rowIndex,
+                                  int columnIndex) {
         return columnDescriptors.get(columnIndex).isEditable();
     }
 
@@ -202,7 +203,9 @@ public abstract class AbstractEntityTableModel
     }
 
     @Override
-    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+    public void setValueAt(Object value,
+                           int rowIndex,
+                           int columnIndex) {
         AnnotatedEntity entity = components.get(rowIndex);
         ColumnDescriptor desc = columnDescriptors.get(columnIndex);
 
@@ -218,7 +221,8 @@ public abstract class AbstractEntityTableModel
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
+    public Object getValueAt(int rowIndex,
+                             int columnIndex) {
         return data[rowIndex][columnIndex];
     }
 
@@ -245,13 +249,15 @@ public abstract class AbstractEntityTableModel
 
     }
 
-    public abstract Object getFixedType(AnnotatedEntity component, String name);
+    public abstract Object getFixedType(AnnotatedEntity component,
+                                        String name);
 
     public Integer indexOf(AnnotatedEntity component) {
         return components.indexOf(component);
     }
 
-    private Object getBasicInfo(AnnotatedEntity entity, String name) {
+    private Object getBasicInfo(AnnotatedEntity entity,
+                                String name) {
 
         Accessor accessor = accessMap.get(name);
 
@@ -274,5 +280,10 @@ public abstract class AbstractEntityTableModel
 
         return "NA";
 
+    }
+
+    public void clear() {
+        components.clear();
+        update();
     }
 }

@@ -32,15 +32,18 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import org.apache.axis.utils.tcpmon;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.PanelFactory;
+import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.core.tools.TransportReactionUtil;
+import uk.ac.ebi.core.tools.TransportReactionUtil.Classification;
 import uk.ac.ebi.mnb.view.ReactionRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
@@ -60,6 +63,7 @@ public class ReactionPanel
     private ReactionRenderer renderer = new ReactionRenderer();
     private JLabel reactionLabel = LabelFactory.newLabel("");
     private JComponent participantXref;
+    private JLabel tClass = new JLabel();
     private CellConstraints cc = new CellConstraints();
 
     public ReactionPanel() {
@@ -69,10 +73,15 @@ public class ReactionPanel
     @Override
     public boolean update() {
 
+        if(entity == null){
+            return false;
+        }
 
         // update all fields and labels...
         reactionLabel.setIcon(renderer.getReaction(entity));
         updateParticipantXref();
+
+        tClass.setIcon(renderer.getTransportClassificationIcon(TransportReactionUtil.getClassification(entity)));
 
         return super.update();
 
@@ -92,7 +101,7 @@ public class ReactionPanel
         JPanel panel = PanelFactory.createInfoPanel();
         panel.setBorder(Borders.DLU4_BORDER);
 
-        panel.add(LabelFactory.newLabel("Reaction Synopsis"));
+        panel.add(tClass);
 
         return panel;
 
@@ -157,9 +166,10 @@ public class ReactionPanel
             Double coef = entity.getReactantStoichiometries().get(i);
             String coefString = coef == 1d ? "" : coef % 1 == 0 ? String.format("%.0f ", coef) : coef.toString() + " ";
 
-           Box box = Box.createHorizontalBox();
+            Box box = Box.createHorizontalBox();
             box.add(LabelFactory.newFormLabel(coefString));
-            box.add(new InternalLinkLabel(m, m.getName(), (SelectionController) MainView.getInstance().getViewController()));
+            box.add(new InternalLinkLabel(m, m.getName(),
+                                          (SelectionController) MainView.getInstance().getViewController()));
 
 
             participantXref.add(
@@ -175,7 +185,8 @@ public class ReactionPanel
 
             Box box = Box.createHorizontalBox();
             box.add(LabelFactory.newFormLabel(coefString));
-            box.add(new InternalLinkLabel(m, m.getName(), (SelectionController) MainView.getInstance().getViewController()));
+            box.add(new InternalLinkLabel(m, m.getName(),
+                                          (SelectionController) MainView.getInstance().getViewController()));
 
             participantXref.add(
                     box,

@@ -29,7 +29,7 @@ import javax.swing.event.UndoableEditListener;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface MainController extends Updatable {
+public interface MainController extends TargetedUpdate {
 
     public MessageManager getMessageManager();
 

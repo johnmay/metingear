@@ -15,7 +15,7 @@ import org.apache.log4j.PropertyConfigurator;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.menu.file.PreferenceDialog;
 import uk.ac.ebi.mnb.view.AboutDialog;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  *
@@ -76,7 +76,7 @@ public class Main {
         // Set the doc image
 
         com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-        app.setDockIconImage(ViewUtils.logo_512x512);
+        app.setDockIconImage(ViewUtilities.logo_512x512);
         app.setAboutHandler(new com.apple.eawt.AboutHandler() {
 
             public void handleAbout(com.apple.eawt.AppEvent.AboutEvent ae) {

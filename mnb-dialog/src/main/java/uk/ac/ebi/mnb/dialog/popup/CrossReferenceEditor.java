@@ -48,7 +48,7 @@ import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.ui.component.factory.FieldFactory;
+import uk.ac.ebi.chemet.render.factory.FieldFactory;
 
 /**
  * @name    CrossReferenceEditor - 2011.10.07 <br>

@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 
 /**
@@ -43,12 +43,12 @@ public class AboutDialog extends JDialog {
      */
     public AboutDialog(boolean isSplash) {
 
-        logo = new JLabel(new ImageIcon(ViewUtils.logo_128x128));
+        logo = new JLabel(new ImageIcon(ViewUtilities.logo_128x128));
         label = new JLabel(
           "<html><b>Metabolic Network Builder</b><br/>John May<br/>EMBL-EBI<br/>2011</html>");
         progressBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, progressBarMax);
         progressBar.setBorderPainted(false);
-        setBackground(ViewUtils.BACKGROUND);
+        setBackground(ViewUtilities.BACKGROUND);
         setTitle("About Metabolic Network Builder");
         setUndecorated(isSplash);
         setAlwaysOnTop(true);
@@ -59,7 +59,7 @@ public class AboutDialog extends JDialog {
             add(progressBar, BorderLayout.SOUTH);
         }
         label.setForeground(new Color(40, 40, 40));
-        label.setFont(ViewUtils.HELVATICA_NEUE_PLAIN_15);
+        label.setFont(ViewUtilities.HELVATICA_NEUE_PLAIN_15);
         label.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         pack();

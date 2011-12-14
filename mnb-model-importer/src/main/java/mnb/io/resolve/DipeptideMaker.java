@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.compound.AminoAcidCompound;
 import org.biojava3.core.sequence.compound.AminoAcidCompoundSet;
 import uk.ac.ebi.mnb.view.MComboBox;
-import uk.ac.ebi.mnb.view.PanelFactory;
+import uk.ac.ebi.chemet.render.factory.PanelFactory;
 
 /**
  *          DipeptideImproter - 2011.11.14 <br>

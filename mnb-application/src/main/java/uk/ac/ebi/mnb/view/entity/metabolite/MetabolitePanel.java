@@ -37,13 +37,14 @@ import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.metabolite.MetaboliteClass;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.ui.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.MComboBox;
-import uk.ac.ebi.mnb.view.PanelFactory;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
-import uk.ac.ebi.ui.component.factory.FieldFactory;
+import uk.ac.ebi.chemet.render.factory.FieldFactory;
+import uk.ac.ebi.core.Reconstruction;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>
@@ -84,37 +85,38 @@ public class MetabolitePanel
     public boolean update() {
 
         // update all fields and labels...
+        if (super.update()) {
 
-        if (entity.hasStructureAssociated()) {
-            JLabel label = (JLabel) getRenderer().visit(entity.getFirstChemicalStructure());
-            structure.setIcon(label.getIcon());
-            structure.setText("");
-        } else {
-            structure.setText("No Structure");
-            structure.setIcon(null);
+            if (entity.hasStructureAssociated()) {
+                JLabel label = (JLabel) getRenderer().visit(entity.getFirstChemicalStructure());
+                structure.setIcon(label.getIcon());
+                structure.setText("");
+            } else {
+                structure.setText("No Structure");
+                structure.setIcon(null);
+            }
+
+            Collection<MolecularFormula> formulas = entity.getAnnotations(MolecularFormula.class);
+            if (formulas.iterator().hasNext()) {
+                formularViewer.setText(ViewUtilities.htmlWrapper(formulas.iterator().next().toHTML()));
+                formulaEditor.setText(formulas.iterator().next().toString());
+            } else {
+                formularViewer.setText("");
+                formulaEditor.setText("");
+            }
+
+            boolean generic = entity.isGeneric();
+
+            markushViewer.setText(generic ? "Yes" : "No");
+            markushEditor.setSelectedIndex(generic ? 0 : 1);
+
+            typeViewer.setText(entity.getType().toString());
+            typeEditor.setSelectedItem(entity.getType());
+
+            return true;
         }
 
-        Collection<MolecularFormula> formulas = entity.getAnnotations(MolecularFormula.class);
-        if (formulas.iterator().hasNext()) {
-            formularViewer.setText(ViewUtils.htmlWrapper(formulas.iterator().next().toHTML()));
-            formulaEditor.setText(formulas.iterator().next().toString());
-        } else {
-            formularViewer.setText("");
-            formulaEditor.setText("");
-        }
-
-        boolean generic = entity.isGeneric();
-
-        markushViewer.setText(generic ? "Yes" : "No");
-        markushEditor.setSelectedIndex(generic ? 0 : 1);
-
-        typeViewer.setText(entity.getType().toString());
-        typeEditor.setSelectedItem(entity.getType());
-
-
-
-        return super.update();
-
+        return false;
     }
 
     @Override
@@ -176,8 +178,9 @@ public class MetabolitePanel
 
     @Override
     public Collection<? extends AbstractAnnotatedEntity> getReferences() {
-        if (entity != null) {
-            return ReconstructionManager.getInstance().getActiveReconstruction().getReactions().getReactions(entity);
+        Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        if (entity != null && recon != null) {
+            return recon.getReactions().getReactions(entity);
         }
         return new ArrayList();
     }

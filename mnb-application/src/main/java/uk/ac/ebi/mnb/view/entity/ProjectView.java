@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
 import uk.ac.ebi.mnb.view.entity.protein.ProductView;
@@ -39,6 +38,8 @@ import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Multimer;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RNAProduct;
+import uk.ac.ebi.core.RibosomalRNA;
+import uk.ac.ebi.core.TransferRNA;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.mnb.core.SelectionMap;
@@ -59,9 +60,10 @@ import uk.ac.ebi.search.SearchManager;
  * @date Apr 8, 2011
  */
 public class ProjectView
-        extends JPanel implements ViewController {
+        extends JPanel
+        implements ViewController {
 
-    private static final org.apache.log4j.Logger logger =
+    private static final org.apache.log4j.Logger LOGGER =
                                                  org.apache.log4j.Logger.getLogger(
             ProjectView.class);
     // underlying  components
@@ -100,6 +102,8 @@ public class ProjectView
         viewMap.put(Reaction.BASE_TYPE, reactions);
 
         viewMap.put(ProteinProduct.BASE_TYPE, products);
+        viewMap.put(RibosomalRNA.BASE_TYPE, products);
+        viewMap.put(TransferRNA.BASE_TYPE, products);
         viewMap.put(RNAProduct.BASE_TYPE, products);
         viewMap.put(Multimer.BASE_TYPE, products);
 
@@ -176,13 +180,17 @@ public class ProjectView
     public boolean update() {
 
         ReconstructionManager manager = ReconstructionManager.getInstance();
-        Reconstruction reconstruction = manager.getActiveReconstruction();
+        Reconstruction reconstruction = manager.getActive();
 
         if (reconstruction == null) {
+            products.clear();
+            metabolites.clear();
+            reactions.clear();
+            genes.clear();
             return false;
         }
 
-        logger.info("Sending update signal to all views");
+        LOGGER.info("Sending update signal to all views");
 
         products.update();
         metabolites.update();
@@ -197,13 +205,13 @@ public class ProjectView
             // the indexer
             SearchManager.getInstance().updateCurrentIndex(reconstruction);
         } catch (CorruptIndexException ex) {
-            logger.info(ex.getMessage());
+            LOGGER.info(ex.getMessage());
             MainView.getInstance().addWarningMessage("Unable to index component for searching");
         } catch (LockObtainFailedException ex) {
-            logger.info(ex.getMessage());
+            LOGGER.info(ex.getMessage());
             MainView.getInstance().addWarningMessage("Unable to index component for searching");
         } catch (IOException ex) {
-            logger.info(ex.getMessage());
+            LOGGER.info(ex.getMessage());
             MainView.getInstance().addWarningMessage("Unable to index component for searching");
         }
 
@@ -215,7 +223,7 @@ public class ProjectView
     @Override
     public boolean update(SelectionManager selection) {
 
-        logger.info("sending targeted updated...");
+        LOGGER.info("sending targeted updated...");
 
         if (selection.getGeneProducts().isEmpty() == false) {
             products.update(selection);
@@ -287,19 +295,17 @@ public class ProjectView
             return false;
         }
 
-        AnnotatedEntity entity = selection.getFirstEntity();
+        LOGGER.debug("Setting selection in table: " + selection.getEntities());
 
+        AnnotatedEntity entity = selection.getFirstEntity();
 
         AbstractEntityView view = viewMap.get(entity.getBaseType());
 
         layout.show(this, view.getClass().getSimpleName());
-        selector.setSelected(entity.getBaseType());
 
+        selector.setSelected(entity.getBaseType());
 
         return view.setSelection(selection);
 
     }
-
-
-
 }
