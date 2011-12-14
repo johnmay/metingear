@@ -4,17 +4,17 @@
  * 2011.11.28
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -172,19 +172,32 @@ public class CompareReconstruction
                                           0);
             venn.setCircleLegends(reconA.getAccession(), reconB.getAccession(), "-");
             venn.setSize(540, 540);
+<<<<<<< .mine
+
+            label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
+                          + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
+                          + reconA.getAccession() + " ‚à© " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconA, reconB) + "<br></html>");
+
+=======
 
             label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
                           + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
                           + reconA.getAccession() + " ∩ " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
                     reconA, reconB) + "<br></html>");
 
+>>>>>>> .r1055
 //            output.setText(
 //                    reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "\n"
 //                    + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "\n"
 //                    + reconA.getAccession() + "+" + reconB.getAccession() + ": " + c.getMetaboliteInstersect(reconA, reconB) + "\n");
         } else {
+<<<<<<< .mine
+            c = new ReconstructionComparison(methods, hydrogen.isSelected(), reconA, reconB, reconC);
+=======
             c = new ReconstructionComparison(methods, hydrogen.isSelected(), reconA, reconB, reconC);
           
+>>>>>>> .r1055
 
             int ab = c.getMetaboliteInstersect(reconA, reconB);
             int bc = c.getMetaboliteInstersect(reconB, reconC);
@@ -216,6 +229,20 @@ public class CompareReconstruction
             venn.setCircleLegends(reconA.getAccession(), reconB.getAccession(), reconC.getAccession());
 
             venn.setSize(540, 540);
+<<<<<<< .mine
+            label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
+                          + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
+                          + reconC.getAccession() + ": " + c.getMetaboliteTotal(reconC) + "<br>"
+                          + reconA.getAccession() + " ‚à© " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconA, reconB)
+                          + reconA.getAccession() + " ‚à© " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconA, reconC)
+                          + reconB.getAccession() + " ‚à© " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconB, reconC)
+                          + reconA.getAccession() + " ‚à© " + reconB.getAccession() + "‚à©" + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconA, reconB, reconC)
+                          + "<br></html>");
+=======
             label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
                           + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
                           + reconC.getAccession() + ": " + c.getMetaboliteTotal(reconC) + "<br>"
@@ -228,6 +255,7 @@ public class CompareReconstruction
                           + reconA.getAccession() + " ∩ " + reconB.getAccession() + "∩" + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
                     reconA, reconB, reconC)
                           + "<br></html>");
+>>>>>>> .r1055
 
         }
 
