@@ -55,13 +55,19 @@ public abstract class AbstractEntityInspector
 
     public AbstractEntityInspector(AbstractEntityPanel panel) {
         this.panel = panel;
+
         panel.setup();
-        toolbar = new InspectorToolbar(this);
-        toolbar.setViewMode();
+
         setLayout(new BorderLayout());
+
+
+        // associate with this inspector (this) and the entity panel
+        toolbar = new InspectorToolbar(this);
         pane = new BorderlessScrollPane(panel);
-        add(toolbar, BorderLayout.NORTH); // only if viewable
-        add(pane, BorderLayout.CENTER);
+
+
+        this.add(toolbar, BorderLayout.NORTH);
+        this.add(pane, BorderLayout.CENTER);
 
     }
 
@@ -87,7 +93,9 @@ public abstract class AbstractEntityInspector
     }
 
     /**
-     * Updates the inspector with the currently selected component
+     * Updates the inspector with the currently selected component.
+     * If multiple rows are selected the first row is used (as 
+     * is the case in table.getSelectedRow())      
      */
     @Override
     public boolean update() {
@@ -129,7 +137,6 @@ public abstract class AbstractEntityInspector
         }
         return false;
     }
-
     private JScrollPane pane;
 
     private void setDisplay() {
@@ -137,8 +144,12 @@ public abstract class AbstractEntityInspector
         toolbar.setVisible((Boolean) preferences.get(Settings.VIEW_TOOLBAR_INSPECTOR));
     }
 
+    /**
+     * Invoked on on a list selection change
+     * @param e 
+     */
     public void valueChanged(ListSelectionEvent e) {
-        update();
+        this.update();
     }
 
     @Override
@@ -157,5 +168,4 @@ public abstract class AbstractEntityInspector
         panel.revalidate();
         panel.repaint();
     }
-
 }

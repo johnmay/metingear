@@ -59,8 +59,10 @@ import uk.ac.ebi.mnb.view.entity.components.InternalReferences;
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
- *          Displays the basic info on an entity (accession, abbreviation and name). Additional entries can be added to
- *          the basic information by overriding the method and adding rows (see ProductPanel or ReactionPanel).
+ *          Displays the basic info on an entity (accession, abbreviation and
+ *          name). Additional entries can be added to the basic information by
+ *          overriding the method and adding rows (see ProductPanel or 
+ *          ReactionPanel). 
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)

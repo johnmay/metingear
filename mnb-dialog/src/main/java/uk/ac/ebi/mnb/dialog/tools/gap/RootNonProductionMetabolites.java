@@ -25,7 +25,6 @@ import ilog.concert.IloException;
 import java.awt.event.ActionEvent;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
-import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
@@ -59,7 +58,7 @@ public class RootNonProductionMetabolites
 
         try {
             Reconstruction active = ReconstructionManager.getInstance().getActive();
-            StoichiometricMatrix<CompartmentalisedMetabolite, MetabolicReaction> s = active.getMatrix();
+            StoichiometricMatrix<CompartmentalisedMetabolite, ?> s = active.getMatrix();
 
             SimulationUtil.setup(); // make sure the paths are set
 

@@ -30,8 +30,10 @@ package uk.ac.ebi.mnb.interfaces;
 public interface Updatable {
 
     /**
-     * Updates all displays this and child components
-     * @return
+     * 
+     * Updates display and all child components
+     * @return 
+     * 
      */
     public boolean update();
 

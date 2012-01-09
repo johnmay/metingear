@@ -57,7 +57,7 @@ public class DeadEndDetectorTest
             LOGGER.error( "Could not set CPLEX library path", ex );
         }
 
-        s = new BasicStoichiometricMatrix(  );
+        s = BasicStoichiometricMatrix.create();
 
         // internal reactions
         s.addReaction( "A => B" );

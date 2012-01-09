@@ -24,10 +24,9 @@ import java.util.Collection;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
-import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.core.tools.MolecularHashCode;
+import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -62,7 +61,7 @@ public class CollapseStructures
         Collection<Metabolite> metabolites = getSelection().get(Metabolite.class);
         for (Metabolite m : metabolites) {
             for (ChemicalStructure structure : m.getChemicalStructures()) {
-                System.out.println(MolecularHashCode.hashCode(structure.getMolecule()));
+                System.out.println(MolecularHashFactory.getInstance().getHash(structure.getMolecule()));
             }
         }
 

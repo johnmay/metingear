@@ -31,28 +31,37 @@ import java.io.*;
 import java.util.*;
 import uk.ac.ebi.optimise.SimulationUtil;
 
+
 /**
  * DeadEndDetector
- * @author  John May
- * @author  $Author$ – $LastChangedDate$ (this version)
- * @date    2011.06.24
- * @version $Revision$
- * @brief   Locates various types of gaps in metabolic network. The class
- *          identifies root non-production and downstream non-production
- *          metabolites as well as terminal non-consumption and upstream
- *          non-consumption. Upstream and down-stream are identified using
- *          Mixed Integer Linear Programming using CPLEX ILOG library
+ *
+ * @author John May
+ * @author $Author$ – $LastChangedDate: 2011-12-06 18:18:06 +0000
+ * (Tue, 06 Dec 2011) $ (this version) @date 2011.06.24
+ * @version $Revision$ @brief Locates various types of gaps in metabolic
+ * network. The class identifies root non-production and downstream
+ * non-production metabolites as well as terminal non-consumption and upstream
+ * non-consumption. Upstream and down-stream are identified using Mixed Integer
+ * Linear Programming using CPLEX ILOG library
  */
 public class GapFind {
 
     private static final Logger LOGGER = Logger.getLogger(GapFind.class);
+
     private IloCplex cplex;
+
     private StoichiometricMatrix s; // Stoichiometric matrix
+
     private IloIntVar[] v; // flux vector (size = n reactions)
+
     private IloIntVar[] xnp; // binary variable for maximising
+
     private IloIntVar[][] w; // binary variable for whether reaction j produces metabolite i (1) or not (0)
+
     private IloAddable[] posMassBalance;
+
     private IloAddable[] negMassBalance;
+
 
     /**
      *
@@ -68,8 +77,10 @@ public class GapFind {
 
     }
 
+
     /**
      * @brief Sets up the constraints of the problem
+     *
      * @throws IloException
      */
     private void setupConstraints()
@@ -99,8 +110,10 @@ public class GapFind {
         negMassBalance = nonConsumtionMassBalanceConstraint();
     }
 
+
     /**
-     * @brief  Add the binary constraints of \f[ W_{ij}  \f]
+     * @brief Add the binary constraints of \f[ W_{ij} \f]
+     *
      * @throws IloException
      */
     private void binaryConstraints()
@@ -126,10 +139,11 @@ public class GapFind {
         }
     }
 
+
     /**
-     * @brief Set min and max production constraints for each molecule
-     * @f[  S_{ij} v_{j} \geq \epsilon w_{ij} @f]
-     * @f[  S_{ij} v_{j} \leq E w_{ij} @f]
+     * @brief Set min and max production constraints for each molecule @f[
+     * S_{ij} v_{j} \geq \epsilon w_{ij} @f] @f[ S_{ij} v_{j} \leq E w_{ij} @f]
+     *
      * @throws IloException
      */
     public void productionConstraints()
@@ -141,8 +155,7 @@ public class GapFind {
                     cplex.addGe(cplex.prod(s.get(i, j).intValue(),
                                            v[j]), // Sijvj
                                 cplex.prod(0.001, w[i][j])); // εwij
-                    //     // max production limit
-
+                    // max production limit
                     cplex.addLe(cplex.prod(s.get(i, j).intValue(),
                                            v[j]), // Sijvj
                                 cplex.prod(100, w[i][j])); // εwij
@@ -151,11 +164,12 @@ public class GapFind {
         }
     }
 
+
     /**
      * @brief Generates a mass balance constraint for non-production metabolites
-     *       \f[ \sum{S_{ij} v_{j}} \geq 0 \quad | \quad \forall i \in N \f]
+     * \f[ \sum{S_{ij} v_{j}} \geq 0 \quad | \quad \forall i \in N \f]
      *
-     * @param  one a variable
+     * @param one a variable
      * @return Array of addable constraints
      * @throws IloException Exception is
      */
@@ -182,9 +196,11 @@ public class GapFind {
         return positiveFlux;
     }
 
+
     /**
-     * Generates a mass balance constraint for non-consumption metabolites
-     * \f[ \sum{S_{ij} v_{j}} \leq 0 \quad | \quad \forall i \in N \f]
+     * Generates a mass balance constraint for non-consumption metabolites \f[
+     * \sum{S_{ij} v_{j}} \leq 0 \quad | \quad \forall i \in N \f]
+     *
      * @throws IloException
      */
     public IloAddable[] nonConsumtionMassBalanceConstraint()
@@ -208,6 +224,7 @@ public class GapFind {
         return negFlux;
     }
 
+
     public Integer[] findNonProductionMetabolites()
             throws IloException {
         cplex.remove(negMassBalance);
@@ -215,6 +232,7 @@ public class GapFind {
 
         return solve();
     }
+
 
     public Integer[] findNonConsumptionMetabolites()
             throws IloException {
@@ -224,8 +242,10 @@ public class GapFind {
         return solve();
     }
 
+
     /**
      * Finds root non-production metabolites using the topology of the matrix
+     *
      * @return indices of root non-production metabolites
      */
     public Integer[] getTerminalNCMetabolites() {
@@ -251,8 +271,10 @@ public class GapFind {
         return rootNonProductionMetabolites.toArray(new Integer[0]);
     }
 
+
     /**
      * Access the terminal non-consumption metabolites
+     *
      * @return
      */
     public Integer[] getRootNPMetabolites() {
@@ -280,6 +302,7 @@ public class GapFind {
 
     }
 
+
     private Integer[] solve()
             throws IloException {
         cplex.solve();
@@ -288,6 +311,7 @@ public class GapFind {
         double[] xSolutions = cplex.getValues(xnp);
 
         for (int i = 0; i < xSolutions.length; i++) {
+            System.out.println(xSolutions[i]);
             if (xSolutions[i] == 0.0d) {
                 problemMetabolites.add(i);
             }
@@ -296,13 +320,14 @@ public class GapFind {
         return problemMetabolites.toArray(new Integer[0]);
     }
 
+
     public static void main(String[] args)
             throws IloException, FileNotFoundException, IOException {
 
 //        SimulationUtil.setCPLEXLibraryPath("/Users/johnmay/ILOG/CPLEX_Studio_AcademicResearch122/cplex/bin/x86-64_darwin9_gcc4.0");
         SimulationUtil.setup();
 
-        BasicStoichiometricMatrix s = new BasicStoichiometricMatrix();
+        BasicStoichiometricMatrix s = BasicStoichiometricMatrix.create();
         // internal reactions
         s.addReaction("A => B");
         s.addReaction("B => C");
@@ -315,14 +340,16 @@ public class GapFind {
         s.addReaction(new String[]{}, new String[]{"A"});
         s.addReaction(new String[]{"C"}, new String[]{});
         // print
-        s.display(System.out, ' ', "0", null, 2, 2);
+        s.display(System.out, ' ', "0", 2, 2);
         // gap find
 
 
 
         System.out.println(Arrays.asList(new GapFind(s).solve()));
 
-        /** USAGE: */
+        /**
+         * USAGE:
+         */
 //        BasicStoichiometricMatrix s = ReactionMatrixIO.readBasicStoichiometricMatrix(
 //                new FileReader( "/Users/johnmay/Desktop/s.tsv" ) , '\t' );
 //

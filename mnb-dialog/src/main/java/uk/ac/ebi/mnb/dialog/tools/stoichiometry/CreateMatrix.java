@@ -4,19 +4,18 @@
  * 2011.11.24
  *
  * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ *
+ * The CheMet library is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * CheMet is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mnb.dialog.tools.stoichiometry;
 
@@ -45,24 +44,30 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.chemet.render.matrix.MatrixPane;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.DefaultStoichiometricMatrix;
+
 
 /**
- *          CreateMatrix - 2011.11.24 <br>
- *          Class creates a stoichiometric matrix
- * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * CreateMatrix - 2011.11.24 <br> Class creates a stoichiometric matrix
+ *
+ * @version $Rev$ : Last Changed $Date: 2011-12-13 16:45:11 +0000 (Tue,
+ * 13 Dec 2011) $
+ * @author johnmay
+ * @author $Author$ (this version)
  */
 public class CreateMatrix
         extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(CreateMatrix.class);
-    private StoichiometricMatrix<CompartmentalisedMetabolite, MetabolicReaction> matrix; // tempoary storage
+
+    private DefaultStoichiometricMatrix matrix; // tempoary storage
+
 
     public CreateMatrix(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
         setDefaultLayout();
     }
+
 
     @Override
     public JLabel getDescription() {
@@ -72,12 +77,14 @@ public class CreateMatrix
         return label;
     }
 
+
     @Override
     public JPanel getOptions() {
         JPanel panel = super.getOptions();
 
         return panel;
     }
+
 
     @Override
     public void process() {
@@ -90,8 +97,8 @@ public class CreateMatrix
                                              : recon.getReactions();
 
         LOGGER.info("Creating reaction matrix for " + rxns.size() + " reactions");
-        matrix = new StoichiometricMatrix<CompartmentalisedMetabolite, MetabolicReaction>((int) (rxns.size() * 1.5),
-                                                                                          rxns.size());
+        matrix = DefaultStoichiometricMatrix.create((int) (rxns.size() * 1.5),
+                                                    rxns.size());
         for (MetabolicReaction rxn : rxns) {
 
             // transpose
@@ -100,12 +107,10 @@ public class CreateMatrix
                 rxn.setReversibility(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
             }
 
-            matrix.addReaction(rxn,
-                               getMetabolites(rxn),
-                               getStoichiometries(rxn),
-                               rxn.getReversibility() == Reversibility.REVERSIBLE);
+            matrix.addReaction(rxn);
         }
     }
+
 
     @Override
     public boolean update() {
@@ -119,33 +124,9 @@ public class CreateMatrix
         Reconstruction active = ReconstructionManager.getInstance().getActive();
 
         active.setMatix(matrix);
-        
+
         updateMenuContext();
 
         return true;
-    }
-
-    public CompartmentalisedMetabolite[] getMetabolites(MetabolicReaction rxn) {
-
-        List<CompartmentalisedMetabolite> list = new ArrayList<CompartmentalisedMetabolite>();
-        for (Participant<Metabolite, ?, Compartment> p : rxn.getAllReactionParticipants()) {
-            list.add(new CompartmentalisedMetabolite(p.getMolecule(), p.getCompartment()));
-        }
-
-        return list.toArray(new CompartmentalisedMetabolite[0]);
-    }
-
-    public Double[] getStoichiometries(MetabolicReaction rxn) {
-
-        Double[] coefs = new Double[rxn.getAllReactionParticipants().size()];
-        int i = 0;
-        for (Double d : rxn.getReactantStoichiometries()) {
-            coefs[i++] = -d;
-        }
-        for (Double d : rxn.getProductStoichiometries()) {
-            coefs[i++] = +d;
-        }
-
-        return coefs;
     }
 }

@@ -64,7 +64,7 @@ public class ReactionField
         extends JTextField {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionField.class);
-    private EntityAccessor accessor = new NameAccessor(); // list uses names
+    private EntityValueAccessor accessor = new NameAccessor(); // list uses names
     private AutoComplete autocomplete;
     private TermQuery typeFilter = new TermQuery(FieldType.TYPE.getTerm(Metabolite.BASE_TYPE));
     private static String[] fields = new String[]{FieldType.NAME.getName(), FieldType.ABBREVIATION.getName()};

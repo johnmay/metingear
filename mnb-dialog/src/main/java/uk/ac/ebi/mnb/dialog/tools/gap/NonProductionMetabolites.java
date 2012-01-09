@@ -59,7 +59,7 @@ public class NonProductionMetabolites
 
         try {
             Reconstruction active = ReconstructionManager.getInstance().getActive();
-            StoichiometricMatrix<CompartmentalisedMetabolite, MetabolicReaction> s = active.getMatrix();
+            StoichiometricMatrix<CompartmentalisedMetabolite, ?> s = active.getMatrix();
 
             SimulationUtil.setup(); // make sure the paths are set
 

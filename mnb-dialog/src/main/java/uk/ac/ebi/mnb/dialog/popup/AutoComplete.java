@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.visualisation.molecule.access.EntityAccessor;
+import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
 
 /**
  *          Autocomplete - 2011.12.05 <br>
@@ -71,7 +71,7 @@ public class AutoComplete extends JDialog {
     }
 
     public void setItems(Collection<AnnotatedEntity> entities,
-                         EntityAccessor accessor) {
+                         EntityValueAccessor accessor) {
 
         model.clear();
 

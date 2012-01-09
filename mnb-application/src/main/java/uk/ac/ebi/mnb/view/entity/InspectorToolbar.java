@@ -62,6 +62,7 @@ public class InspectorToolbar
         add(viewPanel.getComponent(), VIEW_PANEL_NAME);
         setBackground(ViewUtilities.DARK_BACKGROUND);
         setBorder(Borders.DLU2_BORDER);
+        setViewMode();
     }
 
 
