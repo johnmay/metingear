@@ -20,10 +20,11 @@
 package uk.ac.ebi.optimise.gap;
 
 import com.google.common.collect.BiMap;
-import ilog.concert.*;
+import ilog.concert.IloException;
+import ilog.concert.IloIntVar;
+import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
@@ -36,7 +37,8 @@ import uk.ac.ebi.optimise.SimulationUtil;
  *
  * GapFill 2012.01.10
  *
- * @version $Rev$ : Last Changed $Date$
+ * @version $Rev$ : Last Changed $Date: 2012-01-10 13:15:20 +0000 (Tue,
+ * 10 Jan 2012) $
  * @author johnmay
  * @author $Author$ (this version)
  *
@@ -155,17 +157,21 @@ public class GapFill<M, R> {
 
         solver.addMinimize(solver.sum(y));
 
-        solver.solve();
+        boolean solved = solver.solve();
 
         List<Integer> candidates = new ArrayList<Integer>();
 
-        double[] solutions = solver.getValues(y);
+        if (solved) {
 
-        for (int j = 0; j < solutions.length; j++) {
-            System.out.println(solutions[j]);
-            if (solutions[j] == 1.0d) {
-                candidates.add(databaseMap.get(j));
+            double[] solutions = solver.getValues(y);
+
+            for (int j = 0; j < solutions.length; j++) {
+                System.out.println(solutions[j]);
+                if (solutions[j] == 1.0d) {
+                    candidates.add(databaseMap.get(j));
+                }
             }
+
         }
 
         return candidates;
@@ -206,16 +212,18 @@ public class GapFill<M, R> {
 
         BasicStoichiometricMatrix reference = BasicStoichiometricMatrix.create();
 
+        reference.addReactionWithName("db3", "E => J");
+        reference.addReactionWithName("db4", "J => F");
         reference.addReactionWithName("db1", "I => F");
-        reference.addReactionWithName("db2", "E => F");
-        reference.addReactionWithName("db3", "E => I");
+        //reference.addReactionWithName("db1", "E => F");
+        reference.addReactionWithName("db2", "E => I");
 
 
         reference.display();
 
         GapFill<String, String> gf = new GapFill<String, String>(reference, model);
 
-        System.out.println(gf.getCandidateReactions(4));
+        System.out.println(gf.getCandidateReactions(model.getIndex("F")));
 
     }
 }
