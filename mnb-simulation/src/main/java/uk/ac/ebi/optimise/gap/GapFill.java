@@ -1,207 +1,188 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * GapFill.java
+ *
+ * 2012.01.10
+ *
+ * This file is part of the CheMet library
+ *
+ * The CheMet library is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * CheMet is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.optimise.gap;
 
+import com.google.common.collect.BiMap;
 import ilog.concert.*;
 import ilog.cplex.IloCplex;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+import uk.ac.ebi.optimise.CPLEXConstraints;
 import uk.ac.ebi.optimise.SimulationUtil;
 
 
 /**
  *
+ * GapFill 2012.01.10
  *
+ * @version $Rev$ : Last Changed $Date$
  * @author johnmay
+ * @author $Author$ (this version)
+ *
+ * Class description
+ *
  */
-public class GapFill {
+public class GapFill<M, R> {
 
-    private GapFill() throws IloException, UnsatisfiedLinkError {
-        cplex = new IloCplex();
-        cplex.setOut(System.out);
-    }
+    private static final Logger LOGGER = Logger.getLogger(GapFill.class);
 
-    private StoichiometricMatrix s;
+    private StoichiometricMatrix<M, R> database;
 
-    private StoichiometricMatrix model;
+    private StoichiometricMatrix<M, R> model;
 
-    private Set<Integer> modelRxns;
-
-    private IloCplex cplex;
+    private StoichiometricMatrix<M, R> combined;
 
     /**
-     * Constraints
+     * Bi-directional hash maps provide look-up of database/model reaction index
+     * in the combined matrix and vise versa
+     */
+    private BiMap<Integer, Integer> databaseMap;
+
+    private BiMap<Integer, Integer> modelMap;
+
+    private IloCplex solver;
+
+    /**
+     *
+     * Linear programming variables
+     *
+     * w: binary matrix indicates if reaction j produces metabolite i y: binary
+     * vector indicates whether database reaction j resolves gap v: flux vector
      *
      */
-    private IloIntVar[][] w; // binary variable for whether reaction j produces metabolite i (1) or not (0)
+    private IloIntVar[][] w;
 
     private IloIntVar[] y;
 
     private IloNumVar[] v;
 
 
-    public void setup(StoichiometricMatrix database, StoichiometricMatrix model) {
-        this.s = database;
-        modelRxns = new HashSet<Integer>(Arrays.asList(this.s.add(model)));
-    }
+    /**
+     *
+     * @param database
+     * @param model
+     * @throws IloException
+     * @throws UnsatisfiedLinkError thrown if libray.path is not setup correct
+     */
+    public GapFill(StoichiometricMatrix<M, R> database,
+                   StoichiometricMatrix<M, R> model) throws IloException, UnsatisfiedLinkError {
 
-    private IloIntVar[] toSolve;
+        this.database = database;
+        this.model = model;
 
+        this.combined = database.newInstance(database.getMoleculeCount(),
+                                             database.getReactionCount());
 
-    private void setupConstraints(int i)
-            throws IloException {
+        databaseMap = combined.assign(database);
+        modelMap = combined.assign(model);
 
-        System.out.println("Setting up for " + s.getMolecule(i));
-
-        y = new IloIntVar[s.getReactionCount()];
-        // value to optimize
-        List<IloIntVar> binvar = new ArrayList();
-
-        for (int j = 0; j < s.getReactionCount(); j++) {
-            y[j] = cplex.boolVar();
-            if (!modelRxns.contains(j)) {
-                binvar.add(y[j]);
-            }
+        // remove intersect from database
+        for (Integer j : modelMap.values()) {
+            databaseMap.remove(j);
         }
 
+        SimulationUtil.setup();
 
-        // reaction fluxes
-        v = cplex.numVarArray(s.getReactionCount(), -100, 100);
-
-        // flux can take any value between 0 and 100
-        // LB ≤ Vj ≤ UB , j ∈ Model
-        // and
-        // LB Yj ≤ Vj ≤ Yj UB , j ∈ Database
-
-        binaryConstraints();
+        this.solver = new IloCplex();
 
 
-        for (int j = 0; j < s.getReactionCount(); j++) {
+        // intialise variables here...        
+        v = solver.numVarArray(combined.getReactionCount(), -100, 100);
+        y = solver.boolVarArray(combined.getReactionCount()); // - modelMap.size()
+        w = new IloIntVar[combined.getMoleculeCount()][combined.getReactionCount()];
+        for (int i = 0; i < combined.getMoleculeCount(); i++) {
+            w[i] = solver.boolVarArray(combined.getReactionCount());
+        }
 
-            // j ∈ Model
-            if (modelRxns.contains(j)) {
-                //skip
-                cplex.addGe(v[j], 0);
-                cplex.addLe(v[j], 100);
-            } // j ∈ Database
+        // intialise constraints
+
+        // constrain flux
+        for (int j = 0; j < v.length; j++) {
+            // model
+            if (modelMap.containsValue(j)) {
+                solver.addLe(v[j], 100);
+                solver.addGe(v[j], 0);
+            } // database
             else {
-                System.out.println(j);
-                cplex.addGe(v[j], cplex.prod(y[j], -1000));
-                cplex.addLe(v[j], cplex.prod(y[j], 100));
+                solver.addLe(v[j], solver.prod(y[j], 100));
+                solver.addGe(v[j], solver.prod(y[j], -1000));
             }
-
-
         }
 
-        addProductionConstraints(i);
-        cplex.add(getMassBalanceConstraint());
+        solver.add(CPLEXConstraints.getPositiveMassBalance(combined, v));
 
-        // database y's
-
-        toSolve = binvar.toArray(new IloIntVar[0]);
-        cplex.addMinimize(cplex.sum(y));
-
-    }
-
-
-    private Integer[] solve()
-            throws IloException {
-
-        cplex.solve();
-
-//        List<Double> problemMetabolites = new ArrayList<Double>();
-        double[] solutions = cplex.getValues(y);
-
-        for (int i = 0; i < solutions.length; i++) {
-            System.out.println(solutions[i]);
-        }
-
-        return null;
-//        return problemMetabolites.toArray(new Integer[0]);
-    }
-
-
-    private void binaryConstraints()
-            throws IloException {
-        w = new IloIntVar[s.getMoleculeCount()][s.getReactionCount()];
-
-        for (int i = 0; i < s.getMoleculeCount(); i++) {
-            w[i] =
-            cplex.intVarArray(s.getReactionCount(),
-                              0,
-                              1);
-
-        }
     }
 
 
     /**
-     * @brief Set min and max production constraints for each molecule @f[
-     * S_{ij} v_{j} \geq \epsilon w_{ij} @f] @f[ S_{ij} v_{j} \leq E w_{ij} @f]
      *
-     * @throws IloException
+     * Access the column indices (database) of reactions that can resolve
+     * dead-end metabolite at row index 'i' (model)
+     *
+     *
+     * @return
+     *
      */
-    public void addProductionConstraints(int i)
-            throws IloException {
+    public List<Integer> getCandidates(int i) throws IloException {
 
+        int index = combined.getIndex(model.getMolecule(i));
 
-        List<IloIntVar> values = new ArrayList<IloIntVar>();
+        System.out.println("Model:" + model.getMolecule(i));
+        System.out.println("Combined:" + combined.getMolecule(index));
 
-        for (int j = 0; j < s.getReactionCount(); j++) {
+        solver.add(CPLEXConstraints.getProductionConstraints(combined, v, w, index));
 
+        solver.addMinimize(solver.sum(y));
 
-            if (s.get(i, j) != 0) {
+        solver.solve();
 
-                // min production limit
-                cplex.addGe(cplex.prod(s.get(i, j).intValue(),
-                                       v[j]), // Sijvj
-                            cplex.sum(1,
-                                      cplex.negative(cplex.prod(1000,
-                                                                cplex.sum(1,
-                                                                          cplex.negative(w[i][j])))))); // 1-1000*(1-wij)
-                // max production limit
-                cplex.addLe(cplex.prod(s.get(i, j).intValue(),
-                                       v[j]), // Sijvj
-                            cplex.prod(1000, w[i][j])); // 1000*wij        
+        List<Integer> candidates = new ArrayList<Integer>();
 
-                values.add(w[i][j]);
+        double[] solutions = solver.getValues(y);
 
-
+        for (int j = 0; j < solutions.length; j++) {
+            System.out.println(solutions[j]);
+            if (solutions[j] == 1.0d) {
+                candidates.add(databaseMap.get(j));
             }
-
-
         }
 
-        cplex.addGe(cplex.sum(values.toArray(new IloIntVar[0])), 1);
-
+        return candidates;
 
     }
 
 
-    public IloAddable[] getMassBalanceConstraint()
-            throws IloException {
-        IloAddable[] positiveFlux = new IloAddable[s.getMoleculeCount()];
-
-        for (int i = 0; i < s.getMoleculeCount(); i++) {
-            IloNumExpr[] values = new IloNumExpr[s.getReactionCount()];
-
-            for (int j = 0; j < s.getReactionCount(); j++) {
-                values[j] = cplex.prod(v[j], s.get(i, j));
-            }
-
-            // The sum of the reaction flux for this metabolite should
-            // be greater then zero
-            positiveFlux[i] = cplex.ge(cplex.sum(values), 0);
+    public List<R> getCandidateReactions(int i) throws IloException {
+        List<R> rxns = new ArrayList<R>();
+        for (Integer j : getCandidates(i)) {
+            rxns.add(database.getReaction(j));
         }
-
-        return positiveFlux;
+        return rxns;
     }
 
 
-    public static void main(String[] args) throws IloException, UnsatisfiedLinkError {
+    public static void main(String[] args) throws IloException {
 
         SimulationUtil.setup();
 
@@ -215,7 +196,7 @@ public class GapFill {
         model.addReaction("F => G");
         model.addReaction("G => C");
 
-        model.display(System.out, ' ', "0", 4, 4);
+        model.display();
 
         System.out.println("Non-production Metabolites");
         for (int i : new GapFind(model).findNonProductionMetabolites()) {
@@ -223,25 +204,18 @@ public class GapFill {
         }
 
 
-        BasicStoichiometricMatrix ref = BasicStoichiometricMatrix.create();
+        BasicStoichiometricMatrix reference = BasicStoichiometricMatrix.create();
 
-        ref.addReaction("I => F");
-        ref.addReaction("E => F");
-        ref.addReaction("E => I");
-
-
-
-        ref.display();
+        reference.addReactionWithName("db1", "I => F");
+        reference.addReactionWithName("db2", "E => F");
+        reference.addReactionWithName("db3", "E => I");
 
 
-        GapFill gf = new GapFill();
-        gf.setup(ref, model);
+        reference.display();
 
-        ref.display();
+        GapFill<String, String> gf = new GapFill<String, String>(reference, model);
 
-        gf.setupConstraints(1);
-        gf.solve();
-
+        System.out.println(gf.getCandidateReactions(4));
 
     }
 }
