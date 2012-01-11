@@ -6,19 +6,18 @@ package mnb.io.resolve;
  * 2011.10.31
  *
  * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ *
+ * The CheMet library is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * CheMet is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
 import com.google.common.base.Joiner;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -66,27 +65,40 @@ import uk.ac.ebi.visualisation.molecule.MoleculeTable;
 import uk.ac.ebi.visualisation.molecule.access.CrossReferenceAccessor;
 import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
 
+
 /**
- *          CandidateSelector - 2011.10.31 <br>
- *          A dialog to select candidate reconciliation entries
- * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * CandidateSelector - 2011.10.31 <br> A dialog to select candidate
+ * reconciliation entries
+ *
+ * @version $Rev$ : Last Changed $Date: 2011-12-13 16:43:11 +0000 (Tue,
+ * 13 Dec 2011) $
+ * @author johnmay
+ * @author $Author$ (this version)
  */
 public class CandidateSelector
         extends DropdownDialog
         implements ListSelectionListener {
 
     private static final Logger LOGGER = Logger.getLogger(CandidateSelector.class);
+
     private MoleculeTable table = new MoleculeTable(new CrossReferenceAccessor(), new NameAccessor());
+
     private CellConstraints cc = new CellConstraints();
+
     private JLabel desc;
+
     private JLabel nameLabel = new JLabel();
+
     private JLabel matchLabel = new JLabel();
+
     private String name;
+
     private boolean selected = false;
+
     private JPanel options;
+
     private boolean skipall = false;
+
 
     public CandidateSelector(JFrame frame) {
         super(frame, "OkayDialog");
@@ -94,11 +106,17 @@ public class CandidateSelector
         getClose().setText("Skip");
         table.getSelectionModel().addListSelectionListener(this);
     }
+
     private MatchIndication nameMatch = new MatchIndication(200, 200);
+
     private MatchIndication formulaMatch = new MatchIndication(200, 200);
+
     private MatchIndication chargeMatch = new MatchIndication(200, 200);
+
     private Map<Metabolite, CandidateEntry> map = new HashMap();
+
     private Metabolite query;
+
 
     public void setup(Metabolite query,
                       Collection<SynonymCandidateEntry> candidates) {
@@ -141,12 +159,12 @@ public class CandidateSelector
                 if (c != null) {
                     m.setCharge(c);
                 } else {
-                    System.out.println("null charge for: " + id);
+                    LOGGER.debug("null charge for: " + id);
                 }
 
                 Collection<IMolecularFormula> mfs = ChEBIChemicalDataService.getInstance().getFormulas(id);
                 if (mfs.isEmpty()) {
-                    System.out.println("no mf for " + id);
+                    LOGGER.debug("No molecularformula for " + id);
                 }
                 for (IMolecularFormula mf : mfs) {
                     m.addAnnotation(new MolecularFormula(mf));
@@ -171,6 +189,7 @@ public class CandidateSelector
 
     }
 
+
     @Override
     public JLabel getDescription() {
         desc = super.getDescription();
@@ -178,6 +197,7 @@ public class CandidateSelector
         desc.setText(String.format("The molecule '%s' was not found:", name));
         return desc;
     }
+
 
     @Override
     public JPanel getOptions() {
@@ -223,6 +243,7 @@ public class CandidateSelector
 
     }
 
+
     @Override
     public JPanel getNavigation() {
 
@@ -245,6 +266,7 @@ public class CandidateSelector
 
     }
 
+
     @Override
     public void setVisible(boolean visible) {
         if (visible) {
@@ -257,25 +279,30 @@ public class CandidateSelector
         }
     }
 
+
     @Override
     public void process() {
         // do nothing
         selected = true;
     }
 
+
     public boolean okaySelected() {
         return selected;
     }
 
+
     public Collection<Metabolite> getSelected() {
         return table.getSelectedEntities();
     }
+
 
     @Override
     public boolean update() {
         // do nothing
         return true;
     }
+
 
     public void valueChanged(ListSelectionEvent e) {
         Collection<Metabolite> selection = getSelected();

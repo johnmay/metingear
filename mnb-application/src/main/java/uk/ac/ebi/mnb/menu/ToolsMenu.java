@@ -4,8 +4,6 @@
  */
 package uk.ac.ebi.mnb.menu;
 
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import org.apache.log4j.Logger;
@@ -23,17 +21,19 @@ import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReferenceDialog;
 import uk.ac.ebi.mnb.menu.tool.GapAnalysis;
 
+
 /**
  * FileMenu.java
  *
  *
- * @author johnmay
- * @date Apr 28, 2011
+ * @author johnmay @date Apr 28, 2011
  */
 public class ToolsMenu extends ContextMenu {
 
     private static final Logger logger = Logger.getLogger(ToolsMenu.class);
+
     private GapAnalysis gapMenu;
+
 
     public ToolsMenu() {
 
@@ -54,6 +54,14 @@ public class ToolsMenu extends ContextMenu {
                 return selection.hasSelection(Metabolite.class);
             }
         });
+
+        add(new CuratedReconciliation(view), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                return selection.hasSelection(Metabolite.class);
+            }
+        });
+
         add(create(DownloadStructuresDialog.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
@@ -71,9 +79,11 @@ public class ToolsMenu extends ContextMenu {
         });
         add(new JSeparator());
 
-        /***********************
+        /**
+         * *********************
          * Sequence annotation *
-         ***********************/
+         **********************
+         */
         add(create(SequenceHomology.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
@@ -89,9 +99,11 @@ public class ToolsMenu extends ContextMenu {
 
         add(new JSeparator());
 
-        /***********************
-         * Merging             *
-         ***********************/
+        /**
+         * *********************
+         * Merging *
+         **********************
+         */
         add(new JMenuItem(new MergeLoci(MainView.getInstance())));
 
         add(create(CollapseStructures.class), new ContextResponder() {
@@ -103,9 +115,11 @@ public class ToolsMenu extends ContextMenu {
         });
 
         add(new JSeparator());
-        /*************************
+        /**
+         * ***********************
          * Stoichiometric Matrix *
-         *************************/
+         ************************
+         */
         add(create(CreateMatrix.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
@@ -116,9 +130,11 @@ public class ToolsMenu extends ContextMenu {
         gapMenu = new GapAnalysis(view);
         add(gapMenu);
 
-        /*************************
-         * Comparisson           *
-         *************************/
+        /**
+         * ***********************
+         * Comparisson *
+         ************************
+         */
         add(new JSeparator());
 
         add(create(CompareReconstruction.class), new ContextResponder() {
@@ -126,9 +142,10 @@ public class ToolsMenu extends ContextMenu {
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
                 return reconstructions.size() > 1;
             }
-        });        
+        });
 
     }
+
 
     @Override
     public void updateContext() {
