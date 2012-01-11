@@ -113,7 +113,7 @@ public class ExcelEntityResolver implements EntityResolver {
     public Metabolite getReconciledMetabolite(String abbreviation) {
 
         // new resolution
-        if (resolved.containsKey(abbreviation) == false) {
+        if (resolved.containsKey(abbreviation) == false) {                                  
             Metabolite entry = (Metabolite) reconciler.resolve(getEntity(abbreviation));
             resolved.put(abbreviation, entry);
         }

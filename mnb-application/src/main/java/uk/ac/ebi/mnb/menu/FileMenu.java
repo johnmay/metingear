@@ -7,20 +7,23 @@ package uk.ac.ebi.mnb.menu;
 import java.awt.Color;
 import java.io.File;
 import java.util.LinkedList;
+import javax.swing.JFrame;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.menu.file.SaveAsProjectAction;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.event.UndoableEditListener;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.metingeer.menu.ContextMenu;
-import uk.ac.ebi.mnb.dialog.file.ExportMetabolitesMDL;
-import uk.ac.ebi.mnb.dialog.file.NewMetabolite;
-import uk.ac.ebi.mnb.dialog.file.NewProteinProduct;
-import uk.ac.ebi.mnb.dialog.file.NewReaction;
+import uk.ac.ebi.mnb.core.ControllerDialogItem;
+import uk.ac.ebi.mnb.dialog.file.*;
 import uk.ac.ebi.mnb.dialog.file.importation.ImportSBML;
+import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.file.ExportSBMLAction;
 import uk.ac.ebi.mnb.menu.file.ImportENAXML;
@@ -32,21 +35,26 @@ import uk.ac.ebi.mnb.menu.file.OpenProjectAction;
 import uk.ac.ebi.mnb.menu.file.SaveProjectAction;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
 
+
 /**
  * FileMenu.java
  *
  *
- * @author johnmay
- * @date Apr 13, 2011
+ * @author johnmay @date Apr 13, 2011
  */
 public class FileMenu
         extends ContextMenu {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(FileMenu.class);
+
     private SaveAsProjectAction saveAs = new SaveAsProjectAction();
+
     private NewProjectAction newProjectAction = new NewProjectAction();
+
     private JMenu recent = new JMenu("Open Recent...");
+
     private ContextMenu importMenu;
+
     private ContextMenu exportMenu;
 
     private ContextResponder activeProject = new ContextResponder() {
@@ -55,6 +63,7 @@ public class FileMenu
             return active != null;
         }
     };
+
 
     public FileMenu() {
         super("File", MainView.getInstance());
@@ -92,10 +101,15 @@ public class FileMenu
         rebuildRecentlyOpen();
 
     }
+
     private Color ACTIVE_TOP_GRADIENT_COLOR = new Color(0xc8c8c8);
+
     private Color ACTIVE_BOTTOM_GRADIENT_COLOR = new Color(0xbcbcbc);
+
     private Color INACTIVE_TOP_GRADIENT_COLOR = new Color(0xe9e9e9);
+
     private Color INACTIVE_BOTTOM_GRADIENT_COLOR = new Color(0xe4e4e4);
+
 
     public void rebuildRecentlyOpen() {
         recent.removeAll(); // could just add and remove items... but for now
@@ -128,13 +142,16 @@ public class FileMenu
 //        g2.fillRect( 0 , 0 , getWidth() , getHeight() );
 //        super.paintComponent( g );
 //    }
+
     public NewProjectAction getNewProjectAction() {
         return newProjectAction;
     }
 
+
     public void promptForSave() {
         saveAs.activateActions();
     }
+
 
     @Override
     public void updateContext() {
@@ -142,7 +159,6 @@ public class FileMenu
         importMenu.updateContext();
         exportMenu.updateContext();
     }
-
 
 
     /**
@@ -158,6 +174,7 @@ public class FileMenu
         }
     }
 
+
     /**
      * Export sub menu of File
      */
@@ -165,6 +182,12 @@ public class FileMenu
 
         public ExportMenu() {
             super("Export...", MainView.getInstance());
+            add(create(ExportStoichiometricMatrix.class), new ContextResponder() {
+
+                public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                    return active != null && active.hasMatrix();
+                }
+            });
             add(new ExportMetabolitesMDL(MainView.getInstance()), activeProject);
             add(new JMenuItem("Metabolites (.sbml)"));
             add(new JMenuItem("Proteins (.fasta)"));
