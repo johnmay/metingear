@@ -67,7 +67,7 @@ public class ReactionParser {
     public static final Pattern COEFFICIENT_PATTERN =
                                 Pattern.compile("\\A" + DOUBLE_PATTERN.pattern() + "\\s+" + "|\\(" + DOUBLE_PATTERN.pattern() + "\\)");
     public static final Pattern COMPARTMENT_PATTERN =
-                                Pattern.compile("\\[(\\w{1,2})\\]");
+                                Pattern.compile("[\\(\\[](\\w{1,2})[\\)\\]]");
     private static final Reversibility[] NORMALISED_ARROWS =
                                          new Reversibility[]{Reversibility.REVERSIBLE,
                                                              Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT,
