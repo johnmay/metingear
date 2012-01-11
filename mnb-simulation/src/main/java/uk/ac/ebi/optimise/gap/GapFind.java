@@ -52,7 +52,7 @@ public class GapFind {
 
     private StoichiometricMatrix s; // Stoichiometric matrix
 
-    private IloIntVar[] v; // flux vector (size = n reactions)
+    private IloNumVar[] v; // flux vector (size = n reactions)
 
     private IloIntVar[] xnp; // binary variable for maximising
 
@@ -91,8 +91,8 @@ public class GapFind {
                                 1);
         // flux can take any value between 0 and 100
         // LB ≤ v ≤ UB , j ∈ Model
-        v = cplex.intVarArray(s.getReactionCount(),
-                              0,
+        v = cplex.numVarArray(s.getReactionCount(),
+                              -100,
                               100);
 
         // objective function
@@ -150,15 +150,31 @@ public class GapFind {
             throws IloException {
         for (int i = 0; i < s.getMoleculeCount(); i++) {
             for (int j = 0; j < s.getReactionCount(); j++) {
-                if (s.get(i, j) > 0) { // and belongs to irreversible set
-                    // min production limit
-                    cplex.addGe(cplex.prod(s.get(i, j).intValue(),
-                                           v[j]), // Sijvj
-                                cplex.prod(0.001, w[i][j])); // εwij
-                    // max production limit
-                    cplex.addLe(cplex.prod(s.get(i, j).intValue(),
-                                           v[j]), // Sijvj
-                                cplex.prod(100, w[i][j])); // εwij
+                if (s.get(i, j) > 0) {
+
+                    if (s.isReversible(j)) {
+
+                        // min production limit (reversible)
+                        cplex.addGe(cplex.prod(s.get(i, j).intValue(),
+                                               v[j]), // Sijvj
+                                    cplex.sum(0.001, cplex.negative(cplex.prod(100, cplex.sum(1, cplex.negative(w[i][j])))))); // ε-M(1-wij)
+
+                        // max production limit (reversible)
+                        // Sijvj >= Mwij
+                        cplex.addGe(cplex.prod(s.get(i, j).intValue(),
+                                               v[j]),
+                                    cplex.prod(100, w[i][j]));
+                    } else {
+
+                        // min production limit
+                        cplex.addGe(cplex.prod(s.get(i, j).intValue(),
+                                               v[j]), // Sijvj
+                                    cplex.prod(0.001, w[i][j])); // εwij
+                        // max production limit
+                        cplex.addLe(cplex.prod(s.get(i, j).intValue(),
+                                               v[j]), // Sijvj
+                                    cplex.prod(100, w[i][j])); // εwij
+                    }
                 }
             }
         }
@@ -225,7 +241,7 @@ public class GapFind {
     }
 
 
-    public Integer[] findNonProductionMetabolites()
+    public Integer[] getUnproducedMetabolites()
             throws IloException {
         cplex.remove(negMassBalance);
         cplex.add(posMassBalance);
@@ -234,7 +250,7 @@ public class GapFind {
     }
 
 
-    public Integer[] findNonConsumptionMetabolites()
+    public Integer[] getUnconsumedMetabolites()
             throws IloException {
         cplex.remove(posMassBalance);
         cplex.add(negMassBalance);
@@ -248,27 +264,17 @@ public class GapFind {
      *
      * @return indices of root non-production metabolites
      */
-    public Integer[] getTerminalNCMetabolites() {
-        List<Integer> rootNonProductionMetabolites = new ArrayList<Integer>();
+    public Integer[] getRootUnproducedMetabolites() {
+        List<Integer> unproducedMetabolites = new ArrayList<Integer>();
 
         for (int i = 0; i < s.getMoleculeCount(); i++) {
-            int positiveStoichiometry = 0;
-            int negitiveStoichiometry = 0;
 
-            for (int j = 0; j < s.getReactionCount(); j++) {
-                if (s.get(i, j) > 0) {
-                    positiveStoichiometry++;
-                } else if (s.get(i, j) < 0) {
-                    negitiveStoichiometry++;
-                }
-            }
-
-            if ((positiveStoichiometry > 0) && (negitiveStoichiometry == 0)) {
-                rootNonProductionMetabolites.add(i);
+            if (!isProduced(i)) {
+                unproducedMetabolites.add(i);
             }
         }
 
-        return rootNonProductionMetabolites.toArray(new Integer[0]);
+        return unproducedMetabolites.toArray(new Integer[0]);
     }
 
 
@@ -277,29 +283,44 @@ public class GapFind {
      *
      * @return
      */
-    public Integer[] getRootNPMetabolites() {
+    public Integer[] getTerminalUnconsumpedMetabolites() {
 
-        List<Integer> rootNonProductionMetabolites = new ArrayList<Integer>();
+        List<Integer> unconsumedMetabolites = new ArrayList<Integer>();
 
         for (int i = 0; i < s.getMoleculeCount(); i++) {
-            int positiveStoichiometry = 0;
-            int negitiveStoichiometry = 0;
-
-            for (int j = 0; j < s.getReactionCount(); j++) {
-                if (s.get(i, j) > 0) {
-                    positiveStoichiometry++;
-                } else if (s.get(i, j) < 0) {
-                    negitiveStoichiometry++;
-                }
-            }
-
-            if ((positiveStoichiometry == 0) && (negitiveStoichiometry > 0)) {
-                rootNonProductionMetabolites.add(i);
+            if (!isConsumed(i)) {
+                unconsumedMetabolites.add(i);
             }
         }
 
-        return rootNonProductionMetabolites.toArray(new Integer[0]);
+        return unconsumedMetabolites.toArray(new Integer[0]);
 
+    }
+
+
+    public boolean isProduced(int i) {
+        for (int j = 0; j < s.getReactionCount(); j++) {
+            if (s.get(i, j) > 0) {
+                return true;
+            } else if (s.isReversible(j)
+                       && s.get(i, j) != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public boolean isConsumed(int i) {
+        for (int j = 0; j < s.getReactionCount(); j++) {
+            if (s.get(i, j) < 0) {
+                return true;
+            } else if (s.isReversible(j)
+                       && s.get(i, j) != 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -311,7 +332,6 @@ public class GapFind {
         double[] xSolutions = cplex.getValues(xnp);
 
         for (int i = 0; i < xSolutions.length; i++) {
-            System.out.println(xSolutions[i]);
             if (xSolutions[i] == 0.0d) {
                 problemMetabolites.add(i);
             }
@@ -329,23 +349,23 @@ public class GapFind {
 
         BasicStoichiometricMatrix s = BasicStoichiometricMatrix.create();
         // internal reactions
-        s.addReaction("A => B");
-        s.addReaction("B => C");
-        s.addReaction("B => D");
-        s.addReaction("D => E");
-        s.addReaction("F => G");
-        s.addReaction("G => C");
+        s.addReaction("A => B", false);
+        s.addReaction("B => D", false);
+        s.addReaction("D => E", false);
+        s.addReaction("E => F", false);
+        s.addReaction("G => C", false);
 
         // exchange reactions
-        s.addReaction(new String[]{}, new String[]{"A"});
-        s.addReaction(new String[]{"C"}, new String[]{});
+        s.addReaction(new String[]{}, new String[]{"A"}, false);
+        s.addReaction(new String[]{"C"}, new String[]{}, false);
         // print
         s.display(System.out, ' ', "0", 2, 2);
         // gap find
 
 
 
-        System.out.println(Arrays.asList(new GapFind(s).solve()));
+        System.out.println(Arrays.asList(new GapFind(s).getUnproducedMetabolites()));
+        System.out.println(Arrays.asList(new GapFind(s).getUnconsumedMetabolites()));
 
         /**
          * USAGE:

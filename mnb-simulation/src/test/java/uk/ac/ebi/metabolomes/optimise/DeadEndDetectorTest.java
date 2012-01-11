@@ -97,7 +97,7 @@ public class DeadEndDetectorTest
                                           throws Exception
     {
         GapFind deadEndDetector = new GapFind( s );
-        Integer[] allNCIndicies = deadEndDetector.findNonProductionMetabolites(  );
+        Integer[] allNCIndicies = deadEndDetector.getUnproducedMetabolites(  );
 
         // drain E and F
         s.addReaction( new String[] { "E", "F" },
@@ -114,7 +114,7 @@ public class DeadEndDetectorTest
         s.addReaction( new String[0],
                        new String[] { "A" } );
         deadEndDetector = new GapFind( s );
-        allNCIndicies = deadEndDetector.findNonProductionMetabolites(  );
+        allNCIndicies = deadEndDetector.getUnproducedMetabolites(  );
 
         // should only be 1 which is F
         assertEquals( 0, allNCIndicies.length );
@@ -127,7 +127,7 @@ public class DeadEndDetectorTest
                                            throws Exception
     {
         GapFind deadEndDetector = new GapFind( s );
-        Integer[] allNCIndicies = deadEndDetector.findNonConsumptionMetabolites(  );
+        Integer[] allNCIndicies = deadEndDetector.getUnconsumedMetabolites(  );
 
         // allow influx of A
         s.addReaction( new String[0],
@@ -145,7 +145,7 @@ public class DeadEndDetectorTest
                        new String[0] );
         //   s.addReaction( new String[]{ "F" } , new String[ 0 ] );
         deadEndDetector = new GapFind( s );
-        allNCIndicies = deadEndDetector.findNonConsumptionMetabolites(  );
+        allNCIndicies = deadEndDetector.getUnconsumedMetabolites(  );
 
         // should only be 1 which is F
         assertEquals( 1, allNCIndicies.length );
@@ -160,7 +160,7 @@ public class DeadEndDetectorTest
     {
         try {
             GapFind deadEndDetector = new GapFind( s );
-            Integer[] terminalNCIndicies = deadEndDetector.getTerminalNCMetabolites(  );
+            Integer[] terminalNCIndicies = deadEndDetector.getRootUnproducedMetabolites(  );
 
             // there should be 2 root non-production metabolites, E and C
             assertEquals( terminalNCIndicies.length, 2 );
@@ -173,7 +173,7 @@ public class DeadEndDetectorTest
             s.addReaction( new String[] { "E" },
                            new String[0] );
             deadEndDetector = new GapFind( s );
-            terminalNCIndicies = deadEndDetector.getTerminalNCMetabolites(  );
+            terminalNCIndicies = deadEndDetector.getRootUnproducedMetabolites(  );
 
             // there should be one dead end metabolite which is C
             assertEquals( terminalNCIndicies.length, 1 );
@@ -193,7 +193,7 @@ public class DeadEndDetectorTest
     {
         try {
             GapFind deadEndDetector = new GapFind( s );
-            Integer[] rootNPIndicies = deadEndDetector.getRootNPMetabolites(  );
+            Integer[] rootNPIndicies = deadEndDetector.getTerminalUnconsumpedMetabolites(  );
 
             // check there should be 2 root non-production metabolites, A and B
             assertEquals( rootNPIndicies.length, 1 );
@@ -204,7 +204,7 @@ public class DeadEndDetectorTest
             s.addReaction( new String[0],
                            new String[] { "A" } );
             deadEndDetector = new GapFind( s );
-            rootNPIndicies = deadEndDetector.getRootNPMetabolites(  );
+            rootNPIndicies = deadEndDetector.getTerminalUnconsumpedMetabolites(  );
 
             // there should be no NP dead end metabolites
             assertEquals( rootNPIndicies.length, 0 );

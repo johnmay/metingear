@@ -67,7 +67,7 @@ public class TerminalNonConsumptionMetabolites
             SelectionManager manager = controller.getViewController().getSelection();
             manager.clear();
 
-            Integer[] indices = gf.getTerminalNCMetabolites();
+            Integer[] indices = gf.getTerminalUnconsumpedMetabolites();
             LOGGER.debug("Terminal Non-Consumption Metabolites: " + Joiner.on(", ").join(indices));
             for (Integer i : indices) {
                 Metabolite metabolite = s.getMolecule(i).metabolite;

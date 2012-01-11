@@ -68,8 +68,8 @@ public class NonConsumptionMetabolites
             SelectionManager manager = controller.getViewController().getSelection();
             manager.clear();
 
-            Integer[] indices = gf.findNonConsumptionMetabolites();
-            LOGGER.debug("Root Non-Consumption Metabolites: " + Joiner.on(", ").join(indices));
+            Integer[] indices = gf.getUnconsumedMetabolites();
+            LOGGER.debug("Unconsumped Metabolites: " + Joiner.on(", ").join(indices));
 
             for (Integer i : indices) {
                 Metabolite metabolite = s.getMolecule(i).metabolite;

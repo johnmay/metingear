@@ -67,7 +67,7 @@ public class RootNonProductionMetabolites
             SelectionManager manager = controller.getViewController().getSelection();
             manager.clear();
 
-            Integer[] indices = gf.getRootNPMetabolites();
+            Integer[] indices = gf.getRootUnproducedMetabolites();
             LOGGER.debug("Root Non-Production Metabolites: " + Joiner.on(", ").join(indices));
 
             for (Integer i : indices) {

@@ -194,28 +194,44 @@ public class GapFill<M, R> {
 
         BasicStoichiometricMatrix model = BasicStoichiometricMatrix.create();
 
-        model.addReaction(new String[0], new String[]{"A"});
-        model.addReaction(new String[]{"C"}, new String[0]);
+        model.addReaction(new String[0], new String[]{"A"}, true);
+        //       model.addReaction(new String[]{"E"}, new String[0], false);
 
-        model.addReaction("A => D");
-        model.addReaction("D => E");
-        model.addReaction("F => G");
-        model.addReaction("G => C");
+        model.addReaction("A => B", false);
+        model.addReaction("B => C", false);
+        model.addReaction("B => D", false);
+        //model.addReaction("D => E", false);
+        model.addReaction("E => C", false);
+
+        model.addReaction(new String[]{"C"}, new String[0], true);
+
+        //model.addReaction("B => D", false);
+//        model.addReaction("D => E", false);
+        //model.addReaction("E => F", false);
+        //model.addReaction("F => G", false);
+        //model.addReaction("G => C", false);
 
         model.display();
 
-        System.out.println("Non-production Metabolites");
-        for (int i : new GapFind(model).findNonProductionMetabolites()) {
+        System.out.println("Unconsumed metabolites:");
+        for (int i : new GapFind(model).getUnconsumedMetabolites()) {
+            System.out.println(model.getMolecule(i));
+        }
+        System.out.println("Unproduced metabolites:");
+        for (int i : new GapFind(model).getUnproducedMetabolites()) {
+            System.out.println(model.getMolecule(i));
+        }
+        for (int i : new GapFind(model).getRootUnproducedMetabolites()) {
             System.out.println(model.getMolecule(i));
         }
 
 
         BasicStoichiometricMatrix reference = BasicStoichiometricMatrix.create();
 
-        reference.addReactionWithName("db3", "E => J");
         reference.addReactionWithName("db4", "J => F");
+        reference.addReactionWithName("db3", "D => E");
         reference.addReactionWithName("db1", "I => F");
-        //reference.addReactionWithName("db1", "E => F");
+        reference.addReactionWithName("db1", "E => F");
         reference.addReactionWithName("db2", "E => I");
 
 
@@ -223,7 +239,7 @@ public class GapFill<M, R> {
 
         GapFill<String, String> gf = new GapFill<String, String>(reference, model);
 
-        System.out.println(gf.getCandidateReactions(model.getIndex("F")));
+        System.out.println(gf.getCandidateReactions(model.getIndex("E")));
 
     }
 }
