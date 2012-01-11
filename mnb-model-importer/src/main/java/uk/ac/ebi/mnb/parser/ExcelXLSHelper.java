@@ -5,18 +5,17 @@
  *
  * This file is part of the CheMet library
  *
- * The CheMet library is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * The CheMet library is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * CheMet is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mnb.parser;
 
@@ -37,28 +36,33 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+
 /**
- * @name    ExcelXLSImporter
- * @date    2011.07.31
- * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- * @brief   ...class description...
+ * @name ExcelXLSImporter @date 2011.07.31
+ *
+ * @version $Rev$ : Last Changed $Date: 2011-11-01 10:42:55 +0000 (Tue, 01
+ * Nov 2011) $
+ * @author johnmay
+ * @author $Author$ (this version) @brief ...class description...
  *
  */
 public class ExcelXLSHelper extends ExcelHelper {
 
     private static final Logger LOGGER = Logger.getLogger(ExcelXLSHelper.class);
+
     private HSSFWorkbook workbook;
+
 
     /**
      * Constructor the importer from an input stream
+     *
      * @param stream
      * @throws IOException
      */
     public ExcelXLSHelper(InputStream stream) throws IOException {
         this.workbook = new HSSFWorkbook(stream);
     }
+
 
     public List<String> getSheetNames() {
         List<String> sheetNames = new ArrayList<String>();
@@ -68,8 +72,10 @@ public class ExcelXLSHelper extends ExcelHelper {
         return sheetNames;
     }
 
+
     /**
      * Checks sheet names are returns indices that may be reaction sheets
+     *
      * @return
      */
     public List<Integer> getReactionSheetIndices() {
@@ -85,6 +91,7 @@ public class ExcelXLSHelper extends ExcelHelper {
         return indices;
     }
 
+
     public List<Integer> getMetaboliteSheetIndices() {
 
         List<Integer> indices = new ArrayList<Integer>();
@@ -98,9 +105,11 @@ public class ExcelXLSHelper extends ExcelHelper {
         return indices;
     }
 
+
     public String[][] getSheetData(int index) {
         return getSheetData(workbook.getSheetAt(index));
     }
+
 
     public String getCellString(HSSFCell cell) {
         if (cell == null) {
@@ -110,17 +119,20 @@ public class ExcelXLSHelper extends ExcelHelper {
         int type = cell.getCellType();
         if (type == HSSFCell.CELL_TYPE_NUMERIC) {
             return Double.toString(cell.getNumericCellValue());
-        } else if (type == HSSFCell.CELL_TYPE_ERROR) {
-            return "ERROR!";
         } else if (type == HSSFCell.CELL_TYPE_STRING) {
             return cell.getStringCellValue().trim();
         } else if (type == HSSFCell.CELL_TYPE_BLANK) {
             return "";
+        } else if (type == HSSFCell.CELL_TYPE_ERROR) {
+            return "ERROR!";
+        } else if (type == HSSFCell.CELL_TYPE_FORMULA) {
+            return cell.getCellFormula();
         } else {
             LOGGER.info("Unhandled cell type: " + cell.getCellType());
             return "";
         }
     }
+
 
     public String[][] getSheetData(HSSFSheet sheet) {
 
@@ -210,8 +222,10 @@ public class ExcelXLSHelper extends ExcelHelper {
         return data;
     }
 
+
     /**
      * Resizes all columns to the new size
+     *
      * @param data
      * @param requiredCols
      * @return
@@ -230,9 +244,11 @@ public class ExcelXLSHelper extends ExcelHelper {
 
     }
 
+
     public HSSFWorkbook getWorkbook() {
         return workbook;
     }
+
 
     public static void main(String[] args) {
         File bacterialModels = new File("/Users/johnmay/Desktop/organisms/bacteria");
@@ -279,6 +295,7 @@ public class ExcelXLSHelper extends ExcelHelper {
 
         }
     }
+
 
     @Override
     public String[][] getTableHead(Integer sheetIndex, Integer rowCount) {
