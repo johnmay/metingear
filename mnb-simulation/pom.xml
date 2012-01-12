@@ -5,11 +5,11 @@
     <parent>
         <artifactId>mnb</artifactId>
         <groupId>uk.ac.ebi</groupId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.1</version>
     </parent>
     <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>mnb-simulation</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <name>Simulation</name>
     <url>http://maven.apache.org</url>
     <properties>

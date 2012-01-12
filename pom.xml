@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi</groupId>
-    <artifactId>metginear</artifactId>
+    <artifactId>mnb</artifactId>
     <version>1.1</version>
     <packaging>pom</packaging>
     <name>metingear</name>
@@ -93,7 +93,7 @@
         </repository>       
     
  
-        <!-- Required for versions-maven-plugin -->
+        <!-- Required for versions-maven-plugin-->
         <repository>
             <id>Codehaus Snapshots</id>
             <url>http://nexus.codehaus.org/snapshots/</url>
