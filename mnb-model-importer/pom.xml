@@ -9,7 +9,7 @@
     </parent>
     <groupId>uk.ac.ebi</groupId>
     <artifactId>mnb-importer</artifactId>
-    <version>${parent.version}</version>
+    <version>1.1-SNAPSHOT</version>
     <name>Importer</name>
     <url>http://maven.apache.org</url>
     <properties>
