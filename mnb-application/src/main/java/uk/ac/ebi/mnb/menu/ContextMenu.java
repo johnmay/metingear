@@ -64,20 +64,20 @@ public class ContextMenu extends JMenu {
         this.controller = controller;
     }
 
-    public DelayedBuildAction create(final Class<? extends ControllerDialog> clazz,
+    public DelayedBuildAction create(final Class<? extends ControllerDialog> dialogClass,
                                      final TargetedUpdate update,
                                      final MessageManager message,
                                      final SelectionController selection,
                                      final UndoableEditListener undo) {
 
-        return new DelayedBuildAction(clazz.getSimpleName()) {
+        return new DelayedBuildAction(dialogClass, dialogClass.getSimpleName()) {
 
             private ControllerDialog dialog;
 
             @Override
             public void buildComponents() {
                 try {
-                    Constructor constructor = clazz.getConstructors()[0];
+                    Constructor constructor = dialogClass.getConstructors()[0];
                     System.out.println(constructor.getDeclaringClass());
                     System.out.println(Arrays.asList(constructor.getParameterTypes()));
                     dialog = (ControllerDialog) constructor.newInstance((JFrame) controller,
