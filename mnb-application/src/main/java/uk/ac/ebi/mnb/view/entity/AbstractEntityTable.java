@@ -29,6 +29,7 @@ import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.SelectionMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
@@ -54,7 +55,7 @@ public abstract class AbstractEntityTable
         super(model);
         setUI(new ITunesTableUI());
         setAutoscrolls(true);
-        setFont(ViewUtilities.DEFAULT_BODY_FONT);
+        setFont(ThemeManager.getInstance().getTheme().getBodyFont());
         setAutoCreateRowSorter(true);
         setColumnModel(columnModel);
     }
