@@ -29,7 +29,7 @@ import javax.swing.event.UndoableEditListener;
 import mnb.io.tabular.ExcelModelProperties;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.caf.action.GeneralAction;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
@@ -67,7 +67,7 @@ import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.mnb.interfaces.Message;
+import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
@@ -97,7 +97,7 @@ public class ExcelImportDialog
     private JLabel label;
     private JFrame frame;
 
-    public ExcelImportDialog(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits, Reconstruction reconstruction, File file, ExcelHelper helper) {
+    public ExcelImportDialog(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits, Reconstruction reconstruction, File file, ExcelHelper helper) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
 
         this.frame = frame;
@@ -253,7 +253,7 @@ public class ExcelImportDialog
         }
 
         if (parser != null) {
-            for (Message m : parser.collectMessages()) {
+            for (Report m : parser.collectMessages()) {
                 addMessage(m);
             }
         }

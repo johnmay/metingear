@@ -43,7 +43,7 @@ import uk.ac.ebi.io.xml.SBMLReactionReader;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.mnb.interfaces.Message;
+import uk.ac.ebi.caf.report.Report;
 
 
 /**
@@ -98,7 +98,7 @@ public class ImportSBML extends DelayedBuildAction {
             InputStream in = null;
 
 
-            final Set<Message> messages = new HashSet<Message>();
+            final Set<Report> messages = new HashSet<Report>();
 
             LOGGER.info("Importing SBML model");
             final File choosen = chooser.getSelectedFile();
@@ -140,7 +140,7 @@ public class ImportSBML extends DelayedBuildAction {
 
                         public void run() {
                             // add collected messages to the manager outside of thread
-                            for (Message message : messages) {
+                            for (Report message : messages) {
                                 controller.getMessageManager().addReport(message);
                             }
                             wait.dispose();

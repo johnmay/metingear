@@ -37,7 +37,7 @@ import uk.ac.ebi.io.model.ReactionMatrixIO;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.view.MCheckBox;
@@ -70,7 +70,7 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
 
     public ExportStoichiometricMatrix(JFrame frame,
                                       TargetedUpdate updater,
-                                      MessageManager messages,
+                                      ReportManager messages,
                                       SelectionController controller,
                                       UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "SaveDialog");

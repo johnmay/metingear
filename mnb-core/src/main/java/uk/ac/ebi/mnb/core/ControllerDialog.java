@@ -28,8 +28,8 @@ import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.mnb.interfaces.Message;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.Report;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -51,7 +51,7 @@ public abstract class ControllerDialog extends DropdownDialog {
 
     private final TargetedUpdate updater;
 
-    private final MessageManager messages;
+    private final ReportManager messages;
 
     private final SelectionController controller;
 
@@ -60,7 +60,7 @@ public abstract class ControllerDialog extends DropdownDialog {
 
     public ControllerDialog(JFrame frame,
                             TargetedUpdate updater, // updatable called on completion
-                            MessageManager messages, // used to post messages
+                            ReportManager messages, // used to post messages
                             SelectionController controller,
                             UndoableEditListener undoableEdits,
                             String name) {
@@ -89,7 +89,7 @@ public abstract class ControllerDialog extends DropdownDialog {
      * Add a message to the message manager
      * @param edit
      */
-    public void addMessage(Message message) {
+    public void addMessage(Report message) {
         messages.addReport(message);
     }
 

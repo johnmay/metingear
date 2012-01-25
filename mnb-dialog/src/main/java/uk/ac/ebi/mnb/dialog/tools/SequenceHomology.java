@@ -43,7 +43,7 @@ import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.view.MCheckBox;
@@ -73,7 +73,7 @@ public class SequenceHomology
     private JTextField field = FieldFactory.newField("1e-30");
     private MCheckBox alignments = new MCheckBox("Parse alignments (increases save sizes)");
 
-    public SequenceHomology(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+    public SequenceHomology(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "BuildDialog");
 
         remote.setEnabled(false);

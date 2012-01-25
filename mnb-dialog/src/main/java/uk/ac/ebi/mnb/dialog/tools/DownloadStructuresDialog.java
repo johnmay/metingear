@@ -33,7 +33,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditListener;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -75,7 +75,7 @@ public class DownloadStructuresDialog
 
     public DownloadStructuresDialog(JFrame frame,
                                     TargetedUpdate updater,
-                                    MessageManager messages,
+                                    ReportManager messages,
                                     SelectionController controller,
                                     UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");

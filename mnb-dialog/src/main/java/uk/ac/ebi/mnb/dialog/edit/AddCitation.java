@@ -27,7 +27,7 @@ import javax.swing.JTextField;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
@@ -44,7 +44,7 @@ public class AddCitation extends ControllerDialog {
     private static final Logger LOGGER = Logger.getLogger(AddCitation.class);
     private JTextField field = FieldFactory.newField(25);
 
-    public AddCitation(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+    public AddCitation(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "SaveDialog");
     }
 

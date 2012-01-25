@@ -27,7 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.event.UndoableEditListener;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
@@ -62,7 +62,7 @@ public class ControllerDialogItem extends JMenuItem {
      */
     public ControllerDialogItem(final JFrame frame,
                                 final TargetedUpdate updater,
-                                final MessageManager mesg,
+                                final ReportManager mesg,
                                 final SelectionController selection,
                                 final UndoableEditListener editListener,
                                 final Class<? extends ControllerDialog> clazz) {

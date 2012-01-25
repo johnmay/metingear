@@ -42,7 +42,7 @@ import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.reaction.MetaboliteParticipant;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.mnb.interfaces.Message;
+import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
@@ -73,7 +73,7 @@ public class ReactionParser {
                                                              Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT,
                                                              Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT};
     private EntityResolver entites;
-    private Set<Message> messages = new HashSet();
+    private Set<Report> messages = new HashSet();
 
     /**
      * Determines whether an item contains listed items.
@@ -244,7 +244,7 @@ public class ReactionParser {
 
     }
 
-    public Collection<Message> collectMessages() {
+    public Collection<Report> collectMessages() {
         Set collected = new HashSet();
         collected.addAll(messages);
         messages.clear();

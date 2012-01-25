@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mnb.core;
 
-import uk.ac.ebi.mnb.interfaces.Message;
+import uk.ac.ebi.caf.report.Report;
 
 
 
@@ -31,7 +31,7 @@ import uk.ac.ebi.mnb.interfaces.Message;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class AbstractMessage implements Message {
+public abstract class AbstractMessage implements Report {
 
     private final String mesage;
 

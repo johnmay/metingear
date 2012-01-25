@@ -29,7 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.UndoableEditListener;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import org.apache.log4j.Logger;
@@ -61,7 +61,7 @@ public class AddCrossReferenceDialog
 
     public AddCrossReferenceDialog(JFrame frame,
                                    TargetedUpdate updater,
-                                   MessageManager messages,
+                                   ReportManager messages,
                                    SelectionController controller,
                                    UndoableEditListener undo) {
 

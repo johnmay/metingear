@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.interfaces;
 
+import uk.ac.ebi.caf.report.ReportManager;
 import javax.swing.event.UndoableEditListener;
 
 /**
@@ -31,7 +32,7 @@ import javax.swing.event.UndoableEditListener;
  */
 public interface MainController extends TargetedUpdate {
 
-    public MessageManager getMessageManager();
+    public ReportManager getMessageManager();
 
     public ViewController getViewController();
 

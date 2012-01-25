@@ -34,7 +34,7 @@ import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -53,7 +53,7 @@ public class MergeEntities extends ControllerDialog {
 
     public MergeEntities(JFrame frame,
                          TargetedUpdate updater,
-                         MessageManager messages,
+                         ReportManager messages,
                          SelectionController controller,
                          UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, MergeEntities.class.getSimpleName());

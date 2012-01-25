@@ -30,7 +30,7 @@ import javax.swing.event.UndoableEditListener;
 import uk.ac.ebi.annotation.AuthorAnnotation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
@@ -49,7 +49,7 @@ public class AddAuthorAnnotation extends ControllerDialog {
     private JTextField description;
     private CellConstraints cc = new CellConstraints();
 
-    public AddAuthorAnnotation(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+    public AddAuthorAnnotation(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "SaveDialog");
         description = FieldFactory.newField(30);
         author = FieldFactory.newField(System.getProperties().getProperty("user.name"));

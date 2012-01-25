@@ -22,7 +22,7 @@ package uk.ac.ebi.mnb.core;
 
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.mnb.interfaces.Message;
+import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 
 /**
@@ -55,7 +55,7 @@ public abstract class ControllerAction extends GeneralAction {
         return controller.getViewController().setSelection(selection);
     }
 
-    public void addMessage(Message report) {
+    public void addMessage(Report report) {
         controller.getMessageManager().addReport(report);
     }
 

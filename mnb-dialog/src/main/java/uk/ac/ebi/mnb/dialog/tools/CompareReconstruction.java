@@ -54,7 +54,7 @@ import uk.ac.ebi.core.tools.hash.seeds.ConnectedAtomSeed;
 import uk.ac.ebi.core.tools.hash.seeds.SeedFactory;
 import uk.ac.ebi.core.tools.hash.seeds.StereoSeed;
 import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.view.MCheckBox;
@@ -100,7 +100,7 @@ public class CompareReconstruction
 
     public CompareReconstruction(JFrame frame,
                                  TargetedUpdate updater,
-                                 MessageManager messages,
+                                 ReportManager messages,
                                  SelectionController controller,
                                  UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");

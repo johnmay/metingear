@@ -49,7 +49,7 @@ import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.menu.EditUndoButtons;
 import uk.ac.ebi.mnb.menu.ViewInfo;
@@ -73,7 +73,7 @@ public class MainView
     private Toolbar toolbar; //TODO: wrap in class
     private JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT); //TODO wrap
     private ProjectView project = new ProjectView();
-    private MessageManager messages = new MessageBar();
+    private ReportManager messages = new MessageBar();
     private SourceController sourceController; //TODO:  move to SourceList wrapping class
     private JTextField searchField = new JTextField(10); //TODO:  move to a toolbar wraping class
     private final SourceList source;
@@ -343,7 +343,7 @@ public class MainView
         messages.addReport(new ErrorMessage(mesg));
     }
 
-    public MessageManager getMessageManager() {
+    public ReportManager getMessageManager() {
         return messages;
     }
 

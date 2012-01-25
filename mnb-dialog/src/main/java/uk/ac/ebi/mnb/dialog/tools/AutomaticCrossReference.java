@@ -43,7 +43,7 @@ import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
 import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
@@ -68,7 +68,7 @@ public class AutomaticCrossReference
     private JCheckBox kegg = new MCheckBox("KEGG Compound");
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 200, 10));
 
-    public AutomaticCrossReference(JFrame frame, TargetedUpdate updater, MessageManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+    public AutomaticCrossReference(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
         setDefaultLayout();
     }

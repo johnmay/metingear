@@ -22,7 +22,7 @@ package uk.ac.ebi.mnb.dialog.file;
 
 import java.util.*;
 import javax.swing.event.UndoableEditListener;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.interfaces.Updatable;
@@ -65,7 +65,7 @@ public abstract class NewEntity extends ControllerDialog {
      */
     public NewEntity(JFrame frame,
                      TargetedUpdate updater,
-                     MessageManager messages,
+                     ReportManager messages,
                      SelectionController controller,
                      UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "SaveDialog");

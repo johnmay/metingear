@@ -41,7 +41,7 @@ import javax.swing.event.UndoableEditListener;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
-import uk.ac.ebi.mnb.interfaces.MessageManager;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
@@ -66,7 +66,7 @@ public class ContextMenu extends JMenu {
 
     public DelayedBuildAction create(final Class<? extends ControllerDialog> dialogClass,
                                      final TargetedUpdate update,
-                                     final MessageManager message,
+                                     final ReportManager message,
                                      final SelectionController selection,
                                      final UndoableEditListener undo) {
 
@@ -82,7 +82,7 @@ public class ContextMenu extends JMenu {
                     System.out.println(Arrays.asList(constructor.getParameterTypes()));
                     dialog = (ControllerDialog) constructor.newInstance((JFrame) controller,
                                                                         (TargetedUpdate) update,
-                                                                        (MessageManager) message,
+                                                                        (ReportManager) message,
                                                                         (SelectionController) selection,
                                                                         (UndoableEditListener) undo);                    
                 } catch (Exception ex) {

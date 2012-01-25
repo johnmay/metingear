@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.mnb.core;
 
-import uk.ac.ebi.mnb.interfaces.ReportLevel;
+import uk.ac.ebi.caf.report.ReportLevel;
 
 
 /**
