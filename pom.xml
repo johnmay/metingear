@@ -5,7 +5,7 @@
     <artifactId>mnb</artifactId>
     <version>0.8.5-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>metingear</name>
+    <name>Metingear</name>
     <modules>
         <module>mnb-application</module>
         <module>mnb-miscellaneous</module>
