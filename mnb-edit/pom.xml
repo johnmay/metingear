@@ -5,11 +5,11 @@
     <parent>
         <artifactId>mnb</artifactId>
         <groupId>uk.ac.ebi</groupId>
-        <version>0.8-SNAPSHOT</version>
+        <version>0.8.5-SNAPSHOT</version>
     </parent>
     <groupId>uk.ac.ebi</groupId>
     <artifactId>mnb-edit</artifactId>
-    <version>0.8-SNAPSHOT</version>
+    <version>0.8.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Edit</name>

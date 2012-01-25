@@ -5,11 +5,11 @@
     <parent>
         <artifactId>mnb</artifactId>
         <groupId>uk.ac.ebi</groupId>
-        <version>0.8-SNAPSHOT</version>
+        <version>0.8.5-SNAPSHOT</version>
     </parent>
     <groupId>uk.ac.ebi</groupId>
     <artifactId>mnb-importer</artifactId>
-    <version>0.8-SNAPSHOT</version>
+    <version>0.8.5-SNAPSHOT</version>
     <name>Importer</name>
     <url>http://maven.apache.org</url>
     <properties>
