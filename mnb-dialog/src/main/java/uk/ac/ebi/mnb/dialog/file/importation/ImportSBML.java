@@ -36,14 +36,15 @@ import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.xml.stream.XMLStreamException;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.io.xml.SBMLReactionReader;
-import uk.ac.ebi.mnb.core.DelayedBuildAction;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.Message;
+
 
 /**
  *          ImportSBML - 2011.12.01 <br>
@@ -55,13 +56,17 @@ import uk.ac.ebi.mnb.interfaces.Message;
 public class ImportSBML extends DelayedBuildAction {
 
     private static final Logger LOGGER = Logger.getLogger(ImportSBML.class);
+
     private MainController controller;
+
     private JFileChooser chooser;
+
 
     public ImportSBML(MainController controller) {
         super("ImportSBML");
         this.controller = controller;
     }
+
 
     @Override
     public void buildComponents() {
@@ -75,6 +80,7 @@ public class ImportSBML extends DelayedBuildAction {
                 return f.isDirectory() || extension.equals(".xml") || extension.equals(".sbml");
             }
 
+
             @Override
             public String getDescription() {
                 return "SBML File (xml,sbml)";
@@ -83,10 +89,11 @@ public class ImportSBML extends DelayedBuildAction {
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
     }
 
+
     @Override
     public void activateActions() {
 
-        
+
         if (chooser.showOpenDialog((JFrame) controller) == JFileChooser.APPROVE_OPTION) {
             InputStream in = null;
 

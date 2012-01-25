@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.metingeer.menu;
+package uk.ac.ebi.mnb.menu;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -29,7 +29,6 @@ import javax.swing.AbstractAction;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.mnb.core.DelayedBuildAction;
 
 
 import javax.swing.JFrame;
@@ -39,6 +38,7 @@ import javax.swing.JMenuItem;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import javax.swing.event.UndoableEditListener;
+import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.MessageManager;

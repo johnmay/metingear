@@ -4,19 +4,18 @@
  * 2011.11.28
  *
  * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ *
+ * The CheMet library is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * CheMet is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
@@ -62,30 +61,42 @@ import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.chemet.render.factory.LabelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.visualisation.molecule.MetaboliteComparison;
+import uk.ac.ebi.render.molecule.MetaboliteComparison;
+
 
 /**
- *          CompareReconstruction - 2011.11.28 <br>
- *          Class description
- * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * CompareReconstruction - 2011.11.28 <br> Class description
+ *
+ * @version $Rev$ : Last Changed $Date: 2011-12-15 22:07:54 +0000 (Thu,
+ * 15 Dec 2011) $
+ * @author johnmay
+ * @author $Author$ (this version)
  */
 public class CompareReconstruction
         extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(CompareReconstruction.class);
+
     private MComboBox recon1 = new MComboBox();
+
     private MComboBox recon2 = new MComboBox();
+
     private MComboBox recon3 = new MComboBox();
+
     private VennDiagram venn;
     // options
+
     private JCheckBox hydrogen = new MCheckBox("hydrogens");
+
     private JCheckBox charge = new MCheckBox("charge");
+
     private JCheckBox stereo = new MCheckBox("stereochemical bonds");
     // output
+
     private JTextArea output = new JTextArea(7, 40);
+
     private JLabel label = new JLabel();
+
 
     public CompareReconstruction(JFrame frame,
                                  TargetedUpdate updater,
@@ -95,6 +106,7 @@ public class CompareReconstruction
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
         setDefaultLayout();
     }
+
 
     @Override
     public JPanel getOptions() {
@@ -118,6 +130,7 @@ public class CompareReconstruction
 
     }
 
+
     @Override
     public void setVisible(boolean visible) {
 
@@ -131,6 +144,7 @@ public class CompareReconstruction
         super.setVisible(visible);
 
     }
+
 
     @Override
     public void process() {
@@ -179,7 +193,7 @@ public class CompareReconstruction
 //                    + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "\n"
 //                    + reconA.getAccession() + "+" + reconB.getAccession() + ": " + c.getMetaboliteInstersect(reconA, reconB) + "\n");
         } else {
-            c = new ReconstructionComparison(methods, hydrogen.isSelected(), reconA, reconB);
+            c = new ReconstructionComparison(methods, hydrogen.isSelected(), reconA, reconB, reconC);
 
             int ab = c.getMetaboliteInstersect(reconA, reconB);
             int bc = c.getMetaboliteInstersect(reconB, reconC);
@@ -190,10 +204,14 @@ public class CompareReconstruction
                 c.getMetaboliteTotal(reconA),
                 c.getMetaboliteTotal(reconB),
                 c.getMetaboliteTotal(reconC),
-                ab - abc,
-                bc - abc,
-                ac - abc,
+                ab,
+                bc,
+                ac,
                 abc};
+
+            for (double d : data) {
+                System.out.println(d);
+            }
             double[] copy = Arrays.copyOf(data, data.length);
             Arrays.sort(copy);
 
@@ -214,14 +232,14 @@ public class CompareReconstruction
             label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
                           + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
                           + reconC.getAccession() + ": " + c.getMetaboliteTotal(reconC) + "<br>"
-                          + reconA.getAccession() + " ‚à© " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconA, reconB)
-                          + reconA.getAccession() + " ‚à© " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconA, reconC)
-                          + reconB.getAccession() + " ‚à© " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconB, reconC)
-                          + reconA.getAccession() + " ‚à© " + reconB.getAccession() + "‚à©" + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
-                    reconA, reconB, reconC)
+                          + reconA.getAccession() + " and " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconA, reconB) + " "
+                          + reconA.getAccession() + " and " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconA, reconC) + " "
+                          + reconB.getAccession() + " and " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconB, reconC) + " "
+                          + reconA.getAccession() + " and " + reconB.getAccession() + " and " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                    reconA, reconB, reconC) + " "
                           + "<br></html>");
 
         }
@@ -231,7 +249,9 @@ public class CompareReconstruction
 
 
     }
+
     private ReconstructionComparison c;
+
 
     @Override
     public boolean update() {

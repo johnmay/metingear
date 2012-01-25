@@ -17,7 +17,7 @@
 package uk.ac.ebi.mnb.menu.view;
 
 import java.awt.event.ActionEvent;
-import uk.ac.ebi.mnb.core.GeneralAction;
+import uk.ac.ebi.caf.action.GeneralAction;
 
 /**
  * ReactionGraphAction.java

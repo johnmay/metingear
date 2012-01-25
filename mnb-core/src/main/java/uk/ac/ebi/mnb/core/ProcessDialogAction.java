@@ -14,39 +14,45 @@
  */
 package uk.ac.ebi.mnb.core;
 
+import uk.ac.ebi.caf.action.GeneralAction;
 import net.sf.furbelow.SpinningDialWaitIndicator;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
 import javax.swing.SwingUtilities;
 
+
 /**
- * ProcessDialogAction <br>
- * Class to handling the processing step of a dialog (b).
- *  a) MenuItem > Create Dialog
- *  b) A Button > Process Dialog Values
+ * ProcessDialogAction <br> Class to handling the processing step of a dialog
+ * (b). a) MenuItem > Create Dialog b) A Button > Process Dialog Values
  *
- * Invokes {@see DropdownDialog#process()} followed by {@see DropdownDialog#update()}.
- * The {@see DropdownDialog#process()} action is performed in thread with the
- * {@see DropdownDialog#update()} action is wrapped in a {@see SwingUtilities#invokeLater(Runnable)}
- * call. Finally the action hides the provided dialog.
+ * Invokes {
  *
- * @author johnmay
- * @date Apr 27, 2011
+ * @see DropdownDialog#process()} followed by {
+ * @see DropdownDialog#update()}. The {
+ * @see DropdownDialog#process()} action is performed in thread with the {
+ * @see DropdownDialog#update()} action is wrapped in a {
+ * @see SwingUtilities#invokeLater(Runnable)} call. Finally the action hides the
+ * provided dialog.
+ *
+ * @author johnmay @date Apr 27, 2011
  */
 public class ProcessDialogAction extends GeneralAction {
 
     private DropdownDialog dialog;
+
 
     public ProcessDialogAction(String command, DropdownDialog dialog) {
         super(command);
         this.dialog = dialog;
     }
 
+
     /**
-     * Invokes the attached dialog process method {@see DropdownDialog#process()} in a
-     * different thread. On completion the provided dialog is hidden
+     * Invokes the attached dialog process method {
+     *
+     * @see DropdownDialog#process()} in a different thread. On completion the
+     * provided dialog is hidden
      * @param e redundant action
      */
     public void actionPerformed(ActionEvent e) {
@@ -58,16 +64,25 @@ public class ProcessDialogAction extends GeneralAction {
         Thread t = new Thread(new Runnable() {
 
             public void run() {
-                dialog.process(waiter);
+                try {
+                    dialog.process(waiter);
 
-                SwingUtilities.invokeLater(new Runnable() {
+                    SwingUtilities.invokeLater(new Runnable() {
 
-                    public void run() {
-                        waiter.dispose();
-                        dialog.setVisible(false);
-                        dialog.update();
+                        public void run() {
+                            waiter.dispose();
+                            dialog.setVisible(false);
+                            dialog.update();
+                        }
+                    });
+                } catch (Exception e) {
+                    waiter.dispose();
+                    dialog.setVisible(false);
+                    if (dialog instanceof ControllerDialog) {
+                        ControllerDialog controllerDialog = (ControllerDialog) dialog;
+                        controllerDialog.addMessage(new ErrorMessage("An error occured: " + e.getMessage()));
                     }
-                });
+                }
             }
         });
         t.setName(getClass().getSimpleName() + "-PROCESSING");

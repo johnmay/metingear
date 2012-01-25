@@ -29,6 +29,9 @@ import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.mnb.core.ExpandButton;
+import uk.ac.ebi.mnb.core.ExpandComponent;
+
 
 /**
  *          ExpandableComponentGroup - 2011.11.14 <br>
@@ -41,6 +44,7 @@ import uk.ac.ebi.chemet.render.factory.LabelFactory;
 public class ExpandableComponentGroup extends JComponent {
 
     private static final Logger LOGGER = Logger.getLogger(ExpandableComponentGroup.class);
+
 
     public ExpandableComponentGroup(String name, JComponent component) {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -64,6 +68,6 @@ public class ExpandableComponentGroup extends JComponent {
         add(controller);
         add(component);
 
-      //  component.setVisible(false);
+        component.setVisible(false);
     }
 }

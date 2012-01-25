@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.core;
 
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.Message;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;

@@ -34,7 +34,6 @@ import java.awt.RenderingHints;
 import java.awt.event.*;
 import java.util.Stack;
 
-import uk.ac.ebi.mnb.core.*;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 
 import javax.swing.ImageIcon;
@@ -47,9 +46,12 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.interfaces.Message;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.chemet.render.ColorUtilities;
+import uk.ac.ebi.mnb.core.ErrorMessage;
+import uk.ac.ebi.mnb.core.WarningMessage;
 
 /**
  *          MessageManager – 2011.09.30 <br>

@@ -41,7 +41,7 @@ import com.sun.awt.AWTUtilities;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
-import uk.ac.ebi.mnb.core.ActionProperties;
+import uk.ac.ebi.caf.action.ActionProperties;
 import uk.ac.ebi.chemet.render.factory.PanelFactory;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.chemet.render.ColorUtilities;
@@ -102,7 +102,7 @@ public class PopupDialog extends JDialog {
         JButton closeButton = new IconButton(close, closeAction);
         closeButton.registerKeyboardAction(closeButton.getAction(),
                                            KeyStroke.getKeyStroke(
-                ActionProperties.getInstance().getProperty("CloseDialog.Action." + Action.ACCELERATOR_KEY)),
+                ActionProperties.getInstance(getClass()).getProperty("CloseDialog.Action." + Action.ACCELERATOR_KEY)),
                                            JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         background.add(closeButton, cc.xy(2, 2));

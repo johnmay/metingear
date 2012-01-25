@@ -6,9 +6,9 @@ package uk.ac.ebi.mnb.menu;
 
 import java.util.Set;
 import javax.swing.JMenuItem;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.reconstruction.ReconstructionContents;
-import uk.ac.ebi.mnb.core.GeneralAction;
 
 /**
  * DynamicMenuItem.java

@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.mnb.core;
 
+import uk.ac.ebi.caf.action.DelayedBuildAction;
 import java.io.File;
 import javax.swing.JFileChooser;
 

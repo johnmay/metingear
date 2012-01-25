@@ -80,6 +80,11 @@
             <artifactId>mnb-edit</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>Action</artifactId>
+            <version>0.8-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -105,9 +110,10 @@
                 <artifactId>osxappbundle-maven-plugin</artifactId>
                 <version>1.0-alpha-2</version>
                 <configuration>
+                    <bundleName>Metingear ${project.version}</bundleName>
                     <mainClass>uk.ac.ebi.mnb.main.Main</mainClass>
                     <iconFile>/Users/johnmay/EBI/illustrations/mnb/icons/mnb.icns</iconFile>
-                    <buildDirectory>/Users/johnmay/Applications/</buildDirectory>
+                    <buildDirectory>/Users/johnmay/Applications/Metingear</buildDirectory>
                 </configuration>
                 <executions>
                     <execution>

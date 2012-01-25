@@ -21,7 +21,7 @@
 package uk.ac.ebi.mnb.menu;
 
 import java.awt.event.ActionEvent;
-import uk.ac.ebi.mnb.core.GeneralAction;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.main.MainView;
 
 import javax.swing.JComponent;
@@ -30,11 +30,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metingeer.menu.ContextMenu;
 import uk.ac.ebi.mnb.core.ControllerDialogItem;
 import uk.ac.ebi.mnb.dialog.edit.AddAuthorAnnotation;
 import uk.ac.ebi.mnb.dialog.edit.DeleteEntities;
 import uk.ac.ebi.mnb.dialog.edit.MergeEntities;
+
 
 /**
  *          EditMenu – 2011.09.26 <br>
@@ -46,7 +46,9 @@ import uk.ac.ebi.mnb.dialog.edit.MergeEntities;
 public class EditMenu extends ContextMenu {
 
     private static final Logger LOGGER = Logger.getLogger(EditMenu.class);
+
     private JComponent items[] = new JComponent[3];
+
 
     public EditMenu() {
         super("Edit", MainView.getInstance());
@@ -68,10 +70,10 @@ public class EditMenu extends ContextMenu {
             }
         }));
         add(new JSeparator());
-        add(new ControllerDialogItem(view, MergeEntities.class));
+        add(create(MergeEntities.class));
         add(new DeleteEntities(MainView.getInstance()));
         add(new JSeparator());
-        add(new ControllerDialogItem(view, AddAuthorAnnotation.class));
+        add(create(AddAuthorAnnotation.class));
         // add citation
         //add(new ContextDialogItem(view, view.getViewController(), ContextDialog.class));
 

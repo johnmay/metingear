@@ -17,7 +17,7 @@
 package uk.ac.ebi.mnb.menu.build;
 
 import javax.swing.JDialog;
-import uk.ac.ebi.mnb.core.DelayedBuildAction;
+import uk.ac.ebi.caf.action.DelayedBuildAction;
 
 /**
  * PriamAction.java

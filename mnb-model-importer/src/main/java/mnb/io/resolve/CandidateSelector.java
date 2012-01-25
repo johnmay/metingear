@@ -41,6 +41,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.Element;
 import org.openscience.cdk.Isotope;
@@ -59,9 +60,11 @@ import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.render.reconciliation.modules.GoogleSearch;
+import uk.ac.ebi.render.reconciliation.modules.PeptideGenerator;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.visualisation.molecule.MoleculeTable;
+import uk.ac.ebi.render.molecule.MoleculeTable;
 import uk.ac.ebi.visualisation.molecule.access.CrossReferenceAccessor;
 import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
 
@@ -204,7 +207,7 @@ public class CandidateSelector
 
         options = super.getOptions();
         options.setLayout(new FormLayout("p:grow, 4dlu, p, 4dlu, p:grow",
-                                         "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
+                                         "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
 
         nameLabel.setText(name);
         matchLabel.setText("?");
@@ -226,9 +229,11 @@ public class CandidateSelector
 
         options.add(new ExpandableComponentGroup("Suggested Matches", tablePanel), cc.xyw(1, 7, 5));
 
-        DipeptideMaker dipeptide = new DipeptideMaker();
+        PeptideGenerator pg = new PeptideGenerator();
+        GoogleSearch gs = new GoogleSearch();
 
-        options.add(new ExpandableComponentGroup("Dipeptide", dipeptide.getComponent()), cc.xyw(1, 9, 5));
+        options.add(new ExpandableComponentGroup(pg.getDescription(), pg.getComponent()), cc.xyw(1, 9, 5));
+        options.add(new ExpandableComponentGroup(gs.getDescription(), gs.getComponent()), cc.xyw(1, 11, 5));
 
         JPanel panel = PanelFactory.createDialogPanel();
 

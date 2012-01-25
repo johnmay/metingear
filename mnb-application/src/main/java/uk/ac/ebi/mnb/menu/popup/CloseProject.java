@@ -24,7 +24,7 @@ import java.awt.event.ActionEvent;
 import uk.ac.ebi.core.ReconstructionManager;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
-import uk.ac.ebi.mnb.core.GeneralAction;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.main.MainView;

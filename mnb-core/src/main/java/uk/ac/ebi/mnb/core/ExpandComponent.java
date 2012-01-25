@@ -4,9 +4,9 @@
  */
 package uk.ac.ebi.mnb.core;
 
+import uk.ac.ebi.caf.action.GeneralAction;
 import java.awt.event.ActionEvent;
 import javax.swing.JComponent;
-import uk.ac.ebi.mnb.core.GeneralAction;
 
 /**
  * ExpandComponent.java

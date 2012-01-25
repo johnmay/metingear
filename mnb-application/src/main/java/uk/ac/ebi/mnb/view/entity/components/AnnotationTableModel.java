@@ -33,7 +33,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
-import uk.ac.ebi.mnb.core.GeneralAction;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.edit.DeleteAnnotation;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.main.MainView;

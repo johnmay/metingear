@@ -30,7 +30,7 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.mnb.core.GeneralAction;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.optimise.SimulationUtil;

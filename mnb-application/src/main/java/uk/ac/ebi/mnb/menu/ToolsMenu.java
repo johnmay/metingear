@@ -13,7 +13,6 @@ import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
-import uk.ac.ebi.metingeer.menu.ContextMenu;
 import uk.ac.ebi.mnb.dialog.tools.*;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;

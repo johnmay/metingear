@@ -11,11 +11,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.PropertyConfigurator;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.menu.file.PreferenceDialog;
 import uk.ac.ebi.mnb.view.AboutDialog;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+
 
 /**
  *
@@ -24,6 +26,7 @@ import uk.ac.ebi.chemet.render.ViewUtilities;
 public class Main {
 
     private static String os = System.getProperty("os.name");
+
 
     /**
      * @param args the command line arguments
@@ -56,6 +59,7 @@ public class Main {
 
     }
 
+
     /**
      * Ensure use of our own Log4J file
      */
@@ -68,6 +72,7 @@ public class Main {
             System.err.println("Unable to load logging configuration file");
         }
     }
+
 
     private static void setupOSX() {
 

@@ -26,7 +26,6 @@ import com.explodingpixels.macwidgets.SourceListSelectionListener;
 import com.explodingpixels.widgets.PopupMenuCustomizer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

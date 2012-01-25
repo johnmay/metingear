@@ -26,7 +26,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JCheckBoxMenuItem;
 import uk.ac.ebi.mnb.settings.Settings;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.core.GeneralAction;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.main.MainView;
 
 

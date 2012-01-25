@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.core;
 
+import uk.ac.ebi.caf.action.DelayedBuildAction;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;

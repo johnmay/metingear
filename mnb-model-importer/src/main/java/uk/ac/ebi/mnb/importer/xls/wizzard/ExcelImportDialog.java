@@ -28,7 +28,7 @@ import java.io.IOException;
 import javax.swing.event.UndoableEditListener;
 import mnb.io.tabular.ExcelModelProperties;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.mnb.core.GeneralAction;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.parser.ExcelHelper;

@@ -4,7 +4,7 @@
  */
 package uk.ac.ebi.mnb.menu.file;
 
-import uk.ac.ebi.mnb.core.DelayedBuildAction;
+import uk.ac.ebi.caf.action.DelayedBuildAction;
 
 /**
  * NewProjectAction.java

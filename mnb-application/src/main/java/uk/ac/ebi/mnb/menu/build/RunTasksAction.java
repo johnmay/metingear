@@ -5,7 +5,7 @@
 package uk.ac.ebi.mnb.menu.build;
 
 import java.awt.event.ActionEvent;
-import uk.ac.ebi.mnb.core.GeneralAction;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.main.MainView;
 

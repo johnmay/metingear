@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.mnb.core;
 
+import uk.ac.ebi.caf.action.GeneralAction;
 import javax.swing.ImageIcon;
 import javax.swing.JToggleButton;
 import javax.swing.plaf.basic.BasicButtonUI;

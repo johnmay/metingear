@@ -13,7 +13,6 @@ import java.awt.Dialog.ModalityType;
 
 import java.io.IOException;
 import java.util.logging.Level;
-import uk.ac.ebi.mnb.core.*;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.interfaces.Theme;
 import uk.ac.ebi.mnb.interfaces.Updatable;
@@ -28,6 +27,9 @@ import com.jgoodies.forms.layout.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
+import uk.ac.ebi.caf.action.ActionProperties;
+import uk.ac.ebi.mnb.core.CloseDialogAction;
+import uk.ac.ebi.mnb.core.ProcessDialogAction;
 
 /**
  *

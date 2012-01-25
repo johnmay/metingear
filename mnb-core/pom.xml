@@ -73,6 +73,11 @@
             <groupId>org.biojava</groupId>
             <type>jar</type>
             <version>3.0.3-SNAPSHOT</version>
-        </dependency>        
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>Action</artifactId>
+            <version>0.8-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>
