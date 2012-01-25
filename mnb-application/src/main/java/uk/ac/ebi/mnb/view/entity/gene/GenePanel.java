@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.gene;
 
-import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import java.awt.Dimension;
 
@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.*;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 
 /**
  *          MetabolitePanel – 2011.09.30 <br>

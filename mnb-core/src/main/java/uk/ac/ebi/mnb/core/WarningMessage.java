@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.mnb.core;
 
-import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.interfaces.ReportLevel;
 
 
 /**
@@ -42,6 +42,13 @@ public class WarningMessage extends AbstractMessage {
     public String getMessage() {
         return "Warning: " + super.getMessage();
     }
+
+
+    public ReportLevel getLevel() {
+        return ReportLevel.WARN;
+    }
+    
+    
 
 
 }

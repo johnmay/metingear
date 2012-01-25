@@ -27,7 +27,7 @@ import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
 
 import uk.ac.ebi.mnb.core.CloseDialogAction;
-import uk.ac.ebi.interfaces.Theme;
+import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 
@@ -42,9 +42,9 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 import uk.ac.ebi.caf.action.ActionProperties;
-import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.mnb.view.labels.IconButton;
-import uk.ac.ebi.chemet.render.ColorUtilities;
 
 /**
  * @name    PopupDialog - 2011.10.07 <br>
@@ -208,7 +208,7 @@ public class PopupDialog extends JDialog {
         if (colorMap.containsKey(pct)) {
             return colorMap.get(pct);
         }
-        colorMap.put(pct, ColorUtilities.getMixedColor(grey, pct,
+        colorMap.put(pct, ColorUtility.getMixedColor(grey, pct,
                                                        ViewUtilities.CLEAR_COLOUR, 1.0f - pct));
         return colorMap.get(pct);
     }

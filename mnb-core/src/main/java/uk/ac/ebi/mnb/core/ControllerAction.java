@@ -55,8 +55,8 @@ public abstract class ControllerAction extends GeneralAction {
         return controller.getViewController().setSelection(selection);
     }
 
-    public void addMessage(Message mesg) {
-        controller.getMessageManager().addMessage(mesg);
+    public void addMessage(Message report) {
+        controller.getMessageManager().addReport(report);
     }
 
     public boolean update() {

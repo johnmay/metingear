@@ -22,6 +22,8 @@ package uk.ac.ebi.mnb.core;
 
 import uk.ac.ebi.mnb.interfaces.Message;
 
+
+
 /**
  *          Message – 2011.09.30 <br>
  *          Class description
@@ -29,7 +31,7 @@ import uk.ac.ebi.mnb.interfaces.Message;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AbstractMessage implements Message {
+public abstract class AbstractMessage implements Message {
 
     private final String mesage;
 

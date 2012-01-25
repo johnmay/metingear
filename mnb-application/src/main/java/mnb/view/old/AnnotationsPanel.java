@@ -13,7 +13,7 @@ import java.util.Collection;
 import javax.swing.JPanel;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 
 
 /**

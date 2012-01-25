@@ -77,10 +77,10 @@ public class TerminalNonConsumptionMetabolites
             controller.getViewController().setSelection(manager);
 
         } catch (IloException ex) {
-            controller.getMessageManager().addMessage(new ErrorMessage(ex.getLocalizedMessage()));
+            controller.getMessageManager().addReport(new ErrorMessage(ex.getLocalizedMessage()));
 
         } catch (UnsatisfiedLinkError ex) {
-            controller.getMessageManager().addMessage(new ErrorMessage(
+            controller.getMessageManager().addReport(new ErrorMessage(
                     "Please ensure the CPLEX library path is set correctly"));
         }
     }

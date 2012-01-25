@@ -33,9 +33,8 @@ import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
-import uk.ac.ebi.mnb.interfaces.ViewController;
-import uk.ac.ebi.chemet.render.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
 
 /**
  * @name    AddAuthorAnnotation - 2011.10.04 <br>

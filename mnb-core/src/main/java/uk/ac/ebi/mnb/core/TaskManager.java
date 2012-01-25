@@ -25,6 +25,7 @@ import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.chemet.io.external.TaskStatus;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
+
 /**
  *
  * @author johnmay
@@ -35,11 +36,17 @@ public class TaskManager
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(TaskManager.class);
+
     private int MAX_TASKS = 2;
+
     private ArrayList<RunnableTask> queuedTasks;
+
     private ArrayList<RunnableTask> runningTasks;
+
     private ArrayList<RunnableTask> completedTasks;
+
     private MainController controller;
+
 
     private TaskManager() {
         super();
@@ -48,25 +55,31 @@ public class TaskManager
         runningTasks = new ArrayList<RunnableTask>();
     }
 
+
     public static TaskManager getInstance() {
         return TaskManagerHolder.INSTANCE;
     }
+
 
     public void setController(MainController controller) {
         this.controller = controller;
     }
 
+
     public ArrayList<RunnableTask> getQueuedTasks() {
         return queuedTasks;
     }
+
 
     public ArrayList<RunnableTask> getRunningTasks() {
         return runningTasks;
     }
 
+
     public ArrayList<RunnableTask> getCompletedTasks() {
         return completedTasks;
     }
+
 
     public List<RunnableTask> getTasks() {
         List<RunnableTask> tasks = new ArrayList();
@@ -79,6 +92,7 @@ public class TaskManager
 
     }
 
+
     /**
      * Adds a single tasks to the queue
      * @param tasks
@@ -88,6 +102,7 @@ public class TaskManager
         return queuedTasks.add(task);
     }
 
+
     /**
      * Adds all tasks to the queue
      * @param tasks
@@ -96,6 +111,7 @@ public class TaskManager
     public boolean addAll(Collection<? extends RunnableTask> tasks) {
         return queuedTasks.addAll(tasks);
     }
+
 
     /**
      * Adds one or more tasks to the queue
@@ -107,6 +123,7 @@ public class TaskManager
     }
 
     // run tasks
+
     public void run() {
 
         if (controller == null) {
@@ -144,7 +161,7 @@ public class TaskManager
                     if (task.isCompleted()) {
                         task.postrun();
                     } else {
-                        controller.getMessageManager().addMessage(new WarningMessage("Task " + task.getName() + " finished in error"));
+                        controller.getMessageManager().addReport(new WarningMessage("Task " + task.getName() + " finished in error"));
                     }
                     this.update();
                 }
@@ -158,6 +175,7 @@ public class TaskManager
 
     }
 
+
     public void update() {
 
         SwingUtilities.invokeLater(
@@ -169,9 +187,11 @@ public class TaskManager
                 });
     }
 
+
     public int getMaxSimultaneousJobs() {
         return MAX_TASKS;
     }
+
 
     public void setMaxSimultaneousJobs(int maxSimultaneousJobs) {
         this.MAX_TASKS = maxSimultaneousJobs;
@@ -183,6 +203,7 @@ public class TaskManager
 
 
     }
+
 
     private static class TaskManagerHolder {
 

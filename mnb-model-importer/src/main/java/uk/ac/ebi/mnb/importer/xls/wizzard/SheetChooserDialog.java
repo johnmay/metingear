@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import mnb.io.tabular.ExcelModelProperties;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
 

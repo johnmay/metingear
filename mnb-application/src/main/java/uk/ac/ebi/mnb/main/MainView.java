@@ -43,6 +43,7 @@ import com.explodingpixels.widgets.WindowUtils;
 import com.jgoodies.forms.factories.Borders;
 import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.report.bar.MessageBar;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
@@ -329,7 +330,7 @@ public class MainView
      *
      */
     public void addWarningMessage(String mesg) {
-        messages.addMessage(new WarningMessage(mesg));
+        messages.addReport(new WarningMessage(mesg));
     }
 
     /**
@@ -339,7 +340,7 @@ public class MainView
      *
      */
     public void addErrorMessage(String mesg) {
-        messages.addMessage(new ErrorMessage(mesg));
+        messages.addReport(new ErrorMessage(mesg));
     }
 
     public MessageManager getMessageManager() {

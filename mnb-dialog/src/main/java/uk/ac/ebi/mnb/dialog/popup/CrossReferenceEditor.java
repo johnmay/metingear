@@ -43,12 +43,12 @@ import javax.swing.event.DocumentListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.Theme;
+import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.chemet.render.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
 
 /**
  * @name    CrossReferenceEditor - 2011.10.07 <br>

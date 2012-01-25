@@ -29,15 +29,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.chemet.render.factory.PanelFactory;
-import uk.ac.ebi.chemet.render.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
 
 /**
  *          Preferences - 2011.10.02 <br>

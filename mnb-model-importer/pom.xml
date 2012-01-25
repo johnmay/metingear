@@ -77,7 +77,12 @@
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.caf</groupId>
-            <artifactId>Action</artifactId>
+            <artifactId>caf-report</artifactId>
+            <version>0.8-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-action</artifactId>
             <version>0.8-SNAPSHOT</version>
         </dependency>
     </dependencies>

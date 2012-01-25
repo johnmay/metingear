@@ -21,8 +21,8 @@ import uk.ac.ebi.mnb.view.TransparentTextArea;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import org.apache.commons.lang.StringUtils;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.chemet.render.factory.FieldFactory;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 
 
 /**

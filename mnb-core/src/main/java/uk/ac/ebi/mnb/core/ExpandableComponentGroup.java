@@ -28,9 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.JToggleButton;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
-import uk.ac.ebi.mnb.core.ExpandButton;
-import uk.ac.ebi.mnb.core.ExpandComponent;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 
 
 /**

@@ -32,7 +32,7 @@ public class SaveProjectAction
         try {
             manager.getActive().save();
         } catch (IOException ex) {
-            MainView.getInstance().getMessageManager().addMessage(new ErrorMessage(ex.getMessage()));
+            MainView.getInstance().getMessageManager().addReport(new ErrorMessage(ex.getMessage()));
         }
     }
 }

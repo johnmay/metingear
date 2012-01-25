@@ -48,7 +48,7 @@ public class SaveAsProjectAction
                 try {
                     manager.getActive().saveAsProject(f);
                 } catch (IOException ex) {
-                    MainView.getInstance().getMessageManager().addMessage(new ErrorMessage(ex.getMessage()));
+                    MainView.getInstance().getMessageManager().addReport(new ErrorMessage(ex.getMessage()));
                 }
             }
 

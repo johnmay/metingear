@@ -39,7 +39,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.chemet.render.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
 
 /**
  *          AddCrossReferenceDialog – 2011.09.26 <br>

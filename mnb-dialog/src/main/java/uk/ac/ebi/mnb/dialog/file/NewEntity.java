@@ -36,8 +36,8 @@ import org.apache.log4j.Logger;
 import com.jgoodies.forms.layout.*;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.chemet.render.factory.FieldFactory;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 
 /**
  * @name    NewEntity - 2011.10.04 <br>

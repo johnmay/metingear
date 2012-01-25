@@ -48,7 +48,7 @@ import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 
 /**
  * @name    SheetChooserDialog

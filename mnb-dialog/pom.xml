@@ -30,7 +30,7 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>mnb-importer</artifactId>
-      <version>${project.version}</version>
+      <version>${project.version}</version>      
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -51,11 +51,6 @@
       <groupId>uk.ac.ebi.chemet</groupId>
       <artifactId>mnb-simulation</artifactId>
       <version>0.8.5-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>uk.ac.ebi.caf</groupId>
-      <artifactId>Action</artifactId>
-      <version>0.8-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

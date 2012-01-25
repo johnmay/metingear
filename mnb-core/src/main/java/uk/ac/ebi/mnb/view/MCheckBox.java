@@ -21,12 +21,11 @@
  */
 package uk.ac.ebi.mnb.view;
 
-import java.awt.Color;
 import javax.swing.Action;
 import javax.swing.JCheckBox;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.interfaces.Theme;
+import uk.ac.ebi.caf.component.theme.Theme;
 
 
 /**

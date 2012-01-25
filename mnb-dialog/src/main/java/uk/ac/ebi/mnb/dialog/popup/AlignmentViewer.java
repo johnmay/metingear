@@ -28,12 +28,12 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.chemet.render.alignment.AbstractAlignmentColor;
 import uk.ac.ebi.chemet.render.alignment.BasicAlignmentColor;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
-import uk.ac.ebi.chemet.render.ColorUtilities;
 
 /**
  * @name    AlignmentViewer - 2011.10.11 <br>
@@ -51,7 +51,7 @@ public final class AlignmentViewer extends PopupDialog {
     private Style equivalent = sequence.addStyle("Equivalent", null);
     private Style mismatch = sequence.addStyle("Mismatch", null);
     private GeneProduct product;
-    private AbstractAlignmentColor defaultColor = new BasicAlignmentColor(ColorUtilities.EMBL_PETROL, ColorUtilities.shade(ColorUtilities.EMBL_PETROL, 0.4f), ColorUtilities.CLEAR_WHITE);
+    private AbstractAlignmentColor defaultColor = new BasicAlignmentColor(ColorUtility.EMBL_PETROL, ColorUtility.shade(ColorUtility.EMBL_PETROL, 0.4f), ColorUtility.CLEAR_WHITE);
 
     /**
      * 
@@ -75,11 +75,11 @@ public final class AlignmentViewer extends PopupDialog {
 
     public void setColor(AbstractAlignmentColor color) {
         StyleConstants.setBackground(match, color.match);
-        StyleConstants.setForeground(match, ColorUtilities.getTextColor(color.match));
+        StyleConstants.setForeground(match, ColorUtility.getTextColor(color.match));
         StyleConstants.setBackground(equivalent, color.equivalent);
-        StyleConstants.setForeground(equivalent, ColorUtilities.getTextColor(color.equivalent));
+        StyleConstants.setForeground(equivalent, ColorUtility.getTextColor(color.equivalent));
         StyleConstants.setBackground(mismatch, color.mismatch);
-        StyleConstants.setForeground(mismatch, ColorUtilities.getTextColor(color.mismatch));
+        StyleConstants.setForeground(mismatch, ColorUtility.getTextColor(color.mismatch));
     }
 
     /**

@@ -16,13 +16,13 @@ import javax.swing.event.DocumentListener;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.io.TaxonomyMap;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
-import uk.ac.ebi.chemet.render.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
 
 /**
  * NewProjectDialog.java

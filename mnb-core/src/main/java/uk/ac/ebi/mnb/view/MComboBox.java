@@ -21,13 +21,11 @@
 package uk.ac.ebi.mnb.view;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.interfaces.Theme;
+import uk.ac.ebi.caf.component.theme.Theme;
 
 /**
  *          ComboBox – 2011.09.30 <br>

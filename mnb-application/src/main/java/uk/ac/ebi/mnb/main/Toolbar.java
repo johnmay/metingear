@@ -26,7 +26,7 @@ import com.explodingpixels.macwidgets.plaf.EmphasizedLabelUI;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 
 /**
  *          Toolbar - 2011.11.03 <br>

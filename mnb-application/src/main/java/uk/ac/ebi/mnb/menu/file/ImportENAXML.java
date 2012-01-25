@@ -81,9 +81,9 @@ public class ImportENAXML extends FileChooserAction {
                 MainView.getInstance().update();
 
             } catch (FileNotFoundException ex) {
-                MainView.getInstance().getMessageManager().addMessage(new ErrorMessage("File not found " + ex.getMessage()));
+                MainView.getInstance().getMessageManager().addReport(new ErrorMessage("File not found " + ex.getMessage()));
             } catch (XMLStreamException ex) {
-                MainView.getInstance().getMessageManager().addMessage(new ErrorMessage(ex.getMessage()));
+                MainView.getInstance().getMessageManager().addReport(new ErrorMessage(ex.getMessage()));
             }
         }
 

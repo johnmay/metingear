@@ -69,7 +69,7 @@ import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.Message;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 

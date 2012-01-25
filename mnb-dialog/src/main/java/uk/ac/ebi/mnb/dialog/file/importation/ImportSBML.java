@@ -141,7 +141,7 @@ public class ImportSBML extends DelayedBuildAction {
                         public void run() {
                             // add collected messages to the manager outside of thread
                             for (Message message : messages) {
-                                controller.getMessageManager().addMessage(message);
+                                controller.getMessageManager().addReport(message);
                             }
                             wait.dispose();
                             controller.update();

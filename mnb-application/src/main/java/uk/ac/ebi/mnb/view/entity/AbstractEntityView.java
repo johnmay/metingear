@@ -40,7 +40,7 @@ import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 
 /**
  *          EntityView – 2011.09.06 <br>

@@ -59,7 +59,7 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.mnb.view.MComboBox;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.render.molecule.MetaboliteComparison;
 

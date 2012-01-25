@@ -30,7 +30,7 @@ import java.util.Arrays;
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.io.model.ReactionMatrixIO;

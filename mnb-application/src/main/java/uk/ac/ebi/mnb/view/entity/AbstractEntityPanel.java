@@ -22,7 +22,6 @@ package uk.ac.ebi.mnb.view.entity;
 
 import uk.ac.ebi.mnb.view.entity.components.AnnotationTable;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -33,9 +32,7 @@ import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
 import uk.ac.ebi.mnb.dialog.popup.AlignmentViewer;
 import uk.ac.ebi.mnb.edit.*;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.chemet.render.table.renderers.ListLinkRenderer;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
-import uk.ac.ebi.chemet.render.ColorUtilities;
 
 import javax.swing.*;
 import javax.swing.undo.UndoableEdit;
@@ -45,16 +42,16 @@ import org.apache.log4j.Logger;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.*;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.observation.ObservationCollection;
 import uk.ac.ebi.chemet.render.list.renderers.LocalAlignmentListCellRenderer;
-import uk.ac.ebi.chemet.render.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.chemet.render.PooledClassBasedListCellDRR;
-import uk.ac.ebi.chemet.render.ui.VerticalLabelUI;
+import uk.ac.ebi.caf.component.ui.VerticalLabelUI;
+import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.mnb.view.entity.components.InternalReferences;
 
 /**
@@ -203,9 +200,9 @@ public abstract class AbstractEntityPanel
         refLabel.setFont(refLabel.getFont().deriveFont(35.0f));
         synLabel.setFont(synLabel.getFont().deriveFont(35.0f));
         annLabel.setFont(annLabel.getFont().deriveFont(35.0f));
-        refLabel.setForeground(ColorUtilities.shade(refLabel.getForeground(), 0.4f));
-        synLabel.setForeground(ColorUtilities.shade(synLabel.getForeground(), 0.4f));
-        annLabel.setForeground(ColorUtilities.shade(annLabel.getForeground(), 0.4f));
+        refLabel.setForeground(ColorUtility.shade(refLabel.getForeground(), 0.4f));
+        synLabel.setForeground(ColorUtility.shade(synLabel.getForeground(), 0.4f));
+        annLabel.setForeground(ColorUtility.shade(annLabel.getForeground(), 0.4f));
 
 
         add(new JSeparator(), cc.xy(1, 2));

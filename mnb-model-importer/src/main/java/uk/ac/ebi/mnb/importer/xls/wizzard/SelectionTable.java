@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.ColorUtilities;
+import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 
 
@@ -60,10 +60,10 @@ public class SelectionTable extends JTable {
                 this.setText(value == null ? "null" : value.toString());
                 this.setFont(MacFontUtils.ITUNES_FONT);
                 if (isSelected) {
-                    this.setForeground(row >= start && row <= end ? table.getSelectionForeground() : ColorUtilities.shade(table.getSelectionForeground(), 0.6f));
+                    this.setForeground(row >= start && row <= end ? table.getSelectionForeground() : ColorUtility.shade(table.getSelectionForeground(), 0.6f));
                     this.setBackground(table.getSelectionBackground());
                 } else {
-                    this.setForeground(row >= start && row <= end ? table.getForeground() : ColorUtilities.shade(table.getForeground(), 0.6f));
+                    this.setForeground(row >= start && row <= end ? table.getForeground() : ColorUtility.shade(table.getForeground(), 0.6f));
                     this.setBackground(table.getBackground());
                 }
                 return this;

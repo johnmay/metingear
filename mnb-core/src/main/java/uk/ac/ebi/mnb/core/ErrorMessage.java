@@ -1,4 +1,3 @@
-
 /**
  * ErrorMessage.java
  *
@@ -21,7 +20,8 @@
  */
 package uk.ac.ebi.mnb.core;
 
-import org.apache.log4j.Logger;
+import uk.ac.ebi.mnb.interfaces.ReportLevel;
+
 
 
 /**
@@ -31,8 +31,7 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ErrorMessage extends AbstractMessage{
-
+public class ErrorMessage extends AbstractMessage {
 
     public ErrorMessage(String mesage) {
         super(mesage);
@@ -45,6 +44,7 @@ public class ErrorMessage extends AbstractMessage{
     }
 
 
-
+    public ReportLevel getLevel() {
+        return ReportLevel.ERROR;
+    }
 }
-

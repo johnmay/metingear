@@ -37,13 +37,13 @@ import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.metabolite.MetaboliteClass;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.MComboBox;
-import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
-import uk.ac.ebi.chemet.render.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.core.Reconstruction;
 
 /**

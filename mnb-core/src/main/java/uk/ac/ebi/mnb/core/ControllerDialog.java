@@ -26,7 +26,6 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.Message;
@@ -34,8 +33,8 @@ import uk.ac.ebi.mnb.interfaces.MessageManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.SelectionManager;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.view.DropdownDialog;
+
 
 /**
  * @name    MergeEntities - 2011.10.04 <br>
@@ -47,11 +46,17 @@ import uk.ac.ebi.mnb.view.DropdownDialog;
 public abstract class ControllerDialog extends DropdownDialog {
 
     private static final Logger LOGGER = Logger.getLogger(ControllerDialog.class);
+
     private final JFrame frame;
+
     private final TargetedUpdate updater;
+
     private final MessageManager messages;
+
     private final SelectionController controller;
+
     private final UndoableEditListener undoManager;
+
 
     public ControllerDialog(JFrame frame,
                             TargetedUpdate updater, // updatable called on completion
@@ -67,23 +72,27 @@ public abstract class ControllerDialog extends DropdownDialog {
         this.controller = controller;
     }
 
+
     public void setSelection(Collection<AnnotatedEntity> entities) {
         SelectionManager selection = new SelectionMap();
         selection.addAll(entities);
         this.controller.setSelection(selection);
     }
 
+
     public SelectionManager getSelection() {
         return controller.getSelection();
     }
+
 
     /**
      * Add a message to the message manager
      * @param edit
      */
     public void addMessage(Message message) {
-        messages.addMessage(message);
+        messages.addReport(message);
     }
+
 
     /**
      * Add an undoable edit to the undo manager
@@ -92,6 +101,7 @@ public abstract class ControllerDialog extends DropdownDialog {
     public void addEdit(UndoableEdit edit) {
         undoManager.undoableEditHappened(new UndoableEditEvent(this, edit));
     }
+
 
     /**
      * Class update() on the provided TargetedUpdate. Override this to provide
@@ -103,15 +113,17 @@ public abstract class ControllerDialog extends DropdownDialog {
         return updater.update();
     }
 
+
     public boolean update(SelectionManager selection) {
         return updater.update(selection);
     }
+
 
     public void updateMenuContext() {
         if (frame instanceof MainController) {
             ((MainController) frame).updateMenuContext();
         } else {
-           LOGGER.error("Can't fire menu update as frame is not a MainController!");
+            LOGGER.error("Can't fire menu update as frame is not a MainController!");
         }
     }
 }

@@ -4,8 +4,8 @@
  */
 package uk.ac.ebi.mnb.view;
 
-import uk.ac.ebi.chemet.render.factory.PanelFactory;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import net.sf.furbelow.SpinningDialWaitIndicator;
 
 import java.awt.*;
@@ -14,7 +14,7 @@ import java.awt.Dialog.ModalityType;
 import java.io.IOException;
 import java.util.logging.Level;
 import uk.ac.ebi.mnb.interfaces.DialogController;
-import uk.ac.ebi.interfaces.Theme;
+import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.settings.Settings;
 
