@@ -30,8 +30,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.core.ControllerDialogItem;
 import uk.ac.ebi.mnb.dialog.edit.AddAuthorAnnotation;
+import uk.ac.ebi.mnb.dialog.edit.CreateSubset;
 import uk.ac.ebi.mnb.dialog.edit.DeleteEntities;
 import uk.ac.ebi.mnb.dialog.edit.MergeEntities;
 
@@ -69,9 +74,18 @@ public class EditMenu extends ContextMenu {
                 MainView.getInstance().update();
             }
         }));
+        
         add(new JSeparator());
         add(create(MergeEntities.class));
         add(new DeleteEntities(MainView.getInstance()));
+        
+        add(new JSeparator());
+        add(create(CreateSubset.class), new ContextResponder() {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return selection.hasSelection();
+            }
+        });
+        
         add(new JSeparator());
         add(create(AddAuthorAnnotation.class));
         // add citation

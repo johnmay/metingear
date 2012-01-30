@@ -15,6 +15,7 @@ import uk.ac.ebi.mnb.menu.view.ReactionGraphAction;
 import uk.ac.ebi.mnb.menu.view.ToggleInspectorToolbar;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
 
+
 /**
  * FileMenu.java
  *
@@ -23,25 +24,26 @@ import uk.ac.ebi.mnb.view.entity.ProjectView;
  * @date Apr 28, 2011
  */
 public class ViewMenu
-        extends JMenu {
+        extends ContextMenu {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(ViewMenu.class);
+
     private ReactionGraphAction reactionGraphAction;
-    private DynamicMenuItem items[] = new DynamicMenuItem[1];
+
 
     public ViewMenu() {
 
-        super("View");
+        super("View", MainView.getInstance());
 
         reactionGraphAction = new ReactionGraphAction();
 
-        items[0] = new DynamicMenuItem(reactionGraphAction);
-
-        for (DynamicMenuItem mnbMenuItem : items) {
-            add(mnbMenuItem);
-            mnbMenuItem.reloadEnabled();
-        }
+//        items[0] = new DynamicMenuItem(reactionGraphAction);
+//
+//        for (DynamicMenuItem mnbMenuItem : items) {
+//            add(mnbMenuItem);
+//            mnbMenuItem.reloadEnabled();
+//        }
 
         add(new JSeparator());
 
@@ -89,11 +91,6 @@ public class ViewMenu
         add(item);
     }
 
-    public void setActiveDependingOnRequirements() {
-        for (DynamicMenuItem mnbMenuItem : items) {
-            mnbMenuItem.reloadEnabled();
-        }
-    }
 
     public ReactionGraphAction getReactionGraphAction() {
         return reactionGraphAction;

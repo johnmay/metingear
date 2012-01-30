@@ -55,6 +55,7 @@ public class MainMenuBar
     public void updateContext() {
         long start = System.currentTimeMillis();
         file.updateContext();
+        edit.updateContext();
         tools.updateContext();
         long end = System.currentTimeMillis();
         LOGGER.debug("Menu context updated " + (end - start) + " (ms)");

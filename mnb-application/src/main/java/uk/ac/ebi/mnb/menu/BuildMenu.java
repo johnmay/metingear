@@ -6,6 +6,7 @@ package uk.ac.ebi.mnb.menu;
 
 import javax.swing.JComponent;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import uk.ac.ebi.mnb.menu.build.PredictGPR;
 import uk.ac.ebi.mnb.menu.build.CatFamAction;
@@ -34,31 +35,19 @@ public class BuildMenu
 
         enzymeHomologyAction = new SwissProtHomology();
         int index = 0;
-        items[index++] = new DynamicMenuItem( enzymeHomologyAction );
-        items[index++] = new DynamicMenuItem( new PredictGPR() );
-        items[index++] = new DynamicMenuItem( new PriamAction() );
-        items[index++] = new DynamicMenuItem( new CatFamAction() );
+        items[index++] = new JMenuItem( enzymeHomologyAction );
+        items[index++] = new JMenuItem( new PredictGPR() );
+        items[index++] = new JMenuItem( new PriamAction() );
+        items[index++] = new JMenuItem( new CatFamAction() );
         items[index++] = new JSeparator();
-        items[index++] = new DynamicMenuItem( new StoichiometryAction() );
+        items[index++] = new JMenuItem( new StoichiometryAction() );
         items[index++] = new JSeparator();
 
-        for ( JComponent component : items ) {
-            add( component );
-            if ( component instanceof DynamicMenuItem ) {
-                ( ( DynamicMenuItem ) component ).reloadEnabled();
-            }
-        }
+        
     }
 
     public SwissProtHomology getEnzymeHomologyDialogAction() {
         return enzymeHomologyAction;
     }
-
-    public void setActiveDependingOnRequirements() {
-        for ( JComponent component : items ) {
-            if ( component instanceof DynamicMenuItem ) {
-                ( ( DynamicMenuItem ) component ).reloadEnabled();
-            }
-        }
-    }
+   
 }

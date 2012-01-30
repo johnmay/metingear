@@ -5,7 +5,12 @@
 package uk.ac.ebi.mnb.menu;
 
 
-import javax.swing.JMenu;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
+import uk.ac.ebi.mnb.core.TaskManager;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.build.RunTasksAction;
 
 /**
@@ -15,31 +20,26 @@ import uk.ac.ebi.mnb.menu.build.RunTasksAction;
  * @author johnmay
  * @date Apr 28, 2011
  */
-public class RunMenu extends JMenu {
+public class RunMenu extends ContextMenu {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( RunMenu.class );
     private RunTasksAction runTasksAction;
-    private DynamicMenuItem items[] = new DynamicMenuItem[ 1 ];
 
     public RunMenu() {
 
-        super( "Run" );
+        super( "Run", MainView.getInstance() );
 
         runTasksAction = new RunTasksAction();
 
-        items[0] = new DynamicMenuItem( runTasksAction );
+        add(runTasksAction, new ContextResponder() {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return ! TaskManager.getInstance().getQueuedTasks().isEmpty();
+            }
+        });
 
-        for ( DynamicMenuItem mnbMenuItem : items ) {
-            add( mnbMenuItem );
-            mnbMenuItem.reloadEnabled();
-        }
+      
     }
 
-    public void setActiveDependingOnRequirements() {
-        for ( DynamicMenuItem mnbMenuItem : items ) {
-            mnbMenuItem.reloadEnabled();
-        }
-    }
 
     public RunTasksAction getRunTasksAction() {
         return runTasksAction;

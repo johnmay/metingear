@@ -63,7 +63,7 @@ public class FileMenu
 
         MainView view = MainView.getInstance();
 
-        add(new DynamicMenuItem(newProjectAction));
+        add(newProjectAction);
         add(create(NewMetabolite.class), activeProject);
         add(create(NewReaction.class), activeProject);
         add(create(NewProteinProduct.class), activeProject);
