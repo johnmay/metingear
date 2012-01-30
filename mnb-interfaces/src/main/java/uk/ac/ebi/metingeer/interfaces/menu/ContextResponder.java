@@ -22,7 +22,7 @@ package uk.ac.ebi.metingeer.interfaces.menu;
 
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 
 /**
  *          ContextResponder - 2011.11.28 <br>
@@ -37,5 +37,5 @@ public interface ContextResponder {
 
     public boolean getContext(ReconstructionManager reconstructions,
                               Reconstruction active,
-                              SelectionManager selection);
+                              EntityCollection selection);
 }

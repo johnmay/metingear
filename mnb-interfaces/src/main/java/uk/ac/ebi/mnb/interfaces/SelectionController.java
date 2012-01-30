@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.interfaces;
 
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import java.util.Collection;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 
@@ -36,13 +37,13 @@ public interface SelectionController extends TargetedUpdate {
      * Returns the selection from the current context
      * @return
      */
-    public SelectionManager getSelection();
+    public EntityCollection getSelection();
 
     /**
      * Sets the selection on the current context
      * @param selection
      * @return
      */
-    public boolean setSelection(SelectionManager selection);
+    public boolean setSelection(EntityCollection selection);
     
 }

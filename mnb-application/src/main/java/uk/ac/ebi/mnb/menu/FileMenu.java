@@ -8,7 +8,7 @@ import java.awt.Color;
 import java.io.File;
 import java.util.LinkedList;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.menu.file.SaveAsProjectAction;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -52,7 +52,7 @@ public class FileMenu
 
     private ContextResponder activeProject = new ContextResponder() {
 
-        public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+        public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
             return active != null;
         }
     };
@@ -85,7 +85,7 @@ public class FileMenu
         add(exportMenu);
         add(new ExportSBMLAction(), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return active != null && (!active.getReactions().isEmpty() || !active.getMetabolites().isEmpty());
             }
         });
@@ -177,7 +177,7 @@ public class FileMenu
             super("Export...", MainView.getInstance());
             add(create(ExportStoichiometricMatrix.class), new ContextResponder() {
 
-                public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+                public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                     return active != null && active.hasMatrix();
                 }
             });

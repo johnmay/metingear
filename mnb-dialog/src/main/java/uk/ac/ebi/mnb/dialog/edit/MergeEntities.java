@@ -36,7 +36,7 @@ import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 /**
@@ -49,7 +49,7 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 public class MergeEntities extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(MergeEntities.class);
-    private SelectionManager selection;
+    private EntityCollection selection;
 
     public MergeEntities(JFrame frame,
                          TargetedUpdate updater,

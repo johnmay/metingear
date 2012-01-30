@@ -38,7 +38,7 @@ import uk.ac.ebi.chemet.render.ViewUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.EntityView;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 
@@ -123,7 +123,7 @@ public class AbstractEntityView
      * @inheritDoc
      */
     @Override
-    public boolean update(SelectionManager selection) {
+    public boolean update(EntityCollection selection) {
         boolean updated = table.update(selection);
         return inspector.update(selection) || updated;
     }
@@ -140,12 +140,12 @@ public class AbstractEntityView
     }
 
     @Override
-    public SelectionManager getSelection() {
+    public EntityCollection getSelection() {
         return inspector.getSelection();
     }
 
     @Override
-    public boolean setSelection(SelectionManager selection) {
+    public boolean setSelection(EntityCollection selection) {
         return table.setSelection(selection);
     }
 

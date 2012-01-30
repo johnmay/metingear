@@ -20,23 +20,16 @@
  */
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
-import com.explodingpixels.macwidgets.ITunesRatingTableCellRenderer;
-import java.awt.Component;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
-import javax.swing.table.DefaultTableColumnModel;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.BooleanCellRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.core.StarRating;
 import uk.ac.ebi.interfaces.Rating;
-import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
-import uk.ac.ebi.chemet.render.table.renderers.FormulaCellRender;
-import uk.ac.ebi.chemet.render.table.renderers.RatingCellRenderer;
 import uk.ac.ebi.chemet.render.table.editors.RatingCellEditor;
+import uk.ac.ebi.chemet.render.table.renderers.RatingCellRenderer;
+import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
+
 
 /**
  *          MetaboliteTable – 2011.09.05 <br>
@@ -49,6 +42,7 @@ public class MetaboliteTable
         extends AbstractEntityTable {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteTable.class);
+
 
     public MetaboliteTable() {
         super(new MetaboliteTableModel());
@@ -63,8 +57,8 @@ public class MetaboliteTable
                            annotationRenderer);
         setDefaultEditor(CrossReference.class, new CrossReferenceCellEditor());
 
-        setDefaultRenderer(MolecularFormula.class,
-                           new FormulaCellRender());
+        //   setDefaultRenderer(MolecularFormula.class,
+        //                      new FormulaCellRender());
 
 
 
@@ -80,5 +74,4 @@ public class MetaboliteTable
         //addMouseListener(new DoubleClickListener(this));
 
     }
-
 }

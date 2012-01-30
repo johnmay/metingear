@@ -31,10 +31,10 @@ import uk.ac.ebi.chemet.render.ViewUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.mnb.core.SelectionMap;
+import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 
 /**
  *          EntityTable – 2011.09.06 <br>
@@ -49,7 +49,7 @@ public abstract class AbstractEntityTable
                    SelectionController {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityTable.class);
-    private SelectionManager selection = new SelectionMap();
+    private EntityCollection selection = new EntityMap();
 
     public AbstractEntityTable(AbstractEntityTableModel model) {
         super(model);
@@ -78,11 +78,11 @@ public abstract class AbstractEntityTable
      * @inheritDoc
      */
     @Override
-    public boolean update(SelectionManager selection) {
+    public boolean update(EntityCollection selection) {
         return getModel().update(selection);
     }
 
-    public SelectionManager getSelection() {
+    public EntityCollection getSelection() {
         List<AnnotatedEntity> components = new ArrayList();
         selection.clear();
         for (Integer index : getSelectedRows()) {
@@ -98,7 +98,7 @@ public abstract class AbstractEntityTable
      * @param component
      *
      */
-    public boolean setSelection(SelectionManager selectionManager) {
+    public boolean setSelection(EntityCollection selectionManager) {
 
 
         List<AnnotatedEntity> entities = new ArrayList(selectionManager.getEntities());

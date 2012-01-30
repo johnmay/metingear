@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.List;
 
 import uk.ac.ebi.core.*;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
@@ -316,7 +316,7 @@ public class MainView
         return true; // need way of neatly combinding
     }
 
-    public boolean update(SelectionManager selection) {
+    public boolean update(EntityCollection selection) {
         project.update(selection);
         sourceController.update();
         return true;

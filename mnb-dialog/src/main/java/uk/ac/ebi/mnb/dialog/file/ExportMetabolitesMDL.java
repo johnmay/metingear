@@ -39,7 +39,7 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 
 /**
  *          ExportMetabolitesMDL - 2011.10.20 <br>
@@ -61,7 +61,7 @@ public class ExportMetabolitesMDL extends ControllerAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        SelectionManager selection = getSelection();
+        EntityCollection selection = getSelection();
 
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
 

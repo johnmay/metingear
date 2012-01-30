@@ -41,7 +41,7 @@ import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.chemet.render.matrix.MatrixPane;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.DefaultStoichiometricMatrix;
@@ -89,7 +89,7 @@ public class CreateMatrix
     @Override
     public void process() {
 
-        SelectionManager manager = getSelection();
+        EntityCollection manager = getSelection();
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
 
         Collection<MetabolicReaction> rxns = manager.hasSelection(MetabolicReaction.class) && manager.get(MetabolicReaction.class).size() > 1

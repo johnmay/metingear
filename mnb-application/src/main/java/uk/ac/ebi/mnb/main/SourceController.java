@@ -47,7 +47,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.core.TaskManager;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
 import uk.ac.ebi.mnb.menu.popup.SetActiveProject;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
@@ -256,7 +256,7 @@ public class SourceController
         ProjectView view = (ProjectView) MainView.getInstance().getViewController();
 
         if (item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem)) {
-            SelectionManager selection = view.getSelection();// reuse view selection object
+            EntityCollection selection = view.getSelection();// reuse view selection object
             selection.clear().add(((EntitySourceItem) item).getEntity());
             view.setSelection(selection);
         } else if (item instanceof ReconstructionSourceItem && clickCount > 1) {

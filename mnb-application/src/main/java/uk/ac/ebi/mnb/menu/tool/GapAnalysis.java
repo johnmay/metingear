@@ -34,7 +34,7 @@ import uk.ac.ebi.mnb.dialog.tools.gap.NonProductionMetabolites;
 import uk.ac.ebi.mnb.dialog.tools.gap.RootNonProductionMetabolites;
 import uk.ac.ebi.mnb.dialog.tools.gap.TerminalNonConsumptionMetabolites;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 
 /**
  *          GapAnalysis - 2011.12.02 <br>
@@ -75,28 +75,28 @@ public class GapAnalysis extends ContextMenu {
             add(new NonProductionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
                                           Reconstruction active,
-                                          SelectionManager selection) {                  
+                                          EntityCollection selection) {                  
                     return active != null && active.hasMatrix();
                 }
             });
             add(new RootNonProductionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
                                           Reconstruction active,
-                                          SelectionManager selection) {
+                                          EntityCollection selection) {
                     return active != null && active.hasMatrix();
                 }
             });
             add(new NonConsumptionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
                                           Reconstruction active,
-                                          SelectionManager selection) {
+                                          EntityCollection selection) {
                     return active != null && active.hasMatrix();
                 }
             });
             add(new TerminalNonConsumptionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
                                           Reconstruction active,
-                                          SelectionManager selection) {
+                                          EntityCollection selection) {
                     return active != null && active.hasMatrix();
                 }
             });

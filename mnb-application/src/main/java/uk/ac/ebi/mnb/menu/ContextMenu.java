@@ -40,7 +40,7 @@ import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import javax.swing.event.UndoableEditListener;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -131,7 +131,7 @@ public class ContextMenu extends JMenu {
 
         ReconstructionManager manager = ReconstructionManager.getInstance();
         Reconstruction reconstruction = manager.getActive();
-        SelectionManager selection = controller.getViewController().getSelection();
+        EntityCollection selection = controller.getViewController().getSelection();
 
         for (Entry<JMenuItem, ContextResponder> e : items.entrySet()) {
 

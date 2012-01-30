@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.core;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.caf.report.Report;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 
 /**
  * @name    SelectionAction - 2011.10.03 <br>
@@ -47,11 +47,11 @@ public abstract class ControllerAction extends GeneralAction {
      * Access the selection from the MainController child, ViewController.
      * @return
      */
-    public SelectionManager getSelection() {
+    public EntityCollection getSelection() {
         return controller.getViewController().getSelection();
     }
 
-    public boolean setSelection(SelectionManager selection) {
+    public boolean setSelection(EntityCollection selection) {
         return controller.getViewController().setSelection(selection);
     }
 

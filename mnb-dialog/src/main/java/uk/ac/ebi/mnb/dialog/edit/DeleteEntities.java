@@ -31,7 +31,7 @@ import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 
 /**
  *          DeleteEntity - 2011.10.20 <br>
@@ -49,7 +49,7 @@ public class DeleteEntities extends ControllerAction {
     }
 
     public void actionPerformed(ActionEvent e) {
-        SelectionManager selection = getSelection();
+        EntityCollection selection = getSelection();
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
         for (AnnotatedEntity entity : selection.getEntities()) {
             if (entity instanceof Metabolite) {

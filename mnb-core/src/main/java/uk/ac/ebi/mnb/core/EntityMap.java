@@ -31,7 +31,7 @@ import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RNAProduct;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 
 /**
  * @name    SelectionMap - 2011.10.14 <br>
@@ -41,7 +41,7 @@ import uk.ac.ebi.mnb.interfaces.SelectionManager;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class SelectionMap implements SelectionManager {
+public class EntityMap implements EntityCollection {
 
     private Multimap<Class, AnnotatedEntity> map = ArrayListMultimap.create();
 
@@ -69,7 +69,7 @@ public class SelectionMap implements SelectionManager {
     /**
      * @inheritDoc
      */
-    public SelectionManager clear() {
+    public EntityCollection clear() {
         map.clear();
         return this;
     }

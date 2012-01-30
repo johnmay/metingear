@@ -33,7 +33,7 @@ import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.edit.entity.AbbreviationSetter;
 import uk.ac.ebi.edit.entity.NameSetter;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.main.MainView;
 
 /**
@@ -137,7 +137,7 @@ public abstract class AbstractEntityTableModel
     /**
      * Updates only a subset of table data
      */
-    public boolean update(SelectionManager selection) {
+    public boolean update(EntityCollection selection) {
 
         long start = System.currentTimeMillis();
 

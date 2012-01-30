@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import com.jgoodies.forms.layout.CellConstraints;
 import java.awt.BorderLayout;
@@ -127,7 +127,7 @@ public abstract class AbstractEntityInspector
      * @inheritDoc
      */
     @Override
-    public boolean update(SelectionManager selection) {
+    public boolean update(EntityCollection selection) {
         if (selection.getEntities().contains(entity)) {
             panel.update();
             setDisplay();
@@ -153,12 +153,12 @@ public abstract class AbstractEntityInspector
     }
 
     @Override
-    public boolean setSelection(SelectionManager selection) {
+    public boolean setSelection(EntityCollection selection) {
         throw new UnsupportedOperationException("Not supported");
     }
 
     @Override
-    public SelectionManager getSelection() {
+    public EntityCollection getSelection() {
         return table.getSelection();
     }
 

@@ -42,9 +42,9 @@ import uk.ac.ebi.core.RibosomalRNA;
 import uk.ac.ebi.core.TransferRNA;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.mnb.core.SelectionMap;
+import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityView;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.ViewInfo;
@@ -75,7 +75,7 @@ public class ProjectView
     private SearchView search = null;
     private CardLayout layout;
     private Map<String, AbstractEntityView> viewMap;
-    private SelectionManager selection = new SelectionMap();
+    private EntityCollection selection = new EntityMap();
     private ViewInfo selector;
 
     public ProjectView() {
@@ -221,7 +221,7 @@ public class ProjectView
     }
 
     @Override
-    public boolean update(SelectionManager selection) {
+    public boolean update(EntityCollection selection) {
 
         LOGGER.info("sending targeted updated...");
 
@@ -250,7 +250,7 @@ public class ProjectView
      *
      * @return
      */
-    public SelectionManager getSelection() {
+    public EntityCollection getSelection() {
 
         EntityView view = getActiveView();
 
@@ -289,7 +289,7 @@ public class ProjectView
      * @return
      */
     @Override
-    public boolean setSelection(SelectionManager selection) {
+    public boolean setSelection(EntityCollection selection) {
 
         if (selection.isEmpty()) {
             return false;

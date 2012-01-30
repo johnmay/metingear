@@ -19,6 +19,7 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.awt.event.ActionEvent;
@@ -71,7 +72,7 @@ public class CuratedReconciliation
 
     public void actionPerformed(ActionEvent e) {
 
-        SelectionManager manager = getSelection();
+        EntityCollection manager = getSelection();
 
         List<CandidateFactory> factories = new ArrayList<CandidateFactory>();
         factories.add(new CandidateFactory<ChEBIIdentifier>(ChEBINameService.getInstance(), new ChemicalFingerprintEncoder()));

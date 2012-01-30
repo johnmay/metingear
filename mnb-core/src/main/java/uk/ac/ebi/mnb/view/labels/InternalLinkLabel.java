@@ -26,7 +26,7 @@ import javax.swing.AbstractAction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 
 
 
@@ -65,7 +65,7 @@ class ShowItem extends AbstractAction {
 
 
     public void actionPerformed(ActionEvent e) {
-        SelectionManager manager = selector.getSelection();
+        EntityCollection manager = selector.getSelection();
         manager.clear().add(entity);
         selector.setSelection(manager); // push updates
     }

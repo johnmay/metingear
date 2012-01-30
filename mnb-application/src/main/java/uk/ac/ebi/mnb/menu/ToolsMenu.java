@@ -15,7 +15,7 @@ import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.tools.*;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
-import uk.ac.ebi.mnb.interfaces.SelectionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReferenceDialog;
 import uk.ac.ebi.mnb.menu.tool.GapAnalysis;
@@ -42,28 +42,28 @@ public class ToolsMenu extends ContextMenu {
 
         add(create(AddCrossReferenceDialog.class), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection() && selection.getEntities().size() == 1;
             }
         });
 
         add(create(AutomaticCrossReference.class), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(Metabolite.class);
             }
         });
 
         add(new CuratedReconciliation(view), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(Metabolite.class);
             }
         });
 
         add(create(DownloadStructuresDialog.class), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(Metabolite.class);
             }
         });
@@ -72,7 +72,7 @@ public class ToolsMenu extends ContextMenu {
 
         add(new ChokePoint(view), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(MetabolicReaction.class);
             }
         });
@@ -85,13 +85,13 @@ public class ToolsMenu extends ContextMenu {
          */
         add(create(SequenceHomology.class), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(ProteinProduct.class);
             }
         });
         add(create(TransferAnnotations.class), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(ProteinProduct.class);
             }
         });
@@ -107,7 +107,7 @@ public class ToolsMenu extends ContextMenu {
 
         add(create(CollapseStructures.class), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(Metabolite.class);
 
             }
@@ -121,7 +121,7 @@ public class ToolsMenu extends ContextMenu {
          */
         add(create(CreateMatrix.class), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(MetabolicReaction.class) || (active != null && active.getReactions().isEmpty() == false);
             }
         });
@@ -138,7 +138,7 @@ public class ToolsMenu extends ContextMenu {
 
         add(create(CompareReconstruction.class), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, SelectionManager selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return reconstructions.size() > 1;
             }
         });

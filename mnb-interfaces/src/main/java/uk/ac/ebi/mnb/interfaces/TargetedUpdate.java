@@ -20,6 +20,8 @@
  */
 package uk.ac.ebi.mnb.interfaces;
 
+import uk.ac.ebi.interfaces.entities.EntityCollection;
+
 /**
  * @name    TargetedUpdate - 2011.10.14 <br>
  *          Interface extends updatable by allow targeted updates
@@ -35,5 +37,5 @@ public interface TargetedUpdate extends Updatable {
      * @param selection
      * @return
      */
-    public boolean update(SelectionManager selection);
+    public boolean update(EntityCollection selection);
 }
