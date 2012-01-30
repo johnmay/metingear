@@ -25,8 +25,10 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.utility.preference.type.FilePreference;
+import uk.ac.ebi.core.CorePreferences;
+
 
 /**
  *          SimulationUtil - 2011.12.02 <br>
@@ -39,12 +41,14 @@ public class SimulationUtil {
 
     private static final Logger LOGGER = Logger.getLogger(SimulationUtil.class);
 
+
     /**
      * Adds the CPLEX library path specified in the user preferences {@see setCPLEXLibraryPath(String)}
      */
     public static void setup() {
 
-        String path = Preferences.userNodeForPackage(SimulationUtil.class).get("cplex.library.path", null);
+        FilePreference pref = CorePreferences.getInstance().getPreference("CPLEX_LIBRARY_PATH");
+        String path = pref.get().getPath();
 
         List<String> paths = Arrays.asList(System.getProperty("java.library.path").split(File.pathSeparator));
 
@@ -60,14 +64,17 @@ public class SimulationUtil {
 
     }
 
+
     /**
      * Sets the CPLEX library path in the preferences and calls {@see setup()} adding this to the
      * system property library paths. Note: No paths are not removed
      */
     public static void setCPLEXLibraryPath(String path) {
-        Preferences.userNodeForPackage(SimulationUtil.class).put("cplex.library.path", path);
+        FilePreference pref = CorePreferences.getInstance().getPreference("CPLEX_LIBRARY_PATH");
+        pref.put(new File(path));
         setup();
     }
+
 
     /**
      * Adds a path to the system property java.library.path at runtime

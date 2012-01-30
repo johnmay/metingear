@@ -41,9 +41,9 @@ import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.io.xml.SBMLReactionReader;
 import uk.ac.ebi.mnb.core.ErrorMessage;
+import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.caf.report.Report;
 
 
 /**
@@ -121,7 +121,8 @@ public class ImportSBML extends DelayedBuildAction {
                                 manager.getActive().addReaction(reader.nextMetabolicReaction());
 
                             } catch (UnknownCompartmentException ex) {
-                                messages.add(new WarningMessage(ex.getMessage()));
+                                Report r = new WarningMessage(ex.getMessage());
+                                messages.add(r);
                             }
                         }
                     } catch (XMLStreamException ex) {

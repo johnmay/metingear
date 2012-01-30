@@ -32,13 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import javax.swing.AbstractAction;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.apache.log4j.Logger;
@@ -228,8 +222,16 @@ public class CandidateSelector
 
         options.add(new ExpandableComponentGroup("Suggested Matches", tablePanel), cc.xyw(1, 7, 5));
 
-        PeptideGenerator pg = new PeptideGenerator();
+        final PeptideGenerator pg = new PeptideGenerator();
         GoogleSearch gs = new GoogleSearch();
+
+        JComponent pgwrapper = PanelFactory.createDialogPanel("p, 4dlu, min", "p");
+        pgwrapper.add(pg.getComponent(), cc.xy(1, 1));
+        pgwrapper.add(new JButton(new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                pg.transferAnnotations();
+            }
+        }), cc.xy(3, 1));
 
         options.add(new ExpandableComponentGroup(pg.getDescription(), pg.getComponent()), cc.xyw(1, 9, 5));
         options.add(new ExpandableComponentGroup(gs.getDescription(), gs.getComponent()), cc.xyw(1, 11, 5));

@@ -80,6 +80,18 @@
             <artifactId>mnb-edit</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <artifactId>caf-action</artifactId>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <type>jar</type>
+            <version>0.8</version>
+        </dependency>
+        <dependency>
+            <artifactId>caf-report</artifactId>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <type>jar</type>
+            <version>0.8</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

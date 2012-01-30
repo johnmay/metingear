@@ -31,8 +31,6 @@ import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import org.apache.axis.utils.tcpmon;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
@@ -42,9 +40,8 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.chemet.render.reaction.ReactionRenderer;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
-import uk.ac.ebi.core.tools.TransportReactionUtil.Classification;
-import uk.ac.ebi.mnb.view.ReactionRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 
@@ -67,7 +64,7 @@ public class ReactionPanel
     private CellConstraints cc = new CellConstraints();
 
     public ReactionPanel() {
-        super("Metabolite", new AnnotationRenderer());
+        super("Reaction", new AnnotationRenderer());
     }
 
     @Override

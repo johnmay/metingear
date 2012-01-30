@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -42,6 +41,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
@@ -49,6 +49,7 @@ import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
+
 
 /**
  * @name    CrossReferenceEditor - 2011.10.07 <br>
@@ -60,13 +61,21 @@ import uk.ac.ebi.caf.component.factory.FieldFactory;
 public class CrossReferenceEditor extends PopupDialog {
 
     private static final Logger LOGGER = Logger.getLogger(CrossReferenceEditor.class);
+
     private CellConstraints cc = new CellConstraints();
+
     private Map<String, Byte> map = new HashMap();
+
     private FormLayout layout;
+
     private List<MComboBox> comboboxes = new LinkedList();
+
     private List<JTextField> fields = new LinkedList();
+
     private IdentifierFactory ID_FACTORY = IdentifierFactory.getInstance();
+
     private JPanel panel;
+
 
     public CrossReferenceEditor(JFrame frame) {
         super(frame);
@@ -75,6 +84,7 @@ public class CrossReferenceEditor extends PopupDialog {
         }
         panel = getPanel();
     }
+
 
     public void setup(Collection<? extends CrossReference> references) {
 
@@ -108,12 +118,13 @@ public class CrossReferenceEditor extends PopupDialog {
 
     }
 
+
     private void update() {
         panel.removeAll();
         Theme theme = Settings.getInstance().getTheme();
         for (int i = 0; i < fields.size(); i++) {
-            JButton minus = new IconButton(theme.getMinusIcon(), new RemoveCrossReference(this, i));
-            JButton plus = new IconButton(theme.getPlusIcon(), new AddCrossReference(this, i));
+            JButton minus = new IconButton(new RemoveCrossReference(this, i));
+            JButton plus = new IconButton(new AddCrossReference(this, i));
             minus.setEnabled(!(fields.size() == 1));
             panel.add(comboboxes.get(i), cc.xy(1, i + 1));
             panel.add(fields.get(i), cc.xy(2, i + 1));
@@ -122,6 +133,7 @@ public class CrossReferenceEditor extends PopupDialog {
         }
 
     }
+
 
     public Collection<CrossReference> getCrossReferences() {
         Collection<CrossReference> xref = new ArrayList<CrossReference>();
@@ -140,18 +152,21 @@ public class CrossReferenceEditor extends PopupDialog {
         return xref;
     }
 
-    private class RemoveCrossReference extends AbstractAction {
+
+    private class RemoveCrossReference extends GeneralAction {
 
         private int index;
+
         private JDialog dialog;
 
-        public RemoveCrossReference() {
-        }
 
         public RemoveCrossReference(JDialog dialog, int index) {
+            super(RemoveCrossReference.class.getSimpleName());
+
             this.index = index;
             this.dialog = dialog;
         }
+
 
         public void actionPerformed(ActionEvent e) {
             panel.removeAll();
@@ -163,18 +178,20 @@ public class CrossReferenceEditor extends PopupDialog {
         }
     }
 
-    private class AddCrossReference extends AbstractAction {
+
+    private class AddCrossReference extends GeneralAction {
 
         private int index;
+
         private JDialog dialog;
 
-        public AddCrossReference() {
-        }
 
         public AddCrossReference(JDialog dialog, int index) {
+            super(AddCrossReference.class.getSimpleName());
             this.index = index;
             this.dialog = dialog;
         }
+
 
         public void actionPerformed(ActionEvent e) {
             layout.appendRow(new RowSpec(Sizes.PREFERRED));
@@ -195,12 +212,13 @@ public class CrossReferenceEditor extends PopupDialog {
                     box.repaint();
                 }
 
+
                 public void removeUpdate(DocumentEvent e) {
                     DefaultComboBoxModel model = (DefaultComboBoxModel) box.getModel();
                     model.removeAllElements();
 
                     String accession = field.getText().trim();
-                    
+
                     for (Identifier id : accession.isEmpty()
                                          ? ID_FACTORY.getSupportedIdentifiers()
                                          : ID_FACTORY.getMatchingIdentifiers(accession)) {
@@ -209,6 +227,7 @@ public class CrossReferenceEditor extends PopupDialog {
                     box.repaint();
 
                 }
+
 
                 public void changedUpdate(DocumentEvent e) {
                     String accession = field.getText().trim();
