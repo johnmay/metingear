@@ -10,7 +10,7 @@
   <groupId>uk.ac.ebi</groupId>
   <artifactId>mnb-dialog</artifactId>
   <version>0.8.5-SNAPSHOT</version>
-  <name>Dialog</name>
+  <name>Control</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,6 +51,12 @@
       <groupId>uk.ac.ebi.chemet</groupId>
       <artifactId>mnb-simulation</artifactId>
       <version>0.8.5-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <artifactId>caf-action</artifactId>
+      <groupId>uk.ac.ebi.caf</groupId>
+      <type>jar</type>
+      <version>0.8</version>
     </dependency>
   </dependencies>
 </project>

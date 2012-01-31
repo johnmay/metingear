@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view.entity.search;
+package uk.ac.ebi.mnb.view.entity.general;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -34,13 +34,13 @@ import uk.ac.ebi.mnb.main.MainView;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class SearchTable extends AbstractEntityTable {
+public class GeneralTable extends AbstractEntityTable {
 
-    private static final Logger LOGGER = Logger.getLogger(SearchTable.class);
+    private static final Logger LOGGER = Logger.getLogger(GeneralTable.class);
     private DoubleClickListener listener;
 
-    public SearchTable() {
-        super(new SearchTableModel());
+    public GeneralTable() {
+        super(new GeneralTableModel());
         listener = new DoubleClickListener(this);
         addMouseListener(listener);
 

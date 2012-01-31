@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view.entity.search;
+package uk.ac.ebi.mnb.view.entity.general;
 
 import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import org.apache.log4j.Logger;
@@ -32,14 +32,14 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class SearchInspector
+public class GeneralInspector
   extends AbstractEntityInspector {
 
-    private static final Logger LOGGER = Logger.getLogger(SearchInspector.class);
+    private static final Logger LOGGER = Logger.getLogger(GeneralInspector.class);
 
 
-    public SearchInspector() {
-        super(new SearchPanel());
+    public GeneralInspector() {
+        super(new GeneralPanel());
     }
 
 

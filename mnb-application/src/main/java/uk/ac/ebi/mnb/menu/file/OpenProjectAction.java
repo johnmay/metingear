@@ -17,7 +17,7 @@ import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.io.FileFilterManager;
 import uk.ac.ebi.mnb.io.ProjectFilter;
-import uk.ac.ebi.mnb.main.SourceController;
+import uk.ac.ebi.mnb.view.source.SourceController;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.mnb.menu.FileMenu;
 import uk.ac.ebi.mnb.menu.MainMenuBar;

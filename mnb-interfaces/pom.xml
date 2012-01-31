@@ -30,7 +30,7 @@
         <dependency>
             <groupId>uk.ac.ebi.caf</groupId>
             <artifactId>caf-report</artifactId>
-            <version>0.8</version>
+            <version>${caf.version}</version>
         </dependency>
     </dependencies>
 </project>

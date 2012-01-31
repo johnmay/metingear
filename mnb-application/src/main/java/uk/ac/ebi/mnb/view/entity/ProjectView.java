@@ -25,7 +25,7 @@ import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
 import uk.ac.ebi.mnb.view.entity.protein.ProductView;
 import uk.ac.ebi.mnb.view.entity.reaction.ReactionView;
-import uk.ac.ebi.mnb.view.entity.search.SearchView;
+import uk.ac.ebi.mnb.view.entity.general.GeneralView;
 import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.store.LockObtainFailedException;
@@ -72,7 +72,7 @@ public class ProjectView
     private GeneView genes = null;
     private ProductView products = null;
     private TaskView tasks = null;
-    private SearchView search = null;
+    private GeneralView general = null;
     private CardLayout layout;
     private Map<String, AbstractEntityView> viewMap;
     private EntityCollection selection = new EntityMap();
@@ -84,7 +84,7 @@ public class ProjectView
         reactions = new ReactionView();
         metabolites = new MetaboliteView();
         tasks = new TaskView();
-        search = new SearchView();
+        general = new GeneralView();
         genes = new GeneView();
 
         layout = new CardLayout();
@@ -93,7 +93,7 @@ public class ProjectView
         add(reactions, reactions.getClass().getSimpleName());
         add(metabolites, metabolites.getClass().getSimpleName());
         add(tasks, tasks.getClass().getSimpleName());
-        add(search, search.getClass().getSimpleName());
+        add(general, general.getClass().getSimpleName());
         add(genes, genes.getClass().getSimpleName());
 
 
@@ -132,7 +132,7 @@ public class ProjectView
      */
     public EntityView getActiveView() {
 
-        for (AbstractEntityView pane : Arrays.asList(reactions, metabolites, products, genes)) {
+        for (AbstractEntityView pane : Arrays.asList(reactions, metabolites, products, genes, general)) {
             if (pane != null && pane.isVisible()) {
                 return pane;
             }
@@ -167,8 +167,8 @@ public class ProjectView
         layout.show(this, tasks.getClass().getSimpleName());
     }
 
-    public void setSearchView() {
-        layout.show(this, search.getClass().getSimpleName());
+    public void setGenericView() {
+        layout.show(this, general.getClass().getSimpleName());
     }
 
     /**
@@ -278,8 +278,8 @@ public class ProjectView
         return tasks;
     }
 
-    public SearchView getSearchView() {
-        return search;
+    public GeneralView getSearchView() {
+        return general;
     }
 
     /**

@@ -101,7 +101,7 @@ public class ContextMenu extends JMenu {
     public DelayedBuildAction create(final Class<? extends ControllerDialog> clazz) {
 
         return create(clazz,
-                      (TargetedUpdate) controller.getViewController(),
+                      (TargetedUpdate) controller,
                       controller.getMessageManager(),
                       controller.getViewController(),
                       controller.getUndoManager());

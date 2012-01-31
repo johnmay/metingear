@@ -21,7 +21,6 @@
  */
 package uk.ac.ebi.mnb.menu.view;
 
-import com.hp.hpl.jena.graph.query.Expression.Application;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBoxMenuItem;
 import uk.ac.ebi.mnb.settings.Settings;

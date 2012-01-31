@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.main;
+package uk.ac.ebi.mnb.view.source;
 
 import javax.swing.JPopupMenu;
 import uk.ac.ebi.core.ReconstructionManager;
@@ -33,24 +33,24 @@ import java.util.Map;
 import java.util.Set;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.render.source.EntitySourceItem;
-import uk.ac.ebi.chemet.render.source.MetaboliteSourceItem;
-import uk.ac.ebi.chemet.render.source.ProductSourceItem;
-import uk.ac.ebi.chemet.render.source.ReactionSourceItem;
 import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
 import uk.ac.ebi.chemet.render.source.TaskSourceItem;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
+import uk.ac.ebi.chemet.render.source.*;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.mnb.interfaces.ViewController;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
 import uk.ac.ebi.mnb.menu.popup.SetActiveProject;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
+
 
 /**
  * SourceController.java – MetabolicDevelopmentKit – Jun 3, 2011
@@ -65,19 +65,35 @@ public class SourceController
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
             SourceController.class);
+
     public SourceListModel model;
+
     private SourceListCategory reconstructions;
+
     private SourceListCategory reconstruction;
+
     private SourceListItem products;
+
     private SourceListItem metabolites;
+
     private SourceListItem reactions;
+
     private SourceListItem pathways;
+
     private SourceListCategory tasks;
+
+    private SourceListCategory collections;
+
     private SourceListItem genes;
+
     private SetActiveProject setActiveProject = new SetActiveProject();
+
     private Object selected;
+
     private List<EntitySourceItem> items = new ArrayList(); // list of items to update
+
     private Map<AnnotatedEntity, EntitySourceItem> itemMap = new HashMap();
+
 
     public SourceController() {
 
@@ -85,6 +101,7 @@ public class SourceController
 
         reconstructions = new SourceListCategory("Reconstructions");
         reconstruction = new SourceListCategory("Active Reconstruction");
+        collections = new SourceListCategory("Collections");
         products = new SourceListItem("Gene Products");
         metabolites = new SourceListItem("Metabolites");
         reactions = new SourceListItem("Reactions");
@@ -101,10 +118,9 @@ public class SourceController
         model.addItemToCategory(reactions, reconstruction);
         model.addItemToCategory(pathways, reconstruction);
         model.addCategory(tasks);
-
-
-
+        model.addCategory(collections);
     }
+
 
     public void cleanModel() {
 
@@ -113,6 +129,7 @@ public class SourceController
         }
 
     }
+
 
     public void removeLeaves(SourceListItem item) {
         List<SourceListItem> children = item.getChildItems();
@@ -130,6 +147,7 @@ public class SourceController
 
 
     }
+
 
     /**
      * Updates all currently available items to that in the active reconstruction.
@@ -163,46 +181,55 @@ public class SourceController
                 itemMap.get(reconstruction).update();
             }
 
-            Reconstruction recon = manager.getActiveReconstruction();
+            Reconstruction recon = manager.getActive();
 
-            // metabolites
-            for (Metabolite m : recon.getMetabolites()) {
-                if (itemMap.containsKey(m) == false) {
-                    EntitySourceItem item = new MetaboliteSourceItem(m, metabolites);
-                    itemMap.put(m, item);
-                    model.addItemToItem(item, metabolites);
-                }
-                itemMap.get(m).update();
-                itemCollector.remove(m);
-
+            for (int i = 0; i < collections.getItemCount(); i++) {
+                model.removeItemFromCategoryAtIndex(collections, i);
             }
+            for (EntityCollection subset : recon.getSubsets()) {
+                if (subset instanceof EntitySubset) {
+                    model.addItemToCategory(new CollectionSourceItem((EntitySubset) subset), collections);
+                }
+            }
+
+//            // metabolites
+//            for (Metabolite m : recon.getMetabolites()) {
+//                if (itemMap.containsKey(m) == false) {
+//                    EntitySourceItem item = new MetaboliteSourceItem(m, metabolites);
+//                    itemMap.put(m, item);
+//                    model.addItemToItem(item, metabolites);
+//                }
+//                itemMap.get(m).update();
+//                itemCollector.remove(m);
+//
+//            }
             metabolites.setCounterValue(recon.getMetabolites().size());
-
-            // reactions
-
-            for (Reaction r : recon.getReactions()) {
-                if (itemMap.containsKey(r) == false) {
-                    EntitySourceItem item = new ReactionSourceItem(r, reactions);
-                    itemMap.put(r, item);
-                    model.addItemToItem(item, reactions);
-                }
-                itemMap.get(r).update();
-                itemCollector.remove(r);
-            }
+//
+//            // reactions
+//
+//            for (Reaction r : recon.getReactions()) {
+//                if (itemMap.containsKey(r) == false) {
+//                    EntitySourceItem item = new ReactionSourceItem(r, reactions);
+//                    itemMap.put(r, item);
+//                    model.addItemToItem(item, reactions);
+//                }
+//                itemMap.get(r).update();
+//                itemCollector.remove(r);
+//            }
             reactions.setCounterValue(recon.getReactions().size());
-
-
-            // products
-            for (GeneProduct p : recon.getProducts()) {
-                if (itemMap.containsKey(p) == false) {
-                    EntitySourceItem item = new ProductSourceItem(p, products);
-                    itemMap.put(p, item);
-                    model.addItemToItem(item, products);
-                }
-                itemMap.get(p).update();
-                itemCollector.remove(p);
-
-            }
+//
+//
+//            // products
+//            for (GeneProduct p : recon.getProducts()) {
+//                if (itemMap.containsKey(p) == false) {
+//                    EntitySourceItem item = new ProductSourceItem(p, products);
+//                    itemMap.put(p, item);
+//                    model.addItemToItem(item, products);
+//                }
+//                itemMap.get(p).update();
+//                itemCollector.remove(p);
+//
+//            }
 
 
 
@@ -236,6 +263,7 @@ public class SourceController
 
     }
 
+
     /**
      * Mouse event listeners
      * @param item
@@ -244,6 +272,7 @@ public class SourceController
     public void sourceListItemSelected(SourceListItem item) {
         sourceListItemClicked(item, Button.LEFT, 1);
     }
+
 
     @Override
     public void sourceListItemClicked(SourceListItem item,
@@ -255,10 +284,22 @@ public class SourceController
 
         ProjectView view = (ProjectView) MainView.getInstance().getViewController();
 
-        if (item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem)) {
-            EntityCollection selection = view.getSelection();// reuse view selection object
-            selection.clear().add(((EntitySourceItem) item).getEntity());
-            view.setSelection(selection);
+//        if (item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem)) {
+//            EntityCollection selection = view.getSelection();// reuse view selection object
+//            selection.clear().add(((EntitySourceItem) item).getEntity());
+//            view.setSelection(selection);
+//        }
+        if (item instanceof CollectionSourceItem) {
+
+            CollectionSourceItem collectionItem = (CollectionSourceItem) item;
+            EntitySubset subset = collectionItem.getSubset();
+
+            view.setGenericView();
+
+            AbstractEntityTable table = (AbstractEntityTable) view.getActiveView().getTable();
+            table.getModel().setEntities(new ArrayList(subset.getEntities()));
+            view.getActiveView().update();
+
         } else if (item instanceof ReconstructionSourceItem && clickCount > 1) {
             setActiveProject.setEnabled(setActiveProject.getContext(selected));
             setActiveProject.actionPerformed(null);
@@ -277,6 +318,7 @@ public class SourceController
         }
     }
 
+
     @Override
     public void sourceListCategoryClicked(SourceListCategory category,
                                           Button button,
@@ -285,7 +327,9 @@ public class SourceController
             ((ProjectView) MainView.getInstance().getViewController()).setTaskView();
         }
     }
+
     List<ContextAction> actions = new ArrayList();
+
 
     public void customizePopup(JPopupMenu popup) {
 

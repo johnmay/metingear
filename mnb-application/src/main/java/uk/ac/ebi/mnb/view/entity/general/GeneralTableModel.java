@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view.entity.search;
+package uk.ac.ebi.mnb.view.entity.general;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,12 +38,12 @@ import uk.ac.ebi.search.SearchManager;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class SearchTableModel extends AbstractEntityTableModel {
+public class GeneralTableModel extends AbstractEntityTableModel {
 
-    private static final Logger LOGGER = Logger.getLogger(SearchTableModel.class);
+    private static final Logger LOGGER = Logger.getLogger(GeneralTableModel.class);
 
 
-    public SearchTableModel() {
+    public GeneralTableModel() {
         super(new ArrayList<ColumnDescriptor>());
         addColumn(new ColumnDescriptor("Rank", Integer.class, DataType.FIXED, Integer.class));
         addColumns(getDefaultColumns());
@@ -53,8 +53,7 @@ public class SearchTableModel extends AbstractEntityTableModel {
 
     @Override
     public void loadComponents() {
-        List<AnnotatedEntity> entities = SearchManager.getInstance().getPreviousEntries();
-        super.setEntities(entities);
+        // do nothing
     }
 
 

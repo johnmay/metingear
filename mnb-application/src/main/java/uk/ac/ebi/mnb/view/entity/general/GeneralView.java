@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view.entity.search;
+package uk.ac.ebi.mnb.view.entity.general;
 
 import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
@@ -32,11 +32,11 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class SearchView extends AbstractEntityView {
+public class GeneralView extends AbstractEntityView {
 
-    private static final Logger LOGGER = Logger.getLogger(SearchView.class);
+    private static final Logger LOGGER = Logger.getLogger(GeneralView.class);
 
-    public SearchView() {
-        super("Search Results", new SearchTable(), new SearchInspector());
+    public GeneralView() {
+        super("View", new GeneralTable(), new GeneralInspector());
     }
 }

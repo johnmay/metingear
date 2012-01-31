@@ -14,6 +14,7 @@
  */
 package uk.ac.ebi.mnb.main;
 
+import uk.ac.ebi.mnb.view.source.SourceController;
 import com.apple.laf.AquaRootPaneUI;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import java.awt.*;
@@ -53,6 +54,8 @@ import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.menu.EditUndoButtons;
 import uk.ac.ebi.mnb.menu.ViewInfo;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
+
 
 /**
  * MainView.java
@@ -69,14 +72,23 @@ public class MainView
                    MainController {
 
     private static final Logger LOGGER = Logger.getLogger(MainView.class);
+
     private UndoManager undoManager;
+
     private Toolbar toolbar; //TODO: wrap in class
+
     private JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT); //TODO wrap
+
     private ProjectView project = new ProjectView();
+
     private ReportManager messages = new MessageBar();
+
     private SourceController sourceController; //TODO:  move to SourceList wrapping class
+
     private JTextField searchField = new JTextField(10); //TODO:  move to a toolbar wraping class
+
     private final SourceList source;
+
 
     /**
      * Inner class holding the instance
@@ -85,6 +97,7 @@ public class MainView
 
         private static final MainView INSTANCE = new MainView();
     }
+
 
     private MainView() {
 
@@ -142,9 +155,9 @@ public class MainView
                                         SwingUtilities.invokeLater(new Runnable() {
 
                                             public void run() {
-                                                SearchManager.getInstance().setPreviousEntries(
-                                                        entities);
-                                                ((ProjectView) getViewController()).getSearchView().update();
+                                                SearchManager.getInstance().setPreviousEntries(entities);
+                                                AbstractEntityTable table = (AbstractEntityTable) ((ProjectView) getViewController()).getSearchView().getTable();
+                                                table.getModel().setEntities(entities);
                                             }
                                         });
                                     }
@@ -165,7 +178,7 @@ public class MainView
                         }).start();
 
 
-                        ((ProjectView) getViewController()).setSearchView();
+                        ((ProjectView) getViewController()).setGenericView();
                     } catch (BadLocationException ex) {
                         ex.printStackTrace();
                     }
@@ -175,8 +188,10 @@ public class MainView
                 }
             }
 
+
             public void removeUpdate(DocumentEvent e) {
             }
+
 
             public void changedUpdate(DocumentEvent e) {
             }
@@ -229,6 +244,7 @@ public class MainView
                 updateDialogLocations();
             }
 
+
             @Override
             public void componentResized(ComponentEvent e) {
                 messages.update();
@@ -247,6 +263,7 @@ public class MainView
                 project.repaint();
             }
 
+
             public void focusLost(FocusEvent e) {
                 source.getComponent().repaint();
                 project.repaint();
@@ -254,6 +271,7 @@ public class MainView
         });
 
     }
+
 
     public void listColors(Container component) {
         System.out.println(component.getClass() + " " + component.getBackground() + " " + component.isOpaque());
@@ -263,9 +281,11 @@ public class MainView
         }
     }
 
+
     public UndoManager getUndoManager() {
         return undoManager;
     }
+
 
     /** Dialog placement **/
     /**
@@ -284,6 +304,7 @@ public class MainView
         }
 
     }
+
 
     /**
      *
@@ -304,6 +325,7 @@ public class MainView
 
     }
 
+
     /**
      *
      * Sends update signal to project items and source list
@@ -316,11 +338,13 @@ public class MainView
         return true; // need way of neatly combinding
     }
 
+
     public boolean update(EntityCollection selection) {
         project.update(selection);
         sourceController.update();
         return true;
     }
+
 
     /** Message delegation **/
     /**
@@ -333,6 +357,7 @@ public class MainView
         messages.addReport(new WarningMessage(mesg));
     }
 
+
     /**
      *
      * Adds an error message in the message controller
@@ -343,11 +368,13 @@ public class MainView
         messages.addReport(new ErrorMessage(mesg));
     }
 
+
     public ReportManager getMessageManager() {
         return messages;
     }
 
     /* Getters/Setters */
+
     /**
      *
      * Singleton access method
@@ -359,6 +386,7 @@ public class MainView
         return MainViewHolder.INSTANCE;
     }
 
+
     /**
      * Access the attached menu bar
      * @return
@@ -367,6 +395,7 @@ public class MainView
     public MainMenuBar getJMenuBar() {
         return (MainMenuBar) super.getJMenuBar();
     }
+
 
     /**
      *
@@ -378,6 +407,7 @@ public class MainView
         return project;
     }
 
+
     /**
      * Access the displayed tool-bar
      * @return
@@ -385,6 +415,7 @@ public class MainView
     public Toolbar getToolbar() {
         return toolbar;
     }
+
 
     /**
      * Access the source list controller
@@ -394,9 +425,11 @@ public class MainView
         return sourceController;
     }
 
+
     public DialogController getDialogController() {
         return this;
     }
+
 
     public void updateMenuContext() {
         if (getJMenuBar() != null) {

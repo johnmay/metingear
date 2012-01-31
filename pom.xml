@@ -23,6 +23,10 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    
+    <properties>
+        <caf.version>0.8.5-SNAPSHOT</caf.version>
+    </properties>
 
     <repositories>
         

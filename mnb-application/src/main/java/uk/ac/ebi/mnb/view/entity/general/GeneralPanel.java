@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.view.entity.search;
+package uk.ac.ebi.mnb.view.entity.general;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -38,16 +38,16 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class SearchPanel
+public class GeneralPanel
   extends AbstractEntityPanel {
 
-    private static final Logger LOGGER = Logger.getLogger(SearchPanel.class);
+    private static final Logger LOGGER = Logger.getLogger(GeneralPanel.class);
     private AnnotatedEntity entity;
     private JLabel formula;
     private JTextField generic;
 
 
-    public SearchPanel() {
+    public GeneralPanel() {
         super("Metabolite", new AnnotationRenderer());
     }
 

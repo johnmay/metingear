@@ -7,7 +7,6 @@ package uk.ac.ebi.mnb.menu;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import uk.ac.ebi.mnb.main.MainView;
