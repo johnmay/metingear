@@ -115,8 +115,7 @@ public class AutomatedReconciler
 
         Metabolite metabolite = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
                                                                                BasicChemicalIdentifier.nextIdentifier(),
-                                                                               entry.getAbbreviation(),
-                                                                               name);
+                                                                               name, entry.getAbbreviation());
 
         for (int i = 1; i < names.length; i++) {
             metabolite.addAnnotation(new Synonym(names[i]));

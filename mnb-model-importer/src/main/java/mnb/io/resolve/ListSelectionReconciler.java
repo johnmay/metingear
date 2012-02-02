@@ -64,7 +64,7 @@ public class ListSelectionReconciler implements EntryReconciler {
 
     private JFrame frame;
 
-    private CandidateSelector dialog;
+    private CandidateSelector curater;
 
     private Reconstruction recon;
 
@@ -77,7 +77,7 @@ public class ListSelectionReconciler implements EntryReconciler {
         this.factory = factory;
         this.template = factoryIdClass;
         this.frame = frame;
-        dialog = new CandidateSelector(frame);
+        curater = new CandidateSelector(frame);
 
         recon = ReconstructionManager.getInstance().getActive();
         nameMap = HashMultimap.create();
@@ -130,8 +130,8 @@ public class ListSelectionReconciler implements EntryReconciler {
 
         Metabolite metabolite = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
                                                                                BasicChemicalIdentifier.nextIdentifier(),
-                                                                               entry.getAbbreviation(),
-                                                                               name);
+                                                                               name,
+                                                                               entry.getAbbreviation());
 
         for (int i = 1; i < names.length; i++) {
             metabolite.addAnnotation(new Synonym(names[i]));
@@ -145,49 +145,6 @@ public class ListSelectionReconciler implements EntryReconciler {
             metabolite.setCharge(Double.parseDouble(entry.getValue(EntityColumn.CHARGE)));
         }
 
-        try {
-            Multimap<Integer, SynonymCandidateEntry> map = factory.getSynonymCandidates(name);
-
-            // contains a candidate with a score of 0
-            if (map.containsKey(0)) {
-                for (SynonymCandidateEntry candidate : map.get(0)) {
-                    Identifier id = template.newInstance();
-                    id.setAccession(candidate.getId());
-                    metabolite.addAnnotation(new CrossReference(id));
-                }
-            } else {
-                map = factory.getFuzzySynonymCandidates(name);
-                Collection<SynonymCandidateEntry> candidates = new ArrayList();
-                List<Integer> scores = new ArrayList<Integer>(map.keySet());
-                Collections.sort(scores);
-                for (Integer score : scores) {
-                    candidates.addAll(map.get(score));
-                }
-                if (!candidates.isEmpty()) {
-                    if (map.containsKey(0)) {
-                        for (SynonymCandidateEntry candidate : map.get(0)) {
-                            Identifier id = template.newInstance();
-                            id.setAccession(candidate.getId());
-                            metabolite.addAnnotation(new CrossReference(id));
-                        }
-                    } else {
-                        dialog.setup(metabolite, candidates);
-                        dialog.setVisible(true);
-                        if (dialog.okaySelected()) {
-                            Collection<uk.ac.ebi.interfaces.entities.Metabolite> selected = dialog.getSelected();
-                            for (uk.ac.ebi.interfaces.entities.Metabolite m : selected) {
-                                metabolite.addAnnotations(m.getAnnotations());
-                                m.addAnnotation(new CrossReference(m.getIdentifier()));
-                            }
-                        }
-                    }
-                }
-            }
-
-        } catch (ExceptionInInitializerError ex) {
-            LOGGER.info("Unable to resolve candidates: " + ex.getMessage());
-        }
-
         // molecula formula
         if (entry.getFormula() != null) {
             metabolite.addAnnotation(new MolecularFormula(entry.getFormula()));
@@ -199,6 +156,10 @@ public class ListSelectionReconciler implements EntryReconciler {
             metabolite.addAnnotation(new KEGGCrossReference(keggId));
         }
 
+        if (metabolite.getAnnotationsExtending(CrossReference.class).isEmpty()) {
+            curater.setup(metabolite);
+            curater.setVisible(true);
+        }
 
         return metabolite;
 
