@@ -1,4 +1,3 @@
-
 /**
  * MetaboliteCoordinatesMain.java
  *
@@ -29,6 +28,7 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.commons.cli.Option;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dom4j.tree.DefaultEntity;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.*;
@@ -38,9 +38,9 @@ import uk.ac.ebi.chemet.entities.reaction.AtomContainerReaction;
 import uk.ac.ebi.chemet.exceptions.*;
 import uk.ac.ebi.io.xml.SBMLReactionReader;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.metabolomes.execs.CommandLineMain;
 import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
-import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 
 /**
@@ -84,8 +84,8 @@ public class MetaboliteCoordinatesMain extends CommandLineMain {
 
             Map<List<Integer>, List<IAtomContainer>> coordinates = getCoodinateMap(stream);
 
-            for( Entry<List<Integer>, List<IAtomContainer>> e : coordinates.entrySet() ) {
-                for( IAtomContainer mol : e.getValue() ) {
+            for (Entry<List<Integer>, List<IAtomContainer>> e : coordinates.entrySet()) {
+                for (IAtomContainer mol : e.getValue()) {
                     System.out.println(mol.getProperty("Name") + "\t" + StringUtils.join(e.getKey(),
                                                                                          "\t"));
                 }
@@ -93,16 +93,16 @@ public class MetaboliteCoordinatesMain extends CommandLineMain {
 
             stream.close();
 
-        } catch( XMLStreamException ex ) {
+        } catch (XMLStreamException ex) {
             LOGGER.error("Error reading SBML document");
-        } catch( IOException ex ) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         } finally {
             try {
-                if( stream != null ) {
+                if (stream != null) {
                     stream.close();
                 }
-            } catch( IOException ex ) {
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
@@ -111,37 +111,37 @@ public class MetaboliteCoordinatesMain extends CommandLineMain {
 
 
     public Map<List<Integer>, List<IAtomContainer>> getCoodinateMap(InputStream stream)
-      throws XMLStreamException {
+            throws XMLStreamException {
 
         Map<List<Integer>, List<IAtomContainer>> coordinateMap =
                                                  new HashMap<List<Integer>, List<IAtomContainer>>();
-        SBMLReactionReader modelReactions = new SBMLReactionReader(stream);
+        SBMLReactionReader modelReactions = new SBMLReactionReader(stream, DefaultEntityFactory.getInstance());
 
-        while( modelReactions.hasNext() ) {
+        while (modelReactions.hasNext()) {
 
             AtomContainerReaction rxn;
             try {
 
                 rxn = modelReactions.next();
-                for( IAtomContainer molecule : rxn.getAllReactionMolecules() ) {
+                for (IAtomContainer molecule : rxn.getAllReactionMolecules()) {
 
                     List<Integer> location = getPoint(molecule);
 
-                    if( coordinateMap.containsKey(location) ) {
+                    if (coordinateMap.containsKey(location)) {
 
                         boolean found = false;
                         String newName =
                                molecule.getProperty("Name").toString().trim().toLowerCase();
 
-                        for( IAtomContainer existingMol : coordinateMap.get(location) ) {
+                        for (IAtomContainer existingMol : coordinateMap.get(location)) {
                             String existingName = existingMol.getProperty("Name").toString().trim().
-                              toLowerCase();
-                            if( newName.equals(existingName) ) {
+                                    toLowerCase();
+                            if (newName.equals(existingName)) {
                                 found = true;// can also use SMSD
                             }
                         }
 
-                        if( found == false ) {
+                        if (found == false) {
                             coordinateMap.get(location).add(molecule);
                         }
 
@@ -156,11 +156,11 @@ public class MetaboliteCoordinatesMain extends CommandLineMain {
 
                 }
 
-            } catch( UnknownCompartmentException ex ) {
+            } catch (UnknownCompartmentException ex) {
                 LOGGER.error("Unknown compartment");
-            } catch( AbsentAnnotationException ex ) {
+            } catch (AbsentAnnotationException ex) {
                 LOGGER.error("Missing annotation");
-            } catch( MissingStructureException ex ) {
+            } catch (MissingStructureException ex) {
                 LOGGER.error("Missing Structure");
             }
         }
@@ -182,9 +182,9 @@ public class MetaboliteCoordinatesMain extends CommandLineMain {
         atomSymbolMap.put("N", 0);
 
         Iterator<IAtom> atomIt = molecule.atoms().iterator();
-        while( atomIt.hasNext() ) {
+        while (atomIt.hasNext()) {
             IAtom atom = atomIt.next();
-            if( atomSymbolMap.containsKey(atom.getSymbol()) == Boolean.FALSE ) {
+            if (atomSymbolMap.containsKey(atom.getSymbol()) == Boolean.FALSE) {
                 atomSymbolMap.put(atom.getSymbol(), 0);
             }
             atomSymbolMap.put(atom.getSymbol(), atomSymbolMap.get(atom.getSymbol()) + 1);
@@ -200,8 +200,8 @@ public class MetaboliteCoordinatesMain extends CommandLineMain {
         CDKAtomTyper.typeAtoms(molecule);
         try {
             CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance()).addImplicitHydrogens(
-              molecule);
-        } catch( CDKException ex ) {
+                    molecule);
+        } catch (CDKException ex) {
         }
         AtomContainerManipulator.convertImplicitToExplicitHydrogens(molecule);
 
@@ -209,40 +209,37 @@ public class MetaboliteCoordinatesMain extends CommandLineMain {
         Map<String, Integer> bondSymbolMap = new HashMap<String, Integer>();
 
         // make sure no null pointer exceptions on return
-        for( String symbol : Arrays.asList("C", "O", "N", "P", "H", "S") ) {
+        for (String symbol : Arrays.asList("C", "O", "N", "P", "H", "S")) {
             atomSymbolMap.put(symbol, 0);
             bondSymbolMap.put(symbol, 0);
         }
 
         Iterator<IAtom> atomIt = molecule.atoms().iterator();
-        while( atomIt.hasNext() ) {
+        while (atomIt.hasNext()) {
             IAtom atom = atomIt.next();
-            if( atomSymbolMap.containsKey(atom.getSymbol()) == Boolean.FALSE ) {
+            if (atomSymbolMap.containsKey(atom.getSymbol()) == Boolean.FALSE) {
                 atomSymbolMap.put(atom.getSymbol(), 0);
             }
             atomSymbolMap.put(atom.getSymbol(), atomSymbolMap.get(atom.getSymbol()) + 1);
         }
         Iterator<IBond> bondIt = molecule.bonds().iterator();
-        while( bondIt.hasNext() ) {
+        while (bondIt.hasNext()) {
             IBond bond = bondIt.next();
-            for( int i = 0 ; i < bond.getAtomCount() ; i++ ) {
-                if( bondSymbolMap.containsKey(bond.getAtom(i).getSymbol()) == Boolean.FALSE ) {
+            for (int i = 0; i < bond.getAtomCount(); i++) {
+                if (bondSymbolMap.containsKey(bond.getAtom(i).getSymbol()) == Boolean.FALSE) {
                     bondSymbolMap.put(bond.getAtom(i).getSymbol(), 0);
                 }
                 bondSymbolMap.put(bond.getAtom(i).getSymbol(), bondSymbolMap.get(bond.getAtom(i).
-                  getSymbol()) + 1);
+                        getSymbol()) + 1);
             }
         }
 
         List syms = new ArrayList();
-        for( String sym : Arrays.asList("C", "O", "N", "H", "P") ) {
+        for (String sym : Arrays.asList("C", "O", "N", "H", "P")) {
             syms.add(atomSymbolMap.get(sym) + bondSymbolMap.get(sym));
         }
 
         return syms;
 
     }
-
-
 }
-

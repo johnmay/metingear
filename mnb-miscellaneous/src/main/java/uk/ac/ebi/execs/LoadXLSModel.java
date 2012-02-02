@@ -53,7 +53,7 @@ import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.chemet.ws.CachedChemicalWS;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.metabolomes.execs.CommandLineMain;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
