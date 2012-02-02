@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.GeneProduct;
 
@@ -44,13 +44,13 @@ public class Utilities {
      * @param entities
      * @return
      */
-    public static Collection<Metabolite> getMetabolites(Collection<AnnotatedEntity> entities) {
+    public static Collection<MetaboliteImplementation> getMetabolites(Collection<AnnotatedEntity> entities) {
 
-        Collection<Metabolite> metabolites = new ArrayList();
+        Collection<MetaboliteImplementation> metabolites = new ArrayList();
 
         for (AnnotatedEntity entity : entities) {
-            if (entity instanceof Metabolite) {
-                metabolites.add((Metabolite) entity);
+            if (entity instanceof MetaboliteImplementation) {
+                metabolites.add((MetaboliteImplementation) entity);
             }
         }
 

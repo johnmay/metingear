@@ -21,7 +21,6 @@ package mnb.io.resolve;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.io.IOException;
 import java.util.Collection;
 import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
@@ -30,10 +29,11 @@ import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
@@ -67,7 +67,7 @@ public class AutomatedReconciler
         this.factory = factory;
         this.template = factoryIdClass;
 
-        recon =  ReconstructionManager.getInstance().getActive();
+        recon = ReconstructionManager.getInstance().getActive();
         nameMap = HashMultimap.create();
         if (recon != null && !recon.getMetabolites().isEmpty()) {
             for (Metabolite m : recon.getMetabolites()) {
@@ -82,7 +82,7 @@ public class AutomatedReconciler
      * @param entry
      * @return @inheritDoc
      */
-    public AbstractAnnotatedEntity resolve(PreparsedEntry entry) {
+    public AnnotatedEntity resolve(PreparsedEntry entry) {
         if (entry instanceof PreparsedMetabolite) {
             return resolve((PreparsedMetabolite) entry);
         }
@@ -113,8 +113,10 @@ public class AutomatedReconciler
             }
         }
 
-        Metabolite metabolite = new Metabolite(BasicChemicalIdentifier.nextIdentifier(),
-                                               entry.getAbbreviation(), name);
+        Metabolite metabolite = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
+                                                                               BasicChemicalIdentifier.nextIdentifier(),
+                                                                               entry.getAbbreviation(),
+                                                                               name);
 
         for (int i = 1; i < names.length; i++) {
             metabolite.addAnnotation(new Synonym(names[i]));

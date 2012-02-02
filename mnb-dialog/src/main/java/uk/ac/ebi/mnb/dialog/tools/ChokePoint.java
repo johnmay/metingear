@@ -30,13 +30,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AuthorAnnotation;
+
 
 /**
  * @name    FindChokePoints - 2011.10.03 <br>
@@ -49,9 +50,11 @@ public class ChokePoint extends ControllerAction {
 
     private static final Logger LOGGER = Logger.getLogger(ChokePoint.class);
 
+
     public ChokePoint(MainController controller) {
         super(ChokePoint.class.getSimpleName(), controller);
     }
+
 
     public void actionPerformed(ActionEvent ae) {
 

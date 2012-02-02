@@ -24,7 +24,7 @@ import uk.ac.ebi.mnb.io.FileFilterManager;
 import uk.ac.ebi.mnb.io.ProjectFilter;
 import uk.ac.ebi.mnb.view.source.SourceController;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.io.core.ReconstructionInputStream;
+import uk.ac.ebi.io.core.DefaultReconstructionInputStream;
 import uk.ac.ebi.mnb.menu.FileMenu;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
@@ -87,7 +87,7 @@ public class OpenAction
                     Reconstruction recon = new Reconstruction(new ReconstructionIdentifier("Opened Recon"), "", "");
                     IntegerPreference buffer = CorePreferences.getInstance().getPreference("BUFFER_SIZE");
                     InputStream in = new GZIPInputStream(new FileInputStream(new File(choosenFile, "data")), buffer.get());
-                    ReconstructionInputStream ris = new ReconstructionInputStream(in, null); // marshal factory loaded from version
+                    DefaultReconstructionInputStream ris = new DefaultReconstructionInputStream(in, null); // marshal factory loaded from version
                     ris.read(recon);
                     ris.close();
                     long end = System.currentTimeMillis();

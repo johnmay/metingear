@@ -34,12 +34,13 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+
 
 /**
  *          ExportMetabolitesMDL - 2011.10.20 <br>
@@ -51,13 +52,17 @@ import uk.ac.ebi.interfaces.entities.EntityCollection;
 public class ExportMetabolitesMDL extends ControllerAction {
 
     private static final Logger LOGGER = Logger.getLogger(ExportMetabolitesMDL.class);
+
     private JFileChooser fileChooser;
+
     private MainController controller;
+
 
     public ExportMetabolitesMDL(MainController controller) {
         super(ExportMetabolitesMDL.class.getSimpleName(), controller);
         this.controller = controller;
     }
+
 
     public void actionPerformed(ActionEvent e) {
 
@@ -77,7 +82,7 @@ public class ExportMetabolitesMDL extends ControllerAction {
         File file = fileChooser.getSelectedFile();
 
         if (file.exists()) {
-            
+
             int option = JOptionPane.showConfirmDialog(fileChooser, "Are you sure you want to save overwrite '" + file + "' ?");
 
             if (option == JOptionPane.NO_OPTION) {

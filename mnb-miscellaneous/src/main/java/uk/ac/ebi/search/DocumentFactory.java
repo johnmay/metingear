@@ -30,10 +30,11 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
+
 
 /**
  *          DocumentFactory – 2011.09.28 <br>
@@ -45,6 +46,7 @@ import uk.ac.ebi.interfaces.Annotation;
 public class DocumentFactory {
 
     private static final Logger LOGGER = Logger.getLogger(DocumentFactory.class);
+
 
     public static Map<UUID, AnnotatedEntity> write(IndexWriter writer, Reconstruction recon)
             throws
@@ -71,6 +73,7 @@ public class DocumentFactory {
 
     }
 
+
     /**
      * Returns a searchable lucene document for a metabolite
      * @param metabolite
@@ -79,7 +82,7 @@ public class DocumentFactory {
     public static Document getDocument(MetabolicReaction reaction) {
 
         Document document = getDocument(new Document(),
-                (AnnotatedEntity) reaction, true);
+                                        (AnnotatedEntity) reaction, true);
 
         // add metabolite data
         for (Metabolite m : reaction.getAllReactionMolecules()) {
@@ -90,6 +93,7 @@ public class DocumentFactory {
 
     }
 
+
     /**
      * Returns a searchable lucene document for a metabolite
      * @param metabolite
@@ -98,12 +102,13 @@ public class DocumentFactory {
     public static Document getDocument(Metabolite metabolite) {
 
         Document entry = getDocument(new Document(),
-                (AnnotatedEntity) metabolite, true);
+                                     (AnnotatedEntity) metabolite, true);
 
 
         return entry;
 
     }
+
 
     /**
      * Returns a searchable lucene document for an AnnotatedEntity
@@ -112,32 +117,33 @@ public class DocumentFactory {
      * @return
      */
     public static Document getDocument(Document document,
-            AnnotatedEntity entity, boolean root) {
+                                       AnnotatedEntity entity, boolean root) {
 
 
         document.add(new Field(FieldType.ACCESSION.getName(), entity.getAccession(),
-                Field.Store.YES,
-                Field.Index.ANALYZED));
-        if(root)document.add(new Field(FieldType.TYPE.getName(),
-                entity.getBaseType(),
-                Field.Store.YES,
-                Field.Index.ANALYZED));
+                               Field.Store.YES,
+                               Field.Index.ANALYZED));
+        if (root) {
+            document.add(new Field(FieldType.TYPE.getName(),
+                                   entity.getBaseType(),
+                                   Field.Store.YES,
+                                   Field.Index.ANALYZED));
+        }
         if (entity.getName() != null) {
             document.add(new Field(FieldType.NAME.getName(),
-                    entity.getName(),
-                    Field.Store.YES, Field.Index.ANALYZED));
+                                   entity.getName(),
+                                   Field.Store.YES, Field.Index.ANALYZED));
         }
         if (entity.getAbbreviation() != null) {
             document.add(new Field(FieldType.ABBREVIATION.getName(),
-                    entity.getAbbreviation(),
-                    Field.Store.YES, Field.Index.ANALYZED));
+                                   entity.getAbbreviation(),
+                                   Field.Store.YES, Field.Index.ANALYZED));
         }
         // index annotations
 
         // xref
         for (Annotation annotation : entity.getAnnotations()) {
-            document.add(new Field(FieldType.ANNOTATION.getName(), annotation.toString()
-                    , Field.Store.YES, Field.Index.ANALYZED));
+            document.add(new Field(FieldType.ANNOTATION.getName(), annotation.toString(), Field.Store.YES, Field.Index.ANALYZED));
         }
 
 

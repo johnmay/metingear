@@ -23,9 +23,11 @@ package mnb.io.tabular;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+
 
 /**
  *          ProjectEntityResolver - 2011.12.05 <br>
@@ -37,8 +39,11 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 public class NamedEntityResolver implements EntityResolver {
 
     private static final Logger LOGGER = Logger.getLogger(NamedEntityResolver.class);
+
     private Map<String, Metabolite> nameMap = new HashMap<String, Metabolite>();
+
     private Map<String, Metabolite> created = new HashMap<String, Metabolite>();
+
 
     public NamedEntityResolver() {
 
@@ -54,10 +59,14 @@ public class NamedEntityResolver implements EntityResolver {
 
     }
 
+
     public Metabolite getNonReconciledMetabolite(String name) {
 
         if (!created.containsKey(name)) {
-            Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), "", name);
+            Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
+                                                                          BasicChemicalIdentifier.nextIdentifier(),
+                                                                          "",
+                                                                          "");
             created.put(name, m);
         }
 
@@ -65,9 +74,8 @@ public class NamedEntityResolver implements EntityResolver {
 
     }
 
+
     public Metabolite getReconciledMetabolite(String name) {
         return nameMap.get(name);
     }
-
-
 }

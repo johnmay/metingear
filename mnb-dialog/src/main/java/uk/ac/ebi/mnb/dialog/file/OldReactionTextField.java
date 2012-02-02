@@ -47,7 +47,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.Query;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -141,19 +141,19 @@ public class OldReactionTextField
 
         for (int i = 0; i < nR; i++) {
             Object p = participants.get(i);
-            if (p instanceof Metabolite) {
-                rxn.addReactant(new MetabolicParticipant((Metabolite) p));
+            if (p instanceof MetaboliteImplementation) {
+                rxn.addReactant(new MetabolicParticipant((MetaboliteImplementation) p));
             } else {
-                Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
+                MetaboliteImplementation m = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
                 rxn.addReactant(new MetabolicParticipant(m));
             }
         }
         for (int i = 0; i < nP; i++) {
             Object p = participants.get(i + nR);
-            if (p instanceof Metabolite) {
-                rxn.addProduct(new MetabolicParticipant((Metabolite) p));
+            if (p instanceof MetaboliteImplementation) {
+                rxn.addProduct(new MetabolicParticipant((MetaboliteImplementation) p));
             } else {
-                Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
+                MetaboliteImplementation m = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
                 rxn.addProduct(new MetabolicParticipant(m));
             }
         }
@@ -208,9 +208,9 @@ public class OldReactionTextField
             SearchableIndex index = search.getCurrentIndex();
 
             Query query = search.getQuery(fields, participant + "~");
-            query.combine(new Query[]{search.getQuery(FieldType.TYPE, Metabolite.BASE_TYPE)});
+            query.combine(new Query[]{search.getQuery(FieldType.TYPE, MetaboliteImplementation.BASE_TYPE)});
 
-            Collection<AnnotatedEntity> entities = index.getRankedEntities(query, N_SUGGESTIONS, Metabolite.class);
+            Collection<AnnotatedEntity> entities = index.getRankedEntities(query, N_SUGGESTIONS, MetaboliteImplementation.class);
 
             if (!entities.isEmpty()) {
                 model.removeAllElements();

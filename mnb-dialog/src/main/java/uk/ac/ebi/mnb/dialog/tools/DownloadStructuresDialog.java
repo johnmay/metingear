@@ -41,7 +41,7 @@ import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -126,9 +126,9 @@ public class DownloadStructuresDialog
         List<Identifier> problemIdentifiers = new ArrayList();
 
         int completed = 0;
-        int size = getSelection().get(Metabolite.class).size();
+        int size = getSelection().get(MetaboliteImplementation.class).size();
 
-        for (AnnotatedEntity component : getSelection().get(Metabolite.class)) {
+        for (AnnotatedEntity component : getSelection().get(MetaboliteImplementation.class)) {
 
             completed++;
 

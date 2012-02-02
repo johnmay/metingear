@@ -8,7 +8,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
@@ -42,21 +42,21 @@ public class ToolsMenu extends ContextMenu {
         add(create(AutomaticCrossReference.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(Metabolite.class);
+                return selection.hasSelection(MetaboliteImplementation.class);
             }
         });
 
         add(new CuratedReconciliation(view), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(Metabolite.class);
+                return selection.hasSelection(MetaboliteImplementation.class);
             }
         });
 
         add(create(DownloadStructuresDialog.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(Metabolite.class);
+                return selection.hasSelection(MetaboliteImplementation.class);
             }
         });
 
@@ -100,7 +100,7 @@ public class ToolsMenu extends ContextMenu {
         add(create(CollapseStructures.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(Metabolite.class);
+                return selection.hasSelection(MetaboliteImplementation.class);
 
             }
         });

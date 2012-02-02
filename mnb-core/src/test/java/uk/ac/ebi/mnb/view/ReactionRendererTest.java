@@ -13,7 +13,7 @@ import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.render.reaction.ReactionRenderer;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
@@ -28,8 +28,8 @@ public class ReactionRendererTest {
     @Test
     public void testRenderUniporterReaction() throws IOException {
 
-        Metabolite atp = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
-        Metabolite alanine = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
+        MetaboliteImplementation atp = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
+        MetaboliteImplementation alanine = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
 
         final MetabolicReaction rxn = new MetabolicReaction(BasicReactionIdentifier.nextIdentifier(), "up",
                                                             "uniportTest");

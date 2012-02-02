@@ -33,7 +33,7 @@ import javax.swing.JToggleButton;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.core.GeneImplementation;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Multimer;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RNAProduct;
@@ -95,7 +95,7 @@ public class ViewInfo {
         group.add(reactions);
 
 
-        buttonMap.put(Metabolite.BASE_TYPE, metabolites);
+        buttonMap.put(MetaboliteImplementation.BASE_TYPE, metabolites);
         buttonMap.put(Reaction.BASE_TYPE, reactions);
 
         buttonMap.put(ProteinProduct.BASE_TYPE, products);

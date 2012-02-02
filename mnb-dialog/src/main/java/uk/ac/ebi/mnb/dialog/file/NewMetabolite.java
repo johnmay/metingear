@@ -24,7 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.caf.report.ReportManager;
@@ -60,7 +60,7 @@ public class NewMetabolite extends NewEntity {
         ReconstructionManager manager = ReconstructionManager.getInstance();
         if (manager.hasProjects()) {
             Reconstruction reconstruction = manager.getActive();
-            Metabolite m = new Metabolite(getIdentifier(), getAbbreviation(), getName());
+            MetaboliteImplementation m = new MetaboliteImplementation(getIdentifier(), getAbbreviation(), getName());
             reconstruction.addMetabolite(m);
         }
     }

@@ -25,7 +25,7 @@ import ilog.concert.IloException;
 import java.awt.event.ActionEvent;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
@@ -71,7 +71,7 @@ public class NonProductionMetabolites
             LOGGER.debug("Root Non-Production Metabolites: " + Joiner.on(", ").join(indices));
 
             for (Integer i : indices) {
-                Metabolite metabolite = s.getMolecule(i).metabolite;
+                MetaboliteImplementation metabolite = s.getMolecule(i).metabolite;
                 manager.add(metabolite);
             }
 

@@ -34,7 +34,7 @@ import mnb.io.tabular.preparse.PreparsedSheet;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 /**
@@ -49,7 +49,7 @@ public class ExcelEntityResolver implements EntityResolver {
     private static final Logger LOGGER = Logger.getLogger(ExcelEntityResolver.class);
     private List<PreparsedMetabolite> entities = new ArrayList();
     private Map<String, PreparsedMetabolite> entityMap = new HashMap(); // abbreviation -> entitiy
-    private Map<String, Metabolite> nonReconciled = new HashMap();
+    private Map<String, MetaboliteImplementation> nonReconciled = new HashMap();
     private Properties p;
     private PreparsedSheet sheet;
     private EntryReconciler reconciler;
@@ -92,13 +92,13 @@ public class ExcelEntityResolver implements EntityResolver {
         return entityMap.get(abbreviation);
     }
 
-    public Metabolite getNonReconciledMetabolite(String name) {
+    public MetaboliteImplementation getNonReconciledMetabolite(String name) {
 
         if (nonReconciled.containsKey(name)) {
             return nonReconciled.get(name);
         }
 
-        Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), name, name);
+        MetaboliteImplementation m = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), name, name);
 
         nonReconciled.put(name, m);
 
@@ -110,16 +110,16 @@ public class ExcelEntityResolver implements EntityResolver {
      * @param abbreviation
      * @return
      */
-    public Metabolite getReconciledMetabolite(String abbreviation) {
+    public MetaboliteImplementation getReconciledMetabolite(String abbreviation) {
 
         // new resolution
         if (resolved.containsKey(abbreviation) == false) {                                  
-            Metabolite entry = (Metabolite) reconciler.resolve(getEntity(abbreviation));
+            MetaboliteImplementation entry = (MetaboliteImplementation) reconciler.resolve(getEntity(abbreviation));
             resolved.put(abbreviation, entry);
         }
 
         return resolved.get(abbreviation);
 
     }
-    private Map<String, Metabolite> resolved = new HashMap();
+    private Map<String, MetaboliteImplementation> resolved = new HashMap();
 }

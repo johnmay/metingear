@@ -44,7 +44,7 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.dialog.popup.AutoComplete;
 import uk.ac.ebi.search.FieldType;
@@ -66,7 +66,7 @@ public class ReactionField
     private static final Logger LOGGER = Logger.getLogger(ReactionField.class);
     private EntityValueAccessor accessor = new NameAccessor(); // list uses names
     private AutoComplete autocomplete;
-    private TermQuery typeFilter = new TermQuery(FieldType.TYPE.getTerm(Metabolite.BASE_TYPE));
+    private TermQuery typeFilter = new TermQuery(FieldType.TYPE.getTerm(MetaboliteImplementation.BASE_TYPE));
     private static String[] fields = new String[]{FieldType.NAME.getName(), FieldType.ABBREVIATION.getName()};
     private Replacement r = null;
     private DocumentListener listener;
@@ -184,7 +184,7 @@ public class ReactionField
 
                     List<AnnotatedEntity> entities = index.getRankedEntities(baseQuery,
                                                                              25,
-                                                                             Metabolite.class);
+                                                                             MetaboliteImplementation.class);
 
                     LOGGER.info("Suggestions for '" + r.text + "' :" + entities);
 

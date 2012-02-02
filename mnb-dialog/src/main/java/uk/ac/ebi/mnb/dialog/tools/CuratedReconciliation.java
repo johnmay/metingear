@@ -30,8 +30,8 @@ import java.util.List;
 import javax.swing.JFrame;
 import mnb.io.resolve.CandidateSelector;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.core.metabolite.MetaboliteClass;
+import uk.ac.ebi.core.MetaboliteImplementation;
+import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
 import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.io.service.KEGGCompoundNameService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
@@ -78,9 +78,9 @@ public class CuratedReconciliation
         factories.add(new CandidateFactory<ChEBIIdentifier>(ChEBINameService.getInstance(), new ChemicalFingerprintEncoder()));
         factories.add(new CandidateFactory<KEGGCompoundIdentifier>(KEGGCompoundNameService.getInstance(), new ChemicalFingerprintEncoder()));
 
-        for (Metabolite metabolite : manager.get(Metabolite.class)) {
+        for (MetaboliteImplementation metabolite : manager.get(MetaboliteImplementation.class)) {
 
-            if (metabolite.getType() != MetaboliteClass.PROTEIN) {
+            if (metabolite.getType() != MetaboliteClassImplementation.PROTEIN) {
 
                 Collection<SynonymCandidateEntry> candidates = new ArrayList<SynonymCandidateEntry>();
 

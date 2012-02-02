@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
@@ -35,10 +34,11 @@ import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
@@ -95,7 +95,7 @@ public class ListSelectionReconciler implements EntryReconciler {
      * @param entry
      * @return @inheritDoc
      */
-    public AbstractAnnotatedEntity resolve(PreparsedEntry entry) {
+    public AnnotatedEntity resolve(PreparsedEntry entry) {
         if (entry instanceof PreparsedMetabolite) {
             return resolve((PreparsedMetabolite) entry);
         }
@@ -128,7 +128,10 @@ public class ListSelectionReconciler implements EntryReconciler {
 
 
 
-        Metabolite metabolite = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), entry.getAbbreviation(), name);
+        Metabolite metabolite = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
+                                                                               BasicChemicalIdentifier.nextIdentifier(),
+                                                                               entry.getAbbreviation(),
+                                                                               name);
 
         for (int i = 1; i < names.length; i++) {
             metabolite.addAnnotation(new Synonym(names[i]));

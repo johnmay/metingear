@@ -39,13 +39,14 @@ import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
+
 
 /**
  *          ReactionParser – 2011.08.31 <br>
@@ -58,22 +59,32 @@ public class ReactionParser {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionParser.class);
     // Reaction arrow matcher (note excess space is gobbeled up in split)
+
     public static final Pattern EQUATION_ARROW = Pattern.compile("(<[-=]+>)|(<[-=]*)|([-=]*>)");
+
     public static final Pattern EQUATION_ADDITION = Pattern.compile("\\s+[+]\\s+");
+
     private static final Pattern REACTION_COMPARTMENT =
                                  Pattern.compile("\\A\\[(\\w{1,2})\\]\\s*:");
+
     public static final Pattern DOUBLE_PATTERN =
                                 Pattern.compile("([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?)");
+
     public static final Pattern COEFFICIENT_PATTERN =
                                 Pattern.compile("\\A" + DOUBLE_PATTERN.pattern() + "\\s+" + "|\\(" + DOUBLE_PATTERN.pattern() + "\\)");
+
     public static final Pattern COMPARTMENT_PATTERN =
                                 Pattern.compile("[\\(\\[](\\w{1,2})[\\)\\]]");
+
     private static final Reversibility[] NORMALISED_ARROWS =
                                          new Reversibility[]{Reversibility.REVERSIBLE,
                                                              Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT,
                                                              Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT};
+
     private EntityResolver entites;
+
     private Set<Report> messages = new HashSet();
+
 
     /**
      * Determines whether an item contains listed items.
@@ -84,11 +95,13 @@ public class ReactionParser {
         return str.contains("[|,;]") || str.contains("\\sand\\s|\\sor\\s|&");
     }
 
+
     public ReactionParser(EntityResolver entityResolver) {
         entites = entityResolver;
     }
 
     // attrb include the entitysheet (if available)
+
     public MetabolicReaction parseReaction(PreparsedReaction reaction) throws UnparsableReactionError {
 
         String equation = reaction.getEquation();
@@ -116,6 +129,7 @@ public class ReactionParser {
      *
      */
     private static int ticker = 0;
+
 
     public MetabolicReaction parseTwoSidedReaction(PreparsedReaction reaction,
                                                    String[] equationSides) throws UnparsableReactionError {
@@ -175,6 +189,7 @@ public class ReactionParser {
 
     }
 
+
     /**
      * Only have left side (or some weird reaction operator)
      */
@@ -199,7 +214,7 @@ public class ReactionParser {
                                reaction)) {
             rxn.addReactant(p);
         }
-        
+
 
         rxn.setReversibility(getReactionArrow(reaction.getEquation()));
 
@@ -229,9 +244,10 @@ public class ReactionParser {
         return rxn;
     }
 
+
     public List<MetabolicParticipant> parseParticipants(String equationSide,
-                                                         Compartment defaultCompartment,
-                                                         PreparsedReaction reaction) throws UnparsableReactionError {
+                                                        Compartment defaultCompartment,
+                                                        PreparsedReaction reaction) throws UnparsableReactionError {
 
         List<MetabolicParticipant> parsedParticipants = new ArrayList();
 
@@ -244,6 +260,7 @@ public class ReactionParser {
 
     }
 
+
     public Collection<Report> collectMessages() {
         Set collected = new HashSet();
         collected.addAll(messages);
@@ -251,9 +268,10 @@ public class ReactionParser {
         return collected;
     }
 
+
     public MetabolicParticipant parseParticipant(final String participant,
-                                                  final Compartment defaultCompartment,
-                                                  final PreparsedReaction rxn) throws UnparsableReactionError {
+                                                 final Compartment defaultCompartment,
+                                                 final PreparsedReaction rxn) throws UnparsableReactionError {
 
         String entityAbbr = participant.trim();
         String entityAbbrComp = entityAbbr;
@@ -282,16 +300,17 @@ public class ReactionParser {
 
         if (entity != null) {
             // System.out.println( coef + " " + entity.getName() + " " + compartment );
-            return new MetabolicParticipant(entity, coef,
-                                             compartment);
+            return new MetabolicParticipant(entity,
+                                            coef,
+                                            compartment);
         } else {
             messages.add(new WarningMessage("The metabolite "
                                             + entityAbbr.trim()
                                             + " was not found in the metabolite sheet for reaction " + rxn));
             entity = entites.getNonReconciledMetabolite(entityAbbr);
             return new MetabolicParticipant(entity,
-                                             coef,
-                                             compartment);
+                                            coef,
+                                            compartment);
         }
 
 
@@ -306,13 +325,16 @@ public class ReactionParser {
         // 35FGD+1400DH 1) 35FGD+1400DH 2) 35FGD 1400DH 3) FGD, DH
     }
 
+
     public Participant[] parseReactionSide(String reactionSide) {
         return new Participant[0];
     }
 
+
     public String[] getReactionSides(String equation) {
         return EQUATION_ARROW.split(equation.trim());
     }
+
 
     public static Reversibility getReactionArrow(String equation) {
 

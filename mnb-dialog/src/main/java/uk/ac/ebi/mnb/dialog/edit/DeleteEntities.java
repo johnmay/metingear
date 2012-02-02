@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.dialog.edit;
 import java.awt.event.ActionEvent;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -52,8 +52,8 @@ public class DeleteEntities extends ControllerAction {
         EntityCollection selection = getSelection();
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
         for (AnnotatedEntity entity : selection.getEntities()) {
-            if (entity instanceof Metabolite) {
-                recon.getMetabolites().remove((Metabolite) entity);
+            if (entity instanceof MetaboliteImplementation) {
+                recon.getMetabolites().remove((MetaboliteImplementation) entity);
             } else if (entity instanceof MetabolicReaction) {
                 recon.getReactions().remove((MetabolicReaction) entity);
             } else if (entity instanceof GeneProduct) {

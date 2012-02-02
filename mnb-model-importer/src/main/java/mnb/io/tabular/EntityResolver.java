@@ -20,7 +20,8 @@
  */
 package mnb.io.tabular;
 
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+
 
 /**
  *          EntityResolver - 2011.12.05 <br>
@@ -32,6 +33,7 @@ import uk.ac.ebi.core.Metabolite;
 public interface EntityResolver {
 
     public Metabolite getNonReconciledMetabolite(String abbreviation);
+
 
     public Metabolite getReconciledMetabolite(String abbreviation);
 }

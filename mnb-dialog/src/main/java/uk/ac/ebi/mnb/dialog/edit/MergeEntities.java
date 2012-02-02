@@ -28,7 +28,7 @@ import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -76,16 +76,16 @@ public class MergeEntities extends ControllerDialog {
     public void process() {
 
         selection = getSelection();
-        Collection<Metabolite> entities = selection.get(Metabolite.class);
+        Collection<MetaboliteImplementation> entities = selection.get(MetaboliteImplementation.class);
         // create a new metabolite consisting of the other two.
         // find them in all reactions and update reactions also
-        Metabolite n = null;
+        MetaboliteImplementation n = null;
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
 
-        for (Metabolite m : entities) {
+        for (MetaboliteImplementation m : entities) {
 
             if (n == null) {
-                n = new Metabolite(m.getIdentifier(), null, null);
+                n = new MetaboliteImplementation(m.getIdentifier(), null, null);
             }
             if (n.getName() == null) {
                 n.setName(m.getName());

@@ -30,7 +30,7 @@ import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.GeneImplementation;
@@ -98,7 +98,7 @@ public class ProjectView
 
 
         viewMap = new HashMap();
-        viewMap.put(Metabolite.BASE_TYPE, metabolites);
+        viewMap.put(MetaboliteImplementation.BASE_TYPE, metabolites);
         viewMap.put(Reaction.BASE_TYPE, reactions);
 
         viewMap.put(ProteinProduct.BASE_TYPE, products);
@@ -155,7 +155,7 @@ public class ProjectView
 
     public void setMetaboliteView() {
         layout.show(this, metabolites.getClass().getSimpleName());
-        selector.setSelected(Metabolite.BASE_TYPE);
+        selector.setSelected(MetaboliteImplementation.BASE_TYPE);
     }
 
     public void setGeneView() {
@@ -228,7 +228,7 @@ public class ProjectView
         if (selection.getGeneProducts().isEmpty() == false) {
             products.update(selection);
         }
-        if (selection.hasSelection(Metabolite.class)) {
+        if (selection.hasSelection(MetaboliteImplementation.class)) {
             metabolites.update(selection);
         }
         if (selection.hasSelection(MetabolicReaction.class)) {

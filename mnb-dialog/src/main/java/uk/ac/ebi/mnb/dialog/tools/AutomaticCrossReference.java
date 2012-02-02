@@ -36,7 +36,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.io.service.KEGGCompoundNameService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
@@ -103,7 +103,7 @@ public class AutomaticCrossReference
 
     @Override
     public void process() {
-        Collection<Metabolite> metabolties = getSelection().get(Metabolite.class);
+        Collection<MetaboliteImplementation> metabolties = getSelection().get(MetaboliteImplementation.class);
 
         boolean useChEBI = chebi.isSelected();
         boolean useKegg = kegg.isSelected();
@@ -119,7 +119,7 @@ public class AutomaticCrossReference
             factories.add(new CandidateFactory(KEGGCompoundNameService.getInstance(), new ChemicalFingerprintEncoder()));
         }
 
-        for (Metabolite metabolite : metabolties) {
+        for (MetaboliteImplementation metabolite : metabolties) {
             for (CandidateFactory factory : factories) {
                 Multimap<Integer, CandidateEntry> map = factory.getSynonymCandidates(metabolite.getName());
                 if (map.containsKey(0)) {

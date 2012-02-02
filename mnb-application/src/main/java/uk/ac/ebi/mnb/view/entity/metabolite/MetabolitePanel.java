@@ -33,9 +33,9 @@ import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.core.metabolite.MetaboliteClass;
+import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
@@ -57,7 +57,7 @@ public class MetabolitePanel
         extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolitePanel.class);
-    private Metabolite entity;
+    private MetaboliteImplementation entity;
     // chemical structure
     private JLabel structureWarning = LabelFactory.newLabel("No Structure");
     private JLabel structure = LabelFactory.newLabel("No Structure");
@@ -68,7 +68,7 @@ public class MetabolitePanel
     // metabolic class
     private JLabel type = LabelFactory.newFormLabel("Type:");
     private JLabel typeViewer = LabelFactory.newLabel("");
-    private JComboBox typeEditor = new MComboBox(MetaboliteClass.values());
+    private JComboBox typeEditor = new MComboBox(MetaboliteClassImplementation.values());
     // molecular formula
     private JTextField formulaEditor = FieldFactory.newTransparentField(15, false);
     private JLabel formularViewer = LabelFactory.newLabel("");
@@ -121,7 +121,7 @@ public class MetabolitePanel
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
-        this.entity = (Metabolite) entity;
+        this.entity = (MetaboliteImplementation) entity;
         return super.setEntity(entity);
     }
 
@@ -201,6 +201,6 @@ public class MetabolitePanel
         }
 
         entity.setGeneric(((String) markushEditor.getSelectedItem()).equals("Yes") ? true : false);
-        entity.setType((MetaboliteClass) typeEditor.getSelectedItem());
+        entity.setType((MetaboliteClassImplementation) typeEditor.getSelectedItem());
     }
 }

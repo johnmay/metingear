@@ -29,9 +29,10 @@ import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.core.CorePreferences;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.io.core.ReconstructionOutputStream;
+import uk.ac.ebi.io.core.DefaultReconstructionOutputStream;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.main.MainView;
 
@@ -66,7 +67,7 @@ public class SaveAction extends GeneralAction {
             OutputStream out = new GZIPOutputStream(new FileOutputStream(new File("/Users/johnmay/" + reconstruction.getContainer(), "data")),
                                                     bufferPref.get());
 
-            ReconstructionOutputStream ros = new ReconstructionOutputStream(out, new Version(0, 8, 5, 0));
+            DefaultReconstructionOutputStream ros = new DefaultReconstructionOutputStream(out, new Version(0, 8, 5, 0), DefaultEntityFactory.getInstance());
 
             long start = System.currentTimeMillis();
             ros.write(reconstruction);
