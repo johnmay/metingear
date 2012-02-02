@@ -42,6 +42,7 @@ import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.io.xml.SBMLReactionReader;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.caf.report.Report;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
@@ -112,7 +113,7 @@ public class ImportSBML extends DelayedBuildAction {
                     InputStream in = null;
                     try {
                         in = new BufferedInputStream(new FileInputStream(choosen), 4096);
-                        SBMLReactionReader reader = new SBMLReactionReader(in);
+                        SBMLReactionReader reader = new SBMLReactionReader(in, DefaultEntityFactory.getInstance());
                         while (reader.hasNext()) {
 
                             try {

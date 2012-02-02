@@ -74,40 +74,18 @@ public class CuratedReconciliation
 
         EntityCollection manager = getSelection();
 
-        List<CandidateFactory> factories = new ArrayList<CandidateFactory>();
-        factories.add(new CandidateFactory<ChEBIIdentifier>(ChEBINameService.getInstance(), new ChemicalFingerprintEncoder()));
-        factories.add(new CandidateFactory<KEGGCompoundIdentifier>(KEGGCompoundNameService.getInstance(), new ChemicalFingerprintEncoder()));
+        dialog.setSkipall(false); // reset the skip-all flag
 
         for (MetaboliteImplementation metabolite : manager.get(MetaboliteImplementation.class)) {
 
             if (metabolite.getType() != MetaboliteClassImplementation.PROTEIN) {
-
-                Collection<SynonymCandidateEntry> candidates = new ArrayList<SynonymCandidateEntry>();
-
-
-                Multimap<Integer, SynonymCandidateEntry> map = HashMultimap.create();
-                for (CandidateFactory factory : factories) {
-                    map.putAll(factory.getFuzzySynonymCandidates(metabolite.getName()));
-                }
-                List<Integer> scores = new ArrayList<Integer>(map.keySet());
-                Collections.sort(scores);
-                for (Integer score : scores) {
-                    candidates.addAll(map.get(score));
-                }
-
-                dialog.setup(metabolite, candidates);
+                dialog.setup(metabolite);
                 dialog.setVisible(true);
-                if (dialog.okaySelected()) {
-                    Collection<uk.ac.ebi.interfaces.entities.Metabolite> selected = dialog.getSelected();
-                    for (uk.ac.ebi.interfaces.entities.Metabolite m : selected) {
-                        metabolite.addAnnotations(m.getAnnotations());
-                        m.addAnnotation(new CrossReference(m.getIdentifier()));
-                    }
-                }
-
             }
 
         }
+
+        super.update(manager);
 
     }
 }

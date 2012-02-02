@@ -33,6 +33,7 @@ import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.optimise.SimulationUtil;
 import uk.ac.ebi.optimise.gap.GapFind;
 
@@ -71,7 +72,7 @@ public class NonProductionMetabolites
             LOGGER.debug("Root Non-Production Metabolites: " + Joiner.on(", ").join(indices));
 
             for (Integer i : indices) {
-                MetaboliteImplementation metabolite = s.getMolecule(i).metabolite;
+                Metabolite metabolite = s.getMolecule(i).metabolite;
                 manager.add(metabolite);
             }
 
