@@ -33,7 +33,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -42,6 +41,7 @@ import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.render.reaction.ReactionRenderer;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 
@@ -134,8 +134,8 @@ public class ReactionPanel
 
         int size = entity.getAllReactionMolecules().size();
 
-        List<MetaboliteImplementation> reactants = entity.getReactantMolecules();
-        List<MetaboliteImplementation> products = entity.getProductMolecules();
+        List<Metabolite> reactants = entity.getReactantMolecules();
+        List<Metabolite> products = entity.getProductMolecules();
         String columnLayout = "";
         for (int i = 0; i < reactants.size(); i++) {
             columnLayout = columnLayout + 128 + "px" + ", ";
@@ -156,7 +156,7 @@ public class ReactionPanel
 
         int columnIndex = 1;
         for (int i = 0; i < reactants.size(); i++) {
-            MetaboliteImplementation m = reactants.get(i);
+            Metabolite m = reactants.get(i);
             Double coef = entity.getReactantStoichiometries().get(i);
             String coefString = coef == 1d ? "" : coef % 1 == 0 ? String.format("%.0f ", coef) : coef.toString() + " ";
 
@@ -173,7 +173,7 @@ public class ReactionPanel
         }
         columnIndex += 1; // hop over reaction arrow
         for (int i = 0; i < products.size(); i++) {
-            MetaboliteImplementation m = products.get(i);
+            Metabolite m = products.get(i);
             Double coef = entity.getProductStoichiometries().get(i);
             String coefString = coef == 1d ? "" : coef % 1 == 0 ? String.format("%.0f ", coef) : coef.toString() + " ";
 

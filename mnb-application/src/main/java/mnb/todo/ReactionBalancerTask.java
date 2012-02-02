@@ -21,6 +21,7 @@ import java.util.List;
 import uk.ac.ebi.mnb.core.ModelUtils;
 import org.openscience.cdk.interfaces.IMolecule;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
+import uk.ac.ebi.interfaces.entities.Entity;
 
 /**
  * ReactionBalancerTask.java
@@ -85,5 +86,10 @@ public class ReactionBalancerTask
     @Override
     public void postrun() {
         //   throw new UnsupportedOperationException( "Not supported yet." );
+    }
+
+
+    public Entity newInstance() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

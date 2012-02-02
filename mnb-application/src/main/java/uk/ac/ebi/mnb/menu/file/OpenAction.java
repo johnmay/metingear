@@ -18,6 +18,7 @@ import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.core.CorePreferences;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.io.FileFilterManager;
@@ -39,32 +40,32 @@ import uk.ac.ebi.resource.ReconstructionIdentifier;
  */
 public class OpenAction
         extends FileChooserAction {
-
+    
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
             OpenAction.class);
-
+    
     private FileMenu menu;
-
+    
     private File fixedFile;
-
-
+    
+    
     public OpenAction(FileMenu menu) {
         super("OpenProject");
         this.menu = menu;
     }
-
-
+    
+    
     public OpenAction(FileMenu menu, File file) {
         super("");
         this.menu = menu;
         this.fixedFile = file;
         putValue(Action.NAME, file.toString());
     }
-
+    
     ProjectFilter projFilter = FileFilterManager.getInstance().getProjectFilter();
-
-
+    
+    
     @Override
     public void activateActions() {
 
@@ -79,7 +80,7 @@ public class OpenAction
             getChooser().setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
             choosenFile = getFile(showOpenDialog());
         }
-
+        
         if (choosenFile != null) {
             try {
                 {
@@ -87,14 +88,14 @@ public class OpenAction
                     Reconstruction recon = new Reconstruction(new ReconstructionIdentifier("Opened Recon"), "", "");
                     IntegerPreference buffer = CorePreferences.getInstance().getPreference("BUFFER_SIZE");
                     InputStream in = new GZIPInputStream(new FileInputStream(new File(choosenFile, "data")), buffer.get());
-                    DefaultReconstructionInputStream ris = new DefaultReconstructionInputStream(in, null); // marshal factory loaded from version
+                    DefaultReconstructionInputStream ris = new DefaultReconstructionInputStream(in, DefaultEntityFactory.getInstance()); // marshal factory loaded from version
                     ris.read(recon);
                     ris.close();
                     long end = System.currentTimeMillis();
                     logger.info("Loaded project data in " + (end - start) + " (ms)");
                     ReconstructionManager.getInstance().setActiveReconstruction(recon);
                 }
-
+                
                 SourceController controller = MainView.getInstance().getSourceListController();
                 MainView.getInstance().getViewController().update();
                 {
@@ -102,14 +103,14 @@ public class OpenAction
                     controller.update();
                     long end = System.currentTimeMillis();
                     logger.info("Update source list in " + (end - start) + " (ms)");
-
+                    
                 }
 
                 // fire signal at the open recent items menu
                 menu.rebuildRecentlyOpen();
                 MainView.getInstance().getJMenuBar().updateContext();
-
-
+                
+                
             } catch (IOException ex) {
                 MainView.getInstance().addErrorMessage(
                         "Unable to load project " + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
@@ -122,17 +123,17 @@ public class OpenAction
             }
         }
     }
-
-
+    
+    
     private class MNBFileView
             extends FileView {
-
+        
         @Override
         public Boolean isTraversable(File f) {
             return !projFilter.accept(f);
         }
-
-
+        
+        
         @Override
         public Icon getIcon(File f) {
             if (projFilter.accept(f)) {

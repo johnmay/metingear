@@ -60,12 +60,10 @@ public class FileMenu
         add(create(NewMetabolite.class), activeProject);
         add(create(NewReaction.class), activeProject);
         add(create(NewProteinProduct.class), activeProject);
-        add(new OpenProjectAction(this));
         add(new OpenAction(this));
         add(recent);
         add(new JSeparator());
         add(new CloseProject(true), activeProject);
-        add(new SaveProjectAction(), activeProject);
         add(new SaveAction(), activeProject);
         add(saveAs, activeProject);
         add(new JSeparator());
@@ -101,12 +99,12 @@ public class FileMenu
 
     public void rebuildRecentlyOpen() {
         recent.removeAll(); // could just add and remove items... but for now
-        LinkedList<String> items = ReconstructionManager.getInstance().getInstance().getRecent();
+        LinkedList<String> items = ReconstructionManager.getInstance().getRecent();
         for (int i = items.size() - 1; i >= 0; i--) {
             String path = items.get(i);
             File file = new File(path);
             if (file.exists()) {
-                recent.add(new JMenuItem(new OpenProjectAction(this, file)));
+                recent.add(new JMenuItem(new OpenAction(this, file)));
             }
         }
 
