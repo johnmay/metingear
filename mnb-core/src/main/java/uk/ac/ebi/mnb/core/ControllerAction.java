@@ -25,6 +25,7 @@ import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 
+
 /**
  * @name    SelectionAction - 2011.10.03 <br>
  *          Controller action is action that delegates calls to MainController
@@ -38,10 +39,12 @@ public abstract class ControllerAction extends GeneralAction {
 
     private MainController controller;
 
+
     public ControllerAction(String command, MainController controller) {
         super(command);
         this.controller = controller;
     }
+
 
     /**
      * Access the selection from the MainController child, ViewController.
@@ -51,17 +54,26 @@ public abstract class ControllerAction extends GeneralAction {
         return controller.getViewController().getSelection();
     }
 
+
     public boolean setSelection(EntityCollection selection) {
         return controller.getViewController().setSelection(selection);
     }
+
 
     public void addMessage(Report report) {
         controller.getMessageManager().addReport(report);
     }
 
+
     public boolean update() {
         return controller.update();
     }
+
+
+    public boolean update(EntityCollection collection) {
+        return controller.update(collection);
+    }
+
 
     public MainController getController() {
         return controller;

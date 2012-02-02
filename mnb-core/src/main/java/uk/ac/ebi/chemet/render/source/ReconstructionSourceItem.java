@@ -1,4 +1,3 @@
-
 /**
  * MetaboliteSourceItem.java
  *
@@ -40,7 +39,7 @@ import uk.ac.ebi.chemet.render.ViewUtilities;
  * @author  $Author$ (this version)
  */
 public class ReconstructionSourceItem
-  extends EntitySourceItem {
+        extends EntitySourceItem {
 
     private static final Logger LOGGER = Logger.getLogger(ReconstructionSourceItem.class);
 
@@ -63,7 +62,7 @@ public class ReconstructionSourceItem
     @Override
     public void update() {
         ReconstructionManager manger = ReconstructionManager.getInstance();
-        Reconstruction active = manger.getActiveReconstruction();
+        Reconstruction active = manger.getActive();
         setText(getEntity().getAccession() + (getEntity() == active ? " (active)" : ""));
     }
 
@@ -72,7 +71,4 @@ public class ReconstructionSourceItem
     public void remove(SourceListModel model) {
         model.removeItemFromCategory(this, (SourceListCategory) super.container);
     }
-
-
 }
-
