@@ -49,6 +49,7 @@ import java.awt.CardLayout;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import mnb.io.resolve.AutomatedReconciler;
 import mnb.io.resolve.EntryReconciler;
 import mnb.io.resolve.ListSelectionReconciler;
 import mnb.io.tabular.ExcelEntityResolver;
@@ -73,6 +74,7 @@ import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
+
 /**
  * @name    ExcelWizzard
  * @date    2011.08.04
@@ -86,16 +88,27 @@ public class ExcelImportDialog
         extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(ExcelImportDialog.class);
+
     private CardLayout layout = new CardLayout();
+
     private int activeStage = 0;
+
     private SheetChooserDialog sheetChooserDialog;
+
     private ReactionColumnChooser reactionColumnChooser;
+
     private JPanel shiftPanel = PanelFactory.createDialogPanel();
+
     private WizzardStage[] stages = new WizzardStage[4];
+
     private Reconstruction reconstruction;
+
     private CellConstraints cc = new CellConstraints();
+
     private JLabel label;
+
     private JFrame frame;
+
 
     public ExcelImportDialog(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits, Reconstruction reconstruction, File file, ExcelHelper helper) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
@@ -125,6 +138,7 @@ public class ExcelImportDialog
 
     }
 
+
     @Override
     public JLabel getDescription() {
         label = super.getDescription();
@@ -132,10 +146,12 @@ public class ExcelImportDialog
         return label;
     }
 
+
     @Override
     public JPanel getOptions() {
         return shiftPanel;
     }
+
 
     @Override
     public JPanel getNavigation() {
@@ -152,15 +168,21 @@ public class ExcelImportDialog
 
         return panel;
     }
+
     private ExcelModelProperties properties;
+
 
     @Override
     public void process() {
         // do nothing
     }
 
+
     @Override
     public void process(final SpinningDialWaitIndicator waitIndicator) {
+
+
+        stages[activeStage].updateSelection(); // get final options
 
         if (reconstruction == null) {
             addMessage(new ErrorMessage("No active reconstruction - please open an existing reconstruction or create a new one"));
@@ -205,8 +227,8 @@ public class ExcelImportDialog
                                                   new ChemicalFingerprintEncoder());
 
             // todo should be selectable
-            EntryReconciler reconciler = //new AutomatedReconciler(factory, new ChEBIIdentifier());
-                            new ListSelectionReconciler(frame, factory, new ChEBIIdentifier());
+            EntryReconciler reconciler = Boolean.parseBoolean(properties.getProperty("import.skip")) ? new AutomatedReconciler(factory, new ChEBIIdentifier())
+                                         : new ListSelectionReconciler(frame, factory, new ChEBIIdentifier());
 
             ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler);
             parser = new ReactionParser(entitySheet);
@@ -260,16 +282,19 @@ public class ExcelImportDialog
 
     }
 
+
     @Override
     public boolean update() {
         return true;
     }
+
 
     public class NextPanel extends GeneralAction {
 
         public NextPanel() {
             super("ExcelImporterNext");
         }
+
 
         public void actionPerformed(ActionEvent e) {
             if (stages[activeStage].updateSelection()) {
@@ -286,8 +311,11 @@ public class ExcelImportDialog
             }
         }
     }
+
     private Dimension orgSize;
+
     private Dimension shiftSize;
+
 
     @Override
     public Dimension getPreferredSize() {
@@ -304,11 +332,13 @@ public class ExcelImportDialog
 
     }
 
+
     public class PrevPanel extends GeneralAction {
 
         public PrevPanel() {
             super("ExcelImporterPrev");
         }
+
 
         public void actionPerformed(ActionEvent e) {
 

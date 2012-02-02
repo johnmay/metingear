@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.MCheckBox;
 
+
 /**
  *          ImportPanel – 2011.09.26 <br>
  *          Class description
@@ -42,10 +43,15 @@ public class AdditionalOptions
         implements WizzardStage {
 
     private static final Logger LOGGER = Logger.getLogger(AdditionalOptions.class);
+
     private ExcelModelProperties properties;
+
     private JCheckBox chebi = new MCheckBox("chebi");
+
     private JCheckBox kegg = new MCheckBox("kegg");
-    private JCheckBox skip = new MCheckBox("Skip Manual Assignment (can be completed manual)");
+
+    private JCheckBox skip = new MCheckBox("Skip Curated Assignment (can be done later)");
+
 
     public AdditionalOptions(ExcelModelProperties properties) {
         this.properties = properties;
@@ -53,13 +59,12 @@ public class AdditionalOptions
     }
 
 
-
     private void init() {
         setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p, 4dlu, p"));
         CellConstraints cc = new CellConstraints();
 
         add(LabelFactory.newHTMLLabel("Please select which resources should be"
-                       + "used to reconcile chemical <br> names"), cc.xy(1, 1));
+                                      + "used to reconcile chemical <br> names"), cc.xy(1, 1));
 
         add(chebi, cc.xy(1, 5));
         add(kegg, cc.xy(3, 5));
@@ -68,23 +73,28 @@ public class AdditionalOptions
 
     }
 
+
     public Boolean updateSelection() {
 
         properties.put("import.ws.chebi", Boolean.toString(chebi.isSelected()));
         properties.put("import.ws.kegg", Boolean.toString(kegg.isSelected()));
-
+        properties.put("import.skip", Boolean.toString(skip.isSelected()));
 
         return true;
     }
 
+
     public void reloadPanel() {
         init();
     }
+
     private JProgressBar bar = new JProgressBar();
+
 
     public JProgressBar getProgressBar() {
         return bar;
     }
+
 
     public String getDescription() {
         return "<html>Please confirm additional options</html>";
