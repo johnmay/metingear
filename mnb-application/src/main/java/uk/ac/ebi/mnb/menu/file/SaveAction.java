@@ -64,7 +64,7 @@ public class SaveAction extends GeneralAction {
             Reconstruction reconstruction = manager.getActive();
 
             IntegerPreference bufferPref = CorePreferences.getInstance().getPreference("BUFFER_SIZE");
-            File f = new File(System.getProperty("user.home") + File.pathSeparator + reconstruction.getContainer(), "data");
+            File f = new File(System.getProperty("user.home") + File.separator + reconstruction.getContainer(), "data");
             new File(f.getParent()).mkdirs();
             OutputStream out = new GZIPOutputStream(new FileOutputStream(f),
                                                     bufferPref.get());
