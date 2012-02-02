@@ -46,11 +46,9 @@ import mnb.io.tabular.parser.ReactionParser;
 import org.apache.log4j.Logger;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.Query;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.core.reaction.MetaboliteParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
@@ -144,19 +142,19 @@ public class OldReactionTextField
         for (int i = 0; i < nR; i++) {
             Object p = participants.get(i);
             if (p instanceof Metabolite) {
-                rxn.addReactant(new MetaboliteParticipant((Metabolite) p));
+                rxn.addReactant(new MetabolicParticipant((Metabolite) p));
             } else {
                 Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
-                rxn.addReactant(new MetaboliteParticipant(m));
+                rxn.addReactant(new MetabolicParticipant(m));
             }
         }
         for (int i = 0; i < nP; i++) {
             Object p = participants.get(i + nR);
             if (p instanceof Metabolite) {
-                rxn.addProduct(new MetaboliteParticipant((Metabolite) p));
+                rxn.addProduct(new MetabolicParticipant((Metabolite) p));
             } else {
                 Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
-                rxn.addProduct(new MetaboliteParticipant(m));
+                rxn.addProduct(new MetabolicParticipant(m));
             }
         }
 

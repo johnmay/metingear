@@ -39,10 +39,10 @@ import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.core.reaction.MetaboliteParticipant;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.caf.report.Report;
+import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
@@ -133,13 +133,13 @@ public class ReactionParser {
             equationSides[0] = reactionCompartment.replaceAll("");
         }
 
-        for (MetaboliteParticipant p :
+        for (MetabolicParticipant p :
              parseParticipants(equationSides[0],
                                defaultCompartment,
                                reaction)) {
             rxn.addReactant(p);
         }
-        for (MetaboliteParticipant p :
+        for (MetabolicParticipant p :
              parseParticipants(equationSides[1],
                                defaultCompartment,
                                reaction)) {
@@ -193,7 +193,7 @@ public class ReactionParser {
             equationSide = reactionCompartment.replaceAll("");
         }
 
-        for (MetaboliteParticipant p :
+        for (MetabolicParticipant p :
              parseParticipants(equationSide,
                                defaultCompartment,
                                reaction)) {
@@ -229,11 +229,11 @@ public class ReactionParser {
         return rxn;
     }
 
-    public List<MetaboliteParticipant> parseParticipants(String equationSide,
+    public List<MetabolicParticipant> parseParticipants(String equationSide,
                                                          Compartment defaultCompartment,
                                                          PreparsedReaction reaction) throws UnparsableReactionError {
 
-        List<MetaboliteParticipant> parsedParticipants = new ArrayList();
+        List<MetabolicParticipant> parsedParticipants = new ArrayList();
 
         String[] participants = EQUATION_ADDITION.split(equationSide);
         for (String string : participants) {
@@ -251,7 +251,7 @@ public class ReactionParser {
         return collected;
     }
 
-    public MetaboliteParticipant parseParticipant(final String participant,
+    public MetabolicParticipant parseParticipant(final String participant,
                                                   final Compartment defaultCompartment,
                                                   final PreparsedReaction rxn) throws UnparsableReactionError {
 
@@ -282,14 +282,14 @@ public class ReactionParser {
 
         if (entity != null) {
             // System.out.println( coef + " " + entity.getName() + " " + compartment );
-            return new MetaboliteParticipant(entity, coef,
+            return new MetabolicParticipant(entity, coef,
                                              compartment);
         } else {
             messages.add(new WarningMessage("The metabolite "
                                             + entityAbbr.trim()
                                             + " was not found in the metabolite sheet for reaction " + rxn));
             entity = entites.getNonReconciledMetabolite(entityAbbr);
-            return new MetaboliteParticipant(entity,
+            return new MetabolicParticipant(entity,
                                              coef,
                                              compartment);
         }

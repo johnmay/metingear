@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
 import javax.swing.SwingUtilities;
+import org.restlet.data.Preference;
 
 
 /**
@@ -40,6 +41,12 @@ import javax.swing.SwingUtilities;
 public class ProcessDialogAction extends GeneralAction {
 
     private DropdownDialog dialog;
+
+
+    public ProcessDialogAction(Class c, String command, DropdownDialog dialog) {
+        super(c, command);
+        this.dialog = dialog;
+    }
 
 
     public ProcessDialogAction(String command, DropdownDialog dialog) {

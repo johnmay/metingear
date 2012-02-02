@@ -26,10 +26,13 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import javax.imageio.ImageIO;
-import uk.ac.ebi.caf.action.ActionProperties;
 import uk.ac.ebi.mnb.core.CloseDialogAction;
 import uk.ac.ebi.mnb.core.ProcessDialogAction;
+
 
 /**
  *
@@ -44,12 +47,23 @@ public abstract class DropdownDialog
         extends JDialog implements Updatable {
 
     private static final Logger LOGGER = Logger.getLogger(DropdownDialog.class);
+
     private JButton close;
+
     private JButton active;
+
     private DialogController controller;
+
     private Theme theme = Settings.getInstance().getTheme();
+
     private Paint paint = new GradientPaint(0, 0, getBackground().darker(), 0, 10, getBackground());
+
     private CellConstraints cc = new CellConstraints();
+
+    private static final Set<String> GENERIC_DIALOGS = new HashSet<String>(Arrays.asList("OkayDialog",
+                                                                                         "SaveDialog",
+                                                                                         "RunDialog"));
+
 
     public DropdownDialog(JFrame frame,
                           DialogController controller,
@@ -61,11 +75,15 @@ public abstract class DropdownDialog
 
         close = new JButton(new CloseDialogAction(this));
 
-        active = new JButton(new ProcessDialogAction(type + ".DialogButton", this));
+        active = new JButton(new ProcessDialogAction(getClass(),
+                                                     type + ".DialogButton", this));
 
         setUndecorated(true);
 
+
+
     }
+
 
     /**
      * Allows easy instantiation with a JFrame that implements DialogController.
@@ -87,9 +105,12 @@ public abstract class DropdownDialog
         }
 
         close = new JButton(new CloseDialogAction(this));
-        active = new JButton(new ProcessDialogAction(dialogName + ".DialogButton", this));
+        active = GENERIC_DIALOGS.contains(dialogName)
+                 ? new JButton(new ProcessDialogAction(dialogName + ".DialogButton", this))
+                 : new JButton(new ProcessDialogAction(getClass(), dialogName + ".DialogButton", this));
         setUndecorated(true);
     }
+
 
     /**
      * Returns the dialog description label. By default the description is the Class name and should
@@ -99,6 +120,7 @@ public abstract class DropdownDialog
     public JLabel getDescription() {
         return LabelFactory.newLabel(getClass().getSimpleName(), LabelFactory.Size.LARGE);
     }
+
 
     /**
      *
@@ -116,10 +138,11 @@ public abstract class DropdownDialog
 
     }
 
+
     public JPanel getNavigation() {
 
         JPanel navigation = PanelFactory.createDialogPanel("p:grow, right:min, 4dlu ,right:min",
-                                                      "p");
+                                                           "p");
 
         navigation.add(getClose(), cc.xy(2, 1));
         navigation.add(getActivate(), cc.xy(4, 1));
@@ -128,6 +151,7 @@ public abstract class DropdownDialog
         return navigation;
 
     }
+
 
     /**
      * Sets the default layout of the dialog. Class wishing to use Default layout
@@ -152,6 +176,7 @@ public abstract class DropdownDialog
         this.pack();
     }
 
+
     /**
      *
      * Packs and sets the location of the dialog
@@ -172,12 +197,14 @@ public abstract class DropdownDialog
         }
     }
 
+
     /**
      * Uses the {@see DialogController#place(DropdownDialog)} method to position the dialog
      */
     public void setLocation() {
         controller.place((DropdownDialog) this);
     }
+
 
     /**
      * Access the default close button
@@ -187,6 +214,7 @@ public abstract class DropdownDialog
         return close;
     }
 
+
     /**
      * Sets the default close button
      * @param closeButton
@@ -194,6 +222,7 @@ public abstract class DropdownDialog
     public void setClose(JButton closeButton) {
         this.close = closeButton;
     }
+
 
     /**
      * Access the default active button (information loaded from {@see ActionProperties}) with the
@@ -203,6 +232,7 @@ public abstract class DropdownDialog
         return active;
     }
 
+
     /**
      * Sets the default activate button
      * @param runButton
@@ -210,6 +240,7 @@ public abstract class DropdownDialog
     public void setActive(JButton runButton) {
         this.active = runButton;
     }
+
 
     /**
      * Draws the dialog to an image (experimental)
@@ -228,6 +259,7 @@ public abstract class DropdownDialog
         }
     }
 
+
     /**
      * Paints a shadow on the background to make it appear tucked under the tool-bar
      */
@@ -238,6 +270,7 @@ public abstract class DropdownDialog
         g2.fillRect(0, 0, getPreferredSize().width, 10);
     }
 
+
     /**
      * Allows access to the spinning dial wait indicator for example setting text
      * @param waitIndicator
@@ -246,10 +279,12 @@ public abstract class DropdownDialog
         process();
     }
 
+
     /**
      * Process the options in the dialog
      */
     public abstract void process();
+
 
     /**
      * Called on process finish this contain the calls to update the views

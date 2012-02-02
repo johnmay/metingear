@@ -21,12 +21,7 @@
 package uk.ac.ebi.mnb.core;
 
 import java.awt.Dimension;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JSeparator;
-import javax.swing.JToggleButton;
+import javax.swing.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 
@@ -42,6 +37,14 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 public class ExpandableComponentGroup extends JComponent {
 
     private static final Logger LOGGER = Logger.getLogger(ExpandableComponentGroup.class);
+
+    private JDialog root;
+
+
+    public ExpandableComponentGroup(String name, JComponent component, JDialog root) {
+        this(name, component);
+        this.root = root;
+    }
 
 
     public ExpandableComponentGroup(String name, JComponent component) {
@@ -67,5 +70,10 @@ public class ExpandableComponentGroup extends JComponent {
         add(component);
 
         component.setVisible(false);
+        
+        if(root != null){
+            root.pack();
+        }
+
     }
 }

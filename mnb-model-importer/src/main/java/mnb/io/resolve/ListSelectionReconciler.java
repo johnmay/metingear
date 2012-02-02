@@ -171,8 +171,8 @@ public class ListSelectionReconciler implements EntryReconciler {
                         dialog.setup(metabolite, candidates);
                         dialog.setVisible(true);
                         if (dialog.okaySelected()) {
-                            Collection<Metabolite> selected = dialog.getSelected();
-                            for (Metabolite m : selected) {
+                            Collection<uk.ac.ebi.interfaces.entities.Metabolite> selected = dialog.getSelected();
+                            for (uk.ac.ebi.interfaces.entities.Metabolite m : selected) {
                                 metabolite.addAnnotations(m.getAnnotations());
                                 m.addAnnotation(new CrossReference(m.getIdentifier()));
                             }
