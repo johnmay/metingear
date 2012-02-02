@@ -18,14 +18,7 @@ import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.file.*;
 import uk.ac.ebi.mnb.dialog.file.importation.ImportSBML;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.menu.file.ExportSBMLAction;
-import uk.ac.ebi.mnb.menu.file.ImportENAXML;
-import uk.ac.ebi.mnb.menu.file.ImportKGML;
-import uk.ac.ebi.mnb.menu.file.ImportPeptidesAction;
-import uk.ac.ebi.mnb.menu.file.ImportXLSAction;
-import uk.ac.ebi.mnb.menu.file.NewProjectAction;
-import uk.ac.ebi.mnb.menu.file.OpenProjectAction;
-import uk.ac.ebi.mnb.menu.file.SaveProjectAction;
+import uk.ac.ebi.mnb.menu.file.*;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
 
 
@@ -68,10 +61,12 @@ public class FileMenu
         add(create(NewReaction.class), activeProject);
         add(create(NewProteinProduct.class), activeProject);
         add(new OpenProjectAction(this));
+        add(new OpenAction(this));
         add(recent);
         add(new JSeparator());
         add(new CloseProject(true), activeProject);
         add(new SaveProjectAction(), activeProject);
+        add(new SaveAction(), activeProject);
         add(saveAs, activeProject);
         add(new JSeparator());
 

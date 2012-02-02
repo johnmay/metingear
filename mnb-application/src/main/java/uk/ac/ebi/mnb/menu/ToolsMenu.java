@@ -17,7 +17,6 @@ import uk.ac.ebi.mnb.dialog.tools.*;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.menu.reconciliation.AddCrossReferenceDialog;
 import uk.ac.ebi.mnb.menu.tool.GapAnalysis;
 
 
@@ -39,13 +38,6 @@ public class ToolsMenu extends ContextMenu {
         super("Tools", MainView.getInstance());
 
         MainView view = MainView.getInstance();
-
-        add(create(AddCrossReferenceDialog.class), new ContextResponder() {
-
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection() && selection.getEntities().size() == 1;
-            }
-        });
 
         add(create(AutomaticCrossReference.class), new ContextResponder() {
 

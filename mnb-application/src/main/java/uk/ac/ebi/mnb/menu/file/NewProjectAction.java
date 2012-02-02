@@ -6,6 +6,7 @@ package uk.ac.ebi.mnb.menu.file;
 
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 
+
 /**
  * NewProjectAction.java
  *
@@ -14,19 +15,23 @@ import uk.ac.ebi.caf.action.DelayedBuildAction;
  * @date Apr 14, 2011
  */
 public class NewProjectAction
-    extends DelayedBuildAction {
+        extends DelayedBuildAction {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( NewProjectAction.class );
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(NewProjectAction.class);
+
     private NewProject dialog;
 
+
     public NewProjectAction() {
-        super( "NewProject" );
+        super("NewProject");
     }
+
 
     @Override
     public void activateActions() {
-        dialog.setVisible( enabled );
+        dialog.setVisible(enabled);
     }
+
 
     @Override
     public void buildComponents() {
