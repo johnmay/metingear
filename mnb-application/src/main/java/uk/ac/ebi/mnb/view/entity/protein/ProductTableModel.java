@@ -32,7 +32,7 @@ import org.biojava3.core.sequence.template.CompoundSet;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 
 /**
  *          ProteinTableModel – 2011.09.28 <br>

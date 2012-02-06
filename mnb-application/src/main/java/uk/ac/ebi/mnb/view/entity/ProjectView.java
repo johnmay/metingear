@@ -37,9 +37,9 @@ import uk.ac.ebi.core.GeneImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Multimer;
 import uk.ac.ebi.core.ProteinProduct;
-import uk.ac.ebi.core.RNAProduct;
-import uk.ac.ebi.core.RibosomalRNA;
-import uk.ac.ebi.core.TransferRNA;
+import uk.ac.ebi.core.AbstractRNAProduct;
+import uk.ac.ebi.core.RibosomalRNAImplementation;
+import uk.ac.ebi.core.TransferRNAImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.mnb.core.EntityMap;
@@ -102,9 +102,9 @@ public class ProjectView
         viewMap.put(Reaction.BASE_TYPE, reactions);
 
         viewMap.put(ProteinProduct.BASE_TYPE, products);
-        viewMap.put(RibosomalRNA.BASE_TYPE, products);
-        viewMap.put(TransferRNA.BASE_TYPE, products);
-        viewMap.put(RNAProduct.BASE_TYPE, products);
+        viewMap.put(RibosomalRNAImplementation.BASE_TYPE, products);
+        viewMap.put(TransferRNAImplementation.BASE_TYPE, products);
+        viewMap.put(AbstractRNAProduct.BASE_TYPE, products);
         viewMap.put(Multimer.BASE_TYPE, products);
 
         viewMap.put(RunnableTask.BASE_TYPE, tasks);

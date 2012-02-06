@@ -46,6 +46,7 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.core.Reconstruction;
 
+
 /**
  *          MetabolitePanel – 2011.09.30 <br>
  *          Class description
@@ -57,23 +58,36 @@ public class MetabolitePanel
         extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolitePanel.class);
+
     private MetaboliteImplementation entity;
     // chemical structure
+
     private JLabel structureWarning = LabelFactory.newLabel("No Structure");
+
     private JLabel structure = LabelFactory.newLabel("No Structure");
     // for isGeneric
+
     private JLabel markush = LabelFactory.newFormLabel("Markush:");
+
     private JLabel markushViewer = LabelFactory.newLabel("");
+
     private JComboBox markushEditor = new MComboBox(Arrays.asList("Yes", "No"));
     // metabolic class
+
     private JLabel type = LabelFactory.newFormLabel("Type:");
+
     private JLabel typeViewer = LabelFactory.newLabel("");
+
     private JComboBox typeEditor = new MComboBox(MetaboliteClassImplementation.values());
     // molecular formula
+
     private JTextField formulaEditor = FieldFactory.newTransparentField(15, false);
+
     private JLabel formularViewer = LabelFactory.newLabel("");
     // cell constraints
+
     private CellConstraints cc = new CellConstraints();
+
 
     public MetabolitePanel() {
         super("Metabolite", new AnnotationRenderer());
@@ -81,14 +95,15 @@ public class MetabolitePanel
         buildSynopsis();
     }
 
+
     @Override
     public boolean update() {
 
         // update all fields and labels...
         if (super.update()) {
 
-            if (entity.hasStructureAssociated()) {
-                JLabel label = (JLabel) getRenderer().visit(entity.getFirstChemicalStructure());
+            if (entity.hasStructure()) {
+                JLabel label = (JLabel) getRenderer().visit(entity.getStructures().iterator().next());
                 structure.setIcon(label.getIcon());
                 structure.setText("");
             } else {
@@ -119,11 +134,13 @@ public class MetabolitePanel
         return false;
     }
 
+
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
         this.entity = (MetaboliteImplementation) entity;
         return super.setEntity(entity);
     }
+
 
     @Override
     public void setEditable(boolean editable) {
@@ -141,7 +158,9 @@ public class MetabolitePanel
         markushViewer.setVisible(!editable);
         typeViewer.setVisible(!editable);
     }
+
     private JPanel specific;
+
 
     /**
      * Returns the specific information panel
@@ -149,6 +168,7 @@ public class MetabolitePanel
     public JPanel getSynopsis() {
         return specific;
     }
+
 
     /**
      * Builds entity specific panel
@@ -176,6 +196,7 @@ public class MetabolitePanel
         specific.add(typeEditor, cc.xy(7, 5));
     }
 
+
     @Override
     public Collection<? extends AbstractAnnotatedEntity> getReferences() {
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
@@ -184,6 +205,7 @@ public class MetabolitePanel
         }
         return new ArrayList();
     }
+
 
     @Override
     public void store() {

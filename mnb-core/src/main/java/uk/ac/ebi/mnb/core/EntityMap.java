@@ -28,9 +28,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import uk.ac.ebi.core.ProteinProduct;
-import uk.ac.ebi.core.RNAProduct;
+import uk.ac.ebi.core.AbstractRNAProduct;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 
 /**
@@ -87,7 +87,7 @@ public class EntityMap implements EntityCollection {
     public Collection<GeneProduct> getGeneProducts() {
 
         Collection<ProteinProduct> proteins = get(ProteinProduct.class);
-        Collection<RNAProduct> rnas = get(RNAProduct.class);
+        Collection<AbstractRNAProduct> rnas = get(AbstractRNAProduct.class);
 
         Collection<GeneProduct> products = new ArrayList();
         products.addAll(proteins);

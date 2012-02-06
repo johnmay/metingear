@@ -80,20 +80,20 @@ public class CustomXLStoSBML {
     private final Integer SBML_VERSION = 2;
     private Map<String , Species> moleculeCache = new HashMap<String , Species>();
     private Map<Reaction , List<String>> reactionModelMap = new HashMap<Reaction , List<String>>();
-    private Map<uk.ac.ebi.core.Compartment , Compartment> compartmentMap =
-                                                                     new EnumMap<uk.ac.ebi.core.Compartment , Compartment>(
-            uk.ac.ebi.core.Compartment.class ) {
+    private Map<uk.ac.ebi.core.CompartmentImplementation , Compartment> compartmentMap =
+                                                                     new EnumMap<uk.ac.ebi.core.CompartmentImplementation , Compartment>(
+            uk.ac.ebi.core.CompartmentImplementation.class ) {
 
         {
             Compartment e = new Compartment( "Extracellular" , SBML_LEVEL , SBML_VERSION );
             e.setSize( 1 );
-            put( uk.ac.ebi.core.Compartment.EXTRACELLULA , e );
+            put( uk.ac.ebi.core.CompartmentImplementation.EXTRACELLULA , e );
             Compartment c = new Compartment( "Cytoplasm" , SBML_LEVEL , SBML_VERSION );
             c.setSize( 1 );
-            put( uk.ac.ebi.core.Compartment.CYTOPLASM , c );
+            put( uk.ac.ebi.core.CompartmentImplementation.CYTOPLASM , c );
             Compartment p = new Compartment( "Periplasm" , SBML_LEVEL , SBML_VERSION );
             p.setSize( 1 );
-            put( uk.ac.ebi.core.Compartment.PERIPLASM , p );
+            put( uk.ac.ebi.core.CompartmentImplementation.PERIPLASM , p );
         }
     };
 
@@ -110,7 +110,7 @@ public class CustomXLStoSBML {
         String[] row = reader.readNext();
         String prevEq = "";
         String prevModelId = "";
-        Reaction<String , Integer , uk.ac.ebi.core.Compartment> r = null;
+        Reaction<String , Integer , uk.ac.ebi.core.CompartmentImplementation> r = null;
         HashMap<String , SBMLDocument> modelToSBML = new HashMap<String , SBMLDocument>();
         Map<String , Map<Species , Boolean>> modelIdSpecies = new HashMap<String , Map<Species , Boolean>>();
 
@@ -139,7 +139,7 @@ public class CustomXLStoSBML {
 
                     Set<Species> toAdd = new HashSet<Species>();
                     int error = 0;
-                    for ( Participant<String , Integer , uk.ac.ebi.core.Compartment> p : r.
+                    for ( Participant<String , Integer , uk.ac.ebi.core.CompartmentImplementation> p : r.
                             getReactantParticipants() ) {
                         String dbidsbml = p.getMolecule();
                         String comp = "[" + p.getCompartment().getAbbreviation() + "]";
@@ -152,7 +152,7 @@ public class CustomXLStoSBML {
                             toAdd.add( moleculeCache.get( dbidsbml + comp ) );
                         }
                     }
-                    for ( Participant<String , Integer , uk.ac.ebi.core.Compartment> p : r.
+                    for ( Participant<String , Integer , uk.ac.ebi.core.CompartmentImplementation> p : r.
                             getProductParticipants() ) {
                         String dbidsbml = p.getMolecule();
                         String comp = "[" + p.getCompartment().getAbbreviation() + "]";
@@ -175,12 +175,12 @@ public class CustomXLStoSBML {
                         }
                         org.sbml.jsbml.Reaction sbmlReaction = new org.sbml.jsbml.Reaction( UniqueIdentifier.
                                 createUniqueIdentifer().toString() , SBML_LEVEL , SBML_VERSION );
-                        for ( Participant<String , Integer , uk.ac.ebi.core.Compartment> p : r.
+                        for ( Participant<String , Integer , uk.ac.ebi.core.CompartmentImplementation> p : r.
                                 getReactantParticipants() ) {
                             String spid = p.getMolecule() + p.getCompartment().toString();
                             sbmlReaction.addReactant( new SpeciesReference( moleculeCache.get( spid ) ) );
                         }
-                        for ( Participant<String , Integer , uk.ac.ebi.core.Compartment> p : r.
+                        for ( Participant<String , Integer , uk.ac.ebi.core.CompartmentImplementation> p : r.
                                 getProductParticipants() ) {
                             String spid = p.getMolecule() + p.getCompartment().toString();
 
@@ -191,7 +191,7 @@ public class CustomXLStoSBML {
                         LOGGER.error("Skipping reaction: " + r + " [Missing identifiers for some compounds]");
                     }
                 }
-                r = new Reaction<String , Integer , uk.ac.ebi.core.Compartment>();
+                r = new Reaction<String , Integer , uk.ac.ebi.core.CompartmentImplementation>();
             }
 
 
@@ -208,8 +208,8 @@ public class CustomXLStoSBML {
 
             Species sp = moleculeCache.get( dbid + comp );
             if ( sp != null ) {
-                Participant p = new Participant<String , Integer , uk.ac.ebi.core.Compartment>( dbid , 1 ,
-                                                                                                           uk.ac.ebi.core.Compartment.
+                Participant p = new Participant<String , Integer , uk.ac.ebi.core.CompartmentImplementation>( dbid , 1 ,
+                                                                                                           uk.ac.ebi.core.CompartmentImplementation.
                         getCompartment( row[columns.get( "compartment" )] ) );
                 if ( row[columns.get( "side" )].equals( "left" ) ) {
                     r.addReactant( p );
@@ -239,7 +239,7 @@ public class CustomXLStoSBML {
     private static ChebiWebServiceClient chebiClient = new ChebiWebServiceClient();
 
     public Species getSpecies( String dbid , String comp ) throws ChebiWebServiceFault_Exception {
-        uk.ac.ebi.core.Compartment c = uk.ac.ebi.core.Compartment.getCompartment( comp );
+        uk.ac.ebi.core.CompartmentImplementation c = uk.ac.ebi.core.CompartmentImplementation.getCompartment( comp );
 
         String formatedid = pattern.matcher( dbid ).replaceAll( "_" ) + c.getAbbreviation();
 

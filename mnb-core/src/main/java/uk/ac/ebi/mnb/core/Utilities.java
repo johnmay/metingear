@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 
 /**
  * @name    Utilities - 2011.10.03 <br>

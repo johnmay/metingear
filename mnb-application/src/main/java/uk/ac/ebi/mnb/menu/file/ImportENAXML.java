@@ -33,7 +33,7 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.io.xml.ENAXMLReader;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.FileChooserAction;

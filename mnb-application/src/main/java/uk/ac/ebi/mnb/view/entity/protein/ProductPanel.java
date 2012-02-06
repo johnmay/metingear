@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import com.google.common.base.Joiner;

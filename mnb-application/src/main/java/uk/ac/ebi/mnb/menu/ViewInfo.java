@@ -36,7 +36,7 @@ import uk.ac.ebi.core.GeneImplementation;
 import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Multimer;
 import uk.ac.ebi.core.ProteinProduct;
-import uk.ac.ebi.core.RNAProduct;
+import uk.ac.ebi.core.AbstractRNAProduct;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
@@ -99,7 +99,7 @@ public class ViewInfo {
         buttonMap.put(Reaction.BASE_TYPE, reactions);
 
         buttonMap.put(ProteinProduct.BASE_TYPE, products);
-        buttonMap.put(RNAProduct.BASE_TYPE, products);
+        buttonMap.put(AbstractRNAProduct.BASE_TYPE, products);
         buttonMap.put(Multimer.BASE_TYPE, products);
 
 //        buttonMap.put(RunnableTask.BASE_TYPE, tasks);

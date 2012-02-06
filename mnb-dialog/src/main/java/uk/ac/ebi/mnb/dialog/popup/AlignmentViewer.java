@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.chemet.render.alignment.AbstractAlignmentColor;
 import uk.ac.ebi.chemet.render.alignment.BasicAlignmentColor;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 

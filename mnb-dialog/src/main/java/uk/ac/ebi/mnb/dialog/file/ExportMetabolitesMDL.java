@@ -98,9 +98,9 @@ public class ExportMetabolitesMDL extends ControllerAction {
                 MDLV2000Writer writer = new MDLV2000Writer(new FileOutputStream(file));
 
                 for (Metabolite m : metabolites) {
-                    if (m.hasStructureAssociated()) {
+                    if (m.hasStructure()) {
                         for (AtomContainerAnnotation structure : m.getAnnotations(AtomContainerAnnotation.class)) {
-                            writer.write(structure.getMolecule());
+                            writer.write(structure.getStructure());
                         }
                     }
                 }

@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.core.ProteinProduct;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.core.ControllerDialog;

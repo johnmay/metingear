@@ -49,7 +49,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.chemet.ws.CachedChemicalWS;
@@ -175,7 +175,7 @@ public class LoadXLSModel extends CommandLineMain {
 
     public XrefLevel score(Reaction rxn) {
 
-        List<Participant<Metabolite, Double, Compartment>> participants = (List) rxn.
+        List<Participant<Metabolite, Double, CompartmentImplementation>> participants = (List) rxn.
           getAllReactionParticipants();
 
         int missingXref = 0;

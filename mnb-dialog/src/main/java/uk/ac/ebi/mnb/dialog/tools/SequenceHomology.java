@@ -39,7 +39,7 @@ import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.HomologyDatabaseManager;
 import uk.ac.ebi.core.ProteinProduct;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;

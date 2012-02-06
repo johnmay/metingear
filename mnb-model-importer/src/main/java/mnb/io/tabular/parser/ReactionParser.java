@@ -35,7 +35,7 @@ import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.annotation.Subsystem;
 import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
@@ -140,10 +140,10 @@ public class ReactionParser {
         rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
         rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
 
-        Compartment defaultCompartment = Compartment.CYTOPLASM;
+        CompartmentImplementation defaultCompartment = CompartmentImplementation.CYTOPLASM;
 
         if (reactionCompartment.find()) {
-            defaultCompartment = Compartment.getCompartment(reactionCompartment.group(1));
+            defaultCompartment = CompartmentImplementation.getCompartment(reactionCompartment.group(1));
             equationSides[0] = reactionCompartment.replaceAll("");
         }
 
@@ -201,10 +201,10 @@ public class ReactionParser {
         rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
         rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
 
-        Compartment defaultCompartment = Compartment.CYTOPLASM;
+        CompartmentImplementation defaultCompartment = CompartmentImplementation.CYTOPLASM;
 
         if (reactionCompartment.find()) {
-            defaultCompartment = Compartment.getCompartment(reactionCompartment.group(1));
+            defaultCompartment = CompartmentImplementation.getCompartment(reactionCompartment.group(1));
             equationSide = reactionCompartment.replaceAll("");
         }
 
@@ -246,7 +246,7 @@ public class ReactionParser {
 
 
     public List<MetabolicParticipant> parseParticipants(String equationSide,
-                                                        Compartment defaultCompartment,
+                                                        CompartmentImplementation defaultCompartment,
                                                         PreparsedReaction reaction) throws UnparsableReactionError {
 
         List<MetabolicParticipant> parsedParticipants = new ArrayList();
@@ -270,12 +270,12 @@ public class ReactionParser {
 
 
     public MetabolicParticipant parseParticipant(final String participant,
-                                                 final Compartment defaultCompartment,
+                                                 final CompartmentImplementation defaultCompartment,
                                                  final PreparsedReaction rxn) throws UnparsableReactionError {
 
         String entityAbbr = participant.trim();
         String entityAbbrComp = entityAbbr;
-        Compartment compartment = defaultCompartment;
+        CompartmentImplementation compartment = defaultCompartment;
         Double coef = 1d;
 
         // stoichiometric coefficients
@@ -289,7 +289,7 @@ public class ReactionParser {
         // compartment
         Matcher compartmentMatcher = COMPARTMENT_PATTERN.matcher(entityAbbr);
         if (compartmentMatcher.find()) {
-            compartment = Compartment.getCompartment(compartmentMatcher.group(1));
+            compartment = CompartmentImplementation.getCompartment(compartmentMatcher.group(1));
             entityAbbr = compartmentMatcher.replaceAll("");
         }
 

@@ -24,7 +24,7 @@ import uk.ac.ebi.mnb.io.FastaFileFilter;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.io.FileFilterManager;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;

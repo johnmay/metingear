@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.mnb.view.entity.components.AnnotationTable;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;

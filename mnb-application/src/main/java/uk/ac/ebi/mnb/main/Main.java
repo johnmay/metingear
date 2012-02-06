@@ -4,6 +4,8 @@
  */
 package uk.ac.ebi.mnb.main;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
@@ -11,12 +13,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.PropertyConfigurator;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.menu.file.PreferenceDialog;
 import uk.ac.ebi.mnb.view.AboutDialog;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.core.tools.hash.MolecularHash;
+import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
+import uk.ac.ebi.core.tools.hash.seeds.*;
+import uk.ac.ebi.core.util.CDKMoleculeBuilder;
 
 
 /**
@@ -56,7 +63,7 @@ public class Main {
         } catch (InvocationTargetException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+       
     }
 
 

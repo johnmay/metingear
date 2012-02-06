@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 import org.junit.Test;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.render.reaction.ReactionRenderer;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
@@ -34,11 +34,11 @@ public class ReactionRendererTest {
         final MetabolicReaction rxn = new MetabolicReaction(BasicReactionIdentifier.nextIdentifier(), "up",
                                                             "uniportTest");
 
-        rxn.addReactant(new MetabolicParticipant(atp, Compartment.CYTOPLASM));
-        rxn.addReactant(new MetabolicParticipant(alanine, Compartment.EXTRACELLULA));
+        rxn.addReactant(new MetabolicParticipant(atp, CompartmentImplementation.CYTOPLASM));
+        rxn.addReactant(new MetabolicParticipant(alanine, CompartmentImplementation.EXTRACELLULA));
 
-        rxn.addProduct(new MetabolicParticipant(atp, Compartment.CYTOPLASM));
-        rxn.addProduct(new MetabolicParticipant(alanine, Compartment.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipant(atp, CompartmentImplementation.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipant(alanine, CompartmentImplementation.CYTOPLASM));
 
         rxn.setReversibility(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
 

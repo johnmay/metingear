@@ -60,8 +60,8 @@ public class CollapseStructures
         }
         Collection<MetaboliteImplementation> metabolites = getSelection().get(MetaboliteImplementation.class);
         for (MetaboliteImplementation m : metabolites) {
-            for (AtomContainerAnnotation structure : m.getChemicalStructures()) {
-                System.out.println(MolecularHashFactory.getInstance().getHash(structure.getMolecule()));
+            for (AtomContainerAnnotation structure : m.getAnnotations(AtomContainerAnnotation.class)) {
+                System.out.println(MolecularHashFactory.getInstance().getHash(structure.getStructure()));
             }
         }
 
