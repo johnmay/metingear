@@ -32,7 +32,7 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.dialog.popup.CrossReferenceEditor;
+import uk.ac.ebi.mnb.dialog.popup.CrossReferenceEditorDialog;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.DefaultRenderer;
@@ -49,7 +49,7 @@ public class CrossReferenceCellEditor
         implements TableCellEditor {
 
     private static final Logger LOGGER = Logger.getLogger(CrossReferenceCellEditor.class);
-    private static CrossReferenceEditor xrefEditor = new CrossReferenceEditor(MainView.getInstance());
+    private static CrossReferenceEditorDialog xrefEditor = new CrossReferenceEditorDialog(MainView.getInstance());
     private ChangeEvent event = new ChangeEvent(this);
 
     public CrossReferenceCellEditor() {

@@ -46,6 +46,7 @@ import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.mnb.view.labels.IconButton;
 
+
 /**
  * @name    PopupDialog - 2011.10.07 <br>
  *          Class description
@@ -56,10 +57,15 @@ import uk.ac.ebi.mnb.view.labels.IconButton;
 public class PopupDialog extends JDialog {
 
     private static final Logger LOGGER = Logger.getLogger(PopupDialog.class);
+
     private JPanel panel = PanelFactory.createDialogPanel();
+
     private BufferedImage bgImage;
+
     private Point mouse;
+
     private int offset;
+
     private JPanel background = new JPanel() {
 
         @Override
@@ -69,23 +75,28 @@ public class PopupDialog extends JDialog {
         }
     };
 
+
     public PopupDialog(JDialog dialog) {
         this(dialog, ModalityType.APPLICATION_MODAL);
     }
+
 
     public PopupDialog(JDialog dialog, ModalityType modality) {
         super(dialog, modality);
         setup();
     }
 
+
     public PopupDialog(JFrame frame) {
         this(frame, ModalityType.APPLICATION_MODAL);
     }
+
 
     public PopupDialog(JFrame frame, ModalityType modality) {
         super(frame, modality);
         setup();
     }
+
 
     private void setup() {
         setUndecorated(true);
@@ -115,14 +126,18 @@ public class PopupDialog extends JDialog {
                 bgImage = getBackgroundImage();
             }
 
+
             @Override
             public void componentResized(ComponentEvent e) {
-                setLocation(mouse.x - (getWidth() / 2), mouse.y - getHeight() + 7 - offset);
+                if (mouse != null) {
+                    setLocation(mouse.x - (getWidth() / 2), mouse.y - getHeight() + 7 - offset);
+                }
                 bgImage = getBackgroundImage();
                 repaint();
             }
         });
     }
+
 
     /**
      * Sets the pop-up location based on mouse position. The tip of the callout will be at the mouse point with no offset
@@ -130,6 +145,7 @@ public class PopupDialog extends JDialog {
     public void setOnMouse() {
         setOnMouse(offset);
     }
+
 
     /**
      * Sets the location on the mouse with a specified offset. This will place the dialog tip at the offset above the
@@ -142,14 +158,20 @@ public class PopupDialog extends JDialog {
         setLocation(mouse.x - (getWidth() / 2), mouse.y - getHeight() + 7 - offset);
     }
 
+
     public JPanel getPanel() {
         return panel;
     }
     // rendering maps
+
     private Map<Dimension, BufferedImage> backgroundCache = new HashMap();
+
     private Map<Integer, Stroke> strokeMap = new HashMap<Integer, Stroke>();
+
     private Map<Float, Color> colorMap = new HashMap<Float, Color>();
+
     private Color grey = new Color(0, 0, 0, 50);
+
 
     public BufferedImage getBackgroundImage() {
 
@@ -196,6 +218,7 @@ public class PopupDialog extends JDialog {
         return img;
     }
 
+
     public Stroke getShadowStroke(int i) {
         if (strokeMap.containsKey(i)) {
             return strokeMap.get(i);
@@ -204,14 +227,16 @@ public class PopupDialog extends JDialog {
         return strokeMap.get(i);
     }
 
+
     public Color getShadowColor(float pct) {
         if (colorMap.containsKey(pct)) {
             return colorMap.get(pct);
         }
         colorMap.put(pct, ColorUtility.getMixedColor(grey, pct,
-                                                       ViewUtilities.CLEAR_COLOUR, 1.0f - pct));
+                                                     ViewUtilities.CLEAR_COLOUR, 1.0f - pct));
         return colorMap.get(pct);
     }
+
 
     public Area getCalloutShape() {
 

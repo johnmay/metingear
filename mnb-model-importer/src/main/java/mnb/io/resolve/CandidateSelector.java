@@ -210,11 +210,18 @@ public class CandidateSelector
 
     @Override
     public void process() {
+
         for (CrossreferenceModule module : modules) {
             if (module.getComponent().isVisible()) {
-                module.transferAnnotations();
+                try {
+                    module.transferAnnotations();
+                } catch (Exception ex) {
+                    System.err.println("TODO: Message needs to be written to GUI");
+                    LOGGER.error(ex.getMessage());
+                }
             }
         }
+
     }
 
 
