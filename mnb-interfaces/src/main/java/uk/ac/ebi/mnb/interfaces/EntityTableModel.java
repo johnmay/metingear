@@ -1,7 +1,7 @@
 /**
- * EntityTable.java
+ * EntityTableModel.java
  *
- * 2011.10.20
+ * 2012.02.06
  *
  * This file is part of the CheMet library
  * 
@@ -18,19 +18,26 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mnb.interfaces;
 
-import org.apache.log4j.Logger;
+
+import java.util.List;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 /**
- *          EntityTable - 2011.10.20 <br>
- *          Class description
+ *
+ *          EntityTableModel 2012.02.06
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ *
+ *          Class description
+ *
  */
-public interface EntityTable extends TargetedUpdate {  
-    
-    public EntityTableModel getModel();
+public interface EntityTableModel {
 
+
+    public void setEntities(List<? extends AnnotatedEntity> components);
+    
 }

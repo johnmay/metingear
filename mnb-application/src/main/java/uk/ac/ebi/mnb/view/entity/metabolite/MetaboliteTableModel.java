@@ -29,7 +29,7 @@ import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.Reconstruction;
@@ -55,7 +55,7 @@ public class MetaboliteTableModel
                              DataType.FIXED,
                              Boolean.class),
         new ColumnDescriptor(new CrossReference()),
-        new ColumnDescriptor(new ChemicalStructure()),
+        new ColumnDescriptor(new AtomContainerAnnotation()),
         new ColumnDescriptor(new MolecularFormula()),
         new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class)
     };

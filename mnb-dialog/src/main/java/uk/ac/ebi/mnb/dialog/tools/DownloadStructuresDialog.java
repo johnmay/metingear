@@ -37,7 +37,7 @@ import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
@@ -151,7 +151,7 @@ public class DownloadStructuresDialog
                     try {
                         IAtomContainer molecule = chebi.getAtomContainer(id.getAccession());
                         if (molecule != null) {
-                            component.addAnnotation(new ChemicalStructure(molecule));
+                            component.addAnnotation(new AtomContainerAnnotation(molecule));
                         } else {
                             problemIdentifiers.add(id);
                         }
@@ -163,7 +163,7 @@ public class DownloadStructuresDialog
                     try {
                         molecule = KEGGCompoundStructureService.getInstance().getStructure((KEGGCompoundIdentifier) id);
                         if (molecule != null) {
-                            component.addAnnotation(new ChemicalStructure(molecule));
+                            component.addAnnotation(new AtomContainerAnnotation(molecule));
                         }
                     } catch (UnfetchableEntry ex) {
                         problemIdentifiers.add(id);

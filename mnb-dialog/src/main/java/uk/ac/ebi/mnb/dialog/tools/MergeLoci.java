@@ -37,6 +37,7 @@ import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
+
 /**
  * @name    MergeLoci - 2011.10.13 <br>
  *          Class description
@@ -48,9 +49,11 @@ public class MergeLoci extends ControllerAction {
 
     private static final Logger LOGGER = Logger.getLogger(MergeLoci.class);
 
+
     public MergeLoci(MainController controller) {
         super(MergeLoci.class.getSimpleName(), controller);
     }
+
 
     public void actionPerformed(ActionEvent e) {
 

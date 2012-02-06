@@ -39,7 +39,7 @@ import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Annotation;
@@ -77,7 +77,7 @@ public class AnnotationRenderer implements AnnotationVisitor {
      * @param annotation
      * @return
      */
-    public JComponent visit(ChemicalStructure annotation) {
+    public JComponent visit(AtomContainerAnnotation annotation) {
 
 
         BufferedImage img = new BufferedImage(128, 128, BufferedImage.TYPE_4BYTE_ABGR);
@@ -134,8 +134,8 @@ public class AnnotationRenderer implements AnnotationVisitor {
             return visit((CrossReference) annotation);
         } else if (annotation instanceof MolecularFormula) {
             return visit((MolecularFormula) annotation);
-        } else if (annotation instanceof ChemicalStructure) {
-            return visit((ChemicalStructure) annotation);
+        } else if (annotation instanceof AtomContainerAnnotation) {
+            return visit((AtomContainerAnnotation) annotation);
         }
 
         return LabelFactory.newLabel(annotation.toString());

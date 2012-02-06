@@ -33,7 +33,7 @@ import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.MDLV2000Writer;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
@@ -99,7 +99,7 @@ public class ExportMetabolitesMDL extends ControllerAction {
 
                 for (Metabolite m : metabolites) {
                     if (m.hasStructureAssociated()) {
-                        for (ChemicalStructure structure : m.getAnnotations(ChemicalStructure.class)) {
+                        for (AtomContainerAnnotation structure : m.getAnnotations(AtomContainerAnnotation.class)) {
                             writer.write(structure.getMolecule());
                         }
                     }

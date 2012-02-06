@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.edit.entity.AbbreviationSetter;
 import uk.ac.ebi.edit.entity.NameSetter;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.mnb.interfaces.EntityTableModel;
 import uk.ac.ebi.mnb.main.MainView;
 
 /**
@@ -44,7 +45,7 @@ import uk.ac.ebi.mnb.main.MainView;
  * @author  $Author$ (this version)
  */
 public abstract class AbstractEntityTableModel
-        extends AbstractTableModel {
+        extends AbstractTableModel implements EntityTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityTableModel.class);
     private Reconstruction currentReconstruction;

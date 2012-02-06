@@ -30,7 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.chemet.render.PooledClassBasedTableCellDRR;
 import uk.ac.ebi.chemet.render.table.renderers.ActionButtonCellRenderer;
@@ -65,7 +65,7 @@ public class AnnotationTable
         model.getColumn(0).setPreferredWidth(150);
 
         ANNOTATION_RENDERER.setRenderer(Annotation.class, new AnnotationCellRenderer());
-        ANNOTATION_RENDERER.setRenderer(ChemicalStructure.class, new ChemicalStructureRenderer());
+        ANNOTATION_RENDERER.setRenderer(AtomContainerAnnotation.class, new ChemicalStructureRenderer());
         ANNOTATION_RENDERER.setRenderer(MolecularFormula.class, new FormulaCellRender());
 
         setIntercellSpacing(new Dimension(10, 0));

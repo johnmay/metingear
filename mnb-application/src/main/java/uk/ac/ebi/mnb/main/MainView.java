@@ -51,10 +51,10 @@ import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.menu.EditUndoButtons;
 import uk.ac.ebi.mnb.menu.ViewInfo;
-import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 
 
 /**
@@ -156,8 +156,9 @@ public class MainView
 
                                             public void run() {
                                                 SearchManager.getInstance().setPreviousEntries(entities);
-                                                AbstractEntityTable table = (AbstractEntityTable) ((ProjectView) getViewController()).getSearchView().getTable();
+                                                EntityTable table = getViewController().getActiveView().getTable();
                                                 table.getModel().setEntities(entities);
+                                                table.update();
                                             }
                                         });
                                     }
