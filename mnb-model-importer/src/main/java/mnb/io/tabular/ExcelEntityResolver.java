@@ -22,7 +22,6 @@ package mnb.io.tabular;
 
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +31,10 @@ import mnb.io.resolve.EntryReconciler;
 import mnb.io.tabular.parser.ReactionParser;
 import mnb.io.tabular.preparse.PreparsedSheet;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.core.MetaboliteImplementation;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+
 
 /**
  *          EntityResolver – 2011.08.29 <br>
@@ -47,19 +46,30 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 public class ExcelEntityResolver implements EntityResolver {
 
     private static final Logger LOGGER = Logger.getLogger(ExcelEntityResolver.class);
+
     private List<PreparsedMetabolite> entities = new ArrayList();
+
     private Map<String, PreparsedMetabolite> entityMap = new HashMap(); // abbreviation -> entitiy
-    private Map<String, MetaboliteImplementation> nonReconciled = new HashMap();
+
+    private Map<String, Metabolite> nonReconciled = new HashMap();
+
     private Properties p;
+
     private PreparsedSheet sheet;
+
     private EntryReconciler reconciler;
 
+    private EntityFactory factory;
+
+
     public ExcelEntityResolver(PreparsedSheet sheet,
-                          EntryReconciler reconciler) {
+                               EntryReconciler reconciler,
+                               EntityFactory factory) {
         this.sheet = sheet;
         this.reconciler = reconciler;
         load();
     }
+
 
     private final void load() {
 
@@ -88,38 +98,45 @@ public class ExcelEntityResolver implements EntityResolver {
         sheet.reset();
     }
 
+
     public PreparsedMetabolite getEntity(String abbreviation) {
         return entityMap.get(abbreviation);
     }
 
-    public MetaboliteImplementation getNonReconciledMetabolite(String name) {
+
+    public Metabolite getNonReconciledMetabolite(String name) {
 
         if (nonReconciled.containsKey(name)) {
             return nonReconciled.get(name);
         }
 
-        MetaboliteImplementation m = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), name, name);
+        Metabolite m = factory.newInstance(Metabolite.class,
+                                           BasicChemicalIdentifier.nextIdentifier(),
+                                           name,
+                                           name);
 
         nonReconciled.put(name, m);
 
         return m;
     }
 
+
     /**
      * 
      * @param abbreviation
      * @return
      */
-    public MetaboliteImplementation getReconciledMetabolite(String abbreviation) {
+    public Metabolite getReconciledMetabolite(String abbreviation) {
 
         // new resolution
-        if (resolved.containsKey(abbreviation) == false) {                                  
-            MetaboliteImplementation entry = (MetaboliteImplementation) reconciler.resolve(getEntity(abbreviation));
+        if (resolved.containsKey(abbreviation) == false) {
+            Metabolite entry = (Metabolite) reconciler.resolve(getEntity(abbreviation));
             resolved.put(abbreviation, entry);
         }
 
         return resolved.get(abbreviation);
 
     }
-    private Map<String, MetaboliteImplementation> resolved = new HashMap();
+
+    private Map<String, Metabolite> resolved = new HashMap<String, Metabolite>();
 }
