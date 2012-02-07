@@ -34,7 +34,7 @@ import mnb.io.tabular.parser.UnparsableReactionError;
 import mnb.io.tabular.preparse.PreparsedReaction;
 import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.core.ErrorMessage;

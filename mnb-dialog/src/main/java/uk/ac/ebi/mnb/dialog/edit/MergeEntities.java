@@ -27,13 +27,14 @@ import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.reaction.Participant;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -102,7 +103,7 @@ public class MergeEntities extends ControllerDialog {
             n.addAnnotations(m.getAnnotations());
 
             for (MetabolicReaction rxn : recon.getReactions().getReactions(m)) {
-                for (ParticipantImplementation p : rxn.getAllReactionParticipants()) {
+                for (MetabolicParticipant p : rxn.getReactants()) {
                     if (p.getMolecule() == m) { // do a direct reference compare
                         p.setMolecule(n);
                     }

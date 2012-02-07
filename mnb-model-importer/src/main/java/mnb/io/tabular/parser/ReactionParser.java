@@ -36,13 +36,14 @@ import uk.ac.ebi.annotation.Subsystem;
 import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.caf.report.Report;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
@@ -137,7 +138,7 @@ public class ReactionParser {
 
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSides[0]);
 
-        MetabolicReaction rxn = new MetabolicReaction(new BasicReactionIdentifier("{rxn/" + ++ticker + "}"), null, null);
+        MetabolicReaction rxn = new MetabolicReactionImplementation(new BasicReactionIdentifier("{rxn/" + ++ticker + "}"), null, null);
         rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
         rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
 
@@ -148,13 +149,13 @@ public class ReactionParser {
             equationSides[0] = reactionCompartment.replaceAll("");
         }
 
-        for (MetabolicParticipant p :
+        for (MetabolicParticipantImplementation p :
              parseParticipants(equationSides[0],
                                defaultCompartment,
                                reaction)) {
             rxn.addReactant(p);
         }
-        for (MetabolicParticipant p :
+        for (MetabolicParticipantImplementation p :
              parseParticipants(equationSides[1],
                                defaultCompartment,
                                reaction)) {
@@ -194,11 +195,11 @@ public class ReactionParser {
     /**
      * Only have left side (or some weird reaction operator)
      */
-    public MetabolicReaction parseExchangeReaction(PreparsedReaction reaction,
-                                                   String equationSide) throws UnparsableReactionError {
+    public MetabolicReactionImplementation parseExchangeReaction(PreparsedReaction reaction,
+                                                                 String equationSide) throws UnparsableReactionError {
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSide);
 
-        MetabolicReaction rxn = new MetabolicReaction(new BasicReactionIdentifier("{rxn/" + ++ticker + "}"), null, null);
+        MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(new BasicReactionIdentifier("{rxn/" + ++ticker + "}"), null, null);
         rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
         rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
 
@@ -209,7 +210,7 @@ public class ReactionParser {
             equationSide = reactionCompartment.replaceAll("");
         }
 
-        for (MetabolicParticipant p :
+        for (MetabolicParticipantImplementation p :
              parseParticipants(equationSide,
                                defaultCompartment,
                                reaction)) {
@@ -246,11 +247,11 @@ public class ReactionParser {
     }
 
 
-    public List<MetabolicParticipant> parseParticipants(String equationSide,
-                                                        CompartmentImplementation defaultCompartment,
-                                                        PreparsedReaction reaction) throws UnparsableReactionError {
+    public List<MetabolicParticipantImplementation> parseParticipants(String equationSide,
+                                                                      CompartmentImplementation defaultCompartment,
+                                                                      PreparsedReaction reaction) throws UnparsableReactionError {
 
-        List<MetabolicParticipant> parsedParticipants = new ArrayList();
+        List<MetabolicParticipantImplementation> parsedParticipants = new ArrayList();
 
         String[] participants = EQUATION_ADDITION.split(equationSide);
         for (String string : participants) {
@@ -270,9 +271,9 @@ public class ReactionParser {
     }
 
 
-    public MetabolicParticipant parseParticipant(final String participant,
-                                                 final CompartmentImplementation defaultCompartment,
-                                                 final PreparsedReaction rxn) throws UnparsableReactionError {
+    public MetabolicParticipantImplementation parseParticipant(final String participant,
+                                                               final CompartmentImplementation defaultCompartment,
+                                                               final PreparsedReaction rxn) throws UnparsableReactionError {
 
         String entityAbbr = participant.trim();
         String entityAbbrComp = entityAbbr;
@@ -301,17 +302,17 @@ public class ReactionParser {
 
         if (entity != null) {
             // System.out.println( coef + " " + entity.getName() + " " + compartment );
-            return new MetabolicParticipant(entity,
-                                            coef,
-                                            compartment);
+            return new MetabolicParticipantImplementation(entity,
+                                                          coef,
+                                                          compartment);
         } else {
             messages.add(new WarningMessage("The metabolite "
                                             + entityAbbr.trim()
                                             + " was not found in the metabolite sheet for reaction " + rxn));
             entity = entites.getNonReconciledMetabolite(entityAbbr);
-            return new MetabolicParticipant(entity,
-                                            coef,
-                                            compartment);
+            return new MetabolicParticipantImplementation(entity,
+                                                          coef,
+                                                          compartment);
         }
 
 

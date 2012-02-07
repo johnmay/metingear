@@ -23,9 +23,9 @@ package uk.ac.ebi.mnb.core;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 /**

@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.core.Utilities;
@@ -61,9 +61,9 @@ public class ChokePoint extends ControllerAction {
         Map<Metabolite, Integer> rMap = new HashMap();
         Map<Metabolite, Integer> pMap = new HashMap();
 
-        Multimap<Metabolite, MetabolicReaction> mToR = HashMultimap.create();
+        Multimap<Metabolite, MetabolicReactionImplementation> mToR = HashMultimap.create();
 
-        for (MetabolicReaction rxn : getSelection().get(MetabolicReaction.class)) {
+        for (MetabolicReactionImplementation rxn : getSelection().get(MetabolicReactionImplementation.class)) {
             for (Metabolite m : (List<Metabolite>) rxn.getReactantMolecules()) {
                 rMap.put(m, rMap.containsKey(m) ? rMap.get(m) + 1 : 1);
                 mToR.put(m, rxn);
@@ -74,13 +74,13 @@ public class ChokePoint extends ControllerAction {
             }
         }
 
-        List<MetabolicReaction> chokePoints = new ArrayList();
+        List<MetabolicReactionImplementation> chokePoints = new ArrayList();
 
         for (Entry<Metabolite, Integer> e : rMap.entrySet()) {
             if (e.getValue() == 1 && pMap.containsKey(e.getKey()) && pMap.get(e.getKey()) == 1) {
-                Collection<MetabolicReaction> rxns = mToR.get(e.getKey());
+                Collection<MetabolicReactionImplementation> rxns = mToR.get(e.getKey());
                 chokePoints.addAll(rxns);
-                for (MetabolicReaction rxn : rxns) {
+                for (MetabolicReactionImplementation rxn : rxns) {
                     rxn.addAnnotation(new AuthorAnnotation("Choke point reaction"));
                 }
             }

@@ -53,6 +53,7 @@ import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.chemet.ws.CachedChemicalWS;
 import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.metabolomes.execs.CommandLineMain;
@@ -135,7 +136,7 @@ public class LoadXLSModel extends CommandLineMain {
 
             while (rxnSht.hasNext()) {
                 PreparsedReaction ppRxn = (PreparsedReaction) rxnSht.next();
-                AbstractReaction rxn = parser.parseReaction(ppRxn);
+                MetabolicReaction rxn = parser.parseReaction(ppRxn);
                 XrefLevel level = score(rxn);
                 stats.put(level, stats.get(level) + 1);
             }
@@ -173,9 +174,9 @@ public class LoadXLSModel extends CommandLineMain {
     };
 
 
-    public XrefLevel score(AbstractReaction rxn) {
+    public XrefLevel score(MetabolicReaction rxn) {
 
-        List<ParticipantImplementation<Metabolite, Double, CompartmentImplementation>> participants = (List) rxn.getAllReactionParticipants();
+        List<ParticipantImplementation<Metabolite, Double, CompartmentImplementation>> participants = (List) rxn.getParticipants();
 
         int missingXref = 0;
         for (int i = 0; i < participants.size(); i++) {

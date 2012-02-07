@@ -4,18 +4,8 @@
  */
 package uk.ac.ebi.mnb.view;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import org.junit.Test;
-import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
-import uk.ac.ebi.chemet.render.reaction.ReactionRenderer;
-import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
-import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 
 /**

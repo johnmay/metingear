@@ -23,17 +23,15 @@ package uk.ac.ebi.mnb.dialog.tools;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Locus;
-import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Multimer;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 

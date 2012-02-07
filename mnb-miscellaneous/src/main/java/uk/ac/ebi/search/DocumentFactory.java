@@ -30,11 +30,12 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.reaction.Participant;
 
 
 /**
@@ -86,8 +87,8 @@ public class DocumentFactory {
                                         (AnnotatedEntity) reaction, true);
 
         // add metabolite data
-        for (Metabolite m : reaction.getAllReactionMolecules()) {
-            document = getDocument(document, m, false);
+        for (Participant<Metabolite, ?> p : reaction.getParticipants()) {
+            document = getDocument(document, p.getMolecule(), false);
         }
 
         return document;

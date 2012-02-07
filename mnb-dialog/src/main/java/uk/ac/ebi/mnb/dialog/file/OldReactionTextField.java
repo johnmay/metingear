@@ -46,8 +46,8 @@ import mnb.io.tabular.parser.ReactionParser;
 import org.apache.log4j.Logger;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.Query;
-import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
@@ -144,7 +144,7 @@ public class OldReactionTextField
     }
 
 
-    public MetabolicReaction getReaction(Identifier id) {
+    public MetabolicReactionImplementation getReaction(Identifier id) {
         throw new UnsupportedOperationException();
 
 //        int nR = counts.get(0); // reac
