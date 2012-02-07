@@ -30,15 +30,18 @@ import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.core.*;
+import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
@@ -78,11 +81,13 @@ public class ProjectView
 
     private CardLayout layout;
 
-    private Map<String, AbstractEntityView> viewMap;
+    private Map<Class<? extends Entity>, AbstractEntityView> viewMap;
 
     private EntityCollection selection = new EntityMap(DefaultEntityFactory.getInstance());
 
     private ViewInfo selector;
+
+    private EntityFactory factory = DefaultEntityFactory.getInstance();
 
 
     public ProjectView() {
@@ -96,26 +101,21 @@ public class ProjectView
 
         layout = new CardLayout();
         setLayout(layout);
-        add(products, products.getClass().getSimpleName());
-        add(reactions, reactions.getClass().getSimpleName());
-        add(metabolites, metabolites.getClass().getSimpleName());
+        add(products, GeneProduct.class.getName());
+        add(reactions, Reaction.class.getName());
+        add(metabolites, Metabolite.class.getName());
         add(tasks, tasks.getClass().getSimpleName());
         add(general, general.getClass().getSimpleName());
-        add(genes, genes.getClass().getSimpleName());
+        add(genes, Gene.class.getName());
 
+        viewMap = new HashMap<Class<? extends Entity>, AbstractEntityView>();
+        viewMap.put(Metabolite.class, metabolites);
+        viewMap.put(Reaction.class, reactions);
 
-        viewMap = new HashMap();
-        viewMap.put(MetaboliteImplementation.BASE_TYPE, metabolites);
-        viewMap.put(Reaction.BASE_TYPE, reactions);
+        viewMap.put(GeneProduct.class, products);
 
-        viewMap.put(ProteinProduct.BASE_TYPE, products);
-        viewMap.put(RibosomalRNAImplementation.BASE_TYPE, products);
-        viewMap.put(TransferRNAImplementation.BASE_TYPE, products);
-        viewMap.put(AbstractRNAProduct.BASE_TYPE, products);
-        viewMap.put(Multimer.BASE_TYPE, products);
-
-        viewMap.put(RunnableTask.BASE_TYPE, tasks);
-        viewMap.put(GeneImplementation.BASE_TYPE, genes);
+        viewMap.put(RunnableTask.class, tasks);
+        viewMap.put(Gene.class, genes);
 
     }
 
@@ -154,27 +154,29 @@ public class ProjectView
     }
 
 
+    public void setView(Class<? extends Entity> c) {
+        layout.show(this, factory.getRootClass(c).getName());
+        selector.setSelected(c);
+    }
+
+
     public void setProductView() {
-        layout.show(this, products.getClass().getSimpleName());
-        selector.setSelected(ProteinProduct.BASE_TYPE);
+        setView(GeneProduct.class);
     }
 
 
     public void setReactionView() {
-        layout.show(this, reactions.getClass().getSimpleName());
-        selector.setSelected(Reaction.BASE_TYPE);
+        setView(Reaction.class);
     }
 
 
     public void setMetaboliteView() {
-        layout.show(this, metabolites.getClass().getSimpleName());
-        selector.setSelected(MetaboliteImplementation.BASE_TYPE);
+        setView(Metabolite.class);
     }
 
 
     public void setGeneView() {
-        layout.show(this, genes.getClass().getSimpleName());
-        selector.setSelected(GeneImplementation.BASE_TYPE);
+        setView(Gene.class);
     }
 
 
@@ -328,7 +330,7 @@ public class ProjectView
 
         layout.show(this, view.getClass().getSimpleName());
 
-        selector.setSelected(entity.getBaseType());
+        selector.setSelected(DefaultEntityFactory.getInstance().getRootClass(entity.getClass()));
 
         return view.setSelection(selection);
 

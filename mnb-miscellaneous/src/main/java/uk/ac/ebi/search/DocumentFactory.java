@@ -29,6 +29,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
@@ -125,7 +126,7 @@ public class DocumentFactory {
                                Field.Index.ANALYZED));
         if (root) {
             document.add(new Field(FieldType.TYPE.getName(),
-                                   entity.getBaseType(),
+                                   DefaultEntityFactory.getInstance().getRootClass(entity.getClass()).getSimpleName(),
                                    Field.Store.YES,
                                    Field.Index.ANALYZED));
         }

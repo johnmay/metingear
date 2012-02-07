@@ -44,6 +44,7 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -71,7 +72,7 @@ public class ReactionField
 
     private AutoComplete autocomplete;
 
-    private TermQuery typeFilter = new TermQuery(FieldType.TYPE.getTerm(MetaboliteImplementation.BASE_TYPE));
+    private TermQuery typeFilter = new TermQuery(FieldType.TYPE.getTerm(DefaultEntityFactory.getInstance().getRootClass(Metabolite.class).getSimpleName()));
 
     private static String[] fields = new String[]{FieldType.NAME.getName(), FieldType.ABBREVIATION.getName()};
 

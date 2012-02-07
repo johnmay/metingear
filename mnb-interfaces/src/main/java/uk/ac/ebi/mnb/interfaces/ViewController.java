@@ -20,6 +20,9 @@
  */
 package uk.ac.ebi.mnb.interfaces;
 
+import uk.ac.ebi.interfaces.entities.Entity;
+
+
 /**
  * @name    ProjectView - 2011.10.03 <br>
  *          Interface description
@@ -35,5 +38,6 @@ public interface ViewController extends SelectionController {
      */
     public EntityView getActiveView();
 
-    
+
+    public void setView(Class<? extends Entity> c);
 }

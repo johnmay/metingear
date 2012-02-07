@@ -32,15 +32,15 @@ import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.core.GeneImplementation;
-import uk.ac.ebi.core.Multimer;
-import uk.ac.ebi.core.ProteinProduct;
-import uk.ac.ebi.core.AbstractRNAProduct;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.core.*;
+import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.entities.Entity;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+
 
 /**
  *          ViewSelector - 2011.11.01 <br>
@@ -52,14 +52,23 @@ import uk.ac.ebi.core.*;
 public class ViewInfo {
 
     private static final Logger LOGGER = Logger.getLogger(ViewInfo.class);
+
     private JToggleButton genes = new JToggleButton(new ViewGenes());
+
     private JToggleButton products = new JToggleButton(new ViewProducts());
+
     private JToggleButton metabolites = new JToggleButton(new ViewMetabolites());
+
     private JToggleButton reactions = new JToggleButton(new ViewReactions());
+
     private ProjectView controller;
-    private Map<String, JToggleButton> buttonMap = new HashMap();
+
+    private Map<Class<? extends Entity>, JToggleButton> buttonMap = new HashMap();
+
     private BottomBar bottombar = new BottomBar(BottomBarSize.SMALL);
+
     private JLabel info = LabelFactory.newLabel("");
+
 
     public ViewInfo(ProjectView controller) {
         this.controller = controller;
@@ -95,41 +104,40 @@ public class ViewInfo {
         group.add(reactions);
 
 
-        buttonMap.put(MetaboliteImplementation.BASE_TYPE, metabolites);
-        buttonMap.put(Reaction.BASE_TYPE, reactions);
+        buttonMap.put(Metabolite.class, metabolites);
+        buttonMap.put(Reaction.class, reactions);
 
-        buttonMap.put(ProteinProduct.BASE_TYPE, products);
-        buttonMap.put(AbstractRNAProduct.BASE_TYPE, products);
-        buttonMap.put(Multimer.BASE_TYPE, products);
+        buttonMap.put(GeneProduct.class, products);
 
 //        buttonMap.put(RunnableTask.BASE_TYPE, tasks);
-        buttonMap.put(GeneImplementation.BASE_TYPE, genes);
+        buttonMap.put(Gene.class, genes);
 
         bottombar.addComponentToCenter(info);
 
     }
 
+
     public JComponent getButtonGroup() {
         return new LabeledComponentGroup("View", genes, products, metabolites, reactions).getComponent();
     }
+
 
     public BottomBar getBottomBar() {
         return bottombar;
     }
 
-    /**
-     * Sets the toggle for the provided base type
-     */
-    public void setSelected(String type) {
-        if (buttonMap.get(type) != null) {
+
+    public void setSelected(Class<? extends Entity> c) {
+        if (buttonMap.get(c) != null) {
             for (JToggleButton button : buttonMap.values()) {
                 button.setSelected(false);
             }
-            buttonMap.get(type).setSelected(true);
+            buttonMap.get(c).setSelected(true);
             info.setText("");
             info.repaint();
         }
     }
+
 
     private class ViewGenes
             extends GeneralAction {
@@ -138,10 +146,12 @@ public class ViewInfo {
             super("ViewGenes");
         }
 
+
         public void actionPerformed(ActionEvent e) {
             controller.setGeneView();
         }
     }
+
 
     private class ViewProducts
             extends GeneralAction {
@@ -150,10 +160,12 @@ public class ViewInfo {
             super("ViewProducts");
         }
 
+
         public void actionPerformed(ActionEvent e) {
             controller.setProductView();
         }
     }
+
 
     private class ViewMetabolites
             extends GeneralAction {
@@ -162,10 +174,12 @@ public class ViewInfo {
             super("ViewMetabolites");
         }
 
+
         public void actionPerformed(ActionEvent e) {
             controller.setMetaboliteView();
         }
     }
+
 
     private class ViewReactions
             extends GeneralAction {
@@ -173,6 +187,7 @@ public class ViewInfo {
         public ViewReactions() {
             super("ViewReactions");
         }
+
 
         public void actionPerformed(ActionEvent e) {
             controller.setReactionView();
