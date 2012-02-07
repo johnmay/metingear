@@ -27,11 +27,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.swing.text.html.parser.Entity;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.AbstractRNAProduct;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
+
 
 /**
  * @name    SelectionMap - 2011.10.14 <br>
@@ -45,6 +48,14 @@ public class EntityMap implements EntityCollection {
 
     private Multimap<Class, AnnotatedEntity> map = ArrayListMultimap.create();
 
+    private EntityFactory factory;
+
+
+    public EntityMap(EntityFactory factory) {
+        this.factory = factory;
+    }
+
+
     /**
      * @inheritDoc
      */
@@ -52,19 +63,30 @@ public class EntityMap implements EntityCollection {
         return map.values();
     }
 
+
     /**
      * @inheritDoc
      */
     public boolean add(AnnotatedEntity entity) {
-        return map.put(entity.getClass(), entity);
+        return map.put(factory.getEntityClass(entity.getClass()), entity);
     }
+
 
     /**
      * @inheritDoc
      */
     public boolean addAll(Collection<? extends AnnotatedEntity> entities) {
-        return map.putAll(entities.getClass(), entities);
+        
+        boolean changed = false;
+        
+        for (AnnotatedEntity entity : entities) {
+            changed = add(entity) || changed;
+        }
+        
+        return changed;
+        
     }
+
 
     /**
      * @inheritDoc
@@ -74,12 +96,14 @@ public class EntityMap implements EntityCollection {
         return this;
     }
 
+
     /**
      * @inheritDoc
      */
     public <T> Collection<T> get(Class<T> type) {
         return (Collection<T>) map.get(type);
     }
+
 
     /**
      * @inheritDoc
@@ -97,12 +121,14 @@ public class EntityMap implements EntityCollection {
 
     }
 
+
     /**
      * @inheritDoc
      */
     public boolean hasSelection() {
         return !map.isEmpty();
     }
+
 
     /**
      * @inheritDoc
@@ -111,12 +137,14 @@ public class EntityMap implements EntityCollection {
         return !map.get(type).isEmpty();
     }
 
+
     /**
      * @inheritDoc
      */
     public boolean isEmpty() {
         return map.isEmpty();
     }
+
 
     /**
      * @inheritDoc

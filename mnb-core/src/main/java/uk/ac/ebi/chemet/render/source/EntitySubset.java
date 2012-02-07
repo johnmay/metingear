@@ -20,9 +20,8 @@ package uk.ac.ebi.chemet.render.source;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 import org.apache.log4j.Logger;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.mnb.core.EntityMap;
 
 
@@ -52,6 +51,7 @@ public class EntitySubset extends EntityMap {
 
 
     public EntitySubset(String name, Object parent) {
+        super(DefaultEntityFactory.getInstance());
         this.name = name;
         this.parent = parent;
     }

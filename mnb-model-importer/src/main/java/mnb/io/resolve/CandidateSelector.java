@@ -45,6 +45,7 @@ import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
 import uk.ac.ebi.render.crossreference.modules.AssignStructure;
 import uk.ac.ebi.render.crossreference.modules.GoogleSearch;
@@ -87,7 +88,7 @@ public class CandidateSelector
                                          new CrossreferenceModule[]{
         new DatabaseSearch(),
         new AssignStructure(),
-        new PeptideGenerator(),
+        new PeptideGenerator(DefaultEntityFactory.getInstance()),
         new GoogleSearch()
     };
 

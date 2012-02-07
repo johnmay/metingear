@@ -30,6 +30,7 @@ import javax.swing.KeyStroke;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
@@ -49,7 +50,7 @@ public abstract class AbstractEntityTable
                    SelectionController {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityTable.class);
-    private EntityCollection selection = new EntityMap();
+    private EntityCollection selection = new EntityMap(DefaultEntityFactory.getInstance());
 
     public AbstractEntityTable(AbstractEntityTableModel model) {
         super(model);

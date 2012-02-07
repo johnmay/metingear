@@ -71,6 +71,7 @@ import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
@@ -230,7 +231,7 @@ public class ExcelImportDialog
             EntryReconciler reconciler = Boolean.parseBoolean(properties.getProperty("import.skip")) ? new AutomatedReconciler(factory, new ChEBIIdentifier())
                                          : new ListSelectionReconciler(frame, factory, new ChEBIIdentifier());
 
-            ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler);
+            ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler, DefaultEntityFactory.getInstance());
             parser = new ReactionParser(entitySheet);
 
             waitIndicator.setText(String.format("initialising..."));

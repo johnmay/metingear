@@ -23,15 +23,16 @@ package uk.ac.ebi.mnb.dialog.edit;
 import java.awt.event.ActionEvent;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
+
 
 /**
  *          DeleteEntity - 2011.10.20 <br>
@@ -44,16 +45,18 @@ public class DeleteEntities extends ControllerAction {
 
     private static final Logger LOGGER = Logger.getLogger(DeleteEntities.class);
 
+
     public DeleteEntities(MainController controller) {
         super(DeleteEntities.class.getSimpleName(), controller);
     }
+
 
     public void actionPerformed(ActionEvent e) {
         EntityCollection selection = getSelection();
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
         for (AnnotatedEntity entity : selection.getEntities()) {
-            if (entity instanceof MetaboliteImplementation) {
-                recon.getMetabolites().remove((MetaboliteImplementation) entity);
+            if (entity instanceof Metabolite) {
+                recon.getMetabolites().remove((Metabolite) entity);
             } else if (entity instanceof MetabolicReaction) {
                 recon.getReactions().remove((MetabolicReaction) entity);
             } else if (entity instanceof GeneProduct) {
@@ -65,7 +68,5 @@ public class DeleteEntities extends ControllerAction {
         }
         selection.clear();
         getController().getViewController().getActiveView().update();
-    } 
-
-    
+    }
 }

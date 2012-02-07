@@ -41,11 +41,11 @@ import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.io.service.KEGGCompoundStructureService;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
@@ -54,6 +54,7 @@ import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+
 
 /**
  *          DownloadStructuresDialog – 2011.09.27 <br>
@@ -66,12 +67,19 @@ public class DownloadStructuresDialog
         extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(DownloadStructuresDialog.class);
+
     private Collection<AnnotatedEntity> components;
+
     private ChEBIWebServiceConnection chebi;
+
     private KeggCompoundWebServiceConnection kegg;
+
     private JCheckBox chebiCheckBox;
+
     private JCheckBox keggCheckBox;
+
     private JCheckBox chebiAllStarCheckBox;
+
 
     public DownloadStructuresDialog(JFrame frame,
                                     TargetedUpdate updater,
@@ -87,6 +95,7 @@ public class DownloadStructuresDialog
         setDefaultLayout();
     }
 
+
     public JPanel getOptions() {
         JPanel panel = super.getOptions();
         CellConstraints cc = new CellConstraints();
@@ -101,6 +110,7 @@ public class DownloadStructuresDialog
 
         return panel;
     }
+
 
     @Override
     public void process(final SpinningDialWaitIndicator wait) {
@@ -126,9 +136,9 @@ public class DownloadStructuresDialog
         List<Identifier> problemIdentifiers = new ArrayList();
 
         int completed = 0;
-        int size = getSelection().get(MetaboliteImplementation.class).size();
+        int size = getSelection().get(Metabolite.class).size();
 
-        for (AnnotatedEntity component : getSelection().get(MetaboliteImplementation.class)) {
+        for (AnnotatedEntity component : getSelection().get(Metabolite.class)) {
 
             completed++;
 
@@ -182,10 +192,12 @@ public class DownloadStructuresDialog
 
     }
 
+
     @Override
     public void process() {
         // do nothing
     }
+
 
     @Override
     public boolean update() {

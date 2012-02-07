@@ -20,27 +20,13 @@
 package uk.ac.ebi.mnb.dialog.tools;
 
 import uk.ac.ebi.interfaces.entities.EntityCollection;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import javax.swing.JFrame;
 import mnb.io.resolve.CandidateSelector;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
-import uk.ac.ebi.io.service.ChEBINameService;
-import uk.ac.ebi.io.service.KEGGCompoundNameService;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
-import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.*;
-import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 
 /**
@@ -76,7 +62,7 @@ public class CuratedReconciliation
 
         dialog.setSkipall(false); // reset the skip-all flag
 
-        for (MetaboliteImplementation metabolite : manager.get(MetaboliteImplementation.class)) {
+        for (Metabolite metabolite : manager.get(Metabolite.class)) {
 
             if (metabolite.getType() != MetaboliteClassImplementation.PROTEIN) {
                 dialog.setup(metabolite);

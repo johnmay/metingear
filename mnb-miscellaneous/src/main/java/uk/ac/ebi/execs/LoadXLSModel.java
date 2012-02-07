@@ -1,4 +1,3 @@
-
 /**
  * LoadXLSModel.java
  *
@@ -53,6 +52,7 @@ import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.chemet.ws.CachedChemicalWS;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.metabolomes.execs.CommandLineMain;
@@ -117,14 +117,14 @@ public class LoadXLSModel extends CommandLineMain {
 
             ChemicalDBWebService webservice =
                                  new CachedChemicalWS(new ChEBIWebServiceConnection(
-              StarsCategory.THREE_ONLY, 10));
+                    StarsCategory.THREE_ONLY, 10));
 
-            CandidateFactory factory = new CandidateFactory( ChEBINameService.getInstance(),
+            CandidateFactory factory = new CandidateFactory(ChEBINameService.getInstance(),
                                                             new ChemicalFingerprintEncoder());
 
             ExcelEntityResolver entitySheet =
-                           new ExcelEntityResolver(entSht, new AutomatedReconciler(factory,
-                                                                              new ChEBIIdentifier()));
+                                new ExcelEntityResolver(entSht, new AutomatedReconciler(factory,
+                                                                                        new ChEBIIdentifier()), DefaultEntityFactory.getInstance());
 
             ReactionParser parser = new ReactionParser(entitySheet);
 
@@ -133,7 +133,7 @@ public class LoadXLSModel extends CommandLineMain {
             stats.put(XrefLevel.SOME, 0);
             stats.put(XrefLevel.NONE, 0);
 
-            while( rxnSht.hasNext() ) {
+            while (rxnSht.hasNext()) {
                 PreparsedReaction ppRxn = (PreparsedReaction) rxnSht.next();
                 Reaction rxn = parser.parseReaction(ppRxn);
                 XrefLevel level = score(rxn);
@@ -146,19 +146,19 @@ public class LoadXLSModel extends CommandLineMain {
             // so slow but can't use tree map as it will collapse values
             List<Integer> values = new ArrayList(new HashSet(map.values()));
             Collections.sort(values);
-            for( Integer value : values ) {
-                for( String key : map.keySet() ) {
-                    if( map.get(key).equals(value) ) {
+            for (Integer value : values) {
+                for (String key : map.keySet()) {
+                    if (map.get(key).equals(value)) {
                         System.out.println(key + " = " + value);
                     }
                 }
             }
 
-        } catch( UnparsableReactionError ex ) {
+        } catch (UnparsableReactionError ex) {
             ex.printStackTrace();
-        } catch( InvalidPropertiesFormatException ex ) {
+        } catch (InvalidPropertiesFormatException ex) {
             ex.printStackTrace();
-        } catch( IOException ex ) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
 
@@ -175,30 +175,29 @@ public class LoadXLSModel extends CommandLineMain {
 
     public XrefLevel score(Reaction rxn) {
 
-        List<Participant<Metabolite, Double, CompartmentImplementation>> participants = (List) rxn.
-          getAllReactionParticipants();
+        List<Participant<Metabolite, Double, CompartmentImplementation>> participants = (List) rxn.getAllReactionParticipants();
 
         int missingXref = 0;
-        for( int i = 0 ; i < participants.size() ; i++ ) {
+        for (int i = 0; i < participants.size(); i++) {
             Metabolite m = participants.get(i).getMolecule();
             // have has no cross references...
-            if( m.getAnnotationsExtending(CrossReference.class).isEmpty() ) {
+            if (m.getAnnotationsExtending(CrossReference.class).isEmpty()) {
 
 //                if( m.getName().equals("Coenzyme A") == false &&
 //                    m.getName().equals("Diphosphate") == false &&
 //                    m.getName().equals("Phosphate") == false ) {
 
-                    missingXref++;
-                    String name = m.getName();
-                    map.put(name, map.containsKey(name) ? map.get(name) + 1 : 1);
+                missingXref++;
+                String name = m.getName();
+                map.put(name, map.containsKey(name) ? map.get(name) + 1 : 1);
 //                }
-                
+
             }
         }
 
-        if( missingXref == participants.size() ) {
+        if (missingXref == participants.size()) {
             return XrefLevel.NONE;
-        } else if( missingXref == 0 ) {
+        } else if (missingXref == 0) {
             return XrefLevel.ALL;
         } else {
             return XrefLevel.SOME;
@@ -206,7 +205,5 @@ public class LoadXLSModel extends CommandLineMain {
 
     }
 
-
     private Map<String, Integer> map = new HashMap();
 }
-

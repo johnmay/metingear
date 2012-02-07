@@ -7,33 +7,14 @@ package uk.ac.ebi.mnb.menu.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.stream.XMLStreamException;
 import uk.ac.ebi.core.ReconstructionManager;
-import org.sbml.jsbml.CVTerm;
-import org.sbml.jsbml.Compartment;
-import org.sbml.jsbml.Model;
-import org.sbml.jsbml.ModifierSpeciesReference;
-import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
-import org.sbml.jsbml.Species;
-import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.xml.stax.SBMLWriter;
 
-import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
-import uk.ac.ebi.core.metabolite.MetaboliteCollection;
-import uk.ac.ebi.core.MetaboliteImplementation;
-import uk.ac.ebi.metabolomes.identifier.UniqueIdentifier;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.core.FileChooserAction;
-import org.apache.commons.lang.StringUtils;
-import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.io.xml.SBMLIOUtil;
 
 

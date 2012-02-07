@@ -33,7 +33,6 @@ import javax.swing.JToggleButton;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.core.GeneImplementation;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Multimer;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.AbstractRNAProduct;
@@ -41,6 +40,7 @@ import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.core.*;
 
 /**
  *          ViewSelector - 2011.11.01 <br>

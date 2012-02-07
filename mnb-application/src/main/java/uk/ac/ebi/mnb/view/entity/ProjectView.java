@@ -33,23 +33,19 @@ import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.core.GeneImplementation;
-import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Multimer;
-import uk.ac.ebi.core.ProteinProduct;
-import uk.ac.ebi.core.AbstractRNAProduct;
-import uk.ac.ebi.core.RibosomalRNAImplementation;
-import uk.ac.ebi.core.TransferRNAImplementation;
+import uk.ac.ebi.core.*;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.ViewInfo;
 import uk.ac.ebi.mnb.view.entity.gene.GeneView;
 import uk.ac.ebi.search.SearchManager;
+
 
 /**
  * ProjectPanel.java
@@ -67,16 +63,27 @@ public class ProjectView
                                                  org.apache.log4j.Logger.getLogger(
             ProjectView.class);
     // underlying  components
+
     private ReactionView reactions = null;
+
     private MetaboliteView metabolites = null;
+
     private GeneView genes = null;
+
     private ProductView products = null;
+
     private TaskView tasks = null;
+
     private GeneralView general = null;
+
     private CardLayout layout;
+
     private Map<String, AbstractEntityView> viewMap;
-    private EntityCollection selection = new EntityMap();
+
+    private EntityCollection selection = new EntityMap(DefaultEntityFactory.getInstance());
+
     private ViewInfo selector;
+
 
     public ProjectView() {
 
@@ -112,11 +119,13 @@ public class ProjectView
 
     }
 
+
     public void setBottomBarLabel(JLabel label) {
         for (AbstractEntityView view : viewMap.values()) {
             view.setBottomBarLabel(label);
         }
     }
+
 
     /**
      * Sets the association with the buttons to change the view
@@ -125,6 +134,7 @@ public class ProjectView
     public void setViewSelector(ViewInfo selector) {
         this.selector = selector;
     }
+
 
     /**
      * Returns the currently active view
@@ -143,33 +153,40 @@ public class ProjectView
 
     }
 
+
     public void setProductView() {
         layout.show(this, products.getClass().getSimpleName());
         selector.setSelected(ProteinProduct.BASE_TYPE);
     }
+
 
     public void setReactionView() {
         layout.show(this, reactions.getClass().getSimpleName());
         selector.setSelected(Reaction.BASE_TYPE);
     }
 
+
     public void setMetaboliteView() {
         layout.show(this, metabolites.getClass().getSimpleName());
         selector.setSelected(MetaboliteImplementation.BASE_TYPE);
     }
+
 
     public void setGeneView() {
         layout.show(this, genes.getClass().getSimpleName());
         selector.setSelected(GeneImplementation.BASE_TYPE);
     }
 
+
     public void setTaskView() {
         layout.show(this, tasks.getClass().getSimpleName());
     }
 
+
     public void setGenericView() {
         layout.show(this, general.getClass().getSimpleName());
     }
+
 
     /**
      * 
@@ -220,6 +237,7 @@ public class ProjectView
 
     }
 
+
     @Override
     public boolean update(EntityCollection selection) {
 
@@ -228,7 +246,7 @@ public class ProjectView
         if (selection.getGeneProducts().isEmpty() == false) {
             products.update(selection);
         }
-        if (selection.hasSelection(MetaboliteImplementation.class)) {
+        if (selection.hasSelection(Metabolite.class)) {
             metabolites.update(selection);
         }
         if (selection.hasSelection(MetabolicReaction.class)) {
@@ -243,6 +261,7 @@ public class ProjectView
 
         return true; // for now
     }
+
 
     /**
      * Returns the selection manager for the active view. If no view is active
@@ -262,25 +281,31 @@ public class ProjectView
 
     }
 
+
     public ProductView getProductView() {
         return products;
     }
+
 
     public MetaboliteView getMetaboliteView() {
         return metabolites;
     }
 
+
     public ReactionView getReactionView() {
         return reactions;
     }
+
 
     public TaskView getTaskView() {
         return tasks;
     }
 
+
     public GeneralView getSearchView() {
         return general;
     }
+
 
     /**
      * At the moment sets view to that of first item and then selects all provided. This method presumes

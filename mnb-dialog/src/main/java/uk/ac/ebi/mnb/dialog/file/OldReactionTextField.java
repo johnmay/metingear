@@ -47,7 +47,6 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.Query;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -56,6 +55,7 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.search.FieldType;
 import uk.ac.ebi.search.SearchManager;
 import uk.ac.ebi.search.SearchableIndex;
+
 
 /**
  *          ReactionTextField - 2011.10.21 <br>
@@ -69,15 +69,25 @@ public class OldReactionTextField
         implements DocumentListener {
 
     private static final Logger LOGGER = Logger.getLogger(OldReactionTextField.class);
+
     private JDialog autocomplete;
+
     private DefaultListModel model = new DefaultListModel();
+
     private JList list = new JList(model);
+
     private static SearchManager search = SearchManager.getInstance();
+
     private static Pattern REMOVE_TRAILING_CHARS = Pattern.compile("[-=+]+\\s?\\z");
+
     private static int N_SUGGESTIONS = Preferences.userNodeForPackage(OldReactionTextField.class).getInt("reaction.form.suggestions", 15);
+
     private static String[] fields = new String[]{FieldType.NAME.getName(), FieldType.ACCESSION.getName(), FieldType.ABBREVIATION.getName()};
+
     private int previousCount = 0;
+
     private List<Object> participants = new ArrayList();
+
 
     public OldReactionTextField(JDialog parent) {
 
@@ -95,36 +105,37 @@ public class OldReactionTextField
         setupInputMap();
     }
 
+
     /**
      * Adds binds for up, down and tab keys
      */
     private void setupInputMap() {
-        getInputMap().put(KeyStroke.getKeyStroke("DOWN"), new AbstractAction() {
-
-            public void actionPerformed(ActionEvent e) {
-                moveSelectionDown();
-            }
-        });
-        getInputMap().put(KeyStroke.getKeyStroke("UP"), new AbstractAction() {
-
-            public void actionPerformed(ActionEvent e) {
-                moveSelectionUp();
-            }
-        });
-        getInputMap().put(KeyStroke.getKeyStroke("TAB"), new AbstractAction() {
-
-            public void actionPerformed(ActionEvent e) {
-                complete();
-            }
-        });
-        getInputMap().put(KeyStroke.getKeyStroke("ESCAPE"), new AbstractAction() {
-
-            public void actionPerformed(ActionEvent e) {
-                autocomplete.setVisible(false);
-            }
-        });
-
+//        getInputMap().put(KeyStroke.getKeyStroke("DOWN"), new AbstractAction() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//                moveSelectionDown();
+//            }
+//        });
+//        getInputMap().put(KeyStroke.getKeyStroke("UP"), new AbstractAction() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//                moveSelectionUp();
+//            }
+//        });
+//        getInputMap().put(KeyStroke.getKeyStroke("TAB"), new AbstractAction() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//                complete();
+//            }
+//        });
+//        getInputMap().put(KeyStroke.getKeyStroke("ESCAPE"), new AbstractAction() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//                autocomplete.setVisible(false);
+//            }
+//        });
     }
+
 
     @Override
     public void setVisible(boolean aFlag) {
@@ -132,122 +143,130 @@ public class OldReactionTextField
         super.setVisible(aFlag);
     }
 
+
     public MetabolicReaction getReaction(Identifier id) {
+        throw new UnsupportedOperationException();
 
-        int nR = counts.get(0); // reac
-        int nP = counts.get(1); // prod
-
-        MetabolicReaction rxn = new MetabolicReaction(id, null, null);
-
-        for (int i = 0; i < nR; i++) {
-            Object p = participants.get(i);
-            if (p instanceof MetaboliteImplementation) {
-                rxn.addReactant(new MetabolicParticipant((MetaboliteImplementation) p));
-            } else {
-                MetaboliteImplementation m = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
-                rxn.addReactant(new MetabolicParticipant(m));
-            }
-        }
-        for (int i = 0; i < nP; i++) {
-            Object p = participants.get(i + nR);
-            if (p instanceof MetaboliteImplementation) {
-                rxn.addProduct(new MetabolicParticipant((MetaboliteImplementation) p));
-            } else {
-                MetaboliteImplementation m = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
-                rxn.addProduct(new MetabolicParticipant(m));
-            }
-        }
-
-
-        return rxn;
+//        int nR = counts.get(0); // reac
+//        int nP = counts.get(1); // prod
+//
+//        MetabolicReaction rxn = new MetabolicReaction(id, null, null);
+//
+//        for (int i = 0; i < nR; i++) {
+//            Object p = participants.get(i);
+//            if (p instanceof MetaboliteImplementation) {
+//                rxn.addReactant(new MetabolicParticipant((MetaboliteImplementation) p));
+//            } else {
+//                MetaboliteImplementation m = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
+//                rxn.addReactant(new MetabolicParticipant(m));
+//            }
+//        }
+//        for (int i = 0; i < nP; i++) {
+//            Object p = participants.get(i + nR);
+//            if (p instanceof MetaboliteImplementation) {
+//                rxn.addProduct(new MetabolicParticipant((MetaboliteImplementation) p));
+//            } else {
+//                MetaboliteImplementation m = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), (String) p, "");
+//                rxn.addProduct(new MetabolicParticipant(m));
+//            }
+//        }
+//
+//
+//        return rxn;
     }
+
 
     public void complete() {
-        AnnotatedEntity entity = (AnnotatedEntity) model.get(list.getSelectedIndex() == -1 ? 0 : list.getSelectedIndex());
-
-        String currString = getCurrentParticipant();
-        String insert = getText().replaceAll(getCurrentParticipant(), entity.getName());
-        System.out.println(insert);
-        setText(insert);
-        int i = getEntityCount() - 1;
-        participants.add(i, entity);
-        previousCount = getEntityCount();
-        autocomplete.setVisible(false);
+//        AnnotatedEntity entity = (AnnotatedEntity) model.get(list.getSelectedIndex() == -1 ? 0 : list.getSelectedIndex());
+//
+//        String currString = getCurrentParticipant();
+//        String insert = getText().replaceAll(getCurrentParticipant(), entity.getName());
+//        System.out.println(insert);
+//        setText(insert);
+//        int i = getEntityCount() - 1;
+//        participants.add(i, entity);
+//        previousCount = getEntityCount();
+//        autocomplete.setVisible(false);
     }
+
 
     public void moveSelectionDown() {
-        list.setSelectedIndex(list.getSelectedIndex() < model.getSize() ? list.getSelectedIndex() + 1 : list.getSelectedIndex());
+        throw new UnsupportedOperationException();
+
+        //list.setSelectedIndex(list.getSelectedIndex() < model.getSize() ? list.getSelectedIndex() + 1 : list.getSelectedIndex());
     }
+
 
     public void moveSelectionUp() {
-        list.setSelectedIndex(list.getSelectedIndex() > 0 ? list.getSelectedIndex() - 1 : list.getSelectedIndex());
+        throw new UnsupportedOperationException();
+
+        //list.setSelectedIndex(list.getSelectedIndex() > 0 ? list.getSelectedIndex() - 1 : list.getSelectedIndex());
     }
+
 
     public void insertUpdate(DocumentEvent e) {
-
-
-
-        if (previousCount == getEntityCount()) {
-            return;
-        }
-
-        try {
-            String participant = getCurrentParticipant();
-            int i = getEntityCount() - 1;
-            if (i < participants.size()) {
-                participants.set(i, participant);
-            } else {
-                participants.add(participant);
-            };
-
-            for (Object string : participants) {
-                System.out.print(string.getClass().getSimpleName() + ", ");
-            }
-            System.out.println("");
-
-            SearchableIndex index = search.getCurrentIndex();
-
-            Query query = search.getQuery(fields, participant + "~");
-            query.combine(new Query[]{search.getQuery(FieldType.TYPE, MetaboliteImplementation.BASE_TYPE)});
-
-            Collection<AnnotatedEntity> entities = index.getRankedEntities(query, N_SUGGESTIONS, MetaboliteImplementation.class);
-
-            if (!entities.isEmpty()) {
-                model.removeAllElements();
-                for (AnnotatedEntity entity : entities) {
-                    model.addElement(entity);
-                }
-                autocomplete.pack();
-                if (!autocomplete.isVisible()) {
-                    autocomplete.setVisible(true);
-                }
-            }
-
-            Rectangle location = modelToView(getCaretPosition());
-            Point p = location.getLocation();
-            SwingUtilities.convertPointToScreen(p, this);
-            p.setLocation(p.x + 20, p.y);
-            autocomplete.setLocation(p);
-
-        } catch (BadLocationException ex) {
-            java.util.logging.Logger.getLogger(OldReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(OldReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            java.util.logging.Logger.getLogger(OldReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-
-
-
+//
+//        if (previousCount == getEntityCount()) {
+//            return;
+//        }
+//
+//        try {
+//            String participant = getCurrentParticipant();
+//            int i = getEntityCount() - 1;
+//            if (i < participants.size()) {
+//                participants.set(i, participant);
+//            } else {
+//                participants.add(participant);
+//            };
+//
+//            for (Object string : participants) {
+//                System.out.print(string.getClass().getSimpleName() + ", ");
+//            }
+//            System.out.println("");
+//
+//            SearchableIndex index = search.getCurrentIndex();
+//
+//            Query query = search.getQuery(fields, participant + "~");
+//            query.combine(new Query[]{search.getQuery(FieldType.TYPE, MetaboliteImplementation.BASE_TYPE)});
+//
+//            Collection<AnnotatedEntity> entities = index.getRankedEntities(query, N_SUGGESTIONS, MetaboliteImplementation.class);
+//
+//            if (!entities.isEmpty()) {
+//                model.removeAllElements();
+//                for (AnnotatedEntity entity : entities) {
+//                    model.addElement(entity);
+//                }
+//                autocomplete.pack();
+//                if (!autocomplete.isVisible()) {
+//                    autocomplete.setVisible(true);
+//                }
+//            }
+//
+//            Rectangle location = modelToView(getCaretPosition());
+//            Point p = location.getLocation();
+//            SwingUtilities.convertPointToScreen(p, this);
+//            p.setLocation(p.x + 20, p.y);
+//            autocomplete.setLocation(p);
+//
+//        } catch (BadLocationException ex) {
+//            java.util.logging.Logger.getLogger(OldReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            java.util.logging.Logger.getLogger(OldReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (ParseException ex) {
+//            java.util.logging.Logger.getLogger(OldReactionTextField.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
+
 
     public void removeUpdate(DocumentEvent e) {
     }
 
+
     public void changedUpdate(DocumentEvent e) {
     }
+
     private List<Integer> counts = new ArrayList();
+
 
     public int getEntityCount() {
         String equation = getText();
@@ -274,6 +293,7 @@ public class OldReactionTextField
         }
         return count;
     }
+
 
     public String getCurrentParticipant() {
         String equation = getText();

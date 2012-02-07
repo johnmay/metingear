@@ -20,31 +20,23 @@
 package uk.ac.ebi.mnb.dialog.tools.stoichiometry;
 
 import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.core.CompartmentalisedMetabolite;
+import uk.ac.ebi.chemet.render.matrix.MatrixPane;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
-import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.chemet.render.matrix.MatrixPane;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.DefaultStoichiometricMatrix;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 
 /**

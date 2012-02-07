@@ -25,12 +25,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+
 
 /**
  *          CollapseStructures - 2011.10.28 <br>
@@ -48,18 +49,20 @@ public class CollapseStructures
         setDefaultLayout();
     }
 
+
     @Override
     public JPanel getOptions() {
         return super.getOptions();
     }
 
+
     @Override
     public void process() {
-        if (getSelection().hasSelection(MetaboliteImplementation.class) == false) {
+        if (getSelection().hasSelection(Metabolite.class) == false) {
             return;
         }
-        Collection<MetaboliteImplementation> metabolites = getSelection().get(MetaboliteImplementation.class);
-        for (MetaboliteImplementation m : metabolites) {
+        Collection<Metabolite> metabolites = getSelection().get(Metabolite.class);
+        for (Metabolite m : metabolites) {
             for (AtomContainerAnnotation structure : m.getAnnotations(AtomContainerAnnotation.class)) {
                 System.out.println(MolecularHashFactory.getInstance().getHash(structure.getStructure()));
             }

@@ -16,6 +16,7 @@ import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.tools.*;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.tool.GapAnalysis;
 
@@ -42,21 +43,21 @@ public class ToolsMenu extends ContextMenu {
         add(create(AutomaticCrossReference.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(MetaboliteImplementation.class);
+                return selection.hasSelection(Metabolite.class);
             }
         });
 
         add(new CuratedReconciliation(view), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(MetaboliteImplementation.class);
+                return selection.hasSelection(Metabolite.class);
             }
         });
 
         add(create(DownloadStructuresDialog.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(MetaboliteImplementation.class);
+                return selection.hasSelection(Metabolite.class);
             }
         });
 

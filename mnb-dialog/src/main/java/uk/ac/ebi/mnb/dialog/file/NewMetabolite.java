@@ -24,14 +24,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetaboliteImplementation;
+import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.mnb.interfaces.Updatable;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+
 
 /**
  * @name    NewMetabolite - 2011.10.04 <br>
@@ -44,9 +44,11 @@ public class NewMetabolite extends NewEntity {
 
     private static final Logger LOGGER = Logger.getLogger(NewMetabolite.class);
 
+
     public NewMetabolite(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits);
     }
+
 
     @Override
     public JLabel getDescription() {
@@ -55,12 +57,13 @@ public class NewMetabolite extends NewEntity {
         return label;
     }
 
+
     @Override
     public void process() {
         ReconstructionManager manager = ReconstructionManager.getInstance();
         if (manager.hasProjects()) {
             Reconstruction reconstruction = manager.getActive();
-            MetaboliteImplementation m = new MetaboliteImplementation(getIdentifier(), getAbbreviation(), getName());
+            Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class, getIdentifier(), getName(), getAbbreviation());
             reconstruction.addMetabolite(m);
         }
     }

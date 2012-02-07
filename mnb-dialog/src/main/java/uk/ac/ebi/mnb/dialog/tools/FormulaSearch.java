@@ -23,10 +23,9 @@ package uk.ac.ebi.mnb.dialog.tools;
 import java.awt.event.ActionEvent;
 import java.util.Map.Entry;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AuthorAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
-import uk.ac.ebi.core.MetaboliteImplementation;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.core.Utilities;
@@ -56,7 +55,7 @@ public class FormulaSearch extends ControllerAction {
 
         chebi = chebi == null ? new ChEBIWebServiceConnection() : chebi;
 
-        for (MetaboliteImplementation m : Utilities.getMetabolites(getSelection().getEntities())) {
+        for (Metabolite m : Utilities.getMetabolites(getSelection().getEntities())) {
 
             MolecularFormula annotation = m.getAnnotations(MolecularFormula.class).iterator().next();
 

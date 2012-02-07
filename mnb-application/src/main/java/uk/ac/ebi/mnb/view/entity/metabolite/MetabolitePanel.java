@@ -25,26 +25,22 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.utility.TextUtility;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.core.MetaboliteImplementation;
+import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.MComboBox;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
-import uk.ac.ebi.core.Reconstruction;
 
 
 /**
@@ -59,7 +55,7 @@ public class MetabolitePanel
 
     private static final Logger LOGGER = Logger.getLogger(MetabolitePanel.class);
 
-    private MetaboliteImplementation entity;
+    private Metabolite entity;
     // chemical structure
 
     private JLabel structureWarning = LabelFactory.newLabel("No Structure");
@@ -113,7 +109,7 @@ public class MetabolitePanel
 
             Collection<MolecularFormula> formulas = entity.getAnnotations(MolecularFormula.class);
             if (formulas.iterator().hasNext()) {
-                formularViewer.setText(ViewUtilities.htmlWrapper(formulas.iterator().next().toHTML()));
+                formularViewer.setText(TextUtility.html(formulas.iterator().next().toHTML()));
                 formulaEditor.setText(formulas.iterator().next().toString());
             } else {
                 formularViewer.setText("");
@@ -137,7 +133,7 @@ public class MetabolitePanel
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
-        this.entity = (MetaboliteImplementation) entity;
+        this.entity = (Metabolite) entity;
         return super.setEntity(entity);
     }
 

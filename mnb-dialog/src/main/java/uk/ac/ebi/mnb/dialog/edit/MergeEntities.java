@@ -26,18 +26,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.MetaboliteImplementation;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.core.*;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+
 
 /**
  * @name    MergeEntities - 2011.10.04 <br>
@@ -49,7 +47,9 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 public class MergeEntities extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(MergeEntities.class);
+
     private EntityCollection selection;
+
 
     public MergeEntities(JFrame frame,
                          TargetedUpdate updater,
@@ -60,6 +60,7 @@ public class MergeEntities extends ControllerDialog {
         setDefaultLayout();
     }
 
+
     @Override
     public JLabel getDescription() {
         JLabel label = super.getDescription();
@@ -67,10 +68,12 @@ public class MergeEntities extends ControllerDialog {
         return label;
     }
 
+
     @Override
     public JPanel getOptions() {
         return super.getOptions();
     }
+
 
     @Override
     public void process() {
@@ -79,20 +82,20 @@ public class MergeEntities extends ControllerDialog {
         Collection<MetaboliteImplementation> entities = selection.get(MetaboliteImplementation.class);
         // create a new metabolite consisting of the other two.
         // find them in all reactions and update reactions also
-        MetaboliteImplementation n = null;
+        Metabolite n = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
+        ;
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
 
-        for (MetaboliteImplementation m : entities) {
+        StringBuilder accessionBuilder = new StringBuilder();
+        StringBuilder nameBuilder = new StringBuilder();
+        StringBuilder abbrBuilder = new StringBuilder();
 
-            if (n == null) {
-                n = new MetaboliteImplementation(m.getIdentifier(), null, null);
-            }
-            if (n.getName() == null) {
-                n.setName(m.getName());
-            }
-            if (n.getAbbreviation() == null) {
-                n.setAbbreviation(m.getAbbreviation());
-            }
+        for (Metabolite m : entities) {
+
+            accessionBuilder.append(m.getAccession());
+            nameBuilder.append(m.getName());
+            abbrBuilder.append(m.getAbbreviation());
+
             n.addAnnotations(m.getAnnotations());
 
             for (MetabolicReaction rxn : recon.getReactions().getReactions(m)) {
@@ -105,11 +108,19 @@ public class MergeEntities extends ControllerDialog {
             recon.getMetabolites().remove(m);
         }
 
+        n.setIdentifier(new BasicChemicalIdentifier(accessionBuilder.toString()));
+        n.setName(nameBuilder.toString());
+        n.setAbbreviation(abbrBuilder.toString());
+
+
         recon.addMetabolite(n);
+
+
         recon.getReactions().rebuildParticipantMap();
         //        recon.remove // remove metabolite
 
     }
+
 
     @Override
     public void setVisible(boolean visible) {

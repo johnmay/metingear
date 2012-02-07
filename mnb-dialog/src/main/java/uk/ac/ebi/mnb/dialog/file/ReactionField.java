@@ -46,11 +46,13 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.dialog.popup.AutoComplete;
 import uk.ac.ebi.search.FieldType;
 import uk.ac.ebi.search.SearchManager;
 import uk.ac.ebi.search.SearchableIndex;
 import uk.ac.ebi.visualisation.molecule.access.*;
+
 
 /**
  *          ReactionField - 2011.12.02 <br>
@@ -64,15 +66,25 @@ public class ReactionField
         extends JTextField {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionField.class);
+
     private EntityValueAccessor accessor = new NameAccessor(); // list uses names
+
     private AutoComplete autocomplete;
+
     private TermQuery typeFilter = new TermQuery(FieldType.TYPE.getTerm(MetaboliteImplementation.BASE_TYPE));
+
     private static String[] fields = new String[]{FieldType.NAME.getName(), FieldType.ABBREVIATION.getName()};
+
     private Replacement r = null;
+
     private DocumentListener listener;
+
     private static final String LUCENE_ESCAPE_CHARS = "[\\\\+\\-\\!\\(\\)\\:\\^\\[\\]\\{\\}\\~\\*\\?]";
+
     private static final Pattern LUCENE_PATTERN = Pattern.compile(LUCENE_ESCAPE_CHARS);
+
     private static final String REPLACEMENT_STRING = "\\\\$0";
+
 
     public ReactionField(final JDialog dialog) {
 
@@ -147,11 +159,13 @@ public class ReactionField
 
     }
 
+
     private class ReactionFieldListener
             implements DocumentListener {
 
         public void changedUpdate(DocumentEvent e) {
         }
+
 
         public void insertUpdate(DocumentEvent e) {
             try {
@@ -184,7 +198,7 @@ public class ReactionField
 
                     List<AnnotatedEntity> entities = index.getRankedEntities(baseQuery,
                                                                              25,
-                                                                             MetaboliteImplementation.class);
+                                                                             Metabolite.class);
 
                     LOGGER.info("Suggestions for '" + r.text + "' :" + entities);
 
@@ -212,10 +226,12 @@ public class ReactionField
 
         }
 
+
         public void removeUpdate(DocumentEvent e) {
             //    throw new UnsupportedOperationException("Not supported yet.");
         }
     }
+
 
     public static Replacement getReplacement(String text, int offset) {
 
@@ -253,17 +269,22 @@ public class ReactionField
     }
 }
 
+
 class Replacement {
 
     public final int start;
+
     public final int end;
+
     public final String text;
+
 
     public Replacement(int start, int end, String text) {
         this.start = start;
         this.end = end;
         this.text = text;
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -286,6 +307,7 @@ class Replacement {
         return true;
     }
 
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -294,6 +316,7 @@ class Replacement {
         hash = 53 * hash + (this.text != null ? this.text.hashCode() : 0);
         return hash;
     }
+
 
     @Override
     public String toString() {

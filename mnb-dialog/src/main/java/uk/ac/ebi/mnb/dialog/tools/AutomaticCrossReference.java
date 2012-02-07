@@ -36,7 +36,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.io.service.KEGGCompoundNameService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
@@ -52,6 +51,8 @@ import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+
 
 /**
  *          AutomaticCrossReferenceDialog – 2011.09.30 <br>
@@ -64,14 +65,19 @@ public class AutomaticCrossReference
         extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(AutomaticCrossReference.class);
+
     private JCheckBox chebi = new MCheckBox("ChEBI");
+
     private JCheckBox kegg = new MCheckBox("KEGG Compound");
+
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 200, 10));
+
 
     public AutomaticCrossReference(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
         setDefaultLayout();
     }
+
 
     @Override
     public JLabel getDescription() {
@@ -79,6 +85,7 @@ public class AutomaticCrossReference
         label.setText("Match name(s) to chemical databases");
         return label;
     }
+
 
     @Override
     public JPanel getOptions() {
@@ -101,9 +108,10 @@ public class AutomaticCrossReference
         return options;
     }
 
+
     @Override
     public void process() {
-        Collection<MetaboliteImplementation> metabolties = getSelection().get(MetaboliteImplementation.class);
+        Collection<Metabolite> metabolties = getSelection().get(Metabolite.class);
 
         boolean useChEBI = chebi.isSelected();
         boolean useKegg = kegg.isSelected();
@@ -119,7 +127,7 @@ public class AutomaticCrossReference
             factories.add(new CandidateFactory(KEGGCompoundNameService.getInstance(), new ChemicalFingerprintEncoder()));
         }
 
-        for (MetaboliteImplementation metabolite : metabolties) {
+        for (Metabolite metabolite : metabolties) {
             for (CandidateFactory factory : factories) {
                 Multimap<Integer, CandidateEntry> map = factory.getSynonymCandidates(metabolite.getName());
                 if (map.containsKey(0)) {
@@ -140,5 +148,4 @@ public class AutomaticCrossReference
         }
 
     }
-
 }

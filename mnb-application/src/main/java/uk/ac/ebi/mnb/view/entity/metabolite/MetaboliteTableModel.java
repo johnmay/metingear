@@ -33,11 +33,11 @@ import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.StarRating;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Rating;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 
 /**
  *          MetaboliteTableModel – 2011.09.06 <br>
@@ -112,7 +112,7 @@ public class MetaboliteTableModel
     @Override
     public Object getFixedType(AnnotatedEntity component, String name) {
 
-        MetaboliteImplementation metabolicEntity = (MetaboliteImplementation) component;
+        Metabolite metabolicEntity = (Metabolite) component;
 
         if (name.equals(DEFAULT[0].getName())) {
 
