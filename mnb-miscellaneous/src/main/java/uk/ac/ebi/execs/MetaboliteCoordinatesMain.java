@@ -123,7 +123,7 @@ public class MetaboliteCoordinatesMain extends CommandLineMain {
             try {
 
                 rxn = modelReactions.next();
-                for (IAtomContainer molecule : rxn.getAllReactionMolecules()) {
+                for (IAtomContainer molecule : (List<IAtomContainer>) rxn.getAllReactionMolecules()) {
 
                     List<Integer> location = getPoint(molecule);
 

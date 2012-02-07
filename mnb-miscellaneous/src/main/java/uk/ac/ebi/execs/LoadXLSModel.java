@@ -49,8 +49,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.chemet.ws.CachedChemicalWS;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -135,7 +135,7 @@ public class LoadXLSModel extends CommandLineMain {
 
             while (rxnSht.hasNext()) {
                 PreparsedReaction ppRxn = (PreparsedReaction) rxnSht.next();
-                Reaction rxn = parser.parseReaction(ppRxn);
+                AbstractReaction rxn = parser.parseReaction(ppRxn);
                 XrefLevel level = score(rxn);
                 stats.put(level, stats.get(level) + 1);
             }
@@ -173,9 +173,9 @@ public class LoadXLSModel extends CommandLineMain {
     };
 
 
-    public XrefLevel score(Reaction rxn) {
+    public XrefLevel score(AbstractReaction rxn) {
 
-        List<Participant<Metabolite, Double, CompartmentImplementation>> participants = (List) rxn.getAllReactionParticipants();
+        List<ParticipantImplementation<Metabolite, Double, CompartmentImplementation>> participants = (List) rxn.getAllReactionParticipants();
 
         int missingXref = 0;
         for (int i = 0; i < participants.size(); i++) {

@@ -2,14 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package mnb.io.tabular.parser;
 
-import java.util.Arrays;
 import junit.framework.TestCase;
-import mnb.io.tabular.ExcelEntityResolver;
-import uk.ac.ebi.chemet.entities.reaction.Reversibility;
+import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import static junit.framework.Assert.*;
+import uk.ac.ebi.interfaces.reaction.Direction;
 
 
 /**
@@ -35,7 +33,7 @@ public class ReactionParserTest extends TestCase {
      */
     public void testGetReactionSides() {
         ReactionParser parser = new ReactionParser(null);
-        String[] expected = new String[]{ "A + B ", " C + D" };
+        String[] expected = new String[]{"A + B ", " C + D"};
 
         String[] actual = parser.getReactionSides("A + B <--> C + D");
         assertEquals(expected[0], actual[0]);
@@ -86,37 +84,34 @@ public class ReactionParserTest extends TestCase {
 
     public void testGetReactionArrow() {
         ReactionParser parser = new ReactionParser(null);
-        Reversibility actual = parser.getReactionArrow("A + B <--> C + D");
-        assertEquals(Reversibility.REVERSIBLE, actual);
+        Direction actual = parser.getReactionArrow("A + B <--> C + D");
+        assertEquals(DirectionImplementation.BIDIRECTIONAL, actual);
         actual = parser.getReactionArrow("A + B <==> C + D");
-        assertEquals(Reversibility.REVERSIBLE, actual);
+        assertEquals(DirectionImplementation.BIDIRECTIONAL, actual);
         actual = parser.getReactionArrow("A + B <-> C + D");
-        assertEquals(Reversibility.REVERSIBLE, actual);
+        assertEquals(DirectionImplementation.BIDIRECTIONAL, actual);
         actual = parser.getReactionArrow("A + B --> C + D");
-        assertEquals(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT, actual);
+        assertEquals(DirectionImplementation.FORWARD, actual);
         actual = parser.getReactionArrow("A + B -> C + D");
-        assertEquals(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT, actual);
+        assertEquals(DirectionImplementation.FORWARD, actual);
         actual = parser.getReactionArrow("A + B > C + D");
-        assertEquals(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT, actual);
+        assertEquals(DirectionImplementation.FORWARD, actual);
         actual = parser.getReactionArrow("A + B <-- C + D");
-        assertEquals(Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT, actual);
+        assertEquals(DirectionImplementation.BACKWARD, actual);
         actual = parser.getReactionArrow("A + B <- C + D");
-        assertEquals(Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT, actual);
+        assertEquals(DirectionImplementation.BACKWARD, actual);
         actual = parser.getReactionArrow("A + B < C + D");
-        assertEquals(Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT, actual);
+        assertEquals(DirectionImplementation.BACKWARD, actual);
 
         // fail case
         actual = parser.getReactionArrow("A + B - C + D");
-        assertEquals(Reversibility.UNKNOWN, actual);
+        assertEquals(DirectionImplementation.BIDIRECTIONAL, actual);
         // fail case
         actual = parser.getReactionArrow("A + B = C + D");
-        assertEquals(Reversibility.UNKNOWN, actual);
+        assertEquals(DirectionImplementation.BIDIRECTIONAL, actual);
 
 
 
 
     }
-
-
 }
-

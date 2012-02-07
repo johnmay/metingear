@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.entities.reaction.Reversibility;
+import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.chemet.render.matrix.MatrixPane;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Reconstruction;
@@ -94,9 +94,9 @@ public class CreateMatrix
         for (MetabolicReaction rxn : rxns) {
 
             // transpose
-            if (rxn.getReversibility() == Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT) {
+            if (rxn.getDirection() == DirectionImplementation.IRREVERSIBLE_RIGHT_TO_LEFT || rxn.getDirection() == DirectionImplementation.BACKWARD) {
                 rxn.transpose();
-                rxn.setReversibility(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
+                rxn.setDirection(DirectionImplementation.FORWARD);
             }
 
             matrix.addReaction(rxn);

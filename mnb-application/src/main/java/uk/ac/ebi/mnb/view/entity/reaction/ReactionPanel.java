@@ -45,6 +45,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 
+
 /**
  *          MetabolitePanel – 2011.09.30 <br>
  *          Class description
@@ -56,16 +57,24 @@ public class ReactionPanel
         extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionPanel.class);
+
     private MetabolicReaction entity;
+
     private ReactionRenderer renderer = new ReactionRenderer();
+
     private JLabel reactionLabel = LabelFactory.newLabel("");
+
     private JComponent participantXref;
+
     private JLabel tClass = new JLabel();
+
     private CellConstraints cc = new CellConstraints();
+
 
     public ReactionPanel() {
         super("Reaction", new AnnotationRenderer());
     }
+
 
     @Override
     public boolean update() {
@@ -81,11 +90,13 @@ public class ReactionPanel
 
     }
 
+
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
         this.entity = (MetabolicReaction) entity;
         return super.setEntity(entity);
     }
+
 
     /**
      * Returns the specific information panel
@@ -100,6 +111,7 @@ public class ReactionPanel
         return panel;
 
     }
+
 
     @Override
     public JPanel getBasicPanel() {
@@ -124,6 +136,7 @@ public class ReactionPanel
     }
 
     // updates the participant xref panel
+
     private void updateParticipantXref() {
 
         participantXref.removeAll();
@@ -157,7 +170,7 @@ public class ReactionPanel
         int columnIndex = 1;
         for (int i = 0; i < reactants.size(); i++) {
             Metabolite m = reactants.get(i);
-            Double coef = entity.getReactantStoichiometries().get(i);
+            Double coef = entity.getReactantParticipants().get(i).getCoefficient();
             String coefString = coef == 1d ? "" : coef % 1 == 0 ? String.format("%.0f ", coef) : coef.toString() + " ";
 
             Box box = Box.createHorizontalBox();
@@ -174,7 +187,7 @@ public class ReactionPanel
         columnIndex += 1; // hop over reaction arrow
         for (int i = 0; i < products.size(); i++) {
             Metabolite m = products.get(i);
-            Double coef = entity.getProductStoichiometries().get(i);
+            Double coef = entity.getProductParticipants().get(i).getCoefficient();
             String coefString = coef == 1d ? "" : coef % 1 == 0 ? String.format("%.0f ", coef) : coef.toString() + " ";
 
             Box box = Box.createHorizontalBox();
@@ -191,6 +204,7 @@ public class ReactionPanel
 
 
     }
+
 
     @Override
     public Collection<? extends AnnotatedEntity> getReferences() {

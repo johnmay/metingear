@@ -39,14 +39,16 @@ import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.ChebiWebServiceFault_Exception;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.resource.MIRIAMLoader;
 import uk.ac.ebi.interfaces.Resource;
+import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.metabolomes.identifier.UniqueIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+
 
 /**
  * @name    CustomXLStoSBML – 2011.08.15
@@ -57,164 +59,167 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  */
 public class CustomXLStoSBML {
 
-    private static final Logger LOGGER = Logger.getLogger( CustomXLStoSBML.class );
-    private static final File file = new File( "/Users/johnmay/Desktop/transport-reactions/intial-additonal-dict/tr-tagged.tsv" );
-    private static Map<String , Integer> columns = new HashMap<String , Integer>() {
+    private static final Logger LOGGER = Logger.getLogger(CustomXLStoSBML.class);
+
+    private static final File file = new File("/Users/johnmay/Desktop/transport-reactions/intial-additonal-dict/tr-tagged.tsv");
+
+    private static Map<String, Integer> columns = new HashMap<String, Integer>() {
 
         {
-            put( "organism.name" , 0 );
-            put( "model.year" , 3 );
+            put("organism.name", 0);
+            put("model.year", 3);
 
-            put( "reaction.id" , 4 );
-            put( "reaction.equation" , 8 );
-            put( "direction" , 13 );
-            put( "side" , 14 );
-            put( "coef" , 15 );
-            put( "db.id" , 16 );
-            put( "name" , 16 );
-            put( "compartment" , 18 );
+            put("reaction.id", 4);
+            put("reaction.equation", 8);
+            put("direction", 13);
+            put("side", 14);
+            put("coef", 15);
+            put("db.id", 16);
+            put("name", 16);
+            put("compartment", 18);
 
         }
     };
+
     private final Integer SBML_LEVEL = 2;
+
     private final Integer SBML_VERSION = 2;
-    private Map<String , Species> moleculeCache = new HashMap<String , Species>();
-    private Map<Reaction , List<String>> reactionModelMap = new HashMap<Reaction , List<String>>();
-    private Map<uk.ac.ebi.core.CompartmentImplementation , Compartment> compartmentMap =
-                                                                     new EnumMap<uk.ac.ebi.core.CompartmentImplementation , Compartment>(
-            uk.ac.ebi.core.CompartmentImplementation.class ) {
+
+    private Map<String, Species> moleculeCache = new HashMap<String, Species>();
+
+    private Map<AbstractReaction, List<String>> reactionModelMap = new HashMap<AbstractReaction, List<String>>();
+
+    private Map<uk.ac.ebi.core.CompartmentImplementation, Compartment> compartmentMap =
+                                                                       new EnumMap<uk.ac.ebi.core.CompartmentImplementation, Compartment>(
+            uk.ac.ebi.core.CompartmentImplementation.class) {
 
         {
-            Compartment e = new Compartment( "Extracellular" , SBML_LEVEL , SBML_VERSION );
-            e.setSize( 1 );
-            put( uk.ac.ebi.core.CompartmentImplementation.EXTRACELLULA , e );
-            Compartment c = new Compartment( "Cytoplasm" , SBML_LEVEL , SBML_VERSION );
-            c.setSize( 1 );
-            put( uk.ac.ebi.core.CompartmentImplementation.CYTOPLASM , c );
-            Compartment p = new Compartment( "Periplasm" , SBML_LEVEL , SBML_VERSION );
-            p.setSize( 1 );
-            put( uk.ac.ebi.core.CompartmentImplementation.PERIPLASM , p );
+            Compartment e = new Compartment("Extracellular", SBML_LEVEL, SBML_VERSION);
+            e.setSize(1);
+            put(uk.ac.ebi.core.CompartmentImplementation.EXTRACELLULA, e);
+            Compartment c = new Compartment("Cytoplasm", SBML_LEVEL, SBML_VERSION);
+            c.setSize(1);
+            put(uk.ac.ebi.core.CompartmentImplementation.CYTOPLASM, c);
+            Compartment p = new Compartment("Periplasm", SBML_LEVEL, SBML_VERSION);
+            p.setSize(1);
+            put(uk.ac.ebi.core.CompartmentImplementation.PERIPLASM, p);
         }
     };
 
-    public static void main( String[] args ) throws FileNotFoundException , IOException , SBMLException ,
-                                                    XMLStreamException , ChebiWebServiceFault_Exception {
+
+    public static void main(String[] args) throws FileNotFoundException, IOException, SBMLException,
+                                                  XMLStreamException, ChebiWebServiceFault_Exception {
         new CustomXLStoSBML().proces();
     }
 
-    public void proces() throws FileNotFoundException , IOException , XMLStreamException , SBMLException ,
+
+    public void proces() throws FileNotFoundException, IOException, XMLStreamException, SBMLException,
                                 ChebiWebServiceFault_Exception {
 
-        CSVReader reader = new CSVReader( new FileReader( file ) , '\t' , '"' );
+        CSVReader reader = new CSVReader(new FileReader(file), '\t', '"');
 
         String[] row = reader.readNext();
         String prevEq = "";
         String prevModelId = "";
-        Reaction<String , Integer , uk.ac.ebi.core.CompartmentImplementation> r = null;
-        HashMap<String , SBMLDocument> modelToSBML = new HashMap<String , SBMLDocument>();
-        Map<String , Map<Species , Boolean>> modelIdSpecies = new HashMap<String , Map<Species , Boolean>>();
+        AbstractReaction<CompartmentalisedParticipant<String, Integer, uk.ac.ebi.interfaces.reaction.Compartment>> rxn = null;
+        HashMap<String, SBMLDocument> modelToSBML = new HashMap<String, SBMLDocument>();
+        Map<String, Map<Species, Boolean>> modelIdSpecies = new HashMap<String, Map<Species, Boolean>>();
 
-        UniqueIdentifier.setPrefix( "reaction_" );
-        while ( row != null ) {
+        UniqueIdentifier.setPrefix("reaction_");
+        while (row != null) {
 
-            String modelId = getModelId( row );
+            String modelId = getModelId(row);
 
-            if ( modelToSBML.containsKey( modelId ) == false ) {
-                System.out.println( "Creating Model: " + modelId );
-                modelToSBML.put( modelId , new SBMLDocument( SBML_LEVEL , SBML_VERSION ) );
+            if (modelToSBML.containsKey(modelId) == false) {
+                System.out.println("Creating Model: " + modelId);
+                modelToSBML.put(modelId, new SBMLDocument(SBML_LEVEL, SBML_VERSION));
                 Model model = new Model();
-                modelToSBML.get( modelId ).setModel( model );
-                for ( Compartment c : compartmentMap.values() ) {
-                    model.addCompartment( c );
+                modelToSBML.get(modelId).setModel(model);
+                for (Compartment c : compartmentMap.values()) {
+                    model.addCompartment(c);
                 }
-                modelIdSpecies.put( modelId , new HashMap<Species , Boolean>() );
+                modelIdSpecies.put(modelId, new HashMap<Species, Boolean>());
             }
 
-            String equation = row[columns.get( "reaction.equation" )];
+            String equation = row[columns.get("reaction.equation")];
 
-            if ( prevEq.equals( equation ) == Boolean.FALSE ) {
-                if ( r != null ) {
+            if (prevEq.equals(equation) == Boolean.FALSE) {
+                if (rxn != null) {
 //                    org.sbml.jsbml.Reaction sbmlReaction = new org.sbml.jsbml.Reaction(UniqueIdentifier.createUniqueIdentifer().toString());
 
 
                     Set<Species> toAdd = new HashSet<Species>();
                     int error = 0;
-                    for ( Participant<String , Integer , uk.ac.ebi.core.CompartmentImplementation> p : r.
-                            getReactantParticipants() ) {
+                    for (CompartmentalisedParticipant<String, Integer, uk.ac.ebi.interfaces.reaction.Compartment> p : rxn.getReactantParticipants()) {
                         String dbidsbml = p.getMolecule();
                         String comp = "[" + p.getCompartment().getAbbreviation() + "]";
                         //
-                        if ( modelIdSpecies.get( modelId ).containsKey( moleculeCache.get( dbidsbml ) ) ==
-                             false ) {
-                            if ( moleculeCache.get( dbidsbml + comp ) == null ) {
+                        if (modelIdSpecies.get(modelId).containsKey(moleculeCache.get(dbidsbml))
+                            == false) {
+                            if (moleculeCache.get(dbidsbml + comp) == null) {
                                 error = 1;
                             }
-                            toAdd.add( moleculeCache.get( dbidsbml + comp ) );
+                            toAdd.add(moleculeCache.get(dbidsbml + comp));
                         }
                     }
-                    for ( Participant<String , Integer , uk.ac.ebi.core.CompartmentImplementation> p : r.
-                            getProductParticipants() ) {
+                    for (CompartmentalisedParticipant<String, Integer, uk.ac.ebi.interfaces.reaction.Compartment> p : rxn.getProductParticipants()) {
                         String dbidsbml = p.getMolecule();
                         String comp = "[" + p.getCompartment().getAbbreviation() + "]";
 
-                        if ( modelIdSpecies.get( modelId ).containsKey( moleculeCache.get( dbidsbml + comp ) ) ==
-                             false ) {
-                            if ( moleculeCache.get( dbidsbml + comp ) == null ) {
+                        if (modelIdSpecies.get(modelId).containsKey(moleculeCache.get(dbidsbml + comp))
+                            == false) {
+                            if (moleculeCache.get(dbidsbml + comp) == null) {
                                 error = 1;
                             }
-                            toAdd.add( moleculeCache.get( dbidsbml + comp ) );
+                            toAdd.add(moleculeCache.get(dbidsbml + comp));
                         }
                     }
 
                     // XXX quick hack
-                    if ( error == 0 ) {
-                        Model model = modelToSBML.get( modelId ).getModel();
-                        for ( Species sp : toAdd ) {
-                            model.addSpecies( sp );
-                            modelIdSpecies.get( modelId ).put( sp , Boolean.TRUE );
+                    if (error == 0) {
+                        Model model = modelToSBML.get(modelId).getModel();
+                        for (Species sp : toAdd) {
+                            model.addSpecies(sp);
+                            modelIdSpecies.get(modelId).put(sp, Boolean.TRUE);
                         }
-                        org.sbml.jsbml.Reaction sbmlReaction = new org.sbml.jsbml.Reaction( UniqueIdentifier.
-                                createUniqueIdentifer().toString() , SBML_LEVEL , SBML_VERSION );
-                        for ( Participant<String , Integer , uk.ac.ebi.core.CompartmentImplementation> p : r.
-                                getReactantParticipants() ) {
+                        org.sbml.jsbml.Reaction sbmlReaction = new org.sbml.jsbml.Reaction(UniqueIdentifier.createUniqueIdentifer().toString(), SBML_LEVEL, SBML_VERSION);
+                        for (CompartmentalisedParticipant<String, Integer, uk.ac.ebi.interfaces.reaction.Compartment> p : rxn.getReactantParticipants()) {
                             String spid = p.getMolecule() + p.getCompartment().toString();
-                            sbmlReaction.addReactant( new SpeciesReference( moleculeCache.get( spid ) ) );
+                            sbmlReaction.addReactant(new SpeciesReference(moleculeCache.get(spid)));
                         }
-                        for ( Participant<String , Integer , uk.ac.ebi.core.CompartmentImplementation> p : r.
-                                getProductParticipants() ) {
+                        for (CompartmentalisedParticipant<String, Integer, uk.ac.ebi.interfaces.reaction.Compartment> p : rxn.getProductParticipants()) {
                             String spid = p.getMolecule() + p.getCompartment().toString();
 
-                            sbmlReaction.addProduct( new SpeciesReference( moleculeCache.get( spid ) ) );
+                            sbmlReaction.addProduct(new SpeciesReference(moleculeCache.get(spid)));
                         }
-                        model.addReaction( sbmlReaction );
+                        model.addReaction(sbmlReaction);
                     } else {
-                        LOGGER.error("Skipping reaction: " + r + " [Missing identifiers for some compounds]");
+                        LOGGER.error("Skipping reaction: " + rxn + " [Missing identifiers for some compounds]");
                     }
                 }
-                r = new Reaction<String , Integer , uk.ac.ebi.core.CompartmentImplementation>();
+                rxn = new AbstractReaction<CompartmentalisedParticipant<String, Integer, uk.ac.ebi.interfaces.reaction.Compartment>>();
             }
 
 
-            String dbid = row[columns.get( "db.id" )];
-            String comp = row[columns.get( "compartment" )];
+            String dbid = row[columns.get("db.id")];
+            String comp = row[columns.get("compartment")];
 
-            if ( moleculeCache.containsKey( dbid + comp ) ) {
+            if (moleculeCache.containsKey(dbid + comp)) {
                 //next
             } else {
-                Species sp = getSpecies( dbid , comp );
-                moleculeCache.put( dbid + comp , sp );
+                Species sp = getSpecies(dbid, comp);
+                moleculeCache.put(dbid + comp, sp);
             }
 
 
-            Species sp = moleculeCache.get( dbid + comp );
-            if ( sp != null ) {
-                Participant p = new Participant<String , Integer , uk.ac.ebi.core.CompartmentImplementation>( dbid , 1 ,
-                                                                                                           uk.ac.ebi.core.CompartmentImplementation.
-                        getCompartment( row[columns.get( "compartment" )] ) );
-                if ( row[columns.get( "side" )].equals( "left" ) ) {
-                    r.addReactant( p );
+            Species sp = moleculeCache.get(dbid + comp);
+            if (sp != null) {
+                ParticipantImplementation p = new ParticipantImplementation<String, Integer, uk.ac.ebi.core.CompartmentImplementation>(dbid, 1,
+                                                                                                                                       uk.ac.ebi.core.CompartmentImplementation.getCompartment(row[columns.get("compartment")]));
+                if (row[columns.get("side")].equals("left")) {
+                    rxn.addReactant(p);
                 } else {
-                    r.addProduct( p );
+                    rxn.addProduct(p);
                 }
             }
 
@@ -230,35 +235,38 @@ public class CustomXLStoSBML {
         SBMLWriter writer = new SBMLWriter();
 
         // write the SBML files
-        for ( Entry<String , SBMLDocument> e : modelToSBML.entrySet() ) {
-            writer.write( e.getValue() , "/Users/johnmay/Desktop/transport models/" + e.getKey() + ".xml" );
+        for (Entry<String, SBMLDocument> e : modelToSBML.entrySet()) {
+            writer.write(e.getValue(), "/Users/johnmay/Desktop/transport models/" + e.getKey() + ".xml");
         }
 
     }
-    private Pattern pattern = Pattern.compile( "[^A-z0-9]" );
+
+    private Pattern pattern = Pattern.compile("[^A-z0-9]");
+
     private static ChebiWebServiceClient chebiClient = new ChebiWebServiceClient();
 
-    public Species getSpecies( String dbid , String comp ) throws ChebiWebServiceFault_Exception {
-        uk.ac.ebi.core.CompartmentImplementation c = uk.ac.ebi.core.CompartmentImplementation.getCompartment( comp );
 
-        String formatedid = pattern.matcher( dbid ).replaceAll( "_" ) + c.getAbbreviation();
+    public Species getSpecies(String dbid, String comp) throws ChebiWebServiceFault_Exception {
+        uk.ac.ebi.core.CompartmentImplementation c = uk.ac.ebi.core.CompartmentImplementation.getCompartment(comp);
+
+        String formatedid = pattern.matcher(dbid).replaceAll("_") + c.getAbbreviation();
 
 
-        Species sp = new Species( formatedid , SBML_LEVEL , SBML_VERSION );
-        sp.setCompartment( compartmentMap.get( c ) );
+        Species sp = new Species(formatedid, SBML_LEVEL, SBML_VERSION);
+        sp.setCompartment(compartmentMap.get(c));
 
-        if ( dbid.contains( "CHEBI" ) ) {
-            String name = chebiClient.getLiteEntity( dbid , SearchCategory.CHEBI_ID , 1 , StarsCategory.ALL ).
-                    getListElement().get( 0 ).getChebiAsciiName();
-            sp.setName( name );
-            sp.setMetaId( dbid.substring( 6 ) + "_" + c.getAbbreviation() );
+        if (dbid.contains("CHEBI")) {
+            String name = chebiClient.getLiteEntity(dbid, SearchCategory.CHEBI_ID, 1, StarsCategory.ALL).
+                    getListElement().get(0).getChebiAsciiName();
+            sp.setName(name);
+            sp.setMetaId(dbid.substring(6) + "_" + c.getAbbreviation());
             Resource rdf = new ChEBIIdentifier().getResource();
-            sp.addCVTerm( new CVTerm( CVTerm.Qualifier.BQB_IS , rdf.getURN( dbid ) ) );
+            sp.addCVTerm(new CVTerm(CVTerm.Qualifier.BQB_IS, rdf.getURN(dbid)));
             return sp;
-        } else if ( dbid.startsWith( "C" ) ) {
-            sp.setMetaId( dbid.substring( 1 ) + "_" + c.getAbbreviation() );
+        } else if (dbid.startsWith("C")) {
+            sp.setMetaId(dbid.substring(1) + "_" + c.getAbbreviation());
             Resource rdf = new KEGGCompoundIdentifier().getResource();
-            sp.addCVTerm( new CVTerm( CVTerm.Qualifier.BQB_IS , rdf.getURN( dbid ) ) );
+            sp.addCVTerm(new CVTerm(CVTerm.Qualifier.BQB_IS, rdf.getURN(dbid)));
             // kegg
 //            kegg.
             return sp;
@@ -269,9 +277,9 @@ public class CustomXLStoSBML {
 
     }
 
-    public String getModelId( String[] row ) {
-        return ( row[columns.get( "organism.name" )] + "-" + row[columns.get( "model.year" )] ).toLowerCase().replace(
-                " " , "-" );
-    }
 
+    public String getModelId(String[] row) {
+        return (row[columns.get("organism.name")] + "-" + row[columns.get("model.year")]).toLowerCase().replace(
+                " ", "-");
+    }
 }

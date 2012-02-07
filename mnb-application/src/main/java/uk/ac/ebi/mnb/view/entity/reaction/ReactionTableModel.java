@@ -29,7 +29,7 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Subsystem;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
+import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -73,10 +73,10 @@ public class ReactionTableModel extends AbstractEntityTableModel {
     @Override
     public Object getFixedType(AnnotatedEntity component, String name) {
 
-        Reaction rxn = (Reaction) component;
+        AbstractReaction rxn = (AbstractReaction) component;
 
         if (name.equals(DEFAULT[0].getName())) {
-            return rxn.getReversibility();
+            return rxn.getDirection();
         } else if (name.equals(DEFAULT[1].getName())) {
             return rxn.toString();
         }

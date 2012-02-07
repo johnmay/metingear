@@ -64,11 +64,11 @@ public class ChokePoint extends ControllerAction {
         Multimap<Metabolite, MetabolicReaction> mToR = HashMultimap.create();
 
         for (MetabolicReaction rxn : getSelection().get(MetabolicReaction.class)) {
-            for (Metabolite m : rxn.getReactantMolecules()) {
+            for (Metabolite m : (List<Metabolite>) rxn.getReactantMolecules()) {
                 rMap.put(m, rMap.containsKey(m) ? rMap.get(m) + 1 : 1);
                 mToR.put(m, rxn);
             }
-            for (Metabolite m : rxn.getProductMolecules()) {
+            for (Metabolite m : (List<Metabolite>) rxn.getProductMolecules()) {
                 pMap.put(m, pMap.containsKey(m) ? pMap.get(m) + 1 : 1);
                 mToR.put(m, rxn);
             }

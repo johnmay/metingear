@@ -37,12 +37,13 @@ import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.chemet.entities.reaction.Reversibility;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
+import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
@@ -76,10 +77,10 @@ public class ReactionParser {
     public static final Pattern COMPARTMENT_PATTERN =
                                 Pattern.compile("[\\(\\[](\\w{1,2})[\\)\\]]");
 
-    private static final Reversibility[] NORMALISED_ARROWS =
-                                         new Reversibility[]{Reversibility.REVERSIBLE,
-                                                             Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT,
-                                                             Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT};
+    private static final Direction[] NORMALISED_ARROWS =
+                                     new Direction[]{DirectionImplementation.BIDIRECTIONAL,
+                                                     DirectionImplementation.FORWARD,
+                                                     DirectionImplementation.BACKWARD};
 
     private EntityResolver entites;
 
@@ -160,7 +161,7 @@ public class ReactionParser {
             rxn.addProduct(p);
         }
 
-        rxn.setReversibility(getReactionArrow(reaction.getEquation()));
+        rxn.setDirection(getReactionArrow(reaction.getEquation()));
 
         // add subsytem annotation
         String subsytem = reaction.getSubsystem();
@@ -216,7 +217,7 @@ public class ReactionParser {
         }
 
 
-        rxn.setReversibility(getReactionArrow(reaction.getEquation()));
+        rxn.setDirection(getReactionArrow(reaction.getEquation()));
 
         // add subsytem annotation
         String subsytem = reaction.getSubsystem();
@@ -326,8 +327,8 @@ public class ReactionParser {
     }
 
 
-    public Participant[] parseReactionSide(String reactionSide) {
-        return new Participant[0];
+    public ParticipantImplementation[] parseReactionSide(String reactionSide) {
+        return new ParticipantImplementation[0];
     }
 
 
@@ -336,7 +337,7 @@ public class ReactionParser {
     }
 
 
-    public static Reversibility getReactionArrow(String equation) {
+    public static Direction getReactionArrow(String equation) {
 
         Matcher arrowMatcher = EQUATION_ARROW.matcher(equation);
 
@@ -349,7 +350,7 @@ public class ReactionParser {
             }
         }
 
-        return Reversibility.UNKNOWN;
+        return DirectionImplementation.BIDIRECTIONAL;
 
     }
 }

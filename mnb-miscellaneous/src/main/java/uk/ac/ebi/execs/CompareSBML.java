@@ -48,7 +48,7 @@ import org.openscience.cdk.io.MDLRXNWriter;
 import uk.ac.ebi.chemet.entities.reaction.AtomContainerReaction;
 import uk.ac.ebi.chemet.entities.reaction.filter.BasicFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.chemet.exceptions.AbsentAnnotationException;
 import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.io.xml.SBMLReactionReader;
@@ -172,11 +172,11 @@ public class CompareSBML
         // print compound map
         for ( AtomContainerReaction rxn : rxnMap.keySet() ) {
             // find those that cross a compartment
-            for ( Participant rp : rxn.getReactantParticipants() ) {
+            for ( ParticipantImplementation rp : rxn.getReactantParticipants() ) {
                 AtomContainerParticipant rpNorm =
                                          new AtomContainerParticipant( ( ( AtomContainerParticipant ) rp ).
                   getMolecule() );
-                for ( Participant pp : rxn.getProductParticipants() ) {
+                for ( ParticipantImplementation pp : rxn.getProductParticipants() ) {
                     AtomContainerParticipant ppNorm =
                                              new AtomContainerParticipant( ( ( AtomContainerParticipant ) pp ).
                       getMolecule() );

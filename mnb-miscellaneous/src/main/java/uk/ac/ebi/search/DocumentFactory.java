@@ -125,8 +125,9 @@ public class DocumentFactory {
                                Field.Store.YES,
                                Field.Index.ANALYZED));
         if (root) {
+            String type = DefaultEntityFactory.getInstance().getRootClass(entity.getClass()).getSimpleName();
             document.add(new Field(FieldType.TYPE.getName(),
-                                   DefaultEntityFactory.getInstance().getRootClass(entity.getClass()).getSimpleName(),
+                                   type,
                                    Field.Store.YES,
                                    Field.Index.ANALYZED));
         }

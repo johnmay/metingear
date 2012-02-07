@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Reconstruction;
@@ -102,7 +102,7 @@ public class MergeEntities extends ControllerDialog {
             n.addAnnotations(m.getAnnotations());
 
             for (MetabolicReaction rxn : recon.getReactions().getReactions(m)) {
-                for (Participant p : rxn.getAllReactionParticipants()) {
+                for (ParticipantImplementation p : rxn.getAllReactionParticipants()) {
                     if (p.getMolecule() == m) { // do a direct reference compare
                         p.setMolecule(n);
                     }
