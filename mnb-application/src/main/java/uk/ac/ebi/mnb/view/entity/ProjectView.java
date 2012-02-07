@@ -29,11 +29,10 @@ import uk.ac.ebi.mnb.view.entity.general.GeneralView;
 import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.store.LockObtainFailedException;
-import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.Entity;
@@ -43,6 +42,7 @@ import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reaction;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.ViewInfo;
@@ -102,7 +102,7 @@ public class ProjectView
         layout = new CardLayout();
         setLayout(layout);
         add(products, GeneProduct.class.getName());
-        add(reactions, AbstractReaction.class.getName());
+        add(reactions, Reaction.class.getName());
         add(metabolites, Metabolite.class.getName());
         add(tasks, tasks.getClass().getSimpleName());
         add(general, general.getClass().getSimpleName());
@@ -110,7 +110,7 @@ public class ProjectView
 
         viewMap = new HashMap<Class<? extends Entity>, AbstractEntityView>();
         viewMap.put(Metabolite.class, metabolites);
-        viewMap.put(AbstractReaction.class, reactions);
+        viewMap.put(Reaction.class, reactions);
 
         viewMap.put(GeneProduct.class, products);
 
@@ -166,7 +166,7 @@ public class ProjectView
 
 
     public void setReactionView() {
-        setView(AbstractReaction.class);
+        setView(Reaction.class);
     }
 
 
@@ -251,7 +251,7 @@ public class ProjectView
         if (selection.hasSelection(Metabolite.class)) {
             metabolites.update(selection);
         }
-        if (selection.hasSelection(MetabolicReaction.class)) {
+        if (selection.hasSelection(MetabolicReactionImplementation.class)) {
             reactions.update(selection);
         }
         if (selection.hasSelection(RunnableTask.class)) {

@@ -32,7 +32,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -41,6 +41,8 @@ import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.render.reaction.ReactionRenderer;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
+import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
@@ -93,7 +95,7 @@ public class ReactionPanel
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
-        this.entity = (MetabolicReaction) entity;
+        this.entity = (MetabolicReactionImplementation) entity;
         return super.setEntity(entity);
     }
 
@@ -145,10 +147,10 @@ public class ReactionPanel
             return;
         }
 
-        int size = entity.getAllReactionMolecules().size();
+        int size = entity.getParticipants().size();
 
-        List<Metabolite> reactants = entity.getReactantMolecules();
-        List<Metabolite> products = entity.getProductMolecules();
+        List<MetabolicParticipant> reactants = entity.getReactants();
+        List<MetabolicParticipant> products = entity.getProducts();
         String columnLayout = "";
         for (int i = 0; i < reactants.size(); i++) {
             columnLayout = columnLayout + 128 + "px" + ", ";
@@ -169,8 +171,8 @@ public class ReactionPanel
 
         int columnIndex = 1;
         for (int i = 0; i < reactants.size(); i++) {
-            Metabolite m = reactants.get(i);
-            Double coef = entity.getReactantParticipants().get(i).getCoefficient();
+            Metabolite m = reactants.get(i).getMolecule();
+            Double coef = entity.getReactants().get(i).getCoefficient();
             String coefString = coef == 1d ? "" : coef % 1 == 0 ? String.format("%.0f ", coef) : coef.toString() + " ";
 
             Box box = Box.createHorizontalBox();
@@ -186,8 +188,8 @@ public class ReactionPanel
         }
         columnIndex += 1; // hop over reaction arrow
         for (int i = 0; i < products.size(); i++) {
-            Metabolite m = products.get(i);
-            Double coef = entity.getProductParticipants().get(i).getCoefficient();
+            Metabolite m = products.get(i).getMolecule();
+            Double coef = entity.getProducts().get(i).getCoefficient();
             String coefString = coef == 1d ? "" : coef % 1 == 0 ? String.format("%.0f ", coef) : coef.toString() + " ";
 
             Box box = Box.createHorizontalBox();

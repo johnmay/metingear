@@ -194,7 +194,7 @@ public class MetabolitePanel
 
 
     @Override
-    public Collection<? extends AbstractAnnotatedEntity> getReferences() {
+    public Collection<? extends AnnotatedEntity> getReferences() {
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
         if (entity != null && recon != null) {
             return recon.getReactions().getReactions(entity);

@@ -31,7 +31,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JToggleButton;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
@@ -40,6 +39,7 @@ import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reaction;
 
 
 /**
@@ -105,7 +105,7 @@ public class ViewInfo {
 
 
         buttonMap.put(Metabolite.class, metabolites);
-        buttonMap.put(AbstractReaction.class, reactions);
+        buttonMap.put(Reaction.class, reactions);
 
         buttonMap.put(GeneProduct.class, products);
 

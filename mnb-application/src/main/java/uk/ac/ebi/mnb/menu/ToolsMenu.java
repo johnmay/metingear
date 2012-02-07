@@ -7,7 +7,7 @@ package uk.ac.ebi.mnb.menu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
@@ -65,7 +65,7 @@ public class ToolsMenu extends ContextMenu {
         add(new ChokePoint(view), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(MetabolicReaction.class);
+                return selection.hasSelection(MetabolicReactionImplementation.class);
             }
         });
         add(new JSeparator());
@@ -114,7 +114,7 @@ public class ToolsMenu extends ContextMenu {
         add(create(CreateMatrix.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(MetabolicReaction.class) || (active != null && active.getReactions().isEmpty() == false);
+                return selection.hasSelection(MetabolicReactionImplementation.class) || (active != null && active.getReactions().isEmpty() == false);
             }
         });
 

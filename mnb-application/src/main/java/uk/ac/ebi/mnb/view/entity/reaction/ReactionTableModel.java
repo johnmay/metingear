@@ -29,10 +29,10 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Subsystem;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.entities.Reaction;
+
 
 /**
  *          ReactionTableModel – 2011.09.26 <br>
@@ -44,20 +44,23 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 public class ReactionTableModel extends AbstractEntityTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionTableModel.class);
+
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
         new ColumnDescriptor("Reversibility", null,
-        DataType.FIXED,
-        String.class),
+                             DataType.FIXED,
+                             String.class),
         new ColumnDescriptor("Equation", null,
-        DataType.FIXED,
-        String.class),
+                             DataType.FIXED,
+                             String.class),
         new ColumnDescriptor(new EnzymeClassification()),
         new ColumnDescriptor(new Subsystem())};
+
 
     public ReactionTableModel() {
         super();
         addColumns(Arrays.asList(DEFAULT));
     }
+
 
     @Override
     public void loadComponents() {
@@ -70,10 +73,11 @@ public class ReactionTableModel extends AbstractEntityTableModel {
 
     }
 
+
     @Override
     public Object getFixedType(AnnotatedEntity component, String name) {
 
-        AbstractReaction rxn = (AbstractReaction) component;
+        Reaction rxn = (Reaction) component;
 
         if (name.equals(DEFAULT[0].getName())) {
             return rxn.getDirection();
@@ -81,7 +85,7 @@ public class ReactionTableModel extends AbstractEntityTableModel {
             return rxn.toString();
         }
 
-        return "NA";
+        return "N/A";
 
     }
 }

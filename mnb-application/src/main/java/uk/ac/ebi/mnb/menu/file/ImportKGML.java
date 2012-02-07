@@ -29,7 +29,7 @@ import java.io.InputStream;
 import java.util.logging.Level;
 import javax.xml.stream.XMLStreamException;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.io.xml.KGMLReader;
@@ -65,7 +65,7 @@ public class ImportKGML extends FileChooserAction {
             try {
                 stream = new FileInputStream(f);
                 KGMLReader reader = new KGMLReader(stream);
-                for(MetabolicReaction rxn : reader.getReactions()){
+                for(MetabolicReactionImplementation rxn : reader.getReactions()){
                     Reconstruction recon = ReconstructionManager.getInstance().getActive();
                     recon.addReaction(rxn);
                 }
