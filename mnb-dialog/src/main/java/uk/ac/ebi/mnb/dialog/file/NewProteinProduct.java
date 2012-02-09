@@ -24,7 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.ProteinProduct;
+import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.caf.report.ReportManager;
@@ -58,7 +58,7 @@ public class NewProteinProduct extends NewEntity {
         ReconstructionManager manager = ReconstructionManager.getInstance();
         if (manager.hasProjects()) {
             Reconstruction reconstruction = manager.getActive();
-            ProteinProduct prod = new ProteinProduct(getIdentifier(), getAbbreviation(), getName());
+            ProteinProductImplementation prod = new ProteinProductImplementation(getIdentifier(), getAbbreviation(), getName());
 //            reconstruction.addP(prod);
         }
     }

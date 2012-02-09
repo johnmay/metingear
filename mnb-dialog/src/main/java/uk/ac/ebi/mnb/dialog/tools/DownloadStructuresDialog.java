@@ -175,7 +175,7 @@ public class DownloadStructuresDialog
                         if (molecule != null) {
                             component.addAnnotation(new AtomContainerAnnotation(molecule));
                         }
-                    } catch (UnfetchableEntry ex) {
+                    } catch (Exception ex) {
                         problemIdentifiers.add(id);
                     }
                 }

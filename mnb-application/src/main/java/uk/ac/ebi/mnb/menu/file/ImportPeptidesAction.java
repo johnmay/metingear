@@ -19,7 +19,7 @@ import org.biojava3.core.sequence.compound.AminoAcidCompoundSet;
 import org.biojava3.core.sequence.io.FastaReader;
 import org.biojava3.core.sequence.io.GenericFastaHeaderParser;
 import org.biojava3.core.sequence.io.ProteinSequenceCreator;
-import uk.ac.ebi.core.ProteinProduct;
+import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.mnb.io.FastaFileFilter;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.io.FileFilterManager;
@@ -86,14 +86,14 @@ public class ImportPeptidesAction extends FileChooserAction {
                         ProteinIdentifier identifer = new BasicProteinIdentifier(header.substring(0,
                                                                                                   header.indexOf(" ")));
                         String description = header.substring(header.indexOf(" ") + 1);
-                        GeneProduct p = new ProteinProduct(identifer,
+                        GeneProduct p = new ProteinProductImplementation(identifer,
                                                            "",
                                                            description);
                         p.addSequence(entry.getValue());
                         peptides.add(p);
                     } else {
                         ProteinIdentifier identifer = new BasicProteinIdentifier(header);
-                        GeneProduct p = new ProteinProduct(identifer,
+                        GeneProduct p = new ProteinProductImplementation(identifer,
                                                            "",
                                                            "");
                         p.addSequence(entry.getValue());

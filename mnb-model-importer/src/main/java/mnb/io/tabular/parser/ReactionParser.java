@@ -43,7 +43,9 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.core.reaction.compartment.Organelle;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
@@ -142,10 +144,10 @@ public class ReactionParser {
         rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
         rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
 
-        CompartmentImplementation defaultCompartment = CompartmentImplementation.CYTOPLASM;
+        Compartment defaultCompartment = Organelle.CYTOPLASM;
 
         if (reactionCompartment.find()) {
-            defaultCompartment = CompartmentImplementation.getCompartment(reactionCompartment.group(1));
+            defaultCompartment = CompartmentImplementation.getCompartment(reactionCompartment.group(1)).getMapping();
             equationSides[0] = reactionCompartment.replaceAll("");
         }
 
@@ -203,10 +205,10 @@ public class ReactionParser {
         rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
         rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
 
-        CompartmentImplementation defaultCompartment = CompartmentImplementation.CYTOPLASM;
+        Compartment defaultCompartment = Organelle.CYTOPLASM;
 
         if (reactionCompartment.find()) {
-            defaultCompartment = CompartmentImplementation.getCompartment(reactionCompartment.group(1));
+            defaultCompartment = CompartmentImplementation.getCompartment(reactionCompartment.group(1)).getMapping();
             equationSide = reactionCompartment.replaceAll("");
         }
 
@@ -248,7 +250,7 @@ public class ReactionParser {
 
 
     public List<MetabolicParticipantImplementation> parseParticipants(String equationSide,
-                                                                      CompartmentImplementation defaultCompartment,
+                                                                      Compartment defaultCompartment,
                                                                       PreparsedReaction reaction) throws UnparsableReactionError {
 
         List<MetabolicParticipantImplementation> parsedParticipants = new ArrayList();
@@ -272,12 +274,12 @@ public class ReactionParser {
 
 
     public MetabolicParticipantImplementation parseParticipant(final String participant,
-                                                               final CompartmentImplementation defaultCompartment,
+                                                               final Compartment defaultCompartment,
                                                                final PreparsedReaction rxn) throws UnparsableReactionError {
 
         String entityAbbr = participant.trim();
         String entityAbbrComp = entityAbbr;
-        CompartmentImplementation compartment = defaultCompartment;
+        Compartment compartment = defaultCompartment;
         Double coef = 1d;
 
         // stoichiometric coefficients
@@ -291,7 +293,7 @@ public class ReactionParser {
         // compartment
         Matcher compartmentMatcher = COMPARTMENT_PATTERN.matcher(entityAbbr);
         if (compartmentMatcher.find()) {
-            compartment = CompartmentImplementation.getCompartment(compartmentMatcher.group(1));
+            compartment = CompartmentImplementation.getCompartment(compartmentMatcher.group(1)).getMapping();
             entityAbbr = compartmentMatcher.replaceAll("");
         }
 

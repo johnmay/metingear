@@ -326,13 +326,11 @@ public class ProjectView
 
         AnnotatedEntity entity = selection.getFirstEntity();
 
-        AbstractEntityView view = viewMap.get(factory.getRootClass(entity.getClass()));
-
-        layout.show(this, view.getClass().getSimpleName());
+        setView(entity.getClass());
 
         selector.setSelected(DefaultEntityFactory.getInstance().getRootClass(entity.getClass()));
 
-        return view.setSelection(selection);
+        return getActiveView().setSelection(selection);
 
     }
 }

@@ -8,7 +8,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.core.ProteinProduct;
+import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
@@ -16,6 +16,7 @@ import uk.ac.ebi.mnb.dialog.tools.*;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.ProteinProduct;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.tool.GapAnalysis;
 

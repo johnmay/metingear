@@ -20,23 +20,28 @@
  */
 package uk.ac.ebi.mnb.view.entity.components;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.undo.UndoManager;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.edit.DeleteAnnotation;
-import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.main.MainView;
+
 
 /**
  *          AnnotationTableModel - 2011.12.13 <br>
@@ -49,22 +54,31 @@ public class AnnotationTableModel
         extends AbstractTableModel {
 
     private AnnotatedEntity entity;
+
     private List<Annotation> annotations;
+
     private Class[] columns = new Class[]{Annotation.class, Annotation.class, Action.class, Action.class};
+
     private JList observationList;
+
+    private static final Logger LOGGER = Logger.getLogger(AnnotationTableModel.class);
+
 
     public AnnotationTableModel() {
         annotations = new ArrayList<Annotation>();
 
     }
 
+
     public void setObservationList(JList observationList) {
         this.observationList = observationList;
     }
 
+
     public AnnotatedEntity getEntity() {
         return entity;
     }
+
 
     public void setEntity(AnnotatedEntity entity) {
         this.entity = entity;
@@ -75,16 +89,19 @@ public class AnnotationTableModel
         }
     }
 
+
     private void setAnnotations(Collection<Annotation> annotations) {
         this.annotations.clear();
         this.annotations.addAll(annotations);
     }
 
+
     @Override
     public void fireTableDataChanged() {
-       setEntity(entity);
+        setEntity(entity);
         super.fireTableDataChanged();
     }
+
 
     public Object getValueAt(int row,
                              int column) {
@@ -95,7 +112,7 @@ public class AnnotationTableModel
             case 0:
                 return annotations.get(row);
             case 1:
-                return annotations.get(row);
+                return getAnnotation(annotations.get(row));
             case 2:
                 return new DeleteAnnotation(entity,
                                             annotation,
@@ -109,7 +126,6 @@ public class AnnotationTableModel
 
                             public void actionPerformed(ActionEvent e) {
 
-                                System.out.println("showing evidence");
                                 observationList.removeSelectionInterval(0, observationList.getModel().getSize());
 
                                 for (Observation observation : oAnn.getObservations()) {
@@ -130,18 +146,42 @@ public class AnnotationTableModel
 
     }
 
+
+    public Object getAnnotation(final Annotation annotation) {
+        if (annotation instanceof CrossReference) {
+            return new AbstractAction(annotation.toString()) {
+
+                public void actionPerformed(ActionEvent e) {
+                    CrossReference xref = (CrossReference) annotation;
+                    try {
+                        Desktop.getDesktop().browse(xref.getIdentifier().getURL().toURI());
+                    } catch (IOException ex) {
+                        LOGGER.error("IO Exception: " + ex.getMessage());
+                    } catch (URISyntaxException ex) {
+                        LOGGER.error("Syntax error in cross-reference: " + ex.getMessage());
+                    }
+                }
+            };
+        }
+        return annotation;
+    }
+
+
     public int getRowCount() {
         return annotations.size();
     }
+
 
     public int getColumnCount() {
         return columns.length;
     }
 
+
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         return columns[columnIndex];
     }
+
 
     @Override
     public boolean isCellEditable(int rowIndex,
@@ -149,12 +189,14 @@ public class AnnotationTableModel
         return false;
     }
 
+
     @Override
     public void setValueAt(Object aValue,
                            int rowIndex,
                            int columnIndex) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
     public void clear() {
         annotations.clear();

@@ -32,7 +32,6 @@ import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.utility.TextUtility;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
@@ -109,7 +108,8 @@ public class MetabolitePanel
 
             Collection<MolecularFormula> formulas = entity.getAnnotations(MolecularFormula.class);
             if (formulas.iterator().hasNext()) {
-                formularViewer.setText(TextUtility.html(formulas.iterator().next().toHTML()));
+                MolecularFormula mf = formulas.iterator().next();
+                formularViewer.setText(mf.getFormula() != null ? TextUtility.html(mf.toHTML()) : mf.toString());
                 formulaEditor.setText(formulas.iterator().next().toString());
             } else {
                 formularViewer.setText("");

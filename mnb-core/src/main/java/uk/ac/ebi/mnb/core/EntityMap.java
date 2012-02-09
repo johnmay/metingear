@@ -27,13 +27,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import javax.swing.text.html.parser.Entity;
-import uk.ac.ebi.core.ProteinProduct;
+import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.core.AbstractRNAProduct;
+import uk.ac.ebi.core.Multimer;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.interfaces.entities.*;
 
 
 /**
@@ -76,15 +74,15 @@ public class EntityMap implements EntityCollection {
      * @inheritDoc
      */
     public boolean addAll(Collection<? extends AnnotatedEntity> entities) {
-        
+
         boolean changed = false;
-        
+
         for (AnnotatedEntity entity : entities) {
             changed = add(entity) || changed;
         }
-        
+
         return changed;
-        
+
     }
 
 
@@ -111,11 +109,14 @@ public class EntityMap implements EntityCollection {
     public Collection<GeneProduct> getGeneProducts() {
 
         Collection<ProteinProduct> proteins = get(ProteinProduct.class);
-        Collection<AbstractRNAProduct> rnas = get(AbstractRNAProduct.class);
+        Collection<RibosomalRNA> rrna = get(RibosomalRNA.class);
+        Collection<TransferRNA> trna = get(TransferRNA.class);
+//        Collection<TransferRNA> multimer = get(Multimer.class);
 
         Collection<GeneProduct> products = new ArrayList();
         products.addAll(proteins);
-        products.addAll(rnas);
+        products.addAll(rrna);
+        products.addAll(trna);
 
         return products;
 

@@ -28,7 +28,7 @@ import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.IdentifierSet;
-import uk.ac.ebi.core.ProteinProduct;
+import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -73,7 +73,7 @@ public class TransferAnnotations
 
             Multimap<Identifier, Observation> identifiers = HashMultimap.create();
 
-            Collection<Observation> alignments = ((ProteinProduct) product).getObservationCollection().get(
+            Collection<Observation> alignments = ((ProteinProductImplementation) product).getObservationCollection().get(
                     LocalAlignment.class);
             for (Observation observation : alignments) {
                 LocalAlignment alignment = (LocalAlignment) observation;
@@ -99,7 +99,7 @@ public class TransferAnnotations
     }
 
     public boolean setContext() {
-        return getSelection().hasSelection(ProteinProduct.class);
+        return getSelection().hasSelection(ProteinProductImplementation.class);
     }
 
     public boolean setContext(Object obj) {

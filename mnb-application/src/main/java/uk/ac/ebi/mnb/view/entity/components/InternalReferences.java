@@ -30,6 +30,7 @@ import uk.ac.ebi.chemet.render.table.renderers.ListLinkRenderer;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
 
@@ -86,7 +87,7 @@ public class InternalReferences
 
                 MainController mainController = MainView.getInstance();
                 ViewController viewController = mainController.getViewController();
-                EntityCollection manager = viewController.getSelection();
+                EntityCollection manager = viewController.getSelection();                
                 manager.clear().add((AnnotatedEntity) getModel().getElementAt(index));
                 viewController.setSelection(manager);
             }

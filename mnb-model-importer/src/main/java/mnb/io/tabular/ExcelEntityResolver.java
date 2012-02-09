@@ -31,6 +31,8 @@ import mnb.io.resolve.EntryReconciler;
 import mnb.io.tabular.parser.ReactionParser;
 import mnb.io.tabular.preparse.PreparsedSheet;
 import org.apache.log4j.Logger;
+import org.dom4j.tree.DefaultEntity;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
@@ -67,6 +69,7 @@ public class ExcelEntityResolver implements EntityResolver {
                                EntityFactory factory) {
         this.sheet = sheet;
         this.reconciler = reconciler;
+        this.factory = factory;
         load();
     }
 

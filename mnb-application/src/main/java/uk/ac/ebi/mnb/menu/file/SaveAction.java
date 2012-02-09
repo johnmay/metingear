@@ -54,7 +54,6 @@ public class SaveAction extends GeneralAction {
 
     public SaveAction() {
         super("SaveProject");
-        putValue(Action.NAME, "Alternate save");
     }
 
 
@@ -64,12 +63,12 @@ public class SaveAction extends GeneralAction {
             Reconstruction reconstruction = manager.getActive();
 
             IntegerPreference bufferPref = CorePreferences.getInstance().getPreference("BUFFER_SIZE");
-            File f = new File( reconstruction.getContainer(), "data");
+            File f = new File(reconstruction.getContainer(), "data");
             new File(f.getParent()).mkdirs();
             OutputStream out = new GZIPOutputStream(new FileOutputStream(f),
                                                     bufferPref.get());
 
-            DefaultReconstructionOutputStream ros = new DefaultReconstructionOutputStream(out, new Version(0, 8, 5, 0), DefaultEntityFactory.getInstance());
+            DefaultReconstructionOutputStream ros = new DefaultReconstructionOutputStream(out, new Version(0, 8, 5, 2), DefaultEntityFactory.getInstance());
 
             long start = System.currentTimeMillis();
             ros.write(reconstruction);

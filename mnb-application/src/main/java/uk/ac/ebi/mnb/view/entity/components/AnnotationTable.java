@@ -28,10 +28,12 @@ import java.awt.event.MouseEvent;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.TableColumnModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.render.PooledClassBasedTableCellDRR;
 import uk.ac.ebi.chemet.render.table.renderers.ActionButtonCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
@@ -41,6 +43,7 @@ import uk.ac.ebi.chemet.render.table.renderers.DefaultRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.FormulaCellRender;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
+
 
 /**
  *          AnnotationTable - 2011.12.13 <br>
@@ -53,9 +56,13 @@ public class AnnotationTable
         extends JTable {
 
     private static final Logger LOGGER = Logger.getLogger(AnnotationTable.class);
+
     private boolean editable = false;
-    private ActionButtonCellRenderer deleteButtonRenderer = new ActionButtonCellRenderer(false);
+
+    private ActionButtonCellRenderer deleteButtonRenderer = new ActionButtonCellRenderer(false, SwingConstants.CENTER);
+
     private PooledClassBasedTableCellDRR ANNOTATION_RENDERER = new PooledClassBasedTableCellDRR();
+
 
     public AnnotationTable() {
         super(new AnnotationTableModel());
@@ -67,6 +74,8 @@ public class AnnotationTable
         ANNOTATION_RENDERER.setRenderer(Annotation.class, new AnnotationCellRenderer());
         ANNOTATION_RENDERER.setRenderer(AtomContainerAnnotation.class, new ChemicalStructureRenderer());
         ANNOTATION_RENDERER.setRenderer(MolecularFormula.class, new FormulaCellRender());
+        ANNOTATION_RENDERER.setRenderer(Action.class, new ActionButtonCellRenderer(false, SwingConstants.LEFT));
+
 
         setIntercellSpacing(new Dimension(10, 0));
         model.getColumn(1).setCellRenderer(ANNOTATION_RENDERER);
@@ -74,25 +83,29 @@ public class AnnotationTable
         model.getColumn(1).setPreferredWidth(128);
         model.getColumn(2).setCellRenderer(deleteButtonRenderer);
         model.getColumn(2).setPreferredWidth(16);
-        model.getColumn(3).setCellRenderer(new ActionButtonCellRenderer(false));
+        model.getColumn(3).setCellRenderer(new ActionButtonCellRenderer(false, SwingConstants.CENTER));
         model.getColumn(2).setPreferredWidth(32);
 
         addMouseListener(new ActionClickForwarder(this));
     }
 
+
     public void clear() {
-       getModel().clear();
+        getModel().clear();
     }
+
 
     public void setEditable(boolean editable) {
         this.editable = editable;
         deleteButtonRenderer.setVisible(editable);
     }
 
+
     @Override
     public AnnotationTableModel getModel() {
         return (AnnotationTableModel) super.getModel();
     }
+
 
     public void setEntity(AnnotatedEntity entity) {
 
@@ -107,6 +120,7 @@ public class AnnotationTable
 
     }
 
+
     /**
      * Forwards click events on table to appropiate action
      */
@@ -115,9 +129,11 @@ public class AnnotationTable
 
         private JTable table;
 
+
         public ActionClickForwarder(JTable table) {
             this.table = table;
         }
+
 
         @Override
         public void mouseClicked(MouseEvent me) {

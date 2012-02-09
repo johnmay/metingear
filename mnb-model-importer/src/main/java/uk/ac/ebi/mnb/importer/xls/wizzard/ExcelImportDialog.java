@@ -267,8 +267,9 @@ public class ExcelImportDialog
             }
 
 
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             addMessage(new ErrorMessage("Unable to import document " + ex.getMessage()));
+            ex.printStackTrace();
         }
 
         if (!problemReactions.isEmpty()) {
