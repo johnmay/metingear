@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.menu.tool;
+package uk.ac.ebi.mnb.menu;
 
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuItem;

@@ -18,7 +18,6 @@ import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.entities.ProteinProduct;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.menu.tool.GapAnalysis;
 
 
 /**
