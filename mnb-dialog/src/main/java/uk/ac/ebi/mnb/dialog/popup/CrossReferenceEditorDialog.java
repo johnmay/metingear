@@ -22,12 +22,7 @@ package uk.ac.ebi.mnb.dialog.popup;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.swing.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
@@ -78,42 +73,23 @@ public class CrossReferenceEditorDialog extends PopupDialog {
         };
         expand.append(); // need first component
         getPanel().add(expand.getComponent());
-        //     panel = getPanel();
     }
 
 
     public void setup(Collection<? extends CrossReference> references) {
+        
+        Iterator<? extends CrossReference> referenceIterator = references.iterator();
 
+        if(references.size() > expand.getLimit()){
+            expand.setLimit(references.size());
+        }
+        
+        expand.setSize(references.size());
+        
         for (int i = 0; i < references.size(); i++) {
-            // do with collection
-            // expand.getComponent(i).setIdentifier(references.get(i).getIdentifier());
+             expand.getComponent(i).setIdentifier(referenceIterator.next().getIdentifier());
         }
 
-//        layout = new FormLayout("min, p, min, min ", "");
-//        panel.setLayout(layout);
-//        comboboxes = new LinkedList();
-//        fields = new LinkedList();
-//
-//
-//        if (references.isEmpty()) {
-//            layout.appendRow(new RowSpec(Sizes.PREFERRED));
-//            MComboBox box = new MComboBox(map.keySet());
-//            JTextField field = FieldFactory.newField(12);
-//            fields.add(field);
-//            comboboxes.add(box);
-//        } else {
-//            for (CrossReference reference : references) {
-//                layout.appendRow(new RowSpec(Sizes.PREFERRED));
-//                MComboBox box = new MComboBox(map.keySet());
-//                box.setSelectedItem(reference.getIdentifier().getShortDescription());
-//                JTextField field = FieldFactory.newField(reference.getIdentifier().getAccession());
-//                field.setColumns(12);
-//                fields.add(field);
-//                comboboxes.add(box);
-//            }
-//        }
-//
-//        update();
     }
 
 
