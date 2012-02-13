@@ -38,6 +38,10 @@ public class ExpandableComponentGroup extends JComponent {
 
     private static final Logger LOGGER = Logger.getLogger(ExpandableComponentGroup.class);
 
+    private ExpandComponent excomp;
+
+    private JToggleButton button;
+
 
     public ExpandableComponentGroup(String name, JComponent component) {
         this(name, component, null);
@@ -46,8 +50,8 @@ public class ExpandableComponentGroup extends JComponent {
 
     public ExpandableComponentGroup(String name, JComponent component, JDialog root) {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        ExpandComponent excomp = new ExpandComponent(component, root);
-        JToggleButton button = new ExpandButton(excomp);
+        excomp = new ExpandComponent(component, root);
+        button = new ExpandButton(excomp);
 
         JComponent controller = Box.createHorizontalBox();
 
@@ -70,5 +74,10 @@ public class ExpandableComponentGroup extends JComponent {
 
         component.setVisible(false);
 
+    }
+
+
+    public void toggle() {
+        button.setSelected(!button.isSelected());
     }
 }

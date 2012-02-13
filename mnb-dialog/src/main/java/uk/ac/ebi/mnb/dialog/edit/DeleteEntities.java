@@ -56,7 +56,7 @@ public class DeleteEntities extends ControllerAction {
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
         for (AnnotatedEntity entity : selection.getEntities()) {
             if (entity instanceof Metabolite) {
-                recon.getMetabolites().remove((Metabolite) entity);
+                recon.getMetabolome().remove((Metabolite) entity);
             } else if (entity instanceof MetabolicReactionImplementation) {
                 recon.getReactions().remove((MetabolicReactionImplementation) entity);
             } else if (entity instanceof GeneProduct) {

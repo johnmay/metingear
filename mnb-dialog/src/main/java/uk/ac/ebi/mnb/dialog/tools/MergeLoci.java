@@ -25,7 +25,7 @@ import com.google.common.collect.Multimap;
 import java.awt.event.ActionEvent;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Locus;
-import uk.ac.ebi.core.Multimer;
+import uk.ac.ebi.core.MultimerImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.product.ProductCollection;
@@ -91,7 +91,7 @@ public class MergeLoci extends ControllerAction {
                 subunits[i] = products.get(loci[i]).iterator().next();
             }
 
-            GeneProduct product = new Multimer(subunits);
+            GeneProduct product = new MultimerImplementation(subunits);
             recon.getProducts().add(product);
 
             for (MetabolicReaction rxn : multimeric.get(locusAnnotation)) {

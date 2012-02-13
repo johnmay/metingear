@@ -109,7 +109,7 @@ public class MergeEntities extends ControllerDialog {
                     }
                 }
             }
-            recon.getMetabolites().remove(m);
+            recon.getMetabolome().remove(m);
         }
 
         n.setIdentifier(new BasicChemicalIdentifier(accessionBuilder.toString()));

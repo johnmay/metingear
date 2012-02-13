@@ -67,7 +67,7 @@ public class SaveAsProjectAction
 
                     OutputStream out = new GZIPOutputStream(new FileOutputStream(new File(f, "data")),
                                                             bufferPref.get());
-                    DefaultReconstructionOutputStream ros = new DefaultReconstructionOutputStream(out, new Version(0, 8, 5, 2), DefaultEntityFactory.getInstance());
+                    DefaultReconstructionOutputStream ros = new DefaultReconstructionOutputStream(out, new Version(0, 8, 5, 3), DefaultEntityFactory.getInstance());
 
 
                     long start = System.currentTimeMillis();

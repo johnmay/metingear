@@ -29,7 +29,7 @@ import java.util.Comparator;
 import java.util.List;
 import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.core.AbstractRNAProduct;
-import uk.ac.ebi.core.Multimer;
+import uk.ac.ebi.core.MultimerImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.*;
 

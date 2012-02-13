@@ -32,17 +32,11 @@ import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.Entity;
+import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityView;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.Reaction;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.ViewInfo;
@@ -251,7 +245,7 @@ public class ProjectView
         if (selection.hasSelection(Metabolite.class)) {
             metabolites.update(selection);
         }
-        if (selection.hasSelection(MetabolicReactionImplementation.class)) {
+        if (selection.hasSelection(MetabolicReaction.class)) {
             reactions.update(selection);
         }
         if (selection.hasSelection(RunnableTask.class)) {

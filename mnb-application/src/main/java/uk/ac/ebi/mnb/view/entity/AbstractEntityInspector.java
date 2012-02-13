@@ -73,6 +73,7 @@ public abstract class AbstractEntityInspector
 
     public void store() {
         panel.store();
+        panel.update();
     }
 
     public void setEditable(boolean editable) {

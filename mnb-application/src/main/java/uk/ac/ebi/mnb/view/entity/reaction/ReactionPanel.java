@@ -39,11 +39,15 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.chemet.render.reaction.ReactionEditor;
 import uk.ac.ebi.chemet.render.reaction.ReactionRenderer;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 
@@ -66,6 +70,8 @@ public class ReactionPanel
 
     private JLabel reactionLabel = LabelFactory.newLabel("");
 
+    private ReactionEditor editor = new ReactionEditor(null);
+
     private JComponent participantXref;
 
     private JLabel tClass = new JLabel();
@@ -87,6 +93,8 @@ public class ReactionPanel
         updateParticipantXref();
 
         tClass.setIcon(renderer.getTransportClassificationIcon(TransportReactionUtil.getClassification(entity)));
+
+        editor.setReaction(entity);
 
         return super.update();
 
@@ -132,6 +140,10 @@ public class ReactionPanel
         layout.appendRow(new RowSpec(RowSpec.CENTER, Sizes.PREFERRED, RowSpec.NO_GROW));
         panel.add(participantXref, cc.xyw(1, layout.getRowCount(), layout.getColumnCount(), cc.CENTER, cc.CENTER));
 
+        layout.appendRow(new RowSpec(RowSpec.CENTER, Sizes.PREFERRED, RowSpec.NO_GROW));
+        panel.add(editor.getComponent(), cc.xyw(1, layout.getRowCount(), layout.getColumnCount(), cc.CENTER, cc.CENTER));
+
+        editor.getComponent().setVisible(false);
 
         return panel;
 
@@ -211,5 +223,39 @@ public class ReactionPanel
     @Override
     public Collection<? extends AnnotatedEntity> getReferences() {
         return entity.getModifiers();
+    }
+
+
+    @Override
+    public void store() {
+
+        entity = editor.getReaction();
+
+        EntityCollection collection = new EntityMap(DefaultEntityFactory.getInstance());
+
+        // update metabolite table for new entries
+        for (MetabolicParticipant p : entity.getReactants()) {
+            collection.add(p.getMolecule());
+        }
+        for (MetabolicParticipant p : entity.getProducts()) {
+            collection.add(p.getMolecule());
+        }
+
+        MainView.getInstance().update(collection);
+
+        super.store();
+
+    }
+
+
+    @Override
+    public void setEditable(boolean editable) {
+
+        super.setEditable(editable);
+
+        editor.getComponent().setVisible(editable);
+        participantXref.setVisible(!editable);
+        reactionLabel.setVisible(!editable);
+
     }
 }

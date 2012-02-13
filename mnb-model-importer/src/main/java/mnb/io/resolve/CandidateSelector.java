@@ -19,30 +19,19 @@ package mnb.io.resolve;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
-import com.google.common.base.Joiner;
 import com.jgoodies.forms.layout.*;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.Element;
-import org.openscience.cdk.Isotope;
-import org.openscience.cdk.interfaces.IMolecularFormula;
-import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.chemet.render.components.MatchIndication;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
-import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
 import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.core.DefaultEntityFactory;
@@ -151,9 +140,25 @@ public class CandidateSelector
         FormLayout layout = new FormLayout("p:grow");
         options.setLayout(layout);
 
-        for (CrossreferenceModule module : modules) {
+        for (int i = 0; i < modules.length; i++) {
+            CrossreferenceModule module = modules[i];
+
             layout.appendRow(new RowSpec(Sizes.PREFERRED));
-            options.add(new ExpandableComponentGroup(module.getDescription(), module.getComponent(), this), cc.xy(1, layout.getRowCount()));
+
+            String moduleDescription = module.getDescription() + " [" + (i + 1) + "]";
+            final ExpandableComponentGroup expanding = new ExpandableComponentGroup(moduleDescription,
+                                                                                    module.getComponent(), this);
+
+            options.add(expanding, cc.xy(1, layout.getRowCount()));
+
+            options.getInputMap().put(KeyStroke.getKeyStroke(Integer.toString(i + 1)), new AbstractAction() {
+
+                public void actionPerformed(ActionEvent e) {
+
+                    expanding.toggle();
+                }
+            });
+
             layout.appendRow(new RowSpec(Sizes.DLUY4));
         }
 

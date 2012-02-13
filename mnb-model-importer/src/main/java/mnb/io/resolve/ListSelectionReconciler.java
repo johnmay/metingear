@@ -81,8 +81,8 @@ public class ListSelectionReconciler implements EntryReconciler {
 
         recon = ReconstructionManager.getInstance().getActive();
         nameMap = HashMultimap.create();
-        if (recon != null && !recon.getMetabolites().isEmpty()) {
-            for (Metabolite m : recon.getMetabolites()) {
+        if (recon != null && !recon.getMetabolome().isEmpty()) {
+            for (Metabolite m : recon.getMetabolome()) {
                 nameMap.put(m.getName(), m);
             }
         }

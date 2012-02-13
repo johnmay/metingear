@@ -37,6 +37,7 @@ import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.EntityTableModel;
 import uk.ac.ebi.mnb.main.MainView;
 
+
 /**
  *          EntityTableModel – 2011.09.06 <br>
  *          Class description
@@ -48,10 +49,15 @@ public abstract class AbstractEntityTableModel
         extends AbstractTableModel implements EntityTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityTableModel.class);
+
     private Reconstruction currentReconstruction;
+
     private ReconstructionManager pm = ReconstructionManager.getInstance();
+
     private List<ColumnDescriptor> columnDescriptors = new ArrayList();
+
     private List<? extends AnnotatedEntity> components = new ArrayList<AnnotatedEntity>();
+
     private static List<ColumnDescriptor> defaultColumns = new ArrayList(
             Arrays.asList(new ColumnDescriptor("Accession", String.class,
                                                DataType.BASIC, String.class, false),
@@ -59,7 +65,9 @@ public abstract class AbstractEntityTableModel
                                                DataType.BASIC, String.class, new AbbreviationSetter()),
                           new ColumnDescriptor("Name", String.class, DataType.BASIC,
                                                String.class, new NameSetter())));
+
     private Map<String, Accessor> accessMap = new HashMap();
+
 
     public AbstractEntityTableModel() {
         this(defaultColumns);
@@ -68,6 +76,7 @@ public abstract class AbstractEntityTableModel
         accessMap.put("Accession", new AccessionAccessor());
     }
 
+
     public AbstractEntityTableModel(List<ColumnDescriptor> columnDescriptors) {
         this.columnDescriptors.addAll(columnDescriptors);
         accessMap.put("Name", new NameAccessor());
@@ -75,12 +84,14 @@ public abstract class AbstractEntityTableModel
         accessMap.put("Accession", new AccessionAccessor());
     }
 
+
     /**
      * Returns the default columns Accession, Abbreviation and Name
      */
     public static List<ColumnDescriptor> getDefaultColumns() {
         return defaultColumns;
     }
+
 
     /**
      * Returns the component and given index
@@ -90,7 +101,9 @@ public abstract class AbstractEntityTableModel
     public AnnotatedEntity getEntity(int index) {
         return components.get(index);
     }
+
     private Object[][] data;
+
 
     /**
      *
@@ -115,25 +128,43 @@ public abstract class AbstractEntityTableModel
         return true;
     }
 
+
     public boolean update(AnnotatedEntity entity) {
         int index = indexOf(entity);
         if (index == -1) {
             LOGGER.error("Skiping update on item: " + entity);
         }
 
-        for (int j = 0; j < getColumnCount(); j++) {
-            Object newValue = getValue(components.get(index), j);
-            if (!newValue.equals(data[index][j])) {
-                // do this and providing the equals method isn't to tasking
-                // there is little effect on speed and no user interuption
-                // (i.e. an object won't change that a user is updating)
-                data[index][j] = newValue;
-            }
-        }
 
-        fireTableRowsUpdated(index, index);
+        // for adding new entities
+        if (index >= data.length) {
+            int length = data.length;
+            data = Arrays.copyOf(data, index + 1);
+            for (int i = length - 1; i < data.length; i++) {
+                data[i] = new Object[getColumnCount()];
+                for (int j = 0; j < getColumnCount(); j++) {
+                    data[i][j] = getValue(components.get(i), j);
+                }
+            }
+            fireTableRowsInserted(length - 1, data.length - 1);
+        } // exsiting entries
+        else {
+
+            for (int j = 0; j < getColumnCount(); j++) {
+                Object newValue = getValue(components.get(index), j);
+                if (!newValue.equals(data[index][j])) {
+                    // do this and providing the equals method isn't to tasking
+                    // there is little effect on speed and no user interuption
+                    // (i.e. an object won't change that a user is updating)
+                    data[index][j] = newValue;
+                }
+
+            }
+            fireTableRowsUpdated(index, index);
+        }
         return true;
     }
+
 
     /**
      * Updates only a subset of table data
@@ -154,54 +185,66 @@ public abstract class AbstractEntityTableModel
 
     }
 
+
     @Override
     public boolean isCellEditable(int rowIndex,
                                   int columnIndex) {
         return columnDescriptors.get(columnIndex).isEditable();
     }
 
+
     /**
      * Method is called on update before cells are copied over to data[][]
      */
     public abstract void loadComponents();
 
+
     public void setEntities(List<? extends AnnotatedEntity> components) {
         this.components = components;
     }
+
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         return columnDescriptors.get(columnIndex).getDataClass();
     }
 
+
     @Override
     public String getColumnName(int column) {
         return columnDescriptors.get(column).getName();
     }
 
+
     public int getColumnCount() {
         return columnDescriptors.size();
     }
+
 
     public boolean addColumns(List<ColumnDescriptor> descriptors) {
         return columnDescriptors.addAll(descriptors);
     }
 
+
     public boolean addColumn(ColumnDescriptor... descriptors) {
         return columnDescriptors.addAll(Arrays.asList(descriptors));
     }
+
 
     public boolean addColumn(ColumnDescriptor descriptor) {
         return columnDescriptors.add(descriptor);
     }
 
+
     public DataType getAccessType(Integer column) {
         return columnDescriptors.get(column).getType();
     }
 
+
     public int getRowCount() {
         return components.size();
     }
+
 
     @Override
     public void setValueAt(Object value,
@@ -221,11 +264,13 @@ public abstract class AbstractEntityTableModel
 
     }
 
+
     @Override
     public Object getValueAt(int rowIndex,
                              int columnIndex) {
         return data[rowIndex][columnIndex];
     }
+
 
     public Object getValue(AnnotatedEntity entity,
                            Integer columnIndex) {
@@ -250,12 +295,15 @@ public abstract class AbstractEntityTableModel
 
     }
 
+
     public abstract Object getFixedType(AnnotatedEntity component,
                                         String name);
+
 
     public Integer indexOf(AnnotatedEntity component) {
         return components.indexOf(component);
     }
+
 
     private Object getBasicInfo(AnnotatedEntity entity,
                                 String name) {
@@ -282,6 +330,7 @@ public abstract class AbstractEntityTableModel
         return "NA";
 
     }
+
 
     public void clear() {
         components.clear();

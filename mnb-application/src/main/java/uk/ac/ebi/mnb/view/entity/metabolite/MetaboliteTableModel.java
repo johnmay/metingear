@@ -71,7 +71,7 @@ public class MetaboliteTableModel
         Reconstruction project = ReconstructionManager.getInstance().getActiveReconstruction();
 
         if (project != null) {
-            setEntities(project.getMetabolites());
+            setEntities(project.getMetabolome());
         }
 
     }

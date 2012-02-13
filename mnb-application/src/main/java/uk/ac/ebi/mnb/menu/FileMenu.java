@@ -79,7 +79,7 @@ public class FileMenu
         add(new ExportSBMLAction(), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return active != null && (!active.getReactions().isEmpty() || !active.getMetabolites().isEmpty());
+                return active != null && (!active.getReactions().isEmpty() || !active.getMetabolome().isEmpty());
             }
         });
 

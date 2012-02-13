@@ -56,7 +56,7 @@ public class DocumentFactory {
 
         Map<UUID, AnnotatedEntity> documents = new HashMap();
 
-        for (Metabolite m : recon.getMetabolites()) {
+        for (Metabolite m : recon.getMetabolome()) {
             Document doc = getDocument(m);
             UUID uuid = UUID.randomUUID();
             doc.add(new Field("uuid", uuid.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));

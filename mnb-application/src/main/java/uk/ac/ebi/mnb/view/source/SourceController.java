@@ -203,7 +203,7 @@ public class SourceController
 //                itemCollector.remove(m);
 //
 //            }
-            metabolites.setCounterValue(recon.getMetabolites().size());
+            metabolites.setCounterValue(recon.getMetabolome().size());
 //
 //            // reactions
 //

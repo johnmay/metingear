@@ -22,11 +22,14 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import javax.swing.*;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
@@ -37,9 +40,12 @@ import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mnb.core.ErrorMessage;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
+import uk.ac.ebi.render.molecule.MoleculeRenderer;
 
 
 /**
@@ -98,8 +104,13 @@ public class MetabolitePanel
         if (super.update()) {
 
             if (entity.hasStructure()) {
-                JLabel label = (JLabel) getRenderer().visit(entity.getStructures().iterator().next());
-                structure.setIcon(label.getIcon());
+                IAtomContainer atomcontainer = entity.getStructures().iterator().next().getStructure();
+                try {
+                    structure.setIcon(new ImageIcon(MoleculeRenderer.getInstance().getImage(atomcontainer,
+                                                                                            new Rectangle(256, 256))));
+                } catch (CDKException ex) {
+                    MainView.getInstance().addErrorMessage("Could not render structure");
+                }
                 structure.setText("");
             } else {
                 structure.setText("No Structure");

@@ -77,17 +77,22 @@ public class CrossReferenceEditorDialog extends PopupDialog {
 
 
     public void setup(Collection<? extends CrossReference> references) {
-        
+
         Iterator<? extends CrossReference> referenceIterator = references.iterator();
 
-        if(references.size() > expand.getLimit()){
+        if (references.size() > expand.getLimit()) {
             expand.setLimit(references.size());
         }
-        
+
         expand.setSize(references.size());
-        
+
+
         for (int i = 0; i < references.size(); i++) {
-             expand.getComponent(i).setIdentifier(referenceIterator.next().getIdentifier());
+            expand.getComponent(i).setIdentifier(referenceIterator.next().getIdentifier());
+        }
+
+        if (expand.getSize() == 0) {
+            expand.append();
         }
 
     }
