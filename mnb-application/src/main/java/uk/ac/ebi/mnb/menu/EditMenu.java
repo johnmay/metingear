@@ -28,6 +28,7 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.undo.UndoManager;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Reconstruction;
@@ -63,29 +64,36 @@ public class EditMenu extends ContextMenu {
         add(new JMenuItem(new GeneralAction("Undo") {
 
             public void actionPerformed(ActionEvent ae) {
-                MainView.getInstance().getUndoManager().undo();
-                MainView.getInstance().update();
+                UndoManager manager = MainView.getInstance().getUndoManager();
+                if (manager.canUndo()) {
+                    manager.undo();
+                    MainView.getInstance().update();
+                }
             }
         }));
         add(new JMenuItem(new GeneralAction("Redo") {
 
             public void actionPerformed(ActionEvent ae) {
-                MainView.getInstance().getUndoManager().redo();
-                MainView.getInstance().update();
+                UndoManager manager = MainView.getInstance().getUndoManager();
+                if (manager.canRedo()) {
+                    manager.redo();
+                    MainView.getInstance().update();
+                }
             }
         }));
-        
+
         add(new JSeparator());
         add(create(MergeEntities.class));
         add(new DeleteEntities(MainView.getInstance()));
-        
+
         add(new JSeparator());
         add(create(CreateSubset.class), new ContextResponder() {
+
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection();
             }
         });
-        
+
         add(new JSeparator());
         add(create(AddAuthorAnnotation.class));
         // add citation
