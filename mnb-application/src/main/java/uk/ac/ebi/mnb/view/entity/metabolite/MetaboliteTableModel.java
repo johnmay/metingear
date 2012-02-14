@@ -92,7 +92,7 @@ public class MetaboliteTableModel
 
         if (getColumnClass(columnIndex) == CrossReference.class) {
             AnnotatedEntity entity = getEntity(rowIndex);
-            List<Annotation> annotations = new ArrayList(entity.getAnnotations(CrossReference.class));
+            List<Annotation> annotations = new ArrayList(entity.getAnnotationsExtending(CrossReference.class));
             for (int i = 0; i < annotations.size(); i++) {
                 entity.removeAnnotation(annotations.get(i));
             }

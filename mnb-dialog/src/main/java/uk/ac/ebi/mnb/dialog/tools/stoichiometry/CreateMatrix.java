@@ -95,7 +95,7 @@ public class CreateMatrix
         for (MetabolicReaction rxn : rxns) {
 
             // transpose
-            if (rxn.getDirection() == DirectionImplementation.IRREVERSIBLE_RIGHT_TO_LEFT || rxn.getDirection() == DirectionImplementation.BACKWARD) {
+            if (rxn.getDirection() == DirectionImplementation.BACKWARD ) {
                 rxn.transpose();
                 rxn.setDirection(DirectionImplementation.FORWARD);
             }

@@ -253,8 +253,6 @@ public abstract class AbstractEntityTableModel
         AnnotatedEntity entity = components.get(rowIndex);
         ColumnDescriptor desc = columnDescriptors.get(columnIndex);
 
-        System.out.println(desc.getName() + ":" + desc.hasSetter());
-
         if (desc.hasSetter()) {
             UndoManager undoManager = MainView.getInstance().getUndoManager();
             undoManager.addEdit(desc.getUndoableEdit(entity, value));

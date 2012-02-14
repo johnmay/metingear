@@ -24,9 +24,11 @@ import com.explodingpixels.macwidgets.LabeledComponentGroup;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+
 
 /**
  *          EditUndoButtons - 2011.12.09 <br>
@@ -38,8 +40,11 @@ import uk.ac.ebi.chemet.render.ViewUtilities;
 public class EditUndoButtons {
 
     private static final Logger LOGGER = Logger.getLogger(EditUndoButtons.class);
+
     private JButton back;
+
     private JButton forward;
+
 
     public EditUndoButtons() {
 
@@ -56,16 +61,22 @@ public class EditUndoButtons {
         back.setAction(new AbstractAction() {
 
             public void actionPerformed(ActionEvent e) {
-                MainView.getInstance().getUndoManager().undo();
-                MainView.getInstance().update();
+                UndoManager manager = MainView.getInstance().getUndoManager();
+                if (manager.canUndo()) {
+                    manager.undo();
+                    MainView.getInstance().update();
+                }
             }
         });
         back.setIcon(ViewUtilities.getIcon("images/toolbar/back.png"));
         forward.setAction(new AbstractAction() {
 
             public void actionPerformed(ActionEvent e) {
-                MainView.getInstance().getUndoManager().redo();
-                MainView.getInstance().update();
+                UndoManager manager = MainView.getInstance().getUndoManager();
+                if (manager.canRedo()) {
+                    manager.redo();
+                    MainView.getInstance().update();
+                }
             }
         });
         forward.setIcon(ViewUtilities.getIcon("images/toolbar/forward.png"));
@@ -73,6 +84,7 @@ public class EditUndoButtons {
 
 
     }
+
 
     public LabeledComponentGroup getButtonGroup() {
         return new LabeledComponentGroup("Edit", back, forward);

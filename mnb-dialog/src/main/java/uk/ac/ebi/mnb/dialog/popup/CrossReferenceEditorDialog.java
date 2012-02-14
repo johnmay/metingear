@@ -116,7 +116,8 @@ public class CrossReferenceEditorDialog extends PopupDialog {
 
             if (editor.isFilled()) {
                 Identifier id = editor.getIdentifier();
-                xref.add(ANNOTATION_FACTORY.getCrossReference(id));
+                CrossReference crossreference = ANNOTATION_FACTORY.getCrossReference(id);
+                xref.add(crossreference);
             }
 
         }
