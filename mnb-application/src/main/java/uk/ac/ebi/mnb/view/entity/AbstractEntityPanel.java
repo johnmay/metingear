@@ -42,6 +42,8 @@ import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.*;
+import java.awt.Component;
+import java.awt.Font;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
@@ -54,6 +56,7 @@ import uk.ac.ebi.chemet.render.PooledClassBasedListCellDRR;
 import uk.ac.ebi.caf.component.ui.VerticalLabelUI;
 import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.mnb.view.entity.components.InternalReferences;
+
 
 /**
  *          EntityPanelFactory – 2011.09.30 <br>
@@ -69,34 +72,58 @@ public abstract class AbstractEntityPanel
         extends JPanel {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityPanel.class);
+
     private String type;
+
     private JLabel typeLabel = LabelFactory.newLabel("");
+
     private JTextField accession = FieldFactory.newTransparentField(10, false);
+
     private JTextField name = FieldFactory.newTransparentField(30, false);
+
     private JTextField abbreviation = FieldFactory.newTransparentField(10, false);
+
     private AnnotatedEntity entity;
     //
+
     private JList observationList = new JList();
+
     private InternalReferences references = new InternalReferences();
+
     private AnnotationTable annotationTable;
     //
+
     private DefaultListModel observationModel = new DefaultListModel();
+
     private CellConstraints cc = new CellConstraints();
+
     private AnnotationRenderer renderer;
+
     private JPanel middle;
+
     private JPanel synopsis;
+
     private JPanel basic = PanelFactory.createInfoPanel("p, p:grow, p, p:grow, p", "p");
+
     private JPanel observations;
+
     private JLabel refLabel;
+
     private JLabel synLabel;
+
     private JLabel annLabel;
+
     private JScrollPane refPane;
+
     private List<JButton> removeAnnotationButtons = new ArrayList();
+
     private boolean editable;
+
 
     public AnnotationVisitor getRenderer() {
         return renderer;
     }
+
 
     public AbstractEntityPanel(String type,
                                AnnotationRenderer renderer) {
@@ -153,8 +180,11 @@ public abstract class AbstractEntityPanel
 
 
     }
+
     private PooledClassBasedListCellDRR OBSERVATION_RENDERING_POOL;
+
     private AlignmentViewer alignmentView = new AlignmentViewer(MainView.getInstance(), 15);
+
 
     public void setup() {
 
@@ -195,15 +225,20 @@ public abstract class AbstractEntityPanel
                                                      VerticalLabelUI.Rotation.ANTICLOCKWISE);
         annBox.add(annLabel);
         annBox.add(annotationTable);
+        annLabel.setAlignmentY(Component.TOP_ALIGNMENT);
+        annotationTable.setAlignmentY(Component.TOP_ALIGNMENT);
         middle.add(annBox, cc.xy(5, 1));
 
 
-        refLabel.setFont(refLabel.getFont().deriveFont(35.0f));
-        synLabel.setFont(synLabel.getFont().deriveFont(35.0f));
-        annLabel.setFont(annLabel.getFont().deriveFont(35.0f));
-        refLabel.setForeground(ColorUtility.shade(refLabel.getForeground(), 0.4f));
-        synLabel.setForeground(ColorUtility.shade(synLabel.getForeground(), 0.4f));
-        annLabel.setForeground(ColorUtility.shade(annLabel.getForeground(), 0.4f));
+        refLabel.setForeground(ColorUtility.EMBL_PETROL_75);
+        synLabel.setForeground(ColorUtility.EMBL_PETROL_75);
+        annLabel.setForeground(ColorUtility.EMBL_PETROL_75);
+        refLabel.setFont(new Font("Gill Sans", Font.PLAIN, 35));
+        synLabel.setFont(new Font("Gill Sans", Font.PLAIN, 35));
+        annLabel.setFont(new Font("Gill Sans", Font.PLAIN, 35));
+//        refLabel.setForeground(ColorUtility.shade(refLabel.getForeground(), 0.4f));
+//        synLabel.setForeground(ColorUtility.shade(synLabel.getForeground(), 0.4f));
+//        annLabel.setForeground(ColorUtility.shade(annLabel.getForeground(), 0.4f));
 
 
         add(new JSeparator(), cc.xy(1, 2));
@@ -214,11 +249,13 @@ public abstract class AbstractEntityPanel
 
     }
 
+
     public JPanel getObservationPanel() {
         JPanel panel = PanelFactory.createInfoPanel();
         panel.add(observationList);
         return panel;
     }
+
 
     /**
      * layout the labels of the basic panel
@@ -229,10 +266,12 @@ public abstract class AbstractEntityPanel
         basic.add(abbreviation, cc.xy(5, 1));
     }
 
+
     public JPanel getBasicPanel() {
         basic.setBorder(Borders.DLU4_BORDER);
         return basic;
     }
+
 
     public JPanel getAnnotationPanel() {
 
@@ -242,6 +281,7 @@ public abstract class AbstractEntityPanel
         return panel;
 
     }
+
 
     /**
      * Clears all displayed components
@@ -254,6 +294,7 @@ public abstract class AbstractEntityPanel
         references.clear();
         observationModel.removeAllElements();
     }
+
 
     /**
      *
@@ -276,6 +317,7 @@ public abstract class AbstractEntityPanel
 
         return true;
     }
+
 
     /**
      * 
@@ -330,13 +372,14 @@ public abstract class AbstractEntityPanel
 //            ((Box) middle.getComponent(2)).remove(1);
 //            ((Box) middle.getComponent(2)).add(annotations);
             return true;
-        } else{
+        } else {
             clear();
         }
 
         return false;
 
     }
+
 
     /**
      * 
@@ -357,6 +400,7 @@ public abstract class AbstractEntityPanel
 
     }
 
+
     /**
      * Access whether the panel is editable or not.
      * @return
@@ -364,6 +408,7 @@ public abstract class AbstractEntityPanel
     public boolean isEditable() {
         return editable;
     }
+
 
     /**
      * Persists changed information in the currently selected entity
@@ -394,7 +439,9 @@ public abstract class AbstractEntityPanel
 
     }
 
+
     public abstract JPanel getSynopsis();
+
 
     public Collection<? extends AnnotatedEntity> getReferences() {
         return new ArrayList<AnnotatedEntity>();

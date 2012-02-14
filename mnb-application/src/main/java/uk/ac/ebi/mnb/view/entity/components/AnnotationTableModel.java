@@ -41,6 +41,7 @@ import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.edit.DeleteAnnotation;
 import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.view.entity.components.control.AnnotationControlManager;
 
 
 /**
@@ -61,6 +62,8 @@ public class AnnotationTableModel
 
     private JList observationList;
 
+    private AnnotationControlManager annotationControlManager;
+
     private static final Logger LOGGER = Logger.getLogger(AnnotationTableModel.class);
 
 
@@ -72,6 +75,7 @@ public class AnnotationTableModel
 
     public void setObservationList(JList observationList) {
         this.observationList = observationList;
+        annotationControlManager = new AnnotationControlManager(observationList);
     }
 
 
@@ -119,27 +123,12 @@ public class AnnotationTableModel
                                             MainView.getInstance().getViewController().getActiveView(),
                                             MainView.getInstance().getUndoManager());
             case 3:
-                if (annotation instanceof ObservationBasedAnnotation) {
-                    final ObservationBasedAnnotation oAnn = (ObservationBasedAnnotation) annotation;
-                    if (!oAnn.getObservations().isEmpty()) {
-                        return new GeneralAction("ShowEvidence") {
-
-                            public void actionPerformed(ActionEvent e) {
-
-                                observationList.removeSelectionInterval(0, observationList.getModel().getSize());
-
-                                for (Observation observation : oAnn.getObservations()) {
-                                    DefaultListModel model = (DefaultListModel) observationList.getModel();
-                                    int index = model.indexOf(observation);
-                                    if (index != -1) {
-                                        observationList.addSelectionInterval(index, index);
-                                    }
-                                }
-                            }
-                        };
-                    }
+                if (annotationControlManager != null) {
+                    annotationControlManager.getController(annotation, entity);
+                } else {
+                    return null;
                 }
-                return null;
+
         }
 
         return null;

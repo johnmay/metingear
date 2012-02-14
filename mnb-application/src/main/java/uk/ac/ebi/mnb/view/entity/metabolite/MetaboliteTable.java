@@ -28,6 +28,8 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.Rating;
 import uk.ac.ebi.chemet.render.table.editors.RatingCellEditor;
 import uk.ac.ebi.chemet.render.table.renderers.RatingCellRenderer;
+import uk.ac.ebi.chemet.render.table.renderers.StructuralValidityRenderer;
+import uk.ac.ebi.core.tools.StructuralValidity;
 import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
 
 
@@ -55,7 +57,10 @@ public class MetaboliteTable
                            booleanRenderer);
         setDefaultRenderer(CrossReference.class,
                            annotationRenderer);
-        setDefaultEditor(CrossReference.class, new CrossReferenceCellEditor());
+        setDefaultEditor(CrossReference.class,
+                         new CrossReferenceCellEditor());
+        setDefaultRenderer(StructuralValidity.class,
+                           new StructuralValidityRenderer());
 
         //   setDefaultRenderer(MolecularFormula.class,
         //                      new FormulaCellRender());

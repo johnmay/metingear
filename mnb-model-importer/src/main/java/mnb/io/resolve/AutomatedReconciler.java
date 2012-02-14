@@ -26,6 +26,7 @@ import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Synonym;
+import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
@@ -139,6 +140,14 @@ public class AutomatedReconciler
         // molecula formula
         if (entry.getFormula() != null) {
             metabolite.addAnnotation(new MolecularFormula(entry.getFormula()));
+        }
+
+        if (entry.getCharge() != null) {
+            try {
+                metabolite.setCharge(Double.parseDouble(entry.getCharge()));
+            } catch (NumberFormatException ex) {
+                LOGGER.error("Invalid format for charge: " + entry.getCharge());
+            }
         }
 
         // adds the kegg xref

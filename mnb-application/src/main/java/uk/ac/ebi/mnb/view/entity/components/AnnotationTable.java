@@ -20,27 +20,21 @@
  */
 package uk.ac.ebi.mnb.view.entity.components;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.Action;
-import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableColumnModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.chemet.render.ClassBasedTableCellDDR;
 import uk.ac.ebi.chemet.render.PooledClassBasedTableCellDRR;
-import uk.ac.ebi.chemet.render.table.renderers.ActionButtonCellRenderer;
-import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
-import uk.ac.ebi.chemet.render.table.renderers.AnnotationDescriptionRenderer;
-import uk.ac.ebi.chemet.render.table.renderers.ChemicalStructureRenderer;
-import uk.ac.ebi.chemet.render.table.renderers.DefaultRenderer;
-import uk.ac.ebi.chemet.render.table.renderers.FormulaCellRender;
+import uk.ac.ebi.chemet.render.table.renderers.*;
+import uk.ac.ebi.core.tools.StructuralValidity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 
@@ -62,6 +56,7 @@ public class AnnotationTable
     private ActionButtonCellRenderer deleteButtonRenderer = new ActionButtonCellRenderer(false, SwingConstants.CENTER);
 
     private PooledClassBasedTableCellDRR ANNOTATION_RENDERER = new PooledClassBasedTableCellDRR();
+    private ClassBasedTableCellDDR CONTROL_RENDERER = new ClassBasedTableCellDDR();
 
 
     public AnnotationTable() {
@@ -83,7 +78,9 @@ public class AnnotationTable
         model.getColumn(1).setPreferredWidth(128);
         model.getColumn(2).setCellRenderer(deleteButtonRenderer);
         model.getColumn(2).setPreferredWidth(16);
-        model.getColumn(3).setCellRenderer(new ActionButtonCellRenderer(false, SwingConstants.CENTER));
+        
+        CONTROL_RENDERER.setRenderer(Action.class, new ActionButtonCellRenderer(false, SwingConstants.CENTER));
+        CONTROL_RENDERER.setRenderer(StructuralValidity.class, new StructuralValidityRenderer());        
         model.getColumn(2).setPreferredWidth(32);
 
         addMouseListener(new ActionClickForwarder(this));

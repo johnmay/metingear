@@ -34,10 +34,12 @@ import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.StarRating;
+import uk.ac.ebi.core.tools.StructuralValidity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Rating;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+
 
 /**
  *          MetaboliteTableModel – 2011.09.06 <br>
@@ -50,6 +52,7 @@ public class MetaboliteTableModel
         extends AbstractEntityTableModel {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteTableModel.class);
+
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
         new ColumnDescriptor("Generic", null,
                              DataType.FIXED,
@@ -57,13 +60,18 @@ public class MetaboliteTableModel
         new ColumnDescriptor(new CrossReference()),
         new ColumnDescriptor(new AtomContainerAnnotation()),
         new ColumnDescriptor(new MolecularFormula()),
+        new ColumnDescriptor("Validity", null,
+                             DataType.FIXED,
+                             StructuralValidity.class),
         new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class)
     };
+
 
     public MetaboliteTableModel() {
         super();
         addColumns(Arrays.asList(DEFAULT));
     }
+
 
     @Override
     public void loadComponents() {
@@ -76,6 +84,7 @@ public class MetaboliteTableModel
 
     }
 
+
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
 
@@ -86,6 +95,7 @@ public class MetaboliteTableModel
 
         return super.isCellEditable(rowIndex, columnIndex);
     }
+
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
@@ -109,16 +119,20 @@ public class MetaboliteTableModel
         super.setValueAt(aValue, rowIndex, columnIndex);
     }
 
+
     @Override
     public Object getFixedType(AnnotatedEntity component, String name) {
 
-        Metabolite metabolicEntity = (Metabolite) component;
+        Metabolite entity = (Metabolite) component;
 
         if (name.equals(DEFAULT[0].getName())) {
 
-            return metabolicEntity.isGeneric();
+            return entity.isGeneric();
         } else if (name.equals("Rating")) {
             return component.getRating();
+
+        } else if (name.equals("Validity")) {
+            return StructuralValidity.getValidity(entity);
         }
 
         return "NA";

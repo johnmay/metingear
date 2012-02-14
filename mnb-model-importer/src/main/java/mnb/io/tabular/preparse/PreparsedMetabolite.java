@@ -1,4 +1,3 @@
-
 /**
  * PreparsedMetabolite.java
  *
@@ -40,6 +39,7 @@ import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 public class PreparsedMetabolite extends PreparsedEntry {
 
     private static final Logger LOGGER = Logger.getLogger(PreparsedMetabolite.class);
+
     private Collection<CandidateEntry> candidates = new ArrayList<CandidateEntry>();
 
 
@@ -73,11 +73,13 @@ public class PreparsedMetabolite extends PreparsedEntry {
     }
 
 
+    public String getCharge() {
+        return getValue(EntityColumn.CHARGE);
+    }
+
+
     @Override
     public String toString() {
         return Joiner.on(", ").join(getNames());
     }
-
-
 }
-
