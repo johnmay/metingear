@@ -187,7 +187,6 @@ public abstract class DropdownDialog
     public void setVisible(boolean visible) {
         if (visible) {
             this.pack();
-            this.setLocation();
         }
         super.setVisible(visible);
 
@@ -203,6 +202,13 @@ public abstract class DropdownDialog
      */
     public void setLocation() {
         controller.place((DropdownDialog) this);
+    }
+
+
+    @Override
+    public void pack() {
+        super.pack();
+        setLocation();
     }
 
 
