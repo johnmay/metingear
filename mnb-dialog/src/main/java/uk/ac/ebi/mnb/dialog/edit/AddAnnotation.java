@@ -29,6 +29,7 @@ import uk.ac.ebi.caf.component.ExpandingComponentList;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.editor.annotation.AnnotationChoiceEditor;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -84,19 +85,36 @@ public class AddAnnotation
 
 
     private void setup() {
-        list.setSize(0);
-        list.append();
+
+        // ensure size of 1
+        list.reset();
 
         // set the context of the annotation editor
         AnnotatedEntity entity = getSelection().getFirstEntity();
-        for (int i = 0; i < list.getSize(); i++) {
-            list.getComponent(i).setContext(entity.getClass());
-        }
+        list.getComponent(0).setContext(entity.getClass());
+
     }
 
 
+    /**
+     * Transfer the new annotations to the
+     * selected entities
+     */
     @Override
     public void process() {
-        // do nothing
+
+        for (int i = 0; i < list.getSize(); i++) {
+            AnnotationChoiceEditor chooser = list.getComponent(i);
+
+            Annotation annotation = chooser.getEditor().getAnnotation();
+            
+            System.out.println(annotation);
+
+            for (AnnotatedEntity entity : getSelection().getEntities()) {
+                entity.addAnnotation(annotation);
+            }
+
+        }
+
     }
 }

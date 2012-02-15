@@ -15,7 +15,6 @@
 package uk.ac.ebi.mnb.main;
 
 import uk.ac.ebi.mnb.view.source.SourceController;
-import com.apple.laf.AquaRootPaneUI;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import java.awt.*;
 import java.awt.event.*;
@@ -104,7 +103,7 @@ public class MainView
         super("METINGEAR");
 
         // mac widgets
-        getLayeredPane().getRootPane().setUI(new AquaRootPaneUI());
+       // getLayeredPane().getRootPane().setUI(new AquaRootPaneUI());
 
         MacUtils.makeWindowLeopardStyle(getRootPane());
 

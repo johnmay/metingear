@@ -67,6 +67,15 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        
+        <repository>
+            <id>biojava-maven-repo</id>
+            <name>BioJava repository</name>
+            <url>http://www.biojava.org/download/maven/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
 
         <repository>
             <id>dev.java.net.2</id>

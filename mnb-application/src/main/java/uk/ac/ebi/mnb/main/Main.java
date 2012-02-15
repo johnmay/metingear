@@ -48,8 +48,7 @@ public class Main {
             SwingUtilities.invokeAndWait(new Runnable() {
 
                 public void run() {
-
-
+                    
                     MainView view = MainView.getInstance();
                     JMenuBar menubar = new MainMenuBar();
 
@@ -59,9 +58,9 @@ public class Main {
                 }
             });
         } catch (InterruptedException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        } catch (InvocationTargetException ex) {            
+            ex.printStackTrace();
         }
        
     }
@@ -83,26 +82,26 @@ public class Main {
 
     private static void setupOSX() {
 
-        System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Metingeer");
-        // Set the doc image
-
-        com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-        app.setDockIconImage(ViewUtilities.logo_512x512);
-        app.setAboutHandler(new com.apple.eawt.AboutHandler() {
-
-            public void handleAbout(com.apple.eawt.AppEvent.AboutEvent ae) {
-                AboutDialog dialog = new AboutDialog(false);
-                dialog.setVisible(true);
-            }
-        });
-        app.setPreferencesHandler(new com.apple.eawt.PreferencesHandler() {
-
-            public void handlePreferences(com.apple.eawt.AppEvent.PreferencesEvent pe) {
-                PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
-                                                             MainView.getInstance());
-                pref.setVisible(true);
-            }
-        });
+//        System.setProperty("apple.laf.useScreenMenuBar", "true");
+//        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Metingeer");
+//        // Set the doc image
+//
+//        com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
+//        app.setDockIconImage(ViewUtilities.logo_512x512);
+//        app.setAboutHandler(new com.apple.eawt.AboutHandler() {
+//
+//            public void handleAbout(com.apple.eawt.AppEvent.AboutEvent ae) {
+//                AboutDialog dialog = new AboutDialog(false);
+//                dialog.setVisible(true);
+//            }
+//        });
+//        app.setPreferencesHandler(new com.apple.eawt.PreferencesHandler() {
+//
+//            public void handlePreferences(com.apple.eawt.AppEvent.PreferencesEvent pe) {
+//                PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
+//                                                             MainView.getInstance());
+//                pref.setVisible(true);
+//            }
+//        });
     }
 }
