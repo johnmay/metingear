@@ -36,11 +36,8 @@ import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
-import uk.ac.ebi.render.crossreference.modules.AssignStructure;
-import uk.ac.ebi.render.crossreference.modules.GoogleSearch;
-import uk.ac.ebi.render.crossreference.modules.PeptideGenerator;
+import uk.ac.ebi.render.crossreference.modules.*;
 import uk.ac.ebi.render.molecule.MoleculeTable;
-import uk.ac.ebi.render.crossreference.modules.DatabaseSearch;
 import uk.ac.ebi.visualisation.molecule.access.CrossReferenceAccessor;
 import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
 
@@ -73,19 +70,21 @@ public class CandidateSelector
 
     private boolean skipall = false;
 
-    private final CrossreferenceModule[] modules =
-                                         new CrossreferenceModule[]{
-        new DatabaseSearch(),
-        new AssignStructure(),
-        new PeptideGenerator(DefaultEntityFactory.getInstance()),
-        new GoogleSearch()
-    };
+    private final CrossreferenceModule[] modules;
 
 
     public CandidateSelector(JFrame frame) {
         super(frame, "OkayDialog");
-        setDefaultLayout();
         getClose().setText("Skip");
+
+
+        modules = new CrossreferenceModule[]{
+            new DatabaseSearch(),
+            new AssignStructure(),
+            new PeptideGenerator(DefaultEntityFactory.getInstance()),
+            new ManualCrossReferenceModule(this),
+            new GoogleSearch(),};
+        setDefaultLayout();
 
 
     }
@@ -145,20 +144,18 @@ public class CandidateSelector
 
             layout.appendRow(new RowSpec(Sizes.PREFERRED));
 
-            String moduleDescription = module.getDescription() + " [" + (i + 1) + "]";
+            String moduleDescription = module.getDescription() + " [meta + " + (i + 1) + "]";
             final ExpandableComponentGroup expanding = new ExpandableComponentGroup(moduleDescription,
                                                                                     module.getComponent(), this);
-
-            options.add(expanding, cc.xy(1, layout.getRowCount()));
-
-            options.getInputMap().put(KeyStroke.getKeyStroke(Integer.toString(i + 1)), new AbstractAction() {
+            // allows quick switching with number keys
+            expanding.registerKeyboardAction(new AbstractAction() {
 
                 public void actionPerformed(ActionEvent e) {
-
                     expanding.toggle();
+                    options.revalidate();
                 }
-            });
-
+            }, KeyStroke.getKeyStroke("meta " + Integer.toString(i + 1)), JComponent.WHEN_IN_FOCUSED_WINDOW);
+            options.add(expanding, cc.xy(1, layout.getRowCount()));
             layout.appendRow(new RowSpec(Sizes.DLUY4));
         }
 

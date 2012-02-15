@@ -77,7 +77,12 @@ public class ExpandableComponentGroup extends JComponent {
     }
 
 
+    public JToggleButton getButton() {
+        return button;
+    }
+
+
     public void toggle() {
-        button.setSelected(!button.isSelected());
+        button.doClick();
     }
 }

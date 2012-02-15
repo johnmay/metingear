@@ -36,10 +36,7 @@ import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.core.ControllerDialogItem;
-import uk.ac.ebi.mnb.dialog.edit.AddAuthorAnnotation;
-import uk.ac.ebi.mnb.dialog.edit.CreateSubset;
-import uk.ac.ebi.mnb.dialog.edit.DeleteEntities;
-import uk.ac.ebi.mnb.dialog.edit.MergeEntities;
+import uk.ac.ebi.mnb.dialog.edit.*;
 
 
 /**
@@ -96,6 +93,7 @@ public class EditMenu extends ContextMenu {
 
         add(new JSeparator());
         add(create(AddAuthorAnnotation.class));
+        add(create(AddAnnotation.class));
         // add citation
         //add(new ContextDialogItem(view, view.getViewController(), ContextDialog.class));
 

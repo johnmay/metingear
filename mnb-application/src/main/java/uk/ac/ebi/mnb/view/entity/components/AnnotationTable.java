@@ -53,9 +53,10 @@ public class AnnotationTable
 
     private boolean editable = false;
 
-    private ActionButtonCellRenderer deleteButtonRenderer = new ActionButtonCellRenderer(false, SwingConstants.CENTER);
+    private ActionButtonCellRenderer deleteButtonRenderer = new ActionButtonCellRenderer(SwingConstants.CENTER);
 
-    private PooledClassBasedTableCellDRR ANNOTATION_RENDERER = new PooledClassBasedTableCellDRR();
+    private ClassBasedTableCellDDR ANNOTATION_RENDERER = new ClassBasedTableCellDDR();
+
     private ClassBasedTableCellDDR CONTROL_RENDERER = new ClassBasedTableCellDDR();
 
 
@@ -63,25 +64,27 @@ public class AnnotationTable
         super(new AnnotationTableModel());
 
         TableColumnModel model = getColumnModel();
-        model.getColumn(0).setCellRenderer(new AnnotationDescriptionRenderer());
+        model.getColumn(0).setCellRenderer(new DescriptorRenderer());
         model.getColumn(0).setPreferredWidth(150);
 
         ANNOTATION_RENDERER.setRenderer(Annotation.class, new AnnotationCellRenderer());
         ANNOTATION_RENDERER.setRenderer(AtomContainerAnnotation.class, new ChemicalStructureRenderer());
         ANNOTATION_RENDERER.setRenderer(MolecularFormula.class, new FormulaCellRender());
-        ANNOTATION_RENDERER.setRenderer(Action.class, new ActionButtonCellRenderer(false, SwingConstants.LEFT));
-
-
-        setIntercellSpacing(new Dimension(10, 0));
+        ANNOTATION_RENDERER.setRenderer(Action.class, new ActionButtonCellRenderer(SwingConstants.LEFT));
+        
+        setCellSelectionEnabled(false);
+        setIntercellSpacing(new Dimension(4, 4));
         model.getColumn(1).setCellRenderer(ANNOTATION_RENDERER);
 
         model.getColumn(1).setPreferredWidth(128);
         model.getColumn(2).setCellRenderer(deleteButtonRenderer);
-        model.getColumn(2).setPreferredWidth(16);
-        
-        CONTROL_RENDERER.setRenderer(Action.class, new ActionButtonCellRenderer(false, SwingConstants.CENTER));
-        CONTROL_RENDERER.setRenderer(StructuralValidity.class, new StructuralValidityRenderer());        
         model.getColumn(2).setPreferredWidth(32);
+
+        CONTROL_RENDERER.setRenderer(Object.class, new ActionButtonCellRenderer(SwingConstants.CENTER));
+        CONTROL_RENDERER.setRenderer(Action.class, new ActionButtonCellRenderer(SwingConstants.CENTER));
+        CONTROL_RENDERER.setRenderer(StructuralValidity.class, new StructuralValidityRenderer());
+        model.getColumn(3).setCellRenderer(CONTROL_RENDERER);
+        model.getColumn(3).setPreferredWidth(64);
 
         addMouseListener(new ActionClickForwarder(this));
     }
@@ -105,16 +108,7 @@ public class AnnotationTable
 
 
     public void setEntity(AnnotatedEntity entity) {
-
-        // check-in previous annotations (freeing up object pool)
-        if (getModel().getEntity() != null) {
-            for (Annotation annotation : getModel().getEntity().getAnnotations()) {
-                ANNOTATION_RENDERER.checkIn(annotation);
-            }
-        }
-
         getModel().setEntity(entity);
-
     }
 
 

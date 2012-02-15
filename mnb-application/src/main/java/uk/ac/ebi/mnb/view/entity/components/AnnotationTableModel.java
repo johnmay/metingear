@@ -124,7 +124,7 @@ public class AnnotationTableModel
                                             MainView.getInstance().getUndoManager());
             case 3:
                 if (annotationControlManager != null) {
-                    annotationControlManager.getController(annotation, entity);
+                    return annotationControlManager.getController(annotation, entity);
                 } else {
                     return null;
                 }

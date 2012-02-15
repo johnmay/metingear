@@ -315,6 +315,10 @@ public class MainView
      */
     public void place(JDialog dialog) {
 
+        if (!toolbar.getComponent().isShowing()) {
+            return;
+        }
+
         int x = toolbar.getComponent().getLocationOnScreen().x
                 + toolbar.getComponent().getWidth() / 2 - dialog.getWidth() / 2;
         int y = toolbar.getComponent().getLocationOnScreen().y
