@@ -4,26 +4,16 @@
  */
 package uk.ac.ebi.mnb.main;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
 import org.apache.log4j.PropertyConfigurator;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.io.MDLV2000Reader;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.menu.file.PreferenceDialog;
 import uk.ac.ebi.mnb.view.AboutDialog;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.core.tools.hash.MolecularHash;
-import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
-import uk.ac.ebi.core.tools.hash.seeds.*;
-import uk.ac.ebi.core.util.CDKMoleculeBuilder;
 
 
 /**
@@ -43,6 +33,11 @@ public class Main {
         loadLogging();
 
         setupOSX();
+//        try {
+//            UIManager.setLookAndFeel(new SubstanceCremeCoffeeLookAndFeel());
+//        } catch (UnsupportedLookAndFeelException ex) {
+//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
@@ -82,26 +77,26 @@ public class Main {
 
     private static void setupOSX() {
 
-//        System.setProperty("apple.laf.useScreenMenuBar", "true");
-//        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Metingeer");
-//        // Set the doc image
-//
-//        com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-//        app.setDockIconImage(ViewUtilities.logo_512x512);
-//        app.setAboutHandler(new com.apple.eawt.AboutHandler() {
-//
-//            public void handleAbout(com.apple.eawt.AppEvent.AboutEvent ae) {
-//                AboutDialog dialog = new AboutDialog(false);
-//                dialog.setVisible(true);
-//            }
-//        });
-//        app.setPreferencesHandler(new com.apple.eawt.PreferencesHandler() {
-//
-//            public void handlePreferences(com.apple.eawt.AppEvent.PreferencesEvent pe) {
-//                PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
-//                                                             MainView.getInstance());
-//                pref.setVisible(true);
-//            }
-//        });
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Metingeer");
+        // Set the doc image
+
+        com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
+        app.setDockIconImage(ViewUtilities.logo_512x512);
+        app.setAboutHandler(new com.apple.eawt.AboutHandler() {
+
+            public void handleAbout(com.apple.eawt.AppEvent.AboutEvent ae) {
+                AboutDialog dialog = new AboutDialog(false);
+                dialog.setVisible(true);
+            }
+        });
+        app.setPreferencesHandler(new com.apple.eawt.PreferencesHandler() {
+
+            public void handlePreferences(com.apple.eawt.AppEvent.PreferencesEvent pe) {
+                PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
+                                                             MainView.getInstance());
+                pref.setVisible(true);
+            }
+        });
     }
 }

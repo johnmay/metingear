@@ -39,8 +39,8 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
-import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -51,7 +51,6 @@ import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.mnb.view.MCheckBox;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
@@ -88,9 +87,9 @@ public class DownloadStructuresDialog
                                     UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
 
-        chebiCheckBox = new MCheckBox("ChEBI (currated only)");
-        keggCheckBox = new MCheckBox("KEGG Compound");
-        chebiAllStarCheckBox = new MCheckBox("ChEBI (All)");
+        chebiCheckBox = CheckBoxFactory.newCheckBox("ChEBI (currated only)");
+        keggCheckBox = CheckBoxFactory.newCheckBox("KEGG Compound");
+        chebiAllStarCheckBox = CheckBoxFactory.newCheckBox("ChEBI (All)");
 
         setDefaultLayout();
     }

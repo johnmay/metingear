@@ -43,6 +43,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.tools.ReconstructionComparison;
@@ -57,8 +59,6 @@ import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.mnb.view.MCheckBox;
-import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.render.molecule.MetaboliteComparison;
@@ -77,20 +77,20 @@ public class CompareReconstruction
 
     private static final Logger LOGGER = Logger.getLogger(CompareReconstruction.class);
 
-    private MComboBox recon1 = new MComboBox();
+    private JComboBox recon1 = ComboBoxFactory.newComboBox();
 
-    private MComboBox recon2 = new MComboBox();
+    private JComboBox recon2 = ComboBoxFactory.newComboBox();
 
-    private MComboBox recon3 = new MComboBox();
+    private JComboBox recon3 = ComboBoxFactory.newComboBox();
 
     private VennDiagram venn;
     // options
 
-    private JCheckBox hydrogen = new MCheckBox("hydrogens");
+    private JCheckBox hydrogen = CheckBoxFactory.newCheckBox("hydrogens");
 
-    private JCheckBox charge = new MCheckBox("charge");
+    private JCheckBox charge = CheckBoxFactory.newCheckBox("charge");
 
-    private JCheckBox stereo = new MCheckBox("stereochemical bonds");
+    private JCheckBox stereo = CheckBoxFactory.newCheckBox("stereochemical bonds");
     // output
 
     private JTextArea output = new JTextArea(7, 40);

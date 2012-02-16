@@ -25,12 +25,10 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.util.*;
 import javax.swing.*;
 import org.apache.log4j.Logger;
-import org.biojava.bio.Annotatable;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.chemet.render.components.IdentifierEditor;
 
@@ -51,16 +49,11 @@ public class CrossReferenceEditorDialog extends PopupDialog {
     private Map<String, Byte> map = new HashMap();
 
     private FormLayout layout;
-
-    private List<MComboBox> comboboxes = new LinkedList();
-
-    private List<JTextField> fields = new LinkedList();
+    
 
     private AnnotationFactory ANNOTATION_FACTORY = AnnotationFactory.getInstance();
 
     private IdentifierFactory ID_FACTORY = IdentifierFactory.getInstance();
-
-    private JPanel panel;
 
     private ExpandingComponentList<IdentifierEditor> expand;
 

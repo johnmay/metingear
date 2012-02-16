@@ -26,7 +26,6 @@ import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.interfaces.Updatable;
-import uk.ac.ebi.mnb.view.*;
 import uk.ac.ebi.resource.IdentifierFactory;
 
 import javax.swing.*;
@@ -34,10 +33,12 @@ import javax.swing.*;
 import org.apache.log4j.Logger;
 
 import com.jgoodies.forms.layout.*;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+
 
 /**
  * @name    NewEntity - 2011.10.04 <br>
@@ -50,13 +51,21 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 public abstract class NewEntity extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(NewEntity.class);
+
     private JComboBox type;
+
     private JTextField accession = FieldFactory.newField(6);
+
     private JTextField name = FieldFactory.newField(20);
+
     private JTextField abbreviation = FieldFactory.newField(4);
+
     private CellConstraints cc = new CellConstraints();
+
     private Updatable updateable;
+
     private static final Map<String, Byte> nameIndexMap = new HashMap();
+
 
     /**
      * Provide the frame to attach the dialog to and the default identifier type
@@ -73,7 +82,7 @@ public abstract class NewEntity extends ControllerDialog {
         for (Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers()) {
             nameIndexMap.put(id.getShortDescription(), id.getIndex());
         }
-        type = new MComboBox(nameIndexMap.keySet());
+        type = ComboBoxFactory.newComboBox(nameIndexMap.keySet());
 
         this.updateable = updater;
 
@@ -81,6 +90,7 @@ public abstract class NewEntity extends ControllerDialog {
 
 
     }
+
 
     @Override
     public JPanel getOptions() {
@@ -106,6 +116,7 @@ public abstract class NewEntity extends ControllerDialog {
 
     }
 
+
     /**
      * Returns the value of the name field
      * @return
@@ -114,6 +125,7 @@ public abstract class NewEntity extends ControllerDialog {
         return name.getText().trim();
     }
 
+
     /**
      * Returns the value of the name field
      * @return
@@ -121,6 +133,7 @@ public abstract class NewEntity extends ControllerDialog {
     public String getAbbreviation() {
         return abbreviation.getText().trim();
     }
+
 
     /**
      * Returns the value of the name field
@@ -131,6 +144,7 @@ public abstract class NewEntity extends ControllerDialog {
         id.setAccession(accession.getText().trim());
         return id;
     }
+
 
     @Override
     public boolean update() {

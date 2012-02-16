@@ -27,8 +27,8 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import mnb.io.tabular.ExcelModelProperties;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.mnb.view.MCheckBox;
 
 
 /**
@@ -46,11 +46,11 @@ public class AdditionalOptions
 
     private ExcelModelProperties properties;
 
-    private JCheckBox chebi = new MCheckBox("chebi");
+    private JCheckBox chebi = CheckBoxFactory.newCheckBox("chebi");
 
-    private JCheckBox kegg = new MCheckBox("kegg");
+    private JCheckBox kegg = CheckBoxFactory.newCheckBox("kegg");
 
-    private JCheckBox skip = new MCheckBox("Skip Curated Assignment (can be done later)");
+    private JCheckBox skip = CheckBoxFactory.newCheckBox("Skip Curated Assignment (can be done later)");
 
 
     public AdditionalOptions(ExcelModelProperties properties) {

@@ -16,12 +16,12 @@ public class FileFilterManager {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( FileFilterManager.class );
 
-    private ProjectFilter mnbprojectFileFilter;
-    private FastaFileFilter fastaFileFilter;
+    private ProjectFilter mnb;
+    private FastaFileFilter fasta;
 
     private FileFilterManager() {
-        mnbprojectFileFilter = new ProjectFilter();
-        fastaFileFilter = new FastaFileFilter();
+        mnb = new ProjectFilter();
+        fasta = new FastaFileFilter();
     }
 
     public static FileFilterManager getInstance() {
@@ -33,11 +33,11 @@ public class FileFilterManager {
     }
 
     public ProjectFilter getProjectFilter() {
-        return mnbprojectFileFilter;
+        return mnb;
     }
 
     public FastaFileFilter getFastaFilter() {
-        return fastaFileFilter;
+        return fasta;
     }
 
  }

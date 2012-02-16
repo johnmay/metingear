@@ -28,16 +28,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
+
 
 /**
  *          Preferences - 2011.10.02 <br>
@@ -50,14 +51,19 @@ import uk.ac.ebi.caf.component.factory.FieldFactory;
 public class PreferenceDialog extends DropdownDialog {
 
     private static final Logger LOGGER = Logger.getLogger(PreferenceDialog.class);
+
     private JComboBox metSourceView;
+
     private JComboBox rxnSourceView;
+
     private JTextField blastp;
+
 
     public PreferenceDialog(JFrame frame, DialogController controller) {
         super(frame, controller, "SaveDialog");
         setDefaultLayout();
     }
+
 
     @Override
     public JPanel getOptions() {
@@ -67,9 +73,9 @@ public class PreferenceDialog extends DropdownDialog {
 
 
 
-        metSourceView = new MComboBox(SourceItemDisplayType.values());
+        metSourceView = ComboBoxFactory.newComboBox((Object[]) SourceItemDisplayType.values());
         metSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_METABOLITE));
-        rxnSourceView = new MComboBox(SourceItemDisplayType.values());
+        rxnSourceView = ComboBoxFactory.newComboBox((Object[]) SourceItemDisplayType.values());
         rxnSourceView.setSelectedItem(Settings.getInstance().getDisplayType(Settings.VIEW_SOURCE_REACTION));
         blastp = FieldFactory.newField(15);
         blastp.setText(Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastp.path", ""));
@@ -87,6 +93,7 @@ public class PreferenceDialog extends DropdownDialog {
 
     }
 
+
     @Override
     public void process() {
         Settings settings = Settings.getInstance();
@@ -101,6 +108,7 @@ public class PreferenceDialog extends DropdownDialog {
         }
 
     }
+
 
     @Override
     public boolean update() {

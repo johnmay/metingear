@@ -26,10 +26,11 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.util.Arrays;
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
@@ -40,8 +41,6 @@ import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.mnb.view.MCheckBox;
-import uk.ac.ebi.mnb.view.MComboBox;
 
 
 /**
@@ -59,11 +58,11 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(ExportStoichiometricMatrix.class);
 
-    private JComboBox storage = new MComboBox(Arrays.asList("String", "Object"));
+    private JComboBox storage = ComboBoxFactory.newComboBox("String", "Object");
 
-    private JComboBox format = new MComboBox(Arrays.asList("Table (tsv)", "Serialised"));
+    private JComboBox format = ComboBoxFactory.newComboBox("Table (tsv)", "Serialised");
 
-    private JCheckBox useDouble = new MCheckBox("Store values as double precission");
+    private JCheckBox useDouble = CheckBoxFactory.newCheckBox("Store values as double precission");
 
     private JFileChooser chooser = new JFileChooser();
 

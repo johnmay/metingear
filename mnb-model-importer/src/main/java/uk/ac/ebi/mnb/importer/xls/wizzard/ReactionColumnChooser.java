@@ -38,17 +38,17 @@ import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+
 
 /**
  * @name    SheetChooserDialog
@@ -64,32 +64,54 @@ public class ReactionColumnChooser
         implements WizzardStage {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionColumnChooser.class);
+
     private CellConstraints cc = new CellConstraints();
+
     private ExcelHelper helper;
+
     private JTable reactionsSheet;
+
     private JTable metabolitesSheet;
+
     private ImporterOptions options;
+
     private Map<String, String> rxnColumns = new HashMap<String, String>();
+
     private Map<String, JComboBox> comboBoxes = new HashMap();
+
     private ExcelModelProperties properties;
+
     private String[] colNames = new String[]{"Abbreviation", "Description", "Equation",
                                              "Classification",
                                              "Subsystem", "Source"};
+
     private List<String> columns = new ArrayList();
+
     private JTextField field = new JTextField(20);
     // start end
+
     private JSpinner start;
+
     private JSpinner end;
     // combo boxes
+
     private JComboBox abbreviation;
+
     private JComboBox description;
+
     private JComboBox equation;
+
     private JComboBox classification;
+
     private JComboBox subsystem;
+
     private JComboBox source;
+
     private JComboBox locus;
     //
+
     private SelectionTable table;
+
 
     public ReactionColumnChooser(ExcelHelper helper,
                                  ExcelModelProperties properties) {
@@ -106,16 +128,16 @@ public class ReactionColumnChooser
         start = new JSpinner(new SpinnerNumberModel(1, 1, 4000, 1));
         end = new JSpinner(new SpinnerNumberModel(1, 1, 4000, 1));
 
-        abbreviation = new MComboBox(columns);
-        description = new MComboBox(columns);
+        abbreviation = ComboBoxFactory.newComboBox(columns);
+        description = ComboBoxFactory.newComboBox(columns);
 
-        equation = new MComboBox(columns);
-        classification = new MComboBox(columns);
+        equation = ComboBoxFactory.newComboBox(columns);
+        classification = ComboBoxFactory.newComboBox(columns);
 
-        subsystem = new MComboBox(columns);
-        source = new MComboBox(columns);
+        subsystem = ComboBoxFactory.newComboBox(columns);
+        source = ComboBoxFactory.newComboBox(columns);
 
-        locus = new MComboBox(columns);
+        locus = ComboBoxFactory.newComboBox(columns);
 
 
 
@@ -164,17 +186,7 @@ public class ReactionColumnChooser
 
 
 
-        // set previous selections
-        Preferences pref = Preferences.userNodeForPackage(ReactionColumnChooser.class);
-        start.setValue(pref.getInt(properties.getPreferenceKey("rxn.start"), 1));
-        end.setValue(pref.getInt(properties.getPreferenceKey("rxn.end"), 10));
-        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.ABBREVIATION), 0));
-        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.DESCRIPTION), 0));
-        equation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.EQUATION), 0));
-        classification.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.CLASSIFICATION), 0));
-        subsystem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SUBSYSTEM), 0));
-        source.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SOURCE), 0));
-        locus.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.LOCUS), 0));
+
 
 
         // listeners to change table header name
@@ -201,18 +213,34 @@ public class ReactionColumnChooser
             }
         });
 
+        // set previous selections
+        Preferences pref = Preferences.userNodeForPackage(ReactionColumnChooser.class);
+        start.setValue(pref.getInt(properties.getPreferenceKey("rxn.start"), 1));
+        end.setValue(pref.getInt(properties.getPreferenceKey("rxn.end"), 10));
+        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.ABBREVIATION), 0));
+        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.DESCRIPTION), 0));
+        equation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.EQUATION), 0));
+        classification.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.CLASSIFICATION), 0));
+        subsystem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SUBSYSTEM), 0));
+        source.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SOURCE), 0));
+        locus.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.LOCUS), 0));
+
 
     }
+
 
     private class TableHeaderChanger extends AbstractAction {
 
         private String name;
+
         private JComboBox cb;
+
 
         public TableHeaderChanger(JComboBox combobox, String name) {
             this.cb = combobox;
             this.name = name;
         }
+
 
         public void actionPerformed(ActionEvent ae) {
             table.setHeader(cb.getSelectedIndex(), name);
@@ -220,6 +248,7 @@ public class ReactionColumnChooser
             revalidate();
         }
     }
+
 
     public Boolean updateSelection() {
 
@@ -251,12 +280,14 @@ public class ReactionColumnChooser
 
     }
 
+
     public void reloadPanel() {
         if (properties.containsKey(properties.REACTION_SHEET)) {
             int index = Integer.parseInt(properties.getProperty(properties.REACTION_SHEET));
             table.setSheet(index);
         }
     }
+
 
     public String getDescription() {
         return "<html>Please confirm the appropiate columns in the reaction sheet. Please note that the<br>"

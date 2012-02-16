@@ -36,6 +36,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.io.service.KEGGCompoundNameService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
@@ -46,8 +48,6 @@ import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.mnb.view.MCheckBox;
-import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.chemet.render.ViewUtilities;
@@ -66,9 +66,9 @@ public class AutomaticCrossReference
 
     private static final Logger LOGGER = Logger.getLogger(AutomaticCrossReference.class);
 
-    private JCheckBox chebi = new MCheckBox("ChEBI");
+    private JCheckBox chebi = CheckBoxFactory.newCheckBox("ChEBI");
 
-    private JCheckBox kegg = new MCheckBox("KEGG Compound");
+    private JCheckBox kegg = CheckBoxFactory.newCheckBox("KEGG Compound");
 
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 200, 10));
 
@@ -103,7 +103,7 @@ public class AutomaticCrossReference
         options.add(new JSeparator(), cc.xyw(1, 5, 3));
         JLabel label = LabelFactory.newFormLabel("Method", ViewUtilities.htmlWrapper("The method to use for name matching, Generally they<br> aim to improve recall at the cost of precision"));
         options.add(label, cc.xy(1, 7));
-        options.add(new MComboBox(Arrays.asList("Direct", "Fingerprint", "N-gram")), cc.xy(3, 7));
+        options.add(ComboBoxFactory.newComboBox("Direct", "Fingerprint", "N-gram"), cc.xy(3, 7));
 
         return options;
     }

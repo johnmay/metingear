@@ -24,17 +24,12 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.HomologyDatabaseManager;
@@ -46,8 +41,6 @@ import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.mnb.view.MCheckBox;
-import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 
@@ -65,13 +58,13 @@ public class SequenceHomology
     private static final Logger LOGGER = Logger.getLogger(SequenceHomology.class);
     private CellConstraints cc = new CellConstraints();
     // options
-    private MCheckBox remote = new MCheckBox("Remote (webservices)");
-    private MComboBox tool = new MComboBox(Arrays.asList("BLAST", "FASTA"));
-    private MComboBox database = new MComboBox(HomologyDatabaseManager.getInstance().getNames());
+    private JCheckBox remote = CheckBoxFactory.newCheckBox("Remote (webservices)");
+    private JComboBox tool = ComboBoxFactory.newComboBox("BLAST", "FASTA");
+    private JComboBox database = ComboBoxFactory.newComboBox(HomologyDatabaseManager.getInstance().getNames());
     private JSpinner cpu = new JSpinner(new SpinnerNumberModel(1, 1, 4, 1));
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 2500, 50));
     private JTextField field = FieldFactory.newField("1e-30");
-    private MCheckBox alignments = new MCheckBox("Parse alignments (increases save sizes)");
+    private JCheckBox alignments = CheckBoxFactory.newCheckBox("Parse alignments (increases save sizes)");
 
     public SequenceHomology(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "BuildDialog");

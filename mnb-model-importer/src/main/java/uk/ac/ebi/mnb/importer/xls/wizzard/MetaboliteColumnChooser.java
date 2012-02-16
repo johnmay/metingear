@@ -38,10 +38,11 @@ import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.type.EntityColumn;
 import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+
 
 /**
  *          MetaboliteColumnChooser – 2011.09.26 <br>
@@ -55,26 +56,42 @@ public class MetaboliteColumnChooser
         implements WizzardStage {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteColumnChooser.class);
+
     private ExcelModelProperties properties = new ExcelModelProperties();
     // spinners
+
     private JSpinner start;
+
     private JSpinner end;
     // combo boxes
+
     private JComboBox abbreviation;
+
     private JComboBox description;
+
     private JComboBox compartment;
+
     private JComboBox charge;
+
     private JComboBox formula;
     //
+
     private JComboBox kegg;
+
     private JComboBox chebi;
+
     private JComboBox pubchem;
+
     private SelectionTable table;
     //
+
     private ExcelHelper helper;
+
     private JScrollPane pane;
     //
+
     private CellConstraints cc = new CellConstraints();
+
 
     public MetaboliteColumnChooser(ExcelHelper helper, ExcelModelProperties properties) {
         super();
@@ -84,14 +101,14 @@ public class MetaboliteColumnChooser
         start = new JSpinner(new SpinnerNumberModel(1, 1, 4000, 1));
         end = new JSpinner(new SpinnerNumberModel(1, 1, 4000, 1));
 
-        abbreviation = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        description = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        compartment = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        charge = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        formula = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        kegg = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        chebi = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        pubchem = new MComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        abbreviation = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        description = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        compartment = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        charge = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        formula = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        kegg = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        chebi = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        pubchem = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
         table = new SelectionTable(helper);
 
 
@@ -136,18 +153,7 @@ public class MetaboliteColumnChooser
         add(pane, cc.xyw(1, 19, 7));
 
 
-        // set previous selections
-        Preferences pref = Preferences.userNodeForPackage(MetaboliteColumnChooser.class);
-        start.setValue(pref.getInt(properties.getPreferenceKey("ent.start"), 1));
-        end.setValue(pref.getInt(properties.getPreferenceKey("ent.end"), 10));
-        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.ABBREVIATION), 0));
-        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.DESCRIPTION), 0));
-        compartment.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.COMPARTMENT), 0));
-        charge.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.CHARGE), 0));
-        formula.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.FORMULA), 0));
-        kegg.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.KEGG_XREF), 0));
-        chebi.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.CHEBI_XREF), 0));
-        pubchem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.PUBCHEM_XREF), 0));
+
 
 
 
@@ -178,7 +184,21 @@ public class MetaboliteColumnChooser
         pubchem.addActionListener(new TableHeaderChanger(pubchem, "PubChem"));
 
 
+        // set previous selections
+        Preferences pref = Preferences.userNodeForPackage(MetaboliteColumnChooser.class);
+        start.setValue(pref.getInt(properties.getPreferenceKey("ent.start"), 1));
+        end.setValue(pref.getInt(properties.getPreferenceKey("ent.end"), 10));
+        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.ABBREVIATION), 0));
+        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.DESCRIPTION), 0));
+        compartment.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.COMPARTMENT), 0));
+        charge.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.CHARGE), 0));
+        formula.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.FORMULA), 0));
+        kegg.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.KEGG_XREF), 0));
+        chebi.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.CHEBI_XREF), 0));
+        pubchem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.PUBCHEM_XREF), 0));
+
     }
+
 
     public Boolean updateSelection() {
 
@@ -211,15 +231,19 @@ public class MetaboliteColumnChooser
 
     }
 
+
     private class TableHeaderChanger extends AbstractAction {
 
         private String name;
+
         private JComboBox cb;
+
 
         public TableHeaderChanger(JComboBox combobox, String name) {
             this.cb = combobox;
             this.name = name;
         }
+
 
         public void actionPerformed(ActionEvent ae) {
             table.setHeader(cb.getSelectedIndex(), name);
@@ -228,6 +252,7 @@ public class MetaboliteColumnChooser
         }
     }
 
+
     public void setProperty(String key, JComboBox combobox) {
         if (combobox.getSelectedIndex() != 0) {
             String item = (String) combobox.getSelectedItem();
@@ -235,11 +260,13 @@ public class MetaboliteColumnChooser
         }
     }
 
+
     public void reloadPanel() {
         if (properties.containsKey(properties.METABOLITE_SHEET)) {
             table.setSheet(Integer.parseInt(properties.getProperty(ExcelModelProperties.METABOLITE_SHEET)));
         }
     }
+
 
     public String getDescription() {
         return "<html>Please confirm the appropiate columns in the metabolite sheet</html>";

@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
@@ -43,7 +44,6 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.MComboBox;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.render.molecule.MoleculeRenderer;
 
@@ -72,14 +72,14 @@ public class MetabolitePanel
 
     private JLabel markushViewer = LabelFactory.newLabel("");
 
-    private JComboBox markushEditor = new MComboBox(Arrays.asList("Yes", "No"));
+    private JComboBox markushEditor = ComboBoxFactory.newComboBox(Arrays.asList("Yes", "No"));
     // metabolic class
 
     private JLabel type = LabelFactory.newFormLabel("Type:");
 
     private JLabel typeViewer = LabelFactory.newLabel("");
 
-    private JComboBox typeEditor = new MComboBox(MetaboliteClassImplementation.values());
+    private JComboBox typeEditor = ComboBoxFactory.newComboBox(MetaboliteClassImplementation.values());
     // molecular formula
 
     private JTextField formulaEditor = FieldFactory.newTransparentField(15, false);
