@@ -201,15 +201,18 @@ public abstract class AbstractEntityPanel
         middle.setBorder(Borders.DLU4_BORDER);
 
         Box synBox = Box.createHorizontalBox();
-        synLabel = LabelFactory.newVerticalFormLabel("SYNOPSIS",
+        synLabel = LabelFactory.newVerticalFormLabel("Synopsis",
                                                      VerticalLabelUI.Rotation.ANTICLOCKWISE);
         synBox.add(synLabel);
         synBox.add(Box.createHorizontalGlue());
         synBox.add(synopsis);
+        synLabel.setAlignmentY(TOP_ALIGNMENT);
+        synopsis.setAlignmentY(TOP_ALIGNMENT);
+        synBox.setAlignmentY(TOP_ALIGNMENT);
         middle.add(synBox, cc.xy(1, 1, cc.CENTER, cc.TOP));
 
         Box refBox = Box.createHorizontalBox();
-        refLabel = LabelFactory.newVerticalFormLabel("REFERENCES",
+        refLabel = LabelFactory.newVerticalFormLabel("Associations",
                                                      VerticalLabelUI.Rotation.ANTICLOCKWISE);
 
 
@@ -217,25 +220,29 @@ public abstract class AbstractEntityPanel
         refBox.add(refLabel);
         refBox.add(Box.createHorizontalGlue());
         refBox.add(refPane);
+        refLabel.setAlignmentY(TOP_ALIGNMENT);
+        refPane.setAlignmentY(TOP_ALIGNMENT);
+        refBox.setAlignmentY(TOP_ALIGNMENT);
         middle.add(refBox, cc.xy(3, 1, cc.CENTER, cc.TOP));
 
 
         Box annBox = Box.createHorizontalBox();
-        annLabel = LabelFactory.newVerticalFormLabel("ANNOTATIONS",
+        annLabel = LabelFactory.newVerticalFormLabel("Annotations",
                                                      VerticalLabelUI.Rotation.ANTICLOCKWISE);
         annBox.add(annLabel);
         annBox.add(annotationTable);
         annLabel.setAlignmentY(Component.TOP_ALIGNMENT);
         annotationTable.setAlignmentY(Component.TOP_ALIGNMENT);
+        annBox.setAlignmentY(Component.TOP_ALIGNMENT);
         middle.add(annBox, cc.xy(5, 1));
 
 
         refLabel.setForeground(ColorUtility.EMBL_PETROL_75);
         synLabel.setForeground(ColorUtility.EMBL_PETROL_75);
         annLabel.setForeground(ColorUtility.EMBL_PETROL_75);
-        refLabel.setFont(new Font("Gill Sans", Font.PLAIN, 35));
-        synLabel.setFont(new Font("Gill Sans", Font.PLAIN, 35));
-        annLabel.setFont(new Font("Gill Sans", Font.PLAIN, 35));
+        refLabel.setFont(new Font("Gill Sans", Font.PLAIN, 20));
+        synLabel.setFont(new Font("Gill Sans", Font.PLAIN, 20));
+        annLabel.setFont(new Font("Gill Sans", Font.PLAIN, 20));
 //        refLabel.setForeground(ColorUtility.shade(refLabel.getForeground(), 0.4f));
 //        synLabel.setForeground(ColorUtility.shade(synLabel.getForeground(), 0.4f));
 //        annLabel.setForeground(ColorUtility.shade(annLabel.getForeground(), 0.4f));

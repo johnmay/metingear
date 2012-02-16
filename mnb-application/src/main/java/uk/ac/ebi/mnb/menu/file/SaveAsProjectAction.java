@@ -20,7 +20,7 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.io.core.DefaultReconstructionOutputStream;
 import uk.ac.ebi.mnb.core.FileChooserAction;
-import uk.ac.ebi.mnb.io.FileFilterManager;
+import uk.ac.ebi.chemet.io.file.FileFilterManager;
 
 
 /**
