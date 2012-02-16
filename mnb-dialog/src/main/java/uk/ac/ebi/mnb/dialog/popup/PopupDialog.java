@@ -42,9 +42,9 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 import uk.ac.ebi.caf.action.ActionProperties;
+import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.utility.ColorUtility;
-import uk.ac.ebi.mnb.view.labels.IconButton;
 
 
 /**
@@ -110,7 +110,7 @@ public class PopupDialog extends JDialog {
         Icon close = ViewUtilities.getIcon("images/cutout/close_whitebg_16x16.png");
 
         Action closeAction = new CloseDialogAction(this, false);
-        JButton closeButton = new IconButton(close, closeAction);
+        JButton closeButton = ButtonFactory.newCleanButton(close, closeAction);
         closeButton.registerKeyboardAction(closeButton.getAction(),
                                            KeyStroke.getKeyStroke(
                 ActionProperties.getInstance(getClass()).getProperty("CloseDialog.Action." + Action.ACCELERATOR_KEY)),
