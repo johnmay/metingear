@@ -44,44 +44,63 @@ public class ViewMenu
 //            mnbMenuItem.reloadEnabled();
 //        }
 
+
         add(new JSeparator());
 
 
-        final ProjectView view = (ProjectView) MainView.getInstance().getViewController();
+        final MainView view = MainView.getInstance();
+        final ProjectView entityView = (ProjectView) MainView.getInstance().getViewController();
 
+
+        add(new JMenuItem(new AbstractAction("Entity View") {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                view.showMainPanel();
+            }
+        }));
         add(new JMenuItem(new AbstractAction("Genes") {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.setGeneView();
+                view.showMainPanel();
+                entityView.setGeneView();
             }
         }));
         add(new JMenuItem(new AbstractAction("Products") {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.setProductView();
+                view.showMainPanel();
+
+                entityView.setProductView();
             }
         }));
         add(new JMenuItem(new AbstractAction("Metabolites") {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.setMetaboliteView();
+                view.showMainPanel();
+
+                entityView.setMetaboliteView();
             }
         }));
         add(new JMenuItem(new AbstractAction("Reactions") {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.setReactionView();
+                view.showMainPanel();
+
+                entityView.setReactionView();
             }
         }));
         add(new JMenuItem(new AbstractAction("Tasks") {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.setTaskView();
+                view.showMainPanel();
+
+                entityView.setTaskView();
             }
         }));
         add(new JSeparator());

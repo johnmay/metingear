@@ -43,6 +43,7 @@ import com.explodingpixels.widgets.WindowUtils;
 import com.jgoodies.forms.factories.Borders;
 import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.bar.MessageBar;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.ErrorMessage;
@@ -88,6 +89,10 @@ public class MainView
 
     private final SourceList source;
 
+    private JPanel panel = new JPanel(new CardLayout());
+
+    private JPanel mainEntityPanel = new JPanel(new BorderLayout());
+
 
     /**
      * Inner class holding the instance
@@ -101,9 +106,10 @@ public class MainView
     private MainView() {
 
         super("METINGEAR");
+        getContentPane().setLayout(new CardLayout());
 
         // mac widgets
-       // getLayeredPane().getRootPane().setUI(new AquaRootPaneUI());
+        // getLayeredPane().getRootPane().setUI(new AquaRootPaneUI());
 
         MacUtils.makeWindowLeopardStyle(getRootPane());
 
@@ -218,7 +224,7 @@ public class MainView
         source.installSourceListControlBar(controlBar);
         source.addSourceListSelectionListener(sourceController);
         source.addSourceListClickListener(sourceController);
-        //list.setColorScheme(new SourceListDarkColorScheme());
+        source.setColorScheme(new SourceListDarkColorScheme());
         // setup the pane
         pane.add(project, JSplitPane.RIGHT);
         pane.setContinuousLayout(true);
@@ -234,9 +240,9 @@ public class MainView
 
 
         // main layout
-        this.add(topbar, BorderLayout.NORTH);
-        this.add(pane, BorderLayout.CENTER);
-        this.add(selector.getBottomBar().getComponent(), BorderLayout.SOUTH);
+        mainEntityPanel.add(topbar, BorderLayout.NORTH);
+        mainEntityPanel.add(pane, BorderLayout.CENTER);
+        mainEntityPanel.add(selector.getBottomBar().getComponent(), BorderLayout.SOUTH);
         addComponentListener(new ComponentAdapter() {
 
             @Override
@@ -250,6 +256,8 @@ public class MainView
                 messages.update();
             }
         });
+
+
 
         undoManager = new UndoManager();
 
@@ -270,6 +278,21 @@ public class MainView
             }
         });
 
+
+        this.add(mainEntityPanel, "MainPanel");
+        this.add(new PreferencePanel(), "Preferences");
+
+
+    }
+
+
+    public void showMainPanel() {
+        ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "MainPanel");
+    }
+
+
+    public void showPreferneces() {
+        ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "Preferences");
     }
 
 

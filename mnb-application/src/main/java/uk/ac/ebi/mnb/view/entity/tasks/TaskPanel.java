@@ -38,6 +38,7 @@ import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
+
 /**
  *          MetabolitePanel – 2011.09.30 <br>
  *          Class description
@@ -49,14 +50,20 @@ public class TaskPanel
         extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(TaskPanel.class);
+
     private RunnableTask entity;
+
     private JLabel formula;
+
     private JTextArea command = new JTextArea();
+
     private CellConstraints cc = new CellConstraints();
+
 
     public TaskPanel() {
         super("Task", new AnnotationRenderer());
     }
+
 
     /**
      * Updates the command text
@@ -75,11 +82,13 @@ public class TaskPanel
 
     }
 
+
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
         this.entity = (RunnableTask) entity;
         return super.setEntity(entity);
     }
+
 
     @Override
     public JPanel getBasicPanel() {
@@ -89,6 +98,7 @@ public class TaskPanel
         panel.add(command, cc.xyw(1, layout.getRowCount(), 5));
         return panel;
     }
+
 
     /**
      * Returns the specific information panel
@@ -106,8 +116,4 @@ public class TaskPanel
     public Collection<? extends AnnotatedEntity> getReferences() {
         return entity.getEntities();
     }
-
-
-
-
 }

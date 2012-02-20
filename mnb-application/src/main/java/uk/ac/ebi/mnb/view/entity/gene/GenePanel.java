@@ -36,6 +36,7 @@ import com.jgoodies.forms.layout.*;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 
+
 /**
  *          MetabolitePanel – 2011.09.30 <br>
  *          Product panel renderer.
@@ -47,15 +48,23 @@ public class GenePanel
         extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(GenePanel.class);
+
     private Gene entity;
+
     private JLabel formula;
+
     private JTextField generic;
     //
+
     private JScrollPane sequencePane;
+
     private JTextPane sequence;
+
     private DefaultListModel sequenceListModel;
     //
+
     private CellConstraints cc = new CellConstraints();
+
 
     public GenePanel() {
         super("Gene", new AnnotationRenderer());
@@ -73,6 +82,7 @@ public class GenePanel
 //        });
 
     }
+
 
     /**
      *
@@ -94,11 +104,13 @@ public class GenePanel
 
     }
 
+
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
         this.entity = (Gene) entity;
         return super.setEntity(entity);
     }
+
 
     /**
      * 
@@ -122,6 +134,7 @@ public class GenePanel
 
     }
 
+
     /**
      *
      * Returns the synopsis information panel for the gene product
@@ -134,5 +147,4 @@ public class GenePanel
         return panel;
 
     }
-
 }

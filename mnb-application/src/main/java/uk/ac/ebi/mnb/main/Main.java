@@ -43,7 +43,7 @@ public class Main {
             SwingUtilities.invokeAndWait(new Runnable() {
 
                 public void run() {
-                    
+
                     MainView view = MainView.getInstance();
                     JMenuBar menubar = new MainMenuBar();
 
@@ -54,10 +54,10 @@ public class Main {
             });
         } catch (InterruptedException ex) {
             ex.printStackTrace();
-        } catch (InvocationTargetException ex) {            
+        } catch (InvocationTargetException ex) {
             ex.printStackTrace();
         }
-       
+
     }
 
 
@@ -93,9 +93,10 @@ public class Main {
         app.setPreferencesHandler(new com.apple.eawt.PreferencesHandler() {
 
             public void handlePreferences(com.apple.eawt.AppEvent.PreferencesEvent pe) {
-                PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
-                                                             MainView.getInstance());
-                pref.setVisible(true);
+                MainView.getInstance().showPreferneces();
+//                PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
+//                                                             MainView.getInstance());
+//                pref.setVisible(true);
             }
         });
     }

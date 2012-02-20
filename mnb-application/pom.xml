@@ -122,14 +122,14 @@
                     <iconFile>/Users/johnmay/EBI/illustrations/mnb/icons/mnb.icns</iconFile>
                     <buildDirectory>/Users/johnmay/Applications/Metingear</buildDirectory>
                 </configuration>
-<!--                <executions>
+                <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>bundle</goal>
                         </goals>
                     </execution>
-                </executions>-->
+                </executions>
             </plugin>                      
         </plugins>
         
