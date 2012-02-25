@@ -118,6 +118,20 @@ public class ContextMenu extends JMenu {
         JMenuItem item = new JMenuItem(action);
 
         // add to menu and store in map
+        add(item, context);
+
+    }
+
+
+    /**
+     * Using the controller specified in the menu constructor a dialog is created using the controller
+     * as the update and selection manager
+     */
+    public void add(JMenuItem item,
+                    ContextResponder context) {
+
+
+        // add to menu and store in map
         add(item);
         item.setEnabled(false);
         items.put(item, context);

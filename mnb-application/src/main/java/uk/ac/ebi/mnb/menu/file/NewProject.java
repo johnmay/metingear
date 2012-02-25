@@ -6,13 +6,21 @@ package uk.ac.ebi.mnb.menu.file;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import org.apache.lucene.queryParser.QueryParser;
+import uk.ac.ebi.caf.component.ReplacementHandler;
+import uk.ac.ebi.caf.component.SuggestDialog;
+import uk.ac.ebi.caf.component.SuggestionField;
+import uk.ac.ebi.caf.component.SuggestionHandler;
+import uk.ac.ebi.chemet.service.query.taxonmy.TaxonomyQueryService;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.core.Reconstruction;
@@ -38,19 +46,85 @@ public class NewProject extends DropdownDialog {
             NewProject.class);
     private boolean fieldsAreValid = true;
     private JTextField idField;
-    private JTextField codeField;
-    private JTextField taxonField;
-    private JTextField nameField;
+    private SuggestionField codeField;
+    private SuggestionField taxonField;
+    private SuggestionField nameField;
     private JTextField kingdomField;
 
     public NewProject() {
 
         super(MainView.getInstance(), "NewProject");
+        
+        final TaxonomyQueryService service = new TaxonomyQueryService();
+        service.setMaxResults(10);
 
+        
+        ReplacementHandler handler = new ReplacementHandler(){
+            @Override
+            public void replace(JTextField field, Object value) {
+                codeField.setSuggest(false);
+                taxonField.setSuggest(false);
+                nameField.setSuggest(false);
+                Taxonomy taxonomy = (Taxonomy) value;
+                codeField.setText(taxonomy.getCode());
+                taxonField.setText(taxonomy.getAccession());
+                kingdomField.setText(taxonomy.getKingdom().toString());
+                nameField.setText(taxonomy.getOfficialName());
+                codeField.setSuggest(true);
+                taxonField.setSuggest(true);
+                nameField.setSuggest(true);
+            }    
+        };
+        
         idField = FieldFactory.newField(15);
-        codeField = FieldFactory.newField(5);
-        taxonField = FieldFactory.newField(5);
-        nameField = FieldFactory.newField(20);
+        codeField = new SuggestionField(this, 5, new SuggestionHandler() {
+
+            @Override
+            public ListCellRenderer getRenderer() {
+                return new DefaultListCellRenderer(){
+                    @Override
+                    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                        Taxonomy taxonomy = (Taxonomy) value;
+                        this.setText(taxonomy.getCode());
+                        this.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
+                        this.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
+                        return this;
+                    }
+                };
+            }
+
+            @Override
+            public Collection<Object> getSuggestions(String s) {
+                return new ArrayList<Object>(service.searchCode(s, true));
+            }
+        }, handler);
+        taxonField = new SuggestionField(this, 5, new SuggestionHandler() {
+            @Override
+            public Collection<Object> getSuggestions(String s) {
+                return new ArrayList<Object>(service.searchTaxonomyIdentifier(QueryParser.escape(s), true));
+            }
+        }, handler);
+        nameField = new SuggestionField(this, 20, new SuggestionHandler() {
+
+            @Override
+            public ListCellRenderer getRenderer() {
+                return new DefaultListCellRenderer(){
+                    @Override
+                    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                        Taxonomy taxonomy = (Taxonomy) value;
+                        this.setText(taxonomy.getOfficialName());
+                        this.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
+                        this.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
+                        return this;
+                    }
+                };
+            }
+
+            @Override
+            public Collection<Object> getSuggestions(String s) {
+                return new ArrayList<Object>(service.searchName(QueryParser.escape(s.trim()), true));
+            }
+        }, handler);
         kingdomField = FieldFactory.newField(10);
 
         setDefaultLayout();
@@ -88,49 +162,11 @@ public class NewProject extends DropdownDialog {
         panel.add(LabelFactory.newFormLabel("Kingdom:"), cc.xy(5, 5));
         panel.add(kingdomField, cc.xy(7, 5));
 
-
-
-        // load this here (doesn't take that long but saves the user waiting for a response)
-        TaxonomyMap.getInstance();
-
-
-        codeField.getDocument().addDocumentListener(new DocumentListener() {
-
-            public void insertUpdate(DocumentEvent e) {
-                autoSetFromCode();
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-            }
-
-            public void changedUpdate(DocumentEvent e) {
-            }
-        });
-
-
         return panel;
 
 
     }
-    private boolean autoSetting = false;
 
-    private void autoSetFromCode() {
-        String code = codeField.getText().trim().toUpperCase(Locale.ENGLISH);
-        if (code.length() == 5) {
-            final Taxonomy details = TaxonomyMap.getInstance().get(code);
-            if (details != null) {
-                taxonField.setText(Integer.toString(details.getTaxon()));
-                kingdomField.setText(details.getKingdom().name());
-                nameField.setText(details.getOfficialName());
-                nameField.setCaretPosition(0);
-                String[] nameFragments = details.getOfficialName().split("\\s+");
-                if (nameFragments.length >= 2) {
-                    idField.setText("i" + nameFragments[0].substring(0, 3) + nameFragments[1].substring(0, 1).toUpperCase() + nameFragments[1].substring(1, 2));
-                }
-            }
-        }
-        autoSetting = false;
-    }
 
     public String getCode() {
         String code = codeField.getText();

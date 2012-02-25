@@ -56,7 +56,7 @@ public class FileMenu
 
         MainView view = MainView.getInstance();
 
-        add(newProjectAction);
+          add(newProjectAction);
         add(create(NewMetabolite.class), activeProject);
         add(create(NewReaction.class), activeProject);
         add(create(NewProteinProduct.class), activeProject);
@@ -156,7 +156,7 @@ public class FileMenu
 
             super("Import...", MainView.getInstance());
             add(new ImportPeptidesAction(), activeProject);
-            add(new JMenuItem(new ImportKGML()), activeProject);
+            add(new ImportKGML(), activeProject);
         }
     }
 
@@ -175,10 +175,6 @@ public class FileMenu
                 }
             });
             add(new ExportMetabolitesMDL(MainView.getInstance()), activeProject);
-            add(new JMenuItem("Metabolites (.sbml)"));
-            add(new JMenuItem("Proteins (.fasta)"));
-            add(new JMenuItem("Reactions (.sbml)"));
-            add(new JMenuItem("Reactions (.rxn)"));
         }
     }
 }
