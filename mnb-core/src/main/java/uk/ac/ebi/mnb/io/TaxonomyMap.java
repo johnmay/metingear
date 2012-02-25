@@ -39,6 +39,7 @@ import uk.ac.ebi.resource.organism.Taxonomy;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Deprecated
 public class TaxonomyMap {
 
     private static final org.apache.log4j.Logger logger =
