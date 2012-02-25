@@ -2,19 +2,24 @@ package uk.ac.ebi.mnb.main;
 
 import com.google.common.collect.Multimap;
 import com.jgoodies.forms.layout.CellConstraints;
-import java.awt.CardLayout;
-import java.awt.Color;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
+import java.io.IOException;
+import javax.swing.*;
+
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.factory.PreferencePanelFactory;
 import uk.ac.ebi.caf.component.theme.ComponentPreferences;
 import uk.ac.ebi.caf.utility.preference.Preference;
+import uk.ac.ebi.chemet.service.loader.single.TaxonomyLoader;
+import uk.ac.ebi.chemet.service.loader.structure.ChEBIStructureLoader;
+import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
+import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
+import uk.ac.ebi.render.resource.LoaderRow;
 import uk.ac.ebi.render.resource.ResourcePanel;
 
 
@@ -32,7 +37,7 @@ public class PreferencePanel extends Box {
     private JPanel options = PanelFactory.createInfoPanel();
 
 
-    public PreferencePanel() {
+    public PreferencePanel(final Window window) {
 
         super(BoxLayout.X_AXIS);
 
@@ -69,7 +74,7 @@ public class PreferencePanel extends Box {
         Multimap<String, Preference> map = ComponentPreferences.getInstance().getCategoryMap();
 
         options.add(PreferencePanelFactory.getPreferencePanel(map.get("Rendering")), "Rendering");
-        options.add(new ResourcePanel(), "Resources");
+        options.add(new ResourceLoading(window), "Resources");
 
 
 
@@ -77,4 +82,26 @@ public class PreferencePanel extends Box {
         add(Box.createHorizontalGlue());
 
     }
+    
+    
+    private class ResourceLoading extends JPanel {
+        
+        public ResourceLoading(final Window window){
+            setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+            try{
+                System.out.println("Creating resource loader panel");
+                add(LabelFactory.newFormLabel("Taxonomy"));
+                add(new LoaderRow(new TaxonomyLoader(), window));
+                add(LabelFactory.newFormLabel("Chemical Structures"));
+                add(new JSeparator());
+                add(new LoaderRow(new ChEBIStructureLoader(),window));
+                add(new LoaderRow(new KEGGCompoundStructureLoader(),window));
+                add(new LoaderRow(new HMDBStructureLoader(),window));
+            }catch (IOException ex){
+                LOGGER.error("Something's wrong with the index");
+            }
+        }
+        
+    }
+    
 }

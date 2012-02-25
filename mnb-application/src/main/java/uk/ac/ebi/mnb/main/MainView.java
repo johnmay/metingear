@@ -280,7 +280,7 @@ public class MainView
 
 
         this.add(mainEntityPanel, "MainPanel");
-        this.add(new PreferencePanel(), "Preferences");
+        this.add(new PreferencePanel(this), "Preferences");
 
 
     }

@@ -7,9 +7,12 @@ package uk.ac.ebi.mnb.main;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
-import javax.swing.JMenuBar;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+
+import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
 import org.apache.log4j.PropertyConfigurator;
+import org.pushingpixels.substance.api.skin.*;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.menu.file.PreferenceDialog;
@@ -17,7 +20,6 @@ import uk.ac.ebi.mnb.view.AboutDialog;
 
 
 /**
- *
  * @author johnmay
  */
 public class Main {
@@ -34,9 +36,8 @@ public class Main {
 
         setupOSX();
 //        try {
-//            UIManager.setLookAndFeel(new SubstanceCremeCoffeeLookAndFeel());
+//            UIManager.setLookAndFeel(new NimbusLookAndFeel());
 //        } catch (UnsupportedLookAndFeelException ex) {
-//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 
         try {
@@ -94,9 +95,9 @@ public class Main {
 
             public void handlePreferences(com.apple.eawt.AppEvent.PreferencesEvent pe) {
                 MainView.getInstance().showPreferneces();
-//                PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
-//                                                             MainView.getInstance());
-//                pref.setVisible(true);
+                //                PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
+                //                                                             MainView.getInstance());
+                //                pref.setVisible(true);
             }
         });
     }
