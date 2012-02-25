@@ -153,7 +153,18 @@ public class MetaboliteColumnChooser
         add(pane, cc.xyw(1, 19, 7));
 
 
-
+        // set previous selections
+        Preferences pref = Preferences.userNodeForPackage(MetaboliteColumnChooser.class);
+        start.setValue(pref.getInt(properties.getPreferenceKey("ent.start"), 1));
+        end.setValue(pref.getInt(properties.getPreferenceKey("ent.end"), 10));
+        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.ABBREVIATION), 0));
+        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.DESCRIPTION), 0));
+        compartment.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.COMPARTMENT), 0));
+        charge.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.CHARGE), 0));
+        formula.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.FORMULA), 0));
+        kegg.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.KEGG_XREF), 0));
+        chebi.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.CHEBI_XREF), 0));
+        pubchem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.PUBCHEM_XREF), 0));
 
 
 
@@ -184,18 +195,7 @@ public class MetaboliteColumnChooser
         pubchem.addActionListener(new TableHeaderChanger(pubchem, "PubChem"));
 
 
-        // set previous selections
-        Preferences pref = Preferences.userNodeForPackage(MetaboliteColumnChooser.class);
-        start.setValue(pref.getInt(properties.getPreferenceKey("ent.start"), 1));
-        end.setValue(pref.getInt(properties.getPreferenceKey("ent.end"), 10));
-        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.ABBREVIATION), 0));
-        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.DESCRIPTION), 0));
-        compartment.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.COMPARTMENT), 0));
-        charge.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.CHARGE), 0));
-        formula.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.FORMULA), 0));
-        kegg.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.KEGG_XREF), 0));
-        chebi.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.CHEBI_XREF), 0));
-        pubchem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EntityColumn.PUBCHEM_XREF), 0));
+
 
     }
 

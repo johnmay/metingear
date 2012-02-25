@@ -185,8 +185,17 @@ public class ReactionColumnChooser
         add(pane, cc.xyw(1, 15, 7));
 
 
-
-
+        // set previous selections
+        Preferences pref = Preferences.userNodeForPackage(ReactionColumnChooser.class);
+        start.setValue(pref.getInt(properties.getPreferenceKey("rxn.start"), 1));
+        end.setValue(pref.getInt(properties.getPreferenceKey("rxn.end"), 10));
+        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.ABBREVIATION), 0));
+        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.DESCRIPTION), 0));
+        equation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.EQUATION), 0));
+        classification.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.CLASSIFICATION), 0));
+        subsystem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SUBSYSTEM), 0));
+        source.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SOURCE), 0));
+        locus.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.LOCUS), 0));
 
 
         // listeners to change table header name
@@ -213,17 +222,7 @@ public class ReactionColumnChooser
             }
         });
 
-        // set previous selections
-        Preferences pref = Preferences.userNodeForPackage(ReactionColumnChooser.class);
-        start.setValue(pref.getInt(properties.getPreferenceKey("rxn.start"), 1));
-        end.setValue(pref.getInt(properties.getPreferenceKey("rxn.end"), 10));
-        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.ABBREVIATION), 0));
-        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.DESCRIPTION), 0));
-        equation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.EQUATION), 0));
-        classification.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.CLASSIFICATION), 0));
-        subsystem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SUBSYSTEM), 0));
-        source.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SOURCE), 0));
-        locus.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.LOCUS), 0));
+
 
 
     }
