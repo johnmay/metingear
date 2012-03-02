@@ -74,6 +74,8 @@ import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.service.ServiceManager;
+import uk.ac.ebi.service.query.name.NameService;
 
 
 /**
@@ -110,9 +112,21 @@ public class ExcelImportDialog
 
     private JFrame frame;
 
+    private ServiceManager manager;
 
-    public ExcelImportDialog(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits, Reconstruction reconstruction, File file, ExcelHelper helper) {
+
+    public ExcelImportDialog(JFrame frame,
+                             TargetedUpdate updater,
+                             ReportManager messages,
+                             SelectionController controller,
+                             UndoableEditListener undoableEdits,
+                             Reconstruction reconstruction,
+                             File file,
+                             ExcelHelper helper,
+                             ServiceManager manager) {
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
+
+        this.manager = manager;
 
         this.frame = frame;
         this.reconstruction = reconstruction;
@@ -224,7 +238,7 @@ public class ExcelImportDialog
 
 
             CandidateFactory factory =
-                             new CandidateFactory(ChEBINameService.getInstance(),
+                             new CandidateFactory(manager.getService(ChEBIIdentifier.class, NameService.class),
                                                   new ChemicalFingerprintEncoder());
 
             // todo should be selectable
