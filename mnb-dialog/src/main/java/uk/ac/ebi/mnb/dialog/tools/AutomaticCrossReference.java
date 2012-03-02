@@ -38,6 +38,8 @@ import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
+import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
+import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.io.service.KEGGCompoundNameService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
@@ -52,6 +54,11 @@ import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.HMDBIdentifier;
+import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.service.ServiceManager;
+import uk.ac.ebi.service.query.name.NameService;
 
 
 /**
@@ -69,6 +76,7 @@ public class AutomaticCrossReference
     private JCheckBox chebi = CheckBoxFactory.newCheckBox("ChEBI");
 
     private JCheckBox kegg = CheckBoxFactory.newCheckBox("KEGG Compound");
+    private JCheckBox hmdb = CheckBoxFactory.newCheckBox("HMDB");
 
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 200, 10));
 
@@ -94,9 +102,10 @@ public class AutomaticCrossReference
 
         CellConstraints cc = new CellConstraints();
 
-        options.setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
+        options.setLayout(new FormLayout("p, 4dlu, p, 4dlu, p", "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
         options.add(chebi, cc.xy(1, 1));
         options.add(kegg, cc.xy(3, 1));
+        options.add(hmdb, cc.xy(5, 1));
 
         options.add(results, cc.xyw(1, 3, 3));
 
@@ -115,16 +124,25 @@ public class AutomaticCrossReference
 
         boolean useChEBI = chebi.isSelected();
         boolean useKegg = kegg.isSelected();
+        boolean useHMDB = hmdb.isSelected();
 
         ChEBINameService.getInstance().setMaxResults((Integer) results.getValue());
         KEGGCompoundNameService.getInstance().setMaxResults((Integer) results.getValue());
 
+        ServiceManager manager = LuceneServiceManager.getInstance();
+
         List<CandidateFactory> factories = new ArrayList<CandidateFactory>();
-        if (useChEBI) {
-            factories.add(new CandidateFactory(ChEBINameService.getInstance(), new ChemicalFingerprintEncoder()));
+        if (useChEBI && manager.hasService(ChEBIIdentifier.class, NameService.class)) {
+            factories.add(new CandidateFactory(manager.getService(ChEBIIdentifier.class, NameService.class),
+                                               new ChemicalFingerprintEncoder()));
         }
-        if (useKegg) {
-            factories.add(new CandidateFactory(KEGGCompoundNameService.getInstance(), new ChemicalFingerprintEncoder()));
+        if (useKegg && manager.hasService(KEGGCompoundIdentifier.class, NameService.class)) {
+            factories.add(new CandidateFactory(manager.getService(KEGGCompoundIdentifier.class, NameService.class),
+                                               new ChemicalFingerprintEncoder()));
+        }
+        if (useHMDB && manager.hasService(HMDBIdentifier.class, NameService.class)) {
+            factories.add(new CandidateFactory(manager.getService(HMDBIdentifier.class, NameService.class),
+                                               new ChemicalFingerprintEncoder()));
         }
 
         for (Metabolite metabolite : metabolties) {
