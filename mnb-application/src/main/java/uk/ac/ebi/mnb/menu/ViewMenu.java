@@ -52,18 +52,11 @@ public class ViewMenu
         final ProjectView entityView = (ProjectView) MainView.getInstance().getViewController();
 
 
-        add(new JMenuItem(new AbstractAction("Entity View") {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                view.showMainPanel();
-            }
-        }));
         add(new JMenuItem(new AbstractAction("Genes") {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.showMainPanel();
                 entityView.setGeneView();
             }
         }));
@@ -71,8 +64,6 @@ public class ViewMenu
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.showMainPanel();
-
                 entityView.setProductView();
             }
         }));
@@ -80,8 +71,6 @@ public class ViewMenu
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.showMainPanel();
-
                 entityView.setMetaboliteView();
             }
         }));
@@ -89,8 +78,6 @@ public class ViewMenu
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.showMainPanel();
-
                 entityView.setReactionView();
             }
         }));
@@ -98,8 +85,6 @@ public class ViewMenu
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                view.showMainPanel();
-
                 entityView.setTaskView();
             }
         }));

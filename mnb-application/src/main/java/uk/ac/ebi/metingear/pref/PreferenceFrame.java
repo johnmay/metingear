@@ -1,4 +1,4 @@
-package uk.ac.ebi.mnb.main;
+package uk.ac.ebi.metingear.pref;
 
 import org.apache.log4j.Logger;
 
@@ -18,8 +18,8 @@ public class PreferenceFrame extends JFrame {
 
     private static final Logger LOGGER = Logger.getLogger(PreferenceFrame.class);
     
-    public PreferenceFrame(Window window){
-        add(new PreferencePanel(window));
+    public PreferenceFrame(){
+        setContentPane(new PreferencePanel(this));
     }
 
 }

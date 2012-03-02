@@ -51,11 +51,13 @@ public class NewProject extends DropdownDialog {
     private SuggestionField nameField;
     private JTextField kingdomField;
 
+    private TaxonomyQueryService service = new TaxonomyQueryService();
+
     public NewProject() {
 
         super(MainView.getInstance(), "NewProject");
-        
-        final TaxonomyQueryService service = new TaxonomyQueryService();
+
+
         service.setMaxResults(10);
 
         
@@ -95,13 +97,13 @@ public class NewProject extends DropdownDialog {
 
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return new ArrayList<Object>(service.searchCode(s, true));
+                return service.isAvailable() ? new ArrayList<Object>(service.searchCode(s, true)) : new ArrayList();
             }
         }, handler);
         taxonField = new SuggestionField(this, 5, new SuggestionHandler() {
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return new ArrayList<Object>(service.searchTaxonomyIdentifier(QueryParser.escape(s), true));
+                return service.isAvailable() ? new ArrayList<Object>(service.searchTaxonomyIdentifier(QueryParser.escape(s), true)) : new ArrayList();
             }
         }, handler);
         nameField = new SuggestionField(this, 20, new SuggestionHandler() {
@@ -122,7 +124,7 @@ public class NewProject extends DropdownDialog {
 
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return new ArrayList<Object>(service.searchName(QueryParser.escape(s.trim()), true));
+                return service.isAvailable() ? new ArrayList<Object>(service.searchName(QueryParser.escape(s.trim()), true)) : new ArrayList();
             }
         }, handler);
         kingdomField = FieldFactory.newField(10);
@@ -167,6 +169,14 @@ public class NewProject extends DropdownDialog {
 
     }
 
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+
+        // try and get a new service is the current one isn't avaialble
+        if(!service.isAvailable())
+            service = new TaxonomyQueryService();
+    }
 
     public String getCode() {
         String code = codeField.getText();

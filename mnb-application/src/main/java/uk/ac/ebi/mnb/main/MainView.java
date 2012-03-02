@@ -14,10 +14,13 @@
  */
 package uk.ac.ebi.mnb.main;
 
+import uk.ac.ebi.metingear.pref.PreferencePanel;
 import uk.ac.ebi.mnb.view.source.SourceController;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.List;
 
@@ -43,7 +46,6 @@ import com.explodingpixels.widgets.WindowUtils;
 import com.jgoodies.forms.factories.Borders;
 import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.bar.MessageBar;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.ErrorMessage;
@@ -224,12 +226,23 @@ public class MainView
         source.installSourceListControlBar(controlBar);
         source.addSourceListSelectionListener(sourceController);
         source.addSourceListClickListener(sourceController);
-        source.setColorScheme(new SourceListDarkColorScheme());
+        source.setColorScheme(new SourceListSeaGlassColorScheme());
         // setup the pane
         pane.add(project, JSplitPane.RIGHT);
         pane.setContinuousLayout(true);
         pane.setDividerSize(1);
         pane.setBorder(Borders.EMPTY_BORDER);
+        pane.getLeftComponent().setMinimumSize(new Dimension());
+        // snap
+        pane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(pane.getDividerLocation() < 30){
+                    pane.setDividerLocation(0);
+                }
+            }
+        });
+
         // paint hairline border
         ((BasicSplitPaneUI) pane.getUI()).getDivider().setBorder(
                 BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
@@ -280,21 +293,9 @@ public class MainView
 
 
         this.add(mainEntityPanel, "MainPanel");
-        this.add(new PreferencePanel(this), "Preferences");
 
 
     }
-
-
-    public void showMainPanel() {
-        ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "MainPanel");
-    }
-
-
-    public void showPreferneces() {
-        ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "Preferences");
-    }
-
 
     public void listColors(Container component) {
         System.out.println(component.getClass() + " " + component.getBackground() + " " + component.isOpaque());
@@ -345,6 +346,7 @@ public class MainView
                 + toolbar.getComponent().getWidth() / 2 - dialog.getWidth() / 2;
         int y = toolbar.getComponent().getLocationOnScreen().y
                 + toolbar.getComponent().getHeight(); // height should change only screen location
+
 
         dialog.setLocation(x, y);
 

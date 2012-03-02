@@ -11,6 +11,8 @@ import java.io.InputStream;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
+
+import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
 import uk.ac.ebi.mnb.importer.xls.wizzard.ExcelImportDialog;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
@@ -73,7 +75,7 @@ public class ImportXLSAction
                 ExcelHelper importer = name.endsWith(".xls")
                                        ? new ExcelXLSHelper(stream) : null;
                 MainView view = MainView.getInstance();
-                ExcelImportDialog wizzard = new ExcelImportDialog(view, view.getViewController(), view.getMessageManager(), view.getViewController(), view.getUndoManager(), reconstruction, choosenFile, importer);
+                ExcelImportDialog wizzard = new ExcelImportDialog(view, view.getViewController(), view.getMessageManager(), view.getViewController(), view.getUndoManager(), reconstruction, choosenFile, importer, LuceneServiceManager.getInstance());
                 wizzard.setVisible(true);
 
                 // update the views
@@ -81,7 +83,7 @@ public class ImportXLSAction
                 MainView.getInstance().getViewController().update();
                 System.out.println("done..");
 
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 MainView.getInstance().addErrorMessage("Unable to import Excel file: " + ex.getMessage());
             }
         }

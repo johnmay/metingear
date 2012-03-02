@@ -8,14 +8,11 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 import javax.swing.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
 
-import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
 import org.apache.log4j.PropertyConfigurator;
-import org.pushingpixels.substance.api.skin.*;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.metingear.pref.PreferenceFrame;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
-import uk.ac.ebi.mnb.menu.file.PreferenceDialog;
 import uk.ac.ebi.mnb.view.AboutDialog;
 
 
@@ -91,14 +88,20 @@ public class Main {
                 dialog.setVisible(true);
             }
         });
+        
         app.setPreferencesHandler(new com.apple.eawt.PreferencesHandler() {
 
             public void handlePreferences(com.apple.eawt.AppEvent.PreferencesEvent pe) {
-                MainView.getInstance().showPreferneces();
-                //                PreferenceDialog pref = new PreferenceDialog(MainView.getInstance(),
-                //                                                             MainView.getInstance());
-                //                pref.setVisible(true);
+
+                if(preferences == null)
+                    preferences = new PreferenceFrame();
+
+                preferences.setVisible(true);
+                preferences.pack();
+
             }
         });
     }
+    
+    private static PreferenceFrame preferences;
 }
