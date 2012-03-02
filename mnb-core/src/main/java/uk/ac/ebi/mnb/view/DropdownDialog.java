@@ -11,6 +11,8 @@ import net.sf.furbelow.SpinningDialWaitIndicator;
 import java.awt.*;
 import java.awt.Dialog.ModalityType;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.logging.Level;
 import uk.ac.ebi.mnb.interfaces.DialogController;
@@ -64,7 +66,6 @@ public abstract class DropdownDialog
                                                                                          "SaveDialog",
                                                                                          "RunDialog"));
 
-
     public DropdownDialog(JFrame frame,
                           DialogController controller,
                           String type) {
@@ -79,6 +80,8 @@ public abstract class DropdownDialog
                                                      type + ".DialogButton", this));
 
         setUndecorated(true);
+
+
 
 
 

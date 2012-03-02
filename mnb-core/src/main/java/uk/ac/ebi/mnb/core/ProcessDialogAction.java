@@ -87,7 +87,8 @@ public class ProcessDialogAction extends GeneralAction {
                     dialog.setVisible(false);
                     if (dialog instanceof ControllerDialog) {
                         ControllerDialog controllerDialog = (ControllerDialog) dialog;
-                        controllerDialog.addMessage(new ErrorMessage("An error occured: " + e.getMessage()));
+                        controllerDialog.addMessage(new ErrorMessage("An error occurred: " + e.getMessage() + e.getCause()));
+                        e.printStackTrace();
                     }
                 }
             }
