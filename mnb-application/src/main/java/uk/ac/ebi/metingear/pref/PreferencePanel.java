@@ -71,7 +71,6 @@ public class PreferencePanel extends JPanel {
         model.addElement("Resources");
         model.addElement("Rendering");
         
-        category.setSelectedValue("Resources", true);
 
         category.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -103,6 +102,10 @@ public class PreferencePanel extends JPanel {
 
 
         add(options, cc.xywh(2, 1, 1, 3));
+
+
+        category.setSelectedValue("Resources", true);
+
 
     }
     
