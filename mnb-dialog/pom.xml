@@ -45,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-service</artifactId>
+            <artifactId>chemet-lucene-service</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
         <dependency>
