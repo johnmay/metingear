@@ -120,8 +120,8 @@ public class LoadXLSModel extends CommandLineMain {
                                  new CachedChemicalWS(new ChEBIWebServiceConnection(
                     StarsCategory.THREE_ONLY, 10));
 
-            CandidateFactory factory = new CandidateFactory(ChEBINameService.getInstance(),
-                                                            new ChemicalFingerprintEncoder());
+            CandidateFactory factory = null;//new CandidateFactory(ChEBINameService.getInstance(),
+                                            //                new ChemicalFingerprintEncoder());
 
             ExcelEntityResolver entitySheet =
                                 new ExcelEntityResolver(entSht, new AutomatedReconciler(factory,
