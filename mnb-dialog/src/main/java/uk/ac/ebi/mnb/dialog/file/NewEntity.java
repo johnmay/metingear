@@ -4,24 +4,28 @@
  * 2011.10.04
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mnb.dialog.file;
 
 import java.util.*;
+import java.util.regex.Pattern;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditListener;
+
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -41,12 +45,12 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 
 
 /**
- * @name    NewEntity - 2011.10.04 <br>
- *          Base class for new entities. Provides operations on basic information setting (i.e. Abbreviation, Name
- *          and Accession).
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name NewEntity - 2011.10.04 <br>
+ * Base class for new entities. Provides operations on basic information setting (i.e. Abbreviation, Name
+ * and Accession).
  */
 public abstract class NewEntity extends ControllerDialog {
 
@@ -66,10 +70,14 @@ public abstract class NewEntity extends ControllerDialog {
 
     private static final Map<String, Byte> nameIndexMap = new HashMap();
 
+    private static Pattern clean = Pattern.compile("[^A-z0-9]+");
+    private static Pattern split = Pattern.compile("\\s+|\\-+");
+
 
     /**
      * Provide the frame to attach the dialog to and the default identifier type
      * BasicChemicalIdentifier, BasicProteinIdentifier BasicReactionIdentifier
+     *
      * @param frame
      */
     public NewEntity(JFrame frame,
@@ -86,9 +94,6 @@ public abstract class NewEntity extends ControllerDialog {
 
         this.updateable = updater;
 
-        setDefaultLayout();
-
-
     }
 
 
@@ -97,28 +102,69 @@ public abstract class NewEntity extends ControllerDialog {
 
         JPanel panel = super.getOptions();
 
-        panel.setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p",
-                                       "p, 4dlu, p"));
+        panel.setLayout(new FormLayout("right:p, 4dlu, p",
+                                       "p, 4dlu, p:grow"));
 
-        panel.add(type, cc.xy(1, 1));
-        panel.add(accession, cc.xy(3, 1));
 
-        panel.add(LabelFactory.newFormLabel("Abbreviation:",
+        panel.add(LabelFactory.newFormLabel("Abbreviation",
                                             "A short 2-5 character abbreviation of the new entity"),
-                  cc.xy(6, 1));
-        panel.add(abbreviation, cc.xy(7, 1));
+                  cc.xy(1, 1));
+        panel.add(abbreviation, cc.xy(3, 1));
 
-        panel.add(LabelFactory.newFormLabel("Name:", "An offical or trivial name the new entity"), cc.xy(1, 3));
-        panel.add(name, cc.xyw(3, 3, 5));
+        panel.add(LabelFactory.newFormLabel("Name", "An official or trivial name the new entity"), cc.xy(1, 3));
+        panel.add(name, cc.xy(3, 3));
 
+        name.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                String nm = name.getText();
+                String abbr = abbreviation.getText();
+                abbreviation.setText(createAbbreviation(nm, 4));
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                // suppressed
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                // suppressed
+            }
+        });
 
         return panel;
 
     }
 
 
+    public static String createAbbreviation(String text, int target) {
+
+        if (text.length() < target) {
+            return text;
+        }
+
+        StringBuilder builder = new StringBuilder(6);
+
+        String[] chunks = split.split(text.trim());
+
+        int extra = (target - chunks.length) / chunks.length;
+
+        for (String chunk : chunks) {
+            chunk = clean.matcher(chunk).replaceAll("");
+            if (!chunk.isEmpty())
+                builder.append(chunk.charAt(0));
+            for (int i = 0; i < extra && chunk.length() > i + 1; i++)
+                builder.append(chunk.charAt(i + 1));
+        }
+
+        return builder.toString().toLowerCase(Locale.ENGLISH);
+
+    }
+
     /**
      * Returns the value of the name field
+     *
      * @return
      */
     public String getName() {
@@ -128,6 +174,7 @@ public abstract class NewEntity extends ControllerDialog {
 
     /**
      * Returns the value of the name field
+     *
      * @return
      */
     public String getAbbreviation() {
@@ -136,14 +183,11 @@ public abstract class NewEntity extends ControllerDialog {
 
 
     /**
-     * Returns the value of the name field
+     * Return the appropiate identifier
+     *
      * @return
      */
-    public Identifier getIdentifier() {
-        Identifier id = IdentifierFactory.getInstance().ofIndex(nameIndexMap.get(type.getSelectedItem()));
-        id.setAccession(accession.getText().trim());
-        return id;
-    }
+    public abstract Identifier getIdentifier();
 
 
     @Override

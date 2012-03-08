@@ -29,8 +29,11 @@ import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 
 /**
@@ -47,6 +50,7 @@ public class NewMetabolite extends NewEntity {
 
     public NewMetabolite(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits);
+        setDefaultLayout();
     }
 
 
@@ -57,6 +61,10 @@ public class NewMetabolite extends NewEntity {
         return label;
     }
 
+    @Override
+    public Identifier getIdentifier() {
+        return BasicChemicalIdentifier.nextIdentifier();
+    }
 
     @Override
     public void process() {

@@ -37,10 +37,14 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.entities.Reaction;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 /**
  * @name    NewMetabolite - 2011.10.04 <br>
@@ -57,6 +61,7 @@ public class NewReaction extends NewEntity {
 
     public NewReaction(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits);
+        setDefaultLayout();
     }
 
     @Override
@@ -76,9 +81,14 @@ public class NewReaction extends NewEntity {
         FormLayout layout = (FormLayout) panel.getLayout();
         layout.appendRow(new RowSpec(Sizes.DLUY4));
         layout.appendRow(new RowSpec(Sizes.PREFERRED));
-        panel.add(equation, cc.xyw(1, layout.getRowCount(), 7));
+        panel.add(equation, cc.xyw(1, layout.getRowCount(), layout.getColumnCount()));
 
         return panel;
+    }
+
+    @Override
+    public Identifier getIdentifier() {
+        return BasicReactionIdentifier.nextIdentifier();
     }
 
     @Override
@@ -96,7 +106,9 @@ public class NewReaction extends NewEntity {
             ppRxn.addValue(ReactionColumn.EQUATION, equation.getText());
 
             try {
-                reconstruction.addReaction(parser.parseReaction(ppRxn));
+                MetabolicReaction reaction = parser.parseReaction(ppRxn);
+                reaction.setIdentifier(getIdentifier());
+                reconstruction.addReaction(reaction);
             } catch (UnparsableReactionError ex) {
                 addMessage(new ErrorMessage("Cannot create reaction: " + ex.getMessage()));
             }
