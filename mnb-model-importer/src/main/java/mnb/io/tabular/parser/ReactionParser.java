@@ -140,7 +140,7 @@ public class ReactionParser {
 
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSides[0]);
 
-        MetabolicReaction rxn = new MetabolicReactionImplementation(new BasicReactionIdentifier("{rxn/" + ++ticker + "}"), null, null);
+        MetabolicReaction rxn = new MetabolicReactionImplementation(BasicReactionIdentifier.nextIdentifier(), null, null);
         rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
         rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
 
