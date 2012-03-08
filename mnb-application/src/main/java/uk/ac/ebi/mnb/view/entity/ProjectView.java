@@ -77,11 +77,12 @@ public class ProjectView
 
     private Map<Class<? extends Entity>, AbstractEntityView> viewMap;
 
-    private EntityCollection selection = new EntityMap(DefaultEntityFactory.getInstance());
-
     private ViewInfo selector;
 
     private EntityFactory factory = DefaultEntityFactory.getInstance();
+
+    private EntityCollection selection = new EntityMap(factory);
+
 
 
     public ProjectView() {
@@ -306,7 +307,7 @@ public class ProjectView
     /**
      * At the moment sets view to that of first item and then selects all provided. This method presumes
      * all entities are the same
-     * @param entities
+     * @param selection
      * @return
      */
     @Override
