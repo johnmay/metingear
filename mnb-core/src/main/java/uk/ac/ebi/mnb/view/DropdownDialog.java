@@ -64,7 +64,8 @@ public abstract class DropdownDialog
 
     private static final Set<String> GENERIC_DIALOGS = new HashSet<String>(Arrays.asList("OkayDialog",
                                                                                          "SaveDialog",
-                                                                                         "RunDialog"));
+                                                                                         "RunDialog",
+                                                                                         "BuildDialog"));
 
     public DropdownDialog(JFrame frame,
                           DialogController controller,
@@ -79,10 +80,9 @@ public abstract class DropdownDialog
         active = new JButton(new ProcessDialogAction(getClass(),
                                                      type + ".DialogButton", this));
 
+
+
         setUndecorated(true);
-
-
-
 
 
     }
@@ -177,6 +177,9 @@ public abstract class DropdownDialog
 
         this.add(panel);
         this.pack();
+
+        getRootPane().setDefaultButton(active);
+
     }
 
 
