@@ -20,21 +20,29 @@
  */
 package uk.ac.ebi.mnb.menu.file;
 
-import java.awt.event.ActionEvent;
-import java.io.*;
-import java.util.zip.GZIPOutputStream;
-import javax.swing.Action;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.version.Version;
+import uk.ac.ebi.chemet.io.annotation.AnnotationDataOutputStream;
+import uk.ac.ebi.chemet.io.annotation.AnnotationOutput;
+import uk.ac.ebi.chemet.io.entity.EntityDataOutputStream;
+import uk.ac.ebi.chemet.io.entity.EntityOutput;
+import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
+import uk.ac.ebi.chemet.io.observation.ObservationOutput;
 import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.io.core.DefaultReconstructionOutputStream;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.main.MainView;
+
+import java.awt.event.ActionEvent;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.zip.GZIPOutputStream;
 
 
 /**
@@ -63,20 +71,35 @@ public class SaveAction extends GeneralAction {
             Reconstruction reconstruction = manager.getActive();
 
             IntegerPreference bufferPref = CorePreferences.getInstance().getPreference("BUFFER_SIZE");
-            File f = new File(reconstruction.getContainer(), "data");
-            new File(f.getParent()).mkdirs();
-            OutputStream out = new GZIPOutputStream(new FileOutputStream(f),
-                                                    bufferPref.get());
 
-            DefaultReconstructionOutputStream ros = new DefaultReconstructionOutputStream(out, new Version(0, 8, 5, 3), DefaultEntityFactory.getInstance());
+            reconstruction.getContainer().mkdirs();
 
+            File entities     = new File(reconstruction.getContainer(), "entities");
+            File annotations  = new File(reconstruction.getContainer(), "entity-annotations");
+            File observations = new File(reconstruction.getContainer(), "entity-observations");
+
+            DataOutputStream entityDataOut = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(entities), bufferPref.get()));
+            DataOutputStream annotationDataOut = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(annotations), bufferPref.get()));
+            DataOutputStream observationDataOut = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(observations), bufferPref.get()));
+
+            Version version       = new Version("0.9");
+            EntityFactory factory = DefaultEntityFactory.getInstance();
+
+            AnnotationOutput   annotationOutput  = new AnnotationDataOutputStream(annotationDataOut, version);
+            ObservationOutput  observationOutput = new ObservationDataOutputStream(observationDataOut, version);
+            EntityOutput       entityOutput      = new EntityDataOutputStream(version,
+                                                                              entityDataOut,
+                                                                              factory,
+                                                                              annotationOutput,
+                                                                              observationOutput);
+            
             long start = System.currentTimeMillis();
-            ros.write(reconstruction);
+            entityOutput.write(reconstruction);
             long end = System.currentTimeMillis();
 
             LOGGER.info("Wrote reconstruction in " + (end - start) + " ms");
 
-            ros.close();
+            entityDataOut.close();
 
 
         } catch (Exception ex) {
