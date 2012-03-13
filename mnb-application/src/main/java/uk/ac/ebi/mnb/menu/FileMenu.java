@@ -59,7 +59,7 @@ public class FileMenu
           add(newProjectAction);
         add(create(NewMetabolite.class), activeProject);
         add(create(NewReaction.class), activeProject);
-        add(create(NewProteinProduct.class), activeProject);
+        add(create(NewGeneProduct.class), activeProject);
         add(new OpenAction(this));
         add(recent);
         add(new JSeparator());
