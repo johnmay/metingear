@@ -86,7 +86,7 @@ public class ContextMenu extends JMenu {
                                                                         (SelectionController) selection,
                                                                         (UndoableEditListener) undo);                    
                 } catch (Exception ex) {
-                    LOGGER.error("Unable to construct dialog:" + ex.getMessage());
+                    LOGGER.error("Unable to construct dialog:", ex);
                 }
             }
 
