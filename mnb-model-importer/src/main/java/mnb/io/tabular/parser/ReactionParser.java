@@ -80,10 +80,10 @@ public class ReactionParser {
     public static final Pattern COMPARTMENT_PATTERN =
                                 Pattern.compile("[\\(\\[](\\w{1,2})[\\)\\]]");
 
-    private static final Direction[] NORMALISED_ARROWS =
-                                     new Direction[]{DirectionImplementation.BIDIRECTIONAL,
-                                                     DirectionImplementation.FORWARD,
-                                                     DirectionImplementation.BACKWARD};
+    private static final DirectionImplementation[] NORMALISED_ARROWS =
+                                     new DirectionImplementation[]{DirectionImplementation.BIDIRECTIONAL,
+                                                                   DirectionImplementation.FORWARD,
+                                                                   DirectionImplementation.BACKWARD};
 
     private EntityResolver entites;
 
@@ -306,7 +306,7 @@ public class ReactionParser {
             // System.out.println( coef + " " + entity.getName() + " " + compartment );
             return new MetabolicParticipantImplementation(entity,
                                                           coef,
-                                                          compartment);
+                                                          (Enum<? extends Compartment>) compartment);
         } else {
             messages.add(new WarningMessage("The metabolite "
                                             + entityAbbr.trim()
@@ -314,7 +314,7 @@ public class ReactionParser {
             entity = entites.getNonReconciledMetabolite(entityAbbr);
             return new MetabolicParticipantImplementation(entity,
                                                           coef,
-                                                          compartment);
+                                                          (Enum<? extends Compartment>) compartment);
         }
 
 
@@ -340,7 +340,7 @@ public class ReactionParser {
     }
 
 
-    public static Direction getReactionArrow(String equation) {
+    public static DirectionImplementation getReactionArrow(String equation) {
 
         Matcher arrowMatcher = EQUATION_ARROW.matcher(equation);
 
