@@ -20,21 +20,16 @@
  */
 package uk.ac.ebi.mnb.menu;
 
-import java.awt.event.ActionEvent;
-import javax.swing.JMenuItem;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
-import uk.ac.ebi.mnb.menu.ContextMenu;
-import uk.ac.ebi.caf.action.GeneralAction;
-import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.dialog.tools.gap.NonConsumptionMetabolites;
 import uk.ac.ebi.mnb.dialog.tools.gap.NonProductionMetabolites;
 import uk.ac.ebi.mnb.dialog.tools.gap.RootNonProductionMetabolites;
 import uk.ac.ebi.mnb.dialog.tools.gap.TerminalNonConsumptionMetabolites;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
 
 /**
  *          GapAnalysis - 2011.12.02 <br>
