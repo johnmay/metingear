@@ -24,6 +24,7 @@ import com.google.common.collect.Multimap;
 import java.util.Collection;
 import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
+import mnb.io.tabular.type.EntityColumn;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.Charge;
@@ -103,7 +104,7 @@ public class AutomatedReconciler
 
         String[] names = entry.getNames();
 
-        String name = names.length > 0 ? names[0] : "Unamed metabolite";
+        String name = names.length > 0 ? names[0] : "Unnamed metabolite";
 
         if (nameMap.containsKey(name)) {
             Collection<Metabolite> candidates = nameMap.get(name);
@@ -114,12 +115,20 @@ public class AutomatedReconciler
             }
         }
 
-        Metabolite metabolite = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
-                                                                               BasicChemicalIdentifier.nextIdentifier(),
-                                                                               name, entry.getAbbreviation());
+        Metabolite metabolite = DefaultEntityFactory.getInstance().ofClass(Metabolite.class,
+                                                                           BasicChemicalIdentifier.nextIdentifier(),
+                                                                           name,
+                                                                           entry.getAbbreviation());
 
         for (int i = 1; i < names.length; i++) {
             metabolite.addAnnotation(new Synonym(names[i]));
+        }
+
+        // add synonyms if they were provided
+        if(entry.hasValue(EntityColumn.SYNONYMS)){
+            for(String synonym : entry.getValues(EntityColumn.SYNONYMS)){
+                metabolite.addAnnotation(new Synonym(synonym));
+            }
         }
 
         try {
