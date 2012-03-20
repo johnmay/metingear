@@ -40,10 +40,15 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.Sizes;
 import mnb.io.tabular.ExcelModelProperties;
-import mnb.io.tabular.type.ReactionColumn;
+import static mnb.io.tabular.type.ReactionColumn.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
@@ -108,7 +113,14 @@ public class ReactionColumnChooser
     private JComboBox source;
 
     private JComboBox locus;
-    //
+
+    // extra (model data)
+
+    private JComboBox direction;
+    private JComboBox deltaG;
+    private JComboBox deltaGError;
+    private JComboBox minFlux;
+    private JComboBox maxFlux;
 
     private SelectionTable table;
 
@@ -141,38 +153,87 @@ public class ReactionColumnChooser
 
 
 
+        FormLayout layout = new FormLayout("right:p:grow, 4dlu, min, 4dlu, right:p:grow, 4dlu, min", "p");
+
         // content panel
-        setLayout(new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p"));
+        setLayout(layout);
 
         removeAll();
 
-        add(LabelFactory.newFormLabel("Start Row"), cc.xy(1, 1));
-        add(start, cc.xy(3, 1));
-        add(LabelFactory.newFormLabel("End Row"), cc.xy(5, 1));
-        add(end, cc.xy(7, 1));
+        add(LabelFactory.newFormLabel("Start Row"), cc.xy(1, layout.getRowCount()));
+        add(start, cc.xy(3, layout.getRowCount()));
+        add(LabelFactory.newFormLabel("End Row"), cc.xy(5, layout.getRowCount()));
+        add(end, cc.xy(7, layout.getRowCount()));
 
-        add(new JSeparator(), cc.xyw(1, 3, 7));
+        layout.appendRow(new RowSpec(Sizes.DLUY2));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
 
-        add(LabelFactory.newFormLabel("Identifier/Abbreviation"), cc.xy(1, 5));
-        add(abbreviation, cc.xy(3, 5));
-        add(LabelFactory.newFormLabel("Name/Description"), cc.xy(5, 5));
-        add(description, cc.xy(7, 5));
+        add(new JSeparator(), cc.xyw(1, layout.getRowCount(), 7));
 
-        add(LabelFactory.newFormLabel("Reaction Equation"), cc.xy(1, 7));
-        add(equation, cc.xy(3, 7));
-        add(LabelFactory.newFormLabel("Classification (EC/TC Number)"), cc.xy(5, 7));
-        add(classification, cc.xy(7, 7));
+        layout.appendRow(new RowSpec(Sizes.DLUY2));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
 
-        add(LabelFactory.newFormLabel("Subsystem/Reaction type"), cc.xy(1, 9));
-        add(subsystem, cc.xy(3, 9));
-        add(LabelFactory.newFormLabel("Source/Reference:"), cc.xy(5, 9));
-        add(source, cc.xy(7, 9));
+        add(LabelFactory.newFormLabel("Identifier/Abbreviation"), cc.xy(1, layout.getRowCount()));
+        add(abbreviation, cc.xy(3, layout.getRowCount()));
+        add(LabelFactory.newFormLabel("Name/Description"), cc.xy(5, layout.getRowCount()));
+        add(description, cc.xy(7, layout.getRowCount()));
 
-        add(LabelFactory.newFormLabel("Locus"), cc.xy(1, 11));
-        add(locus, cc.xy(3, 11));
+        layout.appendRow(new RowSpec(Sizes.DLUY2));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
 
-        add(new JSeparator(), cc.xyw(1, 13, 7));
+        add(LabelFactory.newFormLabel("Reaction Equation"), cc.xy(1, layout.getRowCount()));
+        add(equation, cc.xy(3, layout.getRowCount()));
+        add(LabelFactory.newFormLabel("Classification (EC/TC Number)"), cc.xy(5, layout.getRowCount()));
+        add(classification, cc.xy(7, layout.getRowCount()));
 
+        layout.appendRow(new RowSpec(Sizes.DLUY2));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
+
+        add(LabelFactory.newFormLabel("Subsystem/Reaction type"), cc.xy(1, layout.getRowCount()));
+        add(subsystem, cc.xy(3, layout.getRowCount()));
+        add(LabelFactory.newFormLabel("Source/Reference:"), cc.xy(5, layout.getRowCount()));
+        add(source, cc.xy(7, layout.getRowCount()));
+
+        layout.appendRow(new RowSpec(Sizes.DLUY2));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
+
+        add(LabelFactory.newFormLabel("Locus"), cc.xy(1, layout.getRowCount()));
+        add(locus, cc.xy(3, layout.getRowCount()));
+
+        layout.appendRow(new RowSpec(Sizes.DLUY2));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
+
+        JPanel extra = PanelFactory.createDialogPanel("right:p:grow, 4dlu, min, 4dlu, right:p:grow, 4dlu, min",
+                                                      "p, 2dlu, p, 2dlu, p");
+
+        deltaG      = ComboBoxFactory.newComboBox(columns);
+        deltaGError = ComboBoxFactory.newComboBox(columns);
+        minFlux     = ComboBoxFactory.newComboBox(columns);
+        maxFlux     = ComboBoxFactory.newComboBox(columns);
+        direction   = ComboBoxFactory.newComboBox(columns);
+
+        extra.add(LabelFactory.newFormLabel("Free energy / ΔG"), cc.xy(1, 1));
+        extra.add(deltaG, cc.xy(3, 1));
+        extra.add(LabelFactory.newFormLabel("Free energy / ΔG (error)"), cc.xy(5, 1));
+        extra.add(deltaGError, cc.xy(7, 1));
+        
+        extra.add(LabelFactory.newFormLabel("Lower Bound Flux"), cc.xy(1, 3));
+        extra.add(minFlux, cc.xy(3, 3));
+        extra.add(LabelFactory.newFormLabel("Upper Bound Flux"), cc.xy(5, 3));
+        extra.add(maxFlux, cc.xy(7, 3));
+
+        extra.add(LabelFactory.newFormLabel("Direction"), cc.xy(1, 5));
+        extra.add(direction, cc.xy(3, 5));
+
+        add(new ExpandableComponentGroup("Extra Columns", extra), cc.xyw(1, layout.getRowCount(), 7, CellConstraints.FILL, CellConstraints.FILL));
+
+        layout.appendRow(new RowSpec(Sizes.DLUY2));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
+
+        add(new JSeparator(), cc.xyw(1, layout.getRowCount(), 7));
+
+        layout.appendRow(new RowSpec(Sizes.DLUY2));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
 
         table = new SelectionTable(helper);
 
@@ -182,20 +243,25 @@ public class ReactionColumnChooser
         pane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
                        rnt.getTableHeader());
         pane.setPreferredSize(new Dimension(800, table.getRowHeight() * 10));
-        add(pane, cc.xyw(1, 15, 7));
+        add(pane, cc.xyw(1, layout.getRowCount(), 7));
 
 
         // set previous selections
         Preferences pref = Preferences.userNodeForPackage(ReactionColumnChooser.class);
         start.setValue(pref.getInt(properties.getPreferenceKey("rxn.start"), 1));
         end.setValue(pref.getInt(properties.getPreferenceKey("rxn.end"), 10));
-        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.ABBREVIATION), 0));
-        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.DESCRIPTION), 0));
-        equation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.EQUATION), 0));
-        classification.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.CLASSIFICATION), 0));
-        subsystem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SUBSYSTEM), 0));
-        source.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.SOURCE), 0));
-        locus.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ReactionColumn.LOCUS), 0));
+        abbreviation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(ABBREVIATION), 0));
+        description.setSelectedIndex(pref.getInt(properties.getPreferenceKey(DESCRIPTION), 0));
+        equation.setSelectedIndex(pref.getInt(properties.getPreferenceKey(EQUATION), 0));
+        classification.setSelectedIndex(pref.getInt(properties.getPreferenceKey(CLASSIFICATION), 0));
+        subsystem.setSelectedIndex(pref.getInt(properties.getPreferenceKey(SUBSYSTEM), 0));
+        source.setSelectedIndex(pref.getInt(properties.getPreferenceKey(SOURCE), 0));
+        locus.setSelectedIndex(pref.getInt(properties.getPreferenceKey(LOCUS), 0));
+        minFlux.setSelectedIndex(pref.getInt(properties.getPreferenceKey(MIN_FLUX), 0));
+        maxFlux.setSelectedIndex(pref.getInt(properties.getPreferenceKey(MAX_FLUX), 0));
+        deltaG.setSelectedIndex(pref.getInt(properties.getPreferenceKey(FREE_ENERGY), 0));
+        deltaGError.setSelectedIndex(pref.getInt(properties.getPreferenceKey(FREE_ENERGY_ERROR), 0));
+        direction.setSelectedIndex(pref.getInt(properties.getPreferenceKey(DIRECTION), 0));
 
 
         // listeners to change table header name
@@ -261,18 +327,32 @@ public class ReactionColumnChooser
         properties.put("rxn.col.subsystem", subsystem.getSelectedItem());
         properties.put("rxn.col.source", source.getSelectedItem());
         properties.put("rxn.col.locus", locus.getSelectedItem());
+        
+        properties.put(FREE_ENERGY.getKey(),       deltaG.getSelectedItem());
+        properties.put(FREE_ENERGY_ERROR.getKey(), deltaGError.getSelectedItem());
+        properties.put(MIN_FLUX.getKey(),      minFlux.getSelectedItem());
+        properties.put(MAX_FLUX.getKey(),      maxFlux.getSelectedItem());
+        properties.put(DIRECTION.getKey(), direction.getSelectedItem());
 
         // set selections for next time
         Preferences pref = Preferences.userNodeForPackage(ReactionColumnChooser.class);
         pref.putInt(properties.getPreferenceKey("rxn.start"), (Integer) start.getValue());
         pref.putInt(properties.getPreferenceKey("rxn.end"), (Integer) end.getValue());
-        pref.putInt(properties.getPreferenceKey(ReactionColumn.ABBREVIATION), abbreviation.getSelectedIndex());
-        pref.putInt(properties.getPreferenceKey(ReactionColumn.DESCRIPTION), description.getSelectedIndex());
-        pref.putInt(properties.getPreferenceKey(ReactionColumn.EQUATION), equation.getSelectedIndex());
-        pref.putInt(properties.getPreferenceKey(ReactionColumn.CLASSIFICATION), classification.getSelectedIndex());
-        pref.putInt(properties.getPreferenceKey(ReactionColumn.SUBSYSTEM), subsystem.getSelectedIndex());
-        pref.putInt(properties.getPreferenceKey(ReactionColumn.SOURCE), source.getSelectedIndex());
-        pref.putInt(properties.getPreferenceKey(ReactionColumn.LOCUS), locus.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(ABBREVIATION), abbreviation.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(DESCRIPTION), description.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(EQUATION), equation.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(CLASSIFICATION), classification.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(SUBSYSTEM), subsystem.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(SOURCE), source.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(LOCUS), locus.getSelectedIndex());
+
+        // extra
+        pref.putInt(properties.getPreferenceKey(FREE_ENERGY),       deltaG.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(FREE_ENERGY_ERROR), deltaGError.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(MIN_FLUX),      minFlux.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(MAX_FLUX),      maxFlux.getSelectedIndex());
+        pref.putInt(properties.getPreferenceKey(DIRECTION),     direction.getSelectedIndex());
+
 
 
         return true;
