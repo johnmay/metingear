@@ -39,12 +39,14 @@ import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.annotation.Subsystem;
 import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
+import uk.ac.ebi.annotation.model.FluxLowerBound;
 import uk.ac.ebi.annotation.reaction.GibbsEnergy;
 import uk.ac.ebi.annotation.reaction.GibbsEnergyError;
 import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.caf.report.Report;
@@ -54,7 +56,6 @@ import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.classification.TransportClassificationNumber;
-import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 
@@ -93,6 +94,7 @@ public class ReactionParser {
                     DirectionImplementation.BACKWARD};
 
     private EntityResolver entites;
+    private EntityFactory factory = DefaultEntityFactory.getInstance();
 
     private Set<Report> messages = new HashSet();
 
@@ -143,14 +145,12 @@ public class ReactionParser {
     private static int ticker = 0;
 
 
-    public MetabolicReaction parseTwoSidedReaction(PreparsedReaction reaction,
+    public MetabolicReaction parseTwoSidedReaction(PreparsedReaction preparsed,
                                                    String[] equationSides) throws UnparsableReactionError {
 
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSides[0]);
 
-        MetabolicReaction rxn = new MetabolicReactionImplementation(BasicReactionIdentifier.nextIdentifier(), null, null);
-        rxn.setAbbreviation(reaction.hasValue(ABBREVIATION) ? reaction.getIdentifier() : "");
-        rxn.setName(reaction.hasValue(DESCRIPTION) ? reaction.getDescription() : "");
+        MetabolicReaction rxn = getReaction(preparsed);
 
         Compartment defaultCompartment = Organelle.CYTOPLASM;
 
@@ -162,59 +162,17 @@ public class ReactionParser {
         for (MetabolicParticipantImplementation p :
                 parseParticipants(equationSides[0],
                                   defaultCompartment,
-                                  reaction)) {
+                                  preparsed)) {
             rxn.addReactant(p);
         }
         for (MetabolicParticipantImplementation p :
                 parseParticipants(equationSides[1],
                                   defaultCompartment,
-                                  reaction)) {
+                                  preparsed)) {
             rxn.addProduct(p);
         }
 
-        if (reaction.hasValue(DIRECTION)) {
-            rxn.setDirection(getReactionArrow(reaction.getValue(DIRECTION)));
-        } else {
-            rxn.setDirection(getReactionArrow(reaction.getEquation()));
-        }
 
-        // add subsytem annotation
-        String subsytem = reaction.getSubsystem();
-        if (subsytem != null && subsytem.isEmpty() == false) {
-            rxn.addAnnotation(new Subsystem(subsytem));
-        }
-
-
-        // add classification
-        for (String classification : reaction.getClassifications()) {
-            // load EC code
-            if (classification.matches("(?:\\d+\\.){3}\\d+") || classification.contains("EC")) {
-                rxn.addAnnotation(new EnzymeClassification(new ECNumber(classification)));
-            } else if (classification.contains("TC")) {
-                rxn.addAnnotation(new Classification(new TransportClassificationNumber(classification)));
-            }
-        }
-
-        // add loci
-        for (String locus : reaction.getLoci()) {
-            rxn.addAnnotation(new Locus(locus));
-        }
-
-        // add delta g and delta g error
-        if (reaction.hasValue(FREE_ENERGY)) {
-            try {
-                rxn.addAnnotation(new GibbsEnergy(Double.parseDouble(reaction.getValue(FREE_ENERGY))));
-            } catch (NumberFormatException ex) {
-                LOGGER.error("Gibbs energy column contained invalid value (not a double)");
-            }
-            if (reaction.hasValue(FREE_ENERGY_ERROR)) {
-                try {
-                    rxn.addAnnotation(new GibbsEnergyError(Double.parseDouble(reaction.getValue(FREE_ENERGY_ERROR))));
-                } catch (NumberFormatException ex) {
-                    LOGGER.error("Gibbs energy error column contained invalid value (not a double)");
-                }
-            }
-        }
 
 
         return rxn;
@@ -226,13 +184,11 @@ public class ReactionParser {
      * Only have left side (or some weird reaction operator)
      */
 
-    public MetabolicReactionImplementation parseExchangeReaction(PreparsedReaction reaction,
+    public MetabolicReaction parseExchangeReaction(PreparsedReaction reaction,
                                                                  String equationSide) throws UnparsableReactionError {
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSide);
 
-        MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(new BasicReactionIdentifier("{rxn/" + ++ticker + "}"), null, null);
-        rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
-        rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
+        MetabolicReaction rxn = getReaction(reaction);
 
         Compartment defaultCompartment = Organelle.CYTOPLASM;
 
@@ -248,34 +204,78 @@ public class ReactionParser {
             rxn.addReactant(p);
         }
 
+        return rxn;
+    }
 
-        rxn.setDirection(getReactionArrow(reaction.getEquation()));
+
+    public MetabolicReaction getReaction(PreparsedReaction preparsed){
+
+        MetabolicReaction rxn = factory.ofClass(MetabolicReaction.class, BasicReactionIdentifier.nextIdentifier(),
+                                                preparsed.hasValue(DESCRIPTION) ? preparsed.getValue(DESCRIPTION) : "",
+                                                preparsed.hasValue(ABBREVIATION) ? preparsed.getValue(ABBREVIATION) : "");
+
+        if (preparsed.hasValue(DIRECTION)) {
+            rxn.setDirection(getReactionArrow(preparsed.getValue(DIRECTION)));
+        } else {
+            rxn.setDirection(getReactionArrow(preparsed.getEquation()));
+        }
 
         // add subsytem annotation
-        String subsytem = reaction.getSubsystem();
-        if (subsytem != null && subsytem.isEmpty() == false) {
-            rxn.addAnnotation(new Subsystem(subsytem));
+        if (preparsed.hasValue(SUBSYSTEM)) {
+            rxn.addAnnotation(new Subsystem(preparsed.getSubsystem()));
         }
 
 
         // add classification
-        for (String classification : reaction.getClassifications()) {
+        for (String classification : preparsed.getClassifications()) {
             // load EC code
             if (classification.matches("(?:\\d+\\.){3}\\d+") || classification.contains("EC")) {
                 rxn.addAnnotation(new EnzymeClassification(new ECNumber(classification)));
             } else if (classification.contains("TC")) {
-                rxn.addAnnotation(new Classification(new BasicProteinIdentifier(classification)));
+                rxn.addAnnotation(new Classification(new TransportClassificationNumber(classification)));
             }
         }
 
-        for (String locus : reaction.getLoci()) {
+        // add loci
+        for (String locus : preparsed.getLoci()) {
             rxn.addAnnotation(new Locus(locus));
         }
 
+        // add delta g and delta g error
+        if (preparsed.hasValue(FREE_ENERGY)) {
+            try {
+                rxn.addAnnotation(new GibbsEnergy(Double.parseDouble(preparsed.getValue(FREE_ENERGY))));
+            } catch (NumberFormatException ex) {
+                LOGGER.error("Gibbs energy column contained invalid value (not a double)");
+            }
+            if (preparsed.hasValue(FREE_ENERGY_ERROR)) {
+                try {
+                    rxn.addAnnotation(new GibbsEnergyError(Double.parseDouble(preparsed.getValue(FREE_ENERGY_ERROR))));
+                } catch (NumberFormatException ex) {
+                    LOGGER.error("Gibbs energy error column contained invalid value (not a double)");
+                }
+            }
+        }
+
+        if(preparsed.hasValue(MIN_FLUX)){
+            try {
+                rxn.addAnnotation(new FluxLowerBound(Double.parseDouble(preparsed.getValue(MIN_FLUX))));
+            } catch (NumberFormatException ex) {
+                LOGGER.error("Min flux column contained invalid value (not a double): " + preparsed.getValue(MIN_FLUX));
+            }
+        }
+
+        if(preparsed.hasValue(MAX_FLUX)){
+            try {
+                rxn.addAnnotation(new FluxLowerBound(Double.parseDouble(preparsed.getValue(MAX_FLUX))));
+            } catch (NumberFormatException ex) {
+                LOGGER.error("Max flux column contained invalid value (not a double): " + preparsed.getValue(MAX_FLUX));
+            }
+        }
 
         return rxn;
-    }
 
+    }
 
     public List<MetabolicParticipantImplementation> parseParticipants(String equationSide,
                                                                       Compartment defaultCompartment,

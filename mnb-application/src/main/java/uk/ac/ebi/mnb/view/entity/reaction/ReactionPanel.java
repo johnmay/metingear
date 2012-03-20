@@ -74,7 +74,7 @@ public class ReactionPanel
 
     private JComponent participantXref;
 
-    private JLabel tClass = new JLabel();
+    private JLabel tramsportIcon = new JLabel();
 
     private CellConstraints cc = new CellConstraints();
 
@@ -87,16 +87,20 @@ public class ReactionPanel
     @Override
     public boolean update() {
 
+        if(super.update()){
 
-        // update all fields and labels...
-        reactionLabel.setIcon(renderer.getReaction(entity));
-        updateParticipantXref();
+            // update all fields and labels...
+            reactionLabel.setIcon(renderer.getReaction(entity));
+            updateParticipantXref();
 
-        tClass.setIcon(renderer.getTransportClassificationIcon(TransportReactionUtil.getClassification(entity)));
+            tramsportIcon.setIcon(renderer.getTransportClassificationIcon(TransportReactionUtil.getClassification(entity)));
 
-        editor.setReaction(entity);
+            editor.setReaction(entity);
 
-        return super.update();
+            return true;
+        }
+
+        return false;
 
     }
 
@@ -116,7 +120,7 @@ public class ReactionPanel
         JPanel panel = PanelFactory.createInfoPanel();
         panel.setBorder(Borders.DLU4_BORDER);
 
-        panel.add(tClass);
+        panel.add(tramsportIcon);
 
         return panel;
 
