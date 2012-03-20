@@ -26,8 +26,8 @@ import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataOutputStream;
 import uk.ac.ebi.chemet.io.annotation.AnnotationOutput;
-import uk.ac.ebi.chemet.io.entity.EntityDataOutputStream;
-import uk.ac.ebi.chemet.io.entity.EntityOutput;
+import uk.ac.ebi.chemet.io.domain.EntityDataOutputStream;
+import uk.ac.ebi.chemet.io.domain.EntityOutput;
 import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
 import uk.ac.ebi.chemet.io.observation.ObservationOutput;
 import uk.ac.ebi.core.CorePreferences;
@@ -39,10 +39,8 @@ import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.main.MainView;
 
 import java.awt.event.ActionEvent;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.zip.GZIPOutputStream;
+import java.io.*;
+import java.util.Properties;
 
 
 /**
@@ -77,12 +75,29 @@ public class SaveAction extends GeneralAction {
             File entities     = new File(reconstruction.getContainer(), "entities");
             File annotations  = new File(reconstruction.getContainer(), "entity-annotations");
             File observations = new File(reconstruction.getContainer(), "entity-observations");
+            File info         = new File(reconstruction.getContainer(), "info.properties");
 
-            DataOutputStream entityDataOut = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(entities), bufferPref.get()));
-            DataOutputStream annotationDataOut = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(annotations), bufferPref.get()));
-            DataOutputStream observationDataOut = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(observations), bufferPref.get()));
+            Version version = new Version("1.2");
 
-            Version version       = new Version("0.9");
+            Properties properties = new Properties();
+
+            if(info.exists()) {
+                FileInputStream propInput =   new FileInputStream(info);
+                properties.load(propInput);
+                propInput.close();
+                String value = properties.getProperty("chemet.version");
+                version = value == null ? version : new Version(value);
+            }
+
+            properties.put("chemet.version", version.toString());
+            FileWriter writer = new FileWriter(info);
+            properties.store(writer, "Project info");
+            writer.close();
+
+            DataOutputStream entityDataOut      = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(entities), bufferPref.get()));
+            DataOutputStream annotationDataOut  = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(annotations), bufferPref.get()));
+            DataOutputStream observationDataOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(observations), bufferPref.get()));
+
             EntityFactory factory = DefaultEntityFactory.getInstance();
 
             AnnotationOutput   annotationOutput  = new AnnotationDataOutputStream(annotationDataOut, version);
@@ -100,6 +115,8 @@ public class SaveAction extends GeneralAction {
             LOGGER.info("Wrote reconstruction in " + (end - start) + " ms");
 
             entityDataOut.close();
+            annotationDataOut.close();
+            observationDataOut.close();
 
 
         } catch (Exception ex) {
