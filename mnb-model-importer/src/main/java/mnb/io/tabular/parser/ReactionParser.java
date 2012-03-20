@@ -116,7 +116,7 @@ public class ReactionParser {
 
     public MetabolicReaction parseReaction(PreparsedReaction reaction) throws UnparsableReactionError {
 
-        String equation = reaction.getEquation();
+        String equation   = reaction.getEquation();
         String[] rxnSides = getReactionSides(equation);
 
         // determine whether the reaction contains two sides or one.
@@ -284,8 +284,10 @@ public class ReactionParser {
         List<MetabolicParticipantImplementation> parsedParticipants = new ArrayList();
 
         String[] participants = EQUATION_ADDITION.split(equationSide);
-        for (String string : participants) {
-            parsedParticipants.add(parseParticipant(string, defaultCompartment, reaction));
+        for (String participant : participants) {
+            if(!participant.trim().isEmpty()){
+                parsedParticipants.add(parseParticipant(participant, defaultCompartment, reaction));
+            }
         }
 
         return parsedParticipants;

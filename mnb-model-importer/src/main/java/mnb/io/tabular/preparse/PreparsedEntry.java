@@ -85,7 +85,7 @@ public class PreparsedEntry {
     }
 
     public boolean hasValue(TableDescription column) {
-        return columnTypeMap.containsKey(column);
+        return columnTypeMap.containsKey(column) && !getValue(column).isEmpty();
     }
 
     public Set<Entry<TableDescription, Integer>> getColumnSet() {

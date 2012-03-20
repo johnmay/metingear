@@ -25,6 +25,7 @@ import java.util.Collection;
 import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import mnb.io.tabular.type.EntityColumn;
+import static mnb.io.tabular.type.EntityColumn.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.Charge;
@@ -147,7 +148,7 @@ public class AutomatedReconciler
         }
 
         // molecula formula
-        if (entry.getFormula() != null) {
+        if (entry.hasValue(FORMULA)) {
             metabolite.addAnnotation(new MolecularFormula(entry.getFormula()));
         }
 
