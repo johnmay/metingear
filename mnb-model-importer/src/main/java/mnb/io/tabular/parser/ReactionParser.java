@@ -27,14 +27,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import mnb.io.tabular.EntityResolver;
 import mnb.io.tabular.preparse.PreparsedReaction;
 import mnb.io.tabular.type.ReactionColumn;
+
+import static mnb.io.tabular.type.ReactionColumn.*;
+
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.annotation.Subsystem;
 import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
+import uk.ac.ebi.annotation.reaction.GibbsEnergy;
+import uk.ac.ebi.annotation.reaction.GibbsEnergyError;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
@@ -46,18 +52,19 @@ import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.core.reaction.compartment.Organelle;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.reaction.Compartment;
-import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.resource.classification.ECNumber;
+import uk.ac.ebi.resource.classification.TransportClassificationNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 
 /**
- *          ReactionParser – 2011.08.31 <br>
- *          Class description
+ * ReactionParser – 2011.08.31 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class ReactionParser {
 
@@ -69,21 +76,21 @@ public class ReactionParser {
     public static final Pattern EQUATION_ADDITION = Pattern.compile("\\s+[+]\\s+");
 
     private static final Pattern REACTION_COMPARTMENT =
-                                 Pattern.compile("\\A\\[(\\w{1,2})\\]\\s*:");
+            Pattern.compile("\\A\\[(\\w{1,2})\\]\\s*:");
 
     public static final Pattern DOUBLE_PATTERN =
-                                Pattern.compile("([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?)");
+            Pattern.compile("([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?)");
 
     public static final Pattern COEFFICIENT_PATTERN =
-                                Pattern.compile("\\A" + DOUBLE_PATTERN.pattern() + "\\s+" + "|\\(" + DOUBLE_PATTERN.pattern() + "\\)");
+            Pattern.compile("\\A" + DOUBLE_PATTERN.pattern() + "\\s+" + "|\\(" + DOUBLE_PATTERN.pattern() + "\\)");
 
     public static final Pattern COMPARTMENT_PATTERN =
-                                Pattern.compile("[\\(\\[](\\w{1,2})[\\)\\]]");
+            Pattern.compile("[\\(\\[](\\w{1,2})[\\)\\]]");
 
     private static final DirectionImplementation[] NORMALISED_ARROWS =
-                                     new DirectionImplementation[]{DirectionImplementation.BIDIRECTIONAL,
-                                                                   DirectionImplementation.FORWARD,
-                                                                   DirectionImplementation.BACKWARD};
+            new DirectionImplementation[]{DirectionImplementation.BIDIRECTIONAL,
+                    DirectionImplementation.FORWARD,
+                    DirectionImplementation.BACKWARD};
 
     private EntityResolver entites;
 
@@ -93,6 +100,7 @@ public class ReactionParser {
     /**
      * Determines whether an item contains listed items.
      * separated by ';', '|' or ','
+     *
      * @param str
      */
     public boolean containsList(String str) {
@@ -125,7 +133,7 @@ public class ReactionParser {
         } else {
 
             throw new UnparsableReactionError("No equation found for rxn: "
-                                              + reaction.getIdentifier());
+                                                      + reaction.getIdentifier());
         }
     }
 
@@ -141,8 +149,8 @@ public class ReactionParser {
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSides[0]);
 
         MetabolicReaction rxn = new MetabolicReactionImplementation(BasicReactionIdentifier.nextIdentifier(), null, null);
-        rxn.setAbbreviation(reaction.hasValue(ReactionColumn.ABBREVIATION) ? reaction.getIdentifier() : "");
-        rxn.setName(reaction.hasValue(ReactionColumn.DESCRIPTION) ? reaction.getDescription() : "");
+        rxn.setAbbreviation(reaction.hasValue(ABBREVIATION) ? reaction.getIdentifier() : "");
+        rxn.setName(reaction.hasValue(DESCRIPTION) ? reaction.getDescription() : "");
 
         Compartment defaultCompartment = Organelle.CYTOPLASM;
 
@@ -152,19 +160,23 @@ public class ReactionParser {
         }
 
         for (MetabolicParticipantImplementation p :
-             parseParticipants(equationSides[0],
-                               defaultCompartment,
-                               reaction)) {
+                parseParticipants(equationSides[0],
+                                  defaultCompartment,
+                                  reaction)) {
             rxn.addReactant(p);
         }
         for (MetabolicParticipantImplementation p :
-             parseParticipants(equationSides[1],
-                               defaultCompartment,
-                               reaction)) {
+                parseParticipants(equationSides[1],
+                                  defaultCompartment,
+                                  reaction)) {
             rxn.addProduct(p);
         }
 
-        rxn.setDirection(getReactionArrow(reaction.getEquation()));
+        if (reaction.hasValue(DIRECTION)) {
+            rxn.setDirection(getReactionArrow(reaction.getValue(DIRECTION)));
+        } else {
+            rxn.setDirection(getReactionArrow(reaction.getEquation()));
+        }
 
         // add subsytem annotation
         String subsytem = reaction.getSubsystem();
@@ -179,14 +191,30 @@ public class ReactionParser {
             if (classification.matches("(?:\\d+\\.){3}\\d+") || classification.contains("EC")) {
                 rxn.addAnnotation(new EnzymeClassification(new ECNumber(classification)));
             } else if (classification.contains("TC")) {
-                rxn.addAnnotation(new Classification(new BasicProteinIdentifier(classification)));
+                rxn.addAnnotation(new Classification(new TransportClassificationNumber(classification)));
             }
         }
 
+        // add loci
         for (String locus : reaction.getLoci()) {
             rxn.addAnnotation(new Locus(locus));
         }
 
+        // add delta g and delta g error
+        if (reaction.hasValue(FREE_ENERGY)) {
+            try {
+                rxn.addAnnotation(new GibbsEnergy(Double.parseDouble(reaction.getValue(FREE_ENERGY))));
+            } catch (NumberFormatException ex) {
+                LOGGER.error("Gibbs energy column contained invalid value (not a double)");
+            }
+            if (reaction.hasValue(FREE_ENERGY_ERROR)) {
+                try {
+                    rxn.addAnnotation(new GibbsEnergyError(Double.parseDouble(reaction.getValue(FREE_ENERGY_ERROR))));
+                } catch (NumberFormatException ex) {
+                    LOGGER.error("Gibbs energy error column contained invalid value (not a double)");
+                }
+            }
+        }
 
 
         return rxn;
@@ -197,6 +225,7 @@ public class ReactionParser {
     /**
      * Only have left side (or some weird reaction operator)
      */
+
     public MetabolicReactionImplementation parseExchangeReaction(PreparsedReaction reaction,
                                                                  String equationSide) throws UnparsableReactionError {
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSide);
@@ -213,9 +242,9 @@ public class ReactionParser {
         }
 
         for (MetabolicParticipantImplementation p :
-             parseParticipants(equationSide,
-                               defaultCompartment,
-                               reaction)) {
+                parseParticipants(equationSide,
+                                  defaultCompartment,
+                                  reaction)) {
             rxn.addReactant(p);
         }
 
@@ -242,7 +271,6 @@ public class ReactionParser {
         for (String locus : reaction.getLoci()) {
             rxn.addAnnotation(new Locus(locus));
         }
-
 
 
         return rxn;
@@ -299,7 +327,7 @@ public class ReactionParser {
 
 
         // try fetching with compartment attached and without
-//        PreparsedMetabolite entity = entites.getEntity(entityAbbrComp.trim());
+        //        PreparsedMetabolite entity = entites.getEntity(entityAbbrComp.trim());
         Metabolite entity = entites.getReconciledMetabolite(entityAbbr.trim());
 
         if (entity != null) {
@@ -309,14 +337,13 @@ public class ReactionParser {
                                                           (Enum<? extends Compartment>) compartment);
         } else {
             messages.add(new WarningMessage("The metabolite "
-                                            + entityAbbr.trim()
-                                            + " was not found in the metabolite sheet for reaction " + rxn));
+                                                    + entityAbbr.trim()
+                                                    + " was not found in the metabolite sheet for reaction " + rxn));
             entity = entites.getNonReconciledMetabolite(entityAbbr);
             return new MetabolicParticipantImplementation(entity,
                                                           coef,
                                                           (Enum<? extends Compartment>) compartment);
         }
-
 
 
         //TODO:
