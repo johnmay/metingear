@@ -4,45 +4,48 @@
  * 2011.09.30
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mnb.view.entity.gene;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.Sizes;
+import org.apache.log4j.Logger;
+import org.biojava3.core.sequence.template.Sequence;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import java.awt.Dimension;
-
-import uk.ac.ebi.interfaces.*;
-import uk.ac.ebi.mnb.view.*;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.mnb.view.AnnotationRenderer;
+import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 import javax.swing.*;
-
-import org.apache.log4j.Logger;
-
-import com.jgoodies.forms.layout.*;
-import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
+import java.awt.*;
 
 
 /**
- *          MetabolitePanel – 2011.09.30 <br>
- *          Product panel renderer.
+ * MetabolitePanel – 2011.09.30 <br>
+ * Product panel renderer.
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class GenePanel
         extends AbstractEntityPanel {
@@ -74,33 +77,37 @@ public class GenePanel
         sequence.setFont(ViewUtilities.COURIER_NEW_PLAIN_11);
 
 
-//        sequence.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                System.out.println(sequence.viewToModel(e.getPoint()));
-//            }
-//        });
+        //        sequence.addMouseListener(new MouseAdapter() {
+        //            @Override
+        //            public void mouseClicked(MouseEvent e) {
+        //                System.out.println(sequence.viewToModel(e.getPoint()));
+        //            }
+        //        });
 
     }
 
 
     /**
-     *
      * Updates the displayed sequence
      * Sends update signal to AbstractEntityPanel to update Name, Abbreviation and Identifier
      *
      * @return
-     * 
      */
     @Override
     public boolean update() {
 
-        // set the sequence
-        Sequence seq = entity.getSequence();
+        if (super.update()) {
 
-        sequence.setText(seq != null ? seq.getSequenceAsString() : "no sequence set");
+            // set the sequence
+            Sequence seq = entity.getSequence();
 
-        return super.update();
+            sequence.setText(seq != null ? seq.getSequenceAsString() : "no sequence set");
+
+            return true;
+
+        }
+
+        return false;
 
     }
 
@@ -113,11 +120,9 @@ public class GenePanel
 
 
     /**
-     * 
      * Appends a JTextPane displaying the product sequence to the basic information panel
      *
      * @return
-     * 
      */
     @Override
     public JPanel getBasicPanel() {
@@ -136,9 +141,7 @@ public class GenePanel
 
 
     /**
-     *
      * Returns the synopsis information panel for the gene product
-     *
      */
     public JPanel getSynopsis() {
 
