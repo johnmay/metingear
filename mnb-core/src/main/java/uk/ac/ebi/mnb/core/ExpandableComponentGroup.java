@@ -22,6 +22,9 @@ package uk.ac.ebi.mnb.core;
 
 import java.awt.Dimension;
 import javax.swing.*;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 
@@ -49,28 +52,31 @@ public class ExpandableComponentGroup extends JComponent {
 
 
     public ExpandableComponentGroup(String name, JComponent component, JDialog root) {
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setLayout(new FormLayout("p:grow", "min, 2dlu, p:grow"));
         excomp = new ExpandComponent(component, root);
         button = new ExpandButton(excomp);
 
-        JComponent controller = Box.createHorizontalBox();
+        Box controller = Box.createHorizontalBox();
 
         button.setSelected(false);
 
         JLabel label = LabelFactory.newFormLabel(name);
         label.setVerticalAlignment(JLabel.CENTER);
 
+        CellConstraints cc = new CellConstraints();
+
         controller.add(button);
         controller.add(Box.createRigidArea(new Dimension(16, 16)));
         controller.add(label);
         controller.add(Box.createRigidArea(new Dimension(16, 16)));
 
+
         JSeparator separator = new JSeparator();
 
         controller.add(separator);
 
-        add(controller);
-        add(component);
+        add(controller, cc.xy(1,1));
+        add(component, cc.xy(1,3, CellConstraints.FILL, CellConstraints.FILL));
 
         component.setVisible(false);
 
