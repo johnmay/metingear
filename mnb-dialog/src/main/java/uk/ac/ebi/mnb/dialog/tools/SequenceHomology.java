@@ -22,14 +22,12 @@ package uk.ac.ebi.mnb.dialog.tools;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import javax.swing.*;
-import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.HomologyDatabaseManager;
@@ -38,11 +36,14 @@ import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
-import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
 
 /**
  * @name    SequenceComparisson - 2011.10.07 <br>
@@ -59,7 +60,7 @@ public class SequenceHomology
     private CellConstraints cc = new CellConstraints();
     // options
     private JCheckBox remote = CheckBoxFactory.newCheckBox("Remote (webservices)");
-    private JComboBox tool = ComboBoxFactory.newComboBox("BLAST", "FASTA");
+    private JComboBox tool = ComboBoxFactory.newComboBox("BLAST");
     private JComboBox database = ComboBoxFactory.newComboBox(HomologyDatabaseManager.getInstance().getNames());
     private JSpinner cpu = new JSpinner(new SpinnerNumberModel(1, 1, 4, 1));
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 2500, 50));
