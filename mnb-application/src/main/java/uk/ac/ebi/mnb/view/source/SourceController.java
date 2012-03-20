@@ -16,45 +16,30 @@
  */
 package uk.ac.ebi.mnb.view.source;
 
-import javax.swing.JPopupMenu;
-import uk.ac.ebi.core.ReconstructionManager;
-import com.explodingpixels.macwidgets.SourceListCategory;
-import com.explodingpixels.macwidgets.SourceListClickListener;
-import com.explodingpixels.macwidgets.SourceListItem;
-import com.explodingpixels.macwidgets.SourceListModel;
-import com.explodingpixels.macwidgets.SourceListSelectionListener;
+import com.explodingpixels.macwidgets.*;
 import com.explodingpixels.widgets.PopupMenuCustomizer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import uk.ac.ebi.chemet.render.source.EntitySourceItem;
-import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
-import uk.ac.ebi.chemet.render.source.TaskSourceItem;
-import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.chemet.render.source.*;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.core.TaskManager;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
 import uk.ac.ebi.mnb.menu.popup.SetActiveProject;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
-import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
+
+import javax.swing.*;
+import java.util.*;
 
 
 /**
  * SourceController.java – MetabolicDevelopmentKit – Jun 3, 2011
  * Class is a wrapper around SoureListModel from Mac Widgets creating the child components
+ *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
 public class SourceController
@@ -63,8 +48,8 @@ public class SourceController
                    PopupMenuCustomizer {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-            SourceController.class);
+            org.apache.log4j.Logger.getLogger(
+                    SourceController.class);
 
     public SourceListModel model;
 
@@ -136,14 +121,13 @@ public class SourceController
 
         for (int i = 0; i < children.size(); i++) {
             SourceListItem child = children.get(i);
-//            List<SourceListItem> grandchildren = child.getChildItems();
-//            if (!grandchildren.isEmpty()) {
-//                removeLeaves(child);
-//            } else {
+            //            List<SourceListItem> grandchildren = child.getChildItems();
+            //            if (!grandchildren.isEmpty()) {
+            //                removeLeaves(child);
+            //            } else {
             model.removeItemFromItem(child, item);
             // }
         }
-
 
 
     }
@@ -162,11 +146,14 @@ public class SourceController
         // still in the collector are removed
         Set<AnnotatedEntity> itemCollector = new HashSet();
         itemCollector.addAll(itemMap.keySet());
+        genes.setCounterValue(0);
         products.setCounterValue(0);
         metabolites.setCounterValue(0);
         reactions.setCounterValue(0);
 
         if (manager.hasProjects()) {
+
+            Reconstruction active = manager.getActive();
 
             // reconstructions
             for (int i = 0; i < manager.size(); i++) {
@@ -181,56 +168,24 @@ public class SourceController
                 itemMap.get(reconstruction).update();
             }
 
-            Reconstruction recon = manager.getActive();
 
             for (int i = 0; i < collections.getItemCount(); i++) {
                 model.removeItemFromCategoryAtIndex(collections, i);
             }
-            for (EntityCollection subset : recon.getSubsets()) {
-                if (subset instanceof EntitySubset) {
-                    model.addItemToCategory(new CollectionSourceItem((EntitySubset) subset), collections);
+
+            if (active != null) {
+                for (EntityCollection subset : active.getSubsets()) {
+                    if (subset instanceof EntitySubset) {
+                        model.addItemToCategory(new CollectionSourceItem((EntitySubset) subset), collections);
+                    }
                 }
             }
 
-//            // metabolites
-//            for (Metabolite m : recon.getMetabolites()) {
-//                if (itemMap.containsKey(m) == false) {
-//                    EntitySourceItem item = new MetaboliteSourceItem(m, metabolites);
-//                    itemMap.put(m, item);
-//                    model.addItemToItem(item, metabolites);
-//                }
-//                itemMap.get(m).update();
-//                itemCollector.remove(m);
-//
-//            }
-            metabolites.setCounterValue(recon.getMetabolome().size());
-//
-//            // reactions
-//
-//            for (Reaction r : recon.getReactions()) {
-//                if (itemMap.containsKey(r) == false) {
-//                    EntitySourceItem item = new ReactionSourceItem(r, reactions);
-//                    itemMap.put(r, item);
-//                    model.addItemToItem(item, reactions);
-//                }
-//                itemMap.get(r).update();
-//                itemCollector.remove(r);
-//            }
-            reactions.setCounterValue(recon.getReactions().size());
-//
-//
-//            // products
-//            for (GeneProduct p : recon.getProducts()) {
-//                if (itemMap.containsKey(p) == false) {
-//                    EntitySourceItem item = new ProductSourceItem(p, products);
-//                    itemMap.put(p, item);
-//                    model.addItemToItem(item, products);
-//                }
-//                itemMap.get(p).update();
-//                itemCollector.remove(p);
-//
-//            }
 
+            genes.setCounterValue(active.getGenes().size());
+            products.setCounterValue(active.getProducts().size());
+            metabolites.setCounterValue(active.getMetabolome().size());
+            reactions.setCounterValue(active.getReactions().size());
 
 
         }
@@ -266,6 +221,7 @@ public class SourceController
 
     /**
      * Mouse event listeners
+     *
      * @param item
      */
     @Override
@@ -284,11 +240,11 @@ public class SourceController
 
         ProjectView view = (ProjectView) MainView.getInstance().getViewController();
 
-//        if (item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem)) {
-//            EntityCollection selection = view.getSelection();// reuse view selection object
-//            selection.clear().add(((EntitySourceItem) item).getEntity());
-//            view.setSelection(selection);
-//        }
+        //        if (item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem)) {
+        //            EntityCollection selection = view.getSelection();// reuse view selection object
+        //            selection.clear().add(((EntitySourceItem) item).getEntity());
+        //            view.setSelection(selection);
+        //        }
         if (item instanceof CollectionSourceItem) {
 
             CollectionSourceItem collectionItem = (CollectionSourceItem) item;
@@ -312,6 +268,9 @@ public class SourceController
                 view.setProductView();
             } else if (item == genes) {
                 view.setGeneView();
+            } else if (item instanceof EntitySourceItem
+                    && ((EntitySourceItem) item).getEntity() instanceof RunnableTask) {
+                view.setTaskView();
             } else {
                 System.out.println("Unhandled item clicked: " + item.getText());
             }
