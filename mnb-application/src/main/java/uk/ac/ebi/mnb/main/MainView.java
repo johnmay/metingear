@@ -14,49 +14,50 @@
  */
 package uk.ac.ebi.mnb.main;
 
-import uk.ac.ebi.metingear.pref.PreferencePanel;
-import uk.ac.ebi.mnb.view.source.SourceController;
-import uk.ac.ebi.mnb.interfaces.DialogController;
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.util.List;
-
-import uk.ac.ebi.core.*;
+import com.explodingpixels.macwidgets.*;
+import com.explodingpixels.widgets.WindowUtils;
+import com.jgoodies.forms.factories.Borders;
+import org.apache.log4j.Logger;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.store.LockObtainFailedException;
+import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.caf.report.bar.MessageBar;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.mnb.core.ErrorMessage;
+import uk.ac.ebi.mnb.core.TaskManager;
+import uk.ac.ebi.mnb.core.WarningMessage;
+import uk.ac.ebi.mnb.interfaces.DialogController;
+import uk.ac.ebi.mnb.interfaces.EntityTable;
+import uk.ac.ebi.mnb.interfaces.MainController;
+import uk.ac.ebi.mnb.interfaces.ViewController;
+import uk.ac.ebi.mnb.menu.EditUndoButtons;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
-import uk.ac.ebi.mnb.view.*;
+import uk.ac.ebi.mnb.menu.ViewInfo;
+import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
-import uk.ac.ebi.search.*;
+import uk.ac.ebi.mnb.view.source.SourceController;
+import uk.ac.ebi.search.SearchManager;
+import uk.ac.ebi.search.SearchableIndex;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.text.BadLocationException;
-
-import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.store.LockObtainFailedException;
-
-import com.explodingpixels.macwidgets.*;
-import com.explodingpixels.widgets.WindowUtils;
-import com.jgoodies.forms.factories.Borders;
 import javax.swing.undo.UndoManager;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.report.bar.MessageBar;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.mnb.core.TaskManager;
-import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mnb.interfaces.EntityTable;
-import uk.ac.ebi.mnb.interfaces.ViewController;
-import uk.ac.ebi.mnb.menu.EditUndoButtons;
-import uk.ac.ebi.mnb.menu.ViewInfo;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -100,7 +101,6 @@ public class MainView
      * Inner class holding the instance
      */
     private static class MainViewHolder {
-
         private static final MainView INSTANCE = new MainView();
     }
 
@@ -108,6 +108,7 @@ public class MainView
     private MainView() {
 
         super("METINGEAR");
+
         getContentPane().setLayout(new CardLayout());
 
         // mac widgets
