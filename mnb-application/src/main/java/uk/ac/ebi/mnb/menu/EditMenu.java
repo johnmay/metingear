@@ -20,23 +20,19 @@
  */
 package uk.ac.ebi.mnb.menu;
 
-import java.awt.event.ActionEvent;
-import uk.ac.ebi.caf.action.GeneralAction;
-import uk.ac.ebi.mnb.main.MainView;
-
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
-import javax.swing.undo.UndoManager;
-
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.metingear.preference.PreferenceFrame;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
-import uk.ac.ebi.mnb.core.ControllerDialogItem;
 import uk.ac.ebi.mnb.dialog.edit.*;
+import uk.ac.ebi.mnb.main.MainView;
+
+import javax.swing.*;
+import javax.swing.undo.UndoManager;
+import java.awt.event.ActionEvent;
 
 
 /**
@@ -94,6 +90,17 @@ public class EditMenu extends ContextMenu {
         add(new JSeparator());
         add(create(AddAuthorAnnotation.class));
         add(create(AddAnnotation.class));
+        add(new JSeparator());
+        add(new AbstractAction("Preferences") {
+
+            PreferenceFrame preferences = new PreferenceFrame();
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                preferences.setVisible(true);
+                preferences.pack();
+            }
+        });
         // add citation
         //add(new ContextDialogItem(view, view.getViewController(), ContextDialog.class));
 
