@@ -116,6 +116,6 @@ public class PreparsedEntry {
             return listPattern.split(value);
         }
 
-        return value != null ? new String[]{value} : new String[0];
+        return value == null || value.isEmpty() ? new String[0] : new String[]{value};
     }
 }
