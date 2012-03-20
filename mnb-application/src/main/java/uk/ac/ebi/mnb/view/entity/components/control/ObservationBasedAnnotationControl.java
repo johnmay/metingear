@@ -55,7 +55,7 @@ public class ObservationBasedAnnotationControl implements AnnotationTableControl
 
     public Object getController(final Annotation annotation, final AnnotatedEntity entity) {
 
-        final ObservationBasedAnnotation oba = (ObservationBasedAnnotation) annotation;
+        final ObservationBasedAnnotation<Observation> oba = (ObservationBasedAnnotation) annotation;
 
         if (!oba.getObservations().isEmpty()) {
             return new GeneralAction("ShowEvidence") {
