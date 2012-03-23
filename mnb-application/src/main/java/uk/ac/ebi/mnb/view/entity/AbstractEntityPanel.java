@@ -422,6 +422,9 @@ public abstract class AbstractEntityPanel
      */
     public void store() {
 
+        //store any pending annotation changes
+        annotationTable.store();
+
         String accessionText = accession.getText().trim();
         if (!accessionText.equals(entity.getAccession())) {
             UndoableEdit nameEdit = new AccessionEdit(entity, accessionText);

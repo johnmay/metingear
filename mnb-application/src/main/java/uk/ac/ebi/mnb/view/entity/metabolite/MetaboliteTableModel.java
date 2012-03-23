@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import uk.ac.ebi.annotation.chemical.ACPAssociated;
+import uk.ac.ebi.annotation.model.Lumped;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
@@ -63,7 +66,9 @@ public class MetaboliteTableModel
         new ColumnDescriptor("Validity", null,
                              DataType.FIXED,
                              StructuralValidity.class),
-        new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class)
+        new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class),
+        new ColumnDescriptor( Lumped.getInstance() ),
+        new ColumnDescriptor( ACPAssociated.getInstance() )
     };
 
 

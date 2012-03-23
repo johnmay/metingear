@@ -62,6 +62,8 @@ public class AnnotationTableModel
 
     private JList observationList;
 
+    private boolean edit;
+
     private AnnotationControlManager annotationControlManager;
 
     private static final Logger LOGGER = Logger.getLogger(AnnotationTableModel.class);
@@ -137,21 +139,6 @@ public class AnnotationTableModel
 
 
     public Object getAnnotation(final Annotation annotation) {
-        if (annotation instanceof CrossReference) {
-            return new AbstractAction(annotation.toString()) {
-
-                public void actionPerformed(ActionEvent e) {
-                    CrossReference xref = (CrossReference) annotation;
-                    try {
-                        Desktop.getDesktop().browse(xref.getIdentifier().getURL().toURI());
-                    } catch (IOException ex) {
-                        LOGGER.error("IO Exception: " + ex.getMessage());
-                    } catch (URISyntaxException ex) {
-                        LOGGER.error("Syntax error in cross-reference: " + ex.getMessage());
-                    }
-                }
-            };
-        }
         return annotation;
     }
 
@@ -175,17 +162,45 @@ public class AnnotationTableModel
     @Override
     public boolean isCellEditable(int rowIndex,
                                   int columnIndex) {
-        return false;
+        return edit && columnIndex == 1;
     }
 
 
     @Override
-    public void setValueAt(Object aValue,
+    public void setValueAt(Object newValue,
                            int rowIndex,
                            int columnIndex) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        Object oldValue = getValueAt(rowIndex, columnIndex);
+
+        if(oldValue instanceof Annotation
+                && newValue instanceof Annotation
+                && entity != null){
+
+            LOGGER.debug("Removing annotation " + oldValue);
+            LOGGER.debug("Adding annotation   " + newValue);
+
+            Annotation oldAnnotation = (Annotation) oldValue;
+            Annotation newAnnotation = (Annotation) newValue;
+
+            entity.removeAnnotation(oldAnnotation);
+            entity.addAnnotation(newAnnotation);
+
+            annotations.set(rowIndex, newAnnotation);
+            fireTableRowsUpdated(rowIndex, rowIndex+1);
+
+
+        }
+
     }
 
+    public boolean isEdit() {
+        return edit;
+    }
+
+    public void setEditable(boolean edit) {
+        this.edit = edit;
+    }
 
     public void clear() {
         annotations.clear();

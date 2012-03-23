@@ -20,10 +20,12 @@
  */
 package uk.ac.ebi.mnb.view.entity.components;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import javax.swing.Action;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -31,8 +33,9 @@ import javax.swing.table.TableColumnModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.chemet.editor.annotation.AnnotationEditorFactory;
 import uk.ac.ebi.chemet.render.ClassBasedTableCellDDR;
-import uk.ac.ebi.chemet.render.PooledClassBasedTableCellDRR;
 import uk.ac.ebi.chemet.render.table.renderers.*;
 import uk.ac.ebi.core.tools.StructuralValidity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -77,6 +80,7 @@ public class AnnotationTable
         model.getColumn(1).setCellRenderer(ANNOTATION_RENDERER);
 
         model.getColumn(1).setPreferredWidth(128);
+        model.getColumn(1).setCellEditor(AnnotationEditorFactory.getInstance().getTableCellEditor());
         model.getColumn(2).setCellRenderer(deleteButtonRenderer);
         model.getColumn(2).setPreferredWidth(32);
 
@@ -85,6 +89,8 @@ public class AnnotationTable
         CONTROL_RENDERER.setRenderer(StructuralValidity.class, new StructuralValidityRenderer());
         model.getColumn(3).setCellRenderer(CONTROL_RENDERER);
         model.getColumn(3).setPreferredWidth(64);
+
+
 
         addMouseListener(new ActionClickForwarder(this));
     }
@@ -97,7 +103,11 @@ public class AnnotationTable
 
     public void setEditable(boolean editable) {
         this.editable = editable;
+        getModel().setEditable(editable);
         deleteButtonRenderer.setVisible(editable);
+        if(!editable){
+            AnnotationEditorFactory.getInstance().getTableCellEditor().cancelCellEditing();
+        }
     }
 
 
@@ -129,14 +139,31 @@ public class AnnotationTable
         @Override
         public void mouseClicked(MouseEvent me) {
             int column = table.getColumnModel().getColumnIndexAtX(me.getX());
-            int row = table.rowAtPoint(me.getPoint());
+            int row    = table.rowAtPoint(me.getPoint());
 
             if (row < table.getRowCount() && row >= 0 && column < table.getColumnCount() && column >= 0) {
                 Object value = table.getValueAt(row, column);
                 if (value instanceof Action) {
                     ((Action) value).actionPerformed(new ActionEvent(me.getSource(), me.getID(), me.paramString()));
+                } else if(!editable && value instanceof CrossReference){
+                    openCrossReferenceLink((CrossReference) value);
                 }
             }
         }
     }
+
+    private void openCrossReferenceLink(CrossReference xref) {
+        try {
+            Desktop.getDesktop().browse(xref.getIdentifier().getURL().toURI());
+        } catch (IOException ex) {
+            LOGGER.error("IO Exception: " + ex.getMessage());
+        } catch (URISyntaxException ex) {
+            LOGGER.error("Syntax error in cross-reference: " + ex.getMessage());
+        }
+    }
+
+    public void store(){
+        AnnotationEditorFactory.getInstance().getTableCellEditor().stopCellEditing();
+    }
+
 }

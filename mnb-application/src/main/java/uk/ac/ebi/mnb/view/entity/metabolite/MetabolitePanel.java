@@ -82,7 +82,6 @@ public class MetabolitePanel
     private JComboBox typeEditor = ComboBoxFactory.newComboBox(MetaboliteClassImplementation.values());
     // molecular formula
 
-    private JTextField formulaEditor = FieldFactory.newTransparentField(15, false);
 
     private JLabel formularViewer = LabelFactory.newLabel("");
     // cell constraints
@@ -121,10 +120,8 @@ public class MetabolitePanel
             if (formulas.iterator().hasNext()) {
                 MolecularFormula mf = formulas.iterator().next();
                 formularViewer.setText(mf.getFormula() != null ? TextUtility.html(mf.toHTML()) : mf.toString());
-                formulaEditor.setText(formulas.iterator().next().toString());
             } else {
                 formularViewer.setText("");
-                formulaEditor.setText("");
             }
 
             boolean generic = entity.isGeneric();
@@ -154,10 +151,7 @@ public class MetabolitePanel
         super.setEditable(editable);
 
         // set editor vissible when editable and vise versa
-        formulaEditor.setVisible(editable);
         markushEditor.setVisible(editable);
-        formulaEditor.setVisible(editable);
-        formulaEditor.setEditable(editable);
         typeEditor.setVisible(editable);
 
         // set viewers hidden when editable and vise versa
@@ -189,9 +183,7 @@ public class MetabolitePanel
         specific.add(structure, cc.xyw(1, 1, 7, CellConstraints.CENTER, CellConstraints.CENTER));
         specific.add(formularViewer, cc.xyw(1, 3, 7, CellConstraints.CENTER,
                                             CellConstraints.CENTER));
-        specific.add(formulaEditor, cc.xyw(1, 3, 7, CellConstraints.CENTER,
-                                           CellConstraints.CENTER));
-        formulaEditor.setHorizontalAlignment(SwingConstants.CENTER);
+
 
 
         specific.add(markush, cc.xy(1, 5));
@@ -218,16 +210,6 @@ public class MetabolitePanel
     public void store() {
 
         super.store();
-
-        // formula
-        if (formulaEditor.getText().isEmpty() == false) {
-            if (entity.getAnnotations(MolecularFormula.class).iterator().hasNext()) {
-                MolecularFormula formula = entity.getAnnotations(MolecularFormula.class).iterator().next();
-                formula.setFormula(formulaEditor.getText());
-            } else {
-                entity.addAnnotation(new MolecularFormula(formulaEditor.getText()));
-            }
-        }
 
         entity.setGeneric(((String) markushEditor.getSelectedItem()).equals("Yes") ? true : false);
         entity.setType((MetaboliteClassImplementation) typeEditor.getSelectedItem());

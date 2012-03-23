@@ -11,8 +11,10 @@ import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.tools.*;
+import uk.ac.ebi.mnb.dialog.tools.assign.AssignReactions;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -68,6 +70,9 @@ public class ToolsMenu extends ContextMenu {
                 return selection.hasSelection(MetabolicReactionImplementation.class);
             }
         });
+
+        add(new AssignReactions(view));
+
         add(new JSeparator());
 
         /**

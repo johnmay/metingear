@@ -26,8 +26,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.EventObject;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
@@ -108,7 +107,7 @@ public class CrossReferenceCellEditor
 
     @Override
     public void cancelCellEditing() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        fireEditingStopped();
     }
 
     @Override
