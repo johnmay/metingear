@@ -74,7 +74,7 @@ public abstract class ControllerDialog extends DropdownDialog {
     }
 
 
-    public void setSelection(Collection<AnnotatedEntity> entities) {
+    public void setSelection(Collection<? extends AnnotatedEntity> entities) {
         EntityCollection selection = new EntityMap(DefaultEntityFactory.getInstance());
         selection.addAll(entities);
         this.controller.setSelection(selection);
