@@ -22,14 +22,22 @@
  */
 package uk.ac.ebi.optimise.gap;
 
-import ilog.concert.*;
+import ilog.concert.IloAddable;
+import ilog.concert.IloException;
+import ilog.concert.IloIntVar;
+import ilog.concert.IloLinearIntExpr;
+import ilog.concert.IloNumExpr;
+import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.*;
-
-import java.io.*;
-import java.util.*;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.optimise.SimulationUtil;
+
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -63,11 +71,17 @@ public class GapFind {
     private IloAddable[] negMassBalance;
 
 
+    public GapFind() throws Exception, UnsatisfiedLinkError{
+        cplex = new IloCplex();
+        cplex.setOut(null);
+    }
+
     /**
      *
      * @param s Matrix of stoichiometries, a column per reaction
+     *
      */
-    public GapFind(StoichiometricMatrix s) throws IloException, UnsatisfiedLinkError {
+    public GapFind(StoichiometricMatrix s) throws Exception, UnsatisfiedLinkError {
         // todo handle our custom stoichiometric
         this.s = s;
 
@@ -342,7 +356,7 @@ public class GapFind {
 
 
     public static void main(String[] args)
-            throws IloException, FileNotFoundException, IOException {
+            throws IloException, FileNotFoundException, Exception {
 
 //        SimulationUtil.setCPLEXLibraryPath("/Users/johnmay/ILOG/CPLEX_Studio_AcademicResearch122/cplex/bin/x86-64_darwin9_gcc4.0");
         SimulationUtil.setup();
