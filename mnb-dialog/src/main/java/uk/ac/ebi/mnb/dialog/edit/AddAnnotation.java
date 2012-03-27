@@ -64,6 +64,7 @@ public class AddAnnotation
             }
         };
         setDefaultLayout();
+        list.setBackground(getBackground());
     }
 
 
@@ -106,7 +107,7 @@ public class AddAnnotation
         for (int i = 0; i < list.getSize(); i++) {
             AnnotationChoiceEditor chooser = list.getComponent(i);
 
-            Annotation annotation = chooser.getEditor().getAnnotation();
+            Annotation annotation = chooser.getEditor().newAnnotation();
             
             System.out.println(annotation);
 
