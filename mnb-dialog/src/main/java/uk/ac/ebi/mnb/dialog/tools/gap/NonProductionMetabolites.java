@@ -77,7 +77,7 @@ public class NonProductionMetabolites
 
             controller.getViewController().setSelection(manager);
 
-        } catch (IloException ex) {
+        } catch (Exception ex) {
             controller.getMessageManager().addReport(new ErrorMessage(ex.getLocalizedMessage()));
 
         } catch (UnsatisfiedLinkError ex) {

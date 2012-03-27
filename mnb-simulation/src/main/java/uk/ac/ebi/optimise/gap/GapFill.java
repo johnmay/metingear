@@ -212,7 +212,7 @@ public class GapFill<M, R> {
         //model.addReaction("G => C", false);
 
         model.display();
-
+                     try{
         System.out.println("Unconsumed metabolites:");
         for (int i : new GapFind(model).getUnconsumedMetabolites()) {
             System.out.println(model.getMolecule(i));
@@ -223,7 +223,9 @@ public class GapFill<M, R> {
         }
         for (int i : new GapFind(model).getRootUnproducedMetabolites()) {
             System.out.println(model.getMolecule(i));
-        }
+        }                }catch (Exception e){
+
+                     }
 
 
         BasicStoichiometricMatrix reference = BasicStoichiometricMatrix.create();

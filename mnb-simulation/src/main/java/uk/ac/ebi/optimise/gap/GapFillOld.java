@@ -215,10 +215,15 @@ public class GapFillOld {
 
         model.display(System.out, ' ', "0", 4, 4);
 
+        try {
         System.out.println("Non-production Metabolites");
         for (int i : new GapFind(model).getUnproducedMetabolites()) {
             System.out.println(model.getMolecule(i));
         }
+        }catch (Exception e) {
+
+        }
+
 
 
         BasicStoichiometricMatrix ref = BasicStoichiometricMatrix.create();

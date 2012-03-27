@@ -61,7 +61,6 @@ public class TerminalNonConsumptionMetabolites
             StoichiometricMatrix<CompartmentalisedMetabolite, ?> s = active.getMatrix();
 
             SimulationUtil.setup(); // make sure the paths are set
-
             GapFind gf = new GapFind(active.getMatrix());
 
             EntityCollection manager = controller.getViewController().getSelection();
@@ -76,7 +75,9 @@ public class TerminalNonConsumptionMetabolites
 
             controller.getViewController().setSelection(manager);
 
-        } catch (IloException ex) {
+
+
+        } catch (Exception ex) {
             controller.getMessageManager().addReport(new ErrorMessage(ex.getLocalizedMessage()));
 
         } catch (UnsatisfiedLinkError ex) {
