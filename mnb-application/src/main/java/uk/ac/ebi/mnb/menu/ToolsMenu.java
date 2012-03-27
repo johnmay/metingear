@@ -71,7 +71,7 @@ public class ToolsMenu extends ContextMenu {
             }
         });
 
-        add(new AssignReactions(view));
+        //add(new AssignReactions(view));
 
         add(new JSeparator());
 
