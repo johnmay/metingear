@@ -164,6 +164,10 @@ public class DownloadStructuresDialog
                         } else {
                             problemIdentifiers.add(id);
                         }
+                    } catch (ExceptionInInitializerError ex) {
+                        problemIdentifiers.add(id);
+                    } catch (NoClassDefFoundError ex) {
+                        problemIdentifiers.add(id);
                     } catch (Exception ex) {
                         problemIdentifiers.add(id);
                     }
@@ -174,7 +178,7 @@ public class DownloadStructuresDialog
                         if (molecule != null) {
                             component.addAnnotation(new AtomContainerAnnotation(molecule));
                         }
-                    } catch (Exception ex) {
+                    }  catch (Exception ex) {
                         problemIdentifiers.add(id);
                     }
                 }
