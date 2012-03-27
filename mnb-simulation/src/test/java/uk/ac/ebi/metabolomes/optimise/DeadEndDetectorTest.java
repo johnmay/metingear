@@ -4,19 +4,13 @@
  */
 package uk.ac.ebi.metabolomes.optimise;
 
-import ilog.concert.IloException;
-import java.util.logging.Level;
-import uk.ac.ebi.optimise.gap.GapFind;
 import junit.framework.TestCase;
-
 import org.apache.log4j.Logger;
-
-import org.junit.Test;
-
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
+import uk.ac.ebi.optimise.gap.GapFind;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.util.logging.Level;
 
 /**
  *
@@ -179,9 +173,9 @@ public class DeadEndDetectorTest
             assertEquals( terminalNCIndicies.length, 1 );
             assertEquals( "F",
                           s.getMolecule( terminalNCIndicies[0] ) );
-        } catch (IloException ex) {
+        }  catch (UnsatisfiedLinkError ex) {
             java.util.logging.Logger.getLogger(DeadEndDetectorTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsatisfiedLinkError ex) {
+        } catch (Exception ex) {
             java.util.logging.Logger.getLogger(DeadEndDetectorTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -208,9 +202,9 @@ public class DeadEndDetectorTest
 
             // there should be no NP dead end metabolites
             assertEquals( rootNPIndicies.length, 0 );
-        } catch (IloException ex) {
-            java.util.logging.Logger.getLogger(DeadEndDetectorTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsatisfiedLinkError ex) {
+            java.util.logging.Logger.getLogger(DeadEndDetectorTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             java.util.logging.Logger.getLogger(DeadEndDetectorTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
