@@ -19,10 +19,7 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
-import com.googlecode.charts4j.GCharts;
-import com.googlecode.charts4j.VennDiagram;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
@@ -30,7 +27,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Set;
-import javax.media.jai.JAI;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -41,27 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.event.UndoableEditListener;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
-import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.core.tools.ReconstructionComparison;
-import uk.ac.ebi.core.tools.hash.seeds.AtomSeed;
-import uk.ac.ebi.core.tools.hash.seeds.AtomicNumberSeed;
-import uk.ac.ebi.core.tools.hash.seeds.BondOrderSumSeed;
-import uk.ac.ebi.core.tools.hash.seeds.ChargeSeed;
-import uk.ac.ebi.core.tools.hash.seeds.ConnectedAtomSeed;
-import uk.ac.ebi.core.tools.hash.seeds.SeedFactory;
-import uk.ac.ebi.core.tools.hash.seeds.StereoSeed;
-import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.render.molecule.MetaboliteComparison;
+
 
 
 /**
@@ -78,9 +54,7 @@ public class CompareReconstruction
     private static final Logger LOGGER = Logger.getLogger(CompareReconstruction.class);
 
     private JComboBox recon1 = ComboBoxFactory.newComboBox();
-
     private JComboBox recon2 = ComboBoxFactory.newComboBox();
-
     private JComboBox recon3 = ComboBoxFactory.newComboBox();
 
     private VennDiagram venn;
