@@ -20,23 +20,29 @@
 package uk.ac.ebi.mnb.dialog.tools;
 
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.image.BufferedImage;
+import com.googlecode.charts4j.GCharts;
+import com.googlecode.charts4j.VennDiagram;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.tools.ReconstructionComparison;
+import uk.ac.ebi.core.tools.hash.seeds.*;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Set;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
 
 
 
@@ -234,50 +240,52 @@ public class CompareReconstruction
             return false;
         }
 
-        try {
-            final URL url = new URL(venn.toURLString());
-            final MetaboliteComparison metComp = new MetaboliteComparison(c);
+        throw new UnsupportedOperationException("Need to resolve JAI dep for google charts.");
 
-            BufferedImage img = ViewUtilities.convertRenderedImage(JAI.create("url", url));
-            JFrame frame = new JFrame();
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setLayout(new FormLayout("p", "p, 4dlu, p, 4dlu,  p, 4dlu, p"));
-            CellConstraints cc = new CellConstraints();
-
-            final JScrollPane pane = new JScrollPane();
-            final JComboBox box = new JComboBox(MetaboliteComparison.TableData.values());
-            pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
-
-            box.addItemListener(new ItemListener() {
-
-                public void itemStateChanged(ItemEvent e) {
-                    JTable table = (JTable) pane.getViewport().getView();
-                    int[] selections = table.getSelectedRows();
-                    JTable newTable = metComp.getComparisconTable(
-                            (MetaboliteComparison.TableData) box.getSelectedItem());
-                    for (int i : selections) {
-                        newTable.addRowSelectionInterval(i, i);
-                    }
-                    pane.setViewportView(newTable);
-                    pane.repaint();
-                    pane.revalidate();
-                }
-            });
-
-
-            pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
-
-            frame.add(new JLabel(new ImageIcon(img)), cc.xy(1, 1));
-            frame.add(label, cc.xy(1, 3));
-            frame.add(box, cc.xy(1, 5));
-            frame.add(pane, cc.xy(1, 7));
-            frame.pack();
-            frame.setVisible(true);
-        } catch (IOException ex) {
-            LOGGER.info("IO Exception when reading stream");
-        }
-
-
-        return true;
+//        try {
+//            final URL url = new URL(venn.toURLString());
+//            final MetaboliteComparison metComp = new MetaboliteComparison(c);
+//
+//            BufferedImage img = ViewUtilities.convertRenderedImage(JAI.create("url", url));
+//            JFrame frame = new JFrame();
+//            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//            frame.setLayout(new FormLayout("p", "p, 4dlu, p, 4dlu,  p, 4dlu, p"));
+//            CellConstraints cc = new CellConstraints();
+//
+//            final JScrollPane pane = new JScrollPane();
+//            final JComboBox box = new JComboBox(MetaboliteComparison.TableData.values());
+//            pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
+//
+//            box.addItemListener(new ItemListener() {
+//
+//                public void itemStateChanged(ItemEvent e) {
+//                    JTable table = (JTable) pane.getViewport().getView();
+//                    int[] selections = table.getSelectedRows();
+//                    JTable newTable = metComp.getComparisconTable(
+//                            (MetaboliteComparison.TableData) box.getSelectedItem());
+//                    for (int i : selections) {
+//                        newTable.addRowSelectionInterval(i, i);
+//                    }
+//                    pane.setViewportView(newTable);
+//                    pane.repaint();
+//                    pane.revalidate();
+//                }
+//            });
+//
+//
+//            pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
+//
+//            frame.add(new JLabel(new ImageIcon(img)), cc.xy(1, 1));
+//            frame.add(label, cc.xy(1, 3));
+//            frame.add(box, cc.xy(1, 5));
+//            frame.add(pane, cc.xy(1, 7));
+//            frame.pack();
+//            frame.setVisible(true);
+//        } catch (IOException ex) {
+//            LOGGER.info("IO Exception when reading stream");
+//        }
+//
+//
+//        return true;
     }
 }
