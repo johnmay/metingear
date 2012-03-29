@@ -5,8 +5,6 @@
 package mnb.io.tabular.parser;
 
 import junit.framework.TestCase;
-import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
-import static junit.framework.Assert.*;
 import uk.ac.ebi.interfaces.reaction.Direction;
 
 
@@ -85,30 +83,30 @@ public class ReactionParserTest extends TestCase {
     public void testGetReactionArrow() {
         ReactionParser parser = new ReactionParser(null);
         Direction actual = parser.getReactionArrow("A + B <--> C + D");
-        assertEquals(DirectionImplementation.BIDIRECTIONAL, actual);
+        assertEquals(Direction.BIDIRECTIONAL, actual);
         actual = parser.getReactionArrow("A + B <==> C + D");
-        assertEquals(DirectionImplementation.BIDIRECTIONAL, actual);
+        assertEquals(Direction.BIDIRECTIONAL, actual);
         actual = parser.getReactionArrow("A + B <-> C + D");
-        assertEquals(DirectionImplementation.BIDIRECTIONAL, actual);
+        assertEquals(Direction.BIDIRECTIONAL, actual);
         actual = parser.getReactionArrow("A + B --> C + D");
-        assertEquals(DirectionImplementation.FORWARD, actual);
+        assertEquals(Direction.FORWARD, actual);
         actual = parser.getReactionArrow("A + B -> C + D");
-        assertEquals(DirectionImplementation.FORWARD, actual);
+        assertEquals(Direction.FORWARD, actual);
         actual = parser.getReactionArrow("A + B > C + D");
-        assertEquals(DirectionImplementation.FORWARD, actual);
+        assertEquals(Direction.FORWARD, actual);
         actual = parser.getReactionArrow("A + B <-- C + D");
-        assertEquals(DirectionImplementation.BACKWARD, actual);
+        assertEquals(Direction.BACKWARD, actual);
         actual = parser.getReactionArrow("A + B <- C + D");
-        assertEquals(DirectionImplementation.BACKWARD, actual);
+        assertEquals(Direction.BACKWARD, actual);
         actual = parser.getReactionArrow("A + B < C + D");
-        assertEquals(DirectionImplementation.BACKWARD, actual);
+        assertEquals(Direction.BACKWARD, actual);
 
         // fail case
         actual = parser.getReactionArrow("A + B - C + D");
-        assertEquals(DirectionImplementation.BIDIRECTIONAL, actual);
+        assertEquals(Direction.UNKNOWN, actual);
         // fail case
         actual = parser.getReactionArrow("A + B = C + D");
-        assertEquals(DirectionImplementation.BIDIRECTIONAL, actual);
+        assertEquals(Direction.UNKNOWN, actual);
 
 
 

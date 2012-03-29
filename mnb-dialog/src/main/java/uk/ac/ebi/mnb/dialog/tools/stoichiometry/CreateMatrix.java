@@ -19,25 +19,23 @@
  */
 package uk.ac.ebi.mnb.dialog.tools.stoichiometry;
 
-import java.awt.Dimension;
-import java.util.Collection;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.chemet.render.matrix.MatrixPane;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.DefaultStoichiometricMatrix;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
+import java.awt.*;
+import java.util.Collection;
 
 
 /**
@@ -95,9 +93,9 @@ public class CreateMatrix
         for (MetabolicReaction rxn : rxns) {
 
             // transpose
-            if (rxn.getDirection() == DirectionImplementation.BACKWARD ) {
+            if (rxn.getDirection() == Direction.BACKWARD ) {
                 rxn.transpose();
-                rxn.setDirection(DirectionImplementation.FORWARD);
+                rxn.setDirection(Direction.FORWARD);
             }
 
             matrix.addReaction(rxn);
