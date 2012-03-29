@@ -20,20 +20,8 @@
  */
 package mnb.io.tabular.parser;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import mnb.io.tabular.EntityResolver;
 import mnb.io.tabular.preparse.PreparsedReaction;
-import mnb.io.tabular.type.ReactionColumn;
-
-import static mnb.io.tabular.type.ReactionColumn.*;
-
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.annotation.Subsystem;
@@ -42,21 +30,27 @@ import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.annotation.model.FluxLowerBound;
 import uk.ac.ebi.annotation.reaction.GibbsEnergy;
 import uk.ac.ebi.annotation.reaction.GibbsEnergyError;
+import uk.ac.ebi.caf.report.Report;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.core.reaction.compartment.Organelle;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.interfaces.reaction.Direction;
+import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.classification.TransportClassificationNumber;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static mnb.io.tabular.type.ReactionColumn.*;
 
 
 /**
@@ -88,10 +82,10 @@ public class ReactionParser {
     public static final Pattern COMPARTMENT_PATTERN =
             Pattern.compile("[\\(\\[](\\w{1,2})[\\)\\]]");
 
-    private static final DirectionImplementation[] NORMALISED_ARROWS =
-            new DirectionImplementation[]{DirectionImplementation.BIDIRECTIONAL,
-                    DirectionImplementation.FORWARD,
-                    DirectionImplementation.BACKWARD};
+    private static final Direction[] NORMALISED_ARROWS =
+            new Direction[]{Direction.BIDIRECTIONAL,
+                    Direction.FORWARD,
+                    Direction.BACKWARD};
 
     private EntityResolver entites;
     private EntityFactory factory = DefaultEntityFactory.getInstance();
@@ -369,7 +363,7 @@ public class ReactionParser {
     }
 
 
-    public static DirectionImplementation getReactionArrow(String equation) {
+    public static Direction getReactionArrow(String equation) {
 
         Matcher arrowMatcher = EQUATION_ARROW.matcher(equation);
 
@@ -382,7 +376,7 @@ public class ReactionParser {
             }
         }
 
-        return DirectionImplementation.BIDIRECTIONAL;
+        return Direction.UNKNOWN;
 
     }
 }
