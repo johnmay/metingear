@@ -279,16 +279,16 @@ public class GapFind {
      * @return indices of root non-production metabolites
      */
     public Integer[] getRootUnproducedMetabolites() {
-        List<Integer> unproducedMetabolites = new ArrayList<Integer>();
+        List<Integer> unproduced = new ArrayList<Integer>();
 
         for (int i = 0; i < s.getMoleculeCount(); i++) {
 
             if (!isProduced(i)) {
-                unproducedMetabolites.add(i);
+                unproduced.add(i);
             }
         }
 
-        return unproducedMetabolites.toArray(new Integer[0]);
+        return unproduced.toArray(new Integer[0]);
     }
 
 

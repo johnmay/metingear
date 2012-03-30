@@ -45,22 +45,25 @@ public class SimulationUtil {
     /**
      * Adds the CPLEX library path specified in the user preferences {@see setCPLEXLibraryPath(String)}
      */
-    public static void setup() {
+    public static boolean setup() {
 
         FilePreference pref = CorePreferences.getInstance().getPreference("CPLEX_LIBRARY_PATH");
         String path = pref.get().getPath();
 
         List<String> paths = Arrays.asList(System.getProperty("java.library.path").split(File.pathSeparator));
 
-        if (path != null && !paths.contains(path)) {
+        if (path != null && !paths.contains(path) && !path.isEmpty() && new File(path).exists()) {
 
             try {
                 addLibraryPath(path);
+                return true;
             } catch (IOException ex) {
                 LOGGER.error("Unable to add CPLEX library path " + path + " to 'java.libary.path'");
             }
 
         }
+
+        return false;
 
     }
 

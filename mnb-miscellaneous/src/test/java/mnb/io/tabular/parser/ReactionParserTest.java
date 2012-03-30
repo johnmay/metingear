@@ -103,10 +103,10 @@ public class ReactionParserTest extends TestCase {
 
         // fail case
         actual = parser.getReactionArrow("A + B - C + D");
-        assertEquals(Direction.UNKNOWN, actual);
+        assertEquals("Unknown direction not detected for '='", Direction.UNKNOWN, actual);
         // fail case
         actual = parser.getReactionArrow("A + B = C + D");
-        assertEquals(Direction.UNKNOWN, actual);
+        assertEquals("Unknown direction not detected for '='", Direction.UNKNOWN, actual);
 
 
 

@@ -84,8 +84,8 @@ public class ReactionParser {
 
     private static final Direction[] NORMALISED_ARROWS =
             new Direction[]{Direction.BIDIRECTIONAL,
-                    Direction.FORWARD,
-                    Direction.BACKWARD};
+                    Direction.BACKWARD,
+                    Direction.FORWARD};
 
     private EntityResolver entites;
     private EntityFactory factory = DefaultEntityFactory.getInstance();
@@ -359,7 +359,7 @@ public class ReactionParser {
 
 
     public String[] getReactionSides(String equation) {
-        return EQUATION_ARROW.split(equation.trim());
+        return equation.isEmpty() ? new String[0] : EQUATION_ARROW.split(equation.trim());
     }
 
 
