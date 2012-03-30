@@ -90,12 +90,12 @@ public class EditMenu extends ContextMenu {
         add(new JSeparator());
         add(create(AddAuthorAnnotation.class));
         add(create(AddAnnotation.class));
-        add(new AssignFlags("Add", view), new ContextResponder() {
-
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection();
-            }
-        });
+//        add(new AssignFlags("Add", view), new ContextResponder() {
+//
+//            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+//                return selection.hasSelection();
+//            }
+//        });
         add(new JSeparator());
         add(new AbstractAction("Preferences") {
 
