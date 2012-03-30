@@ -119,7 +119,6 @@
     </dependencies>
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -159,28 +158,60 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>osxappbundle-maven-plugin</artifactId>
-                <version>1.0-alpha-2</version>
-                <configuration>
-                    <bundleName>Metingear ${project.version}</bundleName>
-                    <mainClass>uk.ac.ebi.metingear.PreMain</mainClass>
-                    <iconFile>/Users/johnmay/EBI/illustration/mnb/icons/mnb.icns</iconFile>
-                    <buildDirectory>/Users/johnmay/Applications/Metingear</buildDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
 
     </build>
+
+    <profiles>
+        <profile>
+            <id>OS X</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>osxappbundle-maven-plugin</artifactId>
+                        <version>1.0-alpha-2</version>
+                        <configuration>
+                            <bundleName>Metingear ${project.version}</bundleName>
+                            <mainClass>uk.ac.ebi.metingear.PreMain</mainClass>
+                            <iconFile>/Users/johnmay/EBI/illustration/mnb/icons/mnb.icns</iconFile>
+                            <buildDirectory>/Users/johnmay/Applications/Metingear</buildDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>bundle</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>1.6</source>
+                            <target>1.6</target>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>default-compile</id>
+                                <phase>compile</phase>
+                                <configuration>
+                                    <includes>
+                                        <include>**/MacApplicationLauncher.java</include>
+                                    </includes>
+                                </configuration>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 
 </project>
