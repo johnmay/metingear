@@ -20,22 +20,17 @@
  */
 package mnb.io.tabular;
 
-import mnb.io.tabular.preparse.PreparsedMetabolite;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.regex.Matcher;
 import mnb.io.resolve.EntryReconciler;
 import mnb.io.tabular.parser.ReactionParser;
+import mnb.io.tabular.preparse.PreparsedMetabolite;
 import mnb.io.tabular.preparse.PreparsedSheet;
 import org.apache.log4j.Logger;
-import org.dom4j.tree.DefaultEntity;
-import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+
+import java.util.*;
+import java.util.regex.Matcher;
 
 
 /**
@@ -114,7 +109,7 @@ public class ExcelEntityResolver implements EntityResolver {
         }
 
         Metabolite m = factory.newInstance(Metabolite.class,
-                                           BasicChemicalIdentifier.nextIdentifier(),
+                                           new BasicChemicalIdentifier(),
                                            name,
                                            name);
 

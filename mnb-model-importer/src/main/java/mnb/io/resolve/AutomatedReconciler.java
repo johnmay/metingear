@@ -21,27 +21,28 @@ package mnb.io.resolve;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.util.Collection;
 import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import mnb.io.tabular.type.EntityColumn;
-import static mnb.io.tabular.type.EntityColumn.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Synonym;
-import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
+import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+
+import java.util.Collection;
+
+import static mnb.io.tabular.type.EntityColumn.FORMULA;
 
 
 /**
@@ -117,7 +118,7 @@ public class AutomatedReconciler
         }
 
         Metabolite metabolite = DefaultEntityFactory.getInstance().ofClass(Metabolite.class,
-                                                                           BasicChemicalIdentifier.nextIdentifier(),
+                                                                           new BasicChemicalIdentifier(),
                                                                            name,
                                                                            entry.getAbbreviation());
 

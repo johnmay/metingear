@@ -32,6 +32,7 @@ import uk.ac.ebi.annotation.reaction.GibbsEnergy;
 import uk.ac.ebi.annotation.reaction.GibbsEnergyError;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
+import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
@@ -44,7 +45,6 @@ import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.classification.TransportClassificationNumber;
-import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -204,7 +204,7 @@ public class ReactionParser {
 
     public MetabolicReaction getReaction(PreparsedReaction preparsed){
 
-        MetabolicReaction rxn = factory.ofClass(MetabolicReaction.class, BasicReactionIdentifier.nextIdentifier(),
+        MetabolicReaction rxn = factory.ofClass(MetabolicReaction.class, new BasicReactionIdentifier(),
                                                 preparsed.hasValue(DESCRIPTION) ? preparsed.getValue(DESCRIPTION) : "",
                                                 preparsed.hasValue(ABBREVIATION) ? preparsed.getValue(ABBREVIATION) : "");
 

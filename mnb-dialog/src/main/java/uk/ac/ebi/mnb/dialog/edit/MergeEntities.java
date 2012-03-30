@@ -20,13 +20,9 @@
  */
 package uk.ac.ebi.mnb.dialog.edit;
 
-import java.util.Collection;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
@@ -34,11 +30,13 @@ import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.reaction.Participant;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
+import java.util.Collection;
 
 
 /**

@@ -21,11 +21,6 @@ package mnb.io.resolve;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import javax.swing.JFrame;
 import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import mnb.io.tabular.type.EntityColumn;
@@ -34,16 +29,18 @@ import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
+import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
-import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+
+import javax.swing.*;
+import java.util.Collection;
 
 
 /**
@@ -129,7 +126,7 @@ public class ListSelectionReconciler implements EntryReconciler {
 
 
         Metabolite metabolite = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
-                                                                               BasicChemicalIdentifier.nextIdentifier(),
+                                                                               new BasicChemicalIdentifier(),
                                                                                name,
                                                                                entry.getAbbreviation());
 

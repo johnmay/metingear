@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import javax.swing.JFileChooser;
+
+import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
 import uk.ac.ebi.core.ReconstructionManager;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.compound.AminoAcidCompound;
@@ -27,7 +29,6 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 
 /**
  * ImportSBMLAction.java

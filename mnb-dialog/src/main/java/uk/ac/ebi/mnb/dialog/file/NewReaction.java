@@ -24,27 +24,24 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.event.UndoableEditListener;
 import mnb.io.tabular.NamedEntityResolver;
 import mnb.io.tabular.parser.ReactionParser;
 import mnb.io.tabular.parser.UnparsableReactionError;
 import mnb.io.tabular.preparse.PreparsedReaction;
 import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Reaction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
 
 /**
  * @name    NewMetabolite - 2011.10.04 <br>
@@ -88,7 +85,7 @@ public class NewReaction extends NewEntity {
 
     @Override
     public Identifier getIdentifier() {
-        return BasicReactionIdentifier.nextIdentifier();
+        return new BasicReactionIdentifier();
     }
 
     @Override

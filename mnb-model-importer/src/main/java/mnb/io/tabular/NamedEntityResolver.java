@@ -23,10 +23,10 @@ package mnb.io.tabular;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 
 /**
@@ -64,7 +64,7 @@ public class NamedEntityResolver implements EntityResolver {
 
         if (!created.containsKey(name)) {
             Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
-                                                                          BasicChemicalIdentifier.nextIdentifier(),
+                                                                          new BasicChemicalIdentifier(),
                                                                           "",
                                                                           "");
             created.put(name, m);

@@ -20,24 +20,24 @@
  */
 package uk.ac.ebi.mnb.dialog.file;
 
-import javax.swing.*;
-import javax.swing.event.UndoableEditListener;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
+import uk.ac.ebi.chemet.resource.basic.BasicRNAIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
-import uk.ac.ebi.resource.rna.BasicRNAIdentifier;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
 
 /**
  * @name    NewMetabolite - 2011.10.04 <br>
@@ -78,7 +78,7 @@ public class NewGeneProduct extends NewEntity {
 
     @Override
     public Identifier getIdentifier() {
-        return protein.isSelected() ? BasicProteinIdentifier.nextIdentifier() : BasicRNAIdentifier.nextIdentifier();
+        return protein.isSelected() ? new BasicProteinIdentifier() : new BasicRNAIdentifier();
     }
 
     @Override

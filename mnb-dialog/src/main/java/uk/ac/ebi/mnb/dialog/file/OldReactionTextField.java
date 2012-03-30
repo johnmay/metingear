@@ -20,41 +20,22 @@
  */
 package uk.ac.ebi.mnb.dialog.file;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
+import mnb.io.tabular.parser.ReactionParser;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mnb.view.BorderlessScrollPane;
+import uk.ac.ebi.search.FieldType;
+import uk.ac.ebi.search.SearchManager;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.AbstractAction;
-import javax.swing.DefaultListModel;
-import javax.swing.JDialog;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import mnb.io.tabular.parser.ReactionParser;
-import org.apache.log4j.Logger;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.search.Query;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
-import uk.ac.ebi.search.FieldType;
-import uk.ac.ebi.search.SearchManager;
-import uk.ac.ebi.search.SearchableIndex;
 
 
 /**
