@@ -6,7 +6,10 @@ package uk.ac.ebi.metabolomes.optimise;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.ac.ebi.caf.utility.preference.type.FilePreference;
+import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
 import uk.ac.ebi.optimise.SimulationUtil;
 import uk.ac.ebi.optimise.gap.GapFind;
@@ -14,6 +17,7 @@ import uk.ac.ebi.optimise.gap.GapFind;
 import java.util.logging.Level;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.fail;
 
 /**
  * @author johnmay
@@ -22,9 +26,10 @@ public class GapFindTest {
     private static final Logger LOGGER = Logger.getLogger(GapFindTest.class);
 
     private BasicStoichiometricMatrix s;
-    private Boolean runnable;
+    private static Boolean runnable;
 
-    public GapFindTest() {
+    @BeforeClass
+    public static void setup() {
         runnable = SimulationUtil.setup();
     }
 
@@ -48,7 +53,6 @@ public class GapFindTest {
             throws Exception {
 
         if (!runnable) return;
-
 
         // drain E and F
         s.addReaction(new String[]{"E"},

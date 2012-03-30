@@ -30,6 +30,6 @@ public class ReactionFieldTest {
     public void multipleSideInsertion() {
         assertEquals(new Replacement(6, 9, "adp"), ReactionField.getReplacement("atp + adp <->", 9));
         assertEquals(new Replacement(12, 12, ""), ReactionField.getReplacement("atp + adp <->", 12));
-        assertEquals(new Replacement(13, 17, "amp"), ReactionField.getReplacement("atp + adp <-> amp", 17));
+        assertEquals(new Replacement(13, 17, " amp"), ReactionField.getReplacement("atp + adp <-> amp", 17));
     }
 }

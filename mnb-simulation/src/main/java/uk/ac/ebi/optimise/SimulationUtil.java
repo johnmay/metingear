@@ -4,17 +4,17 @@
  * 2011.12.02
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,17 +25,19 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.core.CorePreferences;
 
 
 /**
- *          SimulationUtil - 2011.12.02 <br>
- *          Class provides utility methods for the simulation module
+ * SimulationUtil - 2011.12.02 <br>
+ * Class provides utility methods for the simulation module
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class SimulationUtil {
 
@@ -48,13 +50,19 @@ public class SimulationUtil {
     public static boolean setup() {
 
         FilePreference pref = CorePreferences.getInstance().getPreference("CPLEX_LIBRARY_PATH");
-        String path = pref.get().getPath();
+        String path    = pref.get().getPath();
 
         List<String> paths = Arrays.asList(System.getProperty("java.library.path").split(File.pathSeparator));
 
-        if (path != null && !paths.contains(path) && !path.isEmpty() && new File(path).exists()) {
+        if (path != null
+                && !path.isEmpty()
+                && pref.get().exists()) {
 
             try {
+                if(paths.contains(path)) {
+                    return true;
+                }
+                LOGGER.info("Configuring library cplex path " + path);
                 addLibraryPath(path);
                 return true;
             } catch (IOException ex) {
@@ -81,7 +89,9 @@ public class SimulationUtil {
 
     /**
      * Adds a path to the system property java.library.path at runtime
+     *
      * @param s
+     *
      * @throws IOException
      */
     private static void addLibraryPath(String s) throws IOException {
