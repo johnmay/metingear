@@ -29,7 +29,6 @@ import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.annotation.model.FluxLowerBound;
 import uk.ac.ebi.annotation.reaction.GibbsEnergy;
-import uk.ac.ebi.annotation.reaction.GibbsEnergyError;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
@@ -112,7 +111,7 @@ public class ReactionParser {
 
     public MetabolicReaction parseReaction(PreparsedReaction reaction) throws UnparsableReactionError {
 
-        String equation   = reaction.getEquation();
+        String equation = reaction.getEquation();
         String[] rxnSides = getReactionSides(equation);
 
         // determine whether the reaction contains two sides or one.
@@ -167,8 +166,6 @@ public class ReactionParser {
         }
 
 
-
-
         return rxn;
 
     }
@@ -179,7 +176,7 @@ public class ReactionParser {
      */
 
     public MetabolicReaction parseExchangeReaction(PreparsedReaction reaction,
-                                                                 String equationSide) throws UnparsableReactionError {
+                                                   String equationSide) throws UnparsableReactionError {
         Matcher reactionCompartment = REACTION_COMPARTMENT.matcher(equationSide);
 
         MetabolicReaction rxn = getReaction(reaction);
@@ -202,7 +199,7 @@ public class ReactionParser {
     }
 
 
-    public MetabolicReaction getReaction(PreparsedReaction preparsed){
+    public MetabolicReaction getReaction(PreparsedReaction preparsed) {
 
         MetabolicReaction rxn = factory.ofClass(MetabolicReaction.class, new BasicReactionIdentifier(),
                                                 preparsed.hasValue(DESCRIPTION) ? preparsed.getValue(DESCRIPTION) : "",
@@ -238,20 +235,18 @@ public class ReactionParser {
         // add delta g and delta g error
         if (preparsed.hasValue(FREE_ENERGY)) {
             try {
-                rxn.addAnnotation(new GibbsEnergy(Double.parseDouble(preparsed.getValue(FREE_ENERGY))));
-            } catch (NumberFormatException ex) {
-                LOGGER.error("Gibbs energy column contained invalid value (not a double)");
-            }
-            if (preparsed.hasValue(FREE_ENERGY_ERROR)) {
-                try {
-                    rxn.addAnnotation(new GibbsEnergyError(Double.parseDouble(preparsed.getValue(FREE_ENERGY_ERROR))));
-                } catch (NumberFormatException ex) {
-                    LOGGER.error("Gibbs energy error column contained invalid value (not a double)");
+                if (preparsed.hasValue(FREE_ENERGY_ERROR)) {
+                    rxn.addAnnotation(new GibbsEnergy(Double.parseDouble(preparsed.getValue(FREE_ENERGY)),
+                                                      Double.parseDouble(preparsed.getValue(FREE_ENERGY_ERROR))));
+                } else {
+                    rxn.addAnnotation(new GibbsEnergy(Double.parseDouble(preparsed.getValue(FREE_ENERGY)), 0d));
                 }
+            } catch (NumberFormatException ex) {
+                LOGGER.error("Gibbs energy column(s) contained invalid value (not a double)");
             }
         }
 
-        if(preparsed.hasValue(MIN_FLUX)){
+        if (preparsed.hasValue(MIN_FLUX)) {
             try {
                 rxn.addAnnotation(new FluxLowerBound(Double.parseDouble(preparsed.getValue(MIN_FLUX))));
             } catch (NumberFormatException ex) {
@@ -259,7 +254,7 @@ public class ReactionParser {
             }
         }
 
-        if(preparsed.hasValue(MAX_FLUX)){
+        if (preparsed.hasValue(MAX_FLUX)) {
             try {
                 rxn.addAnnotation(new FluxLowerBound(Double.parseDouble(preparsed.getValue(MAX_FLUX))));
             } catch (NumberFormatException ex) {
@@ -279,7 +274,7 @@ public class ReactionParser {
 
         String[] participants = EQUATION_ADDITION.split(equationSide);
         for (String participant : participants) {
-            if(!participant.trim().isEmpty()){
+            if (!participant.trim().isEmpty()) {
                 parsedParticipants.add(parseParticipant(participant, defaultCompartment, reaction));
             }
         }
