@@ -32,6 +32,8 @@ import uk.ac.ebi.annotation.reaction.GibbsEnergy;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.chemet.resource.classification.TransportClassificationNumber;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
@@ -42,8 +44,6 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.resource.classification.TransportClassificationNumber;
 
 import java.util.*;
 import java.util.regex.Matcher;

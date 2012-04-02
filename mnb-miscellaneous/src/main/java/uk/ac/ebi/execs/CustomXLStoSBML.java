@@ -41,11 +41,9 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.SearchCategory;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.resource.MIRIAMLoader;
+import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
 import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
-import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
-import uk.ac.ebi.metabolomes.identifier.UniqueIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
@@ -125,7 +123,6 @@ public class CustomXLStoSBML {
         HashMap<String, SBMLDocument> modelToSBML = new HashMap<String, SBMLDocument>();
         Map<String, Map<Species, Boolean>> modelIdSpecies = new HashMap<String, Map<Species, Boolean>>();
 
-        UniqueIdentifier.setPrefix("reaction_");
         while (row != null) {
 
             String modelId = getModelId(row);
@@ -182,7 +179,7 @@ public class CustomXLStoSBML {
                             model.addSpecies(sp);
                             modelIdSpecies.get(modelId).put(sp, Boolean.TRUE);
                         }
-                        org.sbml.jsbml.Reaction sbmlReaction = new org.sbml.jsbml.Reaction(UniqueIdentifier.createUniqueIdentifer().toString(), SBML_LEVEL, SBML_VERSION);
+                        org.sbml.jsbml.Reaction sbmlReaction = new org.sbml.jsbml.Reaction(new BasicReactionIdentifier().toString(), SBML_LEVEL, SBML_VERSION);
                         for (CompartmentalisedParticipant<String, Integer, uk.ac.ebi.interfaces.reaction.Compartment> p : rxn.getReactantParticipants()) {
                             String spid = p.getMolecule() + p.getCompartment().toString();
                             sbmlReaction.addReactant(new SpeciesReference(moleculeCache.get(spid)));

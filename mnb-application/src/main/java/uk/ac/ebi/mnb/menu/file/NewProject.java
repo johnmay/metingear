@@ -10,26 +10,21 @@ import com.jgoodies.forms.layout.FormLayout;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Locale;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.apache.lucene.queryParser.QueryParser;
 import uk.ac.ebi.caf.component.ReplacementHandler;
-import uk.ac.ebi.caf.component.SuggestDialog;
 import uk.ac.ebi.caf.component.SuggestionField;
 import uk.ac.ebi.caf.component.SuggestionHandler;
+import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
 import uk.ac.ebi.chemet.service.query.taxonmy.TaxonomyQueryService;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.mnb.io.TaxonomyMap;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 
 /**

@@ -27,7 +27,8 @@ import javax.swing.JFrame;
 import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.core.IdentifierSet;
+import uk.ac.ebi.chemet.resource.IdentifierSet;
+import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Observation;
@@ -38,7 +39,6 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.io.xml.UniProtAnnoationLoader;
 
 /**

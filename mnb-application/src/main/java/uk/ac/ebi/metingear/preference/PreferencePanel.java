@@ -15,6 +15,7 @@ import uk.ac.ebi.caf.component.theme.ComponentPreferences;
 import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.caf.utility.preference.Preference;
+import uk.ac.ebi.chemet.resource.ResourcePreferences;
 import uk.ac.ebi.chemet.service.ServicePreferences;
 import uk.ac.ebi.chemet.service.loader.crossreference.ChEBICrossReferenceLoader;
 import uk.ac.ebi.chemet.service.loader.data.ChEBIDataLoader;
@@ -28,7 +29,6 @@ import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
 import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.render.resource.LoaderGroupFactory;
-import uk.ac.ebi.resource.ResourcePreferences;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

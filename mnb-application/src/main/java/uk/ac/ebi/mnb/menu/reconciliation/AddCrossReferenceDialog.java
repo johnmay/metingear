@@ -29,7 +29,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.UndoableEditListener;
+
+import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.chemet.render.components.IdentifierEditor;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import org.apache.log4j.Logger;
@@ -54,10 +57,8 @@ public class AddCrossReferenceDialog
 
     private static final Logger LOGGER = Logger.getLogger(AddCrossReferenceDialog.class);
     private static final Map<String, Byte> nameIndexMap = new HashMap();
-    private JComboBox type;
-    private JTextField accession;
-    private CellConstraints cc = new CellConstraints();
     private AnnotatedEntity entity = null;
+    private IdentifierEditor editor = new IdentifierEditor();
 
     public AddCrossReferenceDialog(JFrame frame,
                                    TargetedUpdate updater,
@@ -66,11 +67,7 @@ public class AddCrossReferenceDialog
                                    UndoableEditListener undo) {
 
         super(frame, updater, messages, controller, undo, "AddCrossReference");
-        for (Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers()) {
-            nameIndexMap.put(id.getShortDescription(), id.getIndex());
-        }
-        type = new JComboBox(nameIndexMap.keySet().toArray());
-        accession = FieldFactory.newField(20);
+
 
         setDefaultLayout();
     }
@@ -84,26 +81,15 @@ public class AddCrossReferenceDialog
 
         JPanel panel = super.getOptions();
 
-        panel.setLayout(new FormLayout("p, 4dlu, p", "p"));
-
-        panel.add(type, cc.xy(1, 1));
-        panel.add(accession, cc.xy(3, 1));
+        panel.add(editor);
 
         return panel;
+
     }
 
     @Override
     public void process() {
-
-        // resolve
-        Byte index = nameIndexMap.get((String) type.getSelectedItem());
-        Identifier id = IdentifierFactory.getInstance().ofIndex(index);
-        id.setAccession(accession.getText());
-
-        // add to component
-        entity.addAnnotation(new CrossReference(id));
-
-
+        entity.addAnnotation(AnnotationFactory.getInstance().getCrossReference(editor.getIdentifier()));
     }
 
     @Override
