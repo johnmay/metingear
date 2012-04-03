@@ -77,11 +77,16 @@ public abstract class AbstractEntityPanel
 
     private JLabel typeLabel = LabelFactory.newLabel("");
 
-    private JTextField accession = FieldFactory.newTransparentField(10, false);
 
-    private JTextField name = FieldFactory.newTransparentField(30, false);
+    // basic panel field
+    private JPanel basic;
 
+    // basic panel components
+    private JTextField accession    = FieldFactory.newTransparentField(10, false);
+    private JTextField name         = FieldFactory.newTransparentField(30, false);
     private JTextField abbreviation = FieldFactory.newTransparentField(10, false);
+
+
 
     private AnnotatedEntity entity;
     //
@@ -97,13 +102,10 @@ public abstract class AbstractEntityPanel
 
     private CellConstraints cc = new CellConstraints();
 
-    private AnnotationRenderer renderer;
-
     private JPanel middle;
 
     private JPanel synopsis;
 
-    private JPanel basic = PanelFactory.createInfoPanel("p, p:grow, p, p:grow, p", "p");
 
     private JPanel observations;
 
@@ -119,20 +121,10 @@ public abstract class AbstractEntityPanel
 
     private boolean editable;
 
-
-    public AnnotationVisitor getRenderer() {
-        return renderer;
-    }
-
-
     public AbstractEntityPanel(String type,
                                AnnotationRenderer renderer) {
         setBackground(Color.WHITE);
         this.type = type;
-        typeLabel.setText(type);
-        layoutBasicPanel();
-        this.renderer = renderer;
-        typeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         name.setHorizontalAlignment(SwingConstants.CENTER);
         accession.setHorizontalAlignment(SwingConstants.CENTER);
         abbreviation.setHorizontalAlignment(SwingConstants.CENTER);
@@ -192,10 +184,10 @@ public abstract class AbstractEntityPanel
         observations = getObservationPanel();
 
         setLayout(new FormLayout("p:grow", "p,p,p,p,p"));
-        setBorder(Borders.DLU7_BORDER);
+        setBorder(Borders.DLU4_BORDER);
 
+        // add the basic panel
         add(getBasicPanel(), cc.xy(1, 1));
-        basic.setBorder(Borders.DLU4_BORDER);
 
         middle = PanelFactory.createInfoPanel("p, p:grow, p, p:grow, p, p:grow", "p");
         middle.setBorder(Borders.DLU4_BORDER);
@@ -264,18 +256,20 @@ public abstract class AbstractEntityPanel
     }
 
 
-    /**
-     * layout the labels of the basic panel
-     */
-    private void layoutBasicPanel() {
-        basic.add(accession, cc.xy(1, 1));
-        basic.add(name, cc.xy(3, 1));
-        basic.add(abbreviation, cc.xy(5, 1));
+
+    public JPanel newBasicPanel() {
+        JPanel panel = PanelFactory.createInfoPanel("p, p:grow, p, p:grow, p", "p");
+        panel.add(accession, cc.xy(1, 1));
+        panel.add(name, cc.xy(3, 1));
+        panel.add(abbreviation, cc.xy(5, 1));
+        panel.setBorder(Borders.DLU4_BORDER);
+        return panel;
     }
 
-
     public JPanel getBasicPanel() {
-        basic.setBorder(Borders.DLU4_BORDER);
+        if(basic == null){
+            basic = newBasicPanel();
+        }
         return basic;
     }
 

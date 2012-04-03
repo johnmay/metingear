@@ -36,19 +36,19 @@ import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AnnotationAddition
+public class AddAnnotationEdit
         extends UndoableEntityEdit {
 
-    private static final Logger LOGGER = Logger.getLogger(AnnotationAddition.class);
+    private static final Logger LOGGER = Logger.getLogger(AddAnnotationEdit.class);
     private AnnotatedEntity entity;
     private Collection<Annotation> annotations;
 
-    public AnnotationAddition(AnnotatedEntity entity, Collection<Annotation> annotations) {
+    public AddAnnotationEdit(AnnotatedEntity entity, Collection<Annotation> annotations) {
         this.entity = entity;
         this.annotations = annotations;
     }
 
-    public AnnotationAddition(AnnotatedEntity entity, Annotation... annotations) {
+    public AddAnnotationEdit(AnnotatedEntity entity, Annotation... annotations) {
         this.entity = entity;
         this.annotations = Arrays.asList(annotations);
     }

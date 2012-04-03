@@ -56,9 +56,7 @@ public abstract class NewEntity extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(NewEntity.class);
 
-    private JComboBox type;
 
-    private JTextField accession = FieldFactory.newField(6);
 
     private JTextField name = FieldFactory.newField(20);
 
@@ -87,10 +85,7 @@ public abstract class NewEntity extends ControllerDialog {
                      UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "SaveDialog");
 
-        for (Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers()) {
-            nameIndexMap.put(id.getShortDescription(), id.getIndex());
-        }
-        type = ComboBoxFactory.newComboBox(nameIndexMap.keySet());
+
 
         this.updateable = updater;
 

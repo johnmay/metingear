@@ -131,7 +131,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>uk.ac.ebi.mnb.Main</mainClass>
+                            <mainClass>uk.ac.ebi.metingear.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

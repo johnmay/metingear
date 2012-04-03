@@ -56,7 +56,7 @@ public class DeleteAnnotation extends AbstractAction {
     }
 
     public void actionPerformed(ActionEvent ae) {
-        editListener.undoableEditHappened(new UndoableEditEvent(ae, new AnnotationRemoval(entity, annotation)));
+        editListener.undoableEditHappened(new UndoableEditEvent(ae, new RemoveAnnotationEdit(entity, annotation)));
         entity.removeAnnotation(annotation);
         updatable.update();
     }

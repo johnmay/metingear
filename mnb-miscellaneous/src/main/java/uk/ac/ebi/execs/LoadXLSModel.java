@@ -48,20 +48,17 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.chemet.ws.CachedChemicalWS;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.metabolomes.execs.CommandLineMain;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
-import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 
 /**

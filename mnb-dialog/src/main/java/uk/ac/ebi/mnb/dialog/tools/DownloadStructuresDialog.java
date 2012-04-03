@@ -34,6 +34,8 @@ import javax.swing.event.UndoableEditListener;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -51,8 +53,6 @@ import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 
 /**

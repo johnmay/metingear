@@ -29,12 +29,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 import net.sf.jniinchi.INCHI_RET;
-import net.sf.jniinchi.JniInchiInput;
-import net.sf.jniinchi.JniInchiInputInchi;
 import org.apache.commons.cli.Option;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -43,8 +40,8 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Writer;
+import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.metabolomes.execs.CommandLineMain;
-import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**
  * @name   FilterUniqueIsomers

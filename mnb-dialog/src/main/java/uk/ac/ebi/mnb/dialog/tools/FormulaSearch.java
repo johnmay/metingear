@@ -25,13 +25,13 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 /**
  * @name    FormulaSearch - 2011.10.04 <br>

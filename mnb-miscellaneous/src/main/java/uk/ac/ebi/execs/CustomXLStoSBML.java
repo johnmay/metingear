@@ -42,10 +42,10 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 
 /**

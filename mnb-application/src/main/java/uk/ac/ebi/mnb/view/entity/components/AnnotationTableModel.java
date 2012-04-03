@@ -20,25 +20,16 @@
  */
 package uk.ac.ebi.mnb.view.entity.components;
 
-import java.awt.Desktop;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.table.AbstractTableModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
-import uk.ac.ebi.caf.action.GeneralAction;
+import uk.ac.ebi.mnb.edit.ReplaceAnnotationEdit;
 import uk.ac.ebi.mnb.edit.DeleteAnnotation;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.entity.components.control.AnnotationControlManager;
@@ -71,7 +62,6 @@ public class AnnotationTableModel
 
     public AnnotationTableModel() {
         annotations = new ArrayList<Annotation>();
-
     }
 
 
@@ -183,6 +173,8 @@ public class AnnotationTableModel
             Annotation oldAnnotation = (Annotation) oldValue;
             Annotation newAnnotation = (Annotation) newValue;
 
+            // could store these in and only apply to model once the user clicks store
+            MainView.getInstance().getUndoManager().addEdit(new ReplaceAnnotationEdit(entity, oldAnnotation, newAnnotation));
             entity.removeAnnotation(oldAnnotation);
             entity.addAnnotation(newAnnotation);
 
