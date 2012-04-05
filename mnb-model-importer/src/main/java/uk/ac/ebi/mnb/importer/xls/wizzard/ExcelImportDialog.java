@@ -161,7 +161,7 @@ public class ExcelImportDialog
 
 
     @Override
-    public JPanel getOptions() {
+    public JPanel getForm() {
         return shiftPanel;
     }
 

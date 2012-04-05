@@ -66,7 +66,7 @@ public class PreferenceDialog extends DropdownDialog {
 
 
     @Override
-    public JPanel getOptions() {
+    public JPanel getForm() {
 
         JPanel options = PanelFactory.createDialogPanel("p, 4dlu, p, 4dlu, p, 4dlu, p", "p, 4dlu, p");
         CellConstraints cc = new CellConstraints();

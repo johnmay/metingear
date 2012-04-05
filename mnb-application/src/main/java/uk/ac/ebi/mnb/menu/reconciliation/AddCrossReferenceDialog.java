@@ -20,14 +20,10 @@
  */
 package uk.ac.ebi.mnb.menu.reconciliation;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.event.UndoableEditListener;
 
 import uk.ac.ebi.annotation.util.AnnotationFactory;
@@ -36,13 +32,9 @@ import uk.ac.ebi.chemet.render.components.IdentifierEditor;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
 
 /**
  *          AddCrossReferenceDialog – 2011.09.26 <br>
@@ -77,9 +69,9 @@ public class AddCrossReferenceDialog
     }
 
     @Override
-    public JPanel getOptions() {
+    public JPanel getForm() {
 
-        JPanel panel = super.getOptions();
+        JPanel panel = super.getForm();
 
         panel.add(editor);
 

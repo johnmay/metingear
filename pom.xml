@@ -14,7 +14,7 @@
         <module>mnb-simulation</module>
         <module>mnb-edit</module>
         <module>mnb-interfaces</module>
-        <module>mnb-dialog</module>
+        <module>action</module>
     </modules>
     <licenses>
         <license>

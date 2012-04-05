@@ -4,36 +4,33 @@
  */
 package uk.ac.ebi.mnb.view;
 
-import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
+import com.jgoodies.forms.factories.Borders;
+import com.jgoodies.forms.layout.CellConstraints;
 import net.sf.furbelow.SpinningDialWaitIndicator;
-
-import java.awt.*;
-import java.awt.Dialog.ModalityType;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.logging.Level;
-import uk.ac.ebi.mnb.interfaces.DialogController;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.ButtonFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.component.injection.Inject;
 import uk.ac.ebi.caf.component.theme.Theme;
+import uk.ac.ebi.mnb.core.CloseDialogAction;
+import uk.ac.ebi.mnb.core.ProcessDialogAction;
+import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 import uk.ac.ebi.mnb.settings.Settings;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
-
-import org.apache.log4j.Logger;
-
-import com.jgoodies.forms.factories.Borders;
-import com.jgoodies.forms.layout.*;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import javax.imageio.ImageIO;
-import uk.ac.ebi.mnb.core.CloseDialogAction;
-import uk.ac.ebi.mnb.core.ProcessDialogAction;
+import java.util.logging.Level;
 
 
 /**
@@ -62,12 +59,21 @@ public abstract class DropdownDialog
 
     private CellConstraints cc = new CellConstraints();
 
+
+    // default injected components
+    @Inject
+    private JLabel  description = LabelFactory.newLabel("Description unavailable");
+
+    @Inject
+    private JButton process     = ButtonFactory.newButton(null);
+
+
     private static final Set<String> GENERIC_DIALOGS = new HashSet<String>(Arrays.asList("OkayDialog",
                                                                                          "SaveDialog",
                                                                                          "RunDialog",
                                                                                          "BuildDialog"));
 
-    public DropdownDialog(JFrame frame,
+    public DropdownDialog(final JFrame frame,
                           DialogController controller,
                           String type) {
 
@@ -84,9 +90,22 @@ public abstract class DropdownDialog
 
         setUndecorated(true);
 
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                frame.requestFocusInWindow();
+            }
+        });
+
 
     }
 
+    /**
+     * Inject resource mappings into fields (name, tooltip, icon, etc.)
+     */
+    public void inject(){
+        // new PropertyComponentInjector(null, getClass()).inject(this);
+    }
 
     /**
      * Allows easy instantiation with a JFrame that implements DialogController.
@@ -95,7 +114,7 @@ public abstract class DropdownDialog
      * @param frame
      * @param dialogName
      */
-    public DropdownDialog(JFrame frame,
+    public DropdownDialog(final JFrame frame,
                           String dialogName) {
 
         super(frame, ModalityType.APPLICATION_MODAL);
@@ -112,6 +131,14 @@ public abstract class DropdownDialog
                  ? new JButton(new ProcessDialogAction(dialogName + ".DialogButton", this))
                  : new JButton(new ProcessDialogAction(getClass(), dialogName + ".DialogButton", this));
         setUndecorated(true);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                frame.requestFocusInWindow();
+            }
+        });
+
     }
 
 
@@ -127,18 +154,15 @@ public abstract class DropdownDialog
 
     /**
      *
-     * Returns the options section of the dialog. This method should be over-
+     * Returns the options/form section of the dialog. This method should be over-
      * ridden if use default layout
      *
      * @return
      * 
      */
-    public JPanel getOptions() {
-
-        JPanel options = PanelFactory.createDialogPanel();
-
-        return options;
-
+    public JPanel getForm() {
+        JPanel form = PanelFactory.createDialogPanel();
+        return form;
     }
 
 
@@ -158,7 +182,7 @@ public abstract class DropdownDialog
 
     /**
      * Sets the default layout of the dialog. Class wishing to use Default layout
-     * should overrider getDescription and getOptions. In addition to adding
+     * should overrider getDescription and getForm. In addition to adding
      * values to the ActionProperties file.
      */
     public void setDefaultLayout() {
@@ -170,7 +194,7 @@ public abstract class DropdownDialog
 
         panel.add(getDescription(), cc.xy(1, 1));
         panel.add(new JSeparator(SwingConstants.HORIZONTAL), cc.xy(1, 3));
-        panel.add(getOptions(), cc.xy(1, 5));
+        panel.add(getForm(), cc.xy(1, 5));
 
         // close and active buttons in the bottom right
         panel.add(getNavigation(), cc.xy(1, 7));
@@ -195,11 +219,6 @@ public abstract class DropdownDialog
             this.pack();
         }
         super.setVisible(visible);
-
-        if (!visible) {
-            // return focus to parent
-            getParent().requestFocusInWindow();
-        }
     }
 
 

@@ -93,7 +93,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-dialog</artifactId>
+            <artifactId>metingear-action</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

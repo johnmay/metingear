@@ -22,7 +22,6 @@ package mnb.io.resolve;
 import com.jgoodies.forms.layout.*;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -132,9 +131,9 @@ public class CandidateSelector
 
 
     @Override
-    public JPanel getOptions() {
+    public JPanel getForm() {
 
-        options = super.getOptions();
+        options = super.getForm();
 
         FormLayout layout = new FormLayout("p:grow");
         options.setLayout(layout);

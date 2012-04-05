@@ -136,12 +136,12 @@ public class NewProject extends DropdownDialog {
     }
 
     @Override
-    public JPanel getOptions() {
+    public JPanel getForm() {
 
         FormLayout layout = new FormLayout(
                 "right:p, 4dlu, p, 4dlu, p, 4dlu, p",
                 "p, 4dlu, p, 4dlu, p");
-        JPanel panel = super.getOptions();
+        JPanel panel = super.getForm();
         panel.setLayout(layout);
         CellConstraints cc = new CellConstraints();
 
