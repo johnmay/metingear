@@ -34,12 +34,8 @@ public class PreMain {
         command.add("-cp");
         command.add(ManagementFactory.getRuntimeMXBean().getClassPath());
         command.add(Main.class.getName());
-        for (String arg : args) {
-            command.add(arg);
-        }
 
         final ProcessBuilder builder = new ProcessBuilder(command);
-
 
         System.out.println(command);
         builder.start();

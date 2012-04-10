@@ -466,4 +466,5 @@ public class MainView
             getJMenuBar().updateContext();
         }
     }
+
 }

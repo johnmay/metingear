@@ -3,6 +3,8 @@ package uk.ac.ebi.metingear;
 import uk.ac.ebi.metingear.launch.ApplicationLauncher;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Main - 13.03.2012 <br/>
@@ -20,7 +22,15 @@ public class Main {
         SwingUtilities.invokeAndWait(getLauncher());
         
     }
-    
+
+    /**
+     * Hack until we remove the MainView singleton :-(
+     */
+    public static void relaunch() throws IOException, URISyntaxException {
+        PreMain.main(new String[0]);
+        System.exit(0);
+    }
+
     public static Runnable getLauncher(){
         
         String os = System.getProperty("os.name");

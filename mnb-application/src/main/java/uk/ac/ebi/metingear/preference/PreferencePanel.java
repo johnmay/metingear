@@ -28,12 +28,14 @@ import uk.ac.ebi.chemet.service.loader.structure.ChEBIStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
 import uk.ac.ebi.core.CorePreferences;
+import uk.ac.ebi.metingear.Main;
 import uk.ac.ebi.render.resource.LoaderGroupFactory;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 
@@ -129,7 +131,7 @@ public class PreferencePanel extends JPanel {
 
             CorePreferences CORE = CorePreferences.getInstance();
             ResourcePreferences RESOURCE = ResourcePreferences.getInstance();
-            JLabel label =LabelFactory.newLabel("BLAST", LabelFactory.Size.HUGE);
+            JLabel label = LabelFactory.newLabel("BLAST", LabelFactory.Size.HUGE);
             label.setHorizontalAlignment(SwingConstants.LEFT);
             add(DefaultComponentFactory.getInstance().createSeparator(label));
             add(PreferencePanelFactory.getPreferencePanel(CORE.getPreference("BLASTP_PATH"),
@@ -151,7 +153,20 @@ public class PreferencePanel extends JPanel {
             try {
 
                 add(Box.createHorizontalStrut(50));
-                add(PreferencePanelFactory.getPreferencePanel(ServicePreferences.getInstance().getPreference("SERVICE_ROOT")));
+                add(PreferencePanelFactory.getPreferenceEditor(ServicePreferences.getInstance().getPreference("SERVICE_ROOT"),
+                                                               new AbstractAction() {
+                                                                   @Override
+                                                                   public void actionPerformed(ActionEvent e) {
+                                                                        int choice = JOptionPane.showConfirmDialog(window, "You must restart Metingear before changes take effect");
+                                                                        if(choice == JOptionPane.OK_OPTION){
+                                                                            try {
+                                                                                Main.relaunch();
+                                                                            } catch (Exception e1) {
+                                                                                JOptionPane.showMessageDialog(window, "Unable to restart the application! Please restart manually.", "Error", JOptionPane.ERROR_MESSAGE);
+                                                                            }
+                                                                        }
+                                                                   }
+                                                               }));
                 add(Box.createHorizontalStrut(50));
                 add(factory.createGroup("Miscellaneous",
                                         new TaxonomyLoader()));
