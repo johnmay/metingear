@@ -6,11 +6,11 @@
     <parent>
         <artifactId>mnb</artifactId>
         <groupId>uk.ac.ebi</groupId>
-        <version>0.8.5-SNAPSHOT</version>
+        <version>0.9-SNAPSHOT</version>
     </parent>
     <groupId>uk.ac.ebi</groupId>
     <artifactId>metingear-action</artifactId>
-    <version>0.8.5-SNAPSHOT</version>
+    <version>0.9-SNAPSHOT</version>
     <name>Action</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>mnb-simulation</artifactId>
-            <version>0.8.5-SNAPSHOT</version>
+            <version>0.9-SNAPSHOT</version>
         </dependency>
         <dependency>
             <artifactId>caf-action</artifactId>

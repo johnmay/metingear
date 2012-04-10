@@ -6,11 +6,11 @@
     <parent>
         <artifactId>mnb</artifactId>
         <groupId>uk.ac.ebi</groupId>
-        <version>0.8.5-SNAPSHOT</version>
+        <version>0.9-SNAPSHOT</version>
     </parent>
     <groupId>uk.ac.ebi</groupId>
     <artifactId>mnb-application</artifactId>
-    <version>0.8.5-SNAPSHOT</version>
+    <version>0.9-SNAPSHOT</version>
     <name>Application</name>
     <url>http://maven.apache.org</url>
     <properties>
