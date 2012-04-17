@@ -22,24 +22,26 @@ package uk.ac.ebi.mnb.dialog.tools;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.util.Collection;
-import javax.swing.JFrame;
-import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.IdentifierSet;
-import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
+import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
+import uk.ac.ebi.chemet.service.query.crossreference.UniProtCrossReferenceService;
 import uk.ac.ebi.core.ProteinProductImplementation;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.io.xml.UniProtAnnoationLoader;
+import uk.ac.ebi.service.query.CrossReferenceService;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
+import java.util.Collection;
 
 /**
  * @name    Annotate - 2011.10.13 <br>
@@ -64,8 +66,8 @@ public class TransferAnnotations
 
     @Override
     public void process() {
-        UniProtAnnoationLoader loader = new UniProtAnnoationLoader();
-        loader.load(); // load from local file
+
+        CrossReferenceService<SwissProtIdentifier> service = new UniProtCrossReferenceService();
 
 
         IdentifierFactory factory = IdentifierFactory.getInstance();
@@ -78,13 +80,9 @@ public class TransferAnnotations
             for (Observation observation : alignments) {
                 LocalAlignment alignment = (LocalAlignment) observation;
                 IdentifierSet set = factory.resolveSequenceHeader(alignment.getSubject());
-                for (Identifier identifier : set.getSubIdentifiers(UniProtIdentifier.class)) {
-                    if (loader.getMap().containsKey(identifier)) {
-                        for (Identifier mapedId : loader.getMap().get((UniProtIdentifier) identifier)) {
-                            identifiers.put(mapedId, observation);
-                        }
-                    } else {
-                        LOGGER.warn("Unable to find mapping for: " + loader.getMap().keySet());
+                for (Identifier identifier : set.getSubIdentifiers(SwissProtIdentifier.class)) {
+                    for(Identifier xref : service.getCrossReferences((SwissProtIdentifier)identifier)){
+                        identifiers.put(xref, observation);
                     }
                 }
             }
@@ -98,11 +96,4 @@ public class TransferAnnotations
         }
     }
 
-    public boolean setContext() {
-        return getSelection().hasSelection(ProteinProductImplementation.class);
-    }
-
-    public boolean setContext(Object obj) {
-        return setContext();
-    }
 }
