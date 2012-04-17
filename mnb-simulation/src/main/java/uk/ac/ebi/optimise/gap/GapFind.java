@@ -168,6 +168,7 @@ public class GapFind {
 
                     if (s.isReversible(j)) {
 
+
                         // min production limit (reversible)
                         cplex.addGe(cplex.prod(s.get(i, j).intValue(),
                                                v[j]), // Sijvj

@@ -8,8 +8,6 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.caf.utility.preference.type.FilePreference;
-import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
 import uk.ac.ebi.optimise.SimulationUtil;
 import uk.ac.ebi.optimise.gap.GapFind;
@@ -17,7 +15,6 @@ import uk.ac.ebi.optimise.gap.GapFind;
 import java.util.logging.Level;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.fail;
 
 /**
  * @author johnmay
@@ -44,6 +41,69 @@ public class GapFindTest {
         s.addReaction("D => E", false);
     }
 
+    /**
+     * Tests fig.1 holds from BMC Bioinformatics 2007, 8:212
+     http://www.biomedcentral.com/1471-2105/8/212
+     * @throws Exception
+     */
+    @Test public void paperFig1Test_a() throws Exception {
+
+        if(!runnable) return;
+
+        BasicStoichiometricMatrix s2 = BasicStoichiometricMatrix.create(5, 5);
+        s2.addReaction("A => ?", false);
+        s2.addReaction("A => C", false);
+
+        // exchange reactions
+        s2.addProduction("?", false);
+        s2.addConsumption("?", false);
+        s2.addConsumption("C", false);
+        s2.display();
+
+        GapFind gf = new GapFind(s2);
+        System.out.println("Non-production:");
+        for(Integer i : gf.getUnproducedMetabolites()){
+            System.out.print(s2.getMolecule(i) + "\t");
+            System.out.println(gf.isProduced(i) ? "" : "*");
+        }
+        System.out.println("Non-consumption:");
+        for(Integer i : gf.getUnconsumedMetabolites()){
+            System.out.print(s2.getMolecule(i) + "\t");
+            System.out.println(gf.isConsumed(i) ? "" : "*");
+        }
+
+
+
+    }
+    @Test public void paperFig1Test_b() throws Exception {
+
+        if(!runnable) return;
+
+        BasicStoichiometricMatrix s2 = BasicStoichiometricMatrix.create(5, 5);
+        s2.addReaction("D => B", false);
+        s2.addReaction("? => B", false);
+
+        // exchange reactions
+        s2.addProduction("?", false);
+        s2.addProduction("D", false);
+        s2.addConsumption("?", false);
+
+        s2.display();
+
+        GapFind gf = new GapFind(s2);
+        System.out.println("Non-production:");
+        for(Integer i : gf.getUnproducedMetabolites()){
+            System.out.print(s2.getMolecule(i) + "\t");
+            System.out.println(gf.isProduced(i) ? "" : "*");
+        }
+        System.out.println("Non-consumption:");
+        for(Integer i : gf.getUnconsumedMetabolites()){
+            System.out.print(s2.getMolecule(i) + "\t");
+            System.out.println(gf.isConsumed(i) ? "" : "*");
+        }
+
+
+    }
 
     /**
      * Test of findNonProductionMetabolites method, of class DeadEndDetector.
@@ -120,9 +180,9 @@ public class GapFindTest {
         try {
             GapFind gf = new GapFind(s);
             Integer[] root = gf.getRootUnproducedMetabolites();
-    
+
             s.display();
-            
+
             // there should be 2 root non-production metabolites, E and C
             assertEquals(1, root.length);
             assertEquals("A",
