@@ -7,9 +7,7 @@
         <groupId>uk.ac.ebi</groupId>
         <version>0.9-SNAPSHOT</version>
     </parent>
-    <groupId>uk.ac.ebi</groupId>
     <artifactId>mnb-miscellaneous</artifactId>
-    <version>0.9-SNAPSHOT</version>
     <name>Miscellaneous</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -19,31 +17,31 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.10</version>
             <scope>test</scope>
         </dependency>
         <!-- chemet -->
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>CheMet-Core</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>CheMet-IO</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-resource</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2</version>
         </dependency>
         <!-- mnb -->
         <!-- external -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>3.8-beta3</version>
+            <version>3.8</version>
         </dependency>
         <dependency>
             <artifactId>chebiWS-client</artifactId>
@@ -60,7 +58,7 @@
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
-            <version>3.4.0</version>
+            <version>3.6.0</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -72,19 +70,13 @@
             <artifactId>biojava3-core</artifactId>
             <groupId>org.biojava</groupId>
             <type>jar</type>
-            <version>3.0.3-SNAPSHOT</version>
+            <version>3.0.3</version>
         </dependency>
         <dependency>
             <artifactId>biojava3-alignment</artifactId>
             <groupId>org.biojava</groupId>
             <type>jar</type>
-            <version>3.0.3-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <artifactId>martservice</artifactId>
-            <groupId>org.biomart</groupId>
-            <type>jar</type>
-            <version>1.0</version>
+            <version>3.0.3</version>
         </dependency>
     </dependencies>
     <repositories>
