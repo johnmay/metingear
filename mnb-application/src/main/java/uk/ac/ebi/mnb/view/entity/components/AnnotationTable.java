@@ -20,16 +20,6 @@
  */
 package uk.ac.ebi.mnb.view.entity.components;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import javax.swing.Action;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.table.TableColumnModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
@@ -40,6 +30,15 @@ import uk.ac.ebi.chemet.render.table.renderers.*;
 import uk.ac.ebi.core.tools.StructuralValidity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
+
+import javax.swing.*;
+import javax.swing.table.TableColumnModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 
 /**
