@@ -20,15 +20,15 @@
  */
 package uk.ac.ebi.optimise;
 
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.utility.preference.type.FilePreference;
+import uk.ac.ebi.core.CorePreferences;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.utility.preference.type.FilePreference;
-import uk.ac.ebi.core.CorePreferences;
 
 
 /**
@@ -75,6 +75,24 @@ public class SimulationUtil {
 
     }
 
+    public static boolean isAvailable(){
+        return setup() && isCPLEXinClassPath();
+    }
+
+    private static Boolean ilog = null;
+
+    public static boolean isCPLEXinClassPath(){
+
+        if(ilog != null) return ilog;
+
+        try{
+            Class.forName("ilog.concert.IloNumVar", false, ClassLoader.getSystemClassLoader());
+            ilog = true;
+        } catch (ClassNotFoundException ex){
+            ilog = false;
+        }
+        return ilog;
+    }
 
     /**
      * Sets the CPLEX library path in the preferences and calls {@see setup()} adding this to the
