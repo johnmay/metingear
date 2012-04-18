@@ -23,36 +23,33 @@ package uk.ac.ebi.mnb.dialog.tools;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import net.sf.furbelow.SpinningDialWaitIndicator;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.event.UndoableEditListener;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
+import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.chemet.service.query.structure.KEGGCompoundStructureService;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.io.service.KEGGCompoundStructureService;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
-import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.WarningMessage;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -71,7 +68,7 @@ public class DownloadStructuresDialog
 
     private ChEBIWebServiceConnection chebi;
 
-    private KeggCompoundWebServiceConnection kegg;
+    private KEGGCompoundStructureService keggService = new KEGGCompoundStructureService();
 
     private JCheckBox chebiCheckBox;
 
@@ -119,11 +116,11 @@ public class DownloadStructuresDialog
             chebi = new ChEBIWebServiceConnection();
         }
 //        if (kegg == null) {
-//            kegg = new KeggCompoundWebServiceConnection();
+//            kegg = new KEGGCompoundStructureService();
 //        }
 
         boolean useChEBI = chebiAllStarCheckBox.isSelected() || chebiCheckBox.isSelected();
-        boolean useKEGG = keggCheckBox.isSelected();
+        boolean useKEGG  = keggCheckBox.isSelected();
 
         // set chebi filtering
         if (chebiAllStarCheckBox.isSelected()) {
@@ -174,7 +171,7 @@ public class DownloadStructuresDialog
                 } else if (useKEGG && id instanceof KEGGCompoundIdentifier) {
                     IAtomContainer molecule;
                     try {
-                        molecule = KEGGCompoundStructureService.getInstance().getStructure((KEGGCompoundIdentifier) id);
+                        molecule =  keggService.getStructure((KEGGCompoundIdentifier) id);
                         if (molecule != null) {
                             component.addAnnotation(new AtomContainerAnnotation(molecule));
                         }
