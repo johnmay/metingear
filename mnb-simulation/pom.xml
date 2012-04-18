@@ -8,17 +8,18 @@
         <version>0.9-SNAPSHOT</version>
     </parent>
     <artifactId>mnb-simulation</artifactId>
-    <name>Simulation</name>
-    <url>http://maven.apache.org</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <repositories>
         <repository>
             <id>ebi-repo-snapshots</id>
             <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots/</url>
         </repository>
     </repositories>
+
     <dependencies>
         <dependency>
             <groupId>ilog.cplex</groupId>
@@ -31,21 +32,6 @@
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>CheMet-BioWarehouse</artifactId>
-            <version>1.2-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jchem</artifactId>
-                    <groupId>chemaxon</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jaxws-api</artifactId>
-                    <groupId>javax.xml.ws</groupId>
-                </exclusion>          
-            </exclusions>
-        </dependency>-->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
