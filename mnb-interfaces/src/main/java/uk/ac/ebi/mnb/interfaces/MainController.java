@@ -21,7 +21,8 @@
 package uk.ac.ebi.mnb.interfaces;
 
 import uk.ac.ebi.caf.report.ReportManager;
-import javax.swing.event.UndoableEditListener;
+
+import javax.swing.undo.UndoManager;
 
 /**
  * @name    MainController - 2011.10.03 <br>
@@ -38,7 +39,7 @@ public interface MainController extends TargetedUpdate {
 
     public DialogController getDialogController();
 
-    public UndoableEditListener getUndoManager();
+    public UndoManager getUndoManager();
 
     public void updateMenuContext();
 
