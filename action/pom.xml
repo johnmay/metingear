@@ -67,5 +67,10 @@
             <type>jar</type>
             <version>0.8</version>
         </dependency>
+        <dependency>
+            <groupId>uk.ac.bbk</groupId>
+            <artifactId>bbkREx</artifactId>
+            <version>0.9-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>
