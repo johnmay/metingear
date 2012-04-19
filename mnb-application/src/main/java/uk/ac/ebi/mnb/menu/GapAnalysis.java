@@ -30,6 +30,7 @@ import uk.ac.ebi.mnb.dialog.tools.gap.NonProductionMetabolites;
 import uk.ac.ebi.mnb.dialog.tools.gap.RootNonProductionMetabolites;
 import uk.ac.ebi.mnb.dialog.tools.gap.TerminalNonConsumptionMetabolites;
 import uk.ac.ebi.mnb.interfaces.MainController;
+import uk.ac.ebi.optimise.SimulationUtil;
 
 /**
  *          GapAnalysis - 2011.12.02 <br>
@@ -71,28 +72,28 @@ public class GapAnalysis extends ContextMenu {
                 public boolean getContext(ReconstructionManager reconstructions,
                                           Reconstruction active,
                                           EntityCollection selection) {                  
-                    return active != null && active.hasMatrix();
+                    return active != null && active.hasMatrix() && SimulationUtil.isAvailable();
                 }
             });
             add(new RootNonProductionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
                                           Reconstruction active,
                                           EntityCollection selection) {
-                    return active != null && active.hasMatrix();
+                    return active != null && active.hasMatrix() && SimulationUtil.isAvailable();
                 }
             });
             add(new NonConsumptionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
                                           Reconstruction active,
                                           EntityCollection selection) {
-                    return active != null && active.hasMatrix();
+                    return active != null && active.hasMatrix() && SimulationUtil.isAvailable();
                 }
             });
             add(new TerminalNonConsumptionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
                                           Reconstruction active,
                                           EntityCollection selection) {
-                    return active != null && active.hasMatrix();
+                    return active != null && active.hasMatrix() && SimulationUtil.isAvailable();
                 }
             });
             

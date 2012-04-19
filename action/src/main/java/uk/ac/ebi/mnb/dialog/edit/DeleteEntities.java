@@ -1,5 +1,5 @@
 /**
- * DeleteEntity.java
+ * DeleteEntitiesEdit.java
  *
  * 2011.10.20
  *
@@ -20,22 +20,21 @@
  */
 package uk.ac.ebi.mnb.dialog.edit;
 
-import java.awt.event.ActionEvent;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.mnb.core.ControllerAction;
+import uk.ac.ebi.mnb.core.EntityMap;
+import uk.ac.ebi.mnb.edit.DeleteEntitiesEdit;
 import uk.ac.ebi.mnb.interfaces.MainController;
+
+import java.awt.event.ActionEvent;
 
 
 /**
- *          DeleteEntity - 2011.10.20 <br>
+ *          DeleteEntitiesEdit - 2011.10.20 <br>
  *          An action class that removes selected items from the reconstruction
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
@@ -54,19 +53,16 @@ public class DeleteEntities extends ControllerAction {
     public void actionPerformed(ActionEvent e) {
         EntityCollection selection = getSelection();
         Reconstruction recon = ReconstructionManager.getInstance().getActive();
-        for (AnnotatedEntity entity : selection.getEntities()) {
-            if (entity instanceof Metabolite) {
-                recon.getMetabolome().remove((Metabolite) entity);
-            } else if (entity instanceof MetabolicReactionImplementation) {
-                recon.getReactions().remove((MetabolicReactionImplementation) entity);
-            } else if (entity instanceof GeneProduct) {
-                recon.getProducts().remove((GeneProduct) entity);
-            } else if (entity instanceof Gene) {
-                Gene gene = (Gene) entity;
-                gene.getChromosome().remove(gene);
-            }
-        }
+
+        EntityCollection collectionCopy = new EntityMap(DefaultEntityFactory.getInstance());
+        collectionCopy.addAll(selection.getEntities()) ;
+
+        DeleteEntitiesEdit edit = new DeleteEntitiesEdit(recon, collectionCopy);
+        edit.redo(); // use the edit to do the action
+        getController().getUndoManager().addEdit(edit);
+
         selection.clear();
         getController().getViewController().getActiveView().update();
+
     }
 }

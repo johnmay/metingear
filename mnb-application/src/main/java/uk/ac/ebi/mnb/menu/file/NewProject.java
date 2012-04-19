@@ -6,26 +6,25 @@ package uk.ac.ebi.mnb.menu.file;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import javax.swing.*;
-
 import org.apache.lucene.queryParser.QueryParser;
 import uk.ac.ebi.caf.component.ReplacementHandler;
 import uk.ac.ebi.caf.component.SuggestionField;
 import uk.ac.ebi.caf.component.SuggestionHandler;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
 import uk.ac.ebi.chemet.service.query.taxonmy.TaxonomyQueryService;
-import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * NewProjectDialog.java
@@ -63,6 +62,9 @@ public class NewProject extends DropdownDialog {
                 taxonField.setSuggest(false);
                 nameField.setSuggest(false);
                 Taxonomy taxonomy = (Taxonomy) value;
+                if(idField.getText().isEmpty()){
+                    idField.setText("i" + taxonomy.getCode());
+                }
                 codeField.setText(taxonomy.getCode());
                 taxonField.setText(taxonomy.getAccession());
                 kingdomField.setText(taxonomy.getKingdom().toString());

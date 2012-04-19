@@ -4,22 +4,21 @@
  */
 package uk.ac.ebi.mnb.menu;
 
-import java.awt.Color;
-import java.io.File;
-import java.util.LinkedList;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.mnb.menu.file.SaveAsProjectAction;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
 import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.file.*;
+import uk.ac.ebi.mnb.dialog.file.importation.ImportModelSeed;
 import uk.ac.ebi.mnb.dialog.file.importation.ImportSBML;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.file.*;
 import uk.ac.ebi.mnb.menu.popup.CloseProject;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.util.LinkedList;
 
 
 /**
@@ -157,6 +156,7 @@ public class FileMenu
             super("Import...", MainView.getInstance());
             add(new ImportPeptidesAction(), activeProject);
             add(new ImportKGML(), activeProject);
+            add(new ImportModelSeed(MainView.getInstance(), MainView.getInstance()), activeProject);
         }
     }
 

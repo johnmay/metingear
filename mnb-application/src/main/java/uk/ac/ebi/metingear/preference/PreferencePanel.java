@@ -18,6 +18,7 @@ import uk.ac.ebi.caf.utility.preference.Preference;
 import uk.ac.ebi.chemet.resource.ResourcePreferences;
 import uk.ac.ebi.chemet.service.ServicePreferences;
 import uk.ac.ebi.chemet.service.loader.crossreference.ChEBICrossReferenceLoader;
+import uk.ac.ebi.chemet.service.loader.crossreference.UniProtCrossReferenceLoader;
 import uk.ac.ebi.chemet.service.loader.data.ChEBIDataLoader;
 import uk.ac.ebi.chemet.service.loader.location.DefaultLocationFactory;
 import uk.ac.ebi.chemet.service.loader.multiple.HMDBMetabocardsLoader;
@@ -28,8 +29,10 @@ import uk.ac.ebi.chemet.service.loader.structure.ChEBIStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
 import uk.ac.ebi.core.CorePreferences;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.metingear.Main;
 import uk.ac.ebi.render.resource.LoaderGroupFactory;
+import uk.ac.ebi.resource.IdentifierFactory;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -157,19 +160,16 @@ public class PreferencePanel extends JPanel {
                                                                new AbstractAction() {
                                                                    @Override
                                                                    public void actionPerformed(ActionEvent e) {
-                                                                        int choice = JOptionPane.showConfirmDialog(window, "You must restart Metingear before changes take effect");
-                                                                        if(choice == JOptionPane.OK_OPTION){
-                                                                            try {
-                                                                                Main.relaunch();
-                                                                            } catch (Exception e1) {
-                                                                                JOptionPane.showMessageDialog(window, "Unable to restart the application! Please restart manually.", "Error", JOptionPane.ERROR_MESSAGE);
-                                                                            }
-                                                                        }
+                                                                       int choice = JOptionPane.showConfirmDialog(window, "You must restart Metingear before changes take effect");
+                                                                       if (choice == JOptionPane.OK_OPTION) {
+                                                                           try {
+                                                                               Main.relaunch();
+                                                                           } catch (Exception e1) {
+                                                                               JOptionPane.showMessageDialog(window, "Unable to restart the application! Please restart manually.", "Error", JOptionPane.ERROR_MESSAGE);
+                                                                           }
+                                                                       }
                                                                    }
                                                                }));
-                add(Box.createHorizontalStrut(50));
-                add(factory.createGroup("Miscellaneous",
-                                        new TaxonomyLoader()));
                 add(Box.createHorizontalStrut(50));
                 add(factory.createGroup("ChEBI",
                                         new ChEBIStructureLoader(),
@@ -184,6 +184,11 @@ public class PreferencePanel extends JPanel {
                 add(factory.createGroup("HMDB",
                                         new HMDBMetabocardsLoader(),
                                         new HMDBStructureLoader()));
+                add(Box.createHorizontalStrut(50));
+                add(factory.createGroup("UniProt",
+                                        new TaxonomyLoader(),
+                                        new UniProtCrossReferenceLoader(DefaultEntityFactory.getInstance(),
+                                                                        IdentifierFactory.getInstance())));
                 add(Box.createGlue());
                 add(Box.createHorizontalStrut(50));
 

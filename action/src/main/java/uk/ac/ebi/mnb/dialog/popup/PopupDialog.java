@@ -20,31 +20,28 @@
  */
 package uk.ac.ebi.mnb.dialog.popup;
 
+import com.explodingpixels.widgets.WindowUtils;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.action.ActionProperties;
+import uk.ac.ebi.caf.component.factory.ButtonFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.component.theme.Theme;
+import uk.ac.ebi.caf.utility.ColorUtility;
+import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.mnb.core.CloseDialogAction;
+import uk.ac.ebi.mnb.settings.Settings;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.Area;
 import java.awt.geom.RoundRectangle2D;
-
-import uk.ac.ebi.mnb.core.CloseDialogAction;
-import uk.ac.ebi.caf.component.theme.Theme;
-import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-
-import javax.swing.*;
-
-import org.apache.log4j.Logger;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.sun.awt.AWTUtilities;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
-import uk.ac.ebi.caf.action.ActionProperties;
-import uk.ac.ebi.caf.component.factory.ButtonFactory;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.caf.utility.ColorUtility;
 
 
 /**
@@ -70,7 +67,9 @@ public class PopupDialog extends JDialog {
 
         @Override
         protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
+            // don't think we need a super.paintComponent(g)
+            // but we do need to clear the background
+            g.clearRect(0,0,getWidth(), getHeight());
             g.drawImage(bgImage, 0, 0, null);
         }
     };
@@ -101,7 +100,9 @@ public class PopupDialog extends JDialog {
     private void setup() {
         setUndecorated(true);
         add(background);
-        AWTUtilities.setWindowOpaque(this, false);
+
+        WindowUtils.makeWindowNonOpaque(this);
+
         //getRootPane().setOpaque(false);
         //getRootPane().setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
         panel.setOpaque(false);
@@ -119,6 +120,8 @@ public class PopupDialog extends JDialog {
         background.add(closeButton, cc.xy(2, 2));
         background.setOpaque(true);
         background.add(panel, cc.xy(3, 3));
+
+
         addComponentListener(new ComponentAdapter() {
 
             @Override
@@ -209,7 +212,7 @@ public class PopupDialog extends JDialog {
             g2.draw(callout);
         }
 
-        g2.setColor(theme.getDialogBackground());
+        g2.setColor(Color.WHITE);
         g2.fill(callout);
         g2.dispose();
 

@@ -27,42 +27,42 @@
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>CheMet-IO</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-domain-data-io</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-annotation-data-io</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-observation-data-io</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>CheMet-WebServices</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>CheMet-Visualisation</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-lucene-service</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-service-core</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.jgoodies</groupId>
@@ -92,6 +92,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>metingear-action</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mnb-simulation</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
