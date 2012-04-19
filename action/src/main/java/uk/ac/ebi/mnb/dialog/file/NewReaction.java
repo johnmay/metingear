@@ -30,6 +30,7 @@ import mnb.io.tabular.parser.UnparsableReactionError;
 import mnb.io.tabular.preparse.PreparsedReaction;
 import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
 import uk.ac.ebi.core.Reconstruction;
@@ -76,6 +77,13 @@ public class NewReaction extends NewEntity {
         equation = new ReactionField(this);
 
         FormLayout layout = (FormLayout) panel.getLayout();
+        layout.appendRow(new RowSpec(Sizes.DLUY4));
+        layout.appendRow(new RowSpec(Sizes.PREFERRED));
+        JLabel label = LabelFactory.newFormLabel("Reaction Equation",
+                                                 "Enter a text equation for your reaction (e.g. 1 A + B -> C [e])");
+        label.setHorizontalAlignment(JLabel.LEADING);
+        panel.add(label,
+                  cc.xyw(1, layout.getRowCount(), layout.getColumnCount()));
         layout.appendRow(new RowSpec(Sizes.DLUY4));
         layout.appendRow(new RowSpec(Sizes.PREFERRED));
         panel.add(equation, cc.xyw(1, layout.getRowCount(), layout.getColumnCount()));
