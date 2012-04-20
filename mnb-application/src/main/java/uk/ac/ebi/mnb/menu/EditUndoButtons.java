@@ -21,13 +21,13 @@
 package uk.ac.ebi.mnb.menu;
 
 import com.explodingpixels.macwidgets.LabeledComponentGroup;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.mnb.main.MainView;
+
+import javax.swing.*;
+import javax.swing.undo.UndoManager;
+import java.awt.event.ActionEvent;
 
 
 /**
@@ -87,6 +87,6 @@ public class EditUndoButtons {
 
 
     public LabeledComponentGroup getButtonGroup() {
-        return new LabeledComponentGroup("Edit", back, forward);
+        return new LabeledComponentGroup("Undo/Redo", back, forward);
     }
 }
