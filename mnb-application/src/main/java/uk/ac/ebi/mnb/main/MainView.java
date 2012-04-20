@@ -107,7 +107,7 @@ public class MainView
 
     private MainView() {
 
-        super("METINGEAR");
+        super("Metingear");
 
         getContentPane().setLayout(new CardLayout());
 
