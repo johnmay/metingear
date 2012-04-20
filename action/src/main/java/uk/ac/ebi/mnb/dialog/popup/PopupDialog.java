@@ -99,6 +99,7 @@ public class PopupDialog extends JDialog {
 
     private void setup() {
         setUndecorated(true);
+        setAlwaysOnTop(true);
         add(background);
 
         WindowUtils.makeWindowNonOpaque(this);
