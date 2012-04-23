@@ -32,8 +32,8 @@ import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -63,7 +63,7 @@ public class ListSelectionReconciler implements EntryReconciler {
 
     private CandidateSelector curater;
 
-    private Reconstruction recon;
+    private ReconstructionImpl recon;
 
     private Multimap<String, Metabolite> nameMap;
 
@@ -76,7 +76,7 @@ public class ListSelectionReconciler implements EntryReconciler {
         this.frame = frame;
         curater = new CandidateSelector(frame);
 
-        recon = ReconstructionManager.getInstance().getActive();
+        recon = DefaultReconstructionManager.getInstance().getActive();
         nameMap = HashMultimap.create();
         if (recon != null && !recon.getMetabolome().isEmpty()) {
             for (Metabolite m : recon.getMetabolome()) {

@@ -4,11 +4,6 @@
  */
 package uk.ac.ebi.mnb.menu;
 
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
-import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.build.RunTasksAction;
 

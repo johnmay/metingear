@@ -26,7 +26,7 @@ import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.io.xml.SBMLReactionReader;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.mdk.domain.tool.DialogCompartmentResolver;
@@ -115,7 +115,7 @@ public class ImportSBML extends DelayedBuildAction {
 
                             try {
 
-                                ReconstructionManager manager = ReconstructionManager.getInstance();
+                                DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
                                 manager.getActive().addReaction(reader.nextMetabolicReaction());
 
                             } catch (UnknownCompartmentException ex) {

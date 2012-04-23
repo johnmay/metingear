@@ -22,7 +22,6 @@ package uk.ac.ebi.mnb.dialog.file;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
@@ -34,9 +33,9 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
@@ -68,7 +67,7 @@ public class ExportMetabolitesMDL extends ControllerAction {
 
         EntityCollection selection = getSelection();
 
-        Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
 
         Collection<Metabolite> metabolites = selection.hasSelection(Metabolite.class)
                                              ? selection.get(Metabolite.class)

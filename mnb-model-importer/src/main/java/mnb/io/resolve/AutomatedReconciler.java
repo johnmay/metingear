@@ -32,8 +32,8 @@ import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -62,7 +62,7 @@ public class AutomatedReconciler
 
     private Identifier template;
 
-    private Reconstruction recon;
+    private ReconstructionImpl recon;
 
     private Multimap<String, Metabolite> nameMap;
 
@@ -71,7 +71,7 @@ public class AutomatedReconciler
         this.factory = factory;
         this.template = factoryIdClass;
 
-        recon = ReconstructionManager.getInstance().getActive();
+        recon = DefaultReconstructionManager.getInstance().getActive();
         nameMap = HashMultimap.create();
         if (recon != null && !recon.getMetabolome().isEmpty()) {
             for (Metabolite m : recon.getMetabolome()) {

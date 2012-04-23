@@ -21,13 +21,11 @@
 package uk.ac.ebi.chemet.render.source;
 
 import com.explodingpixels.macwidgets.SourceListCategory;
-import com.explodingpixels.macwidgets.SourceListItem;
 import com.explodingpixels.macwidgets.SourceListModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 
 
@@ -51,8 +49,8 @@ public class ReconstructionSourceItem
 
 
     @Override
-    public Reconstruction getEntity() {
-        return (Reconstruction) super.getEntity();
+    public ReconstructionImpl getEntity() {
+        return (ReconstructionImpl) super.getEntity();
     }
 
 
@@ -61,8 +59,8 @@ public class ReconstructionSourceItem
      */
     @Override
     public void update() {
-        ReconstructionManager manger = ReconstructionManager.getInstance();
-        Reconstruction active = manger.getActive();
+        DefaultReconstructionManager manger = DefaultReconstructionManager.getInstance();
+        ReconstructionImpl active = manger.getActive();
         setText(getEntity().getAccession() + (getEntity() == active ? " (active)" : ""));
     }
 

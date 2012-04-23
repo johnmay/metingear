@@ -8,7 +8,7 @@ package uk.ac.ebi.mnb.menu.file;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.stream.XMLStreamException;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.xml.stax.SBMLWriter;
@@ -48,7 +48,7 @@ public class ExportSBMLAction
 
             SBMLIOUtil util = new SBMLIOUtil(level, version);
 
-            SBMLDocument document = util.getDocument(ReconstructionManager.getInstance().getActive());
+            SBMLDocument document = util.getDocument(DefaultReconstructionManager.getInstance().getActive());
 
             SBMLWriter writer = new SBMLWriter();
 

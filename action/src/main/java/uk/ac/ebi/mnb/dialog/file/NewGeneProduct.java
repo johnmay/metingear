@@ -29,8 +29,8 @@ import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
 import uk.ac.ebi.chemet.resource.basic.BasicRNAIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -103,9 +103,9 @@ public class NewGeneProduct extends NewEntity {
 
     @Override
     public void process() {
-        ReconstructionManager manager = ReconstructionManager.getInstance();
+        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
         if (manager.hasProjects()) {
-            Reconstruction reconstruction = manager.getActive();
+            ReconstructionImpl reconstruction = manager.getActive();
 
             EntityFactory factory = DefaultEntityFactory.getInstance();
             GeneProduct product = factory.newInstance(protein.isSelected() ? ProteinProduct.class : rrna.isSelected() ? RibosomalRNA.class : TransferRNA.class);

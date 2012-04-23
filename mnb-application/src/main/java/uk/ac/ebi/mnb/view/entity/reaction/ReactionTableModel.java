@@ -23,14 +23,14 @@ package uk.ac.ebi.mnb.view.entity.reaction;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Subsystem;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.Reaction;
 
@@ -67,7 +67,7 @@ public class ReactionTableModel extends AbstractEntityTableModel {
     @Override
     public void loadComponents() {
 
-        Reconstruction project = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl project = DefaultReconstructionManager.getInstance().getActive();
 
         setEntities(project != null ? project.getReactions() : new ArrayList());
 

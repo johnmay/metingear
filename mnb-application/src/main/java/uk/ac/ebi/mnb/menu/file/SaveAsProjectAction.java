@@ -16,8 +16,8 @@ import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
 import uk.ac.ebi.chemet.io.observation.ObservationOutput;
 import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 
@@ -47,7 +47,7 @@ public class SaveAsProjectAction
     @Override
     public void activateActions() {
 
-        ReconstructionManager manager = ReconstructionManager.getInstance();
+        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
 
         if (manager.getActive() == null) {
             JOptionPane.showMessageDialog(getChooser(), "No active project define");
@@ -60,7 +60,7 @@ public class SaveAsProjectAction
             File f = getFile(showSaveDialog());
 
             if (f != null) {
-                Reconstruction reconstruction = manager.getActive();
+                ReconstructionImpl reconstruction = manager.getActive();
                 reconstruction.setContainer(f);
                 f.mkdir();
 

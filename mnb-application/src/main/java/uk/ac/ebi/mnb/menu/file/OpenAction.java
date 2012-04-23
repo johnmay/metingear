@@ -17,8 +17,8 @@ import uk.ac.ebi.chemet.io.observation.ObservationInput;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.main.MainView;
@@ -28,7 +28,6 @@ import javax.swing.*;
 import javax.swing.filechooser.FileView;
 import java.io.*;
 import java.util.Properties;
-import java.util.zip.GZIPInputStream;
 
 
 /**
@@ -112,7 +111,7 @@ public class OpenAction
 
 
                 long start = System.currentTimeMillis();
-                Reconstruction reconstruction = entityInput.read();
+                ReconstructionImpl reconstruction = entityInput.read();
                 long end = System.currentTimeMillis();
                 logger.info("Loaded project data in " + (end - start) + " (ms)");
 
@@ -121,7 +120,7 @@ public class OpenAction
                 observationStream.close();
 
                 // set as the active reconstruction
-                ReconstructionManager.getInstance().setActiveReconstruction(reconstruction);
+                DefaultReconstructionManager.getInstance().setActiveReconstruction(reconstruction);
 
                 // update the view with the
                 MainView.getInstance().update();

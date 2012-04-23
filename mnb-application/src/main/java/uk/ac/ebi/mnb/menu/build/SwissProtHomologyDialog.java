@@ -118,7 +118,7 @@ public class SwissProtHomologyDialog
     @Override
     public void process() {
 
-//        Reconstruction activeProject = ReconstructionManager.getInstance().getActiveReconstruction();
+//        ReconstructionImpl activeProject = ReconstructionManager.getInstance().getActiveReconstruction();
 //
 //        JobParameters parameters = new JobParameters("Blast Test");
 //

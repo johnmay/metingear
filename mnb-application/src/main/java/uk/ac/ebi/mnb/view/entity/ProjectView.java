@@ -21,7 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import uk.ac.ebi.core.ReconstructionManager;
+
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
 import uk.ac.ebi.mnb.view.entity.protein.ProductView;
 import uk.ac.ebi.mnb.view.entity.reaction.ReactionView;
@@ -29,7 +31,6 @@ import uk.ac.ebi.mnb.view.entity.general.GeneralView;
 import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.store.LockObtainFailedException;
-import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -193,8 +194,8 @@ public class ProjectView
      */
     public boolean update() {
 
-        ReconstructionManager manager = ReconstructionManager.getInstance();
-        Reconstruction reconstruction = manager.getActive();
+        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        ReconstructionImpl reconstruction = manager.getActive();
 
         if (reconstruction == null) {
             products.clear();

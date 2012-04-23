@@ -22,8 +22,8 @@ package uk.ac.ebi.mnb.view.entity.gene;
 
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
@@ -57,7 +57,7 @@ public class GeneTableModel extends AbstractEntityTableModel {
     @Override
     public void loadComponents() {
 
-        Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
 
         if (recon != null) {
             super.setEntities(new ArrayList<AnnotatedEntity>(recon.getGenes()));

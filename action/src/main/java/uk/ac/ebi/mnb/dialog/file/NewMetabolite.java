@@ -27,8 +27,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -67,9 +67,9 @@ public class NewMetabolite extends NewEntity {
 
     @Override
     public void process() {
-        ReconstructionManager manager = ReconstructionManager.getInstance();
+        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
         if (manager.hasProjects()) {
-            Reconstruction reconstruction = manager.getActive();
+            ReconstructionImpl reconstruction = manager.getActive();
             Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class, getIdentifier(), getName(), getAbbreviation());
             reconstruction.addMetabolite(m);
         }

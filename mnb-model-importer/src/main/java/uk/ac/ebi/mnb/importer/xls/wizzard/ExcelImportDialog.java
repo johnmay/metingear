@@ -27,7 +27,7 @@ import java.io.File;
 import javax.swing.event.UndoableEditListener;
 import mnb.io.tabular.ExcelModelProperties;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -102,7 +102,7 @@ public class ExcelImportDialog
 
     private WizzardStage[] stages = new WizzardStage[4];
 
-    private Reconstruction reconstruction;
+    private ReconstructionImpl reconstruction;
 
     private CellConstraints cc = new CellConstraints();
 
@@ -118,7 +118,7 @@ public class ExcelImportDialog
                              ReportManager messages,
                              SelectionController controller,
                              UndoableEditListener undoableEdits,
-                             Reconstruction reconstruction,
+                             ReconstructionImpl reconstruction,
                              File file,
                              ExcelHelper helper,
                              ServiceManager manager) {

@@ -24,8 +24,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
@@ -86,7 +86,7 @@ public class MergeEntities extends ControllerDialog {
         // find them in all reactions and update reactions also
         Metabolite n = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
         ;
-        Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
 
         StringBuilder accessionBuilder = new StringBuilder();
         StringBuilder nameBuilder = new StringBuilder();

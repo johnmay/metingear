@@ -32,8 +32,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.io.model.ReactionMatrixIO;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mnb.core.ControllerDialog;
@@ -129,7 +129,7 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
         if (choice == JFileChooser.APPROVE_OPTION) {
 
             File f = chooser.getSelectedFile();
-            Reconstruction recon = ReconstructionManager.getInstance().getActive();
+            ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
             StoichiometricMatrix s = recon.getMatrix();
 
             try {

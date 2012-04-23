@@ -32,16 +32,14 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.utility.TextUtility;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
@@ -198,7 +196,7 @@ public class MetabolitePanel
 
     @Override
     public Collection<? extends AnnotatedEntity> getReferences() {
-        Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
         if (entity != null && recon != null) {
             return recon.getReactions().getReactions(entity);
         }

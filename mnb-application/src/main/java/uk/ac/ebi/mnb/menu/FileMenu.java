@@ -4,8 +4,9 @@
  */
 package uk.ac.ebi.mnb.menu;
 
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.IReconstruction;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.file.*;
@@ -44,7 +45,7 @@ public class FileMenu
 
     private ContextResponder activeProject = new ContextResponder() {
 
-        public boolean getContext(ReconstructionManager reconstructions, IReconstruction active, EntityCollection selection) {
+        public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
             return active != null;
         }
     };
@@ -77,7 +78,7 @@ public class FileMenu
         add(exportMenu);
         add(new ExportSBMLAction(), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, IReconstruction active, EntityCollection selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return active != null && (!active.getReactome().isEmpty() || !active.getMetabolome().isEmpty());
             }
         });
@@ -98,7 +99,7 @@ public class FileMenu
 
     public void rebuildRecentlyOpen() {
         recent.removeAll(); // could just add and remove items... but for now
-        LinkedList<String> items = uk.ac.ebi.core.ReconstructionManager.getInstance().getRecent();
+        LinkedList<String> items = DefaultReconstructionManager.getInstance().getRecent();
         for (int i = items.size() - 1; i >= 0; i--) {
             String path = items.get(i);
             File file = new File(path);
@@ -170,7 +171,7 @@ public class FileMenu
             super("Export...", MainView.getInstance());
             add(create(ExportStoichiometricMatrix.class), new ContextResponder() {
 
-                public boolean getContext(ReconstructionManager reconstructions, IReconstruction active, EntityCollection selection) {
+                public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                     return active != null && active.hasMatrix();
                 }
             });

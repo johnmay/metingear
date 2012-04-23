@@ -23,7 +23,7 @@ package mnb.io.tabular;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 import java.util.HashMap;
@@ -49,7 +49,7 @@ public class NamedEntityResolver implements EntityResolver {
 
     public NamedEntityResolver() {
 
-        for (Metabolite m : ReconstructionManager.getInstance().getActive().getMetabolome()) {
+        for (Metabolite m : DefaultReconstructionManager.getInstance().getActive().getMetabolome()) {
 
             if (nameMap.containsKey(m.getName())) {
                 LOGGER.error("Name clash! " + m.getName());

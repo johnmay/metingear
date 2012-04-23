@@ -1,6 +1,6 @@
 package uk.ac.ebi.mnb.edit;
 
-import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
@@ -20,10 +20,10 @@ import java.util.Map;
 public class DeleteEntitiesEdit extends AbstractUndoableEdit {
 
     private EntityCollection     collection;
-    private Reconstruction       recon;
+    private ReconstructionImpl recon;
     private Map<Gene,Chromosome> geneMap;
     
-    public DeleteEntitiesEdit(Reconstruction recon, EntityCollection collection){
+    public DeleteEntitiesEdit(ReconstructionImpl recon, EntityCollection collection){
         this.recon      = recon;
         this.collection = collection;
     }

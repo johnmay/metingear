@@ -33,8 +33,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.core.ErrorMessage;
@@ -99,9 +99,9 @@ public class NewReaction extends NewEntity {
     @Override
     public void process() {
 
-        ReconstructionManager manager = ReconstructionManager.getInstance();
+        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
         if (manager.hasProjects()) {
-            Reconstruction reconstruction = manager.getActive();
+            ReconstructionImpl reconstruction = manager.getActive();
 
             ReactionParser parser = new ReactionParser(new NamedEntityResolver());
             PreparsedReaction ppRxn = new PreparsedReaction();

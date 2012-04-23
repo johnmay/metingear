@@ -22,8 +22,8 @@ package uk.ac.ebi.mnb.dialog.tools.stoichiometry;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.render.matrix.MatrixPane;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.reaction.Direction;
@@ -81,7 +81,7 @@ public class CreateMatrix
     public void process() {
 
         EntityCollection manager = getSelection();
-        Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
 
         Collection<MetabolicReaction> rxns = manager.hasSelection(MetabolicReaction.class) && manager.get(MetabolicReaction.class).size() > 1
                                              ? manager.get(MetabolicReaction.class)
@@ -112,7 +112,7 @@ public class CreateMatrix
         frame.add(new MatrixPane(matrix));
         frame.setVisible(true);
 
-        Reconstruction active = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl active = DefaultReconstructionManager.getInstance().getActive();
 
         active.setMatix(matrix);
 

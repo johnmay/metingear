@@ -29,7 +29,7 @@
 //import org.openscience.cdk.interfaces.IMoleculeSet;
 //import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 //import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-//import uk.ac.ebi.core.Reconstruction;
+//import uk.ac.ebi.core.ReconstructionImpl;
 //import uk.ac.ebi.metabolomes.core.gene.OldGeneProductCollection;
 //import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 //import uk.ac.ebi.core.Metabolite;
@@ -63,7 +63,7 @@
 //    private static final org.apache.log4j.Logger LOGGER =
 //                                                 org.apache.log4j.Logger.getLogger(PredictGPR.class);
 //    private OldGeneProductCollection productCollection;
-//    private Reconstruction project;
+//    private ReconstructionImpl project;
 //
 //
 //    public PredictGPR(JobParameters param,

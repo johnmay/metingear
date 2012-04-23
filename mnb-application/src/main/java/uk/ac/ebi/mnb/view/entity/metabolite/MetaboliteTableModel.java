@@ -26,8 +26,8 @@ import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.model.Lumped;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.StarRating;
 import uk.ac.ebi.core.tools.StructuralValidity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -81,7 +81,7 @@ public class MetaboliteTableModel
     @Override
     public void loadComponents() {
 
-        Reconstruction project = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl project = DefaultReconstructionManager.getInstance().getActive();
 
         if (project != null) {
             setEntities(project.getMetabolome());

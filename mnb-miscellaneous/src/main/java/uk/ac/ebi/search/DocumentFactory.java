@@ -31,7 +31,7 @@ import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
@@ -50,7 +50,7 @@ public class DocumentFactory {
     private static final Logger LOGGER = Logger.getLogger(DocumentFactory.class);
 
 
-    public static Map<UUID, AnnotatedEntity> write(IndexWriter writer, Reconstruction recon)
+    public static Map<UUID, AnnotatedEntity> write(IndexWriter writer, ReconstructionImpl recon)
             throws
             CorruptIndexException, IOException {
 

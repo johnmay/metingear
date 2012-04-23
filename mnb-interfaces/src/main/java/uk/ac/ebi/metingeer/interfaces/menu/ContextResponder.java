@@ -21,7 +21,7 @@
 package uk.ac.ebi.metingeer.interfaces.menu;
 
 import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.IReconstruction;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
 
 /**
@@ -36,6 +36,6 @@ import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
 public interface ContextResponder {
 
     public boolean getContext(ReconstructionManager reconstructions,
-                              IReconstruction active,
+                              Reconstruction active,
                               EntityCollection selection);
 }

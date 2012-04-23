@@ -14,7 +14,8 @@ import java.util.Map.Entry;
 import javax.swing.JFileChooser;
 
 import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.compound.AminoAcidCompound;
 import org.biojava3.core.sequence.compound.AminoAcidCompoundSet;
@@ -25,7 +26,6 @@ import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.chemet.io.file.FastaFileFilter;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.chemet.io.file.FileFilterManager;
-import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.mnb.main.MainView;
@@ -52,7 +52,7 @@ public class ImportPeptidesAction extends FileChooserAction {
     public void activateActions() {
 
         // add the peptides to the active project and updateObservations the annotations table
-        Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
 
         if (recon == null) {
             MainView.getInstance().addErrorMessage("No active reconstruction to import peptides into");

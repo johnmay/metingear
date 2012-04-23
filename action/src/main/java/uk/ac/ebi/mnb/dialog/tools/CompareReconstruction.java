@@ -30,8 +30,8 @@ import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.core.tools.ReconstructionComparison;
 import uk.ac.ebi.core.tools.hash.seeds.*;
 import uk.ac.ebi.mnb.core.ControllerDialog;
@@ -113,9 +113,9 @@ public class CompareReconstruction
     @Override
     public void setVisible(boolean visible) {
 
-        recon1.setModel(new DefaultComboBoxModel(ReconstructionManager.getInstance().getProjects().toArray()));
-        recon2.setModel(new DefaultComboBoxModel(ReconstructionManager.getInstance().getProjects().toArray()));
-        recon3.setModel(new DefaultComboBoxModel(ReconstructionManager.getInstance().getProjects().toArray()));
+        recon1.setModel(new DefaultComboBoxModel(DefaultReconstructionManager.getInstance().getProjects().toArray()));
+        recon2.setModel(new DefaultComboBoxModel(DefaultReconstructionManager.getInstance().getProjects().toArray()));
+        recon3.setModel(new DefaultComboBoxModel(DefaultReconstructionManager.getInstance().getProjects().toArray()));
 
         ((DefaultComboBoxModel) recon3.getModel()).addElement("-");
         recon3.setSelectedItem("-");
@@ -128,9 +128,9 @@ public class CompareReconstruction
     @Override
     public void process() {
 
-        Reconstruction reconA = (Reconstruction) recon1.getSelectedItem();
-        Reconstruction reconB = (Reconstruction) recon2.getSelectedItem();
-        Reconstruction reconC = (Reconstruction) (recon3.getSelectedItem() == "-" ? null : recon3.getSelectedItem());
+        ReconstructionImpl reconA = (ReconstructionImpl) recon1.getSelectedItem();
+        ReconstructionImpl reconB = (ReconstructionImpl) recon2.getSelectedItem();
+        ReconstructionImpl reconC = (ReconstructionImpl) (recon3.getSelectedItem() == "-" ? null : recon3.getSelectedItem());
 
         venn = null;
 

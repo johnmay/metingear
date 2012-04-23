@@ -23,8 +23,8 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.report.bar.MessageBar;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.metingear.view.ControlDialog;
@@ -133,7 +133,7 @@ public class MainView
         searchField.getDocument().addDocumentListener(new DocumentListener() {
 
             public void insertUpdate(DocumentEvent e) {
-                final Reconstruction recon = ReconstructionManager.getInstance().getActive();
+                final ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
                 if (recon != null) {
                     try {
                         final String text =

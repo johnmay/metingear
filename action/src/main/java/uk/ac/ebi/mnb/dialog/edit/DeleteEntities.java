@@ -22,8 +22,8 @@ package uk.ac.ebi.mnb.dialog.edit;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.core.EntityMap;
@@ -52,7 +52,7 @@ public class DeleteEntities extends ControllerAction {
 
     public void actionPerformed(ActionEvent e) {
         EntityCollection selection = getSelection();
-        Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
 
         EntityCollection collectionCopy = new EntityMap(DefaultEntityFactory.getInstance());
         collectionCopy.addAll(selection.getEntities()) ;

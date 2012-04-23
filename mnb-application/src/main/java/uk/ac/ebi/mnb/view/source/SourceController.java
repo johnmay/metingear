@@ -20,8 +20,8 @@ import com.explodingpixels.macwidgets.*;
 import com.explodingpixels.widgets.PopupMenuCustomizer;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.chemet.render.source.*;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
@@ -140,7 +140,7 @@ public class SourceController
 
 
         // metabolite first
-        ReconstructionManager manager = ReconstructionManager.getInstance();
+        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
 
         // with each update item we remove it from the item collector. then at the end all items
         // still in the collector are removed
@@ -153,12 +153,12 @@ public class SourceController
 
         if (manager.hasProjects()) {
 
-            Reconstruction active = manager.getActive();
+            ReconstructionImpl active = manager.getActive();
 
             // reconstructions
             for (int i = 0; i < manager.size(); i++) {
                 // todo: remove cast
-                Reconstruction reconstruction = (Reconstruction) manager.getProject(i);
+                ReconstructionImpl reconstruction = (ReconstructionImpl) manager.getProject(i);
                 if (itemMap.containsKey(reconstruction) == false) {
                     EntitySourceItem item = new ReconstructionSourceItem(reconstruction,
                                                                          reconstructions);
@@ -293,7 +293,7 @@ public class SourceController
 
     public void customizePopup(JPopupMenu popup) {
 
-        ReconstructionManager manager = ReconstructionManager.getInstance();
+        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
 
         // if there's no item add them all
         if (popup.getComponents().length == 0) {

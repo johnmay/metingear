@@ -14,8 +14,8 @@ import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
 import uk.ac.ebi.chemet.service.query.taxonmy.TaxonomyQueryService;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.resource.organism.Kingdom;
@@ -244,8 +244,8 @@ public class NewProject extends DropdownDialog {
             Taxonomy orgId = new Taxonomy(taxon, code, kingdom, name, name);
             ReconstructionIdentifier proId = new ReconstructionIdentifier(getProjectIdentifier());
 
-            Reconstruction proj = new Reconstruction(proId, orgId);
-            ReconstructionManager.getInstance().setActiveReconstruction(proj);
+            ReconstructionImpl proj = new ReconstructionImpl(proId, orgId);
+            DefaultReconstructionManager.getInstance().setActiveReconstruction(proj);
 
         }
     }

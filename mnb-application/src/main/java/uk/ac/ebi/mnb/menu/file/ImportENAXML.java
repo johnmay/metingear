@@ -23,8 +23,8 @@ package uk.ac.ebi.mnb.menu.file;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.core.ChromosomeImplementation;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
@@ -67,8 +67,8 @@ public class ImportENAXML extends FileChooserAction {
 
                 List<GeneProduct> products = reader.getProducts();
 
-                ReconstructionManager manager = ReconstructionManager.getInstance();
-                Reconstruction recon = manager.getActive();
+                DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
+                ReconstructionImpl recon = manager.getActive();
                 recon.getProducts().addAll(products);
 
                 Chromosome c = new ChromosomeImplementation(1, new ChromosomeSequence(reader.getGenomeString()));

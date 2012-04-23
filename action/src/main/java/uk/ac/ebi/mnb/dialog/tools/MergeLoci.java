@@ -25,9 +25,9 @@ import com.google.common.collect.Multimap;
 import java.awt.event.ActionEvent;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Locus;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.core.MultimerImplementation;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
@@ -55,7 +55,7 @@ public class MergeLoci extends ControllerAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
 
         Multimap<String, MetabolicReaction> monomeric = HashMultimap.create();
         Multimap<String, MetabolicReaction> multimeric = HashMultimap.create();

@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.menu;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.IReconstruction;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
 import uk.ac.ebi.metingear.preference.PreferenceFrame;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
@@ -82,7 +82,7 @@ public class EditMenu extends ContextMenu {
         add(new JSeparator());
         add(create(CreateSubset.class), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, IReconstruction active, EntityCollection selection) {
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection();
             }
         });
@@ -92,7 +92,7 @@ public class EditMenu extends ContextMenu {
         add(create(AddAnnotation.class));
 //        add(new AssignFlags("Add", view), new ContextResponder() {
 //
-//            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+//            public boolean getContext(ReconstructionManager reconstructions, ReconstructionImpl active, EntityCollection selection) {
 //                return selection.hasSelection();
 //            }
 //        });

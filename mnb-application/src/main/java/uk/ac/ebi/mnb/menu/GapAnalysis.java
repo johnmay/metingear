@@ -22,7 +22,7 @@ package uk.ac.ebi.mnb.menu;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.IReconstruction;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.tools.gap.NonConsumptionMetabolites;
@@ -70,28 +70,28 @@ public class GapAnalysis extends ContextMenu {
 
             add(new NonProductionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
-                                          IReconstruction active,
+                                          Reconstruction active,
                                           EntityCollection selection) {                  
                     return active != null && active.hasMatrix() && SimulationUtil.isAvailable();
                 }
             });
             add(new RootNonProductionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
-                                          IReconstruction active,
+                                          Reconstruction active,
                                           EntityCollection selection) {
                     return active != null && active.hasMatrix() && SimulationUtil.isAvailable();
                 }
             });
             add(new NonConsumptionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
-                                          IReconstruction active,
+                                          Reconstruction active,
                                           EntityCollection selection) {
                     return active != null && active.hasMatrix() && SimulationUtil.isAvailable();
                 }
             });
             add(new TerminalNonConsumptionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
-                                          IReconstruction active,
+                                          Reconstruction active,
                                           EntityCollection selection) {
                     return active != null && active.hasMatrix() && SimulationUtil.isAvailable();
                 }

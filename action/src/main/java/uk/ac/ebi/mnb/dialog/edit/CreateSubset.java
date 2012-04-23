@@ -29,8 +29,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.render.source.EntitySubset;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -94,7 +94,7 @@ public class CreateSubset extends ControllerDialog {
 
 
 
-        Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
         EntitySubset subset = new EntitySubset(field.getText(), null);
 
         for (AnnotatedEntity entity : getSelection().getEntities()) {

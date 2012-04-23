@@ -34,7 +34,7 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.service.query.structure.KEGGCompoundStructureService;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -203,7 +203,7 @@ public class DownloadStructuresDialog
     public boolean update() {
 
         // rebuild the map to avoid problems with non-equal hashes
-        ReconstructionManager.getInstance().getActive().getReactions().rebuildParticipantMap();
+        DefaultReconstructionManager.getInstance().getActive().getReactions().rebuildParticipantMap();
 
         return update(getSelection());
 

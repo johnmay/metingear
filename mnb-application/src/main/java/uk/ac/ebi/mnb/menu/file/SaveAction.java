@@ -32,8 +32,8 @@ import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
 import uk.ac.ebi.chemet.io.observation.ObservationOutput;
 import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.main.MainView;
@@ -65,8 +65,8 @@ public class SaveAction extends GeneralAction {
 
     public void actionPerformed(ActionEvent e) {
         try {
-            ReconstructionManager manager = ReconstructionManager.getInstance();
-            Reconstruction reconstruction = manager.getActive();
+            DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
+            ReconstructionImpl reconstruction = manager.getActive();
 
             IntegerPreference bufferPref = CorePreferences.getInstance().getPreference("BUFFER_SIZE");
 

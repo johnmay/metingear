@@ -21,12 +21,12 @@
 package uk.ac.ebi.mnb.dialog.tools.gap;
 
 import com.google.common.base.Joiner;
-import ilog.concert.IloException;
+
 import java.awt.event.ActionEvent;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.caf.action.GeneralAction;
@@ -57,7 +57,7 @@ public class NonProductionMetabolites
     public void actionPerformed(ActionEvent e) {
 
         try {
-            Reconstruction active = ReconstructionManager.getInstance().getActive();
+            ReconstructionImpl active = DefaultReconstructionManager.getInstance().getActive();
             StoichiometricMatrix<CompartmentalisedMetabolite, ?> s = active.getMatrix();
 
             SimulationUtil.setup(); // make sure the paths are set

@@ -23,8 +23,8 @@ package uk.ac.ebi.mnb.view.entity;
 import java.util.*;
 
 import uk.ac.ebi.chemet.render.source.*;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 import javax.swing.table.AbstractTableModel;
@@ -50,9 +50,9 @@ public abstract class AbstractEntityTableModel
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityTableModel.class);
 
-    private Reconstruction currentReconstruction;
+    private ReconstructionImpl currentReconstruction;
 
-    private ReconstructionManager pm = ReconstructionManager.getInstance();
+    private DefaultReconstructionManager pm = DefaultReconstructionManager.getInstance();
 
     private List<ColumnDescriptor> columnDescriptors = new ArrayList();
 

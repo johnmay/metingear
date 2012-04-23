@@ -23,14 +23,12 @@ package uk.ac.ebi.mnb.view.entity.protein;
 import com.google.common.base.Joiner;
 import java.util.ArrayList;
 import java.util.Arrays;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.DataType;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
-import org.biojava3.core.sequence.template.CompoundSet;
-import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 
@@ -58,7 +56,7 @@ public class ProductTableModel extends AbstractEntityTableModel {
     @Override
     public void loadComponents() {
 
-        Reconstruction recon = ReconstructionManager.getInstance().getActive();
+        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
 
         if (recon != null) {
             super.setEntities(new ArrayList<AnnotatedEntity>(recon.getProducts()));
