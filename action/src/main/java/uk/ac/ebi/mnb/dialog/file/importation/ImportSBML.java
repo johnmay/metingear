@@ -45,6 +45,7 @@ import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
+import uk.ac.ebi.mdk.domain.tool.DialogCompartmentResolver;
 
 
 /**
@@ -113,7 +114,7 @@ public class ImportSBML extends DelayedBuildAction {
                     InputStream in = null;
                     try {
                         in = new BufferedInputStream(new FileInputStream(choosen), 4096);
-                        SBMLReactionReader reader = new SBMLReactionReader(in, DefaultEntityFactory.getInstance());
+                        SBMLReactionReader reader = new SBMLReactionReader(in, DefaultEntityFactory.getInstance(), new uk.ac.ebi.mdk.domain.tool.DialogCompartmentResolver(new uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver(), (JFrame) controller));
                         while (reader.hasNext()) {
 
                             try {
