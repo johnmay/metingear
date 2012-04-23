@@ -21,31 +21,26 @@
 package uk.ac.ebi.mnb.dialog.file.importation;
 
 import net.sf.furbelow.SpinningDialWaitIndicator;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.action.DelayedBuildAction;
+import uk.ac.ebi.caf.report.Report;
+import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
+import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.io.xml.SBMLReactionReader;
+import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
+import uk.ac.ebi.mdk.domain.tool.DialogCompartmentResolver;
+import uk.ac.ebi.mnb.core.ErrorMessage;
+import uk.ac.ebi.mnb.core.WarningMessage;
+import uk.ac.ebi.mnb.interfaces.MainController;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.xml.stream.XMLStreamException;
+import java.io.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileFilter;
-import javax.xml.stream.XMLStreamException;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.action.DelayedBuildAction;
-import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
-import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.io.xml.SBMLReactionReader;
-import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.caf.report.Report;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.mdk.domain.tool.DialogCompartmentResolver;
 
 
 /**
@@ -114,7 +109,8 @@ public class ImportSBML extends DelayedBuildAction {
                     InputStream in = null;
                     try {
                         in = new BufferedInputStream(new FileInputStream(choosen), 4096);
-                        SBMLReactionReader reader = new SBMLReactionReader(in, DefaultEntityFactory.getInstance(), new uk.ac.ebi.mdk.domain.tool.DialogCompartmentResolver(new uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver(), (JFrame) controller));
+                        SBMLReactionReader reader = new SBMLReactionReader(in, DefaultEntityFactory.getInstance(), new DialogCompartmentResolver(new AutomaticCompartmentResolver(),
+                                                                                                                                                 (JFrame) controller));
                         while (reader.hasNext()) {
 
                             try {
