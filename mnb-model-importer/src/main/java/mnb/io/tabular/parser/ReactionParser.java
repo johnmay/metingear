@@ -325,7 +325,7 @@ public class ReactionParser {
             // System.out.println( coef + " " + entity.getName() + " " + compartment );
             return new MetabolicParticipantImplementation(entity,
                                                           coef,
-                                                          (Enum<? extends Compartment>) compartment);
+                                                          (Compartment) compartment);
         } else {
             messages.add(new WarningMessage("The metabolite "
                                                     + entityAbbr.trim()
@@ -333,7 +333,7 @@ public class ReactionParser {
             entity = entites.getNonReconciledMetabolite(entityAbbr);
             return new MetabolicParticipantImplementation(entity,
                                                           coef,
-                                                          (Enum<? extends Compartment>) compartment);
+                                                          (Compartment) compartment);
         }
 
 
