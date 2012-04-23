@@ -115,7 +115,7 @@ public class MetaboliteCoordinatesMain extends CommandLineMain {
 
         Map<List<Integer>, List<IAtomContainer>> coordinateMap =
                                                  new HashMap<List<Integer>, List<IAtomContainer>>();
-        SBMLReactionReader modelReactions = new SBMLReactionReader(stream, DefaultEntityFactory.getInstance());
+        SBMLReactionReader modelReactions = new SBMLReactionReader(stream, DefaultEntityFactory.getInstance(), new AutomaticCompartmentResolver());
 
         while (modelReactions.hasNext()) {
 
