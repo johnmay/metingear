@@ -27,6 +27,7 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.metingear.view.ControlDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.core.WarningMessage;
@@ -312,7 +313,7 @@ public class MainView
     }
 
 
-    /** Dialog placement **/
+    /** ControlDialog placement **/
     /**
      * 
      * Updates the currently displayed dialogs to the correct position of the frame
@@ -325,6 +326,10 @@ public class MainView
                 DropdownDialog dialog = ((DropdownDialog) window);
                 dialog.setLocation();
                 dialog.validate();
+            } else if (window instanceof ControlDialog) {
+                ControlDialog dialog = ((ControlDialog) window);
+                dialog.position();
+                ((JDialog)dialog).validate();
             }
         }
 
