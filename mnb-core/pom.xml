@@ -7,7 +7,10 @@
         <groupId>uk.ac.ebi</groupId>
         <version>0.9-SNAPSHOT</version>
     </parent>
+
     <artifactId>mnb-core</artifactId>
+    <packaging>jar</packaging>
+
     <name>Core</name>
     <url>http://maven.apache.org</url>
     <properties>
