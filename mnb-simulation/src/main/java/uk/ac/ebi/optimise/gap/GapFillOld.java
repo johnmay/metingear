@@ -8,7 +8,7 @@ import ilog.concert.*;
 import ilog.cplex.IloCplex;
 import java.util.*;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrixImpl;
 import uk.ac.ebi.optimise.SimulationUtil;
 
 
@@ -24,9 +24,9 @@ public class GapFillOld {
         cplex.setOut(System.out);
     }
 
-    private StoichiometricMatrix s;
+    private StoichiometricMatrixImpl s;
 
-    private StoichiometricMatrix model;
+    private StoichiometricMatrixImpl model;
 
     private Set<Integer> modelRxns;
 
@@ -43,7 +43,7 @@ public class GapFillOld {
     private IloNumVar[] v;
 
 
-    public void setup(StoichiometricMatrix database, StoichiometricMatrix model) {
+    public void setup(StoichiometricMatrixImpl database, StoichiometricMatrixImpl model) {
         this.s = database;
         modelRxns = this.s.assign(model).values();
     }

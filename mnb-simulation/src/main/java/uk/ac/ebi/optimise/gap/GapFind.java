@@ -22,16 +22,11 @@
  */
 package uk.ac.ebi.optimise.gap;
 
-import ilog.concert.IloAddable;
-import ilog.concert.IloException;
-import ilog.concert.IloIntVar;
-import ilog.concert.IloLinearIntExpr;
-import ilog.concert.IloNumExpr;
-import ilog.concert.IloNumVar;
+import ilog.concert.*;
 import ilog.cplex.IloCplex;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.optimise.SimulationUtil;
 
 import java.io.FileNotFoundException;
@@ -58,7 +53,7 @@ public class GapFind {
 
     private IloCplex cplex;
 
-    private StoichiometricMatrix s; // Stoichiometric matrix
+    private StoichiometricMatrix<?,?> s; // Stoichiometric matrix
 
     private IloNumVar[] v; // flux vector (size = n reactions)
 
@@ -200,7 +195,7 @@ public class GapFind {
      * @brief Generates a mass balance constraint for non-production metabolites
      * \f[ \sum{S_{ij} v_{j}} \geq 0 \quad | \quad \forall i \in N \f]
      *
-     * @param one a variable
+
      * @return Array of addable constraints
      * @throws IloException Exception is
      */

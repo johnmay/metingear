@@ -13,7 +13,7 @@ public class GapFillingFactory
 {
 //    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( GapFillingFactory.class );
 //
-//    public static SingleExpansion getSingleExpansion( StoichiometricMatrix s )
+//    public static SingleExpansion getSingleExpansion( StoichiometricMatrixImpl s )
 //    {
 //        if ( s instanceof InChIStoichiometricMatrix )
 //        {

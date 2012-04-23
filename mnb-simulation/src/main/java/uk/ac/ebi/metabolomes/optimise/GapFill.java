@@ -21,7 +21,7 @@
 //
 //import ilog.cplex.IloCplex;
 //
-//import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+//import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrixImpl;
 //
 ///**
 // * GapFill.java – MetabolicDevelopmentKit – Jun 30, 2011
@@ -34,11 +34,11 @@
 //    private IloCplex cplex;
 //
 //    // entire reaction database represented as a stoichiometric matrix
-//    private StoichiometricMatrix database;
-//    private StoichiometricMatrix model;
+//    private StoichiometricMatrixImpl database;
+//    private StoichiometricMatrixImpl model;
 //    private IloIntVar[] y;
 //
-//    public GapFill( StoichiometricMatrix database, StoichiometricMatrix model )
+//    public GapFill( StoichiometricMatrixImpl database, StoichiometricMatrixImpl model )
 //            throws IloException
 //    {
 //        this.database = database;

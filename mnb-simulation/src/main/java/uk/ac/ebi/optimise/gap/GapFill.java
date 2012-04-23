@@ -24,13 +24,14 @@ import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
 import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrixImpl;
 import uk.ac.ebi.optimise.CPLEXConstraints;
 import uk.ac.ebi.optimise.SimulationUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -49,11 +50,11 @@ public class GapFill<M, R> {
 
     private static final Logger LOGGER = Logger.getLogger(GapFill.class);
 
-    private StoichiometricMatrix<M, R> database;
+    private StoichiometricMatrixImpl<M, R> database;
 
-    private StoichiometricMatrix<M, R> model;
+    private StoichiometricMatrixImpl<M, R> model;
 
-    private StoichiometricMatrix<M, R> combined;
+    private StoichiometricMatrixImpl<M, R> combined;
 
     /**
      * Bi-directional hash maps provide look-up of database/model reaction index
@@ -87,8 +88,8 @@ public class GapFill<M, R> {
      * @throws IloException
      * @throws UnsatisfiedLinkError thrown if libray.path is not setup correct
      */
-    public GapFill(StoichiometricMatrix<M, R> database,
-                   StoichiometricMatrix<M, R> model) throws IloException, UnsatisfiedLinkError {
+    public GapFill(StoichiometricMatrixImpl<M, R> database,
+                   StoichiometricMatrixImpl<M, R> model) throws IloException, UnsatisfiedLinkError {
 
         this.database = database;
         this.model = model;

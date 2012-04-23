@@ -28,7 +28,7 @@ import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.entities.Reconstruction;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.optimise.SimulationUtil;
@@ -58,11 +58,13 @@ public class RootNonProductionMetabolites
 
         try {
             Reconstruction active = DefaultReconstructionManager.getInstance().getActive();
-            StoichiometricMatrix<CompartmentalisedMetabolite, ?> s = (StoichiometricMatrix<CompartmentalisedMetabolite, ?>) active.getMatrix();
+            StoichiometricMatrix<CompartmentalisedMetabolite,?> s = active.getMatrix();
+
+
 
             SimulationUtil.setup(); // make sure the paths are set
 
-            GapFind gf = new GapFind(s);
+            GapFind gf = new GapFind(active.getMatrix());
 
             EntityCollection manager = controller.getViewController().getSelection();
             manager.clear();

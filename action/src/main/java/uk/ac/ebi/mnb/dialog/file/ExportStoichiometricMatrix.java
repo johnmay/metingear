@@ -29,7 +29,7 @@ import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.io.model.ReactionMatrixIO;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -131,7 +131,7 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
 
             File f = chooser.getSelectedFile();
             Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
-            StoichiometricMatrix s = (StoichiometricMatrix) recon.getMatrix();
+            StoichiometricMatrix s = recon.getMatrix();
 
             try {
                 if (fmt.equals("Table (tsv)")) {
