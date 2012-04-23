@@ -102,7 +102,7 @@ public class NewProject extends DropdownDialog {
                 return service.isAvailable() ? new ArrayList<Object>(service.searchTaxonomyIdentifier(QueryParser.escape(s), true)) : new ArrayList();
             }
         }, handler);
-        nameField = new SuggestionField(this, 20, new SuggestionHandler() {
+        nameField = new SuggestionField(this, 35, new SuggestionHandler() {
 
             @Override
             public ListCellRenderer getRenderer() {
@@ -152,12 +152,12 @@ public class NewProject extends DropdownDialog {
         panel.add(LabelFactory.newFormLabel("Organism Code (e.g. ECOLI):"), cc.xy(1, 3));
         panel.add(codeField, cc.xy(3, 3));
         panel.add(LabelFactory.newFormLabel("Organism Name:"), cc.xy(1, 5));
-        panel.add(nameField, cc.xy(1, 5));
+        panel.add(nameField, cc.xy(3, 5));
 
         panel.add(LabelFactory.newFormLabel("Taxon Code:"), cc.xy(1, 7));
         panel.add(taxonField, cc.xy(3, 7));
         panel.add(LabelFactory.newFormLabel("Kingdom (e.g. B,E,V,A):"), cc.xy(1, 9));
-        panel.add(kingdomField, cc.xy(1, 9));
+        panel.add(kingdomField, cc.xy(3, 9));
 
         return panel;
 
