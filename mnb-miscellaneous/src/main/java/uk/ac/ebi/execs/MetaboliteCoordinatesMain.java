@@ -41,6 +41,7 @@ import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.metabolomes.execs.CommandLineMain;
 import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
+import uk.ac.ebi.mdk.domain.tool.*;
 
 
 /**
