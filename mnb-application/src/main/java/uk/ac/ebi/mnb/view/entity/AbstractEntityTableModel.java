@@ -201,7 +201,7 @@ public abstract class AbstractEntityTableModel
 
 
     public void setEntities(Collection<? extends AnnotatedEntity> components) {
-        this.components = components instanceof List ? (List) components : Arrays.asList(components);
+        this.components = new ArrayList<AnnotatedEntity>(components);
     }
 
 
