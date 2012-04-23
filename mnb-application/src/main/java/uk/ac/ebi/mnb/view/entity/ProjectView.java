@@ -14,25 +14,11 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import java.awt.CardLayout;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
-import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
-import uk.ac.ebi.mnb.view.entity.protein.ProductView;
-import uk.ac.ebi.mnb.view.entity.reaction.ReactionView;
-import uk.ac.ebi.mnb.view.entity.general.GeneralView;
-import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.*;
@@ -42,7 +28,19 @@ import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.ViewInfo;
 import uk.ac.ebi.mnb.view.entity.gene.GeneView;
+import uk.ac.ebi.mnb.view.entity.general.GeneralView;
+import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
+import uk.ac.ebi.mnb.view.entity.protein.ProductView;
+import uk.ac.ebi.mnb.view.entity.reaction.ReactionView;
+import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
 import uk.ac.ebi.search.SearchManager;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -195,7 +193,7 @@ public class ProjectView
     public boolean update() {
 
         DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        ReconstructionImpl reconstruction = manager.getActive();
+        Reconstruction reconstruction = manager.getActive();
 
         if (reconstruction == null) {
             products.clear();

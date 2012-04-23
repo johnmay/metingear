@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.main.MainView;
 
@@ -40,7 +40,7 @@ import java.awt.event.ActionEvent;
 public class CloseProject extends GeneralAction implements ContextAction {
 
     private static final Logger LOGGER = Logger.getLogger(CloseProject.class);
-    private ReconstructionImpl reconstruction;
+    private Reconstruction reconstruction;
     private boolean active = false;
 
     public CloseProject() {

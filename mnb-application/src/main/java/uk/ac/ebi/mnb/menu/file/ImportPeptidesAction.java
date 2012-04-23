@@ -4,6 +4,24 @@
  */
 package uk.ac.ebi.mnb.menu.file;
 
+import org.biojava3.core.sequence.ProteinSequence;
+import org.biojava3.core.sequence.compound.AminoAcidCompound;
+import org.biojava3.core.sequence.compound.AminoAcidCompoundSet;
+import org.biojava3.core.sequence.io.FastaReader;
+import org.biojava3.core.sequence.io.GenericFastaHeaderParser;
+import org.biojava3.core.sequence.io.ProteinSequenceCreator;
+import uk.ac.ebi.chemet.io.file.FastaFileFilter;
+import uk.ac.ebi.chemet.io.file.FileFilterManager;
+import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ProteinProductImplementation;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
+import uk.ac.ebi.mnb.core.FileChooserAction;
+import uk.ac.ebi.mnb.main.MainView;
+
+import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,24 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-import javax.swing.JFileChooser;
-
-import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
-import org.biojava3.core.sequence.ProteinSequence;
-import org.biojava3.core.sequence.compound.AminoAcidCompound;
-import org.biojava3.core.sequence.compound.AminoAcidCompoundSet;
-import org.biojava3.core.sequence.io.FastaReader;
-import org.biojava3.core.sequence.io.GenericFastaHeaderParser;
-import org.biojava3.core.sequence.io.ProteinSequenceCreator;
-import uk.ac.ebi.core.ProteinProductImplementation;
-import uk.ac.ebi.chemet.io.file.FastaFileFilter;
-import uk.ac.ebi.mnb.core.FileChooserAction;
-import uk.ac.ebi.chemet.io.file.FileFilterManager;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
-import uk.ac.ebi.mnb.main.MainView;
 
 /**
  * ImportSBMLAction.java
@@ -52,7 +52,7 @@ public class ImportPeptidesAction extends FileChooserAction {
     public void activateActions() {
 
         // add the peptides to the active project and updateObservations the annotations table
-        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
 
         if (recon == null) {
             MainView.getInstance().addErrorMessage("No active reconstruction to import peptides into");

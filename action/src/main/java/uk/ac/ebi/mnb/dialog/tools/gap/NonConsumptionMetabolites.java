@@ -21,20 +21,20 @@
 package uk.ac.ebi.mnb.dialog.tools.gap;
 
 import com.google.common.base.Joiner;
-
-import java.awt.event.ActionEvent;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
-import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.caf.action.GeneralAction;
-import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+import uk.ac.ebi.mnb.core.ErrorMessage;
+import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.optimise.SimulationUtil;
 import uk.ac.ebi.optimise.gap.GapFind;
+
+import java.awt.event.ActionEvent;
 
 /**
  *          NonProductionMetabolites - 2011.12.05 <br>
@@ -57,12 +57,12 @@ public class NonConsumptionMetabolites
     public void actionPerformed(ActionEvent e) {
 
         try {
-            ReconstructionImpl active = DefaultReconstructionManager.getInstance().getActive();
-            StoichiometricMatrix<CompartmentalisedMetabolite, ?> s = active.getMatrix();
+            Reconstruction active = DefaultReconstructionManager.getInstance().getActive();
+            StoichiometricMatrix<CompartmentalisedMetabolite, ?> s = (StoichiometricMatrix<CompartmentalisedMetabolite, ?>) active.getMatrix();
 
             SimulationUtil.setup(); // make sure the paths are set
 
-            GapFind gf = new GapFind(active.getMatrix());
+            GapFind gf = new GapFind(s);
 
             EntityCollection manager = controller.getViewController().getSelection();
             manager.clear();

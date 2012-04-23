@@ -20,14 +20,15 @@
  */
 package uk.ac.ebi.mnb.menu.popup;
 
-import java.awt.event.ActionEvent;
-import uk.ac.ebi.core.DefaultReconstructionManager;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
-import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.main.MainView;
+
+import java.awt.event.ActionEvent;
 
 /**
  *          SetActiveProject – 2011.09.07 <br>
@@ -39,7 +40,7 @@ import uk.ac.ebi.mnb.main.MainView;
 public class SetActiveProject extends GeneralAction implements ContextAction {
 
     private static final Logger LOGGER = Logger.getLogger(SetActiveProject.class);
-    private ReconstructionImpl reconstruction;
+    private Reconstruction reconstruction;
 
     public SetActiveProject() {
         super("Popup.ChangeProject");

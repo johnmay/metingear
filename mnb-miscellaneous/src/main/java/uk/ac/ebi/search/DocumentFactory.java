@@ -20,22 +20,23 @@
  */
 package uk.ac.ebi.search;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.interfaces.reaction.Participant;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -50,7 +51,7 @@ public class DocumentFactory {
     private static final Logger LOGGER = Logger.getLogger(DocumentFactory.class);
 
 
-    public static Map<UUID, AnnotatedEntity> write(IndexWriter writer, ReconstructionImpl recon)
+    public static Map<UUID, AnnotatedEntity> write(IndexWriter writer, Reconstruction recon)
             throws
             CorruptIndexException, IOException {
 
@@ -63,7 +64,7 @@ public class DocumentFactory {
             documents.put(uuid, m);
             writer.addDocument(doc);
         }
-        for (MetabolicReaction rxn : recon.getReactions()) {
+        for (MetabolicReaction rxn : recon.getReactome()) {
             Document doc = getDocument(rxn);
             UUID uuid = UUID.randomUUID();
             doc.add(new Field("uuid", uuid.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));

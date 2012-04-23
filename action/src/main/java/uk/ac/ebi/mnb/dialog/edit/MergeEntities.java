@@ -24,12 +24,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -86,7 +82,7 @@ public class MergeEntities extends ControllerDialog {
         // find them in all reactions and update reactions also
         Metabolite n = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
         ;
-        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
 
         StringBuilder accessionBuilder = new StringBuilder();
         StringBuilder nameBuilder = new StringBuilder();
@@ -100,7 +96,7 @@ public class MergeEntities extends ControllerDialog {
 
             n.addAnnotations(m.getAnnotations());
 
-            for (MetabolicReaction rxn : recon.getReactions().getReactions(m)) {
+            for (MetabolicReaction rxn : recon.getReactome().getReactions(m)) {
                 for (MetabolicParticipant p : rxn.getReactants()) {
                     if (p.getMolecule() == m) { // do a direct reference compare
                         p.setMolecule(n);
@@ -118,7 +114,7 @@ public class MergeEntities extends ControllerDialog {
         recon.addMetabolite(n);
 
 
-        recon.getReactions().rebuildParticipantMap();
+        recon.getReactome().rebuildParticipantMap();
         //        recon.remove // remove metabolite
 
     }

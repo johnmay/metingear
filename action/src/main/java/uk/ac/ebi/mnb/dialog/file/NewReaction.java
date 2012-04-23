@@ -34,8 +34,8 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -101,7 +101,7 @@ public class NewReaction extends NewEntity {
 
         DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
         if (manager.hasProjects()) {
-            ReconstructionImpl reconstruction = manager.getActive();
+            Reconstruction reconstruction = manager.getActive();
 
             ReactionParser parser = new ReactionParser(new NamedEntityResolver());
             PreparsedReaction ppRxn = new PreparsedReaction();

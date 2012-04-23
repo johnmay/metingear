@@ -32,10 +32,10 @@ import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 
@@ -63,7 +63,7 @@ public class ListSelectionReconciler implements EntryReconciler {
 
     private CandidateSelector curater;
 
-    private ReconstructionImpl recon;
+    private Reconstruction recon;
 
     private Multimap<String, Metabolite> nameMap;
 

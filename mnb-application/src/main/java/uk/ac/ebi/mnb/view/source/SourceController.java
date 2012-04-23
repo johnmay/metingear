@@ -24,6 +24,7 @@ import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.main.MainView;
@@ -153,7 +154,7 @@ public class SourceController
 
         if (manager.hasProjects()) {
 
-            ReconstructionImpl active = manager.getActive();
+            Reconstruction active = manager.getActive();
 
             // reconstructions
             for (int i = 0; i < manager.size(); i++) {
@@ -183,10 +184,10 @@ public class SourceController
             }
 
 
-            genes.setCounterValue(active.getGenes().size());
+            genes.setCounterValue(active.getGenome().getGenes().size());
             products.setCounterValue(active.getProducts().size());
             metabolites.setCounterValue(active.getMetabolome().size());
-            reactions.setCounterValue(active.getReactions().size());
+            reactions.setCounterValue(active.getReactome().size());
 
 
         }

@@ -20,20 +20,17 @@
  */
 package uk.ac.ebi.mnb.menu.file;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import javax.xml.stream.XMLStreamException;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.io.xml.KGMLReader;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.main.MainView;
+
+import javax.xml.stream.XMLStreamException;
+import java.io.*;
+import java.util.logging.Level;
 
 /**
  *          ImportKGML - 2011.10.26 <br>
@@ -65,7 +62,7 @@ public class ImportKGML extends FileChooserAction {
                 stream = new FileInputStream(f);
                 KGMLReader reader = new KGMLReader(stream);
                 for(MetabolicReactionImplementation rxn : reader.getReactions()){
-                    ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
+                    Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
                     recon.addReaction(rxn);
                 }
                 MainView.getInstance().update();

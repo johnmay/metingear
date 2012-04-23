@@ -22,8 +22,9 @@
 package uk.ac.ebi.mnb.interfaces;
 
 
-import java.util.List;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+
+import java.util.Collection;
 
 /**
  *
@@ -38,6 +39,6 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 public interface EntityTableModel {
 
 
-    public void setEntities(List<? extends AnnotatedEntity> components);
+    public void setEntities(Collection<? extends AnnotatedEntity> components);
     
 }

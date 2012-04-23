@@ -203,7 +203,7 @@ public class DownloadStructuresDialog
     public boolean update() {
 
         // rebuild the map to avoid problems with non-equal hashes
-        DefaultReconstructionManager.getInstance().getActive().getReactions().rebuildParticipantMap();
+        DefaultReconstructionManager.getInstance().getActive().getReactome().rebuildParticipantMap();
 
         return update(getSelection());
 

@@ -22,18 +22,19 @@ package uk.ac.ebi.mnb.dialog.tools;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.awt.event.ActionEvent;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.core.MultimerImplementation;
-import uk.ac.ebi.core.ReconstructionImpl;
-import uk.ac.ebi.core.product.ProductCollection;
-import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
+import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
+
+import java.awt.event.ActionEvent;
 
 
 /**
@@ -55,13 +56,13 @@ public class MergeLoci extends ControllerAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
 
         Multimap<String, MetabolicReaction> monomeric = HashMultimap.create();
         Multimap<String, MetabolicReaction> multimeric = HashMultimap.create();
 
-        ReactionList rxns = recon.getReactions();
-        for (MetabolicReaction rxn : rxns) {
+        Reactome reactome = recon.getReactome();
+        for (MetabolicReaction rxn : reactome) {
             for (Locus locus : rxn.getAnnotations(Locus.class)) {
                 if (locus.containsMultiple()) {
                     multimeric.put(locus.toString(), rxn);
@@ -71,11 +72,11 @@ public class MergeLoci extends ControllerAction {
             }
         }
 
-        ProductCollection products = recon.getProducts();
+        Proteome proteome = recon.getProteome();
 
         // monomeric
         for (String locus : monomeric.keySet()) {
-            for (GeneProduct product : products.get(locus)) {
+            for (GeneProduct product : proteome.get(locus)) {
                 for (MetabolicReaction rxn : monomeric.get(locus)) {
                     rxn.addModifier(product); // needs to be an add
                 }
@@ -88,7 +89,7 @@ public class MergeLoci extends ControllerAction {
             String[] loci = locusAnnotation.split("\\+");
             GeneProduct[] subunits = new GeneProduct[loci.length];
             for (int i = 0; i < loci.length; i++) {
-                subunits[i] = products.get(loci[i]).iterator().next();
+                subunits[i] = proteome.get(loci[i]).iterator().next();
             }
 
             GeneProduct product = new MultimerImplementation(subunits);

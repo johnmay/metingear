@@ -20,19 +20,19 @@
  */
 package uk.ac.ebi.mnb.dialog.file;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
 
 
 /**
@@ -69,7 +69,7 @@ public class NewMetabolite extends NewEntity {
     public void process() {
         DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
         if (manager.hasProjects()) {
-            ReconstructionImpl reconstruction = manager.getActive();
+            Reconstruction reconstruction = manager.getActive();
             Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class, getIdentifier(), getName(), getAbbreviation());
             reconstruction.addMetabolite(m);
         }

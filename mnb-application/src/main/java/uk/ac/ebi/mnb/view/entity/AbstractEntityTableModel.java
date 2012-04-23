@@ -20,22 +20,23 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import java.util.*;
-
-import uk.ac.ebi.chemet.render.source.*;
-import uk.ac.ebi.core.ReconstructionImpl;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-
-import javax.swing.table.AbstractTableModel;
-
-import javax.swing.undo.UndoManager;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.render.source.AbbreviationAccessor;
+import uk.ac.ebi.chemet.render.source.AccessionAccessor;
+import uk.ac.ebi.chemet.render.source.Accessor;
+import uk.ac.ebi.chemet.render.source.NameAccessor;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.edit.entity.AbbreviationSetter;
 import uk.ac.ebi.edit.entity.NameSetter;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.EntityTableModel;
 import uk.ac.ebi.mnb.main.MainView;
+
+import javax.swing.table.AbstractTableModel;
+import javax.swing.undo.UndoManager;
+import java.util.*;
 
 
 /**
@@ -199,8 +200,8 @@ public abstract class AbstractEntityTableModel
     public abstract void loadComponents();
 
 
-    public void setEntities(List<? extends AnnotatedEntity> components) {
-        this.components = components;
+    public void setEntities(Collection<? extends AnnotatedEntity> components) {
+        this.components = components instanceof List ? (List) components : Arrays.asList(components);
     }
 
 

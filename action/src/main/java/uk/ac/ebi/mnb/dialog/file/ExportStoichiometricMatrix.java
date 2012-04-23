@@ -21,26 +21,27 @@ package uk.ac.ebi.mnb.dialog.file;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.io.model.ReactionMatrixIO;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.core.ErrorMessage;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import javax.swing.*;
-import javax.swing.event.UndoableEditListener;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
-import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.core.ReconstructionImpl;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.io.model.ReactionMatrixIO;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
-import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 
 /**
@@ -129,8 +130,8 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
         if (choice == JFileChooser.APPROVE_OPTION) {
 
             File f = chooser.getSelectedFile();
-            ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
-            StoichiometricMatrix s = recon.getMatrix();
+            Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+            StoichiometricMatrix s = (StoichiometricMatrix) recon.getMatrix();
 
             try {
                 if (fmt.equals("Table (tsv)")) {

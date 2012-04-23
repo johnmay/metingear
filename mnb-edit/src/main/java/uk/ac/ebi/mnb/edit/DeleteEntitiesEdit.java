@@ -1,12 +1,8 @@
 package uk.ac.ebi.mnb.edit;
 
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.*;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotUndoException;
@@ -20,10 +16,10 @@ import java.util.Map;
 public class DeleteEntitiesEdit extends AbstractUndoableEdit {
 
     private EntityCollection     collection;
-    private ReconstructionImpl recon;
+    private Reconstruction       recon;
     private Map<Gene,Chromosome> geneMap;
     
-    public DeleteEntitiesEdit(ReconstructionImpl recon, EntityCollection collection){
+    public DeleteEntitiesEdit(Reconstruction recon, EntityCollection collection){
         this.recon      = recon;
         this.collection = collection;
     }
@@ -68,7 +64,7 @@ public class DeleteEntitiesEdit extends AbstractUndoableEdit {
         }
 
         for(MetabolicReaction rxn : collection.get(MetabolicReaction.class)){
-            recon.getReactions().remove(rxn);
+            recon.getReactome().remove(rxn);
         }
 
         // might not work??

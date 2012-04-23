@@ -18,7 +18,7 @@ import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.service.query.name.ChEBINameService;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
@@ -89,7 +89,7 @@ public class ImportModelSeed extends DelayedBuildAction {
 
     public void importXLS(File xls) {
 
-        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
 
         try {
 

@@ -8,7 +8,6 @@ import uk.ac.ebi.chemet.service.KEGGReactionService;
 import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -43,7 +42,7 @@ public class AssignReactions extends ControllerAction {
 
         EntityCollection selection = getSelection();
         DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        ReconstructionImpl recon = manager.getActive();
+        Reconstruction recon = manager.getActive();
 
         Collection<GeneProduct> products = selection.getGeneProducts();
 

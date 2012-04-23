@@ -17,8 +17,8 @@ import uk.ac.ebi.chemet.io.observation.ObservationOutput;
 import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 
 import javax.swing.*;
@@ -60,7 +60,7 @@ public class SaveAsProjectAction
             File f = getFile(showSaveDialog());
 
             if (f != null) {
-                ReconstructionImpl reconstruction = manager.getActive();
+                Reconstruction reconstruction = manager.getActive();
                 reconstruction.setContainer(f);
                 f.mkdir();
 

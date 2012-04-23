@@ -20,21 +20,19 @@
  */
 package uk.ac.ebi.mnb.dialog.edit;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.render.source.EntitySubset;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
 
 
 /**
@@ -94,7 +92,7 @@ public class CreateSubset extends ControllerDialog {
 
 
 
-        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
         EntitySubset subset = new EntitySubset(field.getText(), null);
 
         for (AnnotatedEntity entity : getSelection().getEntities()) {

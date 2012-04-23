@@ -21,38 +21,15 @@
 package uk.ac.ebi.mnb.importer.xls.wizzard;
 
 import com.google.common.base.Joiner;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import javax.swing.event.UndoableEditListener;
-import mnb.io.tabular.ExcelModelProperties;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.core.ReconstructionImpl;
-import uk.ac.ebi.caf.action.GeneralAction;
-import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.parser.ExcelHelper;
-import uk.ac.ebi.mnb.xls.options.ImporterOptions;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import org.apache.log4j.Logger;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.Sizes;
-import java.awt.CardLayout;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.List;
 import mnb.io.resolve.AutomatedReconciler;
 import mnb.io.resolve.EntryReconciler;
 import mnb.io.resolve.ListSelectionReconciler;
 import mnb.io.tabular.ExcelEntityResolver;
+import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.parser.ReactionParser;
 import mnb.io.tabular.parser.UnparsableReactionError;
 import mnb.io.tabular.preparse.PreparsedReaction;
@@ -61,19 +38,36 @@ import mnb.io.tabular.type.EntityColumn;
 import mnb.io.tabular.type.ReactionColumn;
 import mnb.io.tabular.xls.HSSFPreparsedSheet;
 import net.sf.furbelow.SpinningDialWaitIndicator;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import uk.ac.ebi.caf.action.GeneralAction;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.report.Report;
+import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
-import uk.ac.ebi.caf.report.Report;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.mnb.parser.ExcelHelper;
+import uk.ac.ebi.mnb.xls.options.ImporterOptions;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.service.ServiceManager;
 import uk.ac.ebi.service.query.name.NameService;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -102,7 +96,7 @@ public class ExcelImportDialog
 
     private WizzardStage[] stages = new WizzardStage[4];
 
-    private ReconstructionImpl reconstruction;
+    private Reconstruction reconstruction;
 
     private CellConstraints cc = new CellConstraints();
 
@@ -118,7 +112,7 @@ public class ExcelImportDialog
                              ReportManager messages,
                              SelectionController controller,
                              UndoableEditListener undoableEdits,
-                             ReconstructionImpl reconstruction,
+                             Reconstruction reconstruction,
                              File file,
                              ExcelHelper helper,
                              ServiceManager manager) {

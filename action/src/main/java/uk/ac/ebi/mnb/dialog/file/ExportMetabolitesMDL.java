@@ -20,25 +20,24 @@
  */
 package uk.ac.ebi.mnb.dialog.file;
 
+import org.apache.log4j.Logger;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.io.MDLV2000Writer;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mnb.core.ControllerAction;
+import uk.ac.ebi.mnb.interfaces.MainController;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.logging.Level;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import org.apache.log4j.Logger;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.io.MDLV2000Writer;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.mnb.core.ControllerAction;
-import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
 
 
 /**
@@ -67,7 +66,7 @@ public class ExportMetabolitesMDL extends ControllerAction {
 
         EntityCollection selection = getSelection();
 
-        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
 
         Collection<Metabolite> metabolites = selection.hasSelection(Metabolite.class)
                                              ? selection.get(Metabolite.class)

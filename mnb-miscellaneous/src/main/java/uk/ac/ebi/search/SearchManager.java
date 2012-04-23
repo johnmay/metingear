@@ -20,11 +20,6 @@
  */
 package uk.ac.ebi.search;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -39,8 +34,14 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.LockObtainFailedException;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  *          SearchManager – 2011.09.29 <br>
@@ -87,7 +88,7 @@ public class SearchManager {
      * @throws LockObtainFailedException
      * @throws IOException
      */
-    public Thread updateCurrentIndex(final ReconstructionImpl recon) throws CorruptIndexException,
+    public Thread updateCurrentIndex(final Reconstruction recon) throws CorruptIndexException,
                                                                         LockObtainFailedException,
                                                                         IOException {
 
@@ -125,7 +126,7 @@ public class SearchManager {
      * @throws LockObtainFailedException
      * @throws IOException
      */
-    public SearchableIndex getIndex(ReconstructionImpl reconstruction) throws CorruptIndexException,
+    public SearchableIndex getIndex(Reconstruction reconstruction) throws CorruptIndexException,
                                                                           LockObtainFailedException,
                                                                           IOException {
 

@@ -22,11 +22,6 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import javax.swing.*;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -36,14 +31,20 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.utility.TextUtility;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.render.molecule.MoleculeRenderer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 
 /**
@@ -196,9 +197,9 @@ public class MetabolitePanel
 
     @Override
     public Collection<? extends AnnotatedEntity> getReferences() {
-        ReconstructionImpl recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
         if (entity != null && recon != null) {
-            return recon.getReactions().getReactions(entity);
+            return recon.getReactome().getReactions(entity);
         }
         return new ArrayList();
     }

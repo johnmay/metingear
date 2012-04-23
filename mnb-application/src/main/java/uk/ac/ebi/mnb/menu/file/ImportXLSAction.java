@@ -4,20 +4,20 @@
  */
 package uk.ac.ebi.mnb.menu.file;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
-
 import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.importer.xls.wizzard.ExcelImportDialog;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.parser.ExcelXLSHelper;
-import uk.ac.ebi.mnb.core.FileChooserAction;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 /**
  * ImportSBMLAction.java
@@ -66,8 +66,7 @@ public class ImportXLSAction
         if (choosenFile != null && choosenFile.isFile()) {
             String name = choosenFile.getName();
             try {
-                ReconstructionImpl reconstruction = DefaultReconstructionManager.getInstance().
-                        getActive();
+                Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
                 // todo. add XLSX implementation
                 InputStream stream = new FileInputStream(choosenFile);
                 ExcelHelper importer = name.endsWith(".xls")
