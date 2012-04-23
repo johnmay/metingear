@@ -35,6 +35,10 @@ public class ApplicationLauncher implements Runnable {
 
         MainView view = MainView.getInstance();
         view.setJMenuBar(new MainMenuBar());
+
+        PluginLoader loader = new PluginLoader(view, view.getJMenuBar());
+        loader.load();
+
         view.setVisible(true);
 
     }
