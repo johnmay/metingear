@@ -20,28 +20,28 @@
  */
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import uk.ac.ebi.annotation.chemical.ACPAssociated;
-import uk.ac.ebi.annotation.model.Lumped;
-import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.view.entity.DataType;
-import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
-import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.chemical.ACPAssociated;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.annotation.model.Lumped;
 import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.core.StarRating;
 import uk.ac.ebi.core.tools.StructuralValidity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Rating;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
+import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
+import uk.ac.ebi.mnb.view.entity.DataType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -81,7 +81,7 @@ public class MetaboliteTableModel
     @Override
     public void loadComponents() {
 
-        Reconstruction project = ReconstructionManager.getInstance().getActiveReconstruction();
+        Reconstruction project = ReconstructionManager.getInstance().getActive();
 
         if (project != null) {
             setEntities(project.getMetabolome());

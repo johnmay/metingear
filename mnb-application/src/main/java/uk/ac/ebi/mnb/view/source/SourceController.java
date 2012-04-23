@@ -157,7 +157,8 @@ public class SourceController
 
             // reconstructions
             for (int i = 0; i < manager.size(); i++) {
-                Reconstruction reconstruction = manager.getProject(i);
+                // todo: remove cast
+                Reconstruction reconstruction = (Reconstruction) manager.getProject(i);
                 if (itemMap.containsKey(reconstruction) == false) {
                     EntitySourceItem item = new ReconstructionSourceItem(reconstruction,
                                                                          reconstructions);

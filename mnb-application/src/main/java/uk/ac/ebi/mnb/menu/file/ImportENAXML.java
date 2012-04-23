@@ -20,12 +20,6 @@
  */
 package uk.ac.ebi.mnb.menu.file;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.List;
-import javax.swing.JFileChooser;
-import javax.xml.stream.XMLStreamException;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.core.ChromosomeImplementation;
@@ -38,6 +32,13 @@ import uk.ac.ebi.io.xml.ENAXMLReader;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.main.MainView;
+
+import javax.swing.*;
+import javax.xml.stream.XMLStreamException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 /**
  *          NewFromENA - 2011.10.17 <br>
@@ -67,7 +68,7 @@ public class ImportENAXML extends FileChooserAction {
                 List<GeneProduct> products = reader.getProducts();
 
                 ReconstructionManager manager = ReconstructionManager.getInstance();
-                Reconstruction recon = manager.getActiveReconstruction();
+                Reconstruction recon = manager.getActive();
                 recon.getProducts().addAll(products);
 
                 Chromosome c = new ChromosomeImplementation(1, new ChromosomeSequence(reader.getGenomeString()));

@@ -20,7 +20,6 @@
  */
 package uk.ac.ebi.mnb.interfaces;
 
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
 
 /**
  * @name    EntitiesView - 2011.10.03 <br>

@@ -20,9 +20,9 @@
  */
 package uk.ac.ebi.metingeer.interfaces.menu;
 
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.IReconstruction;
+import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
 
 /**
  *          ContextResponder - 2011.11.28 <br>
@@ -36,6 +36,6 @@ import uk.ac.ebi.interfaces.entities.EntityCollection;
 public interface ContextResponder {
 
     public boolean getContext(ReconstructionManager reconstructions,
-                              Reconstruction active,
+                              IReconstruction active,
                               EntityCollection selection);
 }

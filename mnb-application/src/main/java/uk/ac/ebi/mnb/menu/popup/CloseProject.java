@@ -20,14 +20,15 @@
  */
 package uk.ac.ebi.mnb.menu.popup;
 
-import java.awt.event.ActionEvent;
-import uk.ac.ebi.core.ReconstructionManager;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
 import uk.ac.ebi.caf.action.GeneralAction;
+import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
 import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.main.MainView;
+
+import java.awt.event.ActionEvent;
 
 /**
  *          SetActiveProject – 2011.09.07 <br>
@@ -57,7 +58,7 @@ public class CloseProject extends GeneralAction implements ContextAction {
 
     public void actionPerformed(ActionEvent e) {
         LOGGER.info("TODO: Offer save suggestion before close");
-        ReconstructionManager.getInstance().removeProject(active ? ReconstructionManager.getInstance().getActiveReconstruction() : reconstruction);
+        ReconstructionManager.getInstance().removeProject(active ? ReconstructionManager.getInstance().getActive() : reconstruction);
         MainView.getInstance().update();
     }
 

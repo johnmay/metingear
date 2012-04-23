@@ -20,17 +20,18 @@
  */
 package uk.ac.ebi.mnb.view.entity.gene;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.mnb.view.entity.DataType;
-import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
-import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
+import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
+import uk.ac.ebi.mnb.view.entity.DataType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *          ProteinTableModel – 2011.09.28 <br>
@@ -56,7 +57,7 @@ public class GeneTableModel extends AbstractEntityTableModel {
     @Override
     public void loadComponents() {
 
-        Reconstruction recon = ReconstructionManager.getInstance().getActiveReconstruction();
+        Reconstruction recon = ReconstructionManager.getInstance().getActive();
 
         if (recon != null) {
             super.setEntities(new ArrayList<AnnotatedEntity>(recon.getGenes()));
