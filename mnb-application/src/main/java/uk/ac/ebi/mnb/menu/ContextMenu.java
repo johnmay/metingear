@@ -23,9 +23,9 @@ package uk.ac.ebi.mnb.menu;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.ReconstructionManager;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.IReconstruction;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.MainController;
@@ -95,8 +95,8 @@ public class ContextMenu extends JMenu {
 
 
     public void add(JMenu menu) {
-        System.out.println(menu.getText());
         if (menu instanceof ContextMenu) {
+            LOGGER.info("Adding sub-menu: " + menu.getText());
             subMenus.add((ContextMenu) menu);
         }
         super.add(menu);
@@ -147,8 +147,8 @@ public class ContextMenu extends JMenu {
      */
     public void updateContext() {
 
-        ReconstructionManager manager = ReconstructionManager.getInstance();
-        Reconstruction reconstruction = manager.getActive();
+        uk.ac.ebi.mdk.domain.tool.ReconstructionManager manager = (uk.ac.ebi.mdk.domain.tool.ReconstructionManager) ReconstructionManager.getInstance();
+        IReconstruction reconstruction = ReconstructionManager.getInstance().getActive();
         EntityCollection selection = controller.getViewController().getSelection();
 
         for (Entry<JMenuItem, ContextResponder> e : items.entrySet()) {
