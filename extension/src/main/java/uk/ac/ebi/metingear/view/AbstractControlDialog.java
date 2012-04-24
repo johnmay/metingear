@@ -6,6 +6,7 @@ import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.mdk.domain.tool.AnnotationFactory;
 import uk.ac.ebi.mdk.domain.tool.IdentifierFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
@@ -30,9 +31,10 @@ public abstract class AbstractControlDialog
 
     private ReportManager reportManager;
 
+    /* factories */
     private EntityFactory entities;
-
     private IdentifierFactory identifiers;
+    private AnnotationFactory annotationFactory;
 
 
     public void update() {
@@ -91,6 +93,11 @@ public abstract class AbstractControlDialog
 
     public IdentifierFactory getIdentifierFactory() {
         return identifiers;
+    }
+
+    @Override
+    public void setAnnotationFactory(AnnotationFactory annotationFactory){
+        this.annotationFactory = annotationFactory;
     }
 
     /* UTIL FUNCTIONS */
