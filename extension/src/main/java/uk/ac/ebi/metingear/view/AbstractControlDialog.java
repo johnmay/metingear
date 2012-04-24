@@ -9,6 +9,7 @@ import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.mdk.domain.tool.AnnotationFactory;
 import uk.ac.ebi.mdk.domain.tool.IdentifierFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 import javax.swing.event.UndoableEditListener;
 import java.awt.*;
@@ -25,11 +26,11 @@ public abstract class AbstractControlDialog
 
     private static final Logger LOGGER = Logger.getLogger(AbstractControlDialog.class);
 
+    /* controllers */
     private UndoableEditListener undoManager;
-
     private SelectionController selection;
-
     private ReportManager reportManager;
+    private TargetedUpdate updateManager;
 
     /* factories */
     private EntityFactory entities;
@@ -37,12 +38,12 @@ public abstract class AbstractControlDialog
     private AnnotationFactory annotationFactory;
 
 
+
     public void update() {
-        selection.update();
     }
 
     public void update(EntityCollection entities) {
-        selection.update(entities);
+        updateManager.update(entities);
     }
 
 
@@ -88,7 +89,7 @@ public abstract class AbstractControlDialog
 
     @Override
     public void setIdentifierFactory(IdentifierFactory identifierFactory) {
-        this.identifiers = identifiers;
+        this.identifiers = identifierFactory;
     }
 
     public IdentifierFactory getIdentifierFactory() {
@@ -98,6 +99,15 @@ public abstract class AbstractControlDialog
     @Override
     public void setAnnotationFactory(AnnotationFactory annotationFactory){
         this.annotationFactory = annotationFactory;
+    }
+
+    @Override
+    public void setUpdateManager(TargetedUpdate update){
+        this.updateManager = update;
+    }
+
+    public TargetedUpdate getUpdateManager(){
+        return this.updateManager;
     }
 
     /* UTIL FUNCTIONS */
