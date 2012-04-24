@@ -29,7 +29,7 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.chemet.render.components.IdentifierEditor;
 
 
@@ -53,7 +53,7 @@ public class CrossReferenceEditorDialog extends PopupDialog {
 
     private AnnotationFactory ANNOTATION_FACTORY = AnnotationFactory.getInstance();
 
-    private IdentifierFactory ID_FACTORY = IdentifierFactory.getInstance();
+    private DefaultIdentifierFactory ID_FACTORY = DefaultIdentifierFactory.getInstance();
 
     private ExpandingComponentList<IdentifierEditor> expand;
 

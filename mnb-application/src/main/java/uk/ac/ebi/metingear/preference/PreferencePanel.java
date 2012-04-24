@@ -32,7 +32,7 @@ import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.metingear.Main;
 import uk.ac.ebi.render.resource.LoaderGroupFactory;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -188,7 +188,7 @@ public class PreferencePanel extends JPanel {
                 add(factory.createGroup("UniProt",
                                         new TaxonomyLoader(),
                                         new UniProtCrossReferenceLoader(DefaultEntityFactory.getInstance(),
-                                                                        IdentifierFactory.getInstance())));
+                                                                        DefaultIdentifierFactory.getInstance())));
                 add(Box.createGlue());
                 add(Box.createHorizontalStrut(50));
 

@@ -36,7 +36,7 @@ import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.service.query.CrossReferenceService;
 
 import javax.swing.*;
@@ -70,7 +70,7 @@ public class TransferAnnotations
         CrossReferenceService<SwissProtIdentifier> service = new UniProtCrossReferenceService();
 
 
-        IdentifierFactory factory = IdentifierFactory.getInstance();
+        DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
         for (GeneProduct product : getSelection().getGeneProducts()) {
 
             Multimap<Identifier, Observation> identifiers = HashMultimap.create();
