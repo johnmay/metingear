@@ -1,11 +1,14 @@
 package uk.ac.ebi.metingear.launch;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.metingear.view.ControlDialog;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.swing.event.UndoableEditListener;
 import java.awt.*;
@@ -56,6 +59,11 @@ public class DialogLauncherFactory {
                     instance.setReportManager(reportManager);
                     instance.setSelectionController(selectionController);
                     instance.setUndoManager(undoableEditListener);
+
+                    // setup factories
+                    instance.setAnnotationFactory(DefaultAnnotationFactory.getInstance());
+                    instance.setIdentifierFactory(DefaultIdentifierFactory.getInstance());
+                    instance.setEntityFactory(DefaultEntityFactory.getInstance());
 
                     // layout
                     instance.initialiseLayout();
