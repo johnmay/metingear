@@ -5,6 +5,7 @@ import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.mdk.domain.tool.AnnotationFactory;
 import uk.ac.ebi.mdk.domain.tool.IdentifierFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 import javax.swing.event.UndoableEditListener;
 
@@ -20,6 +21,8 @@ public interface ControlDialog extends ProcessingDialog {
     public void setUndoManager(UndoableEditListener undoManager);
 
     public void setReportManager(ReportManager report);
+
+    public void setUpdateManager(TargetedUpdate update);
 
     public void setEntityFactory(EntityFactory entityFactory);
 
