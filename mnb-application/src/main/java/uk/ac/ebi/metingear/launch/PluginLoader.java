@@ -29,17 +29,19 @@ public class PluginLoader {
                                                  view,
                                                  view.getViewController(),
                                                  view.getUndoManager(),
-                                                 view.getMessageManager());
+                                                 view.getMessageManager(),
+                                                 view);
     }
 
     public void load() {
+        System.out.println("Loading Extensions:");
         Iterator<PlugableDialog> plugin = loader.iterator();
         while (plugin.hasNext()) {
-            load(plugin.next());
+            System.out.println("\t-" + load(plugin.next()));
         }
     }
 
-    public void load(PlugableDialog plugin) {
+    public String load(PlugableDialog plugin) {
 
         JMenu menu = getMenu(plugin.getMenuPath().iterator());
 
@@ -48,6 +50,8 @@ public class PluginLoader {
         } else {
             menu.add(factory.getLauncher(plugin.getDialogClass()));
         }
+
+        return plugin.getDialogClass().getSimpleName();
 
     }
 
@@ -76,9 +80,8 @@ public class PluginLoader {
         ContextMenu menu = new ContextMenu(query, view);
 
 
-
-        if(root instanceof ContextMenu){
-            ((ContextMenu)root).add(menu);
+        if (root instanceof ContextMenu) {
+            ((ContextMenu) root).add(menu);
         } else {
             root.add(menu);
         }
