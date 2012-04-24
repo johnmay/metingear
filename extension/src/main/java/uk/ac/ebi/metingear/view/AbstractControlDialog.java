@@ -11,7 +11,9 @@ import uk.ac.ebi.mdk.domain.tool.IdentifierFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
+import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoableEdit;
 import java.awt.*;
 import java.util.Collection;
 
@@ -40,6 +42,7 @@ public abstract class AbstractControlDialog
 
 
     public void update() {
+        updateManager.update();
     }
 
     public void update(EntityCollection entities) {
@@ -118,6 +121,10 @@ public abstract class AbstractControlDialog
 
     public <T extends Entity> Collection<T> getSelection(Class<T> c) {
         return selection.getSelection().get(c);
+    }
+
+    public void addEdit(UndoableEdit edit){
+        undoManager.undoableEditHappened(new UndoableEditEvent(this, edit));
     }
 
 }
