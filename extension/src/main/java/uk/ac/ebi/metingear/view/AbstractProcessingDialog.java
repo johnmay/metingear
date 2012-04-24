@@ -60,20 +60,17 @@ public abstract class AbstractProcessingDialog
 
     public void initialiseLayout() {
 
-        JPanel panel = PanelFactory.createDialogPanel("p:grow",
+        JPanel panel = PanelFactory.createDialogPanel("p:grow, p, p:grow",
                                                       "p, 4dlu, p, 4dlu, p, 4dlu, p");
 
-        panel.setBorder(Borders.DLU14_BORDER);
-
-        panel.add(getInformation(), CELL_CONSTRAINTS.xy(1, 1));
-        panel.add(new JSeparator(), CELL_CONSTRAINTS.xy(1, 3));
-        panel.add(getForm(), CELL_CONSTRAINTS.xy(1, 5));
+        panel.add(getInformation(), CELL_CONSTRAINTS.xyw(1, 1, 3));
+        panel.add(new JSeparator(), CELL_CONSTRAINTS.xyw(1, 3, 3));
+        panel.add(getForm(),        CELL_CONSTRAINTS.xy(2, 5));
 
         // close and active buttons in the bottom right
-        panel.add(getNavigation(), CELL_CONSTRAINTS.xy(1, 7));
+        panel.add(getNavigation(),  CELL_CONSTRAINTS.xyw(1, 7, 3));
 
-        panel.setBorder(Borders.DLU4_BORDER);
-
+        getRootPane().setBorder(Borders.DLU7_BORDER);
         setContentPane(panel);
 
         getRootPane().setDefaultButton(getOkayButton());
