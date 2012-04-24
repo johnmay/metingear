@@ -8,6 +8,7 @@ import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.metingear.view.ControlDialog;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.swing.event.UndoableEditListener;
@@ -27,18 +28,21 @@ public class DialogLauncherFactory {
     private final SelectionController selectionController;
     private final UndoableEditListener undoableEditListener;
     private final ReportManager reportManager;
+    private final TargetedUpdate updateManager;
 
     public DialogLauncherFactory(Window window,
                                  DialogController dialogController,
                                  SelectionController selectionController,
                                  UndoableEditListener undoableEditListener,
-                                 ReportManager reportManager
+                                 ReportManager reportManager,
+                                 TargetedUpdate updateManager
     ) {
         this.window               = window;
         this.dialogController     = dialogController;
         this.selectionController  = selectionController;
         this.undoableEditListener = undoableEditListener;
         this.reportManager        = reportManager;
+        this.updateManager        = updateManager;
     }
 
     public DelayedBuildAction getLauncher(final Class<? extends ControlDialog> c) {
@@ -59,6 +63,7 @@ public class DialogLauncherFactory {
                     instance.setReportManager(reportManager);
                     instance.setSelectionController(selectionController);
                     instance.setUndoManager(undoableEditListener);
+                    instance.setUpdateManager(updateManager);
 
                     // setup factories
                     instance.setAnnotationFactory(DefaultAnnotationFactory.getInstance());
