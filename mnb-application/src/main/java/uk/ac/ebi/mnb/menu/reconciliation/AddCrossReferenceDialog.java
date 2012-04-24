@@ -26,7 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 
-import uk.ac.ebi.annotation.util.AnnotationFactory;
+import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.render.components.IdentifierEditor;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -81,7 +81,7 @@ public class AddCrossReferenceDialog
 
     @Override
     public void process() {
-        entity.addAnnotation(AnnotationFactory.getInstance().getCrossReference(editor.getIdentifier()));
+        entity.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(editor.getIdentifier()));
     }
 
     @Override

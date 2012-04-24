@@ -5,6 +5,8 @@ import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.mdk.domain.tool.IdentifierFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 import javax.swing.event.UndoableEditListener;
@@ -27,6 +29,10 @@ public abstract class AbstractControlDialog
     private SelectionController selection;
 
     private ReportManager reportManager;
+
+    private EntityFactory entities;
+
+    private IdentifierFactory identifiers;
 
 
     public void update() {
@@ -67,6 +73,24 @@ public abstract class AbstractControlDialog
     @Override
     public void setReportManager(ReportManager report) {
         this.reportManager = report;
+    }
+
+    @Override
+    public void setEntityFactory(EntityFactory entities) {
+        this.entities = entities;
+    }
+
+    public EntityFactory getEntityFactory() {
+        return entities;
+    }
+
+    @Override
+    public void setIdentifierFactory(IdentifierFactory identifierFactory) {
+        this.identifiers = identifiers;
+    }
+
+    public IdentifierFactory getIdentifierFactory() {
+        return identifiers;
     }
 
     /* UTIL FUNCTIONS */

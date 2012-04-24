@@ -1,7 +1,7 @@
 package uk.ac.ebi.mnb.dialog.edit;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.util.AnnotationFactory;
+import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.mnb.core.ControllerAction;
@@ -30,7 +30,7 @@ public class AssignFlags extends ControllerAction {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        AnnotationFactory factory = AnnotationFactory.getInstance();
+        DefaultAnnotationFactory factory = DefaultAnnotationFactory.getInstance();
 
         Collection<AnnotatedEntity> entities = getSelection().getEntities();
         for(AnnotatedEntity entity : entities){

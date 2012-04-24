@@ -26,7 +26,7 @@ import java.util.*;
 import javax.swing.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.annotation.util.AnnotationFactory;
+import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
@@ -51,7 +51,7 @@ public class CrossReferenceEditorDialog extends PopupDialog {
     private FormLayout layout;
     
 
-    private AnnotationFactory ANNOTATION_FACTORY = AnnotationFactory.getInstance();
+    private DefaultAnnotationFactory ANNOTATION_FACTORY = DefaultAnnotationFactory.getInstance();
 
     private DefaultIdentifierFactory ID_FACTORY = DefaultIdentifierFactory.getInstance();
 
