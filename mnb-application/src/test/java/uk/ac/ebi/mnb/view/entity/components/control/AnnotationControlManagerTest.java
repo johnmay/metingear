@@ -8,7 +8,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 
 
 /**
