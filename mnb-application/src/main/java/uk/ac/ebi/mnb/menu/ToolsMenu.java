@@ -6,11 +6,11 @@ package uk.ac.ebi.mnb.menu;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.ProteinProduct;
-import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.tool.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.tools.*;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;

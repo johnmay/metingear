@@ -24,8 +24,9 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.tool.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.MainController;
@@ -147,7 +148,7 @@ public class ContextMenu extends JMenu {
      */
     public void updateContext() {
 
-        uk.ac.ebi.mdk.domain.tool.ReconstructionManager manager = (uk.ac.ebi.mdk.domain.tool.ReconstructionManager) DefaultReconstructionManager.getInstance();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
         Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
         EntityCollection selection = controller.getViewController().getSelection();
 

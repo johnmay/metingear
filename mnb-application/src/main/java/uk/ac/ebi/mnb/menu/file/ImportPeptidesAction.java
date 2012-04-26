@@ -15,9 +15,9 @@ import uk.ac.ebi.chemet.io.file.FileFilterManager;
 import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
 import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.core.ProteinProductImplementation;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
-import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.identifier.type.ProteinIdentifier;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.main.MainView;
 

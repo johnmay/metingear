@@ -27,20 +27,15 @@ import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 
 
 /**
- *
- * DropdownDialog.java
+ * ControllerDialog.java
  * A drop down modal dialog
  *
  * @author johnmay
  * @date Apr 27, 2011
- *
  */
 public abstract class DropdownDialog
         extends JDialog implements Updatable {
@@ -51,93 +46,72 @@ public abstract class DropdownDialog
 
     private JButton active;
 
-    private DialogController controller;
-
     private Theme theme = Settings.getInstance().getTheme();
 
     private Paint paint = new GradientPaint(0, 0, getBackground().darker(), 0, 10, getBackground());
 
     private CellConstraints cc = new CellConstraints();
 
+    private DialogController controller;
+
 
     // default injected components
     @Inject
-    private JLabel  description = LabelFactory.newLabel("Description unavailable");
+    private JLabel description = LabelFactory.newLabel("Description unavailable");
 
     @Inject
-    private JButton process     = ButtonFactory.newButton(null);
+    private JButton process = ButtonFactory.newButton(null);
 
 
-    private static final Set<String> GENERIC_DIALOGS = new HashSet<String>(Arrays.asList("OkayDialog",
-                                                                                         "SaveDialog",
-                                                                                         "RunDialog",
-                                                                                         "BuildDialog"));
+    public DropdownDialog(Window window) {
+        this(window, ModalityType.APPLICATION_MODAL);
+    }
 
+    public DropdownDialog(Window window, ModalityType modality) {
+        super(window, modality);
+
+        setUndecorated(true);
+
+        // push focus back to the parent when the dialog is hidden
+        if (getParent() != null) {
+            addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentHidden(ComponentEvent e) {
+                    getParent().requestFocusInWindow();
+                }
+            });
+        }
+
+    }
+
+
+    @Deprecated
     public DropdownDialog(final JFrame frame,
                           DialogController controller,
                           String type) {
 
-        super(frame, ModalityType.APPLICATION_MODAL);
+        this(frame, ModalityType.APPLICATION_MODAL);
 
-        this.controller = controller;
-
-        close = new JButton(new CloseDialogAction(this));
-
-        active = new JButton(new ProcessDialogAction(getClass(),
-                                                     type + ".DialogButton", this));
-
-
-
-        setUndecorated(true);
-
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentHidden(ComponentEvent e) {
-                frame.requestFocusInWindow();
-            }
-        });
-
+        setDialogController(controller);
 
     }
 
-    /**
-     * Inject resource mappings into fields (name, tooltip, icon, etc.)
-     */
-    public void inject(){
-        // new PropertyComponentInjector(null, getClass()).inject(this);
-    }
 
     /**
      * Allows easy instantiation with a JFrame that implements DialogController.
      * If the frame does not implement DialogController then an InstantiationError
      * will be thrown
+     *
      * @param frame
      * @param dialogName
      */
+    @Deprecated
     public DropdownDialog(final JFrame frame,
                           String dialogName) {
 
-        super(frame, ModalityType.APPLICATION_MODAL);
+        this(frame, ModalityType.APPLICATION_MODAL);
 
-        if (frame instanceof DialogController) {
-            this.controller = (DialogController) frame;
-        } else {
-            LOGGER.error("Attempt to instantiate DropdownDialog without a dialog controller");
-            throw new InstantiationError("Frame " + frame.getName() + "does not implement DialogController");
-        }
-
-        close = new JButton(new CloseDialogAction(this));
-        active = GENERIC_DIALOGS.contains(dialogName)
-                 ? new JButton(new ProcessDialogAction(dialogName + ".DialogButton", this))
-                 : new JButton(new ProcessDialogAction(getClass(), dialogName + ".DialogButton", this));
-        setUndecorated(true);
-
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentHidden(ComponentEvent e) {
-                frame.requestFocusInWindow();
-            }
-        });
+        setDialogController((DialogController) frame);
 
     }
 
@@ -145,6 +119,7 @@ public abstract class DropdownDialog
     /**
      * Returns the dialog description label. By default the description is the Class name and should
      * be overridden to return a meaningful description of what the dialog does
+     *
      * @return
      */
     public JLabel getDescription() {
@@ -153,12 +128,10 @@ public abstract class DropdownDialog
 
 
     /**
-     *
      * Returns the options/form section of the dialog. This method should be over-
      * ridden if use default layout
      *
      * @return
-     * 
      */
     public JPanel getForm() {
         JPanel form = PanelFactory.createDialogPanel();
@@ -208,46 +181,20 @@ public abstract class DropdownDialog
 
 
     /**
+     * Access the close button for the dialog
      *
-     * Packs and sets the location of the dialog
-     * @param visible
-     * 
-     */
-    @Override
-    public void setVisible(boolean visible) {
-        if (visible) {
-            this.pack();
-        }
-        super.setVisible(visible);
-    }
-
-
-    /**
-     * Uses the {@see DialogController#place(DropdownDialog)} method to position the dialog
-     */
-    public void setLocation() {
-        controller.place((DropdownDialog) this);
-    }
-
-
-    @Override
-    public void pack() {
-        super.pack();
-        setLocation();
-    }
-
-
-    /**
-     * Access the default close button
      * @return
      */
     public JButton getClose() {
+        if (close == null)
+            close = ButtonFactory.newButton(new CloseDialogAction(this));
         return close;
     }
 
 
     /**
      * Sets the default close button
+     *
      * @param closeButton
      */
     public void setClose(JButton closeButton) {
@@ -260,16 +207,29 @@ public abstract class DropdownDialog
      * provided type in constructor
      */
     public JButton getActivate() {
+        if (active == null)
+            active = new JButton(new ProcessDialogAction(getClass(),
+                                                         getClass().getSimpleName() + ".DialogButton",
+                                                         this));
         return active;
     }
 
 
     /**
      * Sets the default activate button
+     *
      * @param runButton
      */
     public void setActive(JButton runButton) {
         this.active = runButton;
+    }
+
+    public void setDialogController(DialogController controller) {
+        this.controller = controller;
+    }
+
+    public void position() {
+        controller.place(this);
     }
 
 
@@ -304,6 +264,7 @@ public abstract class DropdownDialog
 
     /**
      * Allows access to the spinning dial wait indicator for example setting text
+     *
      * @param waitIndicator
      */
     public void process(final SpinningDialWaitIndicator waitIndicator) {
@@ -323,4 +284,6 @@ public abstract class DropdownDialog
      * thread safe
      */
     public abstract boolean update();
+
+
 }

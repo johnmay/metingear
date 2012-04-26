@@ -41,7 +41,7 @@
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>CheMet-Core</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <version>${mdk.version}</version>
         </dependency>
         <dependency>
             <groupId>sf.net</groupId>

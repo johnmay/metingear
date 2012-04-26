@@ -30,9 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mnb.core.ControllerAction;
-import uk.ac.ebi.mnb.core.Utilities;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 import org.apache.log4j.Logger;

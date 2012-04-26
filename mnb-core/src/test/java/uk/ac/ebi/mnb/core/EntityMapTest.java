@@ -6,12 +6,12 @@ package uk.ac.ebi.mnb.core;
 
 import junit.framework.Assert;
 import org.junit.AfterClass;
-import org.junit.Test;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.MetaboliteImplementation;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 
 
 /**

@@ -20,24 +20,6 @@
  */
 package uk.ac.ebi.mnb.dialog.file;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.regex.Pattern;
-import javax.swing.AbstractAction;
-import javax.swing.JDialog;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import org.apache.log4j.Logger;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.BooleanClause;
@@ -45,14 +27,28 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.MetaboliteImplementation;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mnb.dialog.popup.AutoComplete;
 import uk.ac.ebi.search.FieldType;
 import uk.ac.ebi.search.SearchManager;
 import uk.ac.ebi.search.SearchableIndex;
-import uk.ac.ebi.visualisation.molecule.access.*;
+import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
+import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 
 /**

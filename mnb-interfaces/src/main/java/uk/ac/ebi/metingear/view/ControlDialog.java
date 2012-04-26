@@ -1,9 +1,9 @@
 package uk.ac.ebi.metingear.view;
 
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.mdk.domain.tool.AnnotationFactory;
-import uk.ac.ebi.mdk.domain.tool.IdentifierFactory;
+import uk.ac.ebi.mdk.tool.AnnotationFactory;
+import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.tool.IdentifierFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 

@@ -19,26 +19,28 @@ package mnb.io.resolve;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.jgoodies.forms.layout.*;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.*;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.render.components.MatchIndication;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
 import uk.ac.ebi.render.crossreference.modules.*;
 import uk.ac.ebi.render.molecule.MoleculeTable;
 import uk.ac.ebi.visualisation.molecule.access.CrossReferenceAccessor;
 import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -227,7 +229,7 @@ public class CandidateSelector
     }
 
 
-    public Collection<uk.ac.ebi.interfaces.entities.Metabolite> getSelected() {
+    public Collection<Metabolite> getSelected() {
         return table.getSelectedEntities();
     }
 

@@ -20,42 +20,41 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import uk.ac.ebi.interfaces.entities.GeneProduct;
+import com.jgoodies.forms.factories.Borders;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.component.ui.VerticalLabelUI;
+import uk.ac.ebi.caf.utility.ColorUtility;
+import uk.ac.ebi.chemet.render.PooledClassBasedListCellDRR;
+import uk.ac.ebi.chemet.render.list.renderers.LocalAlignmentListCellRenderer;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.observation.Observation;
+import uk.ac.ebi.mnb.dialog.popup.AlignmentViewer;
+import uk.ac.ebi.mnb.edit.AbbreviationEdit;
+import uk.ac.ebi.mnb.edit.AccessionEdit;
+import uk.ac.ebi.mnb.edit.NameEdit;
+import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.view.AnnotationRenderer;
+import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.entity.components.AnnotationTable;
-import java.awt.Color;
+import uk.ac.ebi.mnb.view.entity.components.InternalReferences;
+import uk.ac.ebi.observation.ObservationCollection;
+import uk.ac.ebi.observation.sequence.LocalAlignment;
+
+import javax.swing.*;
+import javax.swing.undo.UndoableEdit;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import uk.ac.ebi.interfaces.*;
-import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
-import uk.ac.ebi.mnb.dialog.popup.AlignmentViewer;
-import uk.ac.ebi.mnb.edit.*;
-import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
-
-import javax.swing.*;
-import javax.swing.undo.UndoableEdit;
-
-import org.apache.log4j.Logger;
-
-import com.jgoodies.forms.factories.Borders;
-import com.jgoodies.forms.layout.*;
-import java.awt.Component;
-import java.awt.Font;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.observation.ObservationCollection;
-import uk.ac.ebi.chemet.render.list.renderers.LocalAlignmentListCellRenderer;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
-import uk.ac.ebi.chemet.render.PooledClassBasedListCellDRR;
-import uk.ac.ebi.caf.component.ui.VerticalLabelUI;
-import uk.ac.ebi.caf.utility.ColorUtility;
-import uk.ac.ebi.mnb.view.entity.components.InternalReferences;
 
 
 /**

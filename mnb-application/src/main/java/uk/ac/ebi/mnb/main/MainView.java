@@ -24,9 +24,9 @@ import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.report.bar.MessageBar;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.metingear.view.ControlDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
@@ -323,7 +323,7 @@ public class MainView
         for (Window window : getWindows()) {
             if (window instanceof DropdownDialog) {
                 DropdownDialog dialog = ((DropdownDialog) window);
-                dialog.setLocation();
+                dialog.position();
                 dialog.validate();
             } else if (window instanceof ControlDialog) {
                 ControlDialog dialog = ((ControlDialog) window);

@@ -3,11 +3,11 @@ package uk.ac.ebi.metingear.view;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.interfaces.entities.Entity;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.mdk.domain.tool.AnnotationFactory;
-import uk.ac.ebi.mdk.domain.tool.IdentifierFactory;
+import uk.ac.ebi.mdk.domain.entity.Entity;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.tool.AnnotationFactory;
+import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.tool.IdentifierFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 

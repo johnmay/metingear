@@ -20,13 +20,14 @@
  */
 package uk.ac.ebi.mnb.core;
 
+import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Metabolite;
 
 /**
  * @name    Utilities - 2011.10.03 <br>

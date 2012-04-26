@@ -7,19 +7,19 @@ package uk.ac.ebi.mnb.menu.file;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataInputStream;
-import uk.ac.ebi.chemet.io.annotation.AnnotationInput;
 import uk.ac.ebi.chemet.io.domain.EntityDataInputStream;
-import uk.ac.ebi.chemet.io.domain.EntityInput;
 import uk.ac.ebi.chemet.io.file.FileFilterManager;
 import uk.ac.ebi.chemet.io.file.ProjectFilter;
 import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
-import uk.ac.ebi.chemet.io.observation.ObservationInput;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.core.ReconstructionImpl;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.mdk.io.AnnotationInput;
+import uk.ac.ebi.mdk.io.EntityInput;
+import uk.ac.ebi.mdk.io.ObservationInput;
+import uk.ac.ebi.mdk.tool.EntityFactory;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.FileMenu;
@@ -106,8 +106,8 @@ public class OpenAction
                 EntityFactory factory = DefaultEntityFactory.getInstance();
 
                 ObservationInput observationInput = new ObservationDataInputStream(observationStream, version);
-                AnnotationInput  annotationInput  = new AnnotationDataInputStream(annotationStream, version);
-                EntityInput      entityInput      = new EntityDataInputStream(version, entityStream, factory, annotationInput, observationInput);
+                AnnotationInput annotationInput  = new AnnotationDataInputStream(annotationStream, version);
+                EntityInput entityInput      = new EntityDataInputStream(version, entityStream, factory, annotationInput, observationInput);
 
 
                 long start = System.currentTimeMillis();

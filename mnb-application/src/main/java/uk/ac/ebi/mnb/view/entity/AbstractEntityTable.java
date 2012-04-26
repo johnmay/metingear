@@ -21,21 +21,19 @@
 package uk.ac.ebi.mnb.view.entity;
 
 import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
-import java.awt.Container;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *          EntityTable – 2011.09.06 <br>

@@ -20,13 +20,6 @@
  */
 package uk.ac.ebi.mnb.view;
 
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.util.Arrays;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
@@ -42,9 +35,14 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.AnnotationVisitor;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 /**
  *          AnnotationRenderer – 2011.09.26 <br>

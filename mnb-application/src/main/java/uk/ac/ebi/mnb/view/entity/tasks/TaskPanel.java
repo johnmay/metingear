@@ -24,19 +24,18 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
-import java.util.Collection;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.chemet.io.external.RunnableTask;
+import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
+
+import javax.swing.*;
+import java.util.Collection;
 
 
 /**

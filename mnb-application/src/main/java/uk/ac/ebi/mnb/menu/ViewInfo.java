@@ -23,23 +23,17 @@ package uk.ac.ebi.mnb.menu;
 import com.explodingpixels.macwidgets.BottomBar;
 import com.explodingpixels.macwidgets.BottomBarSize;
 import com.explodingpixels.macwidgets.LabeledComponentGroup;
-import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JToggleButton;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.mnb.view.entity.ProjectView;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.Entity;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.Reaction;
+import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.mnb.view.entity.ProjectView;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**

@@ -46,8 +46,10 @@ import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.service.ServiceManager;
+import uk.ac.ebi.mdk.service.query.name.NameService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
@@ -57,8 +59,6 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
-import uk.ac.ebi.service.ServiceManager;
-import uk.ac.ebi.service.query.name.NameService;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
@@ -312,7 +312,7 @@ public class ExcelImportDialog
                     layout.show(shiftPanel, stages[activeStage].getClass().getSimpleName());
                     label.setText(stages[activeStage].getDescription());
                     pack();
-                    setLocation();
+                    position();
                 } else {
                     getActivate().setEnabled(true);
                 }
@@ -355,7 +355,7 @@ public class ExcelImportDialog
                 stages[activeStage].reloadPanel();
                 layout.show(shiftPanel, stages[activeStage].getClass().getSimpleName());
                 pack();
-                setLocation();
+                position();
             }
         }
     }

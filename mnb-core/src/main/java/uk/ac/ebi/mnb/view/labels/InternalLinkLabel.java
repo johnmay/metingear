@@ -21,12 +21,13 @@
  */
 package uk.ac.ebi.mnb.view.labels;
 
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 
 

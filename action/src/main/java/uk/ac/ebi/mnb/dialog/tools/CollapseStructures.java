@@ -28,7 +28,7 @@ import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 

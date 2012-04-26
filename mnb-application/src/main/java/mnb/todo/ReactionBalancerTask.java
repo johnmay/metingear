@@ -16,12 +16,13 @@
  */
 package mnb.todo;
 
-import java.util.ArrayList;
-import java.util.List;
-import uk.ac.ebi.mnb.core.ModelUtils;
 import org.openscience.cdk.interfaces.IMolecule;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.interfaces.entities.Entity;
+import uk.ac.ebi.mdk.domain.entity.Entity;
+import uk.ac.ebi.mnb.core.ModelUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ReactionBalancerTask.java
@@ -40,7 +41,6 @@ public class ReactionBalancerTask
     private List<IMolecule> intialBalancingMolecules;
 
     public ReactionBalancerTask() {
-        super(null);
 
         // instantiate collections here
         intialBalancingMolecules = new ArrayList<IMolecule>();

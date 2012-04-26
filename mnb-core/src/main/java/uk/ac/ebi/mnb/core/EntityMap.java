@@ -22,16 +22,11 @@ package uk.ac.ebi.mnb.core;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import uk.ac.ebi.core.ProteinProductImplementation;
-import uk.ac.ebi.core.AbstractRNAProduct;
-import uk.ac.ebi.core.MultimerImplementation;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.entities.*;
+import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.tool.EntityFactory;
+
+import java.util.*;
 
 
 /**

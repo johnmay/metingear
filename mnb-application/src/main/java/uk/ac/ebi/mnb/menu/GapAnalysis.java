@@ -21,9 +21,9 @@
 package uk.ac.ebi.mnb.menu;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
-import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.tool.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.tools.gap.NonConsumptionMetabolites;
 import uk.ac.ebi.mnb.dialog.tools.gap.NonProductionMetabolites;
@@ -71,7 +71,7 @@ public class GapAnalysis extends ContextMenu {
             add(new NonProductionMetabolites(controller), new ContextResponder() {
                 public boolean getContext(ReconstructionManager reconstructions,
                                           Reconstruction active,
-                                          EntityCollection selection) {                  
+                                          EntityCollection selection) {
                     return active != null && active.hasMatrix() && SimulationUtil.isAvailable();
                 }
             });

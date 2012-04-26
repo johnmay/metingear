@@ -28,8 +28,8 @@ import uk.ac.ebi.chemet.editor.annotation.AnnotationEditorFactory;
 import uk.ac.ebi.chemet.render.ClassBasedTableCellDDR;
 import uk.ac.ebi.chemet.render.table.renderers.*;
 import uk.ac.ebi.core.tools.StructuralValidity;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;

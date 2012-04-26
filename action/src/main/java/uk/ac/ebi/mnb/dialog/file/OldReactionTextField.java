@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.dialog.file;
 import mnb.io.tabular.parser.ReactionParser;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.search.FieldType;
 import uk.ac.ebi.search.SearchManager;

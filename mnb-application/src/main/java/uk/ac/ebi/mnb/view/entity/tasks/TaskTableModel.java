@@ -20,17 +20,16 @@
  */
 package uk.ac.ebi.mnb.view.entity.tasks;
 
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import uk.ac.ebi.mnb.view.entity.DataType;
-import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
-import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.chemet.io.external.TaskStatus;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.TaskManager;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
+import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
+import uk.ac.ebi.mnb.view.entity.DataType;
+
+import java.util.Date;
 
 /**
  *          TaskTableModel – 2011.09.28 <br>

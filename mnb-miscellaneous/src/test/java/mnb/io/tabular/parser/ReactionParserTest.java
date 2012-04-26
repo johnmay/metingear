@@ -5,7 +5,7 @@
 package mnb.io.tabular.parser;
 
 import junit.framework.TestCase;
-import uk.ac.ebi.interfaces.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 
 
 /**

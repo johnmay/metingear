@@ -20,19 +20,16 @@
  */
 package uk.ac.ebi.search;
 
+import org.apache.log4j.Logger;
+import org.apache.lucene.search.*;
+import org.apache.lucene.store.Directory;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.apache.log4j.Logger;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocsCollector;
-import org.apache.lucene.search.TopScoreDocCollector;
-import org.apache.lucene.store.Directory;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 /**
  *          SearchableIndex – 2011.09.29 <br>

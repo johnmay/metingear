@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 import java.util.HashMap;
 import java.util.Map;

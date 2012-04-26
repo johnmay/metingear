@@ -21,26 +21,21 @@
 package uk.ac.ebi.mnb.view.entity;
 
 import com.explodingpixels.macwidgets.plaf.EmphasizedLabelUI;
-import javax.swing.JLabel;
-import javax.swing.event.ListSelectionEvent;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import com.jgoodies.forms.factories.Borders;
-import java.awt.Color;
-import javax.swing.BorderFactory;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.plaf.ScrollBarUI;
-import javax.swing.plaf.ScrollPaneUI;
-import javax.swing.plaf.basic.BasicScrollBarUI;
-import javax.swing.plaf.basic.BasicSplitPaneUI;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.EntityView;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.mnb.view.BorderlessScrollPane;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
+import java.awt.*;
 
 /**
  *          EntityView – 2011.09.06 <br>

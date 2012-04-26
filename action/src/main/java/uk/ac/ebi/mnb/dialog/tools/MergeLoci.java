@@ -26,11 +26,11 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.core.MultimerImplementation;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
 import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 

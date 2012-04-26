@@ -26,8 +26,8 @@ import mnb.io.tabular.preparse.PreparsedMetabolite;
 import mnb.io.tabular.preparse.PreparsedSheet;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.tool.EntityFactory;
 
 import java.util.*;
 import java.util.regex.Matcher;

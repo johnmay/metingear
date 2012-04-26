@@ -6,7 +6,7 @@ package uk.ac.ebi.mnb.menu.file;
 
 import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.importer.xls.wizzard.ExcelImportDialog;
 import uk.ac.ebi.mnb.main.MainView;

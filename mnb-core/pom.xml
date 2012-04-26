@@ -46,12 +46,12 @@
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-annotation</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <version>${mdk.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>CheMet-Visualisation</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <version>${mdk.version}</version>
         </dependency>
       
         <dependency>

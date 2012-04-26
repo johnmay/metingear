@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 
 
 /**

@@ -25,31 +25,29 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
-import java.util.Collection;
-import java.util.List;
-import javax.swing.Box;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.render.reaction.ReactionEditor;
 import uk.ac.ebi.chemet.render.reaction.ReactionRenderer;
 import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mnb.core.EntityMap;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
+
+import javax.swing.*;
+import java.util.Collection;
+import java.util.List;
 
 
 /**

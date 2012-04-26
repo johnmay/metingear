@@ -21,14 +21,12 @@
  */
 package uk.ac.ebi.mnb.view.entity.general;
 
-import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
+
+import javax.swing.*;
 
 
 /**

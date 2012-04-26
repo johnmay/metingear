@@ -38,11 +38,11 @@ import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.core.reaction.compartment.Organelle;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.reaction.Compartment;
-import uk.ac.ebi.interfaces.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.tool.EntityFactory;
 import uk.ac.ebi.mnb.core.WarningMessage;
 
 import java.util.*;

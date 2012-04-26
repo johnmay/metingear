@@ -20,14 +20,15 @@
  */
 package uk.ac.ebi.mnb.edit;
 
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
+import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mnb.interfaces.Updatable;
+
+import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.mnb.interfaces.Updatable;
+import java.awt.event.ActionEvent;
 
 /**
  * @name    DeleteAnnotation - 2011.10.04 <br>

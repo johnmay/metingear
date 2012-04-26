@@ -24,31 +24,30 @@ package uk.ac.ebi.mnb.dialog.tools;
 import com.google.common.collect.Multimap;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.*;
-import javax.swing.event.UndoableEditListener;
-
 import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
-import uk.ac.ebi.caf.utility.TextUtility;
-import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
-import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.caf.utility.TextUtility;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.service.ServiceManager;
-import uk.ac.ebi.service.query.name.NameService;
+import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.service.ServiceManager;
+import uk.ac.ebi.mdk.service.query.name.NameService;
+import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
+import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
+import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
