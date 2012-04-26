@@ -25,7 +25,7 @@ import com.explodingpixels.macwidgets.SourceListCategory;
 import com.explodingpixels.macwidgets.SourceListModel;
 import net.sf.furbelow.SpinningDial;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.chemet.io.external.TaskStatus;
 import uk.ac.ebi.mnb.settings.Settings;

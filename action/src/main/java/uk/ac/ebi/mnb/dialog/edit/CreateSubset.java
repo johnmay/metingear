@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.render.source.EntitySubset;
-import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mnb.core.ControllerDialog;

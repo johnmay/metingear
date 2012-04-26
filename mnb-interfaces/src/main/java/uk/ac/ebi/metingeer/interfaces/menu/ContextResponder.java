@@ -22,7 +22,7 @@ package uk.ac.ebi.metingeer.interfaces.menu;
 
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
-import uk.ac.ebi.mdk.tool.ReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 
 /**
  *          ContextResponder - 2011.11.28 <br>

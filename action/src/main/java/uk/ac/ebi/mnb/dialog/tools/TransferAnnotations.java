@@ -28,7 +28,7 @@ import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.IdentifierSet;
 import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.chemet.service.query.crossreference.UniProtCrossReferenceService;
-import uk.ac.ebi.core.ProteinProductImplementation;
+import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
@@ -75,7 +75,7 @@ public class TransferAnnotations
 
             Multimap<Identifier, Observation> identifiers = HashMultimap.create();
 
-            Collection<Observation> alignments = ((ProteinProductImplementation) product).getObservationCollection().get(
+            Collection<Observation> alignments = ((ProteinProductImpl) product).getObservationCollection().get(
                     LocalAlignment.class);
             for (Observation observation : alignments) {
                 LocalAlignment alignment = (LocalAlignment) observation;

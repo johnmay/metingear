@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrixImpl;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrixImpl;
 
 
 /**

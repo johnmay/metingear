@@ -24,7 +24,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 
 import java.util.*;
 

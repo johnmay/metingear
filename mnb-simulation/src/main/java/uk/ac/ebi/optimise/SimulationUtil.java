@@ -22,7 +22,7 @@ package uk.ac.ebi.optimise;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
-import uk.ac.ebi.core.CorePreferences;
+import uk.ac.ebi.mdk.domain.CorePreferences;
 
 import java.io.File;
 import java.io.IOException;

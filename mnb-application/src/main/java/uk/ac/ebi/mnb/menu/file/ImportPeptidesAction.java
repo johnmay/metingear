@@ -13,8 +13,8 @@ import org.biojava3.core.sequence.io.ProteinSequenceCreator;
 import uk.ac.ebi.chemet.io.file.FastaFileFilter;
 import uk.ac.ebi.chemet.io.file.FileFilterManager;
 import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ProteinProductImplementation;
+import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.identifier.type.ProteinIdentifier;
@@ -87,14 +87,14 @@ public class ImportPeptidesAction extends FileChooserAction {
                         ProteinIdentifier identifer = new BasicProteinIdentifier(header.substring(0,
                                                                                                   header.indexOf(" ")));
                         String description = header.substring(header.indexOf(" ") + 1);
-                        GeneProduct p = new ProteinProductImplementation(identifer,
+                        GeneProduct p = new ProteinProductImpl(identifer,
                                                            "",
                                                            description);
                         p.addSequence(entry.getValue());
                         peptides.add(p);
                     } else {
                         ProteinIdentifier identifer = new BasicProteinIdentifier(header);
-                        GeneProduct p = new ProteinProductImplementation(identifer,
+                        GeneProduct p = new ProteinProductImpl(identifer,
                                                            "",
                                                            "");
                         p.addSequence(entry.getValue());

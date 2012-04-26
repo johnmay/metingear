@@ -8,7 +8,7 @@ package uk.ac.ebi.mnb.menu.file;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.stream.XMLStreamException;
-import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.xml.stax.SBMLWriter;

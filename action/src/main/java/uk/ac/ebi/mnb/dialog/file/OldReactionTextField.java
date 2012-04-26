@@ -22,7 +22,7 @@ package uk.ac.ebi.mnb.dialog.file;
 
 import mnb.io.tabular.parser.ReactionParser;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.search.FieldType;
@@ -125,7 +125,7 @@ public class OldReactionTextField
     }
 
 
-    public MetabolicReactionImplementation getReaction(Identifier id) {
+    public MetabolicReactionImpl getReaction(Identifier id) {
         throw new UnsupportedOperationException();
 
 //        int nR = counts.get(0); // reac

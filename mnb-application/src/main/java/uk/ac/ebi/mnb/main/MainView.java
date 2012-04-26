@@ -23,7 +23,7 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.report.bar.MessageBar;
-import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;

@@ -24,8 +24,8 @@ import com.explodingpixels.macwidgets.SourceListCategory;
 import com.explodingpixels.macwidgets.SourceListModel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 
 

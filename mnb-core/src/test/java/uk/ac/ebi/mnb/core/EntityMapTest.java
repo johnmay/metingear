@@ -8,8 +8,8 @@ import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.MetaboliteImplementation;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.MetaboliteImpl;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 
@@ -41,7 +41,7 @@ public class EntityMapTest {
 
         collection.add(DefaultEntityFactory.getInstance().newInstance(Metabolite.class));
 
-        Assert.assertFalse(collection.hasSelection(MetaboliteImplementation.class));
+        Assert.assertFalse(collection.hasSelection(MetaboliteImpl.class));
         Assert.assertTrue(collection.hasSelection(Metabolite.class));
 
     }

@@ -24,8 +24,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Locus;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.MultimerImplementation;
+import uk.ac.ebi.mdk.domain.entity.MultimerImpl;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
@@ -92,7 +92,7 @@ public class MergeLoci extends ControllerAction {
                 subunits[i] = proteome.get(loci[i]).iterator().next();
             }
 
-            GeneProduct product = new MultimerImplementation(subunits);
+            GeneProduct product = new MultimerImpl(subunits);
             recon.getProducts().add(product);
 
             for (MetabolicReaction rxn : multimeric.get(locusAnnotation)) {

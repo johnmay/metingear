@@ -17,8 +17,8 @@ public class ReactionRendererTest {
     @Test
     public void testRenderUniporterReaction() throws IOException {
 
-//        MetaboliteImplementation atp = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
-//        MetaboliteImplementation alanine = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
+//        MetaboliteImpl atp = new MetaboliteImpl(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
+//        MetaboliteImpl alanine = new MetaboliteImpl(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
 //
 //        final MetabolicReaction rxn = new MetabolicReaction(BasicReactionIdentifier.nextIdentifier(), "up",
 //                                                            "uniportTest");

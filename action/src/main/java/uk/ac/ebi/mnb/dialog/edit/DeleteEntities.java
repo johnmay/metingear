@@ -21,8 +21,8 @@
 package uk.ac.ebi.mnb.dialog.edit;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.core.ControllerAction;

@@ -30,8 +30,7 @@ import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.ui.VerticalLabelUI;
 import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.chemet.render.PooledClassBasedListCellDRR;
-import uk.ac.ebi.chemet.render.list.renderers.LocalAlignmentListCellRenderer;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.observation.Observation;
@@ -165,7 +164,6 @@ public abstract class AbstractEntityPanel
 
         OBSERVATION_RENDERING_POOL = new PooledClassBasedListCellDRR();
 
-        OBSERVATION_RENDERING_POOL.setRenderer(LocalAlignment.class, new LocalAlignmentListCellRenderer());
 
         observationList.setCellRenderer(OBSERVATION_RENDERING_POOL);
 

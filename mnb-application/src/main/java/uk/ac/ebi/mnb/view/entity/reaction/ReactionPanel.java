@@ -30,8 +30,8 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.render.reaction.ReactionEditor;
 import uk.ac.ebi.chemet.render.reaction.ReactionRenderer;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -105,7 +105,7 @@ public class ReactionPanel
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
-        this.entity = (MetabolicReactionImplementation) entity;
+        this.entity = (MetabolicReactionImpl) entity;
         return super.setEntity(entity);
     }
 

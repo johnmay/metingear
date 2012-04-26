@@ -24,7 +24,7 @@ import com.jgoodies.forms.layout.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.render.components.MatchIndication;
-import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;

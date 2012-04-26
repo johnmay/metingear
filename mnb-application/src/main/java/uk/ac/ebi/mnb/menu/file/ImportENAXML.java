@@ -22,14 +22,14 @@ package uk.ac.ebi.mnb.menu.file;
 
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
-import uk.ac.ebi.core.ChromosomeImplementation;
-import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ChromosomeImplementation;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.io.xml.ENAXMLReader;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
-import uk.ac.ebi.mdk.tool.ReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.main.MainView;

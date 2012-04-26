@@ -22,7 +22,7 @@ package uk.ac.ebi.mnb.view.entity.gene;
 
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;

@@ -22,7 +22,7 @@ package uk.ac.ebi.mnb.view.entity.protein;
 
 import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;

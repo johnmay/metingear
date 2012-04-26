@@ -7,8 +7,8 @@ package uk.ac.ebi.optimise.gap;
 import ilog.concert.*;
 import ilog.cplex.IloCplex;
 import java.util.*;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrixImpl;
+import uk.ac.ebi.mdk.domain.matrix.BasicStoichiometricMatrix;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrixImpl;
 import uk.ac.ebi.optimise.SimulationUtil;
 
 

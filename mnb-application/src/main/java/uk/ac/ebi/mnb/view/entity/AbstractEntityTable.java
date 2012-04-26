@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.view.entity;
 import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
-import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.core.EntityMap;

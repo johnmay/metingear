@@ -28,11 +28,11 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
 import uk.ac.ebi.chemet.resource.basic.BasicRNAIdentifier;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 

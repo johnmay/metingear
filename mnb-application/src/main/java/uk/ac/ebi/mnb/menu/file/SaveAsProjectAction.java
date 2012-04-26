@@ -11,14 +11,14 @@ import uk.ac.ebi.chemet.io.annotation.AnnotationDataOutputStream;
 import uk.ac.ebi.chemet.io.domain.EntityDataOutputStream;
 import uk.ac.ebi.chemet.io.file.FileFilterManager;
 import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
-import uk.ac.ebi.core.CorePreferences;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.CorePreferences;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.io.AnnotationOutput;
 import uk.ac.ebi.mdk.io.EntityOutput;
 import uk.ac.ebi.mdk.io.ObservationOutput;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 
 import javax.swing.*;
