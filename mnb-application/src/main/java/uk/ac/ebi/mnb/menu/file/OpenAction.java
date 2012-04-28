@@ -12,7 +12,7 @@ import uk.ac.ebi.chemet.io.file.FileFilterManager;
 import uk.ac.ebi.chemet.io.file.ProjectFilter;
 import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.mdk.domain.CorePreferences;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
@@ -44,7 +44,7 @@ public class OpenAction
                                                  org.apache.log4j.Logger.getLogger(
             OpenAction.class);
 
-    private static final IntegerPreference BUFFER_SIZE = CorePreferences.getInstance().getPreference("BUFFER_SIZE");
+    private static final IntegerPreference BUFFER_SIZE = DomainPreferences.getInstance().getPreference("BUFFER_SIZE");
 
     private FileMenu menu;
 

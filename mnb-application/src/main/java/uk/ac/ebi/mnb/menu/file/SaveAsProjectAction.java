@@ -11,7 +11,7 @@ import uk.ac.ebi.chemet.io.annotation.AnnotationDataOutputStream;
 import uk.ac.ebi.chemet.io.domain.EntityDataOutputStream;
 import uk.ac.ebi.chemet.io.file.FileFilterManager;
 import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
-import uk.ac.ebi.mdk.domain.CorePreferences;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
@@ -66,7 +66,7 @@ public class SaveAsProjectAction
 
 
                 try {
-                    IntegerPreference bufferPref = CorePreferences.getInstance().getPreference("BUFFER_SIZE");
+                    IntegerPreference bufferPref = DomainPreferences.getInstance().getPreference("BUFFER_SIZE");
 
                     reconstruction.getContainer().mkdirs();
 

@@ -28,7 +28,7 @@ import uk.ac.ebi.chemet.service.loader.single.TaxonomyLoader;
 import uk.ac.ebi.chemet.service.loader.structure.ChEBIStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
-import uk.ac.ebi.mdk.domain.CorePreferences;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.metingear.Main;
 import uk.ac.ebi.render.resource.LoaderGroupFactory;
@@ -132,7 +132,7 @@ public class PreferencePanel extends JPanel {
 
             super(BoxLayout.PAGE_AXIS);
 
-            CorePreferences CORE = CorePreferences.getInstance();
+            DomainPreferences CORE = DomainPreferences.getInstance();
             ResourcePreferences RESOURCE = ResourcePreferences.getInstance();
             JLabel label = LabelFactory.newLabel("BLAST", LabelFactory.Size.HUGE);
             label.setHorizontalAlignment(SwingConstants.LEFT);

@@ -27,7 +27,7 @@ import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataOutputStream;
 import uk.ac.ebi.chemet.io.domain.EntityDataOutputStream;
 import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
-import uk.ac.ebi.mdk.domain.CorePreferences;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
@@ -68,7 +68,7 @@ public class SaveAction extends GeneralAction {
             DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
             Reconstruction reconstruction = manager.getActive();
 
-            IntegerPreference bufferPref = CorePreferences.getInstance().getPreference("BUFFER_SIZE");
+            IntegerPreference bufferPref = DomainPreferences.getInstance().getPreference("BUFFER_SIZE");
 
             reconstruction.getContainer().mkdirs();
 
