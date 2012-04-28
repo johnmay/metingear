@@ -25,7 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
+import uk.ac.ebi.mdk.tool.hash.MolecularHashFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
