@@ -27,8 +27,8 @@ import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.BooleanCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.RatingCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.StructuralValidityRenderer;
-import uk.ac.ebi.core.tools.StructuralValidity;
 import uk.ac.ebi.mdk.domain.entity.Rating;
+import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
 import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 

@@ -32,7 +32,7 @@ import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.core.tools.ReconstructionComparison;
+import uk.ac.ebi.mdk.tool.domain.ReconstructionComparison;
 import uk.ac.ebi.mdk.tool.domain.hash.*;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;

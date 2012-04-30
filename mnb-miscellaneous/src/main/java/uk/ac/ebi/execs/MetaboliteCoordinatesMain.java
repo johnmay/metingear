@@ -20,27 +20,34 @@
  */
 package uk.ac.ebi.execs;
 
-import java.io.*;
-import java.util.*;
-import java.util.Map.Entry;
-import javax.vecmath.Point3d;
-import javax.xml.stream.XMLStreamException;
 import org.apache.commons.cli.Option;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.*;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerReaction;
-import uk.ac.ebi.chemet.exceptions.*;
-import uk.ac.ebi.io.xml.SBMLReactionReader;
+import uk.ac.ebi.chemet.exceptions.AbsentAnnotationException;
+import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+import uk.ac.ebi.io.xml.SBMLReactionReader;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerReaction;
+import uk.ac.ebi.mdk.tool.domain.AutomaticCompartmentResolver;
 import uk.ac.ebi.metabolomes.execs.CommandLineMain;
 import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
-import uk.ac.ebi.mdk.domain.tool.*;
+
+import javax.vecmath.Point3d;
+import javax.xml.stream.XMLStreamException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.Map.Entry;
 
 
 /**
