@@ -8,23 +8,22 @@ import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataInputStream;
 import uk.ac.ebi.chemet.io.domain.EntityDataInputStream;
-import uk.ac.ebi.chemet.io.file.FileFilterManager;
-import uk.ac.ebi.chemet.io.file.ProjectFilter;
 import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.io.AnnotationInput;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.ObservationInput;
-import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.FileMenu;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
 import java.io.*;
 import java.util.Properties;
@@ -33,7 +32,6 @@ import java.util.Properties;
 /**
  * OpenProjectAction.java
  *
- *
  * @author johnmay
  * @date Apr 13, 2011
  */
@@ -41,8 +39,8 @@ public class OpenAction
         extends FileChooserAction {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-            OpenAction.class);
+            org.apache.log4j.Logger.getLogger(
+                    OpenAction.class);
 
     private static final IntegerPreference BUFFER_SIZE = DomainPreferences.getInstance().getPreference("BUFFER_SIZE");
 
@@ -50,8 +48,31 @@ public class OpenAction
 
     private File fixedFile;
 
-    ProjectFilter projFilter = FileFilterManager.getInstance().getProjectFilter();
+    FileFilter projFilter = new FileFilter() {
+        public boolean accept(File f) {
 
+            if (!f.isDirectory()) {
+                return false;
+            }
+
+            String path = f.getPath();
+            int lastIndex = path.lastIndexOf(".");
+            if (lastIndex != -1) {
+                String extension = path.substring(lastIndex);
+                if (extension.equals(".mnb")) {
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
+
+        public String getDescription() {
+            return "Metingear Project";
+        }
+
+    };
 
 
     public OpenAction(FileMenu menu) {
@@ -80,15 +101,15 @@ public class OpenAction
     public void activateActions() {
 
         // show file chooser if there is no fixed file (from open recent)
-        File file =  (fixedFile == null) ? getFile(showOpenDialog()) : fixedFile;
+        File file = (fixedFile == null) ? getFile(showOpenDialog()) : fixedFile;
 
         if (file != null) {
             try {
 
-                File entities     = new File(file, "entities");
-                File annotations  = new File(file, "entity-annotations");
+                File entities = new File(file, "entities");
+                File annotations = new File(file, "entity-annotations");
                 File observations = new File(file, "entity-observations");
-                File info         = new File(file, "info.properties");
+                File info = new File(file, "info.properties");
 
                 Properties properties = new Properties();
                 FileInputStream in = new FileInputStream(info);
@@ -99,15 +120,15 @@ public class OpenAction
                 Version version = new Version(value == null ? "1.2" : value);
 
                 // open data input stream
-                DataInputStream annotationStream  = new DataInputStream(new BufferedInputStream(new FileInputStream(annotations), BUFFER_SIZE.get()));
+                DataInputStream annotationStream = new DataInputStream(new BufferedInputStream(new FileInputStream(annotations), BUFFER_SIZE.get()));
                 DataInputStream observationStream = new DataInputStream(new BufferedInputStream(new FileInputStream(observations), BUFFER_SIZE.get()));
-                DataInputStream entityStream      = new DataInputStream(new BufferedInputStream(new FileInputStream(entities), BUFFER_SIZE.get()));
+                DataInputStream entityStream = new DataInputStream(new BufferedInputStream(new FileInputStream(entities), BUFFER_SIZE.get()));
 
                 EntityFactory factory = DefaultEntityFactory.getInstance();
 
                 ObservationInput observationInput = new ObservationDataInputStream(observationStream, version);
-                AnnotationInput annotationInput  = new AnnotationDataInputStream(annotationStream, version);
-                EntityInput entityInput      = new EntityDataInputStream(version, entityStream, factory, annotationInput, observationInput);
+                AnnotationInput annotationInput = new AnnotationDataInputStream(annotationStream, version);
+                EntityInput entityInput = new EntityDataInputStream(version, entityStream, factory, annotationInput, observationInput);
 
 
                 long start = System.currentTimeMillis();
@@ -140,7 +161,7 @@ public class OpenAction
                 ex.printStackTrace();
                 MainView.getInstance().addErrorMessage(
                         "Unable to load project: "
-                        + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
+                                + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
             }
         }
     }

@@ -21,10 +21,11 @@
 package uk.ac.ebi.mnb.menu.file;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
+import uk.ac.ebi.chemet.io.parser.xml.kgml.KGMLReader;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
-import uk.ac.ebi.io.xml.KGMLReader;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.main.MainView;
 
@@ -60,8 +61,8 @@ public class ImportKGML extends FileChooserAction {
             InputStream stream = null;
             try {
                 stream = new FileInputStream(f);
-                KGMLReader reader = new KGMLReader(stream);
-                for(MetabolicReactionImpl rxn : reader.getReactions()){
+                KGMLReader reader = new KGMLReader(DefaultEntityFactory.getInstance(), stream);
+                for(MetabolicReaction rxn : reader.getReactions()){
                     Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
                     recon.addReaction(rxn);
                 }

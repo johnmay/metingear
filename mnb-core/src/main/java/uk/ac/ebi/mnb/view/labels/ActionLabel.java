@@ -5,14 +5,12 @@
 package uk.ac.ebi.mnb.view.labels;
 
 import com.jgoodies.forms.factories.Borders;
-import java.awt.Cursor;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  * ActionLabel.java
@@ -33,16 +31,16 @@ public class ActionLabel
         setBorder(Borders.EMPTY_BORDER);
         setText(text);
         setToolTipText(text);
-        setFont(Settings.getInstance().getTheme().getLinkFont());
-        setForeground(Settings.getInstance().getTheme().getForeground());
+        setFont(ThemeManager.getInstance().getTheme().getLinkFont());
+        setForeground(ThemeManager.getInstance().getTheme().getForeground());
         addMouseListener(new FontHover());
     }
 
     public ActionLabel(Icon icon, AbstractAction action) {
         super(icon);
         setBorder(Borders.EMPTY_BORDER);
-        setFont(Settings.getInstance().getTheme().getLinkFont());
-        setForeground(Settings.getInstance().getTheme().getForeground());
+        setFont(ThemeManager.getInstance().getTheme().getLinkFont());
+        setForeground(ThemeManager.getInstance().getTheme().getForeground());
         addMouseListener(new FontHover());
     }
 
@@ -50,13 +48,13 @@ public class ActionLabel
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            setForeground(Settings.getInstance().getTheme().getEmphasisedForeground());
+            setForeground(ThemeManager.getInstance().getTheme().getEmphasisedForeground());
             setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            setForeground(Settings.getInstance().getTheme().getForeground());
+            setForeground(ThemeManager.getInstance().getTheme().getForeground());
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }

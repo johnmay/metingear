@@ -48,8 +48,10 @@ import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.tool.DialogCompartmentResolver;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.name.NameService;
+import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
@@ -238,7 +240,7 @@ public class ExcelImportDialog
                                          : new ListSelectionReconciler(frame, factory, new ChEBIIdentifier());
 
             ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler, DefaultEntityFactory.getInstance());
-            parser = new ReactionParser(entitySheet);
+            parser = new ReactionParser(entitySheet, new DialogCompartmentResolver(new AutomaticCompartmentResolver(), this));
 
             waitIndicator.setText(String.format("initialising..."));
             waitIndicator.repaint();

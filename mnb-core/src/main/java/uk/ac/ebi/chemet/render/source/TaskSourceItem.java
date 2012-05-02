@@ -25,12 +25,10 @@ import com.explodingpixels.macwidgets.SourceListCategory;
 import com.explodingpixels.macwidgets.SourceListModel;
 import net.sf.furbelow.SpinningDial;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.chemet.io.external.TaskStatus;
-import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
+import uk.ac.ebi.mdk.tool.task.TaskStatus;
 
 
 /**
@@ -63,10 +61,8 @@ public class TaskSourceItem
     @Override
     public void update() {
 
-        Settings pref = Settings.getInstance();
-        SourceItemDisplayType type = (SourceItemDisplayType) pref.get(Settings.VIEW_SOURCE_TASK);
 
-        super.update(type);
+        super.update();
 
         if( getEntity().getStatus() == TaskStatus.RUNNING ) {
             setIcon(new SpinningDial(16, 16, 12));

@@ -24,14 +24,12 @@ import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.report.Report;
-import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
-import uk.ac.ebi.io.xml.SBMLReactionReader;
+import uk.ac.ebi.chemet.io.parser.xml.sbml.SBMLReactionReader;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.tool.DialogCompartmentResolver;
-import uk.ac.ebi.mdk.tool.domain.AutomaticCompartmentResolver;
+import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.mnb.core.ErrorMessage;
-import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 import javax.swing.*;
@@ -113,15 +111,10 @@ public class ImportSBML extends DelayedBuildAction {
                                                                                                                                                  (JFrame) controller));
                         while (reader.hasNext()) {
 
-                            try {
 
                                 DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-                                manager.getActive().addReaction(reader.nextMetabolicReaction());
+                                manager.getActive().addReaction(reader.next());
 
-                            } catch (UnknownCompartmentException ex) {
-                                Report r = new WarningMessage(ex.getMessage());
-                                messages.add(r);
-                            }
                         }
                     } catch (XMLStreamException ex) {
                         messages.add(new ErrorMessage(ex.getMessage()));

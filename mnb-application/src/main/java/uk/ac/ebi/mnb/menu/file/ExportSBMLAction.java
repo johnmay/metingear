@@ -15,7 +15,7 @@ import org.sbml.jsbml.xml.stax.SBMLWriter;
 
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.core.FileChooserAction;
-import uk.ac.ebi.io.xml.SBMLIOUtil;
+import uk.ac.ebi.chemet.io.parser.xml.sbml.SBMLIOUtil;
 
 
 /**

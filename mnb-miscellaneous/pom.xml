@@ -29,17 +29,17 @@
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>CheMet-Core</artifactId>
-            <version>${mdk.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>CheMet-IO</artifactId>
+            <artifactId>mdk-domain</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-resource</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.chemet</groupId>
+            <artifactId>chemet-xml-parsers</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <!-- mnb -->
@@ -76,7 +76,7 @@
             <artifactId>biojava3-core</artifactId>
             <groupId>org.biojava</groupId>
             <type>jar</type>
-            <version>3.0.3</version>
+            <version>3.0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <artifactId>biojava3-alignment</artifactId>

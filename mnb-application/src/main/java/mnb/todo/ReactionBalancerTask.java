@@ -17,8 +17,8 @@
 package mnb.todo;
 
 import org.openscience.cdk.interfaces.IMolecule;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.mdk.domain.entity.Entity;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.mnb.core.ModelUtils;
 
 import java.util.ArrayList;

@@ -34,7 +34,6 @@ import uk.ac.ebi.mdk.domain.entity.reaction.ParticipantImplementation;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.resource.classification.TransportClassificationNumber;
-import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
@@ -43,6 +42,7 @@ import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.tool.CompartmentResolver;
 import uk.ac.ebi.mnb.core.WarningMessage;
 
 import java.util.*;
@@ -88,6 +88,7 @@ public class ReactionParser {
 
     private EntityResolver entites;
     private EntityFactory factory = DefaultEntityFactory.getInstance();
+    private CompartmentResolver resolver;
 
     private Set<Report> messages = new HashSet();
 
@@ -103,8 +104,9 @@ public class ReactionParser {
     }
 
 
-    public ReactionParser(EntityResolver entityResolver) {
+    public ReactionParser(EntityResolver entityResolver,CompartmentResolver resolver ) {
         entites = entityResolver;
+        this.resolver = resolver;
     }
 
     // attrb include the entitysheet (if available)
@@ -148,7 +150,7 @@ public class ReactionParser {
         Compartment defaultCompartment = Organelle.CYTOPLASM;
 
         if (reactionCompartment.find()) {
-            defaultCompartment = CompartmentImplementation.getCompartment(reactionCompartment.group(1)).getMapping();
+            defaultCompartment = resolver.getCompartment(reactionCompartment.group(1));
             equationSides[0] = reactionCompartment.replaceAll("");
         }
 
@@ -184,7 +186,7 @@ public class ReactionParser {
         Compartment defaultCompartment = Organelle.CYTOPLASM;
 
         if (reactionCompartment.find()) {
-            defaultCompartment = CompartmentImplementation.getCompartment(reactionCompartment.group(1)).getMapping();
+            defaultCompartment = resolver.getCompartment(reactionCompartment.group(1));
             equationSide = reactionCompartment.replaceAll("");
         }
 
@@ -312,7 +314,7 @@ public class ReactionParser {
         // compartment
         Matcher compartmentMatcher = COMPARTMENT_PATTERN.matcher(entityAbbr);
         if (compartmentMatcher.find()) {
-            compartment = CompartmentImplementation.getCompartment(compartmentMatcher.group(1)).getMapping();
+            compartment = resolver.getCompartment(compartmentMatcher.group(1));
             entityAbbr = compartmentMatcher.replaceAll("");
         }
 

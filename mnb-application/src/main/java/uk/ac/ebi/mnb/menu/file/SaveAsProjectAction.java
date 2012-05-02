@@ -9,16 +9,15 @@ import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataOutputStream;
 import uk.ac.ebi.chemet.io.domain.EntityDataOutputStream;
-import uk.ac.ebi.chemet.io.file.FileFilterManager;
 import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.io.AnnotationOutput;
 import uk.ac.ebi.mdk.io.EntityOutput;
 import uk.ac.ebi.mdk.io.ObservationOutput;
-import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 
 import javax.swing.*;
@@ -38,6 +37,31 @@ public class SaveAsProjectAction
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(SaveAsProjectAction.class);
 
     private static final Logger LOGGER = Logger.getLogger(SaveAsProjectAction.class);
+    javax.swing.filechooser.FileFilter projFilter = new javax.swing.filechooser.FileFilter() {
+        public boolean accept(File f) {
+
+            if (!f.isDirectory()) {
+                return false;
+            }
+
+            String path = f.getPath();
+            int lastIndex = path.lastIndexOf(".");
+            if (lastIndex != -1) {
+                String extension = path.substring(lastIndex);
+                if (extension.equals(".mnb")) {
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
+
+        public String getDescription() {
+            return "Metingear Project";
+        }
+
+    };
 
     public SaveAsProjectAction() {
         super("SaveAsProject");
@@ -56,7 +80,7 @@ public class SaveAsProjectAction
             // get the name to choose
             getChooser().setSelectedFile(manager.getActive().getContainer());
 
-            getChooser().addChoosableFileFilter(FileFilterManager.getInstance().getProjectFilter());
+            getChooser().addChoosableFileFilter(projFilter);
             File f = getFile(showSaveDialog());
 
             if (f != null) {
@@ -70,17 +94,17 @@ public class SaveAsProjectAction
 
                     reconstruction.getContainer().mkdirs();
 
-                    File entities     = new File(reconstruction.getContainer(), "entities");
-                    File annotations  = new File(reconstruction.getContainer(), "entity-annotations");
+                    File entities = new File(reconstruction.getContainer(), "entities");
+                    File annotations = new File(reconstruction.getContainer(), "entity-annotations");
                     File observations = new File(reconstruction.getContainer(), "entity-observations");
-                    File info         = new File(reconstruction.getContainer(), "info.properties");
+                    File info = new File(reconstruction.getContainer(), "info.properties");
 
                     Version version = new Version("1.2");
 
                     Properties properties = new Properties();
 
-                    if(info.exists()) {
-                        FileInputStream propInput =   new FileInputStream(info);
+                    if (info.exists()) {
+                        FileInputStream propInput = new FileInputStream(info);
                         properties.load(propInput);
                         propInput.close();
                         String value = properties.getProperty("chemet.version");
@@ -92,20 +116,20 @@ public class SaveAsProjectAction
                     properties.store(writer, "Project info");
                     writer.close();
 
-                    DataOutputStream entityDataOut      = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(entities), bufferPref.get()));
-                    DataOutputStream annotationDataOut  = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(annotations), bufferPref.get()));
+                    DataOutputStream entityDataOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(entities), bufferPref.get()));
+                    DataOutputStream annotationDataOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(annotations), bufferPref.get()));
                     DataOutputStream observationDataOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(observations), bufferPref.get()));
 
 
                     EntityFactory factory = DefaultEntityFactory.getInstance();
 
-                    AnnotationOutput annotationOutput  = new AnnotationDataOutputStream(annotationDataOut, version);
+                    AnnotationOutput annotationOutput = new AnnotationDataOutputStream(annotationDataOut, version);
                     ObservationOutput observationOutput = new ObservationDataOutputStream(observationDataOut, version);
-                    EntityOutput entityOutput      = new EntityDataOutputStream(version,
-                                                                                     entityDataOut,
-                                                                                     factory,
-                                                                                     annotationOutput,
-                                                                                     observationOutput);
+                    EntityOutput entityOutput = new EntityDataOutputStream(version,
+                                                                           entityDataOut,
+                                                                           factory,
+                                                                           annotationOutput,
+                                                                           observationOutput);
 
                     long start = System.currentTimeMillis();
                     entityOutput.write(reconstruction);

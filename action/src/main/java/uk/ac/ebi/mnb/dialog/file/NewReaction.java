@@ -37,6 +37,7 @@ import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -103,7 +104,7 @@ public class NewReaction extends NewEntity {
         if (manager.hasProjects()) {
             Reconstruction reconstruction = manager.getActive();
 
-            ReactionParser parser = new ReactionParser(new NamedEntityResolver());
+            ReactionParser parser = new ReactionParser(new NamedEntityResolver(), new AutomaticCompartmentResolver());
             PreparsedReaction ppRxn = new PreparsedReaction();
 
             ppRxn.addValue(ReactionColumn.ABBREVIATION, getAbbreviation());

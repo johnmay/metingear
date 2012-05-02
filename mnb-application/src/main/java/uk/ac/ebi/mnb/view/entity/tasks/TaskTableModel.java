@@ -21,9 +21,9 @@
 package uk.ac.ebi.mnb.view.entity.tasks;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.chemet.io.external.TaskStatus;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
+import uk.ac.ebi.mdk.tool.task.TaskStatus;
 import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;

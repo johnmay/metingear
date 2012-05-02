@@ -14,16 +14,15 @@
  */
 package uk.ac.ebi.mnb.core;
 
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
+import uk.ac.ebi.mdk.tool.task.TaskStatus;
+import uk.ac.ebi.mnb.interfaces.MainController;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.SwingUtilities;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.chemet.io.external.TaskStatus;
-import uk.ac.ebi.mnb.interfaces.MainController;
 
 
 /**

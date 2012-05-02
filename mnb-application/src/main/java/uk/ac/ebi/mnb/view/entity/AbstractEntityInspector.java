@@ -25,7 +25,6 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.settings.Settings;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 
 import javax.swing.*;
@@ -51,7 +50,6 @@ public abstract class AbstractEntityInspector
     private CellConstraints cc = new CellConstraints();
     private AnnotatedEntity entity;
     private AbstractEntityPanel panel;
-    private static final Settings preferences = Settings.getInstance();
 
     public AbstractEntityInspector(AbstractEntityPanel panel) {
         this.panel = panel;
@@ -142,7 +140,7 @@ public abstract class AbstractEntityInspector
 
     private void setDisplay() {
         // called on update
-        toolbar.setVisible((Boolean) preferences.get(Settings.VIEW_TOOLBAR_INSPECTOR));
+        toolbar.setVisible(true);
     }
 
     /**

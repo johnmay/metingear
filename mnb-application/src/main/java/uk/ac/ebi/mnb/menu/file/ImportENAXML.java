@@ -22,13 +22,14 @@ package uk.ac.ebi.mnb.menu.file;
 
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
-import uk.ac.ebi.mdk.domain.entity.collection.ChromosomeImplementation;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.io.xml.ENAXMLReader;
+import uk.ac.ebi.chemet.io.parser.xml.ena.ENAXMLReader;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
+import uk.ac.ebi.mdk.domain.entity.collection.ChromosomeImplementation;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.FileChooserAction;
@@ -64,7 +65,7 @@ public class ImportENAXML extends FileChooserAction {
 
         if (choosenFile instanceof File) {
             try {
-                ENAXMLReader reader = new ENAXMLReader(new FileInputStream(choosenFile));
+                ENAXMLReader reader = new ENAXMLReader(DefaultEntityFactory.getInstance(), new FileInputStream(choosenFile));
 
                 List<GeneProduct> products = reader.getProducts();
 

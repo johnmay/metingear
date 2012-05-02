@@ -26,12 +26,7 @@ import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.entity.Reconstruction;
-import uk.ac.ebi.io.model.ReactionMatrixIO;
-import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
@@ -39,9 +34,6 @@ import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 
 
 /**
@@ -122,28 +114,28 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
     @Override
     public void process() {
 
-        ReactionMatrixIO.setConvertDoubleToInChI(!useDouble.isSelected());
-        Object fmt = format.getSelectedItem();
-
-        int choice = chooser.showSaveDialog(this);
-
-        if (choice == JFileChooser.APPROVE_OPTION) {
-
-            File f = chooser.getSelectedFile();
-            Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
-            StoichiometricMatrix s = recon.getMatrix();
-
-            try {
-                if (fmt.equals("Table (tsv)")) {
-                    ReactionMatrixIO.writeBasicStoichiometricMatrix(s, new FileWriter(f));
-                } else if (fmt.equals("Serialised")) {
-                    ReactionMatrixIO.writeCompressedBasicStoichiometricMatrix(s, new FileOutputStream(f));
-                }
-            } catch (Exception ex) {
-                addMessage(new ErrorMessage("Unable to save file: " + ex.getMessage()));
-            }
-
-        }
+//        ReactionMatrixIO.setConvertDoubleToInChI(!useDouble.isSelected());
+//        Object fmt = format.getSelectedItem();
+//
+//        int choice = chooser.showSaveDialog(this);
+//
+//        if (choice == JFileChooser.APPROVE_OPTION) {
+//
+//            File f = chooser.getSelectedFile();
+//            Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+//            StoichiometricMatrix s = recon.getMatrix();
+//
+//            try {
+//                if (fmt.equals("Table (tsv)")) {
+//                    ReactionMatrixIO.writeBasicStoichiometricMatrix(s, new FileWriter(f));
+//                } else if (fmt.equals("Serialised")) {
+//                    ReactionMatrixIO.writeCompressedBasicStoichiometricMatrix(s, new FileOutputStream(f));
+//                }
+//            } catch (Exception ex) {
+//                addMessage(new ErrorMessage("Unable to save file: " + ex.getMessage()));
+//            }
+//
+//        }
 
     }
 }

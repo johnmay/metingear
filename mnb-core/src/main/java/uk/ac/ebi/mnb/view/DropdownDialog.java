@@ -13,11 +13,11 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.injection.Inject;
 import uk.ac.ebi.caf.component.theme.Theme;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mnb.core.CloseDialogAction;
 import uk.ac.ebi.mnb.core.ProcessDialogAction;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.interfaces.Updatable;
-import uk.ac.ebi.mnb.settings.Settings;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -46,7 +46,7 @@ public abstract class DropdownDialog
 
     private JButton active;
 
-    private Theme theme = Settings.getInstance().getTheme();
+    private Theme theme = ThemeManager.getInstance().getTheme();
 
     private Paint paint = new GradientPaint(0, 0, getBackground().darker(), 0, 10, getBackground());
 

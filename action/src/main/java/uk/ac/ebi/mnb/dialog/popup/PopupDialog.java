@@ -28,10 +28,10 @@ import uk.ac.ebi.caf.action.ActionProperties;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.theme.Theme;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mnb.core.CloseDialogAction;
-import uk.ac.ebi.mnb.settings.Settings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -179,7 +179,7 @@ public class PopupDialog extends JDialog {
 
     public BufferedImage getBackgroundImage() {
 
-        Theme theme = Settings.getInstance().getTheme();
+        Theme theme = ThemeManager.getInstance().getTheme();
         Dimension size = getPreferredSize();
 
         if (backgroundCache.containsKey(size)) {
