@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.chemet.service.query.name.ChEBINameService;
+import uk.ac.ebi.mdk.service.query.name.ChEBINameService;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;

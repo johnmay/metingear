@@ -24,7 +24,7 @@ import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.report.Report;
-import uk.ac.ebi.chemet.io.parser.xml.sbml.SBMLReactionReader;
+import uk.ac.ebi.mdk.io.xml.sbml.SBMLReactionReader;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.tool.DialogCompartmentResolver;

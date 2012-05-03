@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.dialog.tools;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AuthorAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mnb.core.ControllerAction;

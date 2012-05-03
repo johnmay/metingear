@@ -21,9 +21,9 @@
 package uk.ac.ebi.mnb.view.entity.components;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.editor.annotation.AnnotationEditorFactory;
 import uk.ac.ebi.chemet.render.ClassBasedTableCellDDR;
 import uk.ac.ebi.chemet.render.table.renderers.*;

@@ -32,7 +32,7 @@ import uk.ac.ebi.chemet.render.alignment.AbstractAlignmentColor;
 import uk.ac.ebi.chemet.render.alignment.BasicAlignmentColor;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 
 /**
  * @name    AlignmentViewer - 2011.10.11 <br>

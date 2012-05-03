@@ -24,8 +24,8 @@ package uk.ac.ebi.mnb.view.entity.reaction;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.Subsystem;
-import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
+import uk.ac.ebi.mdk.domain.annotation.Subsystem;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
 
 
 /**

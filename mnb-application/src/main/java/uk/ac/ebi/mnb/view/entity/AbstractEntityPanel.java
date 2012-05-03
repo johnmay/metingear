@@ -43,8 +43,8 @@ import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.entity.components.AnnotationTable;
 import uk.ac.ebi.mnb.view.entity.components.InternalReferences;
-import uk.ac.ebi.observation.ObservationCollection;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.domain.observation.ObservationCollection;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 
 import javax.swing.*;
 import javax.swing.undo.UndoableEdit;

@@ -21,7 +21,7 @@
 package uk.ac.ebi.mnb.menu.file;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.io.parser.xml.kgml.KGMLReader;
+import uk.ac.ebi.mdk.io.xml.kgml.KGMLReader;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;

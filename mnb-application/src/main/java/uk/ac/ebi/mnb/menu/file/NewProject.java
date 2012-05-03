@@ -13,7 +13,7 @@ import uk.ac.ebi.caf.component.SuggestionHandler;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
-import uk.ac.ebi.chemet.service.query.taxonmy.TaxonomyQueryService;
+import uk.ac.ebi.mdk.service.query.taxonmy.TaxonomyQueryService;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mnb.main.MainView;
@@ -93,13 +93,13 @@ public class NewProject extends DropdownDialog {
 
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return service.isAvailable() ? new ArrayList<Object>(service.searchCode(s, true)) : new ArrayList();
+                return service.startup() ? new ArrayList<Object>(service.searchCode(s, true)) : new ArrayList();
             }
         }, handler);
         taxonField = new SuggestionField(this, 5, new SuggestionHandler() {
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return service.isAvailable() ? new ArrayList<Object>(service.searchTaxonomyIdentifier(QueryParser.escape(s), true)) : new ArrayList();
+                return service.startup() ? new ArrayList<Object>(service.searchTaxonomyIdentifier(QueryParser.escape(s), true)) : new ArrayList();
             }
         }, handler);
         nameField = new SuggestionField(this, 35, new SuggestionHandler() {
@@ -120,7 +120,7 @@ public class NewProject extends DropdownDialog {
 
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return service.isAvailable() ? new ArrayList<Object>(service.searchName(QueryParser.escape(s.trim()), true)) : new ArrayList();
+                return service.startup() ? new ArrayList<Object>(service.searchName(QueryParser.escape(s.trim()), true)) : new ArrayList();
             }
         }, handler);
         kingdomField = FieldFactory.newField(10);
@@ -169,7 +169,7 @@ public class NewProject extends DropdownDialog {
         super.setVisible(visible);
 
         // try and get a new service is the current one isn't avaialble
-        if (!service.isAvailable())
+        if (!service.startup())
             service = new TaxonomyQueryService();
     }
 

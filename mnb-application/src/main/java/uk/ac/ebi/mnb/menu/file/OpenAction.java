@@ -6,9 +6,9 @@ package uk.ac.ebi.mnb.menu.file;
 
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.chemet.io.annotation.AnnotationDataInputStream;
-import uk.ac.ebi.chemet.io.domain.EntityDataInputStream;
-import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
+import uk.ac.ebi.mdk.io.AnnotationDataInputStream;
+import uk.ac.ebi.mdk.io.EntityDataInputStream;
+import uk.ac.ebi.mdk.io.ObservationDataInputStream;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;

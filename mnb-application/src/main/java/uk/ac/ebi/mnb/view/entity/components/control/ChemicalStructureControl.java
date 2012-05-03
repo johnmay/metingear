@@ -21,8 +21,8 @@
 package uk.ac.ebi.mnb.view.entity.components.control;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.Charge;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.Charge;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;

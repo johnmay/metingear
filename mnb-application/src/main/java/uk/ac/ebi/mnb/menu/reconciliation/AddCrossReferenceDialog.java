@@ -21,7 +21,7 @@
 package uk.ac.ebi.mnb.menu.reconciliation;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.chemet.render.components.IdentifierEditor;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;

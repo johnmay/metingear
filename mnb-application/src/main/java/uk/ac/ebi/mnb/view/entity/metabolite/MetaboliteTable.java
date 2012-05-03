@@ -21,7 +21,7 @@
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.render.table.editors.RatingCellEditor;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.BooleanCellRenderer;

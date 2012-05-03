@@ -22,7 +22,7 @@ package uk.ac.ebi.mnb.menu.file;
 
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
-import uk.ac.ebi.chemet.io.parser.xml.ena.ENAXMLReader;
+import uk.ac.ebi.mdk.io.xml.ena.ENAXMLReader;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;

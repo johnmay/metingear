@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;

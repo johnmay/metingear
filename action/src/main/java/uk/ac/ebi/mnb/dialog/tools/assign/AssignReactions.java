@@ -1,11 +1,11 @@
 package uk.ac.ebi.mnb.dialog.tools.assign;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.chemet.service.KEGGReactionService;
-import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
+import uk.ac.ebi.mdk.service.KEGGReactionService;
+import uk.ac.ebi.mdk.service.query.LuceneServiceManager;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;

@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.dialog.edit;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import uk.ac.ebi.annotation.AuthorAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;

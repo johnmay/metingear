@@ -21,11 +21,11 @@
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.ACPAssociated;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.annotation.model.Lumped;
+import uk.ac.ebi.mdk.domain.annotation.ACPAssociated;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.Lumped;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;

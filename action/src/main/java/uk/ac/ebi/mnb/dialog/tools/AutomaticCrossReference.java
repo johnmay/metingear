@@ -33,7 +33,7 @@ import uk.ac.ebi.caf.utility.TextUtility;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
+import uk.ac.ebi.mdk.service.query.LuceneServiceManager;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.name.NameService;

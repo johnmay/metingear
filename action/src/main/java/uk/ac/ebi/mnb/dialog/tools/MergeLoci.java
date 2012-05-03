@@ -23,7 +23,7 @@ package uk.ac.ebi.mnb.dialog.tools;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.Locus;
+import uk.ac.ebi.mdk.domain.annotation.Locus;
 import uk.ac.ebi.mdk.domain.entity.MultimerImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;

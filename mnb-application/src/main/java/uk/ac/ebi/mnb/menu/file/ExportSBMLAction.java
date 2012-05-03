@@ -5,17 +5,18 @@
 
 package uk.ac.ebi.mnb.menu.file;
 
-import java.io.File;
-import java.io.IOException;
-import javax.xml.stream.XMLStreamException;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.xml.stax.SBMLWriter;
-
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.io.xml.sbml.SBMLIOUtil;
 import uk.ac.ebi.mnb.core.FileChooserAction;
-import uk.ac.ebi.chemet.io.parser.xml.sbml.SBMLIOUtil;
+import uk.ac.ebi.mnb.main.MainView;
+
+import javax.xml.stream.XMLStreamException;
+import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -46,7 +47,7 @@ public class ExportSBMLAction
             int level = 2;
             int version = 2;
 
-            SBMLIOUtil util = new SBMLIOUtil(level, version);
+            SBMLIOUtil util = new SBMLIOUtil(DefaultEntityFactory.getInstance(), level, version);
 
             SBMLDocument document = util.getDocument(DefaultReconstructionManager.getInstance().getActive());
 
