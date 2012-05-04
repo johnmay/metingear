@@ -29,7 +29,7 @@
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>mdk-domain</artifactId>
+            <artifactId>mdk-domain-entity</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
