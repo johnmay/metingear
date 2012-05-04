@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>chemet-resource</artifactId>
+            <artifactId>mdk-domain-identifier</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
