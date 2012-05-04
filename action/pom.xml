@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>mnb</artifactId>
-        <groupId>uk.ac.ebi</groupId>
+        <groupId>uk.ac.ebi.metingear</groupId>
         <version>0.9-SNAPSHOT</version>
     </parent>
 

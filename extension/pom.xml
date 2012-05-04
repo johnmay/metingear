@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>mnb</artifactId>
-        <groupId>uk.ac.ebi</groupId>
+        <groupId>uk.ac.ebi.metingear</groupId>
         <version>0.9-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -25,7 +25,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi</groupId>
+            <groupId>uk.ac.ebi.metingear</groupId>
             <artifactId>mnb-interfaces</artifactId>
             <version>${project.version}</version>
         </dependency>
