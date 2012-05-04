@@ -21,7 +21,7 @@
 package mnb.io.tabular;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;

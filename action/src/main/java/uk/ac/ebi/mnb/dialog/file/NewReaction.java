@@ -32,7 +32,7 @@ import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;

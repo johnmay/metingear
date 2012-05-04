@@ -15,7 +15,7 @@ import uk.ac.ebi.caf.component.theme.ComponentPreferences;
 import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.caf.utility.preference.Preference;
-import uk.ac.ebi.chemet.resource.ResourcePreferences;
+import uk.ac.ebi.mdk.ResourcePreferences;
 import uk.ac.ebi.mdk.service.ServicePreferences;
 import uk.ac.ebi.mdk.service.loader.crossreference.ChEBICrossReferenceLoader;
 import uk.ac.ebi.mdk.service.loader.crossreference.UniProtCrossReferenceLoader;
@@ -32,7 +32,7 @@ import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.metingear.Main;
 import uk.ac.ebi.render.resource.LoaderGroupFactory;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

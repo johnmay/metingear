@@ -12,14 +12,13 @@ import uk.ac.ebi.caf.component.SuggestionField;
 import uk.ac.ebi.caf.component.SuggestionHandler;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
 import uk.ac.ebi.mdk.service.query.taxonmy.TaxonomyQueryService;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.resource.organism.Kingdom;
-import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 import javax.swing.*;
 import java.awt.*;
@@ -183,14 +182,14 @@ public class NewProject extends DropdownDialog {
         return code;
     }
 
-    public Kingdom getKingdom() {
+    public Taxonomy.Kingdom getKingdom() {
         String type = kingdomField.getText();
         if (type.isEmpty()) {
             flagAsInvalidInput("Kingdom type", kingdomField.getText(),
                                "type of organism (A) Archea, (B) Bacteria, (V) Virus etc.");
-            return Kingdom.UNDEFINED;
+            return Taxonomy.Kingdom.UNDEFINED;
         }
-        return Kingdom.getKingdom(type);
+        return Taxonomy.Kingdom.getKingdom(type);
 
 
     }
@@ -236,7 +235,7 @@ public class NewProject extends DropdownDialog {
         // create a new project
         int taxon = getTaxon();
         String code = getCode();
-        Kingdom kingdom = getKingdom();
+        Taxonomy.Kingdom kingdom = getKingdom();
         String name = getOfficialName();
 
         if (fieldsAreValid) {

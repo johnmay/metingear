@@ -44,7 +44,7 @@ import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;

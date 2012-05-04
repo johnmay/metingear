@@ -25,7 +25,7 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.ChEBICrossReference;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.mnb.core.ControllerAction;

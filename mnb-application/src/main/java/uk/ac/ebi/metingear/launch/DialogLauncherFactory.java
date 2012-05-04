@@ -9,7 +9,7 @@ import uk.ac.ebi.metingear.view.ControlDialog;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import javax.swing.event.UndoableEditListener;
 import java.awt.*;

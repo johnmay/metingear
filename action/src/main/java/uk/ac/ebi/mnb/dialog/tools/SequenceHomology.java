@@ -28,7 +28,7 @@ import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.core.HomologyDatabaseManager;
+import uk.ac.ebi.mdk.db.HomologyDatabaseManager;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;

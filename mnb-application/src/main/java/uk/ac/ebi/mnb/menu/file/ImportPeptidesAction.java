@@ -10,7 +10,7 @@ import org.biojava3.core.sequence.compound.AminoAcidCompoundSet;
 import org.biojava3.core.sequence.io.FastaReader;
 import org.biojava3.core.sequence.io.GenericFastaHeaderParser;
 import org.biojava3.core.sequence.io.ProteinSequenceCreator;
-import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;

@@ -40,7 +40,7 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
+import uk.ac.ebi.mdk.db.DatabaseProperties;
 
 
 /**

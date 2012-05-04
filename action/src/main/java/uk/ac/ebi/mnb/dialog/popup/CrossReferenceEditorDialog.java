@@ -28,7 +28,7 @@ import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
 import uk.ac.ebi.chemet.render.components.IdentifierEditor;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import javax.swing.*;
 import java.util.*;

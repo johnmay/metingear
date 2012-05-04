@@ -28,8 +28,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import uk.ac.ebi.resource.organism.Kingdom;
-import uk.ac.ebi.resource.organism.Taxonomy;
+
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 
 /**
@@ -62,7 +62,7 @@ public class TaxonomyMap {
                 String officialName = row[2];
                 String commonName = row[3];
                 String kingdomString = row[4];
-                Kingdom kingdom = Kingdom.getKingdom(kingdomString);
+                Taxonomy.Kingdom kingdom = Taxonomy.Kingdom.getKingdom(kingdomString);
 
                 Taxonomy taxonomy = new Taxonomy(taxon,
                                                  code,
