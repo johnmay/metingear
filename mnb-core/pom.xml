@@ -45,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-annotation</artifactId>
+            <artifactId>mdk-domain-annotation</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>

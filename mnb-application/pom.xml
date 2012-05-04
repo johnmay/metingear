@@ -28,17 +28,17 @@
         <!-- CheMet Libraries -->
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-domain-data-io</artifactId>
+            <artifactId>mdk-io-data-entity</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-annotation-data-io</artifactId>
+            <artifactId>mdk-io-data-annotation</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-observation-data-io</artifactId>
+            <artifactId>mdk-io-data-observation</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
@@ -53,12 +53,12 @@
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-lucene-service</artifactId>
+            <artifactId>mdk-service-lucene</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-service-core</artifactId>
+            <artifactId>mdk-service-core</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>

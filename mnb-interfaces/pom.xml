@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-interface</artifactId>
+            <artifactId>mdk-interface</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>

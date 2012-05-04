@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-xml-parsers</artifactId>
+            <artifactId>mdk-io-xml-parsers</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <!-- mnb -->
