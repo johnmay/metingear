@@ -44,17 +44,17 @@
             <version>1.4.9</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
+            <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>mdk-domain-annotation</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
+            <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>CheMet-Visualisation</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
+            <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>mdk-tool-core</artifactId>
             <version>${mdk.version}</version>
         </dependency>

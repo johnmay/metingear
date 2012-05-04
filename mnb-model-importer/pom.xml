@@ -42,7 +42,7 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
+            <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>CheMet-WebServices</artifactId>
             <version>${mdk.version}</version>
         </dependency>

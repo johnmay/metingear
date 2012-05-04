@@ -22,7 +22,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
+            <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>mdk-interface</artifactId>
             <version>${mdk.version}</version>
         </dependency>
