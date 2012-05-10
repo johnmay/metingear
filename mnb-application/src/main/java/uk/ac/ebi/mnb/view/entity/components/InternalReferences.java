@@ -21,9 +21,9 @@
 package uk.ac.ebi.mnb.view.entity.components;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.table.renderers.ListLinkRenderer;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.ui.render.table.ListLinkRenderer;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;

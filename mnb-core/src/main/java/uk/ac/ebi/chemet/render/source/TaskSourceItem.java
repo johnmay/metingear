@@ -25,7 +25,7 @@ import com.explodingpixels.macwidgets.SourceListCategory;
 import com.explodingpixels.macwidgets.SourceListModel;
 import net.sf.furbelow.SpinningDial;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.mdk.tool.task.TaskStatus;
@@ -67,7 +67,7 @@ public class TaskSourceItem
         if( getEntity().getStatus() == TaskStatus.RUNNING ) {
             setIcon(new SpinningDial(16, 16, 12));
         } else if( getEntity().getStatus() == TaskStatus.ERROR ) {
-            setIcon(ViewUtilities.WARNING_ICON_16x16);
+            setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/cutout/warning_16x16.png"));
         } else {
             setIcon(null);
         }

@@ -24,7 +24,7 @@
         <!-- chemet -->
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-ui</artifactId>
+            <artifactId>CheMet-Visualisation</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>

@@ -22,13 +22,13 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
-import uk.ac.ebi.chemet.render.table.editors.RatingCellEditor;
-import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
-import uk.ac.ebi.chemet.render.table.renderers.BooleanCellRenderer;
-import uk.ac.ebi.chemet.render.table.renderers.RatingCellRenderer;
-import uk.ac.ebi.chemet.render.table.renderers.StructuralValidityRenderer;
 import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
+import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
+import uk.ac.ebi.mdk.ui.render.table.AnnotationCellRenderer;
+import uk.ac.ebi.mdk.ui.render.table.BooleanCellRenderer;
+import uk.ac.ebi.mdk.ui.render.table.RatingCellRenderer;
+import uk.ac.ebi.mdk.ui.render.table.StructuralValidityRenderer;
 import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 

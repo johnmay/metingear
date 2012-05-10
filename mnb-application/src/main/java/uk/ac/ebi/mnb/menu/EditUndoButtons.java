@@ -22,7 +22,7 @@ package uk.ac.ebi.mnb.menu;
 
 import com.explodingpixels.macwidgets.LabeledComponentGroup;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.mnb.main.MainView;
 
 import javax.swing.*;
@@ -68,7 +68,7 @@ public class EditUndoButtons {
                 }
             }
         });
-        back.setIcon(ViewUtilities.getIcon("images/toolbar/back.png"));
+        back.setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/back.png"));
         forward.setAction(new AbstractAction() {
 
             public void actionPerformed(ActionEvent e) {
@@ -79,7 +79,7 @@ public class EditUndoButtons {
                 }
             }
         });
-        forward.setIcon(ViewUtilities.getIcon("images/toolbar/forward.png"));
+        forward.setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/forward.png"));
 
 
 

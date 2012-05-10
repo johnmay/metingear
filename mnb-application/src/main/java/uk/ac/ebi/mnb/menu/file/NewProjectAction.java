@@ -29,6 +29,7 @@ public class NewProjectAction
 
     @Override
     public void activateActions() {
+        dialog.position();
         dialog.setVisible(enabled);
     }
 

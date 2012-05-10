@@ -29,7 +29,6 @@ import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.tool.domain.ReconstructionComparison;
@@ -44,14 +43,13 @@ import java.util.Arrays;
 import java.util.Set;
 
 
-
 /**
  * CompareReconstruction - 2011.11.28 <br> Class description
  *
- * @version $Rev$ : Last Changed $Date: 2011-12-15 22:07:54 +0000 (Thu,
- * 15 Dec 2011) $
  * @author johnmay
  * @author $Author$ (this version)
+ * @version $Rev$ : Last Changed $Date: 2011-12-15 22:07:54 +0000 (Thu,
+ *          15 Dec 2011) $
  */
 public class CompareReconstruction
         extends ControllerDialog {
@@ -95,7 +93,7 @@ public class CompareReconstruction
         CellConstraints cc = new CellConstraints();
 
         panel.setLayout(new FormLayout("p, 4dlu, p, 4dlu, p",
-                                       ViewUtilities.goodiesFormHelper(6, 4, false)));
+                                       "p, 4dlu,p, 4dlu,p, 4dlu,p, 4dlu,p, 4dlu,p"));
         panel.add(LabelFactory.newLabel("Reconstructions"), cc.xyw(1, 1, 5));
         panel.add(recon1, cc.xy(1, 3));
         panel.add(recon2, cc.xy(3, 3));
@@ -149,9 +147,9 @@ public class CompareReconstruction
             c = new ReconstructionComparison(methods, hydrogen.isSelected(), reconA, reconB);
 
             double[] data = new double[]{
-                c.getMetaboliteTotal(reconA),
-                c.getMetaboliteTotal(reconB),
-                c.getMetaboliteInstersect(reconA, reconB)};
+                    c.getMetaboliteTotal(reconA),
+                    c.getMetaboliteTotal(reconB),
+                    c.getMetaboliteInstersect(reconA, reconB)};
             double[] copy = Arrays.copyOf(data, data.length);
             Arrays.sort(copy);
             venn = GCharts.newVennDiagram(100 * (data[0] / copy[copy.length - 1]),
@@ -164,13 +162,13 @@ public class CompareReconstruction
             venn.setCircleLegends(reconA.getAccession(), reconB.getAccession(), "-");
             venn.setSize(540, 540);
             label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
-                          + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
-                          + reconA.getAccession() + " ‚à© " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
+                                  + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
+                                  + reconA.getAccession() + " ‚à© " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
                     reconA, reconB) + "<br></html>");
-//            output.setText(
-//                    reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "\n"
-//                    + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "\n"
-//                    + reconA.getAccession() + "+" + reconB.getAccession() + ": " + c.getMetaboliteInstersect(reconA, reconB) + "\n");
+            //            output.setText(
+            //                    reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "\n"
+            //                    + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "\n"
+            //                    + reconA.getAccession() + "+" + reconB.getAccession() + ": " + c.getMetaboliteInstersect(reconA, reconB) + "\n");
         } else {
             c = new ReconstructionComparison(methods, hydrogen.isSelected(), reconA, reconB, reconC);
 
@@ -180,13 +178,13 @@ public class CompareReconstruction
             int abc = c.getMetaboliteInstersect(reconA, reconB, reconC);
 
             double[] data = new double[]{
-                c.getMetaboliteTotal(reconA),
-                c.getMetaboliteTotal(reconB),
-                c.getMetaboliteTotal(reconC),
-                ab,
-                bc,
-                ac,
-                abc};
+                    c.getMetaboliteTotal(reconA),
+                    c.getMetaboliteTotal(reconB),
+                    c.getMetaboliteTotal(reconC),
+                    ab,
+                    bc,
+                    ac,
+                    abc};
 
             for (double d : data) {
                 System.out.println(d);
@@ -209,22 +207,19 @@ public class CompareReconstruction
 
             venn.setSize(540, 540);
             label.setText("<html>" + reconA.getAccession() + ": " + c.getMetaboliteTotal(reconA) + "<br>"
-                          + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
-                          + reconC.getAccession() + ": " + c.getMetaboliteTotal(reconC) + "<br>"
-                          + reconA.getAccession() + " and " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
+                                  + reconB.getAccession() + ": " + c.getMetaboliteTotal(reconB) + "<br>"
+                                  + reconC.getAccession() + ": " + c.getMetaboliteTotal(reconC) + "<br>"
+                                  + reconA.getAccession() + " and " + reconB.getAccession() + " = " + c.getMetaboliteInstersect(
                     reconA, reconB) + " "
-                          + reconA.getAccession() + " and " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                                  + reconA.getAccession() + " and " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
                     reconA, reconC) + " "
-                          + reconB.getAccession() + " and " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                                  + reconB.getAccession() + " and " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
                     reconB, reconC) + " "
-                          + reconA.getAccession() + " and " + reconB.getAccession() + " and " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
+                                  + reconA.getAccession() + " and " + reconB.getAccession() + " and " + reconC.getAccession() + " = " + c.getMetaboliteInstersect(
                     reconA, reconB, reconC) + " "
-                          + "<br></html>");
+                                  + "<br></html>");
 
         }
-
-
-
 
 
     }
@@ -241,50 +236,50 @@ public class CompareReconstruction
 
         throw new UnsupportedOperationException("Need to resolve JAI dep for google charts.");
 
-//        try {
-//            final URL url = new URL(venn.toURLString());
-//            final MetaboliteComparison metComp = new MetaboliteComparison(c);
-//
-//            BufferedImage img = ViewUtilities.convertRenderedImage(JAI.create("url", url));
-//            JFrame frame = new JFrame();
-//            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//            frame.setLayout(new FormLayout("p", "p, 4dlu, p, 4dlu,  p, 4dlu, p"));
-//            CellConstraints cc = new CellConstraints();
-//
-//            final JScrollPane pane = new JScrollPane();
-//            final JComboBox box = new JComboBox(MetaboliteComparison.TableData.values());
-//            pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
-//
-//            box.addItemListener(new ItemListener() {
-//
-//                public void itemStateChanged(ItemEvent e) {
-//                    JTable table = (JTable) pane.getViewport().getView();
-//                    int[] selections = table.getSelectedRows();
-//                    JTable newTable = metComp.getComparisconTable(
-//                            (MetaboliteComparison.TableData) box.getSelectedItem());
-//                    for (int i : selections) {
-//                        newTable.addRowSelectionInterval(i, i);
-//                    }
-//                    pane.setViewportView(newTable);
-//                    pane.repaint();
-//                    pane.revalidate();
-//                }
-//            });
-//
-//
-//            pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
-//
-//            frame.add(new JLabel(new ImageIcon(img)), cc.xy(1, 1));
-//            frame.add(label, cc.xy(1, 3));
-//            frame.add(box, cc.xy(1, 5));
-//            frame.add(pane, cc.xy(1, 7));
-//            frame.pack();
-//            frame.setVisible(true);
-//        } catch (IOException ex) {
-//            LOGGER.info("IO Exception when reading stream");
-//        }
-//
-//
-//        return true;
+        //        try {
+        //            final URL url = new URL(venn.toURLString());
+        //            final MetaboliteComparison metComp = new MetaboliteComparison(c);
+        //
+        //            BufferedImage img = ViewUtilities.convertRenderedImage(JAI.create("url", url));
+        //            JFrame frame = new JFrame();
+        //            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //            frame.setLayout(new FormLayout("p", "p, 4dlu, p, 4dlu,  p, 4dlu, p"));
+        //            CellConstraints cc = new CellConstraints();
+        //
+        //            final JScrollPane pane = new JScrollPane();
+        //            final JComboBox box = new JComboBox(MetaboliteComparison.TableData.values());
+        //            pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
+        //
+        //            box.addItemListener(new ItemListener() {
+        //
+        //                public void itemStateChanged(ItemEvent e) {
+        //                    JTable table = (JTable) pane.getViewport().getView();
+        //                    int[] selections = table.getSelectedRows();
+        //                    JTable newTable = metComp.getComparisconTable(
+        //                            (MetaboliteComparison.TableData) box.getSelectedItem());
+        //                    for (int i : selections) {
+        //                        newTable.addRowSelectionInterval(i, i);
+        //                    }
+        //                    pane.setViewportView(newTable);
+        //                    pane.repaint();
+        //                    pane.revalidate();
+        //                }
+        //            });
+        //
+        //
+        //            pane.setViewportView(metComp.getComparisconTable(MetaboliteComparison.TableData.PRESENCE));
+        //
+        //            frame.add(new JLabel(new ImageIcon(img)), cc.xy(1, 1));
+        //            frame.add(label, cc.xy(1, 3));
+        //            frame.add(box, cc.xy(1, 5));
+        //            frame.add(pane, cc.xy(1, 7));
+        //            frame.pack();
+        //            frame.setVisible(true);
+        //        } catch (IOException ex) {
+        //            LOGGER.info("IO Exception when reading stream");
+        //        }
+        //
+        //
+        //        return true;
     }
 }

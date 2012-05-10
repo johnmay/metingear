@@ -7,11 +7,8 @@
         <groupId>uk.ac.ebi.metingear</groupId>
         <version>0.9-SNAPSHOT</version>
     </parent>
-
-    <artifactId>mnb-core</artifactId>
-    <packaging>jar</packaging>
-
-    <name>Core</name>
+    <artifactId>mnb-importer</artifactId>
+    <name>Importer</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,33 +26,24 @@
             <version>1.2.16</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.8</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>com.jgoodies</groupId>
             <artifactId>forms</artifactId>
             <version>1.2.1</version>
         </dependency>
         <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-interfaces</artifactId>
-            <version>1.4.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-data</artifactId>
-            <version>1.4.9</version>
+            <groupId>uk.ac.ebi.metingear</groupId>
+            <artifactId>mnb-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-domain-annotation</artifactId>
-            <version>${mdk.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-ui</artifactId>
-            <version>${mdk.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-tool-core</artifactId>
+            <artifactId>CheMet-WebServices</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
@@ -64,31 +52,14 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-edit</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>biojava3-core</artifactId>
-            <groupId>org.biojava</groupId>
-            <type>jar</type>
-            <version>3.0.3</version>
-        </dependency>
-        <!-- CAF -->
-        <dependency>
             <groupId>uk.ac.ebi.caf</groupId>
             <artifactId>caf-report</artifactId>
-            <version>${caf.version}</version>
+            <version>0.8.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.caf</groupId>
             <artifactId>caf-action</artifactId>
-            <version>${caf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.caf</groupId>
-            <artifactId>caf-component</artifactId>
-            <version>${caf.version}</version>
+            <version>0.8.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

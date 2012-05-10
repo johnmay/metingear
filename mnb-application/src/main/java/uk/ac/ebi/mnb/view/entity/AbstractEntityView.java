@@ -24,7 +24,7 @@ import com.explodingpixels.macwidgets.plaf.EmphasizedLabelUI;
 import com.jgoodies.forms.factories.Borders;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.EntityView;
@@ -62,7 +62,7 @@ public class AbstractEntityView
         setName(name);
         setOrientation(JSplitPane.VERTICAL_SPLIT);
         setDividerSize(10);
-        setBackground(ViewUtilities.BACKGROUND);
+        setBackground(ThemeManager.getInstance().getTheme().getBackground());
         JScrollPane tablePane = new BorderlessScrollPane(this.table);
         add(tablePane, JSplitPane.TOP);
         add(this.inspector, JSplitPane.BOTTOM);

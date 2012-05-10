@@ -26,7 +26,7 @@ import com.explodingpixels.macwidgets.LabeledComponentGroup;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
 
@@ -70,10 +70,10 @@ public class ViewInfo {
 
         controller.setViewSelector(this);
 
-        genes.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/gen-selected.png"));
-        products.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/pro-selected.png"));
-        metabolites.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/met-selected.png"));
-        reactions.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/rxn-selected.png"));
+        genes.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/gen-selected.png"));
+        products.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/pro-selected.png"));
+        metabolites.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/met-selected.png"));
+        reactions.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/rxn-selected.png"));
 
         genes.putClientProperty("JButton.buttonType", "segmentedTextured");
         genes.putClientProperty("JButton.segmentPosition", "first");

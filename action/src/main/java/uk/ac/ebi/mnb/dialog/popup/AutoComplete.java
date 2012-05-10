@@ -21,10 +21,10 @@
 package uk.ac.ebi.mnb.dialog.popup;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.ui.component.table.accessor.EntityValueAccessor;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -56,7 +56,7 @@ public class AutoComplete extends JDialog {
 
         list.setVisibleRowCount(6);
 
-        list.setFont(ViewUtilities.DEFAULT_BODY_FONT);
+        list.setFont(ThemeManager.getInstance().getTheme().getBodyFont());
 
         pane = new BorderlessScrollPane(list, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);

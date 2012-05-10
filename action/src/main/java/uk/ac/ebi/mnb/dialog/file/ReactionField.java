@@ -26,15 +26,15 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.ui.component.table.accessor.EntityValueAccessor;
+import uk.ac.ebi.mdk.ui.component.table.accessor.NameAccessor;
 import uk.ac.ebi.mnb.dialog.popup.AutoComplete;
 import uk.ac.ebi.search.FieldType;
 import uk.ac.ebi.search.SearchManager;
 import uk.ac.ebi.search.SearchableIndex;
-import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
-import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

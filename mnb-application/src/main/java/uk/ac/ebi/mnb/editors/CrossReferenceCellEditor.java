@@ -20,21 +20,21 @@
  */
 package uk.ac.ebi.mnb.editors;
 
-import java.awt.Component;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.ui.render.table.AnnotationCellRenderer;
+import uk.ac.ebi.mnb.dialog.popup.CrossReferenceEditorDialog;
+import uk.ac.ebi.mnb.main.MainView;
+
+import javax.swing.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.table.TableCellEditor;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.EventObject;
-import javax.swing.*;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.table.TableCellEditor;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.dialog.popup.CrossReferenceEditorDialog;
-import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
-import uk.ac.ebi.chemet.render.table.renderers.DefaultRenderer;
 
 /**
  * @name    CrossReferenceCellEditor - 2011.10.07 <br>
@@ -50,6 +50,7 @@ public class CrossReferenceCellEditor
     private static final Logger LOGGER = Logger.getLogger(CrossReferenceCellEditor.class);
     private static CrossReferenceEditorDialog xrefEditor = new CrossReferenceEditorDialog(MainView.getInstance());
     private ChangeEvent event = new ChangeEvent(this);
+
 
     public CrossReferenceCellEditor() {
         //  setFont(Settings.getInstance().getTheme().getBodyFont());

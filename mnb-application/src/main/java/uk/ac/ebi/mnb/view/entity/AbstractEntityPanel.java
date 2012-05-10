@@ -29,11 +29,13 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.ui.VerticalLabelUI;
 import uk.ac.ebi.caf.utility.ColorUtility;
-import uk.ac.ebi.chemet.render.PooledClassBasedListCellDRR;
 import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.observation.Observation;
+import uk.ac.ebi.mdk.domain.observation.ObservationCollection;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.ui.render.list.ClassBasedListCellDDR;
 import uk.ac.ebi.mnb.dialog.popup.AlignmentViewer;
 import uk.ac.ebi.mnb.edit.AbbreviationEdit;
 import uk.ac.ebi.mnb.edit.AccessionEdit;
@@ -43,8 +45,6 @@ import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.entity.components.AnnotationTable;
 import uk.ac.ebi.mnb.view.entity.components.InternalReferences;
-import uk.ac.ebi.mdk.domain.observation.ObservationCollection;
-import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 
 import javax.swing.*;
 import javax.swing.undo.UndoableEdit;
@@ -162,7 +162,7 @@ public abstract class AbstractEntityPanel
         annotationTable.getModel().setObservationList(observationList);
 
 
-        OBSERVATION_RENDERING_POOL = new PooledClassBasedListCellDRR();
+        OBSERVATION_RENDERING_POOL = new ClassBasedListCellDDR();
 
 
         observationList.setCellRenderer(OBSERVATION_RENDERING_POOL);
@@ -170,7 +170,7 @@ public abstract class AbstractEntityPanel
 
     }
 
-    private PooledClassBasedListCellDRR OBSERVATION_RENDERING_POOL;
+    private ClassBasedListCellDDR OBSERVATION_RENDERING_POOL;
 
     private AlignmentViewer alignmentView = new AlignmentViewer(MainView.getInstance(), 15);
 
@@ -343,11 +343,6 @@ public abstract class AbstractEntityPanel
 
             // Update obserations
             {
-                // check the objects back in to the pool
-                for (int i = 0; i < observationModel.getSize(); i++) {
-                    Observation o = (Observation) observationModel.remove(i);
-                    OBSERVATION_RENDERING_POOL.checkIn(o);
-                }
 
                 observationModel.removeAllElements();
                 ObservationCollection collection = ((AbstractAnnotatedEntity) entity).getObservationCollection();

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>uk.ac.ebi.metingear</groupId>
+    <artifactId>mnb</artifactId>
+    <version>0.9-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Metingear</name>
+    <modules>
+        <module>mnb-application</module>
+        <module>mnb-miscellaneous</module>
+        <module>mnb-model-importer</module>
+        <module>mnb-core</module>
+        <module>mnb-simulation</module>
+        <module>mnb-edit</module>
+        <module>mnb-interfaces</module>
+        <module>action</module>
+        <module>extension</module>
+    </modules>
+    <licenses>
+        <license>
+            <name>GNU LGPL v2</name>
+            <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <properties>
+        <caf.version>0.8.5-SNAPSHOT</caf.version>
+        <mdk.version>1.4.0-SNAPSHOT</mdk.version>
+    </properties>
+
+    <repositories>
+        
+        <repository>
+            <id>maven-repo</id>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <releases/>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>ebi-repo</id>
+            <name>EBI maven repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+        </repository>
+
+        <repository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI maven snapshots repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
+        </repository>
+
+        <repository>
+            <id>biobabel-repo</id>
+            <url>${biobabel.maven.repo.url}</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        
+        <repository>
+            <id>biojava-maven-repo</id>
+            <name>BioJava repository</name>
+            <url>http://www.biojava.org/download/maven/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        
+    </repositories>
+    
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>1.3.1</version>
+                </plugin>        
+            </plugins>
+        </pluginManagement>       
+    </build>      
+</project>

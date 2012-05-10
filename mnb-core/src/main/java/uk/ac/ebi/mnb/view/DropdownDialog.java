@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.caf.component.injection.Inject;
 import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mnb.core.CloseDialogAction;
@@ -19,15 +18,10 @@ import uk.ac.ebi.mnb.core.ProcessDialogAction;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 
 
 /**
@@ -53,14 +47,6 @@ public abstract class DropdownDialog
     private CellConstraints cc = new CellConstraints();
 
     private DialogController controller;
-
-
-    // default injected components
-    @Inject
-    private JLabel description = LabelFactory.newLabel("Description unavailable");
-
-    @Inject
-    private JButton process = ButtonFactory.newButton(null);
 
 
     public DropdownDialog(Window window) {
@@ -207,11 +193,19 @@ public abstract class DropdownDialog
      * provided type in constructor
      */
     public JButton getActivate() {
-        if (active == null)
+        if (active == null) {
             active = new JButton(new ProcessDialogAction(getClass(),
                                                          getClass().getSimpleName() + ".DialogButton",
                                                          this));
+
+            // set the default option
+            if(active.getText() == null || active.getText().isEmpty()){
+                active.setText("Okay");
+            }
+
+        }
         return active;
+
     }
 
 
@@ -229,27 +223,10 @@ public abstract class DropdownDialog
     }
 
     public void position() {
+        if(controller == null)
+            throw new NullPointerException("No dialog controller has been set");
         controller.place(this);
     }
-
-
-    /**
-     * Draws the dialog to an image (experimental)
-     */
-    public void drawDialog() {
-        BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
-        Graphics2D g2 = (Graphics2D) img.createGraphics();
-        super.setLocation(0, 0);
-        super.setVisible(true);
-        super.setVisible(false);
-        g2.dispose();
-        try {
-            ImageIO.write(img, "png", new File("/Users/johnmay/Desktop/dialog.png"));
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(DropdownDialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
 
     /**
      * Paints a shadow on the background to make it appear tucked under the tool-bar
@@ -263,7 +240,8 @@ public abstract class DropdownDialog
 
 
     /**
-     * Allows access to the spinning dial wait indicator for example setting text
+     * Process method that allows access to the spinning dial wait indicator for example setting text.
+     * This method is optional and simply invokes the {@see process()}
      *
      * @param waitIndicator
      */

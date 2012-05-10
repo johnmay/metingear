@@ -20,19 +20,19 @@
  */
 package uk.ac.ebi.mnb.dialog.popup;
 
-import java.util.Arrays;
-import javax.swing.JFrame;
-import javax.swing.JTextPane;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.utility.ColorUtility;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.ui.render.alignment.AbstractAlignmentColor;
+import uk.ac.ebi.mdk.ui.render.alignment.BasicAlignmentColor;
+
+import javax.swing.*;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.utility.ColorUtility;
-import uk.ac.ebi.chemet.render.alignment.AbstractAlignmentColor;
-import uk.ac.ebi.chemet.render.alignment.BasicAlignmentColor;
-import uk.ac.ebi.mdk.domain.entity.GeneProduct;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
+import java.awt.*;
+import java.util.Arrays;
 
 /**
  * @name    AlignmentViewer - 2011.10.11 <br>
@@ -64,7 +64,7 @@ public final class AlignmentViewer extends PopupDialog {
 
         this.buffer = buffer;
         getPanel().add(sequence);
-        sequence.setFont(ViewUtilities.COURIER_NEW_PLAIN_11);
+        sequence.setFont(new Font("Courier New", Font.PLAIN, 10));
         sequence.setBackground(getPanel().getBackground());
         setAlwaysOnTop(rootPaneCheckingEnabled);
         setColor(defaultColor);

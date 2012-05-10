@@ -4,20 +4,15 @@
  */
 package uk.ac.ebi.mnb.menu.file;
 
+import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.mdk.io.AnnotationDataInputStream;
-import uk.ac.ebi.mdk.io.EntityDataInputStream;
-import uk.ac.ebi.mdk.io.ObservationDataInputStream;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.io.AnnotationInput;
-import uk.ac.ebi.mdk.io.EntityInput;
-import uk.ac.ebi.mdk.io.ObservationInput;
+import uk.ac.ebi.mdk.io.*;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.FileMenu;
@@ -179,7 +174,7 @@ public class OpenAction
         @Override
         public Icon getIcon(File f) {
             if (projFilter.accept(f)) {
-                return ViewUtilities.icon_16x16;
+                return ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/networkbuilder_16x16.png");
             }
             return super.getIcon(f);
         }

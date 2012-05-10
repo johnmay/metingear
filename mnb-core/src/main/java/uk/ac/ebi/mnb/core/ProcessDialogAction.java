@@ -14,13 +14,12 @@
  */
 package uk.ac.ebi.mnb.core;
 
-import uk.ac.ebi.caf.action.GeneralAction;
 import net.sf.furbelow.SpinningDialWaitIndicator;
-import java.awt.event.ActionEvent;
+import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
-import javax.swing.SwingUtilities;
-import org.restlet.data.Preference;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 
 /**
@@ -53,7 +52,6 @@ public class ProcessDialogAction extends GeneralAction {
         super(command);
         this.dialog = dialog;
     }
-
 
     /**
      * Invokes the attached dialog process method {

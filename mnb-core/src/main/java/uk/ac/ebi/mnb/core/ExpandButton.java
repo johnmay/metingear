@@ -5,10 +5,10 @@
 package uk.ac.ebi.mnb.core;
 
 import uk.ac.ebi.caf.action.GeneralAction;
-import javax.swing.ImageIcon;
-import javax.swing.JToggleButton;
+import uk.ac.ebi.caf.utility.ResourceUtility;
+
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  * ExpandButton.java
@@ -26,8 +26,8 @@ public class ExpandButton
 
     public ExpandButton( ExpandComponent a ) {
         super( a );
-        open = ViewUtilities.getIcon( a.getValue( GeneralAction.EXPAND_BUTTON_OPEN_ICON ).toString() , "" );
-        close = ViewUtilities.getIcon( a.getValue( GeneralAction.EXPAND_BUTTON_CLOSE_ICON ).toString() , "" );
+        open = ResourceUtility.getIcon(a.getValue(GeneralAction.EXPAND_BUTTON_OPEN_ICON).toString());
+        close = ResourceUtility.getIcon( a.getValue( GeneralAction.EXPAND_BUTTON_CLOSE_ICON ).toString());
         setUI(new BasicButtonUI());
         setIcon(close);
         setBorder(null);

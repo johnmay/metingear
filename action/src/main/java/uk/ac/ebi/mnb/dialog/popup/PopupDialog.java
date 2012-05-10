@@ -4,17 +4,17 @@
  * 2011.10.07
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,7 +30,7 @@ import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.caf.utility.ColorUtility;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.mnb.core.CloseDialogAction;
 
 import javax.swing.*;
@@ -45,11 +45,11 @@ import java.util.Map;
 
 
 /**
- * @name    PopupDialog - 2011.10.07 <br>
- *          Class description
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name PopupDialog - 2011.10.07 <br>
+ * Class description
  */
 public class PopupDialog extends JDialog {
 
@@ -69,7 +69,7 @@ public class PopupDialog extends JDialog {
         protected void paintComponent(Graphics g) {
             // don't think we need a super.paintComponent(g)
             // but we do need to clear the background
-            g.clearRect(0,0,getWidth(), getHeight());
+            g.clearRect(0, 0, getWidth(), getHeight());
             g.drawImage(bgImage, 0, 0, null);
         }
     };
@@ -109,13 +109,13 @@ public class PopupDialog extends JDialog {
         panel.setOpaque(false);
         background.setLayout(new FormLayout("8px, 16px, p, 16px, 8px", "8px, 16px, p, 16px, 8px"));
         CellConstraints cc = new CellConstraints();
-        Icon close = ViewUtilities.getIcon("images/cutout/close_whitebg_16x16.png");
+        Icon close = ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/close_whitebg_16x16.png");
 
         Action closeAction = new CloseDialogAction(this, false);
         JButton closeButton = ButtonFactory.newCleanButton(close, closeAction);
         closeButton.registerKeyboardAction(closeButton.getAction(),
                                            KeyStroke.getKeyStroke(
-                ActionProperties.getInstance(getClass()).getProperty("CloseDialog.Action." + Action.ACCELERATOR_KEY)),
+                                                   ActionProperties.getInstance(getClass()).getProperty("CloseDialog.Action." + Action.ACCELERATOR_KEY)),
                                            JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         background.add(closeButton, cc.xy(2, 2));
@@ -144,7 +144,8 @@ public class PopupDialog extends JDialog {
 
 
     /**
-     * Sets the pop-up location based on mouse position. The tip of the callout will be at the mouse point with no offset
+     * Sets the pop-up location based on mouse position. The tip of the callout will be at the mouse point with no
+     * offset
      */
     public void setOnMouse() {
         setOnMouse(offset);
@@ -154,6 +155,7 @@ public class PopupDialog extends JDialog {
     /**
      * Sets the location on the mouse with a specified offset. This will place the dialog tip at the offset above the
      * mouse
+     *
      * @param offset
      */
     public void setOnMouse(int offset) {
@@ -237,9 +239,11 @@ public class PopupDialog extends JDialog {
             return colorMap.get(pct);
         }
         colorMap.put(pct, ColorUtility.getMixedColor(grey, pct,
-                                                     ViewUtilities.CLEAR_COLOUR, 1.0f - pct));
+                                                     CLEAR, 1.0f - pct));
         return colorMap.get(pct);
     }
+
+    private static final Color CLEAR = new Color(255, 255, 255, 0);
 
 
     public Area getCalloutShape() {
@@ -251,14 +255,14 @@ public class PopupDialog extends JDialog {
         int center = getPreferredSize().width / 2;
 
         int[] x = new int[]{
-            center,
-            center - 25,
-            center + 25
+                center,
+                center - 25,
+                center + 25
         };
         int[] y = new int[]{
-            getPreferredSize().height - 7,
-            getPreferredSize().height - 32,
-            getPreferredSize().height - 32};
+                getPreferredSize().height - 7,
+                getPreferredSize().height - 32,
+                getPreferredSize().height - 32};
         Polygon p = new Polygon(x, y, 3);
 
         Area composite = new Area(rect);

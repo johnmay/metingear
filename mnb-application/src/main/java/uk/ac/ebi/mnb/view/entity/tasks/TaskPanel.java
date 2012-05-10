@@ -28,13 +28,13 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Collection;
 
 
@@ -72,7 +72,7 @@ public class TaskPanel
     public boolean update() {
 
         command.setText(entity.getCommand());
-        command.setFont(ViewUtilities.COURIER_NEW_PLAIN_11);
+        command.setFont(new Font("Courier New", Font.PLAIN, 10));
         command.setForeground(ThemeManager.getInstance().getTheme().getForeground());
         command.setEditable(false);
         command.setLineWrap(true);
