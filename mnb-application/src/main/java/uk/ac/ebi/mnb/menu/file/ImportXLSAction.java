@@ -73,7 +73,7 @@ public class ImportXLSAction
                 MainView view = MainView.getInstance();
                 ExcelImportDialog wizzard = new ExcelImportDialog(view, view.getViewController(), view.getMessageManager(), view.getViewController(), view.getUndoManager(), reconstruction, choosenFile, importer, LuceneServiceManager.getInstance());
 
-                wizzard.position();
+                wizzard.pack();
                 wizzard.setVisible(true);
 
 

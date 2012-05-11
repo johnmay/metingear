@@ -90,7 +90,7 @@ public class ContextMenu extends JMenu {
 
             @Override
             public void activateActions() {
-                dialog.position();
+                dialog.pack();
                 dialog.setVisible(true);
             }
         };

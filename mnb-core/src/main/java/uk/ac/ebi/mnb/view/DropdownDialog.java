@@ -165,6 +165,11 @@ public abstract class DropdownDialog
 
     }
 
+    @Override
+    public void pack() {
+        super.pack();
+        position();
+    }
 
     /**
      * Access the close button for the dialog
