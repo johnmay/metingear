@@ -14,12 +14,13 @@ import mnb.io.tabular.xls.HSSFPreparsedSheet;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
-import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
-import uk.ac.ebi.mdk.service.query.name.ChEBINameService;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
+import uk.ac.ebi.mdk.service.query.name.ChEBINameService;
+import uk.ac.ebi.mdk.service.query.name.NameService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
@@ -109,7 +110,10 @@ public class ImportModelSeed extends DelayedBuildAction {
                                                            properties,
                                                            EntityColumn.DATA_BOUNDS);
 
-            CandidateFactory factory = new CandidateFactory(new ChEBINameService(),
+            NameService service = new ChEBINameService();
+            service.startup();
+
+            CandidateFactory factory = new CandidateFactory(service,
                                                             new ChemicalFingerprintEncoder());
 
             EntryReconciler reconciler = new AutomatedReconciler(factory,
