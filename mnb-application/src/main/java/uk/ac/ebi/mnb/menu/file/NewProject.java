@@ -13,7 +13,7 @@ import uk.ac.ebi.caf.component.SuggestionHandler;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
-import uk.ac.ebi.mdk.service.query.taxonmy.TaxonomyQueryService;
+import uk.ac.ebi.mdk.service.query.taxonomy.TaxonomyQueryService;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mnb.main.MainView;
