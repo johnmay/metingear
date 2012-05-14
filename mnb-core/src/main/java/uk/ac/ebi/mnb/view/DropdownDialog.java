@@ -6,6 +6,7 @@ package uk.ac.ebi.mnb.view;
 
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.Sizes;
 import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
@@ -99,6 +100,7 @@ public abstract class DropdownDialog
 
         setDialogController((DialogController) frame);
 
+
     }
 
 
@@ -128,7 +130,7 @@ public abstract class DropdownDialog
     public JPanel getNavigation() {
 
         JPanel navigation = PanelFactory.createDialogPanel("p:grow, right:min, 4dlu ,right:min",
-                                                           "p");
+                                                           "min");
 
         navigation.add(getClose(), cc.xy(2, 1));
         navigation.add(getActivate(), cc.xy(4, 1));
@@ -146,20 +148,38 @@ public abstract class DropdownDialog
      */
     public void setDefaultLayout() {
 
-        JPanel panel = PanelFactory.createDialogPanel("p:grow",
-                                                      "p, 4dlu, p, 4dlu, p, 4dlu, p");
+        Box box = Box.createVerticalBox();
 
-        panel.setBorder(Borders.DLU7_BORDER);
+        box.setBorder(Borders.DLU7_BORDER);
 
-        panel.add(getDescription(), cc.xy(1, 1));
-        panel.add(new JSeparator(SwingConstants.HORIZONTAL), cc.xy(1, 3));
-        panel.add(getForm(), cc.xy(1, 5));
+        JLabel label = getDescription();
+        JPanel form = getForm();
+        JPanel nav = getNavigation();
 
-        // close and active buttons in the bottom right
-        panel.add(getNavigation(), cc.xy(1, 7));
+        // make sure all is aligned to the left
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        form.setAlignmentX(Component.LEFT_ALIGNMENT);
+        nav.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        this.add(panel);
-        this.pack();
+        int paddingPixels = Sizes.dialogUnitYAsPixel(4, box);
+
+        box.add(Box.createVerticalStrut(paddingPixels));
+
+        box.add(label);
+
+        box.add(Box.createVerticalStrut(paddingPixels));
+        box.add(new JSeparator(SwingConstants.HORIZONTAL));
+        box.add(Box.createVerticalStrut(paddingPixels));
+
+        box.add(form);
+
+        box.add(Box.createVerticalStrut(paddingPixels));
+        box.add(new JSeparator(SwingConstants.HORIZONTAL));
+        box.add(Box.createVerticalStrut(paddingPixels));
+
+        box.add(nav);
+
+        this.setContentPane(box);
 
         getRootPane().setDefaultButton(active);
 
@@ -204,7 +224,7 @@ public abstract class DropdownDialog
                                                          this));
 
             // set the default option
-            if(active.getText() == null || active.getText().isEmpty()){
+            if (active.getText() == null || active.getText().isEmpty()) {
                 active.setText("Okay");
             }
 
@@ -228,7 +248,7 @@ public abstract class DropdownDialog
     }
 
     public void position() {
-        if(controller == null)
+        if (controller == null)
             throw new NullPointerException("No dialog controller has been set");
         controller.place(this);
     }
