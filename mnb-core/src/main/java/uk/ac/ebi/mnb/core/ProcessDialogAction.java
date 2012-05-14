@@ -25,17 +25,16 @@ import java.awt.event.ActionEvent;
 /**
  * ProcessDialogAction <br> Class to handling the processing step of a dialog
  * (b). a) MenuItem > Create Dialog b) A Button > Process Dialog Values
- *
+ * <p/>
  * Invokes {
  *
+ * @author johnmay @date Apr 27, 2011
  * @see DropdownDialog#process()} followed by {
  * @see DropdownDialog#update()}. The {
  * @see DropdownDialog#process()} action is performed in thread with the {
  * @see DropdownDialog#update()} action is wrapped in a {
  * @see SwingUtilities#invokeLater(Runnable)} call. Finally the action hides the
- * provided dialog.
- *
- * @author johnmay @date Apr 27, 2011
+ *      provided dialog.
  */
 public class ProcessDialogAction extends GeneralAction {
 
@@ -56,9 +55,10 @@ public class ProcessDialogAction extends GeneralAction {
     /**
      * Invokes the attached dialog process method {
      *
-     * @see DropdownDialog#process()} in a different thread. On completion the
-     * provided dialog is hidden
      * @param e redundant action
+     *
+     * @see DropdownDialog#process()} in a different thread. On completion the
+     *      provided dialog is hidden
      */
     public void actionPerformed(ActionEvent e) {
 
@@ -70,7 +70,9 @@ public class ProcessDialogAction extends GeneralAction {
 
             public void run() {
                 try {
+
                     dialog.process(waiter);
+                    dialog.pack();
 
                     SwingUtilities.invokeLater(new Runnable() {
 
@@ -80,6 +82,14 @@ public class ProcessDialogAction extends GeneralAction {
                             dialog.update();
                         }
                     });
+                } catch (RuntimeException e) {
+                    waiter.dispose();
+                    dialog.setVisible(false);
+                    if (dialog instanceof ControllerDialog) {
+                        ControllerDialog controllerDialog = (ControllerDialog) dialog;
+                        controllerDialog.addMessage(new ErrorMessage("A runtime error occurred: " + e.getMessage() + e.getCause()));
+                        e.printStackTrace();
+                    }
                 } catch (Exception e) {
                     waiter.dispose();
                     dialog.setVisible(false);
