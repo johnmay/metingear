@@ -24,16 +24,11 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.mdk.io.AnnotationDataOutputStream;
-import uk.ac.ebi.mdk.io.EntityDataOutputStream;
-import uk.ac.ebi.mdk.io.ObservationDataOutputStream;
+import uk.ac.ebi.mdk.io.*;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
-import uk.ac.ebi.mdk.io.AnnotationOutput;
-import uk.ac.ebi.mdk.io.EntityOutput;
-import uk.ac.ebi.mdk.io.ObservationOutput;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.main.MainView;
@@ -77,7 +72,8 @@ public class SaveAction extends GeneralAction {
             File observations = new File(reconstruction.getContainer(), "entity-observations");
             File info         = new File(reconstruction.getContainer(), "info.properties");
 
-            Version version = new Version("1.2");
+            Version version = IOConstants.VERSION;
+
 
             Properties properties = new Properties();
 
