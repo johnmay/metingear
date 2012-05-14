@@ -5,14 +5,15 @@
 package uk.ac.ebi.mnb.menu;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.tools.*;
+import uk.ac.ebi.mnb.dialog.tools.compare.AlignReconstruction;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.mnb.main.MainView;
 
@@ -21,7 +22,6 @@ import javax.swing.*;
 
 /**
  * FileMenu.java
- *
  *
  * @author johnmay @date Apr 28, 2011
  */
@@ -134,6 +134,12 @@ public class ToolsMenu extends ContextMenu {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return reconstructions.getProjects().size() > 1;
+            }
+        });
+        add(create(AlignReconstruction.class), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return active != null;
             }
         });
 
