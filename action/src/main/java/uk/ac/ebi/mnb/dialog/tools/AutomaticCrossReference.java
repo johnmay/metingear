@@ -152,8 +152,7 @@ public class AutomaticCrossReference
                 if (services.hasService(identifier, NameService.class))
                     resourceSelection.addElement(identifier);
             }
-            if (resourceSelection.getModel().getSize() > 1)
-                resourceSelection.setSelectedIndex(0);
+            resourceSelection.setSelectedIndex(0);
             pack();
         }
         super.setVisible(b);
