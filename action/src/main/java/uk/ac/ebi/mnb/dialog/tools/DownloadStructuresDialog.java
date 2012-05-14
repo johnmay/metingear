@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
@@ -70,11 +71,11 @@ public class DownloadStructuresDialog
 
     private KEGGCompoundStructureService keggService = new KEGGCompoundStructureService();
 
-    private JLabel allowWebServiceLabel = LabelFactory.newFormLabel("Allow Web Services:",
+    private JLabel allowWebServiceLabel = LabelFactory.newFormLabel("Allow Web services:",
                                                                     "Indicate you want to allow the use of web services to download" +
                                                                             " structures. Web services will dramatically reduce the speed and should" +
                                                                             " only be used for small numbers of entries");
-    private JLabel fetchAllLabel = LabelFactory.newFormLabel("Retrieve All:",
+    private JLabel fetchAllLabel = LabelFactory.newFormLabel("Greedy mode:",
                                                              "Retrieve all structures for all cross-references - structures can be filtered post download");
 
     private JCheckBox fetchAll = CheckBoxFactory.newCheckBox("");
@@ -93,9 +94,7 @@ public class DownloadStructuresDialog
         // blend the list in
         resourceSelection.setBackground(getBackground());
         resourceSelection.setForeground(LabelFactory.newFormLabel("").getForeground());
-        resourceSelection.setSelectionBackground(resourceSelection.getBackground());
-        resourceSelection.setSelectionForeground(resourceSelection.getForeground());
-        resourceSelection.setVisibleRowCount(5);
+        resourceSelection.setVisibleRowCount(6);
 
         setDefaultLayout();
 
@@ -123,7 +122,8 @@ public class DownloadStructuresDialog
         panel.add(fetchAll, cc.xy(3, 3));
 
         panel.add(LabelFactory.newFormLabel("Resource Priority:"), cc.xy(1, 5));
-        panel.add(resourceSelection, cc.xy(3, 5, CellConstraints.FILL, CellConstraints.FILL));
+        panel.add(new MutableJListController(resourceSelection).getListWithController(),
+                  cc.xy(3, 5, CellConstraints.FILL, CellConstraints.FILL));
 
         return panel;
     }
@@ -153,6 +153,9 @@ public class DownloadStructuresDialog
                 }
             }
             long end = System.currentTimeMillis();
+
+            if (resourceSelection.getElements().size() > 1)
+                resourceSelection.setSelectedIndex(0);
 
             // make sure we re-pack
             pack();
@@ -193,7 +196,7 @@ public class DownloadStructuresDialog
                                 m.addAnnotation(new AtomContainerAnnotation(structure));
 
                                 // only get first
-                                if(!fetchAll.isSelected())
+                                if (!fetchAll.isSelected())
                                     break ANNOTATION;
 
                             } else {

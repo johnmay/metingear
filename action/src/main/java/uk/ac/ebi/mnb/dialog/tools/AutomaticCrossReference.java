@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.utility.TextUtility;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -69,7 +70,7 @@ public class AutomaticCrossReference
     private JCheckBox kegg = CheckBoxFactory.newCheckBox("KEGG Compound");
     private JCheckBox hmdb = CheckBoxFactory.newCheckBox("HMDB");
 
-    private JLabel wsLabel = LabelFactory.newFormLabel("Allow web-services:", "Dramatic performance reduction on large data-sets");
+    private JLabel wsLabel = LabelFactory.newFormLabel("Allow Web services:", "Dramatic performance reduction on large data-sets");
     private JLabel greedyLabel = LabelFactory.newFormLabel("Greedy Mode:",
                                                            "Keep searching for hits even once a hit has been found");
     private JCheckBox ws = CheckBoxFactory.newCheckBox();
@@ -91,6 +92,11 @@ public class AutomaticCrossReference
 
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
 
+
+        // blend the list in
+        resourceSelection.setBackground(getBackground());
+        resourceSelection.setForeground(LabelFactory.newFormLabel("").getForeground());
+        resourceSelection.setVisibleRowCount(6);
 
         setDefaultLayout();
 
@@ -119,7 +125,7 @@ public class AutomaticCrossReference
         form.add(approximateLabel, cc.xy(1, 1));
         form.add(approximate, cc.xy(3, 1));
         form.add(resourceLabel, cc.xy(1, 3));
-        form.add(resourceSelection, cc.xy(3, 3));
+        form.add(new MutableJListController(resourceSelection).getListWithController(), cc.xy(3, 3));
         form.add(wsLabel, cc.xy(1, 5));
         form.add(ws, cc.xy(3, 5));
         form.add(greedyLabel, cc.xy(1, 7));
@@ -143,9 +149,11 @@ public class AutomaticCrossReference
             ServiceManager services = DefaultServiceManager.getInstance();
             for (Identifier identifier : services.getIdentifiers(NameService.class)) {
                 // check it's actually available
-                if(services.hasService(identifier, NameService.class))
+                if (services.hasService(identifier, NameService.class))
                     resourceSelection.addElement(identifier);
             }
+            if (resourceSelection.getModel().getSize() > 1)
+                resourceSelection.setSelectedIndex(0);
             pack();
         }
         super.setVisible(b);
