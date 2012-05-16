@@ -25,6 +25,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
@@ -145,9 +146,11 @@ public class DocumentFactory {
         }
         // index annotations
 
-        // xref
+        // index string annotations
         for (Annotation annotation : entity.getAnnotations()) {
-            document.add(new Field(FieldType.ANNOTATION.getName(), annotation.toString(), Field.Store.YES, Field.Index.ANALYZED));
+            if(annotation instanceof StringAnnotation){
+                document.add(new Field(FieldType.ANNOTATION.getName(), annotation.toString(), Field.Store.YES, Field.Index.ANALYZED));
+            }
         }
 
 
