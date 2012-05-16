@@ -5,13 +5,11 @@
 
 package uk.ac.ebi.mnb.core;
 
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.Bond;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 
 
 /**
@@ -23,7 +21,7 @@ public class ModelUtils {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(ModelUtils.class);
-    private static final IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+    private static final IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
 
 
     private ModelUtils() {
@@ -52,7 +50,7 @@ public class ModelUtils {
 
 
     public static IMolecule makeWater() {
-        IMolecule mol = DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class);
+        IMolecule mol = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class);
         mol.addAtom(builder.newInstance(IAtom.class, "H"));
         mol.addAtom(builder.newInstance(IAtom.class, "O"));
         mol.addAtom(builder.newInstance(IAtom.class, "H"));
@@ -65,7 +63,7 @@ public class ModelUtils {
 
 
     public static IMolecule makeOxygen() {
-        IMolecule mol = DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class);
+        IMolecule mol = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class);
         mol.addAtom(builder.newInstance(IAtom.class, "O"));
         mol.addAtom(builder.newInstance(IAtom.class, "O"));
         mol.addBond(builder.newInstance(IBond.class, mol.getAtom(0), mol.getAtom(1)));
