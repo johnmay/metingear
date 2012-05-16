@@ -94,8 +94,13 @@ public class ReactionPanel
             reactionLabel.setIcon(renderer.getReaction(entity));
             updateParticipantXref();
 
-            transportIcon.setIcon(renderer.getTransportClassificationIcon(TransportReactionUtil.getClassification(entity)));
-            balanceIcon.setIcon(renderer.getBalanceTypeIcon(MassBalance.getBalanceClassification(entity)));
+            TransportReactionUtil.Classification classification = TransportReactionUtil.getClassification(entity);
+            transportIcon.setIcon(renderer.getTransportClassificationIcon(classification));
+            transportIcon.setToolTipText(classification.toString());
+
+            MassBalance.BalanceType balanceType = MassBalance.getBalanceClassification(entity);
+            balanceIcon.setIcon(renderer.getBalanceTypeIcon(balanceType));
+            balanceIcon.setToolTipText(balanceType.toString());
 
             editor.setReaction(entity);
 
