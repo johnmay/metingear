@@ -25,11 +25,11 @@ import uk.ac.ebi.chemet.render.source.AbbreviationAccessor;
 import uk.ac.ebi.chemet.render.source.AccessionAccessor;
 import uk.ac.ebi.chemet.render.source.Accessor;
 import uk.ac.ebi.chemet.render.source.NameAccessor;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.edit.entity.AbbreviationSetter;
 import uk.ac.ebi.edit.entity.NameSetter;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.EntityTableModel;
 import uk.ac.ebi.mnb.main.MainView;
@@ -40,11 +40,12 @@ import java.util.*;
 
 
 /**
- *          EntityTableModel – 2011.09.06 <br>
- *          Class description
+ * EntityTableModel – 2011.09.06 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public abstract class AbstractEntityTableModel
         extends AbstractTableModel implements EntityTableModel {
@@ -96,7 +97,9 @@ public abstract class AbstractEntityTableModel
 
     /**
      * Returns the component and given index
+     *
      * @param index
+     *
      * @return
      */
     public AnnotatedEntity getEntity(int index) {
@@ -107,9 +110,7 @@ public abstract class AbstractEntityTableModel
 
 
     /**
-     *
      * Updates the underlying table-model
-     *
      */
     public boolean update() {
         loadComponents();
@@ -118,7 +119,7 @@ public abstract class AbstractEntityTableModel
         for (int i = 0; i < components.size(); i++) {
             for (int j = 0; j < getColumnCount(); j++) {
                 Object newValue = getValue(components.get(i), j);
-                if (!newValue.equals(data[i][j])) {
+                if (newValue != null && !newValue.equals(data[i][j])) {
                     data[i][j] = newValue;
                 }
             }
@@ -283,8 +284,8 @@ public abstract class AbstractEntityTableModel
             return entity.getAnnotationsExtending(columnDescriptors.get(columnIndex).getAccessClass());
         } else if (type == DataType.OBSERVATION) {
             return null;
-//            return entity.getObservationCollection().get(
-//                    columnDescriptors.get(columnIndex).getAccessClass());
+            //            return entity.getObservationCollection().get(
+            //                    columnDescriptors.get(columnIndex).getAccessClass());
         }
 
         // will never happen... i hope :-)
@@ -313,17 +314,17 @@ public abstract class AbstractEntityTableModel
             return accessor.access(entity);
         }
         // maybe do this when os x has java 1.7
-//        switch (name) {
-//            case "Name":
-//                return entity.getName();
-//            case "Abbreviation":
-//                return entity.getName();
-//            case "Accession":
-//                return entity.getName();
-//            default:
-//                return "NA";
-//        }
-//
+        //        switch (name) {
+        //            case "Name":
+        //                return entity.getName();
+        //            case "Abbreviation":
+        //                return entity.getName();
+        //            case "Accession":
+        //                return entity.getName();
+        //            default:
+        //                return "NA";
+        //        }
+        //
 
 
         return "NA";
