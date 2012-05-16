@@ -165,6 +165,7 @@ public class ImportModelSeed extends DelayedBuildAction {
                 }
             }
         });
+        t.setName("MODEL-SEED IMPORT");
         t.start();
 
 
