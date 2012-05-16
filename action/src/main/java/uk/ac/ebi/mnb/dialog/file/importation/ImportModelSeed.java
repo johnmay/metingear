@@ -11,6 +11,7 @@ import mnb.io.tabular.preparse.PreparsedSheet;
 import mnb.io.tabular.type.EntityColumn;
 import mnb.io.tabular.type.ReactionColumn;
 import mnb.io.tabular.xls.HSSFPreparsedSheet;
+import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
@@ -62,7 +63,7 @@ public class ImportModelSeed extends DelayedBuildAction {
             public boolean accept(File f) {
                 String name = f.getName();
                 String extension = name.substring(Math.max(0, name.lastIndexOf('.')));
-                return f.isDirectory()  || extension.equals(".xls");
+                return f.isDirectory() || extension.equals(".xls");
             }
 
 
@@ -89,55 +90,82 @@ public class ImportModelSeed extends DelayedBuildAction {
 
     }
 
-    public void importXLS(File xls) {
+    public void importXLS(final File xls) {
 
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        final Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
 
-        try {
+        final SpinningDialWaitIndicator waitIndicator = new SpinningDialWaitIndicator((JFrame) controller);
 
-            HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(xls));
+        waitIndicator.setText("Importing model-SEED");
 
-            ExcelModelProperties properties = new ExcelModelProperties();
-            properties.load(getClass().getResourceAsStream("modelseed.properties"));
-
-            Integer rxnI = Integer.parseInt(properties.getProperty("rxn.sheet"));
-            Integer metI = Integer.parseInt(properties.getProperty("ent.sheet"));
-
-            PreparsedSheet rxnSht = new HSSFPreparsedSheet(workbook.getSheetAt(rxnI),
-                                                           properties,
-                                                           ReactionColumn.DATA_BOUNDS);
-            PreparsedSheet entSht = new HSSFPreparsedSheet(workbook.getSheetAt(metI),
-                                                           properties,
-                                                           EntityColumn.DATA_BOUNDS);
-
-            NameService service = new ChEBINameService();
-            service.startup();
-
-            CandidateFactory factory = new CandidateFactory(service,
-                                                            new ChemicalFingerprintEncoder());
-
-            EntryReconciler reconciler = new AutomatedReconciler(factory,
-                                                                 new ChEBIIdentifier());
-
-            ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht,
-                                                                      reconciler,
-                                                                      DefaultEntityFactory.getInstance());
-
-            ReactionParser reactionParser = new ReactionParser(entitySheet, new AutomaticCompartmentResolver());
-
-            while (rxnSht.hasNext()) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
                 try {
-                    recon.addReaction(reactionParser.parseReaction((PreparsedReaction)rxnSht.next()));
-                }catch (UnparsableReactionError rxn){
-                    controller.getMessageManager().addReport(new WarningMessage(rxn.getMessage()));
+                    HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(xls));
+
+                    ExcelModelProperties properties = new ExcelModelProperties();
+                    properties.load(getClass().getResourceAsStream("modelseed.properties"));
+
+                    Integer rxnI = Integer.parseInt(properties.getProperty("rxn.sheet"));
+                    Integer metI = Integer.parseInt(properties.getProperty("ent.sheet"));
+
+                    PreparsedSheet rxnSht = new HSSFPreparsedSheet(workbook.getSheetAt(rxnI),
+                                                                   properties,
+                                                                   ReactionColumn.DATA_BOUNDS);
+                    PreparsedSheet entSht = new HSSFPreparsedSheet(workbook.getSheetAt(metI),
+                                                                   properties,
+                                                                   EntityColumn.DATA_BOUNDS);
+
+                    NameService service = new ChEBINameService();
+                    service.startup();
+
+                    CandidateFactory factory = new CandidateFactory(service,
+                                                                    new ChemicalFingerprintEncoder());
+
+                    EntryReconciler reconciler = new AutomatedReconciler(factory,
+                                                                         new ChEBIIdentifier());
+
+                    ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht,
+                                                                              reconciler,
+                                                                              DefaultEntityFactory.getInstance());
+
+                    ReactionParser reactionParser = new ReactionParser(entitySheet, new AutomaticCompartmentResolver());
+
+                    while (rxnSht.hasNext()) {
+                        try {
+                            recon.addReaction(reactionParser.parseReaction((PreparsedReaction) rxnSht.next()));
+                        } catch (final UnparsableReactionError rxn) {
+                            SwingUtilities.invokeLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    controller.getMessageManager().addReport(new WarningMessage(rxn.getMessage()));
+                                }
+                            });
+                        }
+                    }
+
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            controller.update();
+                            waitIndicator.dispose();
+                        }
+                    });
+
+                } catch (final IOException ex) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            controller.getMessageManager().addReport(new ErrorMessage("Could not import model-SEED file: " + ex.getMessage()));
+                            waitIndicator.dispose();
+                        }
+                    });
+
                 }
             }
-
-            controller.update();
-
-        } catch (IOException ex) {
-            controller.getMessageManager().addReport(new ErrorMessage("Could not import model-SEED file: " + ex.getMessage()));
-        }
+        });
+        t.start();
 
 
     }
