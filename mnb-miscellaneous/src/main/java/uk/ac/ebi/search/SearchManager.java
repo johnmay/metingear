@@ -92,7 +92,7 @@ public class SearchManager {
                                                                         LockObtainFailedException,
                                                                         IOException {
 
-        // run index update in seperate thread
+        // run index update in separate thread
         Thread t = new Thread(new Runnable() {
 
             public void run() {
@@ -107,7 +107,7 @@ public class SearchManager {
                 }
             }
         });
-
+        t.setName("SEARCH INDEX THREAD");
         t.start();
 
         return t;
