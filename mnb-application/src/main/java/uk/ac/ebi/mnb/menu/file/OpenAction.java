@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.mnb.menu.file;
 
+import net.sf.furbelow.SpinningDialWaitIndicator;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
@@ -64,36 +65,68 @@ public class OpenAction
     public void activateActions() {
 
         // show file chooser if there is no fixed file (from open recent)
-        File file = (fixedFile == null) ? getFile() : fixedFile;
+        final File file = (fixedFile == null) ? getFile() : fixedFile;
 
         if (file != null) {
-            try {
 
-                Reconstruction reconstruction = ReconstructionIOHelper.read(file);
+            final SpinningDialWaitIndicator indicator = new SpinningDialWaitIndicator(MainView.getInstance());
 
-                // set as the active reconstruction
-                DefaultReconstructionManager.getInstance().setActiveReconstruction(reconstruction);
+            indicator.setText("Opening reconstruction");
 
-                // update the view with the
-                MainView.getInstance().update();
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
 
-                // fire signal at the open recent items menu
-                menu.rebuildRecentlyOpen();
+                        Reconstruction reconstruction = ReconstructionIOHelper.read(file);
 
-                // update action context (i.e. we can now close a project)
-                MainView.getInstance().getJMenuBar().updateContext();
+                        // set as the active reconstruction
+                        DefaultReconstructionManager.getInstance().setActiveReconstruction(reconstruction);
+
+                        // update the view with the
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                indicator.dispose();
+
+                                MainView.getInstance().update();
+                                // fire signal at the open recent items menu
+                                menu.rebuildRecentlyOpen();
+
+                                // update action context (i.e. we can now close a project)
+                                MainView.getInstance().getJMenuBar().updateContext();
 
 
-            } catch (IOException ex) {
-                MainView.getInstance().addErrorMessage(
-                        "Unable to load project " + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
-                ex.printStackTrace();
-            } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
-                MainView.getInstance().addErrorMessage(
-                        "Unable to load project: "
-                                + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
-            }
+                            }
+                        });
+
+
+                    } catch (IOException ex) {
+                        indicator.dispose();
+                        MainView.getInstance().addErrorMessage(
+                                "Unable to load project " + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
+                        ex.printStackTrace();
+                    } catch (ClassNotFoundException ex) {
+                        indicator.dispose();
+                        ex.printStackTrace();
+                        MainView.getInstance().addErrorMessage(
+                                "Unable to load project: "
+                                        + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
+                    } catch (RuntimeException ex) {
+                        indicator.dispose();
+                        MainView.getInstance().addErrorMessage(
+                                "Unable to load project due to a runtime error");
+                        logger.error("Unable to load project due to a runtime error", ex);
+
+                    }
+
+
+                }
+            });
+            thread.setName("RECONSTRUCTION READER THREAD");
+            thread.start();
+
         }
     }
 
