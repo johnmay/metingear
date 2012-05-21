@@ -11,7 +11,8 @@ import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
-import uk.ac.ebi.mdk.tool.EntityResolver;
+import uk.ac.ebi.mdk.tool.AbstractEntityAligner;
+import uk.ac.ebi.mdk.tool.MappedEntityAligner;
 import uk.ac.ebi.mdk.ui.component.ResourceList;
 import uk.ac.ebi.mdk.ui.component.compare.MatcherDescription;
 import uk.ac.ebi.mdk.ui.component.compare.MatcherFactory;
@@ -99,7 +100,7 @@ public class AlignReconstruction
     public void process() {
 
         Reconstruction reference = reconstructionChooser.getSelected();
-        EntityResolver resolver  = new EntityResolver(reference.getMetabolome());
+        AbstractEntityAligner resolver  = new MappedEntityAligner(reference.getMetabolome());
 
         // set up the resolver
         for (MatcherDescription description : matcherStack.getElements()) {
@@ -107,7 +108,7 @@ public class AlignReconstruction
         }
 
         Reconstruction active = DefaultReconstructionManager.getInstance().getActive();
-        for(Metabolite metabolite : active.getMetabolome()){
+        for(Metabolite metabolite : getSelection().get(Metabolite.class)){
             System.out.println(resolver.getMatches(metabolite));
         }
 
