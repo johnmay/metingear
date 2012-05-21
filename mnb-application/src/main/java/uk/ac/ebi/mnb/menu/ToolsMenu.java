@@ -67,6 +67,12 @@ public class ToolsMenu extends ContextMenu {
                 return selection.hasSelection(MetabolicReactionImpl.class);
             }
         });
+        add(new AddFlags(view), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return !selection.isEmpty();
+            }
+        });
 
         //add(new AssignReactions(view));
 
