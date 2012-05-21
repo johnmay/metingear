@@ -119,7 +119,7 @@ public class AutomatedReconciler
         }
 
         Metabolite metabolite = DefaultEntityFactory.getInstance().ofClass(Metabolite.class,
-                                                                           new BasicChemicalIdentifier(),
+                                                                           BasicChemicalIdentifier.nextIdentifier(),
                                                                            name,
                                                                            entry.getAbbreviation());
 

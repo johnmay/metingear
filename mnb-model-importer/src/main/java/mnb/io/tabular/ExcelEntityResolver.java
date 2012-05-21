@@ -109,7 +109,7 @@ public class ExcelEntityResolver implements EntityResolver {
         }
 
         Metabolite m = factory.newInstance(Metabolite.class,
-                                           new BasicChemicalIdentifier(),
+                                           BasicChemicalIdentifier.nextIdentifier(),
                                            name,
                                            name);
 

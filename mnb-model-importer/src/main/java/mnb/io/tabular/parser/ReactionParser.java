@@ -203,7 +203,7 @@ public class ReactionParser {
 
     public MetabolicReaction getReaction(PreparsedReaction preparsed) {
 
-        MetabolicReaction rxn = factory.ofClass(MetabolicReaction.class, new BasicReactionIdentifier(),
+        MetabolicReaction rxn = factory.ofClass(MetabolicReaction.class, BasicReactionIdentifier.nextIdentifier(),
                                                 preparsed.hasValue(DESCRIPTION) ? preparsed.getValue(DESCRIPTION) : "",
                                                 preparsed.hasValue(ABBREVIATION) ? preparsed.getValue(ABBREVIATION) : "");
 
