@@ -22,11 +22,10 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.ACPAssociated;
-import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Lumped;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
-import uk.ac.ebi.mdk.domain.annotation.Lumped;
-import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
@@ -57,7 +56,6 @@ public class MetaboliteTableModel
                              DataType.FIXED,
                              Boolean.class),
         new ColumnDescriptor(new CrossReference()),
-        new ColumnDescriptor(new AtomContainerAnnotation()),
         new ColumnDescriptor(new MolecularFormula()),
         new ColumnDescriptor("Validity", null,
                              DataType.FIXED,
