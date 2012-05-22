@@ -118,7 +118,7 @@ public class MergeEntities extends ControllerDialog {
         recon.addMetabolite(n);
 
 
-        recon.getReactome().rebuildParticipantMap();
+        recon.getReactome().rebuildMaps();
         //        recon.remove // remove metabolite
 
     }

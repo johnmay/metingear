@@ -250,7 +250,7 @@ public class DownloadStructuresDialog
     public boolean update() {
 
         // rebuild the map to avoid problems with non-matches hashes
-        DefaultReconstructionManager.getInstance().getActive().getReactome().rebuildParticipantMap();
+        DefaultReconstructionManager.getInstance().getActive().getReactome().rebuildMaps();
 
         return update(getSelection());
 
