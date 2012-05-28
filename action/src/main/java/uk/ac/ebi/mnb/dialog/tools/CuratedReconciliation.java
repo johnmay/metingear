@@ -22,6 +22,7 @@ package uk.ac.ebi.mnb.dialog.tools;
 import mnb.io.resolve.CandidateSelector;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
@@ -45,7 +46,7 @@ public class CuratedReconciliation
 
     public CuratedReconciliation(MainController controller) {
         super(CuratedReconciliation.class.getSimpleName(), controller);
-        dialog = new CandidateSelector((JFrame) controller);
+        dialog = new CandidateSelector((JFrame) controller, DefaultServiceManager.getInstance());
     }
 
 

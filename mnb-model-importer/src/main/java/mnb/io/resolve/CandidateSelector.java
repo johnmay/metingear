@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.ui.component.MatchIndication;
 import uk.ac.ebi.mdk.ui.component.table.MoleculeTable;
 import uk.ac.ebi.mdk.ui.component.table.accessor.CrossReferenceAccessor;
@@ -74,13 +75,13 @@ public class CandidateSelector
     private final CrossreferenceModule[] modules;
 
 
-    public CandidateSelector(JFrame frame) {
+    public CandidateSelector(JFrame frame, ServiceManager manager) {
         super(frame, "OkayDialog");
         getClose().setText("Skip");
 
 
         modules = new CrossreferenceModule[]{
-            new DatabaseSearch(),
+            new DatabaseSearch(manager),
             new AssignStructure(),
             new PeptideGenerator(DefaultEntityFactory.getInstance()),
             new ManualCrossReferenceModule(this),
