@@ -4,17 +4,17 @@
  * 2011.09.30
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,6 +36,7 @@ import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.domain.observation.ObservationCollection;
 import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 import uk.ac.ebi.mdk.ui.render.list.ClassBasedListCellDDR;
+import uk.ac.ebi.mdk.ui.render.list.LocalAlignmentListCellRenderer;
 import uk.ac.ebi.mnb.dialog.popup.AlignmentViewer;
 import uk.ac.ebi.mnb.edit.AbbreviationEdit;
 import uk.ac.ebi.mnb.edit.AccessionEdit;
@@ -57,14 +58,15 @@ import java.util.List;
 
 
 /**
- *          EntityPanelFactory – 2011.09.30 <br>
- *          Displays the basic info on an entity (accession, abbreviation and
- *          name). Additional entries can be added to the basic information by
- *          overriding the method and adding rows (see ProductPanel or 
- *          ReactionPanel). 
+ * EntityPanelFactory – 2011.09.30 <br>
+ * Displays the basic info on an entity (accession, abbreviation and
+ * name). Additional entries can be added to the basic information by
+ * overriding the method and adding rows (see ProductPanel or
+ * ReactionPanel).
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public abstract class AbstractEntityPanel
         extends JPanel {
@@ -83,7 +85,6 @@ public abstract class AbstractEntityPanel
     private JTextField accession    = FieldFactory.newTransparentField(10, false);
     private JTextField name         = FieldFactory.newTransparentField(30, false);
     private JTextField abbreviation = FieldFactory.newTransparentField(10, false);
-
 
 
     private AnnotatedEntity entity;
@@ -153,7 +154,8 @@ public abstract class AbstractEntityPanel
                     alignmentView.setOnMouse(20);
                     if (alignmentView.isVisible() == false) {
                         alignmentView.setVisible(true);
-                    };
+                    }
+                    ;
                 }
             }
         });
@@ -162,15 +164,15 @@ public abstract class AbstractEntityPanel
         annotationTable.getModel().setObservationList(observationList);
 
 
-        OBSERVATION_RENDERING_POOL = new ClassBasedListCellDDR();
+        OBSERVATION_CELL_RENDERER = new ClassBasedListCellDDR();
+        OBSERVATION_CELL_RENDERER.setRenderer(LocalAlignment.class, new LocalAlignmentListCellRenderer());
 
-
-        observationList.setCellRenderer(OBSERVATION_RENDERING_POOL);
+        observationList.setCellRenderer(OBSERVATION_CELL_RENDERER);
 
 
     }
 
-    private ClassBasedListCellDDR OBSERVATION_RENDERING_POOL;
+    private ClassBasedListCellDDR OBSERVATION_CELL_RENDERER;
 
     private AlignmentViewer alignmentView = new AlignmentViewer(MainView.getInstance(), 15);
 
@@ -253,7 +255,6 @@ public abstract class AbstractEntityPanel
     }
 
 
-
     public JPanel newBasicPanel() {
         JPanel panel = PanelFactory.createInfoPanel("p, p:grow, p, p:grow, p", "p");
         panel.add(accession, cc.xy(1, 1));
@@ -264,7 +265,7 @@ public abstract class AbstractEntityPanel
     }
 
     public JPanel getBasicPanel() {
-        if(basic == null){
+        if (basic == null) {
             basic = newBasicPanel();
         }
         return basic;
@@ -295,11 +296,9 @@ public abstract class AbstractEntityPanel
 
 
     /**
-     *
      * Sets the current entity
-     * 
+     *
      * @param entity true if the entity was different from the previous one
-     * 
      */
     public boolean setEntity(AnnotatedEntity entity) {
 
@@ -318,11 +317,9 @@ public abstract class AbstractEntityPanel
 
 
     /**
-     * 
      * Updates the current entity
      *
      * @return true if info was updated
-     *
      */
     public boolean update() {
 
@@ -375,11 +372,9 @@ public abstract class AbstractEntityPanel
 
 
     /**
-     * 
      * Sets if the info is editable
      *
      * @param editable
-     * 
      */
     public void setEditable(boolean editable) {
 
@@ -396,6 +391,7 @@ public abstract class AbstractEntityPanel
 
     /**
      * Access whether the panel is editable or not.
+     *
      * @return
      */
     public boolean isEditable() {
