@@ -26,7 +26,12 @@ import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
+import uk.ac.ebi.mdk.io.ReactionMatrixIO;
 import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
@@ -34,18 +39,19 @@ import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 
 
 /**
- *
  * ExportReactionMatrix 2012.01.11
  *
- * @version $Rev$ : Last Changed $Date$
  * @author johnmay
  * @author $Author$ (this version)
- *
- * Class description
- *
+ *         <p/>
+ *         Class description
+ * @version $Rev$ : Last Changed $Date$
  */
 public class ExportStoichiometricMatrix extends ControllerDialog {
 
@@ -53,9 +59,11 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
 
     private JComboBox storage = ComboBoxFactory.newComboBox("String", "Object");
 
-    private JComboBox format = ComboBoxFactory.newComboBox("Table (tsv)", "Serialised");
+    private JComboBox format = ComboBoxFactory.newComboBox("Table (tsv)", "Serialised", "Sif (Cytoscape)");
 
     private JCheckBox useDouble = CheckBoxFactory.newCheckBox("Store values as double precission");
+
+    private JSpinner threshold = new JSpinner(new SpinnerNumberModel(3, 0, Integer.MAX_VALUE, 1));
 
     private JFileChooser chooser = new JFileChooser();
 
@@ -73,6 +81,14 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
                 if (storage.getSelectedItem().equals("Object")) {
                     format.setSelectedItem("Serialized");
                 }
+            }
+        });
+        threshold.setEnabled(false);
+
+        format.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                threshold.setEnabled(format.getSelectedItem().equals("Sif (Cytoscape)"));
             }
         });
 
@@ -96,7 +112,7 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
 
         CellConstraints cc = new CellConstraints();
 
-        panel.setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p, 4dlu, p"));
+        panel.setLayout(new FormLayout("p, 4dlu, p", "p, 4dlu, p, 4dlu, p, 4dlu, p"));
 
         panel.add(LabelFactory.newFormLabel("Storage"), cc.xy(1, 1));
         panel.add(storage, cc.xy(3, 1));
@@ -106,6 +122,11 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
 
         panel.add(useDouble, cc.xyw(1, 5, 3));
 
+        panel.add(LabelFactory.newFormLabel("Connection threshold",
+                                            "Used in Sif export, metabolites which have more" +
+                                                    " then the provided number of connections are duplicated to avoid a tangled network"), cc.xy(1, 7));
+        panel.add(threshold, cc.xy(3, 7));
+
         return panel;
 
     }
@@ -114,28 +135,30 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
     @Override
     public void process() {
 
-//        ReactionMatrixIO.setConvertDoubleToInChI(!useDouble.isSelected());
-//        Object fmt = format.getSelectedItem();
-//
-//        int choice = chooser.showSaveDialog(this);
-//
-//        if (choice == JFileChooser.APPROVE_OPTION) {
-//
-//            File f = chooser.getSelectedFile();
-//            Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
-//            StoichiometricMatrix s = recon.getMatrix();
-//
-//            try {
-//                if (fmt.equals("Table (tsv)")) {
-//                    ReactionMatrixIO.writeBasicStoichiometricMatrix(s, new FileWriter(f));
-//                } else if (fmt.equals("Serialised")) {
-//                    ReactionMatrixIO.writeCompressedBasicStoichiometricMatrix(s, new FileOutputStream(f));
-//                }
-//            } catch (Exception ex) {
-//                addMessage(new ErrorMessage("Unable to save file: " + ex.getMessage()));
-//            }
-//
-//        }
+        ReactionMatrixIO.setConvertDoubleToInChI(!useDouble.isSelected());
+        Object fmt = format.getSelectedItem();
+
+        int choice = chooser.showSaveDialog(this);
+
+        if (choice == JFileChooser.APPROVE_OPTION) {
+
+            File f = chooser.getSelectedFile();
+            Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+            StoichiometricMatrix s = recon.getMatrix();
+
+            try {
+                if (fmt.equals("Table (tsv)")) {
+                    ReactionMatrixIO.writeBasicStoichiometricMatrix(s, new FileWriter(f));
+                } else if (fmt.equals("Serialised")) {
+                    ReactionMatrixIO.writeCompressedBasicStoichiometricMatrix(s, new FileOutputStream(f));
+                } else if (fmt.equals("Sif (Cytoscape)")) {
+                    ReactionMatrixIO.writeSIF(s, new FileWriter(f), (Integer) threshold.getValue());
+                }
+            } catch (Exception ex) {
+                addMessage(new ErrorMessage("Unable to save file: " + ex.getMessage()));
+            }
+
+        }
 
     }
 }
