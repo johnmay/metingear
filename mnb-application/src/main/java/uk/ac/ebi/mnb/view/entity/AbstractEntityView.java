@@ -23,13 +23,13 @@ package uk.ac.ebi.mnb.view.entity;
 import com.explodingpixels.macwidgets.plaf.EmphasizedLabelUI;
 import com.jgoodies.forms.factories.Borders;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.BorderlessScrollPane;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -38,18 +38,19 @@ import javax.swing.plaf.basic.BasicSplitPaneUI;
 import java.awt.*;
 
 /**
- *          EntityView – 2011.09.06 <br>
- *          Class description
+ * EntityView – 2011.09.06 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class AbstractEntityView
         extends JSplitPane
         implements EntityView {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityView.class);
-    private final AbstractEntityTable table;
+    private final AbstractEntityTable     table;
     private final AbstractEntityInspector inspector;
     private JLabel label = LabelFactory.emptyLabel(); // avoid null pointers
 
@@ -99,11 +100,9 @@ public class AbstractEntityView
     }
 
     /**
-     *
      * Accessor to the table component of the split-pane
      *
      * @return Class extending EntityTable
-     *
      */
     public EntityTable getTable() {
         return table;
@@ -124,11 +123,9 @@ public class AbstractEntityView
     }
 
     /**
-     *
      * Accessor to the inspector component of the split-pane
      *
      * @return Class extending the EntityInspector
-     *
      */
     public AbstractEntityInspector getInspector() {
         return inspector;

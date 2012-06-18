@@ -22,10 +22,10 @@ package uk.ac.ebi.mnb.view.entity;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.BorderlessScrollPane;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

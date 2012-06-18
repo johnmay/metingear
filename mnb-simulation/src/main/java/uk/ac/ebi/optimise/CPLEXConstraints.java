@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrixImpl;
 
 
@@ -61,7 +62,7 @@ public class CPLEXConstraints {
     }
 
 
-    public static final IloAddable[] getProductionConstraints(StoichiometricMatrixImpl s, IloNumVar[] v, IloIntVar[][] w, int i) throws IloException {
+    public static final IloAddable[] getProductionConstraints(StoichiometricMatrix<?,?> s, IloNumVar[] v, IloIntVar[][] w, int i) throws IloException {
 
         List<IloIntVar> production = new ArrayList<IloIntVar>();
         List<IloAddable> constraints = new ArrayList<IloAddable>();
@@ -97,7 +98,7 @@ public class CPLEXConstraints {
     }
 
 
-    public static final IloAddable[] getPositiveMassBalance(StoichiometricMatrixImpl s, IloNumVar[] v)
+    public static final IloAddable[] getPositiveMassBalance(StoichiometricMatrix<?,?> s, IloNumVar[] v)
             throws IloException {
         IloAddable[] positiveFlux = new IloAddable[s.getMoleculeCount()];
 

@@ -78,7 +78,7 @@ public class MetabolitePanel
 
     private JLabel typeViewer = LabelFactory.newLabel("");
 
-    private JComboBox typeEditor = ComboBoxFactory.newComboBox(MetaboliteClassImplementation.values());
+    private JComboBox typeEditor = ComboBoxFactory.newComboBox((Object[])MetaboliteClassImplementation.values());
     // molecular formula
 
 

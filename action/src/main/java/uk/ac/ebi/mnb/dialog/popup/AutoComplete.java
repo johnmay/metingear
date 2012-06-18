@@ -21,10 +21,10 @@
 package uk.ac.ebi.mnb.dialog.popup;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.BorderlessScrollPane;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.ui.component.table.accessor.EntityValueAccessor;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 
 import javax.swing.*;
 import java.util.Collection;

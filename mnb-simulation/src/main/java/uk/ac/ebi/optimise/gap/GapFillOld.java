@@ -6,15 +6,17 @@ package uk.ac.ebi.optimise.gap;
 
 import ilog.concert.*;
 import ilog.cplex.IloCplex;
-import java.util.*;
 import uk.ac.ebi.mdk.domain.matrix.BasicStoichiometricMatrix;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrixImpl;
 import uk.ac.ebi.optimise.SimulationUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 
 /**
- *
- *
  * @author johnmay
  */
 public class GapFillOld {
@@ -24,9 +26,9 @@ public class GapFillOld {
         cplex.setOut(System.out);
     }
 
-    private StoichiometricMatrixImpl s;
+    private StoichiometricMatrix<?, ?> s;
 
-    private StoichiometricMatrixImpl model;
+    private StoichiometricMatrix<?, ?> model;
 
     private Set<Integer> modelRxns;
 
@@ -34,7 +36,6 @@ public class GapFillOld {
 
     /**
      * Constraints
-     *
      */
     private IloIntVar[][] w; // binary variable for whether reaction j produces metabolite i (1) or not (0)
 
@@ -43,9 +44,9 @@ public class GapFillOld {
     private IloNumVar[] v;
 
 
-    public void setup(StoichiometricMatrixImpl database, StoichiometricMatrixImpl model) {
+    public <M,R> void setup(StoichiometricMatrix<M,R> database, StoichiometricMatrix<M,R> model) {
         this.s = database;
-        modelRxns = this.s.assign(model).values();
+        modelRxns = database.assign(model).values();
     }
 
     private IloIntVar[] toSolve;
@@ -58,7 +59,7 @@ public class GapFillOld {
 
         y = new IloIntVar[s.getReactionCount()];
         // value to optimize
-        List<IloIntVar> binvar = new ArrayList();
+        List<IloIntVar> binvar = new ArrayList<IloIntVar>();
 
         for (int j = 0; j < s.getReactionCount(); j++) {
             y[j] = cplex.boolVar();
@@ -101,7 +102,7 @@ public class GapFillOld {
 
         // database y's
 
-        toSolve = binvar.toArray(new IloIntVar[0]);
+        toSolve = binvar.toArray(new IloIntVar[binvar.size()]);
         cplex.addMinimize(cplex.sum(y));
 
     }
@@ -115,8 +116,8 @@ public class GapFillOld {
 //        List<Double> problemMetabolites = new ArrayList<Double>();
         double[] solutions = cplex.getValues(y);
 
-        for (int i = 0; i < solutions.length; i++) {
-            System.out.println(solutions[i]);
+        for (double solution : solutions) {
+            System.out.println(solution);
         }
 
         return null;
@@ -137,10 +138,8 @@ public class GapFillOld {
 
 
     /**
-     * @brief Set min and max production constraints for each molecule @f[
-     * S_{ij} v_{j} \geq \epsilon w_{ij} @f] @f[ S_{ij} v_{j} \leq E w_{ij} @f]
-     *
-     * @throws IloException
+     * @throws IloException Set min and max production constraints for each molecule @f[
+     *                      S_{ij} v_{j} \geq \epsilon w_{ij} @f] @f[ S_{ij} v_{j} \leq E w_{ij} @f]
      */
     public void addProductionConstraints(int i)
             throws IloException {
@@ -173,7 +172,7 @@ public class GapFillOld {
 
         }
 
-        cplex.addGe(cplex.sum(values.toArray(new IloIntVar[0])), 1);
+        cplex.addGe(cplex.sum(values.toArray(new IloIntVar[values.size()])), 1);
 
 
     }
@@ -216,14 +215,13 @@ public class GapFillOld {
         model.display(System.out, ' ', "0", 4, 4);
 
         try {
-        System.out.println("Non-production Metabolites");
-        for (int i : new GapFind(model).getUnproducedMetabolites()) {
-            System.out.println(model.getMolecule(i));
+            System.out.println("Non-production Metabolites");
+            for (int i : new GapFind(model).getUnproducedMetabolites()) {
+                System.out.println(model.getMolecule(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        }catch (Exception e) {
-
-        }
-
 
 
         BasicStoichiometricMatrix ref = BasicStoichiometricMatrix.create();
@@ -231,7 +229,6 @@ public class GapFillOld {
         ref.addReaction("I => F");
         ref.addReaction("E => F");
         ref.addReaction("E => I");
-
 
 
         ref.display();

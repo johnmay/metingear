@@ -55,7 +55,6 @@
 //    public void addReactions(List<Reaction> reactions) {
 //        logger.debug("Adding " + reactions.size() + " reactions");
 //        for( Reaction reaction : reactions ) {
-//            //todo String modifier = getModifierName(reaction);
 //            //addVertex(modifier);
 //            //addMolecules(modifier,
 //            //             reaction.getReactants(),

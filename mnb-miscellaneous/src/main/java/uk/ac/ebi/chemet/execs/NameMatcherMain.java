@@ -109,7 +109,6 @@ public class NameMatcherMain {
 //
 //                    // add the formula search results
 //                    if ( formula.isEmpty() == Boolean.FALSE ) {
-//// todo search different protonation states
 ////                            Matcher formulaMathcer = genericHydrogens.matcher( formula );
 ////                            formulaMathcer.find();
 ////                            Integer h_count = Integer.parseInt( formulaMathcer.group( 1 ) );
