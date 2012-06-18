@@ -31,7 +31,6 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
@@ -52,18 +51,18 @@ public class ProductPanel
         extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(ProductPanel.class);
-    private GeneProduct entity;
-    private JLabel formula;
-    private JTextField generic;
+    private GeneProduct      entity;
+    private JLabel           formula;
+    private JTextField       generic;
     //
-    private JScrollPane sequencePane;
-    private JTextPane sequence;
+    private JScrollPane      sequencePane;
+    private JTextPane        sequence;
     private DefaultListModel sequenceListModel;
     //
     private CellConstraints cc = new CellConstraints();
 
     public ProductPanel() {
-        super("Gene Product", new AnnotationRenderer());
+        super("Gene Product");
         sequenceListModel = new DefaultListModel();
 
         sequence = new JTextPane();

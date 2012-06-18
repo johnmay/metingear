@@ -24,6 +24,7 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.BorderlessScrollPane;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
@@ -42,8 +43,6 @@ import uk.ac.ebi.mnb.edit.AbbreviationEdit;
 import uk.ac.ebi.mnb.edit.AccessionEdit;
 import uk.ac.ebi.mnb.edit.NameEdit;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.entity.components.AnnotationTable;
 import uk.ac.ebi.mnb.view.entity.components.InternalReferences;
 
@@ -120,8 +119,8 @@ public abstract class AbstractEntityPanel
 
     private boolean editable;
 
-    public AbstractEntityPanel(String type,
-                               AnnotationRenderer renderer) {
+    public AbstractEntityPanel(String type) {
+
         setBackground(Color.WHITE);
         this.type = type;
         name.setHorizontalAlignment(SwingConstants.CENTER);

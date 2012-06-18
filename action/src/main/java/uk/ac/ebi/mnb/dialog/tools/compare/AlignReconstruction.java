@@ -24,6 +24,7 @@ import uk.ac.ebi.mnb.view.ReconstructionChooser;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
+import java.util.Collection;
 
 /**
  * Align the currently active reconstruction to not active 'reference'.
@@ -35,7 +36,7 @@ public class AlignReconstruction
 
     private static final Logger LOGGER = Logger.getLogger(AlignReconstruction.class);
 
-    private MatcherStackList matcherStack;
+    private MatcherStackList      matcherStack;
     private ReconstructionChooser reconstructionChooser;
     private ResourceList resources = new ResourceList();
 
@@ -100,7 +101,7 @@ public class AlignReconstruction
     public void process() {
 
         Reconstruction reference = reconstructionChooser.getSelected();
-        AbstractEntityAligner resolver  = new MappedEntityAligner(reference.getMetabolome());
+        AbstractEntityAligner resolver = new MappedEntityAligner(reference.getMetabolome());
 
         // set up the resolver
         for (MatcherDescription description : matcherStack.getElements()) {
@@ -108,9 +109,17 @@ public class AlignReconstruction
         }
 
         Reconstruction active = DefaultReconstructionManager.getInstance().getActive();
-        for(Metabolite metabolite : getSelection().get(Metabolite.class)){
-            System.out.println(resolver.getMatches(metabolite));
+
+        Collection<Metabolite> queries = getSelection().get(Metabolite.class);
+        int matched = 0;
+        for (Metabolite metabolite : queries) {
+            if (!resolver.getMatches(metabolite).isEmpty())
+                matched++;
         }
+
+        System.out.println("Query size: " + queries.size());
+        System.out.println("Reference size: " + reference.getMetabolome().size());
+        System.out.println("Overlap: " + matched);
 
 
     }

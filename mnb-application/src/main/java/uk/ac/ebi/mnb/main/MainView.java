@@ -23,10 +23,12 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.report.bar.MessageBar;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.metingear.search.SearchManager;
+import uk.ac.ebi.metingear.search.SearchableIndex;
 import uk.ac.ebi.metingear.view.ControlDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
@@ -41,8 +43,6 @@ import uk.ac.ebi.mnb.menu.ViewInfo;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
 import uk.ac.ebi.mnb.view.source.SourceController;
-import uk.ac.ebi.search.SearchManager;
-import uk.ac.ebi.search.SearchableIndex;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -65,7 +65,7 @@ import java.util.List;
  * MainView.java
  * Singleton class holding the MainView of the application. The main view contains access methods
  * to the project panel and the source tree. In addition it provides utilties for displaying waring/
- * error messages and 
+ * error messages and
  *
  * @author johnmay
  * @date Apr 8, 2011
@@ -137,7 +137,7 @@ public class MainView
                 if (recon != null) {
                     try {
                         final String text =
-                                     e.getDocument().getText(0, e.getDocument().getLength());
+                                e.getDocument().getText(0, e.getDocument().getLength());
 
 
                         new Thread(new Runnable() {
@@ -155,9 +155,9 @@ public class MainView
                                     }
 
                                     final List<AnnotatedEntity> entities =
-                                                                index.getRankedEntities(SearchManager.getInstance().getQuery(
-                                            text
-                                            + "~"));
+                                            index.getRankedEntities(SearchManager.getInstance().getQuery(
+                                                    text
+                                                            + "~"));
 
                                     if (entities != null) {
                                         SwingUtilities.invokeLater(new Runnable() {
@@ -191,7 +191,6 @@ public class MainView
                     } catch (BadLocationException ex) {
                         ex.printStackTrace();
                     }
-
 
 
                 }
@@ -238,7 +237,7 @@ public class MainView
         pane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if(pane.getDividerLocation() < 30){
+                if (pane.getDividerLocation() < 30) {
                     pane.setDividerLocation(0);
                 }
             }
@@ -270,7 +269,6 @@ public class MainView
                 messages.update();
             }
         });
-
 
 
         undoManager = new UndoManager();
@@ -314,9 +312,7 @@ public class MainView
 
     /** ControlDialog placement **/
     /**
-     * 
      * Updates the currently displayed dialogs to the correct position of the frame
-     *
      */
     public void updateDialogLocations() {
 
@@ -328,7 +324,7 @@ public class MainView
             } else if (window instanceof ControlDialog) {
                 ControlDialog dialog = ((ControlDialog) window);
                 dialog.position();
-                ((JDialog)dialog).validate();
+                ((JDialog) dialog).validate();
             }
         }
 
@@ -336,10 +332,9 @@ public class MainView
 
 
     /**
-     *
      * Places the provided dialog in a drop down location under the toolbar
-     * @param dialog
      *
+     * @param dialog
      */
     public void place(JDialog dialog) {
 
@@ -361,9 +356,7 @@ public class MainView
 
 
     /**
-     *
      * Sends update signal to project items and source list
-     * 
      */
     public boolean update() {
         project.update();
@@ -382,10 +375,9 @@ public class MainView
 
     /** Message delegation **/
     /**
-     * 
      * Adds a warning message in the message controller
-     * @param mesg Short and concise description of the warning
      *
+     * @param mesg Short and concise description of the warning
      */
     public void addWarningMessage(String mesg) {
         messages.addReport(new WarningMessage(mesg));
@@ -393,10 +385,9 @@ public class MainView
 
 
     /**
-     *
      * Adds an error message in the message controller
-     * @param mesg Short and concise description of the error
      *
+     * @param mesg Short and concise description of the error
      */
     public void addErrorMessage(String mesg) {
         messages.addReport(new ErrorMessage(mesg));
@@ -410,11 +401,9 @@ public class MainView
     /* Getters/Setters */
 
     /**
-     *
      * Singleton access method
      *
      * @return Instance of MainView
-     *
      */
     public static MainView getInstance() {
         return MainViewHolder.INSTANCE;
@@ -423,6 +412,7 @@ public class MainView
 
     /**
      * Access the attached menu bar
+     *
      * @return
      */
     @Override
@@ -432,10 +422,9 @@ public class MainView
 
 
     /**
-     *
      * Returns the project panel associated with the view
-     * @return Instance of the project panel
      *
+     * @return Instance of the project panel
      */
     public ViewController getViewController() {
         return project;
@@ -444,6 +433,7 @@ public class MainView
 
     /**
      * Access the displayed tool-bar
+     *
      * @return
      */
     public Toolbar getToolbar() {
@@ -453,6 +443,7 @@ public class MainView
 
     /**
      * Access the source list controller
+     *
      * @return
      */
     public SourceController getSourceListController() {

@@ -25,22 +25,23 @@ import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import mnb.io.tabular.type.EntityColumn;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.annotation.Synonym;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
-import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
-import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
-import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.observation.Candidate;
+import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
 
 import java.util.Collection;
+import java.util.Set;
 
 import static mnb.io.tabular.type.EntityColumn.FORMULA;
 
@@ -48,17 +49,17 @@ import static mnb.io.tabular.type.EntityColumn.FORMULA;
 /**
  * AutomatedReconciler – 2011.09.23 <br> Automated reconciler assign description
  *
- * @version $Rev$ : Last Changed $Date: 2011-11-19 10:15:40 +0000 (Sat, 19
- * Nov 2011) $
  * @author johnmay
  * @author $Author$ (this version)
+ * @version $Rev$ : Last Changed $Date: 2011-11-19 10:15:40 +0000 (Sat, 19
+ *          Nov 2011) $
  */
 public class AutomatedReconciler
         implements EntryReconciler {
 
     private static final Logger LOGGER = Logger.getLogger(AutomatedReconciler.class);
 
-    private CandidateFactory factory;
+    private NameCandidateFactory factory;
 
     private Identifier template;
 
@@ -67,7 +68,7 @@ public class AutomatedReconciler
     private Multimap<String, Metabolite> nameMap;
 
 
-    public AutomatedReconciler(CandidateFactory factory, Identifier factoryIdClass) {
+    public AutomatedReconciler(NameCandidateFactory factory, Identifier factoryIdClass) {
         this.factory = factory;
         this.template = factoryIdClass;
 
@@ -83,8 +84,8 @@ public class AutomatedReconciler
 
 
     /**
-     *
      * @param entry
+     *
      * @return @inheritDoc
      */
     public AnnotatedEntity resolve(PreparsedEntry entry) {
@@ -101,6 +102,7 @@ public class AutomatedReconciler
      * Automatically resolves
      *
      * @param entry
+     *
      * @return
      */
     public Metabolite resolve(PreparsedMetabolite entry) {
@@ -128,23 +130,20 @@ public class AutomatedReconciler
         }
 
         // add synonyms if they were provided
-        if(entry.hasValue(EntityColumn.SYNONYMS)){
-            for(String synonym : entry.getValues(EntityColumn.SYNONYMS)){
+        if (entry.hasValue(EntityColumn.SYNONYMS)) {
+            for (String synonym : entry.getValues(EntityColumn.SYNONYMS)) {
                 metabolite.addAnnotation(new Synonym(synonym));
             }
         }
 
         try {
-            Multimap<Integer, SynonymCandidateEntry> map = factory.getSynonymCandidates(name);
+            Set<Candidate> candidates = factory.getCandidates(name, false);
 
             // contains a candidate with a score of 0
-            if (map.containsKey(0)) {
-                for (SynonymCandidateEntry candidate : map.get(0)) {
-                    Identifier id = template.newInstance();
-                    id.setAccession(candidate.getId());
-                    metabolite.addAnnotation(new CrossReference(id));
-                }
+            for (Candidate candidate : candidates) {
+                metabolite.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(candidate.getIdentifier()));
             }
+
         } catch (ExceptionInInitializerError ex) {
             LOGGER.info("Unable to resolve candidates: " + ex.getMessage());
         }

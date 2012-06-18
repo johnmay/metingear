@@ -19,14 +19,12 @@ package mnb.todo;
 import org.openscience.cdk.interfaces.IMolecule;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
-import uk.ac.ebi.mnb.core.ModelUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * ReactionBalancerTask.java
- *
  *
  * @author johnmay
  * @date May 24, 2011
@@ -35,9 +33,6 @@ public class ReactionBalancerTask
         extends RunnableTask {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ReactionBalancerTask.class);
-    private final static IMolecule proton = ModelUtils.makeProton();
-    private final static IMolecule water = ModelUtils.makeWater();
-    private final static IMolecule oxygen = ModelUtils.makeOxygen();
     private List<IMolecule> intialBalancingMolecules;
 
     public ReactionBalancerTask() {

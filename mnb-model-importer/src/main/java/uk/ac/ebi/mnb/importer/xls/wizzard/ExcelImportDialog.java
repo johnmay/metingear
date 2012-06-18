@@ -51,8 +51,9 @@ import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.name.NameService;
+import uk.ac.ebi.mdk.tool.resolve.ChemicalFingerprintEncoder;
+import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
 import uk.ac.ebi.mdk.ui.edit.reaction.DialogCompartmentResolver;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
@@ -60,7 +61,6 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
-import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
@@ -73,13 +73,12 @@ import java.util.List;
 
 
 /**
- * @name    ExcelWizzard
- * @date    2011.08.04
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- * @brief   ...class description...
- *
+ * @name ExcelWizzard
+ * @date 2011.08.04
+ * @brief ...class description...
  */
 public class ExcelImportDialog
         extends ControllerDialog {
@@ -231,12 +230,13 @@ public class ExcelImportDialog
             waitIndicator.repaint();
 
 
-            CandidateFactory factory =
-                             new CandidateFactory(manager.getService(ChEBIIdentifier.class, NameService.class),
-                                                  new ChemicalFingerprintEncoder());
+            NameCandidateFactory factory =
+                    new NameCandidateFactory(new ChemicalFingerprintEncoder(),
+                                             manager.getService(ChEBIIdentifier.class, NameService.class));
 
             // todo should be selectable
-            EntryReconciler reconciler = Boolean.parseBoolean(properties.getProperty("import.skip")) ? new AutomatedReconciler(factory, new ChEBIIdentifier())
+            EntryReconciler reconciler = Boolean.parseBoolean(properties.getProperty("import.skip"))
+                                         ? new AutomatedReconciler(factory, new ChEBIIdentifier())
                                          : new ListSelectionReconciler(frame, factory, new ChEBIIdentifier());
 
             ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler, DefaultEntityFactory.getInstance());

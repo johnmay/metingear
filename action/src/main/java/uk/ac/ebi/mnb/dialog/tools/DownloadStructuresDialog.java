@@ -39,10 +39,8 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.QueryService;
-import uk.ac.ebi.mdk.service.query.structure.KEGGCompoundStructureService;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 import uk.ac.ebi.mdk.ui.component.ResourceList;
-import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -66,10 +64,6 @@ public class DownloadStructuresDialog
     private static final Logger LOGGER = Logger.getLogger(DownloadStructuresDialog.class);
 
     private Collection<AnnotatedEntity> components;
-
-    private ChEBIWebServiceConnection chebi;
-
-    private KEGGCompoundStructureService keggService = new KEGGCompoundStructureService();
 
     private JLabel allowWebServiceLabel = LabelFactory.newFormLabel("Allow Web services:",
                                                                     "Indicate you want to allow the use of web services to download" +

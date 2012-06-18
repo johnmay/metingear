@@ -32,7 +32,6 @@ import uk.ac.ebi.mdk.ui.component.table.accessor.CrossReferenceAccessor;
 import uk.ac.ebi.mdk.ui.component.table.accessor.NameAccessor;
 import uk.ac.ebi.mdk.ui.edit.crossreference.module.*;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
@@ -97,7 +96,6 @@ public class CandidateSelector
 
     private MatchIndication chargeMatch = new MatchIndication(300, 300);
 
-    private Map<Metabolite, CandidateEntry> map = new HashMap();
 
     private Metabolite query;
 

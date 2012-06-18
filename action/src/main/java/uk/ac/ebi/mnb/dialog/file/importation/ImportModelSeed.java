@@ -22,11 +22,11 @@ import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.mdk.service.query.name.ChEBINameService;
 import uk.ac.ebi.mdk.service.query.name.NameService;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
+import uk.ac.ebi.mdk.tool.resolve.ChemicalFingerprintEncoder;
+import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -44,8 +44,8 @@ public class ImportModelSeed extends DelayedBuildAction {
 
     private static final Logger LOGGER = Logger.getLogger(ImportModelSeed.class);
 
-    private JFileChooser chooser;
-    private Window parent;
+    private JFileChooser   chooser;
+    private Window         parent;
     private MainController controller;
 
     public ImportModelSeed(Window parent, MainController controller) {
@@ -120,8 +120,8 @@ public class ImportModelSeed extends DelayedBuildAction {
                     NameService service = new ChEBINameService();
                     service.startup();
 
-                    CandidateFactory factory = new CandidateFactory(service,
-                                                                    new ChemicalFingerprintEncoder());
+                    NameCandidateFactory factory = new NameCandidateFactory(new ChemicalFingerprintEncoder(),
+                                                                            service);
 
                     EntryReconciler reconciler = new AutomatedReconciler(factory,
                                                                          new ChEBIIdentifier());

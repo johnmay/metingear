@@ -21,7 +21,6 @@ package uk.ac.ebi.mnb.dialog.tools;
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.google.common.collect.Multimap;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import net.sf.furbelow.SpinningDialWaitIndicator;
@@ -32,24 +31,26 @@ import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.utility.TextUtility;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.observation.Candidate;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.QueryService;
 import uk.ac.ebi.mdk.service.query.name.NameService;
+import uk.ac.ebi.mdk.tool.resolve.ChemicalFingerprintEncoder;
+import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
 import uk.ac.ebi.mdk.ui.component.ResourceList;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -70,19 +71,19 @@ public class AutomaticCrossReference
     private JCheckBox kegg = CheckBoxFactory.newCheckBox("KEGG Compound");
     private JCheckBox hmdb = CheckBoxFactory.newCheckBox("HMDB");
 
-    private JLabel wsLabel = LabelFactory.newFormLabel("Allow Web services:", "Dramatic performance reduction on large data-sets");
-    private JLabel greedyLabel = LabelFactory.newFormLabel("Greedy Mode:",
-                                                           "Keep searching for hits even once a hit has been found");
-    private JCheckBox ws = CheckBoxFactory.newCheckBox();
-    private JCheckBox greedy = CheckBoxFactory.newCheckBox();
+    private JLabel    wsLabel     = LabelFactory.newFormLabel("Allow Web services:", "Dramatic performance reduction on large data-sets");
+    private JLabel    greedyLabel = LabelFactory.newFormLabel("Greedy Mode:",
+                                                              "Keep searching for hits even once a hit has been found");
+    private JCheckBox ws          = CheckBoxFactory.newCheckBox();
+    private JCheckBox greedy      = CheckBoxFactory.newCheckBox();
 
-    private JLabel approximateLabel = LabelFactory.newFormLabel("Approximate match:",
-                                                                TextUtility.html("Uses approximate word matching when searching. Only " +
-                                                                                         "names with '0' differences will be transferred but <br>" +
-                                                                                         "using this method may yield new matches. Note: this method " +
-                                                                                         "vastly reduces speed of the search "));
-    private JLabel resourceLabel = LabelFactory.newFormLabel("Resource priority:");
-    private JCheckBox approximate = CheckBoxFactory.newCheckBox();
+    private JLabel       approximateLabel  = LabelFactory.newFormLabel("Approximate match:",
+                                                                       TextUtility.html("Uses approximate word matching when searching. Only " +
+                                                                                                "names with '0' differences will be transferred but <br>" +
+                                                                                                "using this method may yield new matches. Note: this method " +
+                                                                                                "vastly reduces speed of the search "));
+    private JLabel       resourceLabel     = LabelFactory.newFormLabel("Resource priority:");
+    private JCheckBox    approximate       = CheckBoxFactory.newCheckBox();
     private ResourceList resourceSelection = new ResourceList();
 
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 200, 10));
@@ -169,15 +170,15 @@ public class AutomaticCrossReference
 
         List<Metabolite> metabolites = new ArrayList<Metabolite>(getSelection().get(Metabolite.class));
 
-        List<CandidateFactory> factories = new ArrayList<CandidateFactory>();
+        List<NameCandidateFactory> factories = new ArrayList<NameCandidateFactory>();
 
         // build the candidate factories
         for (Identifier identifier : resourceSelection.getElements()) {
             NameService<?> service = DefaultServiceManager.getInstance().getService(identifier,
                                                                                     NameService.class);
             if (canUse(service)) {
-                factories.add(new CandidateFactory(service,
-                                                   new ChemicalFingerprintEncoder()));
+                factories.add(new NameCandidateFactory(new ChemicalFingerprintEncoder(),
+                                                       service));
             }
         }
 
@@ -194,19 +195,23 @@ public class AutomaticCrossReference
                 }
             });
 
-            for (CandidateFactory factory : factories) {
-                Multimap<Integer, CandidateEntry> map = approximate.isSelected()
-                        ? factory.getFuzzySynonymCandidates(m.getName())
-                        : factory.getSynonymCandidates(m.getName());
-                if (map.containsKey(0)) {
-                    for (CandidateEntry entry : map.get(0)) {
-                        m.addAnnotation(factory.getCrossReference(entry));
+            boolean found = false;
+
+            for (NameCandidateFactory factory : factories) {
+
+                Set<Candidate> candidates = factory.getCandidates(m.getName(), approximate.isSelected());
+
+
+                for (Candidate candidate : candidates) {
+                    if (candidate.getDistance() == 0) {
+                        m.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(candidate.getIdentifier()));
+                        found = true;
                     }
-                    if (!greedy.isSelected())
-                        break;
                 }
-                map.clear();
-                map = null;
+
+                if (found && !greedy.isSelected())
+                    break;
+
             }
         }
 

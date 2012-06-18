@@ -35,20 +35,18 @@
             <version>1.2.1</version>
         </dependency>
         <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-interfaces</artifactId>
-            <version>1.4.9</version>
+            <groupId>com.explodingpixels</groupId>
+            <artifactId>macwidgets</artifactId>
+            <version>0.9.6-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-data</artifactId>
-            <version>1.4.9</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>12.0</version>
         </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-domain-annotation</artifactId>
-            <version>${mdk.version}</version>
-        </dependency>
+
+
+        <!-- mdk -->
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>mdk-ui</artifactId>
@@ -60,21 +58,29 @@
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-interface</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-domain-entity</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-apps-io</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+
+        <!-- internal -->
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mnb-interfaces</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-edit</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>biojava3-core</artifactId>
-            <groupId>org.biojava</groupId>
-            <type>jar</type>
-            <version>3.0.3</version>
-        </dependency>
+
+
         <!-- CAF -->
         <dependency>
             <groupId>uk.ac.ebi.caf</groupId>
@@ -92,24 +98,10 @@
             <version>${caf.version}</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-io-data-annotation</artifactId>
-            <version>${mdk.version}</version>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-utility</artifactId>
+            <version>${caf.version}</version>
         </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-io-data-observation</artifactId>
-            <version>${mdk.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-io-data-entity</artifactId>
-            <version>${mdk.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-apps-io</artifactId>
-            <version>${mdk.version}</version>
-        </dependency>
+
     </dependencies>
 </project>

@@ -42,7 +42,6 @@ import uk.ac.ebi.mdk.ui.render.reaction.ReactionRenderer;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 
@@ -75,13 +74,13 @@ public class ReactionPanel
     private JComponent participantXref;
 
     private JLabel transportIcon = new JLabel();
-    private JLabel balanceIcon = new JLabel();
+    private JLabel balanceIcon   = new JLabel();
 
     private CellConstraints cc = new CellConstraints();
 
 
     public ReactionPanel() {
-        super("Reaction", new AnnotationRenderer());
+        super("Reaction");
     }
 
 

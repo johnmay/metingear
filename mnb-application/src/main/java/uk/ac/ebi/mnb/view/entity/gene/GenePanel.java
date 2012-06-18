@@ -30,7 +30,6 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
@@ -69,7 +68,7 @@ public class GenePanel
 
 
     public GenePanel() {
-        super("Gene", new AnnotationRenderer());
+        super("Gene");
         sequenceListModel = new DefaultListModel();
 
         sequence = new JTextPane();

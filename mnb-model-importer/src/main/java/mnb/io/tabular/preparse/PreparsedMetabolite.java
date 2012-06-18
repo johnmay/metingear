@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import mnb.io.tabular.type.EntityColumn;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
+import uk.ac.ebi.mdk.domain.observation.Candidate;
 
 
 /**
@@ -40,7 +40,7 @@ public class PreparsedMetabolite extends PreparsedEntry {
 
     private static final Logger LOGGER = Logger.getLogger(PreparsedMetabolite.class);
 
-    private Collection<CandidateEntry> candidates = new ArrayList<CandidateEntry>();
+    private Collection<Candidate> candidates = new ArrayList<Candidate>();
 
 
     public PreparsedMetabolite() {
@@ -68,7 +68,7 @@ public class PreparsedMetabolite extends PreparsedEntry {
     }
 
 
-    public boolean addCandidate(CandidateEntry candidate) {
+    public boolean addCandidate(Candidate candidate) {
         return candidates.add(candidate);
     }
 

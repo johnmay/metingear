@@ -38,7 +38,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
+import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -56,7 +56,7 @@ public class ListSelectionReconciler implements EntryReconciler {
 
     private static final Logger LOGGER = Logger.getLogger(AutomatedReconciler.class);
 
-    private CandidateFactory factory;
+    private NameCandidateFactory factory;
 
     private Identifier template;
 
@@ -70,7 +70,7 @@ public class ListSelectionReconciler implements EntryReconciler {
 
 
     public ListSelectionReconciler(JFrame frame,
-                                   CandidateFactory factory,
+                                   NameCandidateFactory factory,
                                    Identifier factoryIdClass) {
         this.factory = factory;
         this.template = factoryIdClass;
