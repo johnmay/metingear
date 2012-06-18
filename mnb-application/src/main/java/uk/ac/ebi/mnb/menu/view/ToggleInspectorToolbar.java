@@ -21,12 +21,12 @@
  */
 package uk.ac.ebi.mnb.menu.view;
 
-import java.awt.event.ActionEvent;
-import javax.swing.JCheckBoxMenuItem;
-import uk.ac.ebi.mnb.settings.Settings;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.main.MainView;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 
 /**
@@ -50,8 +50,6 @@ public class ToggleInspectorToolbar extends GeneralAction {
 
         boolean selected = ((JCheckBoxMenuItem) e.getSource()).isSelected();
 
-        Settings.getInstance().put(Settings.VIEW_TOOLBAR_INSPECTOR,
-                                                 selected);
         MainView.getInstance().getViewController().getActiveView().update();
 
     }

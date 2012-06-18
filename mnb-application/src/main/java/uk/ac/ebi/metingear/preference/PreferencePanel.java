@@ -15,24 +15,24 @@ import uk.ac.ebi.caf.component.theme.ComponentPreferences;
 import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.caf.utility.preference.Preference;
-import uk.ac.ebi.chemet.resource.ResourcePreferences;
-import uk.ac.ebi.chemet.service.ServicePreferences;
-import uk.ac.ebi.chemet.service.loader.crossreference.ChEBICrossReferenceLoader;
-import uk.ac.ebi.chemet.service.loader.crossreference.UniProtCrossReferenceLoader;
-import uk.ac.ebi.chemet.service.loader.data.ChEBIDataLoader;
-import uk.ac.ebi.chemet.service.loader.location.DefaultLocationFactory;
-import uk.ac.ebi.chemet.service.loader.multiple.HMDBMetabocardsLoader;
-import uk.ac.ebi.chemet.service.loader.multiple.KEGGCompoundLoader;
-import uk.ac.ebi.chemet.service.loader.name.ChEBINameLoader;
-import uk.ac.ebi.chemet.service.loader.single.TaxonomyLoader;
-import uk.ac.ebi.chemet.service.loader.structure.ChEBIStructureLoader;
-import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
-import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
-import uk.ac.ebi.core.CorePreferences;
-import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.mdk.ResourcePreferences;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.service.ServicePreferences;
+import uk.ac.ebi.mdk.service.loader.crossreference.ChEBICrossReferenceLoader;
+import uk.ac.ebi.mdk.service.loader.crossreference.UniProtCrossReferenceLoader;
+import uk.ac.ebi.mdk.service.loader.data.ChEBIDataLoader;
+import uk.ac.ebi.mdk.service.loader.location.DefaultLocationFactory;
+import uk.ac.ebi.mdk.service.loader.multiple.HMDBMetabocardsLoader;
+import uk.ac.ebi.mdk.service.loader.multiple.KEGGCompoundLoader;
+import uk.ac.ebi.mdk.service.loader.multiple.LipidMapsLoader;
+import uk.ac.ebi.mdk.service.loader.multiple.MetaCycCompoundLoader;
+import uk.ac.ebi.mdk.service.loader.name.ChEBINameLoader;
+import uk.ac.ebi.mdk.service.loader.single.TaxonomyLoader;
+import uk.ac.ebi.mdk.service.loader.structure.*;
+import uk.ac.ebi.mdk.ui.component.service.LoaderGroupFactory;
 import uk.ac.ebi.metingear.Main;
-import uk.ac.ebi.render.resource.LoaderGroupFactory;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -132,7 +132,7 @@ public class PreferencePanel extends JPanel {
 
             super(BoxLayout.PAGE_AXIS);
 
-            CorePreferences CORE = CorePreferences.getInstance();
+            DomainPreferences CORE = DomainPreferences.getInstance();
             ResourcePreferences RESOURCE = ResourcePreferences.getInstance();
             JLabel label = LabelFactory.newLabel("BLAST", LabelFactory.Size.HUGE);
             label.setHorizontalAlignment(SwingConstants.LEFT);
@@ -180,6 +180,14 @@ public class PreferencePanel extends JPanel {
                 add(factory.createGroup("KEGG",
                                         new KEGGCompoundLoader(),
                                         new KEGGCompoundStructureLoader()));
+                add(Box.createHorizontalStrut(50));
+                add(factory.createGroup("BioCyc",
+                                        new MetaCycCompoundLoader(),
+                                        new MetaCycStructureLoader()));
+                add(Box.createHorizontalStrut(50));
+                add(factory.createGroup("LIPID MAPS",
+                                        new LipidMapsLoader(),
+                                        new LipidMapsSDFLoader()));
                 add(Box.createHorizontalStrut(50));
                 add(factory.createGroup("HMDB",
                                         new HMDBMetabocardsLoader(),

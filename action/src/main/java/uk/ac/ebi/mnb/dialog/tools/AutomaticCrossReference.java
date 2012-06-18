@@ -21,34 +21,36 @@ package uk.ac.ebi.mnb.dialog.tools;
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.google.common.collect.Multimap;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.*;
-import javax.swing.event.UndoableEditListener;
-
 import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
-import uk.ac.ebi.caf.utility.TextUtility;
-import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
-import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.caf.utility.TextUtility;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.observation.Candidate;
+import uk.ac.ebi.mdk.service.DefaultServiceManager;
+import uk.ac.ebi.mdk.service.ServiceManager;
+import uk.ac.ebi.mdk.service.query.QueryService;
+import uk.ac.ebi.mdk.service.query.name.NameService;
+import uk.ac.ebi.mdk.tool.resolve.ChemicalFingerprintEncoder;
+import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
+import uk.ac.ebi.mdk.ui.component.ResourceList;
+import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.HMDBIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.service.ServiceManager;
-import uk.ac.ebi.service.query.name.NameService;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -69,25 +71,44 @@ public class AutomaticCrossReference
     private JCheckBox kegg = CheckBoxFactory.newCheckBox("KEGG Compound");
     private JCheckBox hmdb = CheckBoxFactory.newCheckBox("HMDB");
 
-    private JCheckBox approximate = CheckBoxFactory.newCheckBox("Use Approximate Match",
-                                                                TextUtility.html("Uses approximate word matching when searching. Only " +
-                                                                                         "names with '0' differences will be transferred but <br>" +
-                                                                                         "using this method may yield new matches. Note: this method " +
-                                                                                         "vastly reduces speed of the search "));
+    private JLabel    wsLabel     = LabelFactory.newFormLabel("Allow Web services:", "Dramatic performance reduction on large data-sets");
+    private JLabel    greedyLabel = LabelFactory.newFormLabel("Greedy Mode:",
+                                                              "Keep searching for hits even once a hit has been found");
+    private JCheckBox ws          = CheckBoxFactory.newCheckBox();
+    private JCheckBox greedy      = CheckBoxFactory.newCheckBox();
+
+    private JLabel       approximateLabel  = LabelFactory.newFormLabel("Approximate match:",
+                                                                       TextUtility.html("Uses approximate word matching when searching. Only " +
+                                                                                                "names with '0' differences will be transferred but <br>" +
+                                                                                                "using this method may yield new matches. Note: this method " +
+                                                                                                "vastly reduces speed of the search "));
+    private JLabel       resourceLabel     = LabelFactory.newFormLabel("Resource priority:");
+    private JCheckBox    approximate       = CheckBoxFactory.newCheckBox();
+    private ResourceList resourceSelection = new ResourceList();
 
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 200, 10));
 
 
     public AutomaticCrossReference(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
+
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
+
+
+        // blend the list in
+        resourceSelection.setBackground(getBackground());
+        resourceSelection.setForeground(LabelFactory.newFormLabel("").getForeground());
+        resourceSelection.setVisibleRowCount(6);
+
         setDefaultLayout();
+
+
     }
 
 
     @Override
     public JLabel getDescription() {
         JLabel label = super.getDescription();
-        label.setText("Match name(s) to chemical databases");
+        label.setText("Match name(s) to metabolic databases");
         return label;
     }
 
@@ -95,25 +116,49 @@ public class AutomaticCrossReference
     @Override
     public JPanel getForm() {
 
-        JPanel options = PanelFactory.createDialogPanel();
+        JPanel form = PanelFactory.createDialogPanel();
 
         CellConstraints cc = new CellConstraints();
 
-        options.setLayout(new FormLayout("p, 4dlu, p, 4dlu, p", "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
-        options.add(chebi, cc.xy(1, 1));
-        options.add(kegg, cc.xy(3, 1));
-        options.add(hmdb, cc.xy(5, 1));
+        form.setLayout(new FormLayout("right:p, 4dlu, left:p:grow",
+                                      "p, 4dlu, top:p, 4dlu, p, 4dlu, p"));
 
-        options.add(approximate, cc.xyw(1, 3, 3));
+        form.add(approximateLabel, cc.xy(1, 1));
+        form.add(approximate, cc.xy(3, 1));
+        form.add(resourceLabel, cc.xy(1, 3));
+        form.add(new MutableJListController(resourceSelection).getListWithController(), cc.xy(3, 3));
+        form.add(wsLabel, cc.xy(1, 5));
+        form.add(ws, cc.xy(3, 5));
+        form.add(greedyLabel, cc.xy(1, 7));
+        form.add(greedy, cc.xy(3, 7));
 
-        options.add(new JSeparator(), cc.xyw(1, 5, 3));
+
         //        JLabel label = LabelFactory.newFormLabel("Method", TextUtility.html("The method to use for name matching, Generally they<br> aim to improve recall at the cost of precision"));
         //        options.add(label, cc.xy(1, 7));
         //        options.add(ComboBoxFactory.newComboBox("Direct", "Fingerprint", "N-gram"), cc.xy(3, 7));
 
-        return options;
+        return form;
     }
 
+
+    @Override
+    public void setVisible(boolean b) {
+        if (b) {
+
+            // should be in a setup() method
+            resourceSelection.getModel().clear();
+            ServiceManager services = DefaultServiceManager.getInstance();
+            for (Identifier identifier : services.getIdentifiers(NameService.class)) {
+                // check it's actually available
+                if (services.hasService(identifier, NameService.class))
+                    resourceSelection.addElement(identifier);
+            }
+            resourceSelection.setSelectedIndex(0);
+            pack();
+        }
+        super.setVisible(b);
+
+    }
 
     @Override
     public void process() {
@@ -125,24 +170,16 @@ public class AutomaticCrossReference
 
         List<Metabolite> metabolites = new ArrayList<Metabolite>(getSelection().get(Metabolite.class));
 
-        boolean useChEBI = chebi.isSelected();
-        boolean useKegg = kegg.isSelected();
-        boolean useHMDB = hmdb.isSelected();
+        List<NameCandidateFactory> factories = new ArrayList<NameCandidateFactory>();
 
-        ServiceManager manager = LuceneServiceManager.getInstance();
-
-        List<CandidateFactory> factories = new ArrayList<CandidateFactory>();
-        if (useChEBI && manager.hasService(ChEBIIdentifier.class, NameService.class)) {
-            factories.add(new CandidateFactory(manager.getService(ChEBIIdentifier.class, NameService.class),
-                                               new ChemicalFingerprintEncoder()));
-        }
-        if (useKegg && manager.hasService(KEGGCompoundIdentifier.class, NameService.class)) {
-            factories.add(new CandidateFactory(manager.getService(KEGGCompoundIdentifier.class, NameService.class),
-                                               new ChemicalFingerprintEncoder()));
-        }
-        if (useHMDB && manager.hasService(HMDBIdentifier.class, NameService.class)) {
-            factories.add(new CandidateFactory(manager.getService(HMDBIdentifier.class, NameService.class),
-                                               new ChemicalFingerprintEncoder()));
+        // build the candidate factories
+        for (Identifier identifier : resourceSelection.getElements()) {
+            NameService<?> service = DefaultServiceManager.getInstance().getService(identifier,
+                                                                                    NameService.class);
+            if (canUse(service)) {
+                factories.add(new NameCandidateFactory(new ChemicalFingerprintEncoder(),
+                                                       service));
+            }
         }
 
 
@@ -158,23 +195,36 @@ public class AutomaticCrossReference
                 }
             });
 
-            for (CandidateFactory factory : factories) {
-                Multimap<Integer, CandidateEntry> map = approximate.isSelected()
-                        ? factory.getFuzzySynonymCandidates(m.getName())
-                        : factory.getSynonymCandidates(m.getName());
-                if (map.containsKey(0)) {
-                    for (CandidateEntry entry : map.get(0)) {
-                        m.addAnnotation(factory.getCrossReference(entry));
+            boolean found = false;
+
+            for (NameCandidateFactory factory : factories) {
+
+                Set<Candidate> candidates = factory.getCandidates(m.getName(), approximate.isSelected());
+
+
+                for (Candidate candidate : candidates) {
+                    if (candidate.getDistance() == 0) {
+                        m.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(candidate.getIdentifier()));
+                        found = true;
                     }
                 }
-                map.clear();
-                map = null;
+
+                if (found && !greedy.isSelected())
+                    break;
+
             }
         }
 
         factories = null; // for cleanup
         System.gc();
 
+    }
+
+    public boolean canUse(QueryService service) {
+        QueryService.ServiceType type = service.getServiceType();
+        return ws.isSelected()
+                || !type.equals(QueryService.ServiceType.SOAP_WEB_SERVICE)
+                && !type.equals(QueryService.ServiceType.REST_WEB_SERVICE);
     }
 
     @Override

@@ -20,13 +20,14 @@
  */
 package uk.ac.ebi.mnb.view.entity.components.control;
 
-import java.util.*;
-import javax.swing.JList;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
-import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.annotation.ObservationBasedAnnotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+
+import javax.swing.*;
+import java.util.*;
 
 
 /**

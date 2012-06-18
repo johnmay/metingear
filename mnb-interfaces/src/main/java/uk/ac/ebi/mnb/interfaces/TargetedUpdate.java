@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mnb.interfaces;
 
-import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 
 /**
  * @name    TargetedUpdate - 2011.10.14 <br>

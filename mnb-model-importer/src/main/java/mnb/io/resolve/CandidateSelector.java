@@ -19,26 +19,28 @@ package mnb.io.resolve;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.jgoodies.forms.layout.*;
-import java.awt.Dimension;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.service.ServiceManager;
+import uk.ac.ebi.mdk.ui.component.MatchIndication;
+import uk.ac.ebi.mdk.ui.component.table.MoleculeTable;
+import uk.ac.ebi.mdk.ui.component.table.accessor.CrossReferenceAccessor;
+import uk.ac.ebi.mdk.ui.component.table.accessor.NameAccessor;
+import uk.ac.ebi.mdk.ui.edit.crossreference.module.*;
+import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
+import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
+import uk.ac.ebi.mnb.view.DropdownDialog;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.*;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.components.MatchIndication;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
-import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
-import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
-import uk.ac.ebi.render.crossreference.modules.*;
-import uk.ac.ebi.render.molecule.MoleculeTable;
-import uk.ac.ebi.visualisation.molecule.access.CrossReferenceAccessor;
-import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
 
 
 /**
@@ -72,13 +74,13 @@ public class CandidateSelector
     private final CrossreferenceModule[] modules;
 
 
-    public CandidateSelector(JFrame frame) {
+    public CandidateSelector(JFrame frame, ServiceManager manager) {
         super(frame, "OkayDialog");
         getClose().setText("Skip");
 
 
         modules = new CrossreferenceModule[]{
-            new DatabaseSearch(),
+            new DatabaseSearch(manager),
             new AssignStructure(),
             new PeptideGenerator(DefaultEntityFactory.getInstance()),
             new ManualCrossReferenceModule(this),
@@ -94,7 +96,6 @@ public class CandidateSelector
 
     private MatchIndication chargeMatch = new MatchIndication(300, 300);
 
-    private Map<Metabolite, CandidateEntry> map = new HashMap();
 
     private Metabolite query;
 
@@ -227,7 +228,7 @@ public class CandidateSelector
     }
 
 
-    public Collection<uk.ac.ebi.interfaces.entities.Metabolite> getSelected() {
+    public Collection<Metabolite> getSelected() {
         return table.getSelectedEntities();
     }
 

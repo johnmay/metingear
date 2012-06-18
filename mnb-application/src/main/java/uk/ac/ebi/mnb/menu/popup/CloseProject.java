@@ -23,8 +23,8 @@ package uk.ac.ebi.mnb.menu.popup;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.main.MainView;
 

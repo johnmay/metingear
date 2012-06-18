@@ -20,18 +20,17 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import com.jgoodies.forms.layout.CellConstraints;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.BorderlessScrollPane;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import uk.ac.ebi.mnb.settings.Settings;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
+import java.awt.*;
 
 /**
  *          EntityInspector – 2011.09.06 <br>
@@ -51,7 +50,6 @@ public abstract class AbstractEntityInspector
     private CellConstraints cc = new CellConstraints();
     private AnnotatedEntity entity;
     private AbstractEntityPanel panel;
-    private static final Settings preferences = Settings.getInstance();
 
     public AbstractEntityInspector(AbstractEntityPanel panel) {
         this.panel = panel;
@@ -142,7 +140,7 @@ public abstract class AbstractEntityInspector
 
     private void setDisplay() {
         // called on update
-        toolbar.setVisible((Boolean) preferences.get(Settings.VIEW_TOOLBAR_INSPECTOR));
+        toolbar.setVisible(true);
     }
 
     /**

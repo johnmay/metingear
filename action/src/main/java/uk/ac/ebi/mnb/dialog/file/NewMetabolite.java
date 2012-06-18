@@ -22,12 +22,12 @@ package uk.ac.ebi.mnb.dialog.file;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 

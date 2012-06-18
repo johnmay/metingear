@@ -1,8 +1,12 @@
 package uk.ac.ebi.mnb.edit;
 
-import uk.ac.ebi.interfaces.Chromosome;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.*;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotUndoException;
@@ -15,8 +19,8 @@ import java.util.Map;
  */
 public class DeleteEntitiesEdit extends AbstractUndoableEdit {
 
-    private EntityCollection     collection;
-    private Reconstruction       recon;
+    private EntityCollection collection;
+    private Reconstruction recon;
     private Map<Gene,Chromosome> geneMap;
     
     public DeleteEntitiesEdit(Reconstruction recon, EntityCollection collection){

@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>mnb</artifactId>
-        <groupId>uk.ac.ebi</groupId>
+        <groupId>uk.ac.ebi.metingear</groupId>
         <version>0.9-SNAPSHOT</version>
     </parent>
     <packaging>jar</packaging>
@@ -39,14 +40,19 @@
             <version>1.2.16</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>CheMet-Core</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>12.0</version>
         </dependency>
         <dependency>
-            <groupId>sf.net</groupId>
-            <artifactId>lpsolve</artifactId>
-            <version>5.5</version>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-interface</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-domain-entity</artifactId>
+            <version>${mdk.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.caf</groupId>

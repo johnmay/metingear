@@ -4,9 +4,9 @@
  */
 package uk.ac.ebi.mnb.menu.file;
 
-import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.importer.xls.wizzard.ExcelImportDialog;
 import uk.ac.ebi.mnb.main.MainView;
@@ -22,7 +22,6 @@ import java.io.InputStream;
 /**
  * ImportSBMLAction.java
  *
- *
  * @author johnmay
  * @date Apr 14, 2011
  */
@@ -30,8 +29,8 @@ public class ImportXLSAction
         extends FileChooserAction {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-            ImportXLSAction.class);
+            org.apache.log4j.Logger.getLogger(
+                    ImportXLSAction.class);
 
     public ImportXLSAction() {
         super("ImportXLS");
@@ -72,8 +71,11 @@ public class ImportXLSAction
                 ExcelHelper importer = name.endsWith(".xls")
                                        ? new ExcelXLSHelper(stream) : null;
                 MainView view = MainView.getInstance();
-                ExcelImportDialog wizzard = new ExcelImportDialog(view, view.getViewController(), view.getMessageManager(), view.getViewController(), view.getUndoManager(), reconstruction, choosenFile, importer, LuceneServiceManager.getInstance());
+                ExcelImportDialog wizzard = new ExcelImportDialog(view, view.getViewController(), view.getMessageManager(), view.getViewController(), view.getUndoManager(), reconstruction, choosenFile, importer, DefaultServiceManager.getInstance());
+
+                wizzard.pack();
                 wizzard.setVisible(true);
+
 
                 // update the views
                 MainView.getInstance().getSourceListController().update();

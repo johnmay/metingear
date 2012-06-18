@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mnb.interfaces;
 
-import uk.ac.ebi.interfaces.entities.Entity;
+import uk.ac.ebi.mdk.domain.entity.Entity;
 
 
 /**

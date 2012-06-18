@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
+import uk.ac.ebi.mdk.domain.matrix.BasicStoichiometricMatrix;
 import uk.ac.ebi.optimise.SimulationUtil;
 import uk.ac.ebi.optimise.gap.GapFind;
 

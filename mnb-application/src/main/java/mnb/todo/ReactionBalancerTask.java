@@ -16,16 +16,15 @@
  */
 package mnb.todo;
 
+import org.openscience.cdk.interfaces.IMolecule;
+import uk.ac.ebi.mdk.domain.entity.Entity;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
+
 import java.util.ArrayList;
 import java.util.List;
-import uk.ac.ebi.mnb.core.ModelUtils;
-import org.openscience.cdk.interfaces.IMolecule;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.interfaces.entities.Entity;
 
 /**
  * ReactionBalancerTask.java
- *
  *
  * @author johnmay
  * @date May 24, 2011
@@ -34,13 +33,9 @@ public class ReactionBalancerTask
         extends RunnableTask {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ReactionBalancerTask.class);
-    private final static IMolecule proton = ModelUtils.makeProton();
-    private final static IMolecule water = ModelUtils.makeWater();
-    private final static IMolecule oxygen = ModelUtils.makeOxygen();
     private List<IMolecule> intialBalancingMolecules;
 
     public ReactionBalancerTask() {
-        super(null);
 
         // instantiate collections here
         intialBalancingMolecules = new ArrayList<IMolecule>();

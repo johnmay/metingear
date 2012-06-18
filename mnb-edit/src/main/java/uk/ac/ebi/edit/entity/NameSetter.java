@@ -20,9 +20,10 @@
  */
 package uk.ac.ebi.edit.entity;
 
-import javax.swing.undo.UndoableEdit;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mnb.edit.NameEdit;
+
+import javax.swing.undo.UndoableEdit;
 
 /**
  *          Name - 2011.11.17 <br>

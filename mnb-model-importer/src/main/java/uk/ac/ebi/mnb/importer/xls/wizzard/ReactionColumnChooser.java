@@ -46,11 +46,11 @@ import com.jgoodies.forms.layout.Sizes;
 import mnb.io.tabular.ExcelModelProperties;
 import static mnb.io.tabular.type.ReactionColumn.*;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.BorderlessScrollPane;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 

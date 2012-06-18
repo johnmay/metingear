@@ -1,15 +1,15 @@
 package uk.ac.ebi.metingear.launch;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.metingear.view.ControlDialog;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import javax.swing.event.UndoableEditListener;
 import java.awt.*;

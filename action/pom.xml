@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>mnb</artifactId>
-        <groupId>uk.ac.ebi</groupId>
+        <groupId>uk.ac.ebi.metingear</groupId>
         <version>0.9-SNAPSHOT</version>
     </parent>
 
@@ -35,23 +35,38 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-miscellaneous</artifactId>
+            <artifactId>mnb-interfaces</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>CheMet-Visualisation</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mnb-edit</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-lucene-service</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-ui</artifactId>
+            <version>${mdk.version}</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-derby-service</artifactId>
-            <version>1.3-SNAPSHOT</version>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-service-lucene</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-service-soap</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-service-derby</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-tool-homology</artifactId>
+            <version>${mdk.version}</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.charts4j</groupId>
@@ -63,11 +78,160 @@
             <artifactId>mnb-simulation</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>12.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.biojava</groupId>
+            <artifactId>biojava3-core</artifactId>
+            <version>3.0.4</version>
+        </dependency>
+
+        <!-- CDK -->
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-io</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-core</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-interfaces</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+
+
+        <!-- MDK -->
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-io-xml-parsers</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-tool-core</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-tool-compare</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-domain-annotation</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-domain-observation</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-domain-entity</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-tool-domain</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-interface</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-io-data-core</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-service-core</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-domain-identifier</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-domain-identifier</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+
+        <!-- CAF -->
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-report</artifactId>
+            <version>${caf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-utility</artifactId>
+            <version>${caf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-component</artifactId>
+            <version>${caf.version}</version>
+        </dependency>
         <dependency>
             <artifactId>caf-action</artifactId>
             <groupId>uk.ac.ebi.caf</groupId>
             <version>${caf.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.explodingpixels</groupId>
+            <artifactId>macwidgets</artifactId>
+            <version>0.9.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>forms</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>stax2-api</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -85,7 +249,6 @@
         </plugins>
 
     </build>
-
 
 
 </project>

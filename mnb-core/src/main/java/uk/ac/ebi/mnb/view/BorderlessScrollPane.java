@@ -21,10 +21,10 @@
 package uk.ac.ebi.mnb.view;
 
 import com.jgoodies.forms.factories.Borders;
-import java.awt.Component;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 import org.apache.log4j.Logger;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *          BorderlessScrollPane – 2011.09.07 <br>
@@ -32,7 +32,9 @@ import org.apache.log4j.Logger;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @Deprecated use the one in caf component instead
  */
+@Deprecated
 public class BorderlessScrollPane extends JScrollPane {
 
     private static final Logger LOGGER = Logger.getLogger(BorderlessScrollPane.class);

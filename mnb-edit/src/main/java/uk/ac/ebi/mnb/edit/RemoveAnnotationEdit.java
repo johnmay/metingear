@@ -20,14 +20,15 @@
  */
 package uk.ac.ebi.mnb.edit;
 
-import java.util.Arrays;
-import java.util.Collection;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
+
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * @name    RemoveAnnotations - 2011.10.02 <br>

@@ -16,12 +16,10 @@
  */
 package mnb.view.old;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Polygon;
-import javax.swing.JComponent;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * ReactionArrow.java
@@ -53,7 +51,7 @@ public class ReactionArrow
         arrowHead = new Polygon( new int[]{ x2 , x2 - gap , x2 - gap } ,
                                  new int[]{ y2 , y2 + ( gap / 2 ) , y2 - ( gap / 2 ) } ,
                                  3 );
-        setBackground(ViewUtilities.BACKGROUND);
+        setBackground(ThemeManager.getInstance().getTheme().getBackground());
     }
 
     public ReactionArrow( Dimension d ) {

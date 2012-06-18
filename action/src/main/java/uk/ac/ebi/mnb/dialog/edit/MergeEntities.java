@@ -22,10 +22,14 @@ package uk.ac.ebi.mnb.dialog.edit;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.entities.*;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -114,7 +118,7 @@ public class MergeEntities extends ControllerDialog {
         recon.addMetabolite(n);
 
 
-        recon.getReactome().rebuildParticipantMap();
+        recon.getReactome().rebuildMaps();
         //        recon.remove // remove metabolite
 
     }

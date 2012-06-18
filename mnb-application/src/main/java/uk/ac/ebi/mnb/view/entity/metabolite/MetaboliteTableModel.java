@@ -21,19 +21,14 @@
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.ACPAssociated;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.annotation.model.Lumped;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.StarRating;
-import uk.ac.ebi.core.tools.StructuralValidity;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.Rating;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.annotation.ACPAssociated;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Lumped;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
@@ -61,7 +56,6 @@ public class MetaboliteTableModel
                              DataType.FIXED,
                              Boolean.class),
         new ColumnDescriptor(new CrossReference()),
-        new ColumnDescriptor(new AtomContainerAnnotation()),
         new ColumnDescriptor(new MolecularFormula()),
         new ColumnDescriptor("Validity", null,
                              DataType.FIXED,

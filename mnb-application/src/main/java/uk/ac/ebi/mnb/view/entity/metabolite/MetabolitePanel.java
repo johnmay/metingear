@@ -4,17 +4,17 @@
  * 2011.09.30
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,20 +25,19 @@ import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.utility.TextUtility;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.MetaboliteClassImplementation;
+import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
-import uk.ac.ebi.render.molecule.MoleculeRenderer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,11 +47,12 @@ import java.util.Collection;
 
 
 /**
- *          MetabolitePanel – 2011.09.30 <br>
- *          Class description
+ * MetabolitePanel – 2011.09.30 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class MetabolitePanel
         extends AbstractEntityPanel {
@@ -78,7 +78,7 @@ public class MetabolitePanel
 
     private JLabel typeViewer = LabelFactory.newLabel("");
 
-    private JComboBox typeEditor = ComboBoxFactory.newComboBox(MetaboliteClassImplementation.values());
+    private JComboBox typeEditor = ComboBoxFactory.newComboBox((Object[])MetaboliteClassImplementation.values());
     // molecular formula
 
 
@@ -89,7 +89,7 @@ public class MetabolitePanel
 
 
     public MetabolitePanel() {
-        super("Metabolite", new AnnotationRenderer());
+        super("Metabolite");
 
         buildSynopsis();
     }
@@ -182,7 +182,6 @@ public class MetabolitePanel
         specific.add(structure, cc.xyw(1, 1, 7, CellConstraints.CENTER, CellConstraints.CENTER));
         specific.add(formularViewer, cc.xyw(1, 3, 7, CellConstraints.CENTER,
                                             CellConstraints.CENTER));
-
 
 
         specific.add(markush, cc.xy(1, 5));

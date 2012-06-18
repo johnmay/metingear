@@ -1,6 +1,6 @@
 package uk.ac.ebi.metingear.launch;
 
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.metingear.preference.PreferenceFrame;
 import uk.ac.ebi.mnb.view.AboutDialog;
 
@@ -24,7 +24,7 @@ public class MacApplicationLauncher extends ApplicationLauncher {
         // Set the doc image
 
         com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-        app.setDockIconImage(ViewUtilities.logo_512x512);
+        app.setDockIconImage(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/networkbuilder_512x512.png").getImage());
         app.setAboutHandler(new com.apple.eawt.AboutHandler() {
 
             public void handleAbout(com.apple.eawt.AppEvent.AboutEvent ae) {

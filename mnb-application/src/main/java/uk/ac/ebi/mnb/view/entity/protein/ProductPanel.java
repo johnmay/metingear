@@ -27,13 +27,11 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.template.Sequence;
+import uk.ac.ebi.caf.component.BorderlessScrollPane;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 import javax.swing.*;
@@ -53,22 +51,22 @@ public class ProductPanel
         extends AbstractEntityPanel {
 
     private static final Logger LOGGER = Logger.getLogger(ProductPanel.class);
-    private GeneProduct entity;
-    private JLabel formula;
-    private JTextField generic;
+    private GeneProduct      entity;
+    private JLabel           formula;
+    private JTextField       generic;
     //
-    private JScrollPane sequencePane;
-    private JTextPane sequence;
+    private JScrollPane      sequencePane;
+    private JTextPane        sequence;
     private DefaultListModel sequenceListModel;
     //
     private CellConstraints cc = new CellConstraints();
 
     public ProductPanel() {
-        super("Gene Product", new AnnotationRenderer());
+        super("Gene Product");
         sequenceListModel = new DefaultListModel();
 
         sequence = new JTextPane();
-        sequence.setFont(ViewUtilities.COURIER_NEW_PLAIN_11);
+        sequence.setFont(new Font("Courier New", Font.PLAIN, 10));
 
 
         //        sequence.addMouseListener(new MouseAdapter() {

@@ -1,4 +1,3 @@
-
 /**
  * LoadChebiNames.java
  *
@@ -22,16 +21,12 @@
 
 
 import au.com.bytecode.opencsv.CSVReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
@@ -40,33 +35,40 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
+import uk.ac.ebi.mdk.db.DatabaseProperties;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
- *          LoadChebiNames – 2011.09.13 <br>
- *          A test Class using lucene and chebi names
+ * LoadChebiNames – 2011.09.13 <br>
+ * A test Class using lucene and chebi names
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class LoadChebiNames {
 
-    private static final Logger LOGGER = Logger.getLogger(LoadChebiNames.class);
-    private DatabaseProperties DB_PROPS = DatabaseProperties.getInstance();
+    private static final Logger             LOGGER   = Logger.getLogger(LoadChebiNames.class);
+    private              DatabaseProperties DB_PROPS = DatabaseProperties.getInstance();
 
 
     public LoadChebiNames() {
 
-        if( DB_PROPS.containsKey("chebi.names") ) {
+        if (DB_PROPS.containsKey("chebi.names")) {
             load(DB_PROPS.getFile("chebi.names"));
         }
     }
 
 
     private static final int CHEBI_ID = 1;
-    private static final int TYPE = 2;
-    private static final int NAME = 4;
+    private static final int TYPE     = 2;
+    private static final int NAME     = 4;
 
 
     private void load(File file) {
@@ -79,10 +81,10 @@ public class LoadChebiNames {
 
             String[] header = reader.readNext();
             String[] row;
-            while( (row = reader.readNext()) != null ) {
+            while ((row = reader.readNext()) != null) {
 
                 String chebi = row[CHEBI_ID];
-                if( !map.containsKey(chebi) ) {
+                if (!map.containsKey(chebi)) {
                     map.put(chebi, new Document());
                 }
 
@@ -97,28 +99,26 @@ public class LoadChebiNames {
             reader.close();
 
 
-            StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_CURRENT);
+            StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_34);
             Directory index = new RAMDirectory();
-            IndexWriter w = new IndexWriter(index, analyzer, true,
-                                            IndexWriter.MaxFieldLength.UNLIMITED);
+            IndexWriter w = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, analyzer));
             // add documents to index
-            for( Document doc : map.values() ) {
+            for (Document doc : map.values()) {
 //                w.addDocument(doc);
             }
             Document doc = new Document();
             doc.add(new Field("title", "leucene", Field.Store.YES, Field.Index.ANALYZED));
             w.close();
 
-            Query q = new QueryParser(Version.LUCENE_CURRENT, "NAME", analyzer).parse("leucene");
+            Query q = new QueryParser(Version.LUCENE_34, "NAME", analyzer).parse("leucene");
             IndexSearcher searcher = new IndexSearcher(index, true);
             TopScoreDocCollector collector = TopScoreDocCollector.create(10, true);
             searcher.search(q, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             System.out.println("Docs:");
-            for( ScoreDoc scoreDoc : hits ) {
+            for (ScoreDoc scoreDoc : hits) {
                 System.out.println(searcher.doc(scoreDoc.doc));
             }
-
 
 
             // searcher can only be closed when there
@@ -126,8 +126,7 @@ public class LoadChebiNames {
             searcher.close();
 
 
-
-        } catch( Exception ex ) {
+        } catch (Exception ex) {
 
             ex.printStackTrace();
         }

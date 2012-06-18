@@ -23,9 +23,10 @@ package uk.ac.ebi.mnb.menu;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.MainController;
@@ -35,8 +36,11 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * ContextMenu - 2011.11.28 <br>
@@ -73,20 +77,20 @@ public class ContextMenu extends JMenu {
             public void buildComponents() {
                 try {
                     Constructor constructor = dialogClass.getConstructors()[0];
-                    System.out.println(constructor.getDeclaringClass());
-                    System.out.println(Arrays.asList(constructor.getParameterTypes()));
+                    LOGGER.debug("Building dialog: " + dialogClass.getSimpleName());
                     dialog = (ControllerDialog) constructor.newInstance((JFrame) controller,
                                                                         (TargetedUpdate) update,
                                                                         (ReportManager) message,
                                                                         (SelectionController) selection,
                                                                         (UndoableEditListener) undo);
                 } catch (Exception ex) {
-                    LOGGER.error("Unable to construct dialog:", ex);
+                    LOGGER.error("Unable to construct dialog " + dialogClass.getSimpleName(), ex);
                 }
             }
 
             @Override
             public void activateActions() {
+                dialog.pack();
                 dialog.setVisible(true);
             }
         };
@@ -147,7 +151,7 @@ public class ContextMenu extends JMenu {
      */
     public void updateContext() {
 
-        uk.ac.ebi.mdk.domain.tool.ReconstructionManager manager = (uk.ac.ebi.mdk.domain.tool.ReconstructionManager) DefaultReconstructionManager.getInstance();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
         Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
         EntityCollection selection = controller.getViewController().getSelection();
 

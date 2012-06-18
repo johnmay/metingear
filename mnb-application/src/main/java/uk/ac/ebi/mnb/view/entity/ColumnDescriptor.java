@@ -20,11 +20,12 @@
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.edit.entity.FieldManager;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+
+import javax.swing.undo.UndoableEdit;
 
 /**
  *          ColumnDescriptor – 2011.09.06 <br>

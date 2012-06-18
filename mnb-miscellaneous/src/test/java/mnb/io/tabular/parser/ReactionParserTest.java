@@ -5,7 +5,8 @@
 package mnb.io.tabular.parser;
 
 import junit.framework.TestCase;
-import uk.ac.ebi.interfaces.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 
 
 /**
@@ -30,7 +31,7 @@ public class ReactionParserTest extends TestCase {
      * Test of getReactionSides method, of class ReactionParser.
      */
     public void testGetReactionSides() {
-        ReactionParser parser = new ReactionParser(null);
+        ReactionParser parser = new ReactionParser(null, new AutomaticCompartmentResolver());
         String[] expected = new String[]{"A + B ", " C + D"};
 
         String[] actual = parser.getReactionSides("A + B <--> C + D");
@@ -81,7 +82,7 @@ public class ReactionParserTest extends TestCase {
 
 
     public void testGetReactionArrow() {
-        ReactionParser parser = new ReactionParser(null);
+        ReactionParser parser = new ReactionParser(null, new AutomaticCompartmentResolver());
         Direction actual = parser.getReactionArrow("A + B <--> C + D");
         assertEquals(Direction.BIDIRECTIONAL, actual);
         actual = parser.getReactionArrow("A + B <==> C + D");

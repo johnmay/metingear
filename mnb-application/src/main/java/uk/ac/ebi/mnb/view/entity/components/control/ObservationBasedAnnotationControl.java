@@ -20,15 +20,15 @@
  */
 package uk.ac.ebi.mnb.view.entity.components.control;
 
-import java.awt.event.ActionEvent;
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.ObservationBasedAnnotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.observation.Observation;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 
 /**

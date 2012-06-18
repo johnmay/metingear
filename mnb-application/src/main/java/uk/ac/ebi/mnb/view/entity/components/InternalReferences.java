@@ -20,19 +20,18 @@
  */
 package uk.ac.ebi.mnb.view.entity.components;
 
-import java.awt.Cursor;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JList;
-import javax.swing.ListModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.table.renderers.ListLinkRenderer;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.ui.render.table.ListLinkRenderer;
 import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  *          InternalReferences - 2011.12.14 <br>
@@ -87,7 +86,7 @@ public class InternalReferences
 
                 MainController mainController = MainView.getInstance();
                 ViewController viewController = mainController.getViewController();
-                EntityCollection manager = viewController.getSelection();                
+                EntityCollection manager = viewController.getSelection();
                 manager.clear().add((AnnotatedEntity) getModel().getElementAt(index));
                 viewController.setSelection(manager);
             }

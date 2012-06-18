@@ -181,8 +181,6 @@ public class ExcelModelProperties extends Properties {
 
         throw new UnsupportedOperationException("No bounds specified in properties");
 
-        // todo: throw more meaningful exception
-
     }
 
     public static ExcelModelProperties createTemplate() {

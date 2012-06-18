@@ -19,16 +19,15 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-
-import java.awt.event.ActionEvent;
-import javax.swing.JFrame;
-
 import mnb.io.resolve.CandidateSelector;
-import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mnb.core.ControllerAction;
-import uk.ac.ebi.mnb.interfaces.*;
+import uk.ac.ebi.mnb.interfaces.MainController;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 /**
  * ResolveMissingInfo 2012.01.11
@@ -47,7 +46,7 @@ public class CuratedReconciliation
 
     public CuratedReconciliation(MainController controller) {
         super(CuratedReconciliation.class.getSimpleName(), controller);
-        dialog = new CandidateSelector((JFrame) controller);
+        dialog = new CandidateSelector((JFrame) controller, DefaultServiceManager.getInstance());
     }
 
 

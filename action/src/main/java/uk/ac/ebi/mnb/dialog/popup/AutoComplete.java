@@ -20,18 +20,14 @@
  */
 package uk.ac.ebi.mnb.dialog.popup;
 
-import java.util.Collection;
-import javax.swing.DefaultListModel;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
+import uk.ac.ebi.caf.component.BorderlessScrollPane;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.ui.component.table.accessor.EntityValueAccessor;
+
+import javax.swing.*;
+import java.util.Collection;
 
 /**
  *          Autocomplete - 2011.12.05 <br>
@@ -60,7 +56,7 @@ public class AutoComplete extends JDialog {
 
         list.setVisibleRowCount(6);
 
-        list.setFont(ViewUtilities.DEFAULT_BODY_FONT);
+        list.setFont(ThemeManager.getInstance().getTheme().getBodyFont());
 
         pane = new BorderlessScrollPane(list, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
