@@ -20,25 +20,29 @@
  */
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
-import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
-import uk.ac.ebi.chemet.render.table.renderers.BooleanCellRenderer;
-import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.Rating;
-import uk.ac.ebi.chemet.render.table.editors.RatingCellEditor;
-import uk.ac.ebi.chemet.render.table.renderers.RatingCellRenderer;
-import uk.ac.ebi.chemet.render.table.renderers.StructuralValidityRenderer;
-import uk.ac.ebi.core.tools.StructuralValidity;
+import uk.ac.ebi.mdk.domain.annotation.ACPAssociated;
+import uk.ac.ebi.mdk.domain.annotation.Lumped;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.entity.Rating;
+import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
+import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
+import uk.ac.ebi.mdk.ui.render.table.AnnotationCellRenderer;
+import uk.ac.ebi.mdk.ui.render.table.BooleanCellRenderer;
+import uk.ac.ebi.mdk.ui.render.table.RatingCellRenderer;
+import uk.ac.ebi.mdk.ui.render.table.StructuralValidityRenderer;
 import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 
 
 /**
- *          MetaboliteTable – 2011.09.05 <br>
- *          Class description
+ * MetaboliteTable – 2011.09.05 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class MetaboliteTable
         extends AbstractEntityTable {
@@ -62,12 +66,12 @@ public class MetaboliteTable
         setDefaultRenderer(StructuralValidity.class,
                            new StructuralValidityRenderer());
 
-        //   setDefaultRenderer(MolecularFormula.class,
-        //                      new FormulaCellRender());
-
-
-
-
+        setDefaultRenderer(MolecularFormula.class,
+                           annotationRenderer);
+        setDefaultRenderer(Lumped.class,
+                           annotationRenderer);
+        setDefaultRenderer(ACPAssociated.class,
+                           annotationRenderer);
 
 
         setDefaultRenderer(Rating.class, new RatingCellRenderer());

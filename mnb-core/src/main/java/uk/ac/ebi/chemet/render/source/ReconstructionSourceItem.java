@@ -23,10 +23,10 @@ package uk.ac.ebi.chemet.render.source;
 import com.explodingpixels.macwidgets.SourceListCategory;
 import com.explodingpixels.macwidgets.SourceListModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
+import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 
 
 /**
@@ -44,7 +44,7 @@ public class ReconstructionSourceItem
 
     public ReconstructionSourceItem(AbstractAnnotatedEntity entity, Object container) {
         super(entity, container);
-        setIcon(ViewUtilities.icon_16x16);
+        setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/networkbuilder_16x16.png"));
     }
 
 

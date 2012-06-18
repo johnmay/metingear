@@ -4,17 +4,17 @@
  * 2011.09.26
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,9 +22,9 @@ package uk.ac.ebi.mnb.menu;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
-import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.metingear.preference.PreferenceFrame;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.edit.*;
@@ -36,11 +36,12 @@ import java.awt.event.ActionEvent;
 
 
 /**
- *          EditMenu – 2011.09.26 <br>
- *          Class description
+ * EditMenu – 2011.09.26 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class EditMenu extends ContextMenu {
 
@@ -90,12 +91,18 @@ public class EditMenu extends ContextMenu {
         add(new JSeparator());
         add(create(AddAuthorAnnotation.class));
         add(create(AddAnnotation.class));
-//        add(new AssignFlags("Add", view), new ContextResponder() {
-//
-//            public boolean getContext(ReconstructionManager reconstructions, ReconstructionImpl active, EntityCollection selection) {
-//                return selection.hasSelection();
-//            }
-//        });
+        add(new ReassignIdentifiers(MainView.getInstance()), new ContextResponder() {
+            @Override
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return selection.hasSelection();
+            }
+        });
+        add(new Resync(MainView.getInstance()), new ContextResponder() {
+            @Override
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return active != null;
+            }
+        });
         add(new JSeparator());
         add(new AbstractAction("Preferences") {
 

@@ -21,14 +21,13 @@
  */
 package uk.ac.ebi.mnb.view.entity.general;
 
-import java.util.ArrayList;
-import java.util.List;
-import uk.ac.ebi.mnb.view.entity.DataType;
-import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
-import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.search.SearchManager;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
+import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
+import uk.ac.ebi.mnb.view.entity.DataType;
+
+import java.util.ArrayList;
 
 
 /**

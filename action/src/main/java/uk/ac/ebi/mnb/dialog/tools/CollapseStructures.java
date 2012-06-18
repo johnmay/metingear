@@ -20,17 +20,17 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
-import java.util.Collection;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.event.UndoableEditListener;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
-import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
+import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
+import java.util.Collection;
 
 
 /**

@@ -20,14 +20,15 @@
  */
 package uk.ac.ebi.mnb.edit;
 
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
+import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mnb.interfaces.Updatable;
+
+import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.mnb.interfaces.Updatable;
+import java.awt.event.ActionEvent;
 
 /**
  * @name    DeleteAnnotation - 2011.10.04 <br>
@@ -52,7 +53,7 @@ public class DeleteAnnotation extends AbstractAction {
         this.entity = entity;
         this.annotation = annotation;
         putValue(SHORT_DESCRIPTION, "Removes selected annotation");
-        putValue(LARGE_ICON_KEY, ViewUtilities.getIcon("images/cutout/close_16x16.png", "Remove annotation"));
+        putValue(LARGE_ICON_KEY, ResourceUtility.getIcon(getClass(), "close_16x16.png"));
     }
 
     public void actionPerformed(ActionEvent ae) {

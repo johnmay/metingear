@@ -25,19 +25,20 @@ import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import mnb.io.tabular.type.EntityColumn;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.Synonym;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.Synonym;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.KEGGCrossReference;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.service.DefaultServiceManager;
+import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -46,16 +47,16 @@ import java.util.Collection;
 /**
  * UserReconciler - 2011.10.31 <br> Class description
  *
- * @version $Rev$ : Last Changed $Date: 2011-11-19 10:15:40 +0000 (Sat, 19
- * Nov 2011) $
  * @author johnmay
  * @author $Author$ (this version)
+ * @version $Rev$ : Last Changed $Date: 2011-11-19 10:15:40 +0000 (Sat, 19
+ *          Nov 2011) $
  */
 public class ListSelectionReconciler implements EntryReconciler {
 
     private static final Logger LOGGER = Logger.getLogger(AutomatedReconciler.class);
 
-    private CandidateFactory factory;
+    private NameCandidateFactory factory;
 
     private Identifier template;
 
@@ -69,12 +70,12 @@ public class ListSelectionReconciler implements EntryReconciler {
 
 
     public ListSelectionReconciler(JFrame frame,
-                                   CandidateFactory factory,
+                                   NameCandidateFactory factory,
                                    Identifier factoryIdClass) {
         this.factory = factory;
         this.template = factoryIdClass;
         this.frame = frame;
-        curater = new CandidateSelector(frame);
+        curater = new CandidateSelector(frame, DefaultServiceManager.getInstance());
 
         recon = DefaultReconstructionManager.getInstance().getActive();
         nameMap = HashMultimap.create();
@@ -90,6 +91,7 @@ public class ListSelectionReconciler implements EntryReconciler {
 
     /**
      * @param entry
+     *
      * @return @inheritDoc
      */
     public AnnotatedEntity resolve(PreparsedEntry entry) {
@@ -106,6 +108,7 @@ public class ListSelectionReconciler implements EntryReconciler {
      * Automatically resolves
      *
      * @param entry
+     *
      * @return
      */
     public Metabolite resolve(PreparsedMetabolite entry) {
@@ -122,7 +125,6 @@ public class ListSelectionReconciler implements EntryReconciler {
                 LOGGER.error("Duplicate metabolites with same name! --> TODO offer selection");
             }
         }
-
 
 
         Metabolite metabolite = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,

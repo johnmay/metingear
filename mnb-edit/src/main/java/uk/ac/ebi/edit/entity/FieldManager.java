@@ -20,8 +20,9 @@
  */
 package uk.ac.ebi.edit.entity;
 
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+
 import javax.swing.undo.UndoableEdit;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 /**
  *          EntitySetter - 2011.11.17 <br>

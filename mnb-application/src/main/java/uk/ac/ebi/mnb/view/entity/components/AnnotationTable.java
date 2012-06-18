@@ -21,15 +21,14 @@
 package uk.ac.ebi.mnb.view.entity.components;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.chemet.editor.annotation.AnnotationEditorFactory;
-import uk.ac.ebi.chemet.render.ClassBasedTableCellDDR;
-import uk.ac.ebi.chemet.render.table.renderers.*;
-import uk.ac.ebi.core.tools.StructuralValidity;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
+import uk.ac.ebi.mdk.ui.edit.annotation.AnnotationEditorFactory;
+import uk.ac.ebi.mdk.ui.render.table.*;
 
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;

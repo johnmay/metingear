@@ -20,10 +20,11 @@
  */
 package uk.ac.ebi.edit.entity;
 
-import javax.swing.undo.UndoableEdit;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mnb.edit.AbbreviationEdit;
+
+import javax.swing.undo.UndoableEdit;
 
 /**
  *          AbbreviationSetter - 2011.11.17 <br>

@@ -20,11 +20,13 @@
  */
 package uk.ac.ebi.mnb.edit;
 
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
+
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 import java.util.Arrays;
 import java.util.Collection;
-import javax.swing.undo.*;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
 
 /**
  * @name   NameEdit - 2011.10.02 <br>

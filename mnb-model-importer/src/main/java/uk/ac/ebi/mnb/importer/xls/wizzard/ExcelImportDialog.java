@@ -44,11 +44,16 @@ import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
+import uk.ac.ebi.mdk.service.ServiceManager;
+import uk.ac.ebi.mdk.service.query.name.NameService;
+import uk.ac.ebi.mdk.tool.resolve.ChemicalFingerprintEncoder;
+import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
+import uk.ac.ebi.mdk.ui.edit.reaction.DialogCompartmentResolver;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
@@ -56,9 +61,6 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
 import uk.ac.ebi.mnb.xls.options.ImporterOptions;
-import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
-import uk.ac.ebi.service.ServiceManager;
-import uk.ac.ebi.service.query.name.NameService;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
@@ -71,13 +73,12 @@ import java.util.List;
 
 
 /**
- * @name    ExcelWizzard
- * @date    2011.08.04
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- * @brief   ...class description...
- *
+ * @name ExcelWizzard
+ * @date 2011.08.04
+ * @brief ...class description...
  */
 public class ExcelImportDialog
         extends ControllerDialog {
@@ -229,16 +230,17 @@ public class ExcelImportDialog
             waitIndicator.repaint();
 
 
-            CandidateFactory factory =
-                             new CandidateFactory(manager.getService(ChEBIIdentifier.class, NameService.class),
-                                                  new ChemicalFingerprintEncoder());
+            NameCandidateFactory factory =
+                    new NameCandidateFactory(new ChemicalFingerprintEncoder(),
+                                             manager.getService(ChEBIIdentifier.class, NameService.class));
 
             // todo should be selectable
-            EntryReconciler reconciler = Boolean.parseBoolean(properties.getProperty("import.skip")) ? new AutomatedReconciler(factory, new ChEBIIdentifier())
+            EntryReconciler reconciler = Boolean.parseBoolean(properties.getProperty("import.skip"))
+                                         ? new AutomatedReconciler(factory, new ChEBIIdentifier())
                                          : new ListSelectionReconciler(frame, factory, new ChEBIIdentifier());
 
             ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler, DefaultEntityFactory.getInstance());
-            parser = new ReactionParser(entitySheet);
+            parser = new ReactionParser(entitySheet, new DialogCompartmentResolver(new AutomaticCompartmentResolver(), this));
 
             waitIndicator.setText(String.format("initialising..."));
             waitIndicator.repaint();
@@ -312,7 +314,7 @@ public class ExcelImportDialog
                     layout.show(shiftPanel, stages[activeStage].getClass().getSimpleName());
                     label.setText(stages[activeStage].getDescription());
                     pack();
-                    setLocation();
+                    position();
                 } else {
                     getActivate().setEnabled(true);
                 }
@@ -355,7 +357,7 @@ public class ExcelImportDialog
                 stages[activeStage].reloadPanel();
                 layout.show(shiftPanel, stages[activeStage].getClass().getSimpleName());
                 pack();
-                setLocation();
+                position();
             }
         }
     }

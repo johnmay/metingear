@@ -22,7 +22,7 @@ package uk.ac.ebi.optimise;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
-import uk.ac.ebi.core.CorePreferences;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class SimulationUtil {
      */
     public static boolean setup() {
 
-        FilePreference pref = CorePreferences.getInstance().getPreference("CPLEX_LIBRARY_PATH");
+        FilePreference pref = DomainPreferences.getInstance().getPreference("CPLEX_LIBRARY_PATH");
         String path    = pref.get().getPath();
 
         List<String> paths = Arrays.asList(System.getProperty("java.library.path").split(File.pathSeparator));
@@ -99,7 +99,7 @@ public class SimulationUtil {
      * system property library paths. Note: No paths are not removed
      */
     public static void setCPLEXLibraryPath(String path) {
-        FilePreference pref = CorePreferences.getInstance().getPreference("CPLEX_LIBRARY_PATH");
+        FilePreference pref = DomainPreferences.getInstance().getPreference("CPLEX_LIBRARY_PATH");
         pref.put(new File(path));
         setup();
     }

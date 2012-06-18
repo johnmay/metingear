@@ -20,26 +20,26 @@
  */
 package uk.ac.ebi.mnb.dialog.file;
 
-import java.util.*;
-import java.util.regex.Pattern;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.UndoableEditListener;
-
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 
 import javax.swing.*;
-
-import org.apache.log4j.Logger;
-
-import com.jgoodies.forms.layout.*;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.mnb.core.ControllerDialog;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.UndoableEditListener;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 
 /**

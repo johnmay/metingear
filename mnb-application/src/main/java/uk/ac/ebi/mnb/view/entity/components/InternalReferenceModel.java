@@ -20,16 +20,13 @@
  */
 package uk.ac.ebi.mnb.view.entity.components;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.swing.ListModel;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+
+import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import java.util.*;
 
 /**
  *          InternalReferenceModel - 2011.12.14 <br>

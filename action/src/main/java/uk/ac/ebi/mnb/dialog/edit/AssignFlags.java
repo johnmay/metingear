@@ -1,9 +1,9 @@
 package uk.ac.ebi.mnb.dialog.edit;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 

@@ -20,19 +20,19 @@
  */
 package uk.ac.ebi.mnb.view.entity.components;
 
+import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mnb.edit.DeleteAnnotation;
+import uk.ac.ebi.mnb.edit.ReplaceAnnotationEdit;
+import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.mnb.view.entity.components.control.AnnotationControlManager;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import javax.swing.Action;
-import javax.swing.JList;
-import javax.swing.table.AbstractTableModel;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.mnb.edit.ReplaceAnnotationEdit;
-import uk.ac.ebi.mnb.edit.DeleteAnnotation;
-import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.entity.components.control.AnnotationControlManager;
 
 
 /**

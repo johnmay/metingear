@@ -24,9 +24,7 @@ package uk.ac.ebi.chemet.render.source;
 import com.explodingpixels.macwidgets.SourceListItem;
 import com.explodingpixels.macwidgets.SourceListModel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.settings.SourceItemDisplayType;
+import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 
 
 /**
@@ -44,17 +42,6 @@ public class ReactionSourceItem
 
     public ReactionSourceItem(AbstractAnnotatedEntity entity, Object container) {
         super(entity, container);
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void update() {
-        Settings pref = Settings.getInstance();
-        SourceItemDisplayType type = (SourceItemDisplayType) pref.get(Settings.VIEW_SOURCE_REACTION);
-        super.update(type);
     }
 
 

@@ -20,21 +20,22 @@
  */
 package uk.ac.ebi.mnb.core;
 
-import java.util.Collection;
-import javax.swing.JFrame;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.report.Report;
+import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mnb.interfaces.MainController;
+import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+import uk.ac.ebi.mnb.view.DropdownDialog;
+
+import javax.swing.*;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoableEdit;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.mnb.interfaces.MainController;
-import uk.ac.ebi.caf.report.Report;
-import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.mnb.interfaces.SelectionController;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.mnb.view.DropdownDialog;
+import java.util.Collection;
 
 
 /**

@@ -4,64 +4,61 @@
  * 2011.12.02
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mnb.dialog.file;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.regex.Pattern;
-import javax.swing.AbstractAction;
-import javax.swing.JDialog;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 import org.apache.log4j.Logger;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.MetaboliteImplementation;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.ui.component.table.accessor.EntityValueAccessor;
+import uk.ac.ebi.mdk.ui.component.table.accessor.NameAccessor;
+import uk.ac.ebi.metingear.search.FieldType;
+import uk.ac.ebi.metingear.search.SearchManager;
+import uk.ac.ebi.metingear.search.SearchableIndex;
 import uk.ac.ebi.mnb.dialog.popup.AutoComplete;
-import uk.ac.ebi.search.FieldType;
-import uk.ac.ebi.search.SearchManager;
-import uk.ac.ebi.search.SearchableIndex;
-import uk.ac.ebi.visualisation.molecule.access.*;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 
 /**
- *          ReactionField - 2011.12.02 <br>
- *          Class extends JTextField and allows auto-competition of metabolite names
- *          and parsing of a reaction
+ * ReactionField - 2011.12.02 <br>
+ * Class extends JTextField and allows auto-competition of metabolite names
+ * and parsing of a reaction
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class ReactionField
         extends JTextField {
@@ -74,7 +71,8 @@ public class ReactionField
 
     private TermQuery typeFilter = new TermQuery(FieldType.TYPE.getTerm(DefaultEntityFactory.getInstance().getRootClass(Metabolite.class).getSimpleName()));
 
-    private static String[] fields = new String[]{FieldType.NAME.getName(), FieldType.ABBREVIATION.getName()};
+    private static String[] fields = new String[]{FieldType.NAME.getName(),
+                                                  FieldType.ABBREVIATION.getName()};
 
     private Replacement r = null;
 
@@ -188,7 +186,7 @@ public class ReactionField
                     SearchableIndex index = SearchManager.getInstance().getCurrentIndex();
 
                     String searchableText =
-                           LUCENE_PATTERN.matcher(r.text).replaceAll(REPLACEMENT_STRING);
+                            LUCENE_PATTERN.matcher(r.text).replaceAll(REPLACEMENT_STRING);
 
                     Query baseQuery = SearchManager.getInstance().getQuery(fields, searchableText + "~");
 
@@ -245,24 +243,26 @@ public class ReactionField
             // ends of field
             if (substring.length() == 3) {
                 if (substring.equals(" + ")) {
-                    return end >= offset ? new Replacement(offset, offset, "") : new Replacement(end, offset, text.substring(end, offset));
+                    return end >= offset ? new Replacement(offset, offset, "")
+                                         : new Replacement(end, offset, text.substring(end, offset));
                 } else if (substring.matches("<[ -=]>")
-                           || substring.matches("<[ -=]{2}")
-                           || substring.matches("[ -=]{2}>")) {
-                    return end >= offset ? new Replacement(offset, offset, "") : new Replacement(end, offset, text.substring(end, offset));
+                        || substring.matches("<[ -=]{2}")
+                        || substring.matches("[ -=]{2}>")) {
+                    return end >= offset ? new Replacement(offset, offset, "")
+                                         : new Replacement(end, offset, text.substring(end, offset));
                 }
             } else if (substring.length() == 2) {
                 if (((substring.equals("+ ") && i != offset && i + 1 != offset)
-                     || (substring.equals(" +") && i != 0))) {
+                        || (substring.equals(" +") && i != 0))) {
                     return new Replacement(end, offset, text.substring(end, offset));
                 } else if (substring.matches("<[ -=]")
-                           || substring.matches("[ -=]>")
-                           || substring.matches(" <")
-                           || substring.matches("> ")) {
-                    return end >= offset ? new Replacement(offset, offset, "") : new Replacement(end, offset, text.substring(end, offset));
+                        || substring.matches("[ -=]>")
+                        || substring.matches(" <")
+                        || substring.matches("> ")) {
+                    return end >= offset ? new Replacement(offset, offset, "")
+                                         : new Replacement(end, offset, text.substring(end, offset));
                 }
             }
-
 
 
         }

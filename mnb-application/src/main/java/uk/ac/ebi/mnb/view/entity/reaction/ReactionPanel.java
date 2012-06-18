@@ -4,17 +4,17 @@
  * 2011.09.30
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,39 +25,38 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
-import java.util.Collection;
-import java.util.List;
-import javax.swing.Box;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
+import uk.ac.ebi.mdk.tool.domain.MassBalance;
+import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil;
+import uk.ac.ebi.mdk.ui.edit.reaction.ReactionEditor;
+import uk.ac.ebi.mdk.ui.render.reaction.ReactionRenderer;
+import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.chemet.render.reaction.ReactionEditor;
-import uk.ac.ebi.chemet.render.reaction.ReactionRenderer;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.tools.TransportReactionUtil;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 
+import javax.swing.*;
+import java.util.Collection;
+import java.util.List;
+
 
 /**
- *          MetabolitePanel – 2011.09.30 <br>
- *          Class description
+ * MetabolitePanel – 2011.09.30 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class ReactionPanel
         extends AbstractEntityPanel {
@@ -74,26 +73,33 @@ public class ReactionPanel
 
     private JComponent participantXref;
 
-    private JLabel tramsportIcon = new JLabel();
+    private JLabel transportIcon = new JLabel();
+    private JLabel balanceIcon   = new JLabel();
 
     private CellConstraints cc = new CellConstraints();
 
 
     public ReactionPanel() {
-        super("Reaction", new AnnotationRenderer());
+        super("Reaction");
     }
 
 
     @Override
     public boolean update() {
 
-        if(super.update()){
+        if (super.update()) {
 
             // update all fields and labels...
             reactionLabel.setIcon(renderer.getReaction(entity));
             updateParticipantXref();
 
-            tramsportIcon.setIcon(renderer.getTransportClassificationIcon(TransportReactionUtil.getClassification(entity)));
+            TransportReactionUtil.Classification classification = TransportReactionUtil.getClassification(entity);
+            transportIcon.setIcon(renderer.getTransportClassificationIcon(classification));
+            transportIcon.setToolTipText(classification.toString());
+
+            MassBalance.BalanceType balanceType = MassBalance.getBalanceClassification(entity);
+            balanceIcon.setIcon(renderer.getBalanceTypeIcon(balanceType));
+            balanceIcon.setToolTipText(balanceType.toString());
 
             editor.setReaction(entity);
 
@@ -107,7 +113,7 @@ public class ReactionPanel
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
-        this.entity = (MetabolicReactionImplementation) entity;
+        this.entity = (MetabolicReactionImpl) entity;
         return super.setEntity(entity);
     }
 
@@ -118,9 +124,11 @@ public class ReactionPanel
     public JPanel getSynopsis() {
 
         JPanel panel = PanelFactory.createInfoPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         panel.setBorder(Borders.DLU4_BORDER);
 
-        panel.add(tramsportIcon);
+        panel.add(transportIcon);
+        panel.add(balanceIcon);
 
         return panel;
 
@@ -218,7 +226,6 @@ public class ReactionPanel
                     cc.xy(columnIndex, 1, cc.CENTER, cc.CENTER));
             columnIndex += i + 1 < products.size() ? 2 : 1;
         }
-
 
 
     }

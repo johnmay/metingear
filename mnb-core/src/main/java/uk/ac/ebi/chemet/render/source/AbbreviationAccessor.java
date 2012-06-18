@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.chemet.render.source;
 
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 
 /**

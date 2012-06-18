@@ -22,15 +22,16 @@ package uk.ac.ebi.mnb.dialog.popup;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.util.*;
-import javax.swing.*;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
-import uk.ac.ebi.chemet.render.components.IdentifierEditor;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.ui.edit.crossreference.IdentifierEditor;
+
+import javax.swing.*;
+import java.util.*;
 
 
 /**

@@ -22,7 +22,7 @@
 package mnb.io.resolve;
 
 import mnb.io.tabular.preparse.PreparsedEntry;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 
 /**

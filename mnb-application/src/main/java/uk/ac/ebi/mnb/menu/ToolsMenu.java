@@ -5,14 +5,15 @@
 package uk.ac.ebi.mnb.menu;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.Reconstruction;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.ProteinProduct;
-import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.tools.*;
+import uk.ac.ebi.mnb.dialog.tools.compare.AlignReconstruction;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.mnb.main.MainView;
 
@@ -21,7 +22,6 @@ import javax.swing.*;
 
 /**
  * FileMenu.java
- *
  *
  * @author johnmay @date Apr 28, 2011
  */
@@ -64,7 +64,13 @@ public class ToolsMenu extends ContextMenu {
         add(new ChokePoint(view), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(MetabolicReactionImplementation.class);
+                return selection.hasSelection(MetabolicReactionImpl.class);
+            }
+        });
+        add(new AddFlags(view), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return !selection.isEmpty();
             }
         });
 
@@ -116,7 +122,7 @@ public class ToolsMenu extends ContextMenu {
         add(create(CreateMatrix.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(MetabolicReactionImplementation.class) || (active != null && active.getReactome().isEmpty() == false);
+                return selection.hasSelection(MetabolicReactionImpl.class) || (active != null && active.getReactome().isEmpty() == false);
             }
         });
 
@@ -134,6 +140,12 @@ public class ToolsMenu extends ContextMenu {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return reconstructions.getProjects().size() > 1;
+            }
+        });
+        add(create(AlignReconstruction.class), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return active != null;
             }
         });
 

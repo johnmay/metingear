@@ -1,8 +1,8 @@
 package uk.ac.ebi.mnb.edit;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
 
 import javax.swing.undo.CannotRedoException;

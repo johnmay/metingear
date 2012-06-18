@@ -4,69 +4,68 @@
  * 2011.09.30
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mnb.view.entity;
 
-import uk.ac.ebi.interfaces.entities.GeneProduct;
+import com.jgoodies.forms.factories.Borders;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.BorderlessScrollPane;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.component.ui.VerticalLabelUI;
+import uk.ac.ebi.caf.utility.ColorUtility;
+import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.observation.Observation;
+import uk.ac.ebi.mdk.domain.observation.ObservationCollection;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.ui.render.list.ClassBasedListCellDDR;
+import uk.ac.ebi.mdk.ui.render.list.LocalAlignmentListCellRenderer;
+import uk.ac.ebi.mnb.dialog.popup.AlignmentViewer;
+import uk.ac.ebi.mnb.edit.AbbreviationEdit;
+import uk.ac.ebi.mnb.edit.AccessionEdit;
+import uk.ac.ebi.mnb.edit.NameEdit;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.entity.components.AnnotationTable;
-import java.awt.Color;
+import uk.ac.ebi.mnb.view.entity.components.InternalReferences;
+
+import javax.swing.*;
+import javax.swing.undo.UndoableEdit;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import uk.ac.ebi.interfaces.*;
-import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
-import uk.ac.ebi.mnb.dialog.popup.AlignmentViewer;
-import uk.ac.ebi.mnb.edit.*;
-import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
-
-import javax.swing.*;
-import javax.swing.undo.UndoableEdit;
-
-import org.apache.log4j.Logger;
-
-import com.jgoodies.forms.factories.Borders;
-import com.jgoodies.forms.layout.*;
-import java.awt.Component;
-import java.awt.Font;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.observation.ObservationCollection;
-import uk.ac.ebi.chemet.render.list.renderers.LocalAlignmentListCellRenderer;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
-import uk.ac.ebi.chemet.render.PooledClassBasedListCellDRR;
-import uk.ac.ebi.caf.component.ui.VerticalLabelUI;
-import uk.ac.ebi.caf.utility.ColorUtility;
-import uk.ac.ebi.mnb.view.entity.components.InternalReferences;
 
 
 /**
- *          EntityPanelFactory – 2011.09.30 <br>
- *          Displays the basic info on an entity (accession, abbreviation and
- *          name). Additional entries can be added to the basic information by
- *          overriding the method and adding rows (see ProductPanel or 
- *          ReactionPanel). 
+ * EntityPanelFactory – 2011.09.30 <br>
+ * Displays the basic info on an entity (accession, abbreviation and
+ * name). Additional entries can be added to the basic information by
+ * overriding the method and adding rows (see ProductPanel or
+ * ReactionPanel).
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public abstract class AbstractEntityPanel
         extends JPanel {
@@ -85,7 +84,6 @@ public abstract class AbstractEntityPanel
     private JTextField accession    = FieldFactory.newTransparentField(10, false);
     private JTextField name         = FieldFactory.newTransparentField(30, false);
     private JTextField abbreviation = FieldFactory.newTransparentField(10, false);
-
 
 
     private AnnotatedEntity entity;
@@ -121,8 +119,8 @@ public abstract class AbstractEntityPanel
 
     private boolean editable;
 
-    public AbstractEntityPanel(String type,
-                               AnnotationRenderer renderer) {
+    public AbstractEntityPanel(String type) {
+
         setBackground(Color.WHITE);
         this.type = type;
         name.setHorizontalAlignment(SwingConstants.CENTER);
@@ -155,7 +153,8 @@ public abstract class AbstractEntityPanel
                     alignmentView.setOnMouse(20);
                     if (alignmentView.isVisible() == false) {
                         alignmentView.setVisible(true);
-                    };
+                    }
+                    ;
                 }
             }
         });
@@ -164,16 +163,15 @@ public abstract class AbstractEntityPanel
         annotationTable.getModel().setObservationList(observationList);
 
 
-        OBSERVATION_RENDERING_POOL = new PooledClassBasedListCellDRR();
+        OBSERVATION_CELL_RENDERER = new ClassBasedListCellDDR();
+        OBSERVATION_CELL_RENDERER.setRenderer(LocalAlignment.class, new LocalAlignmentListCellRenderer());
 
-        OBSERVATION_RENDERING_POOL.setRenderer(LocalAlignment.class, new LocalAlignmentListCellRenderer());
-
-        observationList.setCellRenderer(OBSERVATION_RENDERING_POOL);
+        observationList.setCellRenderer(OBSERVATION_CELL_RENDERER);
 
 
     }
 
-    private PooledClassBasedListCellDRR OBSERVATION_RENDERING_POOL;
+    private ClassBasedListCellDDR OBSERVATION_CELL_RENDERER;
 
     private AlignmentViewer alignmentView = new AlignmentViewer(MainView.getInstance(), 15);
 
@@ -256,7 +254,6 @@ public abstract class AbstractEntityPanel
     }
 
 
-
     public JPanel newBasicPanel() {
         JPanel panel = PanelFactory.createInfoPanel("p, p:grow, p, p:grow, p", "p");
         panel.add(accession, cc.xy(1, 1));
@@ -267,7 +264,7 @@ public abstract class AbstractEntityPanel
     }
 
     public JPanel getBasicPanel() {
-        if(basic == null){
+        if (basic == null) {
             basic = newBasicPanel();
         }
         return basic;
@@ -298,11 +295,9 @@ public abstract class AbstractEntityPanel
 
 
     /**
-     *
      * Sets the current entity
-     * 
+     *
      * @param entity true if the entity was different from the previous one
-     * 
      */
     public boolean setEntity(AnnotatedEntity entity) {
 
@@ -321,11 +316,9 @@ public abstract class AbstractEntityPanel
 
 
     /**
-     * 
      * Updates the current entity
      *
      * @return true if info was updated
-     *
      */
     public boolean update() {
 
@@ -346,11 +339,6 @@ public abstract class AbstractEntityPanel
 
             // Update obserations
             {
-                // check the objects back in to the pool
-                for (int i = 0; i < observationModel.getSize(); i++) {
-                    Observation o = (Observation) observationModel.remove(i);
-                    OBSERVATION_RENDERING_POOL.checkIn(o);
-                }
 
                 observationModel.removeAllElements();
                 ObservationCollection collection = ((AbstractAnnotatedEntity) entity).getObservationCollection();
@@ -383,11 +371,9 @@ public abstract class AbstractEntityPanel
 
 
     /**
-     * 
      * Sets if the info is editable
      *
      * @param editable
-     * 
      */
     public void setEditable(boolean editable) {
 
@@ -404,6 +390,7 @@ public abstract class AbstractEntityPanel
 
     /**
      * Access whether the panel is editable or not.
+     *
      * @return
      */
     public boolean isEditable() {

@@ -20,19 +20,19 @@
  */
 package uk.ac.ebi.mnb.dialog.edit;
 
-import java.awt.Window;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.event.UndoableEditListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.editor.annotation.AnnotationChoiceEditor;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.ui.edit.annotation.AnnotationChoiceEditor;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
+import java.awt.*;
 
 
 /**

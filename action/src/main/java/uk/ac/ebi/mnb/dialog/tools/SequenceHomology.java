@@ -28,11 +28,11 @@ import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.core.HomologyDatabaseManager;
-import uk.ac.ebi.core.ProteinProductImplementation;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.mdk.db.HomologyDatabaseManager;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
+import uk.ac.ebi.mdk.tool.task.homology.HomologySearchFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
@@ -140,7 +140,7 @@ public class SequenceHomology
     }
 
     public boolean setContext() {
-        return getSelection().hasSelection(ProteinProductImplementation.class);
+        return getSelection().hasSelection(ProteinProductImpl.class);
     }
 
     public boolean setContext(Object obj) {

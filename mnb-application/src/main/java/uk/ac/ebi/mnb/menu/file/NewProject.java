@@ -12,14 +12,13 @@ import uk.ac.ebi.caf.component.SuggestionField;
 import uk.ac.ebi.caf.component.SuggestionHandler;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
-import uk.ac.ebi.chemet.service.query.taxonmy.TaxonomyQueryService;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
+import uk.ac.ebi.mdk.service.query.taxonomy.TaxonomyQueryService;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.resource.organism.Kingdom;
-import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 import javax.swing.*;
 import java.awt.*;
@@ -93,13 +92,13 @@ public class NewProject extends DropdownDialog {
 
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return service.isAvailable() ? new ArrayList<Object>(service.searchCode(s, true)) : new ArrayList();
+                return service.startup() ? new ArrayList<Object>(service.searchCode(s, true)) : new ArrayList();
             }
         }, handler);
         taxonField = new SuggestionField(this, 5, new SuggestionHandler() {
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return service.isAvailable() ? new ArrayList<Object>(service.searchTaxonomyIdentifier(QueryParser.escape(s), true)) : new ArrayList();
+                return service.startup() ? new ArrayList<Object>(service.searchTaxonomyIdentifier(QueryParser.escape(s), true)) : new ArrayList();
             }
         }, handler);
         nameField = new SuggestionField(this, 35, new SuggestionHandler() {
@@ -120,7 +119,7 @@ public class NewProject extends DropdownDialog {
 
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return service.isAvailable() ? new ArrayList<Object>(service.searchName(QueryParser.escape(s.trim()), true)) : new ArrayList();
+                return service.startup() ? new ArrayList<Object>(service.searchName(QueryParser.escape(s.trim()), true)) : new ArrayList();
             }
         }, handler);
         kingdomField = FieldFactory.newField(10);
@@ -169,7 +168,7 @@ public class NewProject extends DropdownDialog {
         super.setVisible(visible);
 
         // try and get a new service is the current one isn't avaialble
-        if (!service.isAvailable())
+        if (!service.startup())
             service = new TaxonomyQueryService();
     }
 
@@ -183,14 +182,14 @@ public class NewProject extends DropdownDialog {
         return code;
     }
 
-    public Kingdom getKingdom() {
+    public Taxonomy.Kingdom getKingdom() {
         String type = kingdomField.getText();
         if (type.isEmpty()) {
             flagAsInvalidInput("Kingdom type", kingdomField.getText(),
                                "type of organism (A) Archea, (B) Bacteria, (V) Virus etc.");
-            return Kingdom.UNDEFINED;
+            return Taxonomy.Kingdom.UNDEFINED;
         }
-        return Kingdom.getKingdom(type);
+        return Taxonomy.Kingdom.getKingdom(type);
 
 
     }
@@ -236,7 +235,7 @@ public class NewProject extends DropdownDialog {
         // create a new project
         int taxon = getTaxon();
         String code = getCode();
-        Kingdom kingdom = getKingdom();
+        Taxonomy.Kingdom kingdom = getKingdom();
         String name = getOfficialName();
 
         if (fieldsAreValid) {

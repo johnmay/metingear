@@ -20,8 +20,8 @@
  */
 package uk.ac.ebi.mnb.view.entity.components.control;
 
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 
 /**

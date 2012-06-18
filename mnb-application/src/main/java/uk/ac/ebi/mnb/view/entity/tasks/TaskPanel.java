@@ -4,17 +4,17 @@
  * 2011.09.30
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,27 +24,26 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
-import java.util.Collection;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.mnb.settings.Settings;
-import uk.ac.ebi.mnb.view.AnnotationRenderer;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Collection;
 
 
 /**
- *          MetabolitePanel – 2011.09.30 <br>
- *          Class description
+ * MetabolitePanel – 2011.09.30 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class TaskPanel
         extends AbstractEntityPanel {
@@ -61,20 +60,21 @@ public class TaskPanel
 
 
     public TaskPanel() {
-        super("Task", new AnnotationRenderer());
+        super("Task");
     }
 
 
     /**
      * Updates the command text
+     *
      * @return
      */
     @Override
     public boolean update() {
 
         command.setText(entity.getCommand());
-        command.setFont(ViewUtilities.COURIER_NEW_PLAIN_11);
-        command.setForeground(Settings.getInstance().getTheme().getForeground());
+        command.setFont(new Font("Courier New", Font.PLAIN, 10));
+        command.setForeground(ThemeManager.getInstance().getTheme().getForeground());
         command.setEditable(false);
         command.setLineWrap(true);
 

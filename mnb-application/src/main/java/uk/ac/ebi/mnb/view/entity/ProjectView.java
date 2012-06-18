@@ -16,12 +16,12 @@ package uk.ac.ebi.mnb.view.entity;
 
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.store.LockObtainFailedException;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.*;
+import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
+import uk.ac.ebi.metingear.search.SearchManager;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.ViewController;
@@ -33,7 +33,6 @@ import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
 import uk.ac.ebi.mnb.view.entity.protein.ProductView;
 import uk.ac.ebi.mnb.view.entity.reaction.ReactionView;
 import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
-import uk.ac.ebi.search.SearchManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,8 +55,8 @@ public class ProjectView
         implements ViewController {
 
     private static final org.apache.log4j.Logger LOGGER =
-                                                 org.apache.log4j.Logger.getLogger(
-            ProjectView.class);
+            org.apache.log4j.Logger.getLogger(
+                    ProjectView.class);
     // underlying  components
 
     private ReactionView reactions = null;
@@ -81,7 +80,6 @@ public class ProjectView
     private EntityFactory factory = DefaultEntityFactory.getInstance();
 
     private EntityCollection selection = new EntityMap(factory);
-
 
 
     public ProjectView() {
@@ -123,6 +121,7 @@ public class ProjectView
 
     /**
      * Sets the association with the buttons to change the view
+     *
      * @param selector
      */
     public void setViewSelector(ViewInfo selector) {
@@ -132,6 +131,7 @@ public class ProjectView
 
     /**
      * Returns the currently active view
+     *
      * @return
      */
     public EntityView getActiveView() {
@@ -185,10 +185,8 @@ public class ProjectView
 
 
     /**
-     * 
      * Updates all child views (products, metabolites, reactions and tasks) calling
      * {@see EntityView#update()}
-     *
      */
     public boolean update() {
 
@@ -210,7 +208,6 @@ public class ProjectView
         reactions.update();
         tasks.update();
         genes.update();
-
 
 
         try {
@@ -306,7 +303,9 @@ public class ProjectView
     /**
      * At the moment sets view to that of first item and then selects all provided. This method presumes
      * all entities are the same
+     *
      * @param selection
+     *
      * @return
      */
     @Override

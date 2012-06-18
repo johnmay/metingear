@@ -20,9 +20,7 @@
  */
 package uk.ac.ebi.mnb.interfaces;
 
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import java.util.Collection;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 
 /**
  * @name    ItemSelector - 2011.10.03 <br>

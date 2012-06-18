@@ -38,9 +38,9 @@ import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.type.EntityColumn;
 import mnb.io.tabular.util.ExcelUtilities;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.BorderlessScrollPane;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.mnb.parser.ExcelHelper;
-import uk.ac.ebi.mnb.view.BorderlessScrollPane;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 
 
@@ -101,14 +101,14 @@ public class MetaboliteColumnChooser
         start = new JSpinner(new SpinnerNumberModel(1, 1, 4000, 1));
         end = new JSpinner(new SpinnerNumberModel(1, 1, 4000, 1));
 
-        abbreviation = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        description = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        compartment = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        charge = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        formula = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        kegg = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        chebi = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
-        pubchem = ComboBoxFactory.newComboBox(ExcelUtilities.getComboBoxValues(0, 40));
+        abbreviation = ComboBoxFactory.newComboBox((Object[])ExcelUtilities.getComboBoxValues(0, 40));
+        description = ComboBoxFactory.newComboBox((Object[])ExcelUtilities.getComboBoxValues(0, 40));
+        compartment = ComboBoxFactory.newComboBox((Object[])ExcelUtilities.getComboBoxValues(0, 40));
+        charge = ComboBoxFactory.newComboBox((Object[])ExcelUtilities.getComboBoxValues(0, 40));
+        formula = ComboBoxFactory.newComboBox((Object[])ExcelUtilities.getComboBoxValues(0, 40));
+        kegg = ComboBoxFactory.newComboBox((Object[])ExcelUtilities.getComboBoxValues(0, 40));
+        chebi = ComboBoxFactory.newComboBox((Object[])ExcelUtilities.getComboBoxValues(0, 40));
+        pubchem = ComboBoxFactory.newComboBox((Object[])ExcelUtilities.getComboBoxValues(0, 40));
         table = new SelectionTable(helper);
 
 

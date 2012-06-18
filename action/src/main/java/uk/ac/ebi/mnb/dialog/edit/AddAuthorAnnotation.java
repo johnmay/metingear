@@ -20,21 +20,20 @@ package uk.ac.ebi.mnb.dialog.edit;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.UndoableEditListener;
-import uk.ac.ebi.annotation.AuthorAnnotation;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
+
+import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
 
 /**
  * @name    AddAuthorAnnotation - 2011.10.04 <br>

@@ -26,7 +26,7 @@ import ilog.concert.*;
 import ilog.cplex.IloCplex;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
+import uk.ac.ebi.mdk.domain.matrix.BasicStoichiometricMatrix;
 import uk.ac.ebi.optimise.SimulationUtil;
 
 import java.io.FileNotFoundException;

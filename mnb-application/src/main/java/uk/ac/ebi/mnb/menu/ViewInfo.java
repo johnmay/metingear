@@ -23,23 +23,17 @@ package uk.ac.ebi.mnb.menu;
 import com.explodingpixels.macwidgets.BottomBar;
 import com.explodingpixels.macwidgets.BottomBarSize;
 import com.explodingpixels.macwidgets.LabeledComponentGroup;
-import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JToggleButton;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.Entity;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.Reaction;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -76,10 +70,10 @@ public class ViewInfo {
 
         controller.setViewSelector(this);
 
-        genes.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/gen-selected.png"));
-        products.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/pro-selected.png"));
-        metabolites.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/met-selected.png"));
-        reactions.setSelectedIcon(ViewUtilities.getIcon("images/toolbar/rxn-selected.png"));
+        genes.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/gen-selected.png"));
+        products.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/pro-selected.png"));
+        metabolites.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/met-selected.png"));
+        reactions.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/rxn-selected.png"));
 
         genes.putClientProperty("JButton.buttonType", "segmentedTextured");
         genes.putClientProperty("JButton.segmentPosition", "first");

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>uk.ac.ebi</groupId>
+    <groupId>uk.ac.ebi.metingear</groupId>
     <artifactId>mnb</artifactId>
-    <version>0.9-SNAPSHOT</version>
+    <version>0.9.1</version>
     <packaging>pom</packaging>
     <name>Metingear</name>
     <modules>
@@ -24,13 +25,15 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    
+
     <properties>
         <caf.version>0.8.5-SNAPSHOT</caf.version>
+        <mdk.version>1.3.1</mdk.version>
+        <cdk.version>1.4.10</cdk.version>
     </properties>
 
     <repositories>
-        
+
         <repository>
             <id>maven-repo</id>
             <url>http://repo1.maven.org/maven2</url>
@@ -68,7 +71,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        
+
         <repository>
             <id>biojava-maven-repo</id>
             <name>BioJava repository</name>
@@ -77,9 +80,9 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        
+
     </repositories>
-    
+
     <build>
         <pluginManagement>
             <plugins>
@@ -87,8 +90,8 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>versions-maven-plugin</artifactId>
                     <version>1.3.1</version>
-                </plugin>        
+                </plugin>
             </plugins>
-        </pluginManagement>       
-    </build>      
+        </pluginManagement>
+    </build>
 </project>

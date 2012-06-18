@@ -21,15 +21,12 @@ import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.explodingpixels.macwidgets.TriAreaComponent;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
-import java.awt.CardLayout;
+import uk.ac.ebi.mnb.main.MainView;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
-import uk.ac.ebi.mnb.main.MainView;
 
 
 /**
@@ -60,7 +57,7 @@ public class InspectorToolbar
         setUpEditPanel();
         add(editPanel.getComponent(), EDIT_PANEL_NAME);
         add(viewPanel.getComponent(), VIEW_PANEL_NAME);
-        setBackground(ViewUtilities.DARK_BACKGROUND);
+        setBackground(new Color(36,36,36));
         setBorder(Borders.DLU2_BORDER);
         setViewMode();
     }
