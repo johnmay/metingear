@@ -10,11 +10,11 @@ import org.biojava3.core.sequence.compound.AminoAcidCompoundSet;
 import org.biojava3.core.sequence.io.FastaReader;
 import org.biojava3.core.sequence.io.GenericFastaHeaderParser;
 import org.biojava3.core.sequence.io.ProteinSequenceCreator;
-import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.type.ProteinIdentifier;
 import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.main.MainView;
@@ -40,7 +40,7 @@ public class ImportPeptidesAction extends FileChooserAction {
     private static final org.apache.log4j.Logger logger =
             org.apache.log4j.Logger.getLogger(
                     ImportPeptidesAction.class);
-    private FileFilter filter = new FileFilter() {
+    private              FileFilter              filter = new FileFilter() {
         @Override
         public boolean accept(File f) {
             String path = f.getPath();
@@ -86,17 +86,22 @@ public class ImportPeptidesAction extends FileChooserAction {
         if (choosenFile != null) {
 
 
-            FileInputStream inStream = null;
+            FileInputStream in = null;
+
             try {
-                inStream = new FileInputStream(choosenFile);
-                FastaReader<ProteinSequence, AminoAcidCompound> fastaReader =
+                in = new FileInputStream(choosenFile);
+
+
+                FastaReader<ProteinSequence, AminoAcidCompound> reader =
                         new FastaReader<ProteinSequence, AminoAcidCompound>(
-                                inStream,
+                                in,
+                                // we could have a custom header parser but we're not concerned with handling protein source etc atm
                                 new GenericFastaHeaderParser<ProteinSequence, AminoAcidCompound>(),
                                 new ProteinSequenceCreator(AminoAcidCompoundSet.getAminoAcidCompoundSet()));
-                LinkedHashMap<String, ProteinSequence> b = fastaReader.process();
 
-                for (Entry<String, ProteinSequence> entry : b.entrySet()) {
+                LinkedHashMap<String, ProteinSequence> sequences = reader.process();
+
+                for (Entry<String, ProteinSequence> entry : sequences.entrySet()) {
 
                     String header = entry.getValue().getOriginalHeader();
 
@@ -115,17 +120,23 @@ public class ImportPeptidesAction extends FileChooserAction {
                                                                "",
                                                                "");
                         p.addSequence(entry.getValue());
+                        peptides.add(p);
                     }
 
                 }
+
             } catch (Exception ex) {
                 logger.error("error reading Fasta file: ", ex);
+                MainView.getInstance().addErrorMessage("Unable to read peptides from fasta file: " + ex.getMessage());
             } finally {
+
                 try {
-                    inStream.close();
+                    if(in != null)
+                        in.close();
                 } catch (IOException ex) {
                     logger.error("could not close stream");
                 }
+
             }
         }
 
