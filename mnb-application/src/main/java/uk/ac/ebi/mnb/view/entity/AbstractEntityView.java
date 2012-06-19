@@ -34,6 +34,8 @@ import uk.ac.ebi.mnb.main.MainView;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import java.awt.*;
 
@@ -55,10 +57,10 @@ public class AbstractEntityView
     private JLabel label = LabelFactory.emptyLabel(); // avoid null pointers
 
     public AbstractEntityView(String name,
-                              AbstractEntityTable entityTable,
-                              AbstractEntityInspector inspector) {
+                              final AbstractEntityTable table,
+                              final AbstractEntityInspector inspector) {
 
-        this.table = entityTable;
+        this.table = table;
         this.inspector = inspector;
         setName(name);
         setOrientation(JSplitPane.VERTICAL_SPLIT);
@@ -68,19 +70,27 @@ public class AbstractEntityView
         add(tablePane, JSplitPane.TOP);
         add(this.inspector, JSplitPane.BOTTOM);
         setBorders();
-        inspector.setTable(entityTable);
-        entityTable.getSelectionModel().addListSelectionListener(inspector);
+        inspector.setTable(table);
         setDividerLocation(350);
 
 
         // action listener changes text on the bottom-bar
-        entityTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent e) {
-                label.setText(table.getSelectedRowCount() + " of " + table.getRowCount() + " " + getName() + " selected");
+                label.setText(AbstractEntityView.this.table.getSelectedRowCount() + " of " + AbstractEntityView.this.table.getRowCount() + " " + getName() + " selected");
                 label.repaint();
                 // set updater for context
                 MainView.getInstance().getJMenuBar().updateContext();
+            }
+        });
+
+        // update inspector on selection and data change
+        table.getSelectionModel().addListSelectionListener(inspector);
+        table.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                inspector.update();
             }
         });
 
