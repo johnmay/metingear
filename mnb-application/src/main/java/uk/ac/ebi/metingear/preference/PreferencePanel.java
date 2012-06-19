@@ -160,7 +160,12 @@ public class PreferencePanel extends JPanel {
                                                                new AbstractAction() {
                                                                    @Override
                                                                    public void actionPerformed(ActionEvent e) {
-                                                                       int choice = JOptionPane.showConfirmDialog(window, "You must restart Metingear before changes take effect");
+                                                                       int choice = JOptionPane.showConfirmDialog(window,
+                                                                                                                  "<html>You have changed the storage location of services and you must <br/> " +
+                                                                                                                          "restart Metingear before updating any service data.<br/><br/>" +
+                                                                                                                          "Would you like to restart now? <br/>" +
+                                                                                                                          "If you wish to continue editing, please select 'No'." +
+                                                                                                                          "</html>", "Restart Required", JOptionPane.YES_NO_OPTION);
                                                                        if (choice == JOptionPane.OK_OPTION) {
                                                                            try {
                                                                                Main.relaunch();
@@ -211,14 +216,14 @@ public class PreferencePanel extends JPanel {
 
     class MyListRenderer extends JLabel implements ListCellRenderer {
 
-        private JPanel unselected = new JPanel(new FormLayout("p:grow, center:p, 20px", "p:grow, center:p, p:grow"));
-        private JLabel label = new JLabel();
-        private CellConstraints cc = new CellConstraints();
+        private JPanel          unselected = new JPanel(new FormLayout("p:grow, center:p, 20px", "p:grow, center:p, p:grow"));
+        private JLabel          label      = new JLabel();
+        private CellConstraints cc         = new CellConstraints();
 
-        Color topLineColor = new Color(0x4580c8);
-        Color topColor = new Color(0x5d94d6);
-        Color bottomColor = new Color(0x1956ad);
-        GradientWithBorderPainter painter = new GradientWithBorderPainter(topLineColor, bottomColor, topColor, bottomColor);
+        Color                     topLineColor = new Color(0x4580c8);
+        Color                     topColor     = new Color(0x5d94d6);
+        Color                     bottomColor  = new Color(0x1956ad);
+        GradientWithBorderPainter painter      = new GradientWithBorderPainter(topLineColor, bottomColor, topColor, bottomColor);
 
         private JPanel selected = new JPanel(new FormLayout("p:grow, center:p, 20px", "p:grow, center:p, p:grow")) {
             @Override
