@@ -301,11 +301,6 @@ public abstract class AbstractEntityPanel
      */
     public boolean setEntity(AnnotatedEntity entity) {
 
-
-        if (this.entity == entity) { // don't reset
-            return false;
-        }
-
         this.entity = entity;
 
         annotationTable.setEntity(entity);
