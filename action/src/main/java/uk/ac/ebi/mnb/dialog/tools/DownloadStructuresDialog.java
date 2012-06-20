@@ -32,7 +32,6 @@ import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
-import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
@@ -48,7 +47,12 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
-import java.util.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -63,17 +67,16 @@ public class DownloadStructuresDialog
 
     private static final Logger LOGGER = Logger.getLogger(DownloadStructuresDialog.class);
 
-    private Collection<AnnotatedEntity> components;
 
     private JLabel allowWebServiceLabel = LabelFactory.newFormLabel("Allow Web services:",
                                                                     "Indicate you want to allow the use of web services to download" +
                                                                             " structures. Web services will dramatically reduce the speed and should" +
                                                                             " only be used for small numbers of entries");
-    private JLabel fetchAllLabel = LabelFactory.newFormLabel("Greedy mode:",
-                                                             "Retrieve all structures for all cross-references - structures can be filtered post download");
+    private JLabel fetchAllLabel        = LabelFactory.newFormLabel("Greedy mode:",
+                                                                    "Retrieve all structures for all cross-references - structures can be filtered post download");
 
     private JCheckBox fetchAll = CheckBoxFactory.newCheckBox("");
-    private JCheckBox allowWebService = CheckBoxFactory.newCheckBox("");
+    private JCheckBox ws       = CheckBoxFactory.newCheckBox("");
 
     private ResourceList resourceSelection = new ResourceList();
 
@@ -89,6 +92,13 @@ public class DownloadStructuresDialog
         resourceSelection.setBackground(getBackground());
         resourceSelection.setForeground(LabelFactory.newFormLabel("").getForeground());
         resourceSelection.setVisibleRowCount(6);
+
+        ws.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                updateResourceList();
+            }
+        });
 
         setDefaultLayout();
 
@@ -111,7 +121,7 @@ public class DownloadStructuresDialog
 
 
         panel.add(allowWebServiceLabel, cc.xy(1, 1));
-        panel.add(allowWebService, cc.xy(3, 1));
+        panel.add(ws, cc.xy(3, 1));
         panel.add(fetchAllLabel, cc.xy(1, 3));
         panel.add(fetchAll, cc.xy(3, 3));
 
@@ -125,35 +135,7 @@ public class DownloadStructuresDialog
     @Override
     public void setVisible(boolean b) {
         if (b) {
-
-            ServiceManager services = DefaultServiceManager.getInstance();
-            Set<Identifier> available = new HashSet<Identifier>(services.getIdentifiers(StructureService.class));
-
-            Set<Identifier> accept = new HashSet<Identifier>();
-
-            long st = System.currentTimeMillis();
-            resourceSelection.getModel().removeAllElements();
-            // set up the resources
-            for (Metabolite metabolite : getSelection().get(Metabolite.class)) {
-                for (CrossReference xref : metabolite.getAnnotationsExtending(CrossReference.class)) {
-                    for (Identifier identifier : available) {
-                        if (xref.getIdentifier().getClass().equals(identifier.getClass())) {
-                            resourceSelection.addElement(identifier);
-                            accept.add(identifier);
-                            break;
-                        }
-                    }
-                    available.removeAll(accept);
-                }
-            }
-            long end = System.currentTimeMillis();
-
-            if (resourceSelection.getElements().size() > 1)
-                resourceSelection.setSelectedIndex(0);
-
-            // make sure we re-pack
-            pack();
-
+            updateResourceList();
         }
         super.setVisible(b);
     }
@@ -234,7 +216,7 @@ public class DownloadStructuresDialog
 
     public boolean canUse(QueryService service) {
         QueryService.ServiceType type = service.getServiceType();
-        return allowWebService.isSelected()
+        return ws.isSelected()
                 || !type.equals(QueryService.ServiceType.SOAP_WEB_SERVICE)
                 && !type.equals(QueryService.ServiceType.REST_WEB_SERVICE);
     }
@@ -247,6 +229,44 @@ public class DownloadStructuresDialog
         DefaultReconstructionManager.getInstance().getActive().getReactome().rebuildMaps();
 
         return update(getSelection());
+
+    }
+
+    private void updateResourceList() {
+
+        ServiceManager services = DefaultServiceManager.getInstance();
+        Set<Identifier> available = new HashSet<Identifier>();
+
+        for (Identifier id : services.getIdentifiers(StructureService.class)) {
+            if (services.hasService(id, StructureService.class) &&
+                    canUse(services.getService(id, StructureService.class))) {
+                available.add(id);
+            }
+        }
+
+        Set<Identifier> accept = new HashSet<Identifier>();
+
+        long st = System.currentTimeMillis();
+        resourceSelection.getModel().removeAllElements();
+        // set up the resources
+        for (Metabolite metabolite : getSelection().get(Metabolite.class)) {
+            for (CrossReference xref : metabolite.getAnnotationsExtending(CrossReference.class)) {
+                for (Identifier identifier : available) {
+                    if (xref.getIdentifier().getClass().equals(identifier.getClass())) {
+                        resourceSelection.addElement(identifier);
+                        accept.add(identifier);
+                        break;
+                    }
+                }
+                available.removeAll(accept);
+            }
+        }
+        long end = System.currentTimeMillis();
+
+        if (resourceSelection.getElements().size() > 1)
+            resourceSelection.setSelectedIndex(0);
+
+        pack();
 
     }
 

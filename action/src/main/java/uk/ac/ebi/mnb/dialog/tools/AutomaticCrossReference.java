@@ -48,6 +48,8 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -66,10 +68,6 @@ public class AutomaticCrossReference
 
     private static final Logger LOGGER = Logger.getLogger(AutomaticCrossReference.class);
 
-    private JCheckBox chebi = CheckBoxFactory.newCheckBox("ChEBI");
-
-    private JCheckBox kegg = CheckBoxFactory.newCheckBox("KEGG Compound");
-    private JCheckBox hmdb = CheckBoxFactory.newCheckBox("HMDB");
 
     private JLabel    wsLabel     = LabelFactory.newFormLabel("Allow Web services:", "Dramatic performance reduction on large data-sets");
     private JLabel    greedyLabel = LabelFactory.newFormLabel("Greedy Mode:",
@@ -100,6 +98,13 @@ public class AutomaticCrossReference
         resourceSelection.setVisibleRowCount(6);
 
         setDefaultLayout();
+
+        ws.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                updateResourceList();
+            }
+        });
 
 
     }
@@ -144,17 +149,7 @@ public class AutomaticCrossReference
     @Override
     public void setVisible(boolean b) {
         if (b) {
-
-            // should be in a setup() method
-            resourceSelection.getModel().clear();
-            ServiceManager services = DefaultServiceManager.getInstance();
-            for (Identifier identifier : services.getIdentifiers(NameService.class)) {
-                // check it's actually available
-                if (services.hasService(identifier, NameService.class))
-                    resourceSelection.addElement(identifier);
-            }
-            resourceSelection.setSelectedIndex(0);
-            pack();
+            updateResourceList();
         }
         super.setVisible(b);
 
@@ -227,8 +222,30 @@ public class AutomaticCrossReference
                 && !type.equals(QueryService.ServiceType.REST_WEB_SERVICE);
     }
 
+
+    private void updateResourceList() {
+        // should be in a setup() method
+        resourceSelection.getModel().clear();
+        ServiceManager services = DefaultServiceManager.getInstance();
+        for (Identifier identifier : services.getIdentifiers(NameService.class)) {
+            // check it's actually available
+            if (services.hasService(identifier, NameService.class)) {
+                if (canUse(services.getService(identifier, NameService.class))) {
+                    resourceSelection.addElement(identifier);
+                }
+            }
+        }
+        if (resourceSelection.getElements().size() > 1)
+            resourceSelection.setSelectedIndex(0);
+
+        pack();
+
+    }
+
     @Override
     public boolean update() {
         return update(getSelection());
     }
+
+
 }
