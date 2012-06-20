@@ -1,9 +1,12 @@
 package uk.ac.ebi.metingear.launch;
 
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -18,11 +21,20 @@ import java.util.Properties;
  */
 public class ApplicationLauncher implements Runnable {
 
-    public ApplicationLauncher(){
+    public ApplicationLauncher() {
 
+        // configure loader
         try {
             Properties properties = new Properties();
             properties.load(getClass().getResourceAsStream("/config/metingeer-log.properties"));
+            for (Object key : properties.keySet()) {
+                String value = properties.getProperty(key.toString());
+                if (value != null && value.contains("<os.app.data>")) {
+                    properties.put(key,
+                                   value.replaceAll("<os.app.data>",
+                                                    FilePreference.OS_APP_DATA_PATH));
+                }
+            }
             PropertyConfigurator.configure(properties);
         } catch (IOException ex) {
             System.err.println("Unable to load logging configuration file");
