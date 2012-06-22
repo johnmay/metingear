@@ -105,7 +105,7 @@ public class PopupDialog extends JDialog {
         WindowUtils.makeWindowNonOpaque(this);
 
         //getRootPane().setOpaque(false);
-        //getRootPane().setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
+        getRootPane().setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
         panel.setOpaque(false);
         background.setLayout(new FormLayout("8px, 16px, p, 16px, 8px", "8px, 16px, p, 16px, 8px"));
         CellConstraints cc = new CellConstraints();
