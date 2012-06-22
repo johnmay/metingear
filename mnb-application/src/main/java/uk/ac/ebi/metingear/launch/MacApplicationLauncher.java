@@ -17,7 +17,7 @@ public class MacApplicationLauncher extends ApplicationLauncher {
 
     PreferenceFrame preferences;
 
-    public MacApplicationLauncher(){
+    public MacApplicationLauncher() {
 
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Metingeer");
@@ -48,4 +48,8 @@ public class MacApplicationLauncher extends ApplicationLauncher {
 
     }
 
+    @Override
+    public void loadLookAndFeel() {
+        // do nothing default looks good
+    }
 }

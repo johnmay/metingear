@@ -1,6 +1,5 @@
 package uk.ac.ebi.metingear.launch;
 
-import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.mnb.main.MainView;
@@ -42,8 +41,27 @@ public class ApplicationLauncher implements Runnable {
 
     }
 
+    public void loadLookAndFeel() {
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                System.err.println("Could not set look at feel");
+            }
+        }
+    }
+
     @Override
     public void run() {
+
+        loadLookAndFeel();
 
         MainView view = MainView.getInstance();
         view.setJMenuBar(new MainMenuBar());
