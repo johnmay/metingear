@@ -21,6 +21,8 @@ import com.explodingpixels.macwidgets.HudWidgetFactory;
 import com.explodingpixels.macwidgets.TriAreaComponent;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
+import uk.ac.ebi.caf.action.DelayedBuildAction;
+import uk.ac.ebi.mnb.dialog.edit.AddAnnotation;
 import uk.ac.ebi.mnb.main.MainView;
 
 import javax.swing.*;
@@ -33,20 +35,21 @@ import java.awt.event.ActionListener;
  * InspectorToolbar.java – MetabolicDevelopmentKit – Jun 6,
  * Transient panel with a CardLayout to switch between the Viewing and Editing states of the
  * inspector entry.
+ *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
 public class InspectorToolbar
-  extends JPanel {
+        extends JPanel {
 
-    private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-      InspectorToolbar.class);
-    private CardLayout layout = new CardLayout();
+    private static final org.apache.log4j.Logger logger          =
+            org.apache.log4j.Logger.getLogger(
+                    InspectorToolbar.class);
+    private              CardLayout              layout          = new CardLayout();
     // edit panel when editing an entry, view panel when view an entry
-    private TriAreaComponent editPanel = new TriAreaComponent();
-    private TriAreaComponent viewPanel = new TriAreaComponent();
-    private String EDIT_PANEL_NAME = "Edit";
-    private String VIEW_PANEL_NAME = "View";
+    private              TriAreaComponent        editPanel       = new TriAreaComponent();
+    private              TriAreaComponent        viewPanel       = new TriAreaComponent();
+    private              String                  EDIT_PANEL_NAME = "Edit";
+    private              String                  VIEW_PANEL_NAME = "View";
     private AbstractEntityInspector inspector;
 
 
@@ -57,7 +60,7 @@ public class InspectorToolbar
         setUpEditPanel();
         add(editPanel.getComponent(), EDIT_PANEL_NAME);
         add(viewPanel.getComponent(), VIEW_PANEL_NAME);
-        setBackground(new Color(36,36,36));
+        setBackground(new Color(36, 36, 36));
         setBorder(Borders.DLU2_BORDER);
         setViewMode();
     }
@@ -70,8 +73,33 @@ public class InspectorToolbar
         JButton saveButton = HudWidgetFactory.createHudButton("Save");
         //editPanel.setLayout( new FormLayout( "right:p, p:grow , center:p, p:grow, left:p" , "pref" ) );
         CellConstraints cc = new CellConstraints();
-        editPanel.addComponentToCenter(HudWidgetFactory.createHudButton("Add Annotation"), 4);
-        editPanel.addComponentToCenter(HudWidgetFactory.createHudButton("Add Reaction"), 4);
+        JButton addAnnotation = HudWidgetFactory.createHudButton("Add Annotation");
+        addAnnotation.setAction(new DelayedBuildAction("") {
+
+            private AddAnnotation dialog;
+
+            @Override
+            public void buildComponents() {
+                // we could pass main view but it's a bit of a pain to add this on inspector
+                // constructor
+                dialog = new AddAnnotation(MainView.getInstance(),
+                                           MainView.getInstance(),
+                                           MainView.getInstance().getMessageManager(),
+                                           MainView.getInstance().getViewController(),
+                                           MainView.getInstance().getUndoManager());
+            }
+
+            @Override
+            public void activateActions() {
+                dialog.getSelection().add(inspector.getEntity());
+                dialog.setVisible(true);
+            }
+        });
+        addAnnotation.setText("Add Annotation");
+        addAnnotation.setToolTipText("Add an annotation to this entity");
+
+        editPanel.addComponentToCenter(addAnnotation, 4);
+
         editPanel.addComponentToRight(discardButton, 4);
         editPanel.addComponentToRight(saveButton, 4);
         discardButton.addActionListener(new ActionListener() {
@@ -118,8 +146,8 @@ public class InspectorToolbar
 
         });
         viewPanel.addComponentToRight(editButton);
-        viewPanel.addComponentToLeft(HudWidgetFactory.createHudButton("Export TSV"), 4);
-        viewPanel.addComponentToLeft(HudWidgetFactory.createHudButton("Export SBML"), 4);
+        //viewPanel.addComponentToLeft(HudWidgetFactory.createHudButton("Export TSV"), 4);
+        //viewPanel.addComponentToLeft(HudWidgetFactory.createHudButton("Export SBML"), 4);
 
     }
 

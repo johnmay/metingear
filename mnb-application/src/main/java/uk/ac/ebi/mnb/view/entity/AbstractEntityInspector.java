@@ -24,6 +24,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.BorderlessScrollPane;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
@@ -159,6 +160,10 @@ public abstract class AbstractEntityInspector
     @Override
     public EntityCollection getSelection() {
         return table.getSelection();
+    }
+
+    public AnnotatedEntity getEntity(){
+        return entity;
     }
 
     public void clear() {
