@@ -4,17 +4,17 @@
  * 2011.12.13
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,11 +41,12 @@ import java.net.URISyntaxException;
 
 
 /**
- *          AnnotationTable - 2011.12.13 <br>
- *          Class description
+ * AnnotationTable - 2011.12.13 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class AnnotationTable
         extends JTable {
@@ -72,7 +73,7 @@ public class AnnotationTable
         ANNOTATION_RENDERER.setRenderer(AtomContainerAnnotation.class, new ChemicalStructureRenderer());
         ANNOTATION_RENDERER.setRenderer(MolecularFormula.class, new FormulaCellRender());
         ANNOTATION_RENDERER.setRenderer(Action.class, new ActionButtonCellRenderer(SwingConstants.LEFT));
-        
+
         setCellSelectionEnabled(false);
         setIntercellSpacing(new Dimension(4, 4));
         model.getColumn(1).setCellRenderer(ANNOTATION_RENDERER);
@@ -88,9 +89,11 @@ public class AnnotationTable
         model.getColumn(3).setCellRenderer(CONTROL_RENDERER);
         model.getColumn(3).setPreferredWidth(64);
 
-
-
         addMouseListener(new ActionClickForwarder(this));
+
+        setBackground(Color.WHITE);
+
+
     }
 
 
@@ -103,7 +106,7 @@ public class AnnotationTable
         this.editable = editable;
         getModel().setEditable(editable);
         deleteButtonRenderer.setVisible(editable);
-        if(!editable){
+        if (!editable) {
             AnnotationEditorFactory.getInstance().getTableCellEditor().cancelCellEditing();
         }
     }
@@ -137,13 +140,13 @@ public class AnnotationTable
         @Override
         public void mouseClicked(MouseEvent me) {
             int column = table.getColumnModel().getColumnIndexAtX(me.getX());
-            int row    = table.rowAtPoint(me.getPoint());
+            int row = table.rowAtPoint(me.getPoint());
 
             if (row < table.getRowCount() && row >= 0 && column < table.getColumnCount() && column >= 0) {
                 Object value = table.getValueAt(row, column);
                 if (value instanceof Action) {
                     ((Action) value).actionPerformed(new ActionEvent(me.getSource(), me.getID(), me.paramString()));
-                } else if(!editable && value instanceof CrossReference){
+                } else if (!editable && value instanceof CrossReference) {
                     openCrossReferenceLink((CrossReference) value);
                 }
             }
@@ -160,7 +163,7 @@ public class AnnotationTable
         }
     }
 
-    public void store(){
+    public void store() {
         AnnotationEditorFactory.getInstance().getTableCellEditor().stopCellEditing();
     }
 

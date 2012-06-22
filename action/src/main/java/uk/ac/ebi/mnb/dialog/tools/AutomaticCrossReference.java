@@ -121,7 +121,7 @@ public class AutomaticCrossReference
     @Override
     public JPanel getForm() {
 
-        JPanel form = PanelFactory.createDialogPanel();
+        JPanel form = super.getForm();
 
         CellConstraints cc = new CellConstraints();
 

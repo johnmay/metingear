@@ -15,7 +15,6 @@ import java.awt.event.MouseEvent;
 /**
  * ActionLabel.java
  *
- *
  * @author johnmay
  * @date May 9, 2011
  */
@@ -26,13 +25,19 @@ public class ActionLabel
             org.apache.log4j.Logger.getLogger(ActionLabel.class);
 
     public ActionLabel(String text,
-            AbstractAction action) {
+                       AbstractAction action) {
         super(action);
-        setBorder(Borders.EMPTY_BORDER);
         setText(text);
         setToolTipText(text);
         setFont(ThemeManager.getInstance().getTheme().getLinkFont());
         setForeground(ThemeManager.getInstance().getTheme().getForeground());
+
+        setBorderPainted(false);
+        setFocusPainted(false);
+        setContentAreaFilled(false);
+        setBorder(Borders.EMPTY_BORDER);
+        setMargin(new Insets(0, 0, 0, 0));
+
         addMouseListener(new FontHover());
     }
 

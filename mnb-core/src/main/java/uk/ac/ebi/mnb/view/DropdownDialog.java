@@ -41,8 +41,6 @@ public abstract class DropdownDialog
 
     private JButton active;
 
-    private Theme theme = ThemeManager.getInstance().getTheme();
-
     private Paint paint = new GradientPaint(0, 0, getBackground().darker(), 0, 10, getBackground());
 
     private CellConstraints cc = new CellConstraints();
@@ -123,6 +121,7 @@ public abstract class DropdownDialog
      */
     public JPanel getForm() {
         JPanel form = PanelFactory.createDialogPanel();
+        form.setBackground(getBackground());
         return form;
     }
 
@@ -131,6 +130,8 @@ public abstract class DropdownDialog
 
         JPanel navigation = PanelFactory.createDialogPanel("p:grow, right:min, 4dlu ,right:min",
                                                            "min");
+
+        navigation.setBackground(getBackground());
 
         navigation.add(getClose(), cc.xy(2, 1));
         navigation.add(getActivate(), cc.xy(4, 1));
