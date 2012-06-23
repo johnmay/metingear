@@ -70,10 +70,10 @@ public class ViewInfo {
 
         controller.setViewSelector(this);
 
-        genes.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/gen-selected.png"));
-        products.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/pro-selected.png"));
-        metabolites.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/met-selected.png"));
-        reactions.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/rxn-selected.png"));
+        genes.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/metingear/view/gen-selected.png"));
+        products.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/metingear/view/pro-selected.png"));
+        metabolites.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/metingear/view/met-selected.png"));
+        reactions.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/metingear/view/rxn-selected.png"));
 
         genes.putClientProperty("JButton.buttonType", "segmentedTextured");
         genes.putClientProperty("JButton.segmentPosition", "first");
