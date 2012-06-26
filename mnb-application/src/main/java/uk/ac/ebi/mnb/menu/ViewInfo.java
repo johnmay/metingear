@@ -4,17 +4,17 @@
  * 2011.11.01
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -37,11 +37,12 @@ import java.util.Map;
 
 
 /**
- *          ViewSelector - 2011.11.01 <br>
- *          Class description
+ * ViewSelector - 2011.11.01 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class ViewInfo {
 
@@ -61,7 +62,8 @@ public class ViewInfo {
 
     private BottomBar bottombar = new BottomBar(BottomBarSize.SMALL);
 
-    private JLabel info = LabelFactory.newLabel("");
+    private JLabel info      = LabelFactory.newLabel("");
+    private JLabel viewLabel = LabelFactory.newLabel("View");
 
 
     public ViewInfo(ProjectView controller) {
@@ -112,7 +114,7 @@ public class ViewInfo {
 
 
     public JComponent getButtonGroup() {
-        return new LabeledComponentGroup("View", genes, products, metabolites, reactions).getComponent();
+        return new LabeledComponentGroup(viewLabel, genes, products, metabolites, reactions).getComponent();
     }
 
 
@@ -127,6 +129,7 @@ public class ViewInfo {
                 button.setSelected(false);
             }
             buttonMap.get(c).setSelected(true);
+            viewLabel.setText(((EntityViewInfo) buttonMap.get(c).getAction()).getViewLabel());
             info.setText("");
             info.repaint();
         }
@@ -134,57 +137,76 @@ public class ViewInfo {
 
 
     private class ViewGenes
-            extends GeneralAction {
+            extends EntityViewInfo {
 
         public ViewGenes() {
-            super("ViewGenes");
+            super("ViewGenes", "Genes");
         }
 
 
         public void actionPerformed(ActionEvent e) {
             controller.setGeneView();
+            viewLabel.setText(getViewLabel());
         }
     }
 
 
     private class ViewProducts
-            extends GeneralAction {
+            extends EntityViewInfo {
 
         public ViewProducts() {
-            super("ViewProducts");
+            super("ViewProducts", "Gene Products");
         }
 
 
         public void actionPerformed(ActionEvent e) {
             controller.setProductView();
+            viewLabel.setText(getViewLabel());
         }
     }
 
 
     private class ViewMetabolites
-            extends GeneralAction {
+            extends EntityViewInfo {
 
         public ViewMetabolites() {
-            super("ViewMetabolites");
+            super("ViewMetabolites", "Metabolites");
         }
 
 
         public void actionPerformed(ActionEvent e) {
             controller.setMetaboliteView();
+            viewLabel.setText(getViewLabel());
         }
     }
 
 
     private class ViewReactions
-            extends GeneralAction {
+            extends EntityViewInfo {
 
         public ViewReactions() {
-            super("ViewReactions");
+            super("ViewReactions", "Reactions");
         }
 
 
         public void actionPerformed(ActionEvent e) {
             controller.setReactionView();
+            viewLabel.setText(getViewLabel());
         }
     }
+
+    private abstract class EntityViewInfo extends GeneralAction {
+
+        private String viewLabel;
+
+        private EntityViewInfo(String command, String viewLabel) {
+            super(command);
+            this.viewLabel = viewLabel;
+        }
+
+        public String getViewLabel() {
+            return viewLabel;
+        }
+    }
+
 }

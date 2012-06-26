@@ -19,9 +19,7 @@ package uk.ac.ebi.mnb.view.source;
 import com.explodingpixels.macwidgets.*;
 import com.explodingpixels.widgets.PopupMenuCustomizer;
 import uk.ac.ebi.chemet.render.source.*;
-import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
-import uk.ac.ebi.mdk.domain.entity.Reconstruction;
-import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
+import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
@@ -80,6 +78,7 @@ public class SourceController
 
     private Map<AnnotatedEntity, EntitySourceItem> itemMap = new HashMap();
 
+    private SourceList source;
 
     public SourceController() {
 
@@ -107,6 +106,36 @@ public class SourceController
         model.addCategory(collections);
     }
 
+    public void setSelected(Class<? extends Entity> c) {
+        if (Metabolite.class.isAssignableFrom(c)) {
+            setSelected(metabolites);
+        } else if (Reaction.class.isAssignableFrom(c)) {
+            setSelected(reactions);
+        } else if (GeneProduct.class.isAssignableFrom(c)) {
+            setSelected(products);
+        } else if (Gene.class.isAssignableFrom(c)) {
+            setSelected(genes);
+        }
+    }
+
+    public void setSelected(SourceListItem item) {
+        // check the item isn't currently selected
+        if (!isSelected(item)) {
+            source.setSelectedItem(item);
+        }
+    }
+
+    public boolean isSelected(SourceListItem item) {
+        if (source == null) {
+            return false;
+        }
+        return item.equals(source.getSelectedItem());
+    }
+
+
+    public void setSource(SourceList source) {
+        this.source = source;
+    }
 
     public void cleanModel() {
 
@@ -277,6 +306,7 @@ public class SourceController
                 System.out.println("Unhandled item clicked: " + item.getText());
             }
         }
+
     }
 
 

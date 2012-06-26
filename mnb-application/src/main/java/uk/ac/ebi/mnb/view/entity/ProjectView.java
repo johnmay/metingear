@@ -33,6 +33,7 @@ import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
 import uk.ac.ebi.mnb.view.entity.protein.ProductView;
 import uk.ac.ebi.mnb.view.entity.reaction.ReactionView;
 import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
+import uk.ac.ebi.mnb.view.source.SourceController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,8 +82,11 @@ public class ProjectView
 
     private EntityCollection selection = new EntityMap(factory);
 
+    private SourceController controller;
 
     public ProjectView() {
+
+        this.controller = controller;
 
         products = new ProductView();
         reactions = new ReactionView();
@@ -125,9 +129,16 @@ public class ProjectView
      * @param selector
      */
     public void setViewSelector(ViewInfo selector) {
+        if (selector == null)
+            throw new NullPointerException("ViewInfo should not be null");
         this.selector = selector;
     }
 
+    public void setSourceController(SourceController controller) {
+        if (controller == null)
+            throw new NullPointerException("SourceController should not be null");
+        this.controller = controller;
+    }
 
     /**
      * Returns the currently active view
@@ -150,7 +161,10 @@ public class ProjectView
 
     public void setView(Class<? extends Entity> c) {
         layout.show(this, factory.getRootClass(c).getName());
-        selector.setSelected(c);
+        if (controller != null)
+            controller.setSelected(c);
+        if (selector != null)
+            selector.setSelected(c);
     }
 
 

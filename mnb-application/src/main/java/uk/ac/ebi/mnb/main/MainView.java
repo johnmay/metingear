@@ -215,6 +215,10 @@ public class MainView
         // source list (todo: wrap in a class MNBSourceList)
         sourceController = new SourceController();
         source = new SourceList(sourceController.model);
+        sourceController.setSource(source);
+        project.setSourceController(sourceController);
+
+
         WindowUtils.installJComponentRepainterOnWindowFocusChanged(source.getComponent());
         SourceListControlBar controlBar = new SourceListControlBar();
         controlBar.installDraggableWidgetOnSplitPane(pane);
