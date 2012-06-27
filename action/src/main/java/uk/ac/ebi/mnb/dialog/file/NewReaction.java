@@ -94,7 +94,7 @@ public class NewReaction extends NewEntity {
 
     @Override
     public Identifier getIdentifier() {
-        return new BasicReactionIdentifier();
+        return BasicReactionIdentifier.nextIdentifier();
     }
 
     @Override

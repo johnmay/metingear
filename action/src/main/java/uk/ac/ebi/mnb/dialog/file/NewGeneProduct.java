@@ -78,7 +78,7 @@ public class NewGeneProduct extends NewEntity {
 
     @Override
     public Identifier getIdentifier() {
-        return protein.isSelected() ? new BasicProteinIdentifier() : new BasicRNAIdentifier();
+        return protein.isSelected() ? BasicProteinIdentifier.nextIdentifier() : BasicRNAIdentifier.nextIdentifier();
     }
 
     @Override

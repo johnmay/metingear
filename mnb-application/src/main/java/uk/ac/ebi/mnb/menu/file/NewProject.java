@@ -12,13 +12,13 @@ import uk.ac.ebi.caf.component.SuggestionField;
 import uk.ac.ebi.caf.component.SuggestionHandler;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
 import uk.ac.ebi.mdk.service.query.taxonomy.TaxonomyQueryService;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.DropdownDialog;
-import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,15 +33,15 @@ import java.util.Collection;
  */
 public class NewProject extends DropdownDialog {
 
-    private static final org.apache.log4j.Logger logger =
+    private static final org.apache.log4j.Logger logger         =
             org.apache.log4j.Logger.getLogger(
                     NewProject.class);
-    private boolean fieldsAreValid = true;
-    private JTextField idField;
+    private              boolean                 fieldsAreValid = true;
+    private JTextField      idField;
     private SuggestionField codeField;
     private SuggestionField taxonField;
     private SuggestionField nameField;
-    private JTextField kingdomField;
+    private JTextField      kingdomField;
 
     private TaxonomyQueryService service = new TaxonomyQueryService();
 
@@ -98,7 +98,9 @@ public class NewProject extends DropdownDialog {
         taxonField = new SuggestionField(this, 5, new SuggestionHandler() {
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return service.startup() ? new ArrayList<Object>(service.searchTaxonomyIdentifier(QueryParser.escape(s), true)) : new ArrayList();
+                return service.startup()
+                       ? new ArrayList<Object>(service.searchTaxonomyIdentifier(QueryParser.escape(s), true))
+                       : new ArrayList();
             }
         }, handler);
         nameField = new SuggestionField(this, 35, new SuggestionHandler() {
@@ -119,7 +121,8 @@ public class NewProject extends DropdownDialog {
 
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return service.startup() ? new ArrayList<Object>(service.searchName(QueryParser.escape(s.trim()), true)) : new ArrayList();
+                return service.startup() ? new ArrayList<Object>(service.searchName(QueryParser.escape(s.trim()), true))
+                                         : new ArrayList();
             }
         }, handler);
         kingdomField = FieldFactory.newField(10);

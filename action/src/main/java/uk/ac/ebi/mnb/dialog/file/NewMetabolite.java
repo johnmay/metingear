@@ -62,7 +62,7 @@ public class NewMetabolite extends NewEntity {
 
     @Override
     public Identifier getIdentifier() {
-        return new BasicChemicalIdentifier();
+        return BasicChemicalIdentifier.nextIdentifier();
     }
 
     @Override
