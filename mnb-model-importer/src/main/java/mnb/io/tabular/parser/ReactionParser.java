@@ -23,25 +23,21 @@ package mnb.io.tabular.parser;
 import mnb.io.tabular.EntityResolver;
 import mnb.io.tabular.preparse.PreparsedReaction;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.report.Report;
+import uk.ac.ebi.mdk.domain.annotation.FluxLowerBound;
+import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
 import uk.ac.ebi.mdk.domain.annotation.Locus;
 import uk.ac.ebi.mdk.domain.annotation.Subsystem;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.Classification;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.mdk.domain.annotation.FluxLowerBound;
-import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
-import uk.ac.ebi.caf.report.Report;
-import uk.ac.ebi.mdk.domain.entity.reaction.ParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.reaction.*;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 import uk.ac.ebi.mdk.domain.identifier.classification.TransportClassificationNumber;
-import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
-import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
-import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
-import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
 import uk.ac.ebi.mnb.core.WarningMessage;
 
@@ -70,7 +66,7 @@ public class ReactionParser {
     public static final Pattern EQUATION_ADDITION = Pattern.compile("\\s+[+]\\s+");
 
     private static final Pattern REACTION_COMPARTMENT =
-            Pattern.compile("\\A\\[(\\w{1,2})\\]\\s*:");
+            Pattern.compile("\\A\\[([\\w\\s]+)\\]\\s*:");
 
     public static final Pattern DOUBLE_PATTERN =
             Pattern.compile("([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?)");
@@ -79,12 +75,12 @@ public class ReactionParser {
             Pattern.compile("\\A" + DOUBLE_PATTERN.pattern() + "\\s+" + "|\\(" + DOUBLE_PATTERN.pattern() + "\\)");
 
     public static final Pattern COMPARTMENT_PATTERN =
-            Pattern.compile("[\\(\\[](\\w{1,2})[\\)\\]]");
+            Pattern.compile("[\\(\\[]([\\w\\s]+)[\\)\\]]\\s*\\z");
 
     private static final Direction[] NORMALISED_ARROWS =
             new Direction[]{Direction.BIDIRECTIONAL,
-                    Direction.BACKWARD,
-                    Direction.FORWARD};
+                            Direction.BACKWARD,
+                            Direction.FORWARD};
 
     private EntityResolver entites;
     private EntityFactory factory = DefaultEntityFactory.getInstance();
@@ -104,7 +100,7 @@ public class ReactionParser {
     }
 
 
-    public ReactionParser(EntityResolver entityResolver,CompartmentResolver resolver ) {
+    public ReactionParser(EntityResolver entityResolver, CompartmentResolver resolver) {
         entites = entityResolver;
         this.resolver = resolver;
     }
@@ -205,7 +201,8 @@ public class ReactionParser {
 
         MetabolicReaction rxn = factory.ofClass(MetabolicReaction.class, BasicReactionIdentifier.nextIdentifier(),
                                                 preparsed.hasValue(DESCRIPTION) ? preparsed.getValue(DESCRIPTION) : "",
-                                                preparsed.hasValue(ABBREVIATION) ? preparsed.getValue(ABBREVIATION) : "");
+                                                preparsed.hasValue(ABBREVIATION) ? preparsed.getValue(ABBREVIATION)
+                                                                                 : "");
 
         if (preparsed.hasValue(DIRECTION)) {
             rxn.setDirection(getReactionArrow(preparsed.getValue(DIRECTION)));
