@@ -135,6 +135,7 @@ public abstract class AbstractEntityTable
     }
 
     public void clear() {
+        getSelectionModel().clearSelection();
         getModel().clear();
     }
 }
