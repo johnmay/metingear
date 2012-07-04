@@ -36,7 +36,7 @@
 
     <!-- versions for some core libraries changing here will affect all child modules -->
     <properties>
-        <caf.version>0.8.5-SNAPSHOT</caf.version>
+        <caf.version>0.8.6-SNAPSHOT</caf.version>
         <mdk.version>1.3.2-SNAPSHOT</mdk.version>
         <cdk.version>1.4.10</cdk.version>
     </properties>
