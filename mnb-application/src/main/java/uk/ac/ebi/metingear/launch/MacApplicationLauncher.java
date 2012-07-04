@@ -20,7 +20,7 @@ public class MacApplicationLauncher extends ApplicationLauncher {
     public MacApplicationLauncher() {
 
         System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Metingeer");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Metingear");
         // Set the doc image
 
         com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
