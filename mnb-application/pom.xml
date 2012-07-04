@@ -239,6 +239,9 @@
                         <manifest>
                             <mainClass>uk.ac.ebi.metingear.Main</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <SplashScreen-Image>uk/ac/ebi/metingear/splash.png</SplashScreen-Image>
+                        </manifestEntries>
                     </archive>
 
                     <descriptors>
@@ -309,6 +312,7 @@
                             <mainClass>uk.ac.ebi.metingear.Main</mainClass>
                             <iconFile>/Users/johnmay/EBI/illustration/mnb/icons/mnb.icns</iconFile>
                             <buildDirectory>/Users/johnmay/Applications/Metingear</buildDirectory>
+                            <dictionaryFile>${basedir}/src/main/resources/uk/ac/ebi/metingear/Info.plist</dictionaryFile>
                         </configuration>
                         <executions>
                             <execution>
