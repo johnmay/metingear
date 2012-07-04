@@ -41,7 +41,7 @@ public abstract class DropdownDialog
 
     private JButton active;
 
-    private Paint paint = new GradientPaint(0, 0, getBackground().darker(), 0, 10, getBackground());
+    private Paint paint;
 
     private CellConstraints cc = new CellConstraints();
 
@@ -66,6 +66,8 @@ public abstract class DropdownDialog
                 }
             });
         }
+
+        paint = new GradientPaint(0, 0, getBackground().darker(), 0, 10, getBackground());
 
     }
 
