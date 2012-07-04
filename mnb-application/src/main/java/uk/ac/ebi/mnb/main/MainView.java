@@ -23,6 +23,7 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.report.bar.MessageBar;
+import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
@@ -83,7 +84,7 @@ public class MainView
 
     private JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT); //TODO wrap
 
-    private ProjectView project = new ProjectView();
+    private ProjectView project;
 
     private ReportManager messages = new MessageBar();
 
@@ -110,17 +111,15 @@ public class MainView
 
         super("Metingear");
 
-        getContentPane().setLayout(new CardLayout());
+        project = new ProjectView();
 
-        // mac widgets
-        // getLayeredPane().getRootPane().setUI(new AquaRootPaneUI());
+        getContentPane().setLayout(new CardLayout());
 
         MacUtils.makeWindowLeopardStyle(getRootPane());
 
         // toolbar
         toolbar = new Toolbar();
         //  searchField.putClientProperty("JTextField.variant", "search"); // makes the search bar rounded
-
 
         ViewInfo selector = new ViewInfo(project);
         final JComponent spacer = MacWidgetFactory.createSpacer(205, 0);
@@ -231,6 +230,7 @@ public class MainView
         source.addSourceListSelectionListener(sourceController);
         source.addSourceListClickListener(sourceController);
         source.setColorScheme(new SourceListSeaGlassColorScheme());
+
         // setup the pane
         pane.add(project, JSplitPane.RIGHT);
         pane.setContinuousLayout(true);
