@@ -174,7 +174,7 @@ public class NewReaction extends NewEntity {
                 String text = e.getDocument().getText(0, e.getDocument().getLength());
 
 
-                if (input.matches("\\[")) {
+                if (input.equals("[")) {
 
                     List<Object> suggestions = new ArrayList<Object>();
 
