@@ -18,7 +18,12 @@
         <module>mnb-edit</module>
         <module>mnb-interfaces</module>
         <module>action</module>
+
+        <!-- core extension module, should be moved-->
         <module>extension</module>
+
+        <module>extensions</module>
+
     </modules>
 
     <licenses>
