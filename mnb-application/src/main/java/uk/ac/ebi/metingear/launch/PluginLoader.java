@@ -17,9 +17,9 @@ public class PluginLoader {
 
 
     private ServiceLoader<PlugableDialog> loader;
-    private MainView view;
-    private MainMenuBar menu;
-    private DialogLauncherFactory factory;
+    private MainView                      view;
+    private MainMenuBar                   menu;
+    private DialogLauncherFactory         factory;
 
     public PluginLoader(MainView view, MainMenuBar menu) {
         this.view = view;
@@ -34,10 +34,11 @@ public class PluginLoader {
     }
 
     public void load() {
-        System.out.println("Loading Extensions:");
+        System.out.println("[PLUGIN] Loading Extensions from META-INF/services");
         Iterator<PlugableDialog> plugin = loader.iterator();
         while (plugin.hasNext()) {
-            System.out.println("\t-" + load(plugin.next()));
+            PlugableDialog plugableDialog = plugin.next();
+            System.out.println("[PLUGIN] " + load(plugableDialog) + " (" + plugableDialog.getClass() + ") loaded");
         }
     }
 
@@ -45,13 +46,16 @@ public class PluginLoader {
 
         JMenu menu = getMenu(plugin.getMenuPath().iterator());
 
+        AbstractAction action = factory.getLauncher(plugin.getDialogClass());
+
         if (menu instanceof ContextMenu) {
-            ((ContextMenu) menu).add(factory.getLauncher(plugin.getDialogClass()), plugin.getContext());
+            ((ContextMenu) menu).add(action, plugin.getContext());
         } else {
-            menu.add(factory.getLauncher(plugin.getDialogClass()));
+            menu.add(action);
         }
 
-        return plugin.getDialogClass().getSimpleName();
+        Object name = action.getValue(Action.NAME);
+        return name != null ? name.toString() : plugin.getDialogClass().getSimpleName();
 
     }
 
