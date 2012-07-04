@@ -4,7 +4,7 @@
     <parent>
         <artifactId>mnb</artifactId>
         <groupId>uk.ac.ebi.metingear</groupId>
-        <version>0.9.1-SNAPSHOT</version>
+        <version>0.9.2-SNAPSHOT</version>
     </parent>
     <artifactId>mnb-edit</artifactId>
     <packaging>jar</packaging>
