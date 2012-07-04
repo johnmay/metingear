@@ -191,13 +191,10 @@ public class NewReaction extends NewEntity {
 
                         String edit = text.substring(range[0], range[1]).trim();
 
-                        System.out.println(edit);
-
                         if (edit.contains("[") && !edit.contains("]")) {
                             // do long compartment name prediction
                             CompartmentResolver resolver = new PrefixCompartmentResolver();
                             edit = edit.substring(Math.min(edit.indexOf('[') + 1, edit.length() - 1), edit.length());
-                            System.out.println("Resolving compartment: " + edit);
                             List<Object> suggestions = new ArrayList<Object>();
                             for (Compartment compartment : resolver.getCompartments(edit)) {
                                 suggestions.add(text.substring(0, text.indexOf('[', range[0]) + 1) + compartment.getDescription() + "] ");
@@ -210,7 +207,6 @@ public class NewReaction extends NewEntity {
                         String searchableText =
                                 LUCENE_PATTERN.matcher(edit).replaceAll(REPLACEMENT_STRING);
 
-                        System.out.println("Search text: " + searchableText);
 
                         Query baseQuery = SearchManager.getInstance().getQuery(fields, searchableText + "*~");
 
