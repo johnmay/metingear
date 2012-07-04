@@ -45,7 +45,7 @@ public class CuratedReconciliation
 
     public CuratedReconciliation(MainController controller) {
         super(CuratedReconciliation.class.getSimpleName());
-
+        this.controller = controller;
     }
 
     @Override
