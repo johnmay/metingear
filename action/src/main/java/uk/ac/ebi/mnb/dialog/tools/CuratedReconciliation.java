@@ -17,6 +17,7 @@
 package uk.ac.ebi.mnb.dialog.tools;
 
 import mnb.io.resolve.CandidateSelector;
+import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
@@ -37,19 +38,25 @@ import java.awt.event.ActionEvent;
  * @version $Rev$ : Last Changed $Date$
  */
 public class CuratedReconciliation
-        extends ControllerAction {
+        extends DelayedBuildAction {
 
     private CandidateSelector dialog;
+    private MainController controller;
 
     public CuratedReconciliation(MainController controller) {
-        super(CuratedReconciliation.class.getSimpleName(), controller);
+        super(CuratedReconciliation.class.getSimpleName());
+
+    }
+
+    @Override
+    public void buildComponents() {
         dialog = new CandidateSelector((JFrame) controller, DefaultServiceManager.getInstance());
     }
 
+    @Override
+    public void activateActions() {
 
-    public void actionPerformed(ActionEvent e) {
-
-        EntityCollection manager = getSelection();
+        EntityCollection manager = controller.getViewController().getSelection();
 
         dialog.setSkipall(false); // reset the skip-all flag
 
@@ -58,7 +65,9 @@ public class CuratedReconciliation
             dialog.setVisible(true);
         }
 
-        super.update(manager);
+        controller.update(manager);
 
     }
+
+
 }
