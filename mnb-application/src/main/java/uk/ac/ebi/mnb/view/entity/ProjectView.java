@@ -86,14 +86,12 @@ public class ProjectView
 
     public ProjectView() {
 
-        this.controller = controller;
-
+        genes = new GeneView();
         products = new ProductView();
         reactions = new ReactionView();
         metabolites = new MetaboliteView();
         tasks = new TaskView();
         general = new GeneralView();
-        genes = new GeneView();
 
         layout = new CardLayout();
         setLayout(layout);
@@ -198,6 +196,13 @@ public class ProjectView
     }
 
 
+    public void clear() {
+        products.clear();
+        metabolites.clear();
+        reactions.clear();
+        genes.clear();
+    }
+
     /**
      * Updates all child views (products, metabolites, reactions and tasks) calling
      * {@see EntityView#update()}
@@ -208,10 +213,7 @@ public class ProjectView
         Reconstruction reconstruction = manager.getActive();
 
         if (reconstruction == null) {
-            products.clear();
-            metabolites.clear();
-            reactions.clear();
-            genes.clear();
+            clear();
             return false;
         }
 

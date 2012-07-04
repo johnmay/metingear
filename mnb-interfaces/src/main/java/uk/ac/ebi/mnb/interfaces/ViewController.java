@@ -40,4 +40,7 @@ public interface ViewController extends SelectionController {
 
 
     public void setView(Class<? extends Entity> c);
+
+    // clear all data from views
+    public void clear();
 }
