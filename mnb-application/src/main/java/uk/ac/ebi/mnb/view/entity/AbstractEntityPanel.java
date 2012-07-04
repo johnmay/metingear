@@ -159,9 +159,6 @@ public abstract class AbstractEntityPanel
             }
         });
 
-        annotationTable = new AnnotationTable();
-        annotationTable.getModel().setObservationList(observationList);
-
 
         OBSERVATION_CELL_RENDERER = new ClassBasedListCellDDR();
         OBSERVATION_CELL_RENDERER.setRenderer(LocalAlignment.class, new LocalAlignmentListCellRenderer());
@@ -175,6 +172,11 @@ public abstract class AbstractEntityPanel
 
     private AlignmentViewer alignmentView = new AlignmentViewer(MainView.getInstance(), 15);
 
+
+    private void createAnnotationTable() {
+        annotationTable = new AnnotationTable();
+        annotationTable.getModel().setObservationList(observationList);
+    }
 
     public void setup() {
 
@@ -220,6 +222,7 @@ public abstract class AbstractEntityPanel
         annLabel = LabelFactory.newVerticalFormLabel("Annotations",
                                                      VerticalLabelUI.Rotation.ANTICLOCKWISE);
         annBox.add(annLabel);
+        if (annotationTable == null) createAnnotationTable();
         annBox.add(annotationTable);
         annLabel.setAlignmentY(Component.TOP_ALIGNMENT);
         annotationTable.setAlignmentY(Component.TOP_ALIGNMENT);
