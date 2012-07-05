@@ -39,7 +39,9 @@ public abstract class AbstractControlDialog
     private IdentifierFactory identifiers;
     private AnnotationFactory annotationFactory;
 
-
+    public AbstractControlDialog(Window window) {
+        super(window);
+    }
 
     public void update() {
         updateManager.update();
@@ -47,11 +49,6 @@ public abstract class AbstractControlDialog
 
     public void update(EntityCollection entities) {
         updateManager.update(entities);
-    }
-
-
-    public AbstractControlDialog(Window window) {
-        super(window);
     }
 
     public UndoableEditListener getUndoManager() {
