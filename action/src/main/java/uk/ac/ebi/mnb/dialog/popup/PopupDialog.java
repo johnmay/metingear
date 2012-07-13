@@ -111,7 +111,7 @@ public class PopupDialog extends JDialog {
         JButton closeButton = ButtonFactory.newCleanButton(close, closeAction);
         closeButton.registerKeyboardAction(closeButton.getAction(),
                                            KeyStroke.getKeyStroke(
-                                                   ActionProperties.getInstance(getClass()).getProperty("CloseDialog.Action." + Action.ACCELERATOR_KEY)),
+                                                   ActionProperties.getInstance().getProperty("CloseDialog.Action." + Action.ACCELERATOR_KEY)),
                                            JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         background.add(closeButton, cc.xy(2, 2));

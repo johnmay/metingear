@@ -22,11 +22,11 @@ import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.metingear.search.SearchManager;
+import uk.ac.ebi.metingear.view.ViewToggle;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityView;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.main.MainView;
-import uk.ac.ebi.mnb.menu.ViewInfo;
 import uk.ac.ebi.mnb.view.entity.gene.GeneView;
 import uk.ac.ebi.mnb.view.entity.general.GeneralView;
 import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteView;
@@ -76,7 +76,7 @@ public class ProjectView
 
     private Map<Class<? extends Entity>, AbstractEntityView> viewMap;
 
-    private ViewInfo selector;
+    private ViewToggle selector;
 
     private EntityFactory factory = DefaultEntityFactory.getInstance();
 
@@ -126,9 +126,9 @@ public class ProjectView
      *
      * @param selector
      */
-    public void setViewSelector(ViewInfo selector) {
+    public void setViewSelector(ViewToggle selector) {
         if (selector == null)
-            throw new NullPointerException("ViewInfo should not be null");
+            throw new NullPointerException("ViewToggle should not be null");
         this.selector = selector;
     }
 

@@ -2,10 +2,15 @@ package uk.ac.ebi.metingear.view;
 
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.action.ActionProperties;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.component.injection.AbstractComponentInjector;
+import uk.ac.ebi.caf.component.injection.Inject;
+import uk.ac.ebi.caf.component.injection.PropertyComponentInjector;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 
 import javax.swing.*;
@@ -27,12 +32,18 @@ public abstract class AbstractProcessingDialog
 
     private DialogController controller;
 
+    @Inject
     private JButton close;
+
+    @Inject
     private JButton okay;
 
-    private JLabel information;
+    @Inject
+    private JLabel     information;
     private JComponent form;
     private JComponent navigation;
+
+    private AbstractComponentInjector INJECTOR;
 
     private static final CellConstraints CELL_CONSTRAINTS = new CellConstraints();
 
@@ -47,6 +58,18 @@ public abstract class AbstractProcessingDialog
             }
         });
 
+    }
+
+    private final void inject() {
+        prepareInjector();
+        INJECTOR.inject(this);
+    }
+
+
+    private void prepareInjector() {
+        // inject from property component injector using action.properties
+        if (INJECTOR == null)
+            INJECTOR = new PropertyComponentInjector(ActionProperties.getInstance());
     }
 
     public void prepare() {
@@ -65,15 +88,17 @@ public abstract class AbstractProcessingDialog
 
         panel.add(getInformation(), CELL_CONSTRAINTS.xyw(1, 1, 3));
         panel.add(new JSeparator(), CELL_CONSTRAINTS.xyw(1, 3, 3));
-        panel.add(getForm(),        CELL_CONSTRAINTS.xy(2, 5));
+        panel.add(getForm(), CELL_CONSTRAINTS.xy(2, 5));
 
         // close and active buttons in the bottom right
-        panel.add(getNavigation(),  CELL_CONSTRAINTS.xyw(1, 7, 3));
+        panel.add(getNavigation(), CELL_CONSTRAINTS.xyw(1, 7, 3));
 
         getRootPane().setBorder(Borders.DLU7_BORDER);
         setContentPane(panel);
 
         getRootPane().setDefaultButton(getOkayButton());
+
+        inject();
 
     }
 
@@ -131,16 +156,16 @@ public abstract class AbstractProcessingDialog
     }
 
     public JComponent createForm() {
-        return PanelFactory.create();
+        return new JPanel();
     }
 
     public JComponent createNavigation() {
 
-        JPanel navigation = PanelFactory.createDialogPanel("p:grow, right:min, 4dlu ,right:min",
-                                                           "p");
+        JPanel navigation = new JPanel(new FormLayout("p:grow, right:min, 4dlu ,right:min",
+                                                      "p"));
 
         navigation.add(getCloseButton(), CELL_CONSTRAINTS.xy(2, 1));
-        navigation.add(getOkayButton(),  CELL_CONSTRAINTS.xy(4, 1));
+        navigation.add(getOkayButton(), CELL_CONSTRAINTS.xy(4, 1));
 
         return navigation;
 
@@ -195,6 +220,23 @@ public abstract class AbstractProcessingDialog
         Graphics2D g2 = (Graphics2D) g;
         g2.setPaint(paint);
         g2.fillRect(0, 0, getPreferredSize().width, 10);
+    }
+
+
+    public final JLabel getLabel(Class c, String name) {
+
+        prepareInjector();
+
+        JLabel label = LabelFactory.newFormLabel(name, "no information injected");
+
+        INJECTOR.inject(c, label, name);
+
+        return label;
+
+    }
+
+    public final JLabel getLabel(String name) {
+        return getLabel(getClass(), name);
     }
 
 

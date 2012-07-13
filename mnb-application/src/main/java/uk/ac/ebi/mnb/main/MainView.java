@@ -23,7 +23,6 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.report.bar.MessageBar;
-import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
@@ -31,6 +30,7 @@ import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.metingear.search.SearchManager;
 import uk.ac.ebi.metingear.search.SearchableIndex;
 import uk.ac.ebi.metingear.view.ControlDialog;
+import uk.ac.ebi.metingear.view.ViewToggle;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.core.WarningMessage;
@@ -40,7 +40,6 @@ import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.ViewController;
 import uk.ac.ebi.mnb.menu.EditUndoButtons;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
-import uk.ac.ebi.mnb.menu.ViewInfo;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
 import uk.ac.ebi.mnb.view.source.SourceController;
@@ -121,7 +120,7 @@ public class MainView
         toolbar = new Toolbar();
         //  searchField.putClientProperty("JTextField.variant", "search"); // makes the search bar rounded
 
-        ViewInfo selector = new ViewInfo(project);
+        ViewToggle selector = new ViewToggle(project);
         final JComponent spacer = MacWidgetFactory.createSpacer(205, 0);
         toolbar.addComponentToLeft(new EditUndoButtons().getButtonGroup().getComponent());
         toolbar.addComponentToLeft(spacer);

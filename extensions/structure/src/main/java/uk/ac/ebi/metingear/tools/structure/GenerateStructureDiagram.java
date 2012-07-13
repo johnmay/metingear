@@ -29,6 +29,7 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.component.injection.Inject;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
@@ -40,7 +41,6 @@ import javax.swing.undo.CompoundEdit;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * A simple tool that allows generation of 2D coordinates using the CDK Structure Diagram
@@ -66,13 +66,6 @@ public class GenerateStructureDiagram
     }
 
     @Override
-    public JLabel createInformation() {
-        JLabel label = super.createInformation();
-        label.setText("Generate a structure diagram for selected metabolites");
-        return label;
-    }
-
-    @Override
     public JComponent createForm() {
 
         JComponent component = super.createForm();
@@ -82,12 +75,8 @@ public class GenerateStructureDiagram
 
         CellConstraints cc = new CellConstraints();
 
-        component.add(LabelFactory.newFormLabel("Overwrite:",
-                                                "Indicates structures with existing coordinates should have" +
-                                                        " a new diagram generated (not recommended)"),
-                      cc.xy(1, 1));
-        component.add(overwrite,
-                      cc.xy(3, 1));
+        component.add(getLabel("overwriteLabel"), cc.xy(1, 1));
+        component.add(overwrite,                  cc.xy(3, 1));
 
         return component;
 
@@ -145,4 +134,5 @@ public class GenerateStructureDiagram
     public void update() {
         super.update(getSelectionController().getSelection());
     }
+
 }

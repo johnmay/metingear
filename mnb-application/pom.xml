@@ -242,6 +242,7 @@
 
                     <finalName>Metingear-${project.version}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
+                    <classifier>wtf</classifier>
 
                     <archive>
                         <manifest>
@@ -320,7 +321,8 @@
                             <mainClass>uk.ac.ebi.metingear.Main</mainClass>
                             <iconFile>/Users/johnmay/EBI/illustration/mnb/icons/mnb.icns</iconFile>
                             <buildDirectory>/Users/johnmay/Applications/Metingear</buildDirectory>
-                            <dictionaryFile>${basedir}/src/main/resources/uk/ac/ebi/metingear/Info.plist
+                            <dictionaryFile>
+                                ${basedir}/src/main/resources/uk/ac/ebi/metingear/Info.plist
                             </dictionaryFile>
                         </configuration>
                         <executions>

@@ -32,7 +32,9 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 
 /**
@@ -80,6 +82,8 @@ public class SourceController
 
     private SourceList source;
 
+    private JPopupMenu popupMenu = new JPopupMenu();
+
     public SourceController() {
 
         model = new SourceListModel();
@@ -90,7 +94,6 @@ public class SourceController
         products = new SourceListItem("Gene Products");
         metabolites = new SourceListItem("Metabolites");
         reactions = new SourceListItem("Reactions");
-        pathways = new SourceListItem("Pathways");
         tasks = new SourceListCategory("Tasks");
         genes = new SourceListItem("Genes");
 
@@ -101,7 +104,6 @@ public class SourceController
         model.addItemToCategory(products, reconstruction);
         model.addItemToCategory(metabolites, reconstruction);
         model.addItemToCategory(reactions, reconstruction);
-        model.addItemToCategory(pathways, reconstruction);
         model.addCategory(tasks);
         model.addCategory(collections);
     }
@@ -266,6 +268,15 @@ public class SourceController
                                       Button button,
                                       int clickCount) {
 
+
+        popupMenu.setVisible(false);
+
+        if (button.equals(Button.RIGHT)) {
+            customizePopup(popupMenu);
+            popupMenu.setVisible(true);
+            popupMenu.setLocation(MouseInfo.getPointerInfo().getLocation());
+            return;
+        }
 
         selected = item;
 

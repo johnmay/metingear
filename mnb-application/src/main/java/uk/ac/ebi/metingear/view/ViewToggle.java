@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.mnb.menu;
+package uk.ac.ebi.metingear.view;
 
 import com.explodingpixels.macwidgets.BottomBar;
 import com.explodingpixels.macwidgets.BottomBarSize;
@@ -44,9 +44,9 @@ import java.util.Map;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public class ViewInfo {
+public class ViewToggle {
 
-    private static final Logger LOGGER = Logger.getLogger(ViewInfo.class);
+    private static final Logger LOGGER = Logger.getLogger(ViewToggle.class);
 
     private JToggleButton genes = new JToggleButton(new ViewGenes());
 
@@ -66,16 +66,16 @@ public class ViewInfo {
     private JLabel viewLabel = LabelFactory.newLabel("View");
 
 
-    public ViewInfo(ProjectView controller) {
+    public ViewToggle(ProjectView controller) {
         this.controller = controller;
         controller.setBottomBarLabel(info);
 
         controller.setViewSelector(this);
 
-        genes.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/metingear/view/gen-selected.png"));
-        products.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/metingear/view/pro-selected.png"));
-        metabolites.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/metingear/view/met-selected.png"));
-        reactions.setSelectedIcon(ResourceUtility.getIcon("/uk/ac/ebi/metingear/view/rxn-selected.png"));
+        genes.setSelectedIcon(ResourceUtility.getIcon(getClass(), "gen-selected.png"));
+        products.setSelectedIcon(ResourceUtility.getIcon(getClass(), "pro-selected.png"));
+        metabolites.setSelectedIcon(ResourceUtility.getIcon(getClass(), "met-selected.png"));
+        reactions.setSelectedIcon(ResourceUtility.getIcon(getClass(), "rxn-selected.png"));
 
         genes.putClientProperty("JButton.buttonType", "segmentedTextured");
         genes.putClientProperty("JButton.segmentPosition", "first");
@@ -200,7 +200,7 @@ public class ViewInfo {
         private String viewLabel;
 
         private EntityViewInfo(String command, String viewLabel) {
-            super(command);
+            super(ViewToggle.class, command);
             this.viewLabel = viewLabel;
         }
 
