@@ -1,7 +1,9 @@
 package uk.ac.ebi.metingear.launch;
 
+import com.apple.eawt.FullScreenUtilities;
 import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.metingear.preference.PreferenceFrame;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AboutDialog;
 
 /**
@@ -13,7 +15,8 @@ import uk.ac.ebi.mnb.view.AboutDialog;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class MacApplicationLauncher extends ApplicationLauncher {
+public class
+MacApplicationLauncher extends ApplicationLauncher {
 
     PreferenceFrame preferences;
 
@@ -21,6 +24,7 @@ public class MacApplicationLauncher extends ApplicationLauncher {
 
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Metingear");
+
         // Set the doc image
 
         com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
@@ -50,6 +54,11 @@ public class MacApplicationLauncher extends ApplicationLauncher {
 
     @Override
     public void loadLookAndFeel() {
-        // do nothing default looks good
+        // do nothing default looks good on OS X
+    }
+
+    @Override
+    public void beforeVisible() {
+        FullScreenUtilities.setWindowCanFullScreen(MainView.getInstance(), true);
     }
 }

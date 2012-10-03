@@ -68,6 +68,15 @@ public class EntityMap implements EntityCollection {
     /**
      * @inheritDoc
      */
+    @Override
+    public boolean remove(AnnotatedEntity entity) {
+        return map.remove(factory.getEntityClass(entity.getClass()), entity);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
     public boolean addAll(Collection<? extends AnnotatedEntity> entities) {
 
         boolean changed = false;

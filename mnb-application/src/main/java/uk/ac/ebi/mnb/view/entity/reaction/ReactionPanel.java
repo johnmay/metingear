@@ -31,6 +31,8 @@ import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
@@ -51,8 +53,7 @@ import java.util.List;
 
 
 /**
- * MetabolitePanel – 2011.09.30 <br>
- * Class description
+ * MetabolitePanel – 2011.09.30 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -163,6 +164,7 @@ public class ReactionPanel
 
     // updates the participant xref panel
 
+
     private void updateParticipantXref() {
 
         participantXref.removeAll();
@@ -197,7 +199,9 @@ public class ReactionPanel
         for (int i = 0; i < reactants.size(); i++) {
             Metabolite m = reactants.get(i).getMolecule();
             Double coef = entity.getReactants().get(i).getCoefficient();
-            String coefString = coef == 1d ? "" : coef % 1 == 0 ? String.format("%.0f ", coef) : coef.toString() + " ";
+            String coefString = coef == 1d ? "" : coef % 1 == 0
+                                                  ? String.format("%.0f ", coef)
+                                                  : coef.toString() + " ";
 
             Box box = Box.createHorizontalBox();
             box.add(LabelFactory.newFormLabel(coefString));
@@ -214,7 +218,9 @@ public class ReactionPanel
         for (int i = 0; i < products.size(); i++) {
             Metabolite m = products.get(i).getMolecule();
             Double coef = entity.getProducts().get(i).getCoefficient();
-            String coefString = coef == 1d ? "" : coef % 1 == 0 ? String.format("%.0f ", coef) : coef.toString() + " ";
+            String coefString = coef == 1d ? "" : coef % 1 == 0
+                                                  ? String.format("%.0f ", coef)
+                                                  : coef.toString() + " ";
 
             Box box = Box.createHorizontalBox();
             box.add(LabelFactory.newFormLabel(coefString));
@@ -250,6 +256,12 @@ public class ReactionPanel
         }
         for (MetabolicParticipant p : entity.getProducts()) {
             collection.add(p.getMolecule());
+        }
+
+        // should be synced with a listener
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
+        if (reconstruction != null) {
+            reconstruction.getReactome().rebuildMaps();
         }
 
         MainView.getInstance().update(collection);

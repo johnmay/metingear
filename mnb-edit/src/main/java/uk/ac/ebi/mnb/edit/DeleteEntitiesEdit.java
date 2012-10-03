@@ -1,5 +1,7 @@
 package uk.ac.ebi.mnb.edit;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -19,12 +21,12 @@ import java.util.Map;
  */
 public class DeleteEntitiesEdit extends AbstractUndoableEdit {
 
-    private EntityCollection collection;
-    private Reconstruction recon;
-    private Map<Gene,Chromosome> geneMap;
-    
-    public DeleteEntitiesEdit(Reconstruction recon, EntityCollection collection){
-        this.recon      = recon;
+    private EntityCollection      collection;
+    private Reconstruction        recon;
+    private Map<Gene, Chromosome> geneMap;
+
+    public DeleteEntitiesEdit(Reconstruction recon, EntityCollection collection) {
+        this.recon = recon;
         this.collection = collection;
     }
 
@@ -32,25 +34,23 @@ public class DeleteEntitiesEdit extends AbstractUndoableEdit {
     @Override
     public void undo() throws CannotUndoException {
 
-
-        for(GeneProduct gp : collection.get(GeneProduct.class)){
+        for (GeneProduct gp : collection.get(GeneProduct.class)) {
             recon.addProduct(gp);
         }
 
-        for(Metabolite m : collection.get(Metabolite.class)){
+        for (Metabolite m : collection.get(Metabolite.class)) {
             recon.getMetabolome().add(m);
         }
 
-        for(MetabolicReaction rxn : collection.get(MetabolicReaction.class)){
+        for (MetabolicReaction rxn : collection.get(MetabolicReaction.class)) {
             recon.addReaction(rxn);
         }
+        recon.getReactome().rebuildMaps();
 
         // might not work??
-        for(Gene gene : collection.get(Gene.class)){
+        for (Gene gene : collection.get(Gene.class)) {
             geneMap.get(gene).add(gene);
         }
-
-        System.out.println(recon.getMetabolome().size());
 
     }
 
@@ -58,22 +58,23 @@ public class DeleteEntitiesEdit extends AbstractUndoableEdit {
     @Override
     public void redo() throws CannotUndoException {
 
-        for(GeneProduct gp : collection.get(GeneProduct.class)){
+        for (GeneProduct gp : collection.get(GeneProduct.class)) {
             recon.getProducts().remove(gp);
         }
 
-        for(Metabolite m : collection.get(Metabolite.class)){
-            System.out.println(m);
+        for (Metabolite m : collection.get(Metabolite.class)) {
             recon.getMetabolome().remove(m);
         }
 
-        for(MetabolicReaction rxn : collection.get(MetabolicReaction.class)){
+        // remove reactions
+        for (MetabolicReaction rxn : collection.get(MetabolicReaction.class)) {
             recon.getReactome().remove(rxn);
         }
+        recon.getReactome().rebuildMaps();
 
         // might not work??
-        for(Gene gene : collection.get(Gene.class)){
-            geneMap.put(gene,gene.getChromosome());
+        for (Gene gene : collection.get(Gene.class)) {
+            geneMap.put(gene, gene.getChromosome());
             gene.getChromosome().remove(gene);
         }
 

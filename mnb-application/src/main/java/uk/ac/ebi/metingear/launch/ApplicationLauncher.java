@@ -25,13 +25,16 @@ public class ApplicationLauncher implements Runnable {
         // configure loader
         try {
             Properties properties = new Properties();
-            properties.load(getClass().getResourceAsStream("/config/metingeer-log.properties"));
+            properties.load(getClass().getResourceAsStream("/config/metingear-log.properties"));
             for (Object key : properties.keySet()) {
                 String value = properties.getProperty(key.toString());
                 if (value != null && value.contains("<os.app.data>")) {
                     properties.put(key,
                                    value.replaceAll("<os.app.data>",
                                                     FilePreference.OS_APP_DATA_PATH));
+
+                    System.out.println(value.replaceAll("<os.app.data>",
+                                       FilePreference.OS_APP_DATA_PATH));
                 }
             }
             PropertyConfigurator.configure(properties);
@@ -69,7 +72,15 @@ public class ApplicationLauncher implements Runnable {
         PluginLoader loader = new PluginLoader(view, view.getJMenuBar());
         loader.load();
 
+        beforeVisible();
+
         view.setVisible(true);
+
+
+
+    }
+
+    public void beforeVisible() {
 
     }
 

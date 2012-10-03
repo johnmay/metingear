@@ -168,7 +168,7 @@ public class GapFill<M, R> {
             double[] solutions = solver.getValues(y);
 
             for (int j = 0; j < solutions.length; j++) {
-                System.out.println(solutions[j]);
+                System.out.println(combined.getReaction(j) + ": " + solutions[j]);
                 if (solutions[j] == 1.0d) {
                     candidates.add(databaseMap.get(j));
                 }
@@ -232,11 +232,12 @@ public class GapFill<M, R> {
 
         BasicStoichiometricMatrix reference = BasicStoichiometricMatrix.create();
 
-        reference.addReactionWithName("db4", "J => F");
-        reference.addReactionWithName("db3", "D => E");
-        reference.addReactionWithName("db1", "I => F");
-        reference.addReactionWithName("db1", "E => F");
-        reference.addReactionWithName("db2", "E => I");
+        reference.addReactionWithName("d1", "J => F");
+        reference.addReactionWithName("d2", "D => E");
+        reference.addReactionWithName("d3", "I => F");
+        reference.addReactionWithName("d4", "E => F");
+        reference.addReactionWithName("d5", "E => I");
+        reference.addReaction(new String[]{"F"}, new String[0], true);
 
 
         reference.display();

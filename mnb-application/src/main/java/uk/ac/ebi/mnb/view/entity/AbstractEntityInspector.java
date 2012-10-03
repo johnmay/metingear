@@ -103,7 +103,7 @@ public abstract class AbstractEntityInspector
             return false;
         }
         int selected = table.getSelectedRow();
-        if (selected != -1) {
+        if (selected >= 0 && selected < table.getRowCount()) {
             entity = table.getModel().getEntity(table.convertRowIndexToModel(selected));
             if (panel.setEntity(entity)) {
                 panel.update();

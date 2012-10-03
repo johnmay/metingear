@@ -37,7 +37,7 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.Collection;
 
 
 /**
@@ -125,13 +125,14 @@ public class CompareReconstruction
 
         ReconstructionImpl reconA = (ReconstructionImpl) recon1.getSelectedItem();
         ReconstructionImpl reconB = (ReconstructionImpl) recon2.getSelectedItem();
-        ReconstructionImpl reconC = (ReconstructionImpl) (recon3.getSelectedItem() == "-" ? null : recon3.getSelectedItem());
+        ReconstructionImpl reconC = (ReconstructionImpl) (recon3.getSelectedItem() == "-" ? null
+                                                                                          : recon3.getSelectedItem());
 
         venn = null;
 
-        Set<AtomSeed> methods = SeedFactory.getInstance().getSeeds(BondOrderSumSeed.class,
-                                                                   AtomicNumberSeed.class,
-                                                                   ConnectedAtomSeed.class);
+        Collection<AtomSeed> methods = SeedFactory.getInstance().getSeeds(BondOrderSumSeed.class,
+                                                                          AtomicNumberSeed.class,
+                                                                          ConnectedAtomSeed.class);
         if (stereo.isSelected()) {
             methods.add(SeedFactory.getInstance().getSeed(StereoSeed.class));
         }

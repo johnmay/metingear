@@ -66,7 +66,7 @@ public class NamedEntityResolver implements EntityResolver {
 
         if (!created.containsKey(name)) {
             Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
-                                                                          new BasicChemicalIdentifier(),
+                                                                          BasicChemicalIdentifier.nextIdentifier(),
                                                                           name,
                                                                           name);
             created.put(name, m);

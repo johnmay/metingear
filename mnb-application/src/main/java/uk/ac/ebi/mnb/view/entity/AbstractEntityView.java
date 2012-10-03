@@ -40,8 +40,7 @@ import javax.swing.plaf.basic.BasicSplitPaneUI;
 import java.awt.*;
 
 /**
- * EntityView – 2011.09.06 <br>
- * Class description
+ * EntityView – 2011.09.06 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -55,6 +54,7 @@ public class AbstractEntityView
     private final AbstractEntityTable     table;
     private final AbstractEntityInspector inspector;
     private JLabel label = LabelFactory.emptyLabel(); // avoid null pointers
+
 
     public AbstractEntityView(String name,
                               final AbstractEntityTable table,
@@ -96,6 +96,7 @@ public class AbstractEntityView
 
     }
 
+
     private void setBorders() {
         // simple narrow border on top and bottom
         ((BasicSplitPaneUI) getUI()).getDivider().setBorder(
@@ -103,11 +104,13 @@ public class AbstractEntityView
         setBorder(Borders.EMPTY_BORDER);
     }
 
+
     public void clear() {
         inspector.clear();
         table.clear();
         repaint();
     }
+
 
     /**
      * Accessor to the table component of the split-pane
@@ -118,10 +121,11 @@ public class AbstractEntityView
         return table;
     }
 
+
     public boolean update() {
-        boolean updated = table.update();
-        return inspector.update() || updated;
+        return table.update() && inspector.update();
     }
+
 
     /**
      * @inheritDoc
@@ -132,6 +136,7 @@ public class AbstractEntityView
         return inspector.update(selection) || updated;
     }
 
+
     /**
      * Accessor to the inspector component of the split-pane
      *
@@ -141,15 +146,18 @@ public class AbstractEntityView
         return inspector;
     }
 
+
     @Override
     public EntityCollection getSelection() {
         return inspector.getSelection();
     }
 
+
     @Override
     public boolean setSelection(EntityCollection selection) {
         return table.setSelection(selection);
     }
+
 
     void setBottomBarLabel(JLabel label) {
         this.label = label;
