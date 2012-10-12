@@ -66,13 +66,13 @@ public class CustomXLStoSBML {
 //        {
 //            Compartment e = new Compartment("Extracellular", SBML_LEVEL, SBML_VERSION);
 //            e.setSize(1);
-//            put(uk.ac.ebi.core.CompartmentImplementation.EXTRACELLULA, e);
+//            put(uk.ac.ebi.core.CompartmentImplementation.EXTRACELLULAR, e);
 //            Compartment c = new Compartment("Cytoplasm", SBML_LEVEL, SBML_VERSION);
 //            c.setSize(1);
 //            put(uk.ac.ebi.core.CompartmentImplementation.CYTOPLASM, c);
 //            Compartment p = new Compartment("Periplasm", SBML_LEVEL, SBML_VERSION);
 //            p.setSize(1);
-//            put(uk.ac.ebi.core.CompartmentImplementation.PERIPLASM, p);
+//            put(uk.ac.ebi.core.CompartmentImplementation.OUTER_MEMBRANE_PERIPLASM, p);
 //        }
 //    };
 //
