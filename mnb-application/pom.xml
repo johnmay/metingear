@@ -201,8 +201,8 @@
         </dependency>
         <dependency>
             <groupId>org.sbml</groupId>
-            <artifactId>JSBML</artifactId>
-            <version>0.8-b2</version>
+            <artifactId>jsbml</artifactId>
+            <version>0.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
