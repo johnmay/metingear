@@ -13,6 +13,11 @@ public interface ProcessingDialog {
 
     public void update();
 
+    /**
+     * Invoked just before the dialog is visible
+     */
+    public void prepare();
+
     public void setDialogController(DialogController controller);
 
     public void position();

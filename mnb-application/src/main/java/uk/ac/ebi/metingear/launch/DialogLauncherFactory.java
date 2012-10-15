@@ -89,6 +89,7 @@ public class DialogLauncherFactory {
             public void activateActions() {
                 instance.pack();
                 instance.position();
+                instance.prepare();
                 instance.setVisible(true);
             }
         };
