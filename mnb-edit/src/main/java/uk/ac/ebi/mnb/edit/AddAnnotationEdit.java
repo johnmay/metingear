@@ -27,6 +27,7 @@ import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -45,12 +46,12 @@ public class AddAnnotationEdit
     private Collection<Annotation> annotations;
 
     public AddAnnotationEdit(AnnotatedEntity entity, Collection<Annotation> annotations) {
-        this.entity = entity;
-        this.annotations = annotations;
+        this.entity      = entity;
+        this.annotations = new ArrayList<Annotation>(annotations);
     }
 
     public AddAnnotationEdit(AnnotatedEntity entity, Annotation... annotations) {
-        this.entity = entity;
+        this.entity      = entity;
         this.annotations = Arrays.asList(annotations);
     }
 
