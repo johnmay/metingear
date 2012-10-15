@@ -72,7 +72,7 @@ public class PluginLoader {
 
     public JMenu getMenu(JComponent root, String query) {
 
-        for (Component component : root.getComponents()) {
+        for (Component component : root instanceof JMenu ? ((JMenu) root).getMenuComponents() : root.getComponents()) {
             if (component instanceof JMenu) {
                 String subject = ((JMenu) component).getText();
                 if (subject.equalsIgnoreCase(query)) {
@@ -82,7 +82,6 @@ public class PluginLoader {
         }
 
         ContextMenu menu = new ContextMenu(query, view);
-
 
         if (root instanceof ContextMenu) {
             ((ContextMenu) root).add(menu);
