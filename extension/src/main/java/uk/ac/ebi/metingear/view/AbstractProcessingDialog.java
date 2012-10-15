@@ -80,6 +80,14 @@ public abstract class AbstractProcessingDialog
         // do nothing
     }
 
+    /**
+     * Set whether the "okay"/"process" button is enabled. Allows subclasses
+     * to inhibit processing without a complete form.
+     * @param enabled whether to enable the button
+     */
+    public void setEnabled(boolean enabled){
+        okay.setEnabled(enabled);
+    }
 
     public void initialiseLayout() {
 
