@@ -226,6 +226,10 @@
             <artifactId>metingear-extenstions-structure</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
+        </dependency><dependency>
+            <artifactId>metingear-extenstions-annotation</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <version>${project.version}</version>
         </dependency>
 
 
