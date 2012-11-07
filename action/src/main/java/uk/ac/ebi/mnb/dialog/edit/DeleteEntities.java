@@ -79,7 +79,7 @@ public class DeleteEntities extends ControllerAction {
         getController().getUndoManager().addEdit(edit);
 
         selection.clear();
-        getController().getViewController().getActiveView().update();
+        getController().update();
 
         if (showWarning) {
             String mesg = "Some metabolites were not deleted as they were referenced in" +

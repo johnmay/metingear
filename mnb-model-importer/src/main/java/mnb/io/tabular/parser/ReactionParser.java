@@ -315,10 +315,12 @@ public class ReactionParser {
             entityAbbr = compartmentMatcher.replaceAll("");
         }
 
+        // trim the abbreviation
+        entityAbbr = entityAbbr.trim();
 
         // try fetching with compartment attached and without
         //        PreparsedMetabolite entity = entites.getEntity(entityAbbrComp.trim());
-        Metabolite entity = entites.getReconciledMetabolite(entityAbbr.trim());
+        Metabolite entity = entites.getReconciledMetabolite(entityAbbr);
 
         if (entity != null) {
             // System.out.println( coef + " " + entity.getName() + " " + compartment );
@@ -327,7 +329,7 @@ public class ReactionParser {
                                                           (Compartment) compartment);
         } else {
             messages.add(new WarningMessage("The metabolite "
-                                                    + entityAbbr.trim()
+                                                    + entityAbbr
                                                     + " was not found in the metabolite sheet for reaction " + rxn));
             entity = entites.getNonReconciledMetabolite(entityAbbr);
             return new MetabolicParticipantImplementation(entity,
