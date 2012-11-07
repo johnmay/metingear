@@ -45,7 +45,7 @@ public class ExportSBMLAction
 
             File sbmlOut = getFile(showSaveDialog());
             int level = 2;
-            int version = 2;
+            int version = 4;
 
             SBMLIOUtil util = new SBMLIOUtil(DefaultEntityFactory.getInstance(), level, version);
 
