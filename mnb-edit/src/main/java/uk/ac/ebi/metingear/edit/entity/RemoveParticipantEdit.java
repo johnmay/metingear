@@ -104,10 +104,6 @@ public class RemoveParticipantEdit extends CompoundEdit {
                 super.addEdit(new RemoveReactantEdit(p, reaction));
             }
         }
-        if (lastEdit() != null) {
-            super.end();
-            return;
-        }
 
 
         for (MetabolicParticipant p : reaction.getProducts()) {
@@ -115,6 +111,7 @@ public class RemoveParticipantEdit extends CompoundEdit {
                 super.addEdit(new RemoveProductEdit(p, reaction));
             }
         }
+
         if (lastEdit() != null) {
             super.end();
             return;

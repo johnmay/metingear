@@ -27,6 +27,7 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.CompoundEdit;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * An undoable edit that removes a metabolite from a reconstruction.
@@ -51,8 +52,8 @@ public class RemoveMetaboliteEdit extends CompoundEdit {
                                 final Metabolite metabolite) {
 
         final Reactome reactome = reconstruction.getReactome();
-        this.reactions = reconstruction.getReactome()
-                                       .getReactions(metabolite);
+        this.reactions = new HashSet<MetabolicReaction>(reconstruction.getReactome()
+                                                                      .getReactions(metabolite));
 
         // remove from metabolome
         super.addEdit(new AbstractUndoableEdit() {

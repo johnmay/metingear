@@ -99,6 +99,76 @@ public class RemoveMetaboliteEditTest {
     }
 
     @Test
+    public void testUndo_duplicate() {
+
+        MetaboliteImpl a = new MetaboliteImpl("a", "a");
+        MetaboliteImpl b = new MetaboliteImpl("b", "b");
+        MetaboliteImpl c = new MetaboliteImpl("c", "c");
+        MetaboliteImpl d = new MetaboliteImpl("d", "d");
+
+        MetabolicReaction r1 = new MetabolicReactionImpl();
+        MetabolicReaction r2 = new MetabolicReactionImpl();
+
+        r1.addReactant(new MetabolicParticipantImplementation(a));
+        r1.addReactant(new MetabolicParticipantImplementation(b));
+        r1.addProduct(new MetabolicParticipantImplementation(a));
+        r1.addProduct(new MetabolicParticipantImplementation(d));
+
+        r2.addReactant(new MetabolicParticipantImplementation(c));
+        r2.addReactant(new MetabolicParticipantImplementation(d));
+        r2.addProduct(new MetabolicParticipantImplementation(a));
+
+        Reconstruction reconstruction = new ReconstructionImpl();
+
+        reconstruction.addMetabolite(a);
+        reconstruction.addMetabolite(b);
+        reconstruction.addMetabolite(c);
+        reconstruction.addMetabolite(d);
+        reconstruction.getReactome().add(r1);
+        reconstruction.getReactome().add(r2);
+
+        UndoableEdit edit = new RemoveMetaboliteEdit(reconstruction, a);
+
+        // remove metabolite 'a'
+        reconstruction.remove(a);
+
+        assertFalse("metabolome contained metabolite, ",
+                    reconstruction.getMetabolome().contains(a));
+        assertEquals("metabolome contained metabolite, ",
+                     0,
+                     reconstruction.getReactome().getReactions(a).size());
+        assertEquals("incorrect r1 reactant count, ",
+                     1,
+                     r1.getReactantCount());
+        assertEquals("incorrect r1 product count, ",
+                     1,
+                     r1.getReactantCount());
+        assertEquals("incorrect r2 product count, ",
+                     0,
+                     r2.getProductCount());
+
+        // undo the removal
+        edit.undo();
+
+        assertTrue("metabolome did not contain metabolite, ",
+                   reconstruction.getMetabolome().contains(a));
+        assertEquals("metabolome contained metabolite, ",
+                     2,
+                     reconstruction.getReactome().getReactions(a).size());
+        assertEquals("incorrect r1 reactant count, ",
+                     2,
+                     r1.getReactantCount());
+        assertEquals("incorrect r1 reactant count, ",
+                     2,
+                     r1.getProductCount());
+        assertEquals("incorrect r2 product count, ",
+                     1,
+                     r2.getProductCount());
+
+
+    }
+
+    @Test
     public void testRedo() {
 
         MetaboliteImpl a = new MetaboliteImpl("a", "a");
