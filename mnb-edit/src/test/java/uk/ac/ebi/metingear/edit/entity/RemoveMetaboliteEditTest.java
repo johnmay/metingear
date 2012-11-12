@@ -67,11 +67,7 @@ public class RemoveMetaboliteEditTest {
         UndoableEdit edit = new RemoveMetaboliteEdit(reconstruction, a);
 
         // remove metabolite 'a'
-        reconstruction.getMetabolome().remove(a);
-        reconstruction.getReactome().removeKey(a, r1);
-        reconstruction.getReactome().removeKey(a, r2);
-        r1.removeReactant(r1.getReactants().get(0));
-        r2.removeProduct(r2.getProducts().get(0));
+        reconstruction.remove(a);
 
         assertFalse("metabolome contained metabolite, ",
                     reconstruction.getMetabolome().contains(a));
@@ -133,11 +129,7 @@ public class RemoveMetaboliteEditTest {
         UndoableEdit edit = new RemoveMetaboliteEdit(reconstruction, a);
 
         // remove metabolite 'a'
-        reconstruction.getMetabolome().remove(a);
-        reconstruction.getReactome().removeKey(a, r1);
-        reconstruction.getReactome().removeKey(a, r2);
-        r1.removeReactant(r1.getReactants().get(0));
-        r2.removeProduct(r2.getProducts().get(0));
+        reconstruction.remove(a);
 
         assertFalse("metabolome contained metabolite, ",
                     reconstruction.getMetabolome().contains(a));
