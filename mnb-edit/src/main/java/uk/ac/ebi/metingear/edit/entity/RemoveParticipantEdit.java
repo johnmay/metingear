@@ -55,17 +55,19 @@ public class RemoveParticipantEdit extends CompoundEdit {
         for (MetabolicParticipant p : reaction.getReactants()) {
             if (p == participant) {  // intended reference equality
                 super.addEdit(new RemoveReactantEdit(participant, reaction));
-                super.end();
-                return;
             }
         }
 
         for (MetabolicParticipant p : reaction.getProducts()) {
             if (p == participant) {   // intended reference equality
                 super.addEdit(new RemoveProductEdit(participant, reaction));
-                super.end();
-                return;
             }
+        }
+
+        // if no last edit nothing was added
+        if (super.lastEdit() != null) {
+            super.end();
+            return;
         }
 
         throw new IllegalArgumentException("Participant is not present in reaction");

@@ -226,5 +226,45 @@ public class RemoveParticipantEditTest {
 
     }
 
+    /**
+     * Ensures if a participant is pressent in the reactants and participants
+     * then both are removed
+     */
+    @Test
+    public void testUndo_duplicate() {
+
+        MetabolicReactionImpl reaction = new MetabolicReactionImpl();
+
+        MetabolicParticipant reactant = new MetabolicParticipantImplementation();
+        MetabolicParticipant product = new MetabolicParticipantImplementation();
+
+        reaction.addReactant(reactant);
+        reaction.addProduct(reactant);
+        reaction.addProduct(product);
+
+        assertEquals("reactant count was different,",
+                     1, reaction.getReactantCount());
+        assertEquals("product count was different,",
+                     2, reaction.getProductCount());
+
+        UndoableEdit edit = new RemoveParticipantEdit(reactant, reaction);
+
+        reaction.removeReactant(reactant);
+        reaction.removeProduct(product);
+
+        assertEquals("reactant count was different,",
+                     0, reaction.getReactantCount());
+        assertEquals("product count was different,",
+                     1, reaction.getProductCount());
+
+        edit.undo();
+
+        assertEquals("reactant count was different,",
+                     1, reaction.getReactantCount());
+        assertEquals("product count was different,",
+                     2, reaction.getProductCount());
+
+    }
+
 
 }
