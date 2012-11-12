@@ -28,8 +28,14 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
+import uk.ac.ebi.mdk.prototype.hash.seed.StereoSeed;
 import uk.ac.ebi.mdk.tool.domain.ReconstructionComparison;
-import uk.ac.ebi.mdk.tool.domain.hash.*;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -45,8 +51,8 @@ import java.util.Collection;
  *
  * @author johnmay
  * @author $Author$ (this version)
- * @version $Rev$ : Last Changed $Date: 2011-12-15 22:07:54 +0000 (Thu,
- *          15 Dec 2011) $
+ * @version $Rev$ : Last Changed $Date: 2011-12-15 22:07:54 +0000 (Thu, 15 Dec
+ *          2011) $
  */
 public class CompareReconstruction
         extends ControllerDialog {
@@ -126,7 +132,7 @@ public class CompareReconstruction
         ReconstructionImpl reconA = (ReconstructionImpl) recon1.getSelectedItem();
         ReconstructionImpl reconB = (ReconstructionImpl) recon2.getSelectedItem();
         ReconstructionImpl reconC = (ReconstructionImpl) (recon3.getSelectedItem() == "-" ? null
-                                                                                          : recon3.getSelectedItem());
+                : recon3.getSelectedItem());
 
         venn = null;
 

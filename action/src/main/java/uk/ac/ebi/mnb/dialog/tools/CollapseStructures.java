@@ -16,10 +16,10 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
-import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
+import uk.ac.ebi.mdk.experimental.hash.MolecularHashFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -30,12 +30,12 @@ import java.util.Collection;
 
 
 /**
- *          CollapseStructures - 2011.10.28 <br>
- *          A dialog providing options to collapse multiple structures to a
- *          single annotation
+ * CollapseStructures - 2011.10.28 <br> A dialog providing options to collapse
+ * multiple structures to a single annotation
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class CollapseStructures
         extends ControllerDialog {
