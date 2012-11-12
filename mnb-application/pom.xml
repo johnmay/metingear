@@ -237,7 +237,10 @@
     <build>
         <plugins>
 
-
+            <!-- build a standalone executable jar
+                 > cd mnb-application
+                 > mvn assembly:assembly
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
