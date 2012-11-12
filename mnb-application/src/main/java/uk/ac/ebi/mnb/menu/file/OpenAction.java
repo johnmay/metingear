@@ -18,6 +18,7 @@ import uk.ac.ebi.mnb.menu.FileMenu;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 
 /**
@@ -105,14 +106,14 @@ public class OpenAction
                     } catch (IOException ex) {
                         indicator.dispose();
                         MainView.getInstance().addErrorMessage(
-                                "Unable to load project " + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
+                                "Unable to load project " + Arrays.toString(ex.getStackTrace()).replaceAll("\n", "<br>"));
                         ex.printStackTrace();
                     } catch (ClassNotFoundException ex) {
                         indicator.dispose();
                         ex.printStackTrace();
                         MainView.getInstance().addErrorMessage(
                                 "Unable to load project: "
-                                        + ex.getStackTrace().toString().replaceAll("\n", "<br>"));
+                                        + Arrays.toString(ex.getStackTrace()).replaceAll("\n", "<br>"));
                     } catch (RuntimeException ex) {
                         indicator.dispose();
                         MainView.getInstance().addErrorMessage(
