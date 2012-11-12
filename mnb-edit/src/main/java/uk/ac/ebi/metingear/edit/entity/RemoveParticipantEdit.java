@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.metingear.edit.entity;
 
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 
@@ -34,6 +35,7 @@ public class RemoveParticipantEdit extends CompoundEdit {
      * find the participant in the reaction and create a new {@link
      * RemoveReactantEdit} or {@link RemoveProductEdit} depending on which side
      * of the reaction the participant is on.
+     * <p/>
      * <p/>
      * If the participant is not found in the reaction an {@link
      * IllegalArgumentException} is thrown.
@@ -67,6 +69,56 @@ public class RemoveParticipantEdit extends CompoundEdit {
         }
 
         throw new IllegalArgumentException("Participant is not present in reaction");
+
+    }
+
+
+    /**
+     * Create a new participant edit. The constructor uses reference equality to
+     * find the molecule in the reaction and create a new {@link
+     * RemoveReactantEdit} or {@link RemoveProductEdit} depending on which side
+     * of the reaction the participant is on. This edit will remove all
+     * participants that reference the given metabolite (i.e. if the same
+     * metabolite is present in different compartments both will be removed).
+     * <p/>
+     * <p/>
+     * <p/>
+     * If the participant is not found in the reaction an {@link
+     * IllegalArgumentException} is thrown.
+     *
+     * @param metabolite the metabolite to remove
+     * @param reaction   the reaction to remove
+     */
+    public RemoveParticipantEdit(Metabolite metabolite,
+                                 MetabolicReaction reaction) {
+
+        if (metabolite == null)
+            throw new IllegalArgumentException("null metabolite provided");
+        if (reaction == null)
+            throw new IllegalArgumentException("null reaction provided");
+
+        for (MetabolicParticipant p : reaction.getReactants()) {
+            if (p.getMolecule() == metabolite) {  // intended reference equality
+                super.addEdit(new RemoveReactantEdit(p, reaction));
+            }
+        }
+        if (lastEdit() != null) {
+            super.end();
+            return;
+        }
+
+
+        for (MetabolicParticipant p : reaction.getProducts()) {
+            if (p.getMolecule() == metabolite) {   // intended reference equality
+                super.addEdit(new RemoveProductEdit(p, reaction));
+            }
+        }
+        if (lastEdit() != null) {
+            super.end();
+            return;
+        }
+
+        throw new IllegalArgumentException("Molecule is not present in reaction");
 
     }
 

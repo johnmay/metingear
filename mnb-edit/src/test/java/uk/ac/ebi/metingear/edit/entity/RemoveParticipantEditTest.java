@@ -18,9 +18,12 @@
 package uk.ac.ebi.metingear.edit.entity;
 
 import org.junit.Test;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.MetaboliteImpl;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 
 import javax.swing.undo.UndoableEdit;
 
@@ -33,7 +36,12 @@ public class RemoveParticipantEditTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testConstructor_NullParticipant() {
-        new RemoveParticipantEdit(null, new MetabolicReactionImpl());
+        new RemoveParticipantEdit((MetabolicParticipant) null, new MetabolicReactionImpl());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructor_NullMetabolite() {
+        new RemoveParticipantEdit((Metabolite) null, new MetabolicReactionImpl());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -185,6 +193,36 @@ public class RemoveParticipantEditTest {
         assertEquals("product count was different,",
                      0, reaction.getProductCount());
 
+
+    }
+
+    @Test
+    public void testRemoveMetabolite() {
+        MetabolicReactionImpl reaction = new MetabolicReactionImpl();
+
+        Metabolite hydrogen = new MetaboliteImpl("", "H+");
+
+        MetabolicParticipant reactantC = new MetabolicParticipantImplementation(hydrogen, Organelle.CYTOPLASM);
+        MetabolicParticipant reactantE = new MetabolicParticipantImplementation(hydrogen, Organelle.EXTRACELLULAR);
+
+        reaction.addReactant(reactantC);
+        reaction.addReactant(reactantE);
+
+        UndoableEdit edit = new RemoveParticipantEdit(hydrogen, reaction);
+
+        assertEquals("reactant count was different,",
+                     2, reaction.getReactantCount());
+
+        reaction.removeReactant(reactantC);
+        reaction.removeReactant(reactantE);
+
+        assertEquals("reactant count was different,",
+                     0, reaction.getReactantCount());
+
+        edit.undo();
+
+        assertEquals("reactant count was different,",
+                     2, reaction.getReactantCount());
 
     }
 
