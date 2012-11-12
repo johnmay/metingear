@@ -32,6 +32,7 @@ import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 import uk.ac.ebi.mdk.service.query.CrossReferenceService;
 import uk.ac.ebi.mdk.service.query.crossreference.UniProtCrossReferenceService;
 import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
@@ -63,29 +64,34 @@ public class TransferAnnotations
     @Override
     public void process() {
 
+        // replace with service manager
         CrossReferenceService<SwissProtIdentifier> service = new UniProtCrossReferenceService();
-        service.startup();
+
+        if(!service.startup()){
+            addMessage(new ErrorMessage("Could not start UniProt Cross-references - please" +
+                                                " ensure the service is loaded (Edit > Preferences > Services)"));
+            return;
+        }
 
 
         DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
         for (GeneProduct product : getSelection().getGeneProducts()) {
 
-            Multimap<Identifier, Observation> identifiers = HashMultimap.create();
+            Multimap<Identifier, LocalAlignment> identifiers = HashMultimap.create();
 
-            Collection<Observation> alignments = ((ProteinProductImpl) product).getObservationCollection().get(
-                    LocalAlignment.class);
+            Collection<Observation> alignments = product.getObservations(LocalAlignment.class);
             for (Observation observation : alignments) {
                 LocalAlignment alignment = (LocalAlignment) observation;
                 IdentifierSet set = factory.resolveSequenceHeader(alignment.getSubject());
                 for (Identifier identifier : set.getSubIdentifiers(SwissProtIdentifier.class)) {
                     for (Identifier xref : service.getCrossReferences((SwissProtIdentifier) identifier)) {
-                        identifiers.put(xref, observation);
+                        identifiers.put(xref, alignment);
                     }
                 }
             }
 
             for (Identifier identifier : identifiers.keySet()) {
-                CrossReference xref = new CrossReference(identifier);
+                CrossReference<Identifier, LocalAlignment> xref = new CrossReference<Identifier,LocalAlignment>(identifier);
                 xref.addObservations(identifiers.get(identifier));
                 product.addAnnotation(xref);
             }
