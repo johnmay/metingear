@@ -26,7 +26,11 @@ import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.Lumped;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
-import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Rating;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.StarRating;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
@@ -36,15 +40,16 @@ import uk.ac.ebi.mnb.view.entity.DataType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
 /**
- *          MetaboliteTableModel – 2011.09.06 <br>
- *          Class description
+ * MetaboliteTableModel – 2011.09.06 <br> Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class MetaboliteTableModel
         extends AbstractEntityTableModel {
@@ -52,17 +57,17 @@ public class MetaboliteTableModel
     private static final Logger LOGGER = Logger.getLogger(MetaboliteTableModel.class);
 
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
-        new ColumnDescriptor("Generic", null,
-                             DataType.FIXED,
-                             Boolean.class),
-        new ColumnDescriptor(new CrossReference()),
-        new ColumnDescriptor(new MolecularFormula()),
-        new ColumnDescriptor("Validity", null,
-                             DataType.FIXED,
-                             StructuralValidity.class),
-        new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class),
-        new ColumnDescriptor( Lumped.getInstance() ),
-        new ColumnDescriptor( ACPAssociated.getInstance() )
+            new ColumnDescriptor("Generic", null,
+                                 DataType.FIXED,
+                                 Boolean.class),
+            new ColumnDescriptor(new CrossReference()),
+            new ColumnDescriptor(new MolecularFormula()),
+            new ColumnDescriptor("Validity", null,
+                                 DataType.FIXED,
+                                 StructuralValidity.class),
+            new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class),
+            new ColumnDescriptor(Lumped.getInstance()),
+            new ColumnDescriptor(ACPAssociated.getInstance())
     };
 
 
@@ -73,13 +78,16 @@ public class MetaboliteTableModel
 
 
     @Override
-    public void loadComponents() {
+    public Collection<? extends AnnotatedEntity> getEntities() {
 
-        Reconstruction project = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction project = DefaultReconstructionManager.getInstance()
+                                                             .getActive();
 
         if (project != null) {
-            setEntities(project.getMetabolome());
+            return project.getMetabolome();
         }
+
+        return Collections.EMPTY_LIST;
 
     }
 
@@ -88,7 +96,7 @@ public class MetaboliteTableModel
     public boolean isCellEditable(int rowIndex, int columnIndex) {
 
         if (getColumnClass(columnIndex) == CrossReference.class
-            || getColumnClass(columnIndex) == Rating.class) {
+                || getColumnClass(columnIndex) == Rating.class) {
             return true;
         }
 

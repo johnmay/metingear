@@ -42,6 +42,8 @@ import uk.ac.ebi.mnb.menu.EditUndoButtons;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
+import uk.ac.ebi.mnb.view.entity.general.GeneralTable;
+import uk.ac.ebi.mnb.view.entity.general.GeneralTableModel;
 import uk.ac.ebi.mnb.view.source.SourceController;
 
 import javax.swing.*;
@@ -163,7 +165,9 @@ public class MainView
                                             public void run() {
                                                 SearchManager.getInstance().setPreviousEntries(entities);
                                                 EntityTable table = getViewController().getActiveView().getTable();
-                                                table.getModel().setEntities(entities);
+                                                if(table instanceof GeneralTable){
+                                                    ((GeneralTableModel)table.getModel()).setGeneralEntities(entities);
+                                                }
                                                 table.update();
                                             }
                                         });

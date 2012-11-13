@@ -31,10 +31,11 @@ import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
- * ProteinTableModel – 2011.09.28 <br>
- * Class description
+ * ProteinTableModel – 2011.09.28 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -42,7 +43,7 @@ import java.util.Arrays;
  */
 public class GeneTableModel extends AbstractEntityTableModel {
 
-    private static final Logger             LOGGER  = Logger.getLogger(GeneTableModel.class);
+    private static final Logger LOGGER = Logger.getLogger(GeneTableModel.class);
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
             new ColumnDescriptor("Sequence", null,
                                  DataType.FIXED,
@@ -54,14 +55,17 @@ public class GeneTableModel extends AbstractEntityTableModel {
         addColumns(Arrays.asList(DEFAULT));
     }
 
-    @Override
-    public void loadComponents() {
 
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+    public Collection<? extends AnnotatedEntity> getEntities() {
+
+        Reconstruction recon = DefaultReconstructionManager.getInstance()
+                                                           .getActive();
 
         if (recon != null) {
-            super.setEntities(recon.getGenome().getGenes());
+            return recon.getGenome().getGenes();
         }
+
+        return Collections.EMPTY_LIST;
 
     }
 

@@ -100,7 +100,7 @@ public abstract class AbstractEntityTable
     public boolean setSelection(EntityCollection selectionManager) {
 
 
-        List<AnnotatedEntity> entities = new ArrayList(selectionManager.getEntities());
+        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>(selectionManager.getEntities());
 
         clearSelection();
 

@@ -19,10 +19,13 @@ package uk.ac.ebi.mnb.dialog.edit;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.core.WarningMessage;
@@ -30,8 +33,6 @@ import uk.ac.ebi.mnb.edit.DeleteEntitiesEdit;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -54,7 +55,8 @@ public class DeleteEntities extends ControllerAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance()
+                                                           .getActive();
         EntityCollection selection = getSelection();
 
         EntityCollection collection = new EntityMap(DefaultEntityFactory.getInstance());
@@ -63,29 +65,31 @@ public class DeleteEntities extends ControllerAction {
         // ergh bit of hack but stops a bug for now
         boolean showWarning = Boolean.FALSE;
 
-
-        // removes metabolites contained in reactions as it's tricky to delete these at
-        // the moment
-        List<Metabolite> metabolites = new ArrayList<Metabolite>(collection.get(Metabolite.class));
-        for (Metabolite metabolite : metabolites) {
-            if (!recon.getReactome().getReactions(metabolite).isEmpty()) {
-                showWarning = Boolean.TRUE;
-                collection.remove(metabolite);
-            }
-        }
-
         DeleteEntitiesEdit edit = new DeleteEntitiesEdit(recon, collection);
-        edit.redo(); // use the edit to do the action
         getController().getUndoManager().addEdit(edit);
 
+        for (Metabolite m : collection.get(Metabolite.class)) {
+            recon.remove(m);
+        }
+        for (MetabolicReaction r : collection.get(MetabolicReaction.class)) {
+            recon.remove(r);
+        }
+        for (Gene g : collection.get(Gene.class)) {
+            recon.remove(g);
+        }
+        for (GeneProduct p : collection.getGeneProducts()) {
+            recon.remove(p);
+        }
+
         selection.clear();
-        getController().update();
+        update();
 
         if (showWarning) {
             String mesg = "Some metabolites were not deleted as they were referenced in" +
                     " reactions. Please remove the metabolites from the reactions that use them or" +
                     " delete the entire reaction first.";
-            getController().getMessageManager().addReport(new WarningMessage(mesg));
+            getController().getMessageManager()
+                    .addReport(new WarningMessage(mesg));
         }
 
     }

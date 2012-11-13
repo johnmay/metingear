@@ -35,11 +35,11 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collection;
 
 
 /**
- * MetabolitePanel – 2011.09.30 <br>
- * Product panel renderer.
+ * MetabolitePanel – 2011.09.30 <br> Product panel renderer.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -86,8 +86,8 @@ public class GenePanel
 
 
     /**
-     * Updates the displayed sequence
-     * Sends update signal to AbstractEntityPanel to update Name, Abbreviation and Identifier
+     * Updates the displayed sequence Sends update signal to AbstractEntityPanel
+     * to update Name, Abbreviation and Identifier
      *
      * @return
      */
@@ -111,6 +111,11 @@ public class GenePanel
 
 
     @Override
+    public Collection<? extends AnnotatedEntity> getReferences() {
+        return entity.getProducts();
+    }
+
+    @Override
     public boolean setEntity(AnnotatedEntity entity) {
         this.entity = (Gene) entity;
         return super.setEntity(entity);
@@ -118,7 +123,8 @@ public class GenePanel
 
 
     /**
-     * Appends a JTextPane displaying the product sequence to the basic information panel
+     * Appends a JTextPane displaying the product sequence to the basic
+     * information panel
      *
      * @return
      */

@@ -24,7 +24,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.BorderlessScrollPane;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
-import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
@@ -34,11 +33,12 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
 /**
- *          EntityInspector – 2011.09.06 <br>
- *          Displays information on the selected entity in the table
+ * EntityInspector – 2011.09.06 <br> Displays information on the selected entity
+ * in the table
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public abstract class AbstractEntityInspector
         extends JPanel
@@ -93,9 +93,9 @@ public abstract class AbstractEntityInspector
     }
 
     /**
-     * Updates the inspector with the currently selected component.
-     * If multiple rows are selected the first row is used (as 
-     * is the case in table.getSelectedRow())      
+     * Updates the inspector with the currently selected component. If multiple
+     * rows are selected the first row is used (as is the case in
+     * table.getSelectedRow())
      */
     @Override
     public boolean update() {
@@ -104,14 +104,14 @@ public abstract class AbstractEntityInspector
         }
         int selected = table.getSelectedRow();
         if (selected >= 0 && selected < table.getRowCount()) {
-            entity = table.getModel().getEntity(table.convertRowIndexToModel(selected));
-            if (panel.setEntity(entity)) {
-                panel.update();
-            }
+            entity = table.getModel()
+                          .getEntity(table.convertRowIndexToModel(selected));
+
+            panel.setEntity(entity);
+            panel.update();
             setDisplay();
             repaint();
             revalidate();
-
         } else {
             if (entity != null) {
                 panel.update();
@@ -137,6 +137,7 @@ public abstract class AbstractEntityInspector
         }
         return false;
     }
+
     private JScrollPane pane;
 
     private void setDisplay() {
@@ -146,7 +147,8 @@ public abstract class AbstractEntityInspector
 
     /**
      * Invoked on on a list selection change
-     * @param e 
+     *
+     * @param e
      */
     public void valueChanged(ListSelectionEvent e) {
         this.update();
@@ -162,7 +164,7 @@ public abstract class AbstractEntityInspector
         return table.getSelection();
     }
 
-    public AnnotatedEntity getEntity(){
+    public AnnotatedEntity getEntity() {
         return entity;
     }
 

@@ -36,12 +36,16 @@ import uk.ac.ebi.mnb.main.MainView;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.undo.UndoManager;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
- * EntityTableModel – 2011.09.06 <br>
- * Class description
+ * EntityTableModel – 2011.09.06 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -99,11 +103,10 @@ public abstract class AbstractEntityTableModel
      * Returns the component and given index
      *
      * @param index
-     *
      * @return
      */
     public AnnotatedEntity getEntity(int index) {
-        return components.get(index);
+        return index != -1 && index < components.size() ? components.get(index) : null;
     }
 
     private Object[][] data;
@@ -113,7 +116,8 @@ public abstract class AbstractEntityTableModel
      * Updates the underlying table-model
      */
     public boolean update() {
-        loadComponents();
+        setEntities(getEntities());
+
         data = new Object[components.size()][getColumnCount()];
         long start = System.currentTimeMillis();
         for (int i = 0; i < components.size(); i++) {
@@ -125,7 +129,7 @@ public abstract class AbstractEntityTableModel
             }
         }
         long end = System.currentTimeMillis();
-        LOGGER.info("Loaded table data: " + getClass() + " : " + (end - start) + " ms ");
+        LOGGER.info("loaded table data: " + getClass() + " : " + (end - start) + " ms ");
         fireTableDataChanged();
         return true;
     }
@@ -134,7 +138,7 @@ public abstract class AbstractEntityTableModel
     public boolean update(AnnotatedEntity entity) {
         int index = indexOf(entity);
         if (index == -1) {
-            LOGGER.error("Skiping update on item: " + entity);
+            LOGGER.error("Skipping update on item: " + entity);
         }
 
 
@@ -198,7 +202,7 @@ public abstract class AbstractEntityTableModel
     /**
      * Method is called on update before cells are copied over to data[][]
      */
-    public abstract void loadComponents();
+    public abstract Collection<? extends AnnotatedEntity> getEntities();
 
 
     public void setEntities(Collection<? extends AnnotatedEntity> components) {
@@ -281,7 +285,8 @@ public abstract class AbstractEntityTableModel
         } else if (type == DataType.BASIC) {
             return getBasicInfo(entity, getColumnName(columnIndex));
         } else if (type == DataType.ANNOTATION) {
-            return entity.getAnnotationsExtending(columnDescriptors.get(columnIndex).getAccessClass());
+            return entity.getAnnotationsExtending(columnDescriptors.get(columnIndex)
+                                                                   .getAccessClass());
         } else if (type == DataType.OBSERVATION) {
             return null;
             //            return entity.getObservationCollection().get(

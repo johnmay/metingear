@@ -30,6 +30,8 @@ import uk.ac.ebi.mnb.menu.popup.CloseProject;
 import uk.ac.ebi.mnb.menu.popup.SetActiveProject;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
+import uk.ac.ebi.mnb.view.entity.general.GeneralTable;
+import uk.ac.ebi.mnb.view.entity.general.GeneralTableModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -176,7 +178,7 @@ public class SourceController
 
         // with each update item we remove it from the item collector. then at the end all items
         // still in the collector are removed
-        Set<AnnotatedEntity> itemCollector = new HashSet();
+        Set<AnnotatedEntity> itemCollector = new HashSet<AnnotatedEntity>();
         itemCollector.addAll(itemMap.keySet());
         genes.setCounterValue(0);
         products.setCounterValue(0);
@@ -191,7 +193,7 @@ public class SourceController
             for (int i = 0; i < manager.size(); i++) {
                 // todo: remove cast
                 ReconstructionImpl reconstruction = (ReconstructionImpl) manager.getProject(i);
-                if (itemMap.containsKey(reconstruction) == false) {
+                if (!itemMap.containsKey(reconstruction)) {
                     EntitySourceItem item = new ReconstructionSourceItem(reconstruction,
                                                                          reconstructions);
                     itemMap.put(reconstruction, item);
@@ -227,7 +229,7 @@ public class SourceController
         // task are independant from reconstruction
         // products
         for (RunnableTask t : TaskManager.getInstance().getTasks()) {
-            if (itemMap.containsKey(t) == false) {
+            if (!itemMap.containsKey(t)) {
                 EntitySourceItem item = new TaskSourceItem(t, tasks);
                 itemMap.put(t, item);
                 model.addItemToCategory(item, tasks);
@@ -295,7 +297,11 @@ public class SourceController
             view.setGenericView();
 
             AbstractEntityTable table = (AbstractEntityTable) view.getActiveView().getTable();
-            table.getModel().setEntities(new ArrayList(subset.getEntities()));
+
+            if(table instanceof GeneralTable){
+                ((GeneralTableModel)table.getModel()).setGeneralEntities(subset.getEntities());
+            }
+
             view.getActiveView().update();
 
         } else if (item instanceof ReconstructionSourceItem && clickCount > 1) {

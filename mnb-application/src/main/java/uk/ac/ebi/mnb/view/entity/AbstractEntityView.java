@@ -51,7 +51,7 @@ public class AbstractEntityView
         implements EntityView {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityView.class);
-    private final AbstractEntityTable     table;
+    private final AbstractEntityTable table;
     private final AbstractEntityInspector inspector;
     private JLabel label = LabelFactory.emptyLabel(); // avoid null pointers
 
@@ -75,15 +75,19 @@ public class AbstractEntityView
 
 
         // action listener changes text on the bottom-bar
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        table.getSelectionModel()
+             .addListSelectionListener(new ListSelectionListener() {
 
-            public void valueChanged(ListSelectionEvent e) {
-                label.setText(AbstractEntityView.this.table.getSelectedRowCount() + " of " + AbstractEntityView.this.table.getRowCount() + " " + getName() + " selected");
-                label.repaint();
-                // set updater for context
-                MainView.getInstance().getJMenuBar().updateContext();
-            }
-        });
+                 public void valueChanged(ListSelectionEvent e) {
+                     label.setText(AbstractEntityView.this.table
+                                           .getSelectedRowCount() + " of " + AbstractEntityView.this
+                             .table
+                             .getRowCount() + " " + getName() + " selected");
+                     label.repaint();
+                     // set updater for context
+                     MainView.getInstance().getJMenuBar().updateContext();
+                 }
+             });
 
         // update inspector on selection and data change
         table.getSelectionModel().addListSelectionListener(inspector);
@@ -123,7 +127,10 @@ public class AbstractEntityView
 
 
     public boolean update() {
-        return table.update() && inspector.update();
+        boolean changed = table.update();
+        changed = inspector.update() || changed;
+        repaint();
+        return changed;
     }
 
 

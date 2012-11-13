@@ -23,21 +23,21 @@ package uk.ac.ebi.mnb.view.entity.reaction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.Subsystem;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 
 /**
- * ReactionTableModel – 2011.09.26 <br>
- * Class description
+ * ReactionTableModel – 2011.09.26 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -65,12 +65,16 @@ public class ReactionTableModel extends AbstractEntityTableModel {
 
 
     @Override
-    public void loadComponents() {
+    public Collection<? extends AnnotatedEntity> getEntities() {
 
-        Reconstruction project = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction project = DefaultReconstructionManager.getInstance()
+                                                             .getActive();
 
-        setEntities(project != null ? project.getReactome() : new ArrayList());
+        if (project != null)
+            return project.getReactome();
 
+
+        return Collections.EMPTY_LIST;
     }
 
 
