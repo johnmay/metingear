@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Metingear : The metabolic development environment" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Metingear</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/johnmay/metingear">View on GitHub</a>
+
+          <h1 id="project_title">Metingear</h1>
+          <h2 id="project_tagline">The metabolic development environment</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/johnmay/metingear/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/johnmay/metingear/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>Metingear is an open source desktop application for creating and curating genome scale metabolic networks with chemical structure.</p>
+
+<p>Creating a high-quality genome-scale metabolite reconstruction requires meticulous manual curation and can take substantial time to complete. Metingear simplifies the process of manual curation providing a higher-quality and correctly annotated reconstruction in less time.</p>
+
+<h3>Latest Version</h3>
+
+
+
+<h2>Key Features</h2>
+
+<h4>Importing existing models</h4>
+
+<p>Import reconstructions from:</p>
+
+<ul>
+<li>
+<a href="http://sbml.org/">Systems Biology Markup Language</a> (SBML)</li>
+<li>
+<a href="http://www.kegg.jp/kegg/xml/">KEGG Markup Language</a> (KGML)</li>
+<li>Microsoft ® Excel *</li>
+</ul><p>Include nucleotide and protein sequence information from:</p>
+
+<ul>
+<li>
+<a href="http://www.ebi.ac.uk/ena/">European Nucleotide Archive</a> (ENA)</li>
+<li>
+<a href="http://en.wikipedia.org/wiki/FASTA_format">FASTA</a> format files</li>
+</ul><h4>Metabolite cross-referencing</h4>
+
+<p>Metingear provides easily resolution of cross-references</p>
+
+<ul>
+<li>import and export <a href="http://en.wikipedia.org/wiki/Resource_Description_Framework">Resource Description Framework</a> (RDF) annotations from SBML</li>
+<li>extract references from free text, such as notes and comments</li>
+<li>search multiple resources using the name of a metabolite</li>
+<li>resource inference on manually entered identifiers</li>
+</ul><h4>Chemical Structure</h4>
+
+<ul>
+<li>automatically fetch a structure using added cross-references<br>
+</li>
+<li>import a structure diagram from <a href="http://www.xml-cml.org/">Chemical Markup Language</a> (CML), <a href="http://en.wikipedia.org/wiki/Chemical_table_file">MDL V2000/V3000</a>, <a href="www.iupac.org/inchi/">International Chemical Identifier</a> (InChI) and <a href="http://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system">Simplified molecular-input line-entry system</a> (SMILES).</li>
+<li>use an assisted drawing tool to create structures for repetitive metabolites (e.g. short polypeptides)</li>
+<li>export chemical structures to a <a href="http://en.wikipedia.org/wiki/Chemical_table_file#SDF">Structured Data File</a> (SDF) or as <a href="www.iupac.org/inchi/">InChI</a> annotations in <a href="http://sbml.org/">SBML</a>
+</li>
+</ul><h4>Data Resources</h4>
+
+<p>Simplified interaction with:</p>
+
+<ul>
+<li>
+<a href="http://www.ebi.ac.uk/chebi/">Chemical Entities of Biological Interest</a> (ChEBI)</li>
+<li><a href="http://www.genome.jp/kegg/ligand.html">KEGG Compound</a></li>
+<li><a href="http://metacyc.org/">MetaCyc</a></li>
+<li>
+<a href="http://pubchem.ncbi.nlm.nih.gov/">PubChem</a> **</li>
+<li>
+<a href="http://www.hmdb.ca/">Human Metabolome Database</a> (HMDB)</li>
+<li><a href="http://www.lipidmaps.org/">LIPID MAPs</a></li>
+<li><a href="http://www.uniprot.org/">UniProt</a></li>
+</ul><p>To improve speed, users can load resources into a searchable local index. The index dramatically improves speed and allows customised searching, such as chemical substructure. All services are link to identifiers so once an identifier is added Metingear can identify if any services are available and which services can be used.</p>
+
+<h2>Tutorials</h2>
+
+<ul>
+<li><a href="https://github.com/johnmay/metingear/wiki/Installation">Installation</a></li>
+<li><a href="https://github.com/johnmay/metingear/wiki/Getting-Started">Getting Started</a></li>
+<li><a href="https://github.com/johnmay/metingear/wiki/Import">Importing Data</a></li>
+<li><a href="https://github.com/johnmay/metingear/wiki/Creating-and-Editing">Creating and Editing</a></li>
+<li><a href="https://github.com/johnmay/metingear/wiki/Annotating">Annotating</a></li>
+</ul><p><br></p>
+
+<h2>Other Projects</h2>
+
+<ul>
+<li>
+<a href="https://github.com/johnmay/mdk">Model Development Kit</a> (MDK) - the domain model behind Metingear </li>
+<li>
+<a href="http://sourceforge.net/p/cdk/">Chemistry Development Kit</a> (CDK) - used to manipulate chemical data</li>
+<li>
+<a href="http://biojava.org/wiki/Main_Page">BioJava3</a> - used to manipulate sequence data</li>
+</ul><p><br><br><br><em>* requires column selection</em> <br><em>** currently web-service only</em></p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Metingear maintained by <a href="https://github.com/johnmay">johnmay</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
