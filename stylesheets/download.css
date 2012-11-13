@@ -1,0 +1,27 @@
+div #download {
+    background: url(../images/download.png) no-repeat;
+    width:      255px;
+    height:     75px;
+    vertical-align :middle;
+    position: relative;
+}
+ 
+div #download:hover {
+    background-position:0 -75px;
+}
+ 
+div #downloadinfo {
+  position: absolute; 
+  left:     85px; 
+  top:      5px; 
+  width:    155px; /* 255 - 85 - 15 */
+  height:   65px; 
+  display:  table; 
+}
+ 
+#downloadinfo p {
+  display: table-cell; 
+  vertical-align: middle; 
+  text-align: left;
+  text-shadow: none; 
+}

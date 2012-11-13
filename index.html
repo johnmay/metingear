@@ -6,10 +6,38 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="Metingear : The metabolic development environment" />
 
+    
+    <link rel="stylesheet" type="text/css" href="stylesheets/download.css">
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>Metingear</title>
   </head>
+
+   <!-- TODO: move script to a separate file -->
+    <script type="text/javascript">
+        
+        // get the appropiate label for the download button
+        function getDownloadOSLabel(){
+            var label="for all platforms";
+            if (navigator.appVersion.indexOf("Win")!=-1) label="for Windows";
+            if (navigator.appVersion.indexOf("Mac")!=-1) label="for Mac OS X";
+            return label;
+        }
+        
+        // directs to windows or mac specific downloads, defaults to the jar
+        function download(){
+            if (navigator.appVersion.indexOf("Win")!=-1) {
+                window.location.href='https://github.com/downloads/johnmay/metingear/Metingear-0.9.1.exe';
+            }
+            else if (navigator.appVersion.indexOf("Mac")!=-1){
+                window.location.href='https://github.com/downloads/johnmay/metingear/Metingear-0.9.1.dmg';
+            } else {             
+                window.location.href='https://github.com/downloads/johnmay/metingear/Metingear-0.9.1.jar';                
+            }
+        }
+        
+        
+    </script> 
 
   <body>
 
@@ -37,7 +65,17 @@
 
 <h3>Latest Version</h3>
 
-
+<div id="download" onClick="download()">
+                <div id="downloadinfo">
+                    <p>
+                        <b>Download Beta 0.9.1</b>
+                        <br/>
+                        <span><script type="text/javascript">document.write(getDownloadOSLabel())</script></span>
+                        <a href="https://github.com/johnmay/metingear/downloads"
+                           title="alternative download options">more</a>
+                        </p>
+                </div>
+            </div>
 
 <h2>Key Features</h2>
 
