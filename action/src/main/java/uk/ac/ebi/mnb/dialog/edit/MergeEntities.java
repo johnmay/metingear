@@ -17,31 +17,35 @@
 
 package uk.ac.ebi.mnb.dialog.edit;
 
+import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.metingear.edit.entity.MergeMetaboliteEdit;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
- * @name    MergeEntities - 2011.10.04 <br>
- *          Class allows merging of entries
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name MergeEntities - 2011.10.04 <br> Class allows merging of entries
  */
 public class MergeEntities extends ControllerDialog {
 
@@ -79,44 +83,38 @@ public class MergeEntities extends ControllerDialog {
 
         selection = getSelection();
         Collection<Metabolite> entities = selection.get(Metabolite.class);
-        // create a new metabolite consisting of the other two.
-        // find them in all reactions and update reactions also
-        Metabolite n = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
-        ;
+
+
         Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
 
-        StringBuilder accessionBuilder = new StringBuilder();
-        StringBuilder nameBuilder = new StringBuilder();
-        StringBuilder abbrBuilder = new StringBuilder();
+        List<Annotation> annotations = new ArrayList<Annotation>();
+
+        Set<String> names = new HashSet<String>();
+        Set<String> abbreviations = new HashSet<String>();
 
         for (Metabolite m : entities) {
 
-            accessionBuilder.append(m.getAccession());
-            nameBuilder.append(m.getName());
-            abbrBuilder.append(m.getAbbreviation());
+            names.add(m.getName().trim());
+            abbreviations.add(m.getName().trim());
 
-            n.addAnnotations(m.getAnnotations());
-
-            for (MetabolicReaction rxn : recon.getReactome().getReactions(m)) {
-                for (MetabolicParticipant p : rxn.getReactants()) {
-                    if (p.getMolecule() == m) { // do a direct reference compare
-                        p.setMolecule(n);
-                    }
-                }
-            }
-            recon.getMetabolome().remove(m);
+            annotations.addAll(m.getAnnotations());
         }
 
-        n.setIdentifier(new BasicChemicalIdentifier().newInstance());
-        n.setName(nameBuilder.toString());
-        n.setAbbreviation(abbrBuilder.toString());
+        Metabolite union = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
+                                                                          BasicChemicalIdentifier.nextIdentifier(),
+                                                                          Joiner.on(" ").join(names),
+                                                                          Joiner.on(" ").join(abbreviations));
+        // add all annotations to the union
+        union.addAnnotations(annotations);
 
+        MergeMetaboliteEdit edit = new MergeMetaboliteEdit(new ArrayList<Metabolite>(entities),
+                                                           union,
+                                                           recon);
 
-        recon.addMetabolite(n);
+        addEdit(edit); // add the edit to the manager
 
+        edit.apply(); // actually do the edit - this is quite complex, hence it is bundled in with the undoable edit
 
-        recon.getReactome().rebuildMaps();
-        //        recon.remove // remove metabolite
 
     }
 
