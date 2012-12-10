@@ -23,8 +23,8 @@ package uk.ac.ebi.mnb.view.entity;
 import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
-import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
@@ -32,15 +32,16 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *          EntityTable – 2011.09.06 <br>
- *          Class description
+ * EntityTable – 2011.09.06 <br> Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public abstract class AbstractEntityTable
         extends JTable
@@ -56,6 +57,8 @@ public abstract class AbstractEntityTable
         setAutoscrolls(true);
         setFont(ThemeManager.getInstance().getTheme().getBodyFont());
         setAutoCreateRowSorter(true);
+        // force double click to edit -> annoying because ctrl-z/cmd-z will start editing the cell
+        putClientProperty("JTable.autoStartsEdit", Boolean.FALSE);
         setColumnModel(columnModel);
     }
 
@@ -65,9 +68,7 @@ public abstract class AbstractEntityTable
     }
 
     /**
-     *
      * Update the table model with the current
-     *
      */
     public boolean update() {
         return getModel().update();
@@ -91,11 +92,9 @@ public abstract class AbstractEntityTable
     }
 
     /**
-     *
      * Sets a single selection in the table
-     * 
-     * @param component
      *
+     * @param component
      */
     public boolean setSelection(EntityCollection selectionManager) {
 
@@ -122,7 +121,7 @@ public abstract class AbstractEntityTable
         if (parent != null) {
 
             int y = getTableHeader().getHeight() + (getRowHeight() * selected) - ((int) parent.getHeight()
-                                                                                  / 2);
+                    / 2);
             scrollRectToVisible(new Rectangle(0, y,
                                               parent.getWidth(),
                                               parent.getHeight()));
