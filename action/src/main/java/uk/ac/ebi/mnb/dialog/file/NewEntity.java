@@ -42,14 +42,13 @@ import java.util.regex.Pattern;
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @name NewEntity - 2011.10.04 <br>
- * Base class for new entities. Provides operations on basic information setting (i.e. Abbreviation, Name
- * and Accession).
+ * @name NewEntity - 2011.10.04 <br> Base class for new entities. Provides
+ * operations on basic information setting (i.e. Abbreviation, Name and
+ * Accession).
  */
 public abstract class NewEntity extends ControllerDialog {
 
     private static final Logger LOGGER = Logger.getLogger(NewEntity.class);
-
 
 
     private JTextField name = FieldFactory.newField(20);
@@ -80,7 +79,6 @@ public abstract class NewEntity extends ControllerDialog {
         super(frame, updater, messages, controller, undoableEdits, "SaveDialog");
 
 
-
         this.updateable = updater;
 
     }
@@ -95,13 +93,13 @@ public abstract class NewEntity extends ControllerDialog {
                                        "p, 4dlu, p:grow"));
 
 
+        panel.add(LabelFactory.newFormLabel("Name", "An official or trivial name the new entity"), cc.xy(1, 1));
+        panel.add(name, cc.xy(3, 1));
+
         panel.add(LabelFactory.newFormLabel("Abbreviation",
                                             "A short 2-5 character abbreviation of the new entity"),
-                  cc.xy(1, 1));
-        panel.add(abbreviation, cc.xy(3, 1));
-
-        panel.add(LabelFactory.newFormLabel("Name", "An official or trivial name the new entity"), cc.xy(1, 3));
-        panel.add(name, cc.xy(3, 3));
+                  cc.xy(1, 3));
+        panel.add(abbreviation, cc.xy(3, 3));
 
         name.getDocument().addDocumentListener(new DocumentListener() {
             @Override
