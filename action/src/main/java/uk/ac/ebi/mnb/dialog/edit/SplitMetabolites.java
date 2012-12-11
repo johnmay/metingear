@@ -17,9 +17,9 @@
 
 package uk.ac.ebi.mnb.dialog.edit;
 
+import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.list.MutableJList;
 import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.report.ReportManager;
@@ -53,6 +53,8 @@ public class SplitMetabolites extends ControllerDialog {
     public SplitMetabolites(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "SplitMetabolites");
         setDefaultLayout();
+        left.setCellRenderer(new ReactionCellRenderer());
+        right.setCellRenderer(new ReactionCellRenderer());
     }
 
 
@@ -69,30 +71,41 @@ public class SplitMetabolites extends ControllerDialog {
 
         final JPanel form = super.getForm();
 
-        form.setLayout(new FormLayout("90dlu, 4dlu, 90dlu", "p, 4dlu, p"));
+        form.setLayout(new FormLayout("p:grow, 4dlu, p:grow", "top:min"));
+        form.setBorder(Borders.createEmptyBorder("10dlu, 10dlu, 10dlu, 10dlu"));
 
-        CellConstraints cc = new CellConstraints();
+        final CellConstraints cc = new CellConstraints();
+
 
         left.setVisibleRowCount(10);
         right.setVisibleRowCount(10);
-        left.setBackground(form.getBackground());
-        right.setBackground(form.getBackground());
+
+        final Color bgColor = form.getBackground();
+
+        left.setBackground(bgColor);
+        right.setBackground(bgColor);
+
+        // fix cell width/height - otherwise the lists can expand and be unaligned
+        left.setFixedCellHeight(18);
+        left.setFixedCellWidth(200);
+        right.setFixedCellHeight(18);
+        right.setFixedCellWidth(200);
+
         left.setForeground(form.getForeground());
         right.setForeground(form.getForeground());
-        left.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, form.getBackground().darker()));
-        right.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, form.getBackground().darker()));
 
-        form.add(LabelFactory.newLabel("left"), cc.xy(1, 1));
-        form.add(LabelFactory.newLabel("right"), cc.xy(3, 1));
 
-        JComponent leftComponent = new MutableJListController(left).getListWithController();
-        JComponent rightComponent = new MutableJListController(right).getListWithController();
+//        form.add(LabelFactory.newLabel("left"), cc.xy(1, 1));
+//        form.add(LabelFactory.newLabel("right"), cc.xy(3, 1));
 
-        leftComponent.setPreferredSize(new Dimension(250, (int) leftComponent.getPreferredSize().getHeight()));
-        rightComponent.setPreferredSize(new Dimension(250, (int) rightComponent.getPreferredSize().getHeight()));
+        final JComponent leftComponent = new MutableJListController(left).getListWithController();
+        final JComponent rightComponent = new MutableJListController(right).getListWithController();
 
-        form.add(leftComponent, cc.xy(1, 3));
-        form.add(rightComponent, cc.xy(3, 3));
+        leftComponent.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
+        rightComponent.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.LIGHT_GRAY));
+
+        form.add(leftComponent, cc.xy(1, 1));
+        form.add(rightComponent, cc.xy(3, 1));
 
         return form;
 
@@ -113,11 +126,13 @@ public class SplitMetabolites extends ControllerDialog {
         final ReconstructionManager manager = DefaultReconstructionManager.getInstance();
         final Collection<MetabolicReaction> reactions = manager.getActive().getReactome().getReactions(metabolite);
 
-        left.removeAll();
-        right.removeAll();
+        left.getModel().removeAllElements();
+        right.getModel().removeAllElements();
+
         for (final MetabolicReaction reaction : reactions) {
             left.addElement(reaction);
         }
+
 
     }
 
@@ -164,6 +179,19 @@ public class SplitMetabolites extends ControllerDialog {
         edit.apply();
 
 
+    }
+
+    private static class ReactionCellRenderer extends DefaultListCellRenderer {
+        @Override
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            final JLabel component = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            final String text = component.getText();
+            if (text.length() > 40) {
+                component.setToolTipText(text);
+                component.setText(text.substring(0, 40) + "...");
+            }
+            return component;
+        }
     }
 
 }
