@@ -31,11 +31,12 @@ import java.util.List;
 
 /**
  * A compound edit which merge several <i>separate</i> metabolites into a single
- * union.
+ * union. The undoable edit allows you <i>apply</i> the edit to the data model
+ * with {@link #apply()}.
  *
  * @author John May
  */
-public class MergeMetaboliteEdit extends CompoundEdit {
+public final class MergeMetaboliteEdit extends CompoundEdit {
 
     private final Reconstruction reconstruction;
     private final Metabolite union;
@@ -47,15 +48,17 @@ public class MergeMetaboliteEdit extends CompoundEdit {
         this.separate = separate;
         this.union = union;
         this.reconstruction = reconstruction;
-        create();
+
+        // construction of the compound edit
+        build();
 
     }
 
     /**
-     * Applies the edit
+     * Applies the edit to the object model. This edit is rather complex and can
+     * be difficult to correctly perform all required steps.
      */
-    public void apply() {
-
+    public final void apply() {
 
         for (final Metabolite replace : separate) {
             reconstruction.getMetabolome().remove(replace);
@@ -98,7 +101,7 @@ public class MergeMetaboliteEdit extends CompoundEdit {
     /**
      * Creates the compound edit
      */
-    private void create() {
+    private void build() {
 
         // remove separate metabolites
         for (final Metabolite replace : separate) {
@@ -180,7 +183,8 @@ public class MergeMetaboliteEdit extends CompoundEdit {
     }
 
     /**
-     * Creates a replacement with the given.
+     * Helper method to create a replacement participant with the new
+     * metabolite.
      *
      * @param p a participant to get the coefficient/compartment from
      * @param m a metabolite to set on the participant
