@@ -4,17 +4,17 @@
  * 2011.10.04
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -23,8 +23,8 @@ package uk.ac.ebi.mnb.core;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -39,11 +39,11 @@ import java.util.Collection;
 
 
 /**
- * @name    MergeEntities - 2011.10.04 <br>
- *          Dialog that allows full control of contents, selection, messages and update action
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name MergeEntities - 2011.10.04 <br> Dialog that allows full control of
+ * contents, selection, messages and update action
  */
 public abstract class ControllerDialog extends DropdownDialog {
 
@@ -86,9 +86,17 @@ public abstract class ControllerDialog extends DropdownDialog {
         return controller.getSelection();
     }
 
+    /**
+     * Prepare the dialog before it is shown.
+     */
+    public void prepare() {
+
+    }
+
 
     /**
      * Add a message to the message manager
+     *
      * @param edit
      */
     public void addMessage(Report message) {
@@ -98,6 +106,7 @@ public abstract class ControllerDialog extends DropdownDialog {
 
     /**
      * Add an undoable edit to the undo manager
+     *
      * @param edit
      */
     public void addEdit(UndoableEdit edit) {
@@ -108,6 +117,7 @@ public abstract class ControllerDialog extends DropdownDialog {
     /**
      * Class update() on the provided TargetedUpdate. Override this to provide
      * more efficient updating
+     *
      * @return
      */
     @Override

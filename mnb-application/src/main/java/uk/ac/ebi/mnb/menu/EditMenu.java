@@ -22,12 +22,20 @@ package uk.ac.ebi.mnb.menu;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.metingear.preference.PreferenceFrame;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
-import uk.ac.ebi.mnb.dialog.edit.*;
+import uk.ac.ebi.mnb.dialog.edit.AddAnnotation;
+import uk.ac.ebi.mnb.dialog.edit.AddAuthorAnnotation;
+import uk.ac.ebi.mnb.dialog.edit.CreateSubset;
+import uk.ac.ebi.mnb.dialog.edit.DeleteEntities;
+import uk.ac.ebi.mnb.dialog.edit.MergeEntities;
+import uk.ac.ebi.mnb.dialog.edit.ReassignIdentifiers;
+import uk.ac.ebi.mnb.dialog.edit.Resync;
+import uk.ac.ebi.mnb.dialog.edit.SplitMetabolites;
 import uk.ac.ebi.mnb.main.MainView;
 
 import javax.swing.*;
@@ -36,8 +44,7 @@ import java.awt.event.ActionEvent;
 
 
 /**
- * EditMenu – 2011.09.26 <br>
- * Class description
+ * EditMenu – 2011.09.26 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -91,6 +98,12 @@ public class EditMenu extends ContextMenu {
         add(new JSeparator());
         add(create(AddAuthorAnnotation.class));
         add(create(AddAnnotation.class));
+        add(create(SplitMetabolites.class), new ContextResponder() {
+            @Override
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return active != null && selection.hasSelection(Metabolite.class) && selection.get(Metabolite.class).size() == 1;
+            }
+        });
         add(new ReassignIdentifiers(MainView.getInstance()), new ContextResponder() {
             @Override
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
