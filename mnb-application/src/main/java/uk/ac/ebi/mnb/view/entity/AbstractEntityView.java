@@ -55,6 +55,21 @@ public class AbstractEntityView
     private final AbstractEntityInspector inspector;
     private JLabel label = LabelFactory.emptyLabel(); // avoid null pointers
 
+    private final ListSelectionListener listener = new ListSelectionListener() {
+
+        public void valueChanged(ListSelectionEvent e) {
+            if (!e.getValueIsAdjusting()) {
+                label.setText(AbstractEntityView.this.table
+                                      .getSelectedRowCount() + " of " + AbstractEntityView.this
+                        .table
+                        .getRowCount() + " " + getName() + " selected");
+                label.repaint();
+                // set updater for context
+                MainView.getInstance().getJMenuBar().updateContext();
+            }
+        }
+    };
+
 
     public AbstractEntityView(String name,
                               final AbstractEntityTable table,
@@ -76,18 +91,7 @@ public class AbstractEntityView
 
         // action listener changes text on the bottom-bar
         table.getSelectionModel()
-             .addListSelectionListener(new ListSelectionListener() {
-
-                 public void valueChanged(ListSelectionEvent e) {
-                     label.setText(AbstractEntityView.this.table
-                                           .getSelectedRowCount() + " of " + AbstractEntityView.this
-                             .table
-                             .getRowCount() + " " + getName() + " selected");
-                     label.repaint();
-                     // set updater for context
-                     MainView.getInstance().getJMenuBar().updateContext();
-                 }
-             });
+             .addListSelectionListener(listener);
 
         // update inspector on selection and data change
         table.getSelectionModel().addListSelectionListener(inspector);

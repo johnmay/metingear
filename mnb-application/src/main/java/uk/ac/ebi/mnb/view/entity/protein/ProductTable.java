@@ -21,6 +21,9 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
+import uk.ac.ebi.mdk.domain.entity.Rating;
+import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
+import uk.ac.ebi.mdk.ui.render.table.RatingCellRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
@@ -40,6 +43,11 @@ public class ProductTable extends AbstractEntityTable {
 
     public ProductTable() {
         super(new ProductTableModel());
+
+        setDefaultRenderer(Rating.class, new RatingCellRenderer());
+        setDefaultEditor(Rating.class, new RatingCellEditor());
+
+
     }
 
 

@@ -18,14 +18,16 @@
 package uk.ac.ebi.mnb.dialog.edit;
 
 import com.google.common.base.Joiner;
-import org.apache.log4j.Logger;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.metingear.edit.entity.MergeMetaboliteEdit;
 import uk.ac.ebi.mnb.core.ControllerDialog;
@@ -35,6 +37,7 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -49,9 +52,8 @@ import java.util.Set;
  */
 public class MergeEntities extends ControllerDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(MergeEntities.class);
 
-    private EntityCollection selection;
+    private JTextField name = FieldFactory.newField(40);
 
 
     public MergeEntities(JFrame frame,
@@ -67,34 +69,44 @@ public class MergeEntities extends ControllerDialog {
     @Override
     public JLabel getDescription() {
         JLabel label = super.getDescription();
-        label.setText("Merge multiple entries into one");
+        label.setText("Merge multiple metabolites into one");
         return label;
     }
 
 
     @Override
     public JPanel getForm() {
-        return super.getForm();
+        JPanel panel = super.getForm();
+        panel.setLayout(new FormLayout("right:p, 4dlu, p", "p"));
+        panel.add(LabelFactory.newFormLabel("Merged Name:",
+                                            "The name of the merged metabolite"), new CellConstraints(1, 1));
+        panel.add(name, new CellConstraints(3, 1));
+        return panel;
     }
 
+    @Override
+    public void prepare() {
+        final Set<String> names = new HashSet<String>();
+        for (final Metabolite m : getSelection().get(Metabolite.class)) {
+            names.add(m.getName().trim());
+        }
+        name.setText(Joiner.on("-").join(names));
+    }
 
     @Override
     public void process() {
 
-        selection = getSelection();
-        Collection<Metabolite> entities = selection.get(Metabolite.class);
+        Collection<Metabolite> entities = getSelection().get(Metabolite.class);
 
 
         Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
 
         List<Annotation> annotations = new ArrayList<Annotation>();
 
-        Set<String> names = new HashSet<String>();
         Set<String> abbreviations = new HashSet<String>();
 
         for (Metabolite m : entities) {
 
-            names.add(m.getName().trim());
             abbreviations.add(m.getName().trim());
 
             annotations.addAll(m.getAnnotations());
@@ -102,7 +114,7 @@ public class MergeEntities extends ControllerDialog {
 
         Metabolite union = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
                                                                           BasicChemicalIdentifier.nextIdentifier(),
-                                                                          Joiner.on(" ").join(names),
+                                                                          name.getText(),
                                                                           Joiner.on(" ").join(abbreviations));
         // add all annotations to the union
         union.addAnnotations(annotations);

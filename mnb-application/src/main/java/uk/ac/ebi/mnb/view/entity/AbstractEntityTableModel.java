@@ -28,9 +28,12 @@ import uk.ac.ebi.chemet.render.source.NameAccessor;
 import uk.ac.ebi.edit.entity.AbbreviationSetter;
 import uk.ac.ebi.edit.entity.NameSetter;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
+import uk.ac.ebi.mdk.ui.render.table.RatingCellRenderer;
 import uk.ac.ebi.mnb.interfaces.EntityTableModel;
 import uk.ac.ebi.mnb.main.MainView;
 

@@ -84,7 +84,18 @@ public class EditMenu extends ContextMenu {
         }));
 
         add(new JSeparator());
-        add(create(MergeEntities.class));
+        add(create(MergeEntities.class), new ContextResponder() {
+            @Override
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return active != null && selection.hasSelection(Metabolite.class) && selection.get(Metabolite.class).size() > 1;
+            }
+        });
+        add(create(SplitMetabolites.class), new ContextResponder() {
+            @Override
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return active != null && selection.hasSelection(Metabolite.class) && selection.get(Metabolite.class).size() == 1;
+            }
+        });
         add(new DeleteEntities(MainView.getInstance()));
 
         add(new JSeparator());
@@ -98,12 +109,6 @@ public class EditMenu extends ContextMenu {
         add(new JSeparator());
         add(create(AddAuthorAnnotation.class));
         add(create(AddAnnotation.class));
-        add(create(SplitMetabolites.class), new ContextResponder() {
-            @Override
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return active != null && selection.hasSelection(Metabolite.class) && selection.get(Metabolite.class).size() == 1;
-            }
-        });
         add(new ReassignIdentifiers(MainView.getInstance()), new ContextResponder() {
             @Override
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {

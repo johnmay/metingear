@@ -32,7 +32,6 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,7 +100,10 @@ public abstract class AbstractEntityTable
 
         List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>(selectionManager.getEntities());
 
+        LOGGER.debug("selecting " + entities.size() + " entities");
+
         clearSelection();
+        getSelectionModel().setValueIsAdjusting(true);
 
         for (int i = 0; i < entities.size(); i++) {
             int index = convertRowIndexToView(getModel().indexOf(entities.get(i)));
@@ -127,6 +129,8 @@ public abstract class AbstractEntityTable
                                               parent.getHeight()));
 
         }
+
+        getSelectionModel().setValueIsAdjusting(false);
 
         return true;
 

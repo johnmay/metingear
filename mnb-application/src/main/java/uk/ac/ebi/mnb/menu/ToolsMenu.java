@@ -10,9 +10,19 @@ import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
-import uk.ac.ebi.mnb.dialog.tools.*;
+import uk.ac.ebi.mnb.dialog.tools.AddFlags;
+import uk.ac.ebi.mnb.dialog.tools.AutomaticCrossReference;
+import uk.ac.ebi.mnb.dialog.tools.ChokePoint;
+import uk.ac.ebi.mnb.dialog.tools.CollapseStructures;
+import uk.ac.ebi.mnb.dialog.tools.CompareReconstruction;
+import uk.ac.ebi.mnb.dialog.tools.CuratedReconciliation;
+import uk.ac.ebi.mnb.dialog.tools.DownloadStructuresDialog;
+import uk.ac.ebi.mnb.dialog.tools.MergeLoci;
+import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
+import uk.ac.ebi.mnb.dialog.tools.TransferAnnotations;
 import uk.ac.ebi.mnb.dialog.tools.compare.AlignReconstruction;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.mnb.main.MainView;
@@ -30,6 +40,7 @@ public class ToolsMenu extends ContextMenu {
     private static final Logger logger = Logger.getLogger(ToolsMenu.class);
 
     private GapAnalysis gapMenu;
+    private final ContextMenu annotation;
 
 
     public ToolsMenu() {
@@ -38,39 +49,49 @@ public class ToolsMenu extends ContextMenu {
 
         MainView view = MainView.getInstance();
 
-        add(create(AutomaticCrossReference.class), new ContextResponder() {
+        annotation = new ContextMenu("Annotation", MainView.getInstance());
+
+        add(annotation);
+
+        annotation.add(create(AutomaticCrossReference.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(Metabolite.class);
             }
         });
 
-        add(new CuratedReconciliation(view), new ContextResponder() {
+        annotation.add(new AddFlags(view), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return !selection.isEmpty();
+            }
+        });
+
+        annotation.add(create(DownloadStructuresDialog.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(Metabolite.class);
             }
         });
 
-        add(create(DownloadStructuresDialog.class), new ContextResponder() {
+
+        annotation.add(new JSeparator());
+
+        annotation.add(new CuratedReconciliation(view), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(Metabolite.class);
             }
         });
+
+        annotation.add(new JSeparator());
 
         add(new JSeparator());
 
         add(new ChokePoint(view), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(MetabolicReactionImpl.class);
-            }
-        });
-        add(new AddFlags(view), new ContextResponder() {
-
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return !selection.isEmpty();
+                return selection.hasSelection(MetabolicReaction.class);
             }
         });
 

@@ -24,7 +24,9 @@ import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.StarRating;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
@@ -47,7 +49,8 @@ public class ProductTableModel extends AbstractEntityTableModel {
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
             new ColumnDescriptor("Sequence", null,
                                  DataType.FIXED,
-                                 String.class)
+                                 String.class),
+            new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class)
     };
 
     public ProductTableModel() {
@@ -70,11 +73,32 @@ public class ProductTableModel extends AbstractEntityTableModel {
     }
 
     @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        if (getColumnClass(columnIndex) == Rating.class) {
+            return true;
+        }
+        return super.isCellEditable(rowIndex, columnIndex);
+    }
+
+    @Override
+    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+        if (getColumnClass(columnIndex) == Rating.class) {
+            AnnotatedEntity entity = getEntity(rowIndex);
+            entity.setRating((StarRating) value);
+            update(entity);
+            return;
+        }
+        super.setValueAt(value, rowIndex, columnIndex);
+    }
+
+    @Override
     public Object getFixedType(AnnotatedEntity component, String name) {
         GeneProduct product = (GeneProduct) component;
 
         if (name.equals("Sequence")) {
             return Joiner.on("/").join(product.getSequences());
+        } else if (name.equals("Rating")) {
+            return component.getRating();
         }
 
         return "NA";

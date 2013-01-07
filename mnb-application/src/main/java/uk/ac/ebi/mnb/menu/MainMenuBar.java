@@ -28,10 +28,10 @@ public class MainMenuBar
     public MainMenuBar() {
         add(file);
         add(edit);
-        add(build);
-        add(run);
         add(view);
         add(tools);
+        add(run);
+
 //        setBorderPainted(false);
 //        WindowUtils.installJComponentRepainterOnWindowFocusChanged(this);
     }

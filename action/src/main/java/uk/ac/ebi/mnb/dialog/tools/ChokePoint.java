@@ -19,23 +19,30 @@ package uk.ac.ebi.mnb.dialog.tools;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Note;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mnb.core.ControllerAction;
+import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map.Entry;
 
 
 /**
- * @name    FindChokePoints - 2011.10.03 <br>
- *          Performs an action on the given context (selection)
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name FindChokePoints - 2011.10.03 <br> Performs an action on the given
+ * context (selection)
  */
 public class ChokePoint extends ControllerAction {
 
@@ -49,36 +56,57 @@ public class ChokePoint extends ControllerAction {
 
     public void actionPerformed(ActionEvent ae) {
 
-        Map<Metabolite, Integer> rMap = new HashMap();
-        Map<Metabolite, Integer> pMap = new HashMap();
+        int n = DefaultReconstructionManager.getInstance().getActive().getMetabolome().size();
 
-        Multimap<Metabolite, MetabolicReactionImpl> mToR = HashMultimap.create();
+        final Multimap<Metabolite, MetabolicReaction> reactants = HashMultimap.create(n, 5);
+        final Multimap<Metabolite, MetabolicReaction> products = HashMultimap.create(n, 5);
 
-        for (MetabolicReactionImpl rxn : getSelection().get(MetabolicReactionImpl.class)) {
-            for (Metabolite m : (List<Metabolite>) rxn.getReactantMolecules()) {
-                rMap.put(m, rMap.containsKey(m) ? rMap.get(m) + 1 : 1);
-                mToR.put(m, rxn);
+
+        // count number of reactions producing and consuming each metabolite
+        for (final MetabolicReaction rxn : getSelection().get(MetabolicReaction.class)) {
+
+            for (final MetabolicParticipant reactant : rxn.getReactants()) {
+                Metabolite metabolite = reactant.getMolecule();
+                reactants.put(metabolite, rxn);
             }
-            for (Metabolite m : (List<Metabolite>) rxn.getProductMolecules()) {
-                pMap.put(m, pMap.containsKey(m) ? pMap.get(m) + 1 : 1);
-                mToR.put(m, rxn);
+
+            for (final MetabolicParticipant product : rxn.getProducts()) {
+                Metabolite metabolite = product.getMolecule();
+                products.put(metabolite, rxn);
+            }
+
+        }
+
+        final List<MetabolicReaction> chokePoints = new ArrayList<MetabolicReaction>();
+
+        // unique consumed metabolites
+        for (Entry<Metabolite, Collection<MetabolicReaction>> entry : reactants.asMap().entrySet()) {
+            if (entry.getValue().size() == 1) {
+                Metabolite metabolite = entry.getKey();
+                // use a better annotation
+                Annotation note = new Note("Reaction uniquely consumes " + metabolite.getName() + " (" + metabolite.getIdentifier() + ")");
+                entry.getValue().iterator().next().addAnnotation(note);
+                chokePoints.addAll(entry.getValue());
             }
         }
 
-        List<MetabolicReactionImpl> chokePoints = new ArrayList();
-
-        for (Entry<Metabolite, Integer> e : rMap.entrySet()) {
-            if (e.getValue() == 1 && pMap.containsKey(e.getKey()) && pMap.get(e.getKey()) == 1) {
-                Collection<MetabolicReactionImpl> rxns = mToR.get(e.getKey());
-                chokePoints.addAll(rxns);
-                for (MetabolicReactionImpl rxn : rxns) {
-                    rxn.addAnnotation(new AuthorAnnotation("Choke point reaction"));
-                }
+        // unique produced metabolites
+        for (Entry<Metabolite, Collection<MetabolicReaction>> entry : products.asMap().entrySet()) {
+            if (entry.getValue().size() == 1) {
+                Metabolite metabolite = entry.getKey();
+                // use a better annotation
+                Annotation note = new Note("Reaction uniquely produces " + metabolite.getName() + " (" + metabolite.getIdentifier() + ")");
+                entry.getValue().iterator().next().addAnnotation(note);
+                chokePoints.addAll(entry.getValue());
             }
         }
 
-        getSelection().clear();
-        getSelection().addAll(chokePoints);
+
+        LOGGER.debug("identified " + chokePoints.size() + " choke points");
+
+        EntityMap map = new EntityMap(DefaultEntityFactory.getInstance());
+        map.addAll(chokePoints);
+        setSelection(map);
 
     }
 }
