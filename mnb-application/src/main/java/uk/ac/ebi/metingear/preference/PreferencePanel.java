@@ -134,7 +134,7 @@ public class PreferencePanel extends JPanel {
 
             DomainPreferences CORE = DomainPreferences.getInstance();
             ResourcePreferences RESOURCE = ResourcePreferences.getInstance();
-            JLabel label = LabelFactory.newLabel("BLAST", LabelFactory.Size.HUGE);
+            JLabel label = LabelFactory.newLabel("NCBI-BLAST+", LabelFactory.Size.HUGE);
             label.setHorizontalAlignment(SwingConstants.LEFT);
             add(DefaultComponentFactory.getInstance().createSeparator(label));
             add(PreferencePanelFactory.getPreferencePanel(CORE.getPreference("BLASTP_PATH"),
