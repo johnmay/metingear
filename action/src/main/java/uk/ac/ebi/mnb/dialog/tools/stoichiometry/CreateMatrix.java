@@ -38,10 +38,10 @@ import java.util.Collection;
 /**
  * CreateMatrix - 2011.11.24 <br> Class creates a stoichiometric matrix
  *
- * @version $Rev$ : Last Changed $Date: 2011-12-13 16:45:11 +0000 (Tue,
- * 13 Dec 2011) $
  * @author johnmay
  * @author $Author$ (this version)
+ * @version $Rev$ : Last Changed $Date: 2011-12-13 16:45:11 +0000 (Tue, 13 Dec
+ *          2011) $
  */
 public class CreateMatrix
         extends ControllerDialog {
@@ -78,11 +78,12 @@ public class CreateMatrix
     public void process() {
 
         EntityCollection manager = getSelection();
-        Reconstruction  recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
 
-        Collection<MetabolicReaction> rxns = manager.hasSelection(MetabolicReaction.class) && manager.get(MetabolicReaction.class).size() > 1
-                                             ? manager.get(MetabolicReaction.class)
-                                             : recon.getReactome();
+        Collection<MetabolicReaction> rxns =
+                manager.hasSelection(MetabolicReaction.class) && manager.get(MetabolicReaction.class).size() > 1
+                ? manager.get(MetabolicReaction.class)
+                : recon.getReactome();
 
         LOGGER.info("Creating reaction matrix for " + rxns.size() + " reactions");
         matrix = DefaultStoichiometricMatrix.create((int) (rxns.size() * 1.5),
@@ -90,7 +91,7 @@ public class CreateMatrix
         for (MetabolicReaction rxn : rxns) {
 
             // transpose
-            if (rxn.getDirection() == Direction.BACKWARD ) {
+            if (rxn.getDirection() == Direction.BACKWARD) {
                 rxn.transpose();
                 rxn.setDirection(Direction.FORWARD);
             }
@@ -103,7 +104,11 @@ public class CreateMatrix
     @Override
     public boolean update() {
 
-        JFrame frame = new JFrame("S");
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
+
+        JFrame frame = new JFrame("Stoichiometric Matrix ("
+                                          + reconstruction.getAccession()
+                                          + ")");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(500, 500);
         frame.add(new MatrixPane(matrix));
