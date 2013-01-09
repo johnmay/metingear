@@ -20,28 +20,29 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.core.ControllerAction;
+import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.logging.Level;
 
 
 /**
- *          ExportMetabolitesMDL - 2011.10.20 <br>
- *          Class description
+ * ExportMetabolitesMDL - 2011.10.20 <br> Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class ExportMetabolitesMDL extends ControllerAction {
 
@@ -64,9 +65,10 @@ public class ExportMetabolitesMDL extends ControllerAction {
 
         Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
 
-        Collection<Metabolite> metabolites = selection.hasSelection(Metabolite.class)
-                                             ? selection.get(Metabolite.class)
-                                             : recon.getMetabolome();
+        Collection<Metabolite> metabolites =
+                selection.hasSelection(Metabolite.class)
+                ? selection.get(Metabolite.class)
+                : recon.getMetabolome();
 
 
         fileChooser = fileChooser == null ? new JFileChooser() : fileChooser;
@@ -84,24 +86,36 @@ public class ExportMetabolitesMDL extends ControllerAction {
                 return;
             }
 
-        } else {
+        }
+        BufferedWriter writer = null;
 
-            try {
-                // check if overwritting
+        try {
+            // check if overwritting
 
-                MDLV2000Writer writer = new MDLV2000Writer(new FileOutputStream(file));
+            writer = new BufferedWriter(new FileWriter(file));
+            MDLV2000Writer mdl = new MDLV2000Writer(writer);
 
-                for (Metabolite m : metabolites) {
-                    if (m.hasStructure()) {
-                        for (AtomContainerAnnotation structure : m.getAnnotations(AtomContainerAnnotation.class)) {
-                            writer.write(structure.getStructure());
-                        }
+            String recordSeparator = "$$$$" + System.getProperty("line.separator");
+
+            for (Metabolite m : metabolites) {
+                if (m.hasStructure()) {
+                    for (AtomContainerAnnotation structure : m.getAnnotations(AtomContainerAnnotation.class)) {
+                        mdl.write(structure.getStructure());
+                        writer.write(recordSeparator);
                     }
                 }
+            }
 
-            } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(ExportMetabolitesMDL.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (CDKException ex) {
+        } catch (IOException ex) {
+            addMessage(new ErrorMessage("internal error: " + ex.getMessage()));
+        } catch (CDKException ex) {
+            addMessage(new ErrorMessage("internal error: " + ex.getMessage()));
+        } finally {
+            try {
+                if (writer != null)
+                    writer.close();
+            } catch (IOException e1) {
+                System.err.println(e1.getMessage());
             }
         }
 
