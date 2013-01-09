@@ -58,7 +58,7 @@ public class SequenceHomology
     private JCheckBox remote = CheckBoxFactory.newCheckBox("Remote (webservices)");
     private JComboBox tool = ComboBoxFactory.newComboBox("BLAST");
     private JComboBox database = ComboBoxFactory.newComboBox(HomologyDatabaseManager.getInstance().getNames());
-    private JSpinner cpu = new JSpinner(new SpinnerNumberModel(1, 1, 4, 1));
+    private JSpinner cpu = new JSpinner(new SpinnerNumberModel(1, 1, Runtime.getRuntime().availableProcessors(), 1));
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 2500, 50));
     private JTextField field = FieldFactory.newField("1e-30");
     private JCheckBox alignments = CheckBoxFactory.newCheckBox("Parse alignments (increases save sizes)");
@@ -67,6 +67,7 @@ public class SequenceHomology
         super(frame, updater, messages, controller, undoableEdits, "BuildDialog");
 
         remote.setEnabled(false);
+        cpu.setValue(Runtime.getRuntime().availableProcessors());
         setDefaultLayout();
     }
 
