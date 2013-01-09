@@ -39,8 +39,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -84,7 +82,7 @@ public class CandidateSelector
             new AssignStructure(),
             new PeptideGenerator(DefaultEntityFactory.getInstance()),
             new ManualCrossReferenceModule(this),
-            new GoogleSearch(),};
+            new WebSearch(),};
         setDefaultLayout();
 
 
