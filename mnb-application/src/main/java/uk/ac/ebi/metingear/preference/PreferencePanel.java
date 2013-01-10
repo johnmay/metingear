@@ -25,12 +25,17 @@ import uk.ac.ebi.mdk.service.loader.crossreference.UniProtCrossReferenceLoader;
 import uk.ac.ebi.mdk.service.loader.data.ChEBIDataLoader;
 import uk.ac.ebi.mdk.service.loader.location.DefaultLocationFactory;
 import uk.ac.ebi.mdk.service.loader.multiple.HMDBMetabocardsLoader;
+import uk.ac.ebi.mdk.service.loader.multiple.HMDBXMLLoader;
 import uk.ac.ebi.mdk.service.loader.multiple.KEGGCompoundLoader;
 import uk.ac.ebi.mdk.service.loader.multiple.LipidMapsLoader;
 import uk.ac.ebi.mdk.service.loader.multiple.MetaCycCompoundLoader;
 import uk.ac.ebi.mdk.service.loader.name.ChEBINameLoader;
 import uk.ac.ebi.mdk.service.loader.single.TaxonomyLoader;
-import uk.ac.ebi.mdk.service.loader.structure.*;
+import uk.ac.ebi.mdk.service.loader.structure.ChEBIStructureLoader;
+import uk.ac.ebi.mdk.service.loader.structure.HMDBStructureLoader;
+import uk.ac.ebi.mdk.service.loader.structure.KEGGCompoundStructureLoader;
+import uk.ac.ebi.mdk.service.loader.structure.LipidMapsSDFLoader;
+import uk.ac.ebi.mdk.service.loader.structure.MetaCycStructureLoader;
 import uk.ac.ebi.mdk.ui.component.service.LoaderGroupFactory;
 import uk.ac.ebi.metingear.Main;
 
@@ -43,8 +48,7 @@ import java.io.IOException;
 
 
 /**
- * PreferencePanel 2012.02.16 <br/>
- * Class description
+ * PreferencePanel 2012.02.16 <br/> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -195,8 +199,9 @@ public class PreferencePanel extends JPanel {
                                         new LipidMapsSDFLoader()));
                 add(Box.createHorizontalStrut(50));
                 add(factory.createGroup("HMDB",
-                                        new HMDBMetabocardsLoader(),
-                                        new HMDBStructureLoader()));
+                                        new HMDBXMLLoader(),
+                                        new HMDBStructureLoader(),
+                                        new HMDBMetabocardsLoader()));
                 add(Box.createHorizontalStrut(50));
                 add(factory.createGroup("UniProt",
                                         new TaxonomyLoader(),
@@ -216,14 +221,14 @@ public class PreferencePanel extends JPanel {
 
     class MyListRenderer extends JLabel implements ListCellRenderer {
 
-        private JPanel          unselected = new JPanel(new FormLayout("p:grow, center:p, 20px", "p:grow, center:p, p:grow"));
-        private JLabel          label      = new JLabel();
-        private CellConstraints cc         = new CellConstraints();
+        private JPanel unselected = new JPanel(new FormLayout("p:grow, center:p, 20px", "p:grow, center:p, p:grow"));
+        private JLabel label = new JLabel();
+        private CellConstraints cc = new CellConstraints();
 
-        Color                     topLineColor = new Color(0x4580c8);
-        Color                     topColor     = new Color(0x5d94d6);
-        Color                     bottomColor  = new Color(0x1956ad);
-        GradientWithBorderPainter painter      = new GradientWithBorderPainter(topLineColor, bottomColor, topColor, bottomColor);
+        Color topLineColor = new Color(0x4580c8);
+        Color topColor = new Color(0x5d94d6);
+        Color bottomColor = new Color(0x1956ad);
+        GradientWithBorderPainter painter = new GradientWithBorderPainter(topLineColor, bottomColor, topColor, bottomColor);
 
         private JPanel selected = new JPanel(new FormLayout("p:grow, center:p, 20px", "p:grow, center:p, p:grow")) {
             @Override
