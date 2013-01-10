@@ -24,6 +24,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.UUID;
 
 /**
  * NewProjectDialog.java
@@ -33,15 +35,15 @@ import java.util.Collection;
  */
 public class NewProject extends DropdownDialog {
 
-    private static final org.apache.log4j.Logger logger         =
+    private static final org.apache.log4j.Logger logger =
             org.apache.log4j.Logger.getLogger(
                     NewProject.class);
-    private              boolean                 fieldsAreValid = true;
-    private JTextField      idField;
+    private boolean fieldsAreValid = true;
+    private JTextField idField;
     private SuggestionField codeField;
     private SuggestionField taxonField;
     private SuggestionField nameField;
-    private JTextField      kingdomField;
+    private JTextField kingdomField;
 
     private TaxonomyQueryService service = new TaxonomyQueryService();
 
@@ -61,7 +63,11 @@ public class NewProject extends DropdownDialog {
                 nameField.setSuggest(false);
                 Taxonomy taxonomy = (Taxonomy) value;
                 if (idField.getText().isEmpty()) {
-                    idField.setText("i" + taxonomy.getCode());
+                    String[] nameTokens = taxonomy.getOfficialName().split("\\s+");
+                    if (nameTokens.length > 1)
+                        idField.setText("i" + nameTokens[0].substring(0, 1).toUpperCase() + nameTokens[1].substring(0, 2).toLowerCase() + "%n");
+                    else
+                        idField.setText("i" + taxonomy.getCode().toLowerCase());
                 }
                 codeField.setText(taxonomy.getCode());
                 taxonField.setText(taxonomy.getAccession());
@@ -83,8 +89,12 @@ public class NewProject extends DropdownDialog {
                     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                         Taxonomy taxonomy = (Taxonomy) value;
                         this.setText(taxonomy.getCode());
-                        this.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
-                        this.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
+                        this.setBackground(
+                                isSelected ? list.getSelectionBackground()
+                                           : list.getBackground());
+                        this.setForeground(
+                                isSelected ? list.getSelectionForeground()
+                                           : list.getForeground());
                         return this;
                     }
                 };
@@ -92,7 +102,9 @@ public class NewProject extends DropdownDialog {
 
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return service.startup() ? new ArrayList<Object>(service.searchCode(s, true)) : new ArrayList();
+                return service.startup()
+                       ? new ArrayList<Object>(service.searchCode(s, true))
+                       : new ArrayList();
             }
         }, handler);
         taxonField = new SuggestionField(this, 5, new SuggestionHandler() {
@@ -100,7 +112,7 @@ public class NewProject extends DropdownDialog {
             public Collection<Object> getSuggestions(String s) {
                 return service.startup()
                        ? new ArrayList<Object>(service.searchTaxonomyIdentifier(QueryParser.escape(s), true))
-                       : new ArrayList();
+                       : Collections.emptyList();
             }
         }, handler);
         nameField = new SuggestionField(this, 35, new SuggestionHandler() {
@@ -112,8 +124,12 @@ public class NewProject extends DropdownDialog {
                     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                         Taxonomy taxonomy = (Taxonomy) value;
                         this.setText(taxonomy.getOfficialName());
-                        this.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
-                        this.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
+                        this.setBackground(
+                                isSelected ? list.getSelectionBackground()
+                                           : list.getBackground());
+                        this.setForeground(
+                                isSelected ? list.getSelectionForeground()
+                                           : list.getForeground());
                         return this;
                     }
                 };
@@ -121,8 +137,9 @@ public class NewProject extends DropdownDialog {
 
             @Override
             public Collection<Object> getSuggestions(String s) {
-                return service.startup() ? new ArrayList<Object>(service.searchName(QueryParser.escape(s.trim()), true))
-                                         : new ArrayList();
+                return service.startup()
+                       ? new ArrayList<Object>(service.searchName(QueryParser.escape(s.trim()), true))
+                       : Collections.emptyList();
             }
         }, handler);
         kingdomField = FieldFactory.newField(10);
@@ -246,7 +263,7 @@ public class NewProject extends DropdownDialog {
             Taxonomy orgId = new Taxonomy(taxon, code, kingdom, name, name);
             ReconstructionIdentifier proId = new ReconstructionIdentifier(getProjectIdentifier());
 
-            ReconstructionImpl proj = new ReconstructionImpl(proId, orgId);
+            ReconstructionImpl proj = new ReconstructionImpl(UUID.randomUUID(), proId, orgId);
             DefaultReconstructionManager.getInstance().setActiveReconstruction(proj);
 
         }
