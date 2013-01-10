@@ -27,7 +27,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.Sizes;
 import mnb.io.resolve.AutomatedReconciler;
 import mnb.io.resolve.EntryReconciler;
-import mnb.io.resolve.ListSelectionReconciler;
 import mnb.io.tabular.ExcelEntityResolver;
 import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.parser.ReactionParser;
@@ -234,10 +233,8 @@ public class ExcelImportDialog
                     new NameCandidateFactory(new ChemicalFingerprintEncoder(),
                                              manager.getService(ChEBIIdentifier.class, NameService.class));
 
-            // todo should be selectable
-            EntryReconciler reconciler = Boolean.parseBoolean(properties.getProperty("import.skip"))
-                                         ? new AutomatedReconciler(factory, new ChEBIIdentifier())
-                                         : new ListSelectionReconciler(frame, factory, new ChEBIIdentifier());
+            // todo resource should be selectable
+            EntryReconciler reconciler = new AutomatedReconciler(factory, new ChEBIIdentifier());
 
             ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler, DefaultEntityFactory.getInstance());
             parser = new ReactionParser(entitySheet, new DialogCompartmentResolver(new AutomaticCompartmentResolver(), this));
@@ -333,7 +330,8 @@ public class ExcelImportDialog
         // we need to do this as cardlayout returns the largest size and we only want the currenly active size
 
         orgSize = orgSize == null ? super.getPreferredSize() : orgSize;
-        shiftSize = shiftSize == null ? shiftPanel.getPreferredSize() : shiftSize;
+        shiftSize =
+                shiftSize == null ? shiftPanel.getPreferredSize() : shiftSize;
 
         Dimension actualSize = ((JPanel) stages[activeStage]).getPreferredSize();
         shiftPanel.setPreferredSize(actualSize);
