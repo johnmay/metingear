@@ -68,11 +68,11 @@ public class DownloadStructuresDialog
                                                                     "Indicate you want to allow the use of web services to download" +
                                                                             " structures. Web services will dramatically reduce the speed and should" +
                                                                             " only be used for small numbers of entries");
-    private JLabel fetchAllLabel        = LabelFactory.newFormLabel("Greedy mode:",
-                                                                    "Retrieve all structures for all cross-references - structures can be filtered post download");
+    private JLabel fetchAllLabel = LabelFactory.newFormLabel("Greedy mode:",
+                                                             "Retrieve all structures for all cross-references - structures can be filtered post download");
 
     private JCheckBox fetchAll = CheckBoxFactory.newCheckBox("");
-    private JCheckBox ws       = CheckBoxFactory.newCheckBox("");
+    private JCheckBox ws = CheckBoxFactory.newCheckBox("");
 
     private ResourceList resourceSelection = new ResourceList();
 
@@ -128,12 +128,8 @@ public class DownloadStructuresDialog
         return panel;
     }
 
-    @Override
-    public void setVisible(boolean b) {
-        if (b) {
-            updateResourceList();
-        }
-        super.setVisible(b);
+    @Override public void prepare() {
+        updateResourceList();
     }
 
     @Override
