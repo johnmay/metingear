@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <artifactId>mnb</artifactId>
         <groupId>uk.ac.ebi.metingear</groupId>
-        <version>0.9.2-SNAPSHOT</version>
+        <version>0.9.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>mnb-application</artifactId>
@@ -49,6 +50,11 @@
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>mdk-service-lucene</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-service-rest</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
@@ -226,7 +232,8 @@
             <artifactId>metingear-extenstions-structure</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
-        </dependency><dependency>
+        </dependency>
+        <dependency>
             <artifactId>metingear-extenstions-annotation</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
@@ -256,12 +263,15 @@
                             <mainClass>uk.ac.ebi.metingear.Main</mainClass>
                         </manifest>
                         <manifestEntries>
-                            <SplashScreen-Image>uk/ac/ebi/metingear/splash.png</SplashScreen-Image>
+                            <SplashScreen-Image>uk/ac/ebi/metingear/splash.png
+                            </SplashScreen-Image>
                         </manifestEntries>
                     </archive>
 
                     <descriptors>
-                        <descriptor>src/main/resources/uk/ac/ebi/metingear/assembly.xml</descriptor>
+                        <descriptor>
+                            src/main/resources/uk/ac/ebi/metingear/assembly.xml
+                        </descriptor>
                     </descriptors>
 
                 </configuration>
@@ -303,7 +313,9 @@
                                 <phase>compile</phase>
                                 <configuration>
                                     <excludes>
-                                        <exclude>**/MacApplicationLauncher.java</exclude>
+                                        <exclude>
+                                            **/MacApplicationLauncher.java
+                                        </exclude>
                                     </excludes>
                                 </configuration>
                                 <goals>
@@ -324,10 +336,15 @@
                         <artifactId>osxappbundle-maven-plugin</artifactId>
                         <version>1.0-alpha-2</version>
                         <configuration>
-                            <bundleName>Metingear ${project.version}</bundleName>
+                            <bundleName>Metingear ${project.version}
+                            </bundleName>
                             <mainClass>uk.ac.ebi.metingear.Main</mainClass>
-                            <iconFile>/Users/johnmay/EBI/illustration/mnb/icons/mnb.icns</iconFile>
-                            <buildDirectory>/Users/johnmay/Applications/Metingear</buildDirectory>
+                            <iconFile>
+                                /Users/johnmay/EBI/illustration/mnb/icons/mnb.icns
+                            </iconFile>
+                            <buildDirectory>
+                                /Users/johnmay/Applications/Metingear
+                            </buildDirectory>
                             <dictionaryFile>
                                 ${basedir}/src/main/resources/uk/ac/ebi/metingear/Info.plist
                             </dictionaryFile>
