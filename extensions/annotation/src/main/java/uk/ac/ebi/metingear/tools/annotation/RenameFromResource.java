@@ -24,12 +24,16 @@ import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.QueryService;
 import uk.ac.ebi.mdk.service.query.name.PreferredNameService;
 import uk.ac.ebi.mdk.ui.render.list.DefaultRenderer;
+import uk.ac.ebi.metingear.edit.entity.RenameMetaboliteEdit;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
 
 import javax.swing.*;
@@ -38,6 +42,7 @@ import javax.swing.undo.CompoundEdit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -171,10 +176,13 @@ public class RenameFromResource extends AbstractControlDialog {
     public void process() {
 
         // new edit action (one for all entries)
-        CompoundEdit edit = new CompoundEdit();
+        CompoundEdit edits = new CompoundEdit();
 
         // get the preferred name service
         PreferredNameService service = (PreferredNameService) resourceSelection.getSelectedItem();
+        final Reactome reactome = DefaultReconstructionManager.getInstance().getActive().getReactome();
+
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
 
         // for each selected metabolite select the first cross-reference which
         // matches the class of the identifier and set the new name
@@ -184,30 +192,17 @@ public class RenameFromResource extends AbstractControlDialog {
                 if (xref.getIdentifier().getClass().equals(service.getIdentifier().getClass())) {
 
                     // old/new names for undo/redo closure
-                    final String oldName = metabolite.getName();
                     final String newName = service.getPreferredName(xref.getIdentifier());
 
                     if (newName.isEmpty())
                         continue;
 
-                    // add the edit as anonymous class
-                    edit.addEdit(new AbstractUndoableEdit() {
-
-                        @Override public void undo() {
-                            super.undo();
-                            metabolite.setName(oldName);
-                        }
-
-                        @Override public void redo() {
-                            super.redo();
-                            metabolite.setName(newName);
-                        }
-
-
-                    });
+                    // create the edit
+                    RenameMetaboliteEdit edit = new RenameMetaboliteEdit(metabolite, newName, reconstruction);
+                    edits.addEdit(edit);
 
                     // actually perform the edit
-                    metabolite.setName(newName);
+                    edit.apply();
 
                     // don't update the name any more
                     break;
@@ -216,19 +211,10 @@ public class RenameFromResource extends AbstractControlDialog {
             }
         }
 
-        edit.end();
+        edits.end();
 
-        addEdit(edit);
+        addEdit(edits);
 
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void update() {
-        // update select entities
-        super.update(getSelectionController().getSelection());
     }
 
 

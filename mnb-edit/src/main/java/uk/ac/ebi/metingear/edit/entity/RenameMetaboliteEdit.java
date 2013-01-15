@@ -41,9 +41,10 @@ public final class RenameMetaboliteEdit extends AbstractUndoableEdit {
 
     public Metabolite create(Metabolite original, String name) {
         Metabolite m = (Metabolite) original.newInstance();
-        // don't touch identitifers
+        m.setIdentifier(original.getIdentifier());
         m.setAbbreviation(original.getAbbreviation());
         m.setName(name);
+        m.setRating(original.getRating());
         m.addAnnotations(original.getAnnotations());
         for (Class<? extends Observation> c : m.getObservationClasses()) {
             for (Observation observation : original.getObservations(c)) {
