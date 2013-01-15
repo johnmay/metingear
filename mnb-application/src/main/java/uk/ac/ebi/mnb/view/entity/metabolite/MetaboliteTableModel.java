@@ -33,10 +33,14 @@ import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.StarRating;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
+import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
+import uk.ac.ebi.mnb.edit.RemoveAnnotationEdit;
+import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
 
+import javax.swing.undo.CompoundEdit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -105,25 +109,31 @@ public class MetaboliteTableModel
 
 
     @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+    public void setValueAt(Object value, int rowIndex, int columnIndex) {
 
         if (getColumnClass(columnIndex) == CrossReference.class) {
             AnnotatedEntity entity = getEntity(rowIndex);
-            List<Annotation> annotations = new ArrayList(entity.getAnnotationsExtending(CrossReference.class));
-            for (int i = 0; i < annotations.size(); i++) {
-                entity.removeAnnotation(annotations.get(i));
+            List<Annotation> annotations = new ArrayList<Annotation>(entity.getAnnotationsExtending(CrossReference.class));
+            CompoundEdit edit = new CompoundEdit();
+            edit.addEdit(new RemoveAnnotationEdit(entity, annotations));
+            edit.addEdit(new AddAnnotationEdit(entity, (Collection<Annotation>) value));
+            edit.end();
+            // apply the edit
+            for(Annotation annotation : annotations){
+                entity.removeAnnotation(annotation);
             }
-            entity.addAnnotations((Collection<Annotation>) aValue);
+            entity.addAnnotations((Collection<Annotation>) value);
+            MainView.getInstance().getUndoManager().addEdit(edit);
             update(entity);
             return;
         } else if (getColumnClass(columnIndex) == Rating.class) {
             AnnotatedEntity entity = getEntity(rowIndex);
-            entity.setRating((StarRating) aValue);
+            entity.setRating((StarRating) value);
             update(entity);
             return;
         }
 
-        super.setValueAt(aValue, rowIndex, columnIndex);
+        super.setValueAt(value, rowIndex, columnIndex);
     }
 
 
