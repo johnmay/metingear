@@ -20,6 +20,7 @@ import com.jgoodies.forms.factories.Borders;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.report.bar.MessageBar;
@@ -155,9 +156,7 @@ public class MainView
                                     }
 
                                     final List<AnnotatedEntity> entities =
-                                            index.getRankedEntities(SearchManager.getInstance().getQuery(
-                                                    text
-                                                            + "~"));
+                                            index.getRankedEntities(SearchManager.getInstance().getQuery(text + "~"));
 
                                     if (entities != null) {
                                         SwingUtilities.invokeLater(new Runnable() {
@@ -175,15 +174,16 @@ public class MainView
 
 
                                 } catch (InterruptedException ex) {
-                                    ex.printStackTrace();
+                                    LOGGER.error(ex);
                                 } catch (ParseException ex) {
-                                    ex.printStackTrace();
+                                    LOGGER.debug(ex);
                                 } catch (CorruptIndexException ex) {
-                                    ex.printStackTrace();
+                                    LOGGER.error(ex);
                                 } catch (LockObtainFailedException ex) {
-                                    ex.printStackTrace();
+                                    LOGGER.error(ex);
                                 } catch (IOException ex) {
-                                    ex.printStackTrace();
+                                    LOGGER.error(ex);
+
                                 }
                             }
                         }).start();
