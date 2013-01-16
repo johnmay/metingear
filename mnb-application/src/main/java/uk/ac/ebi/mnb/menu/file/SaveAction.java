@@ -62,6 +62,9 @@ public class SaveAction extends GeneralAction {
 
             Version version = IOConstants.VERSION;
 
+            if(!reconstruction.getContainer().exists())
+                reconstruction.setContainer(reconstruction.defaultLocation());
+
             long start = System.currentTimeMillis();
             ReconstructionIOHelper.write(reconstruction, reconstruction.getContainer());
             long end = System.currentTimeMillis();
