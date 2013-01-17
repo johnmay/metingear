@@ -216,7 +216,7 @@ public class AutomaticCrossReference
 
     public boolean isUsable(QueryService service) {
         QueryService.ServiceType type = service.getServiceType();
-        return !ws.isSelected() || !service.getServiceType().remote();
+        return ws.isSelected() || !service.getServiceType().remote();
     }
 
 

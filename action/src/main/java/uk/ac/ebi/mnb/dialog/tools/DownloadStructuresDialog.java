@@ -161,13 +161,12 @@ public class DownloadStructuresDialog
                         // get the appropiate service for the given ientifier
                         StructureService service = services.getService(identifier,
                                                                        StructureService.class);
-
                         if (canUse(service) && isChemicalService(service)) {
 
                             IAtomContainer structure = service.getStructure(reference.getIdentifier());
 
                             // don't add empty structures
-                            if (structure.getAtomCount() > 1) {
+                            if (!structure.isEmpty()) {
 
                                 Annotation annotation = new AtomContainerAnnotation(structure);
                                 edit.addEdit(new AddAnnotationEdit(m, annotation));
@@ -221,7 +220,7 @@ public class DownloadStructuresDialog
 
     public boolean canUse(QueryService service) {
         QueryService.ServiceType type = service.getServiceType();
-        return !ws.isSelected() && !service.getServiceType().remote();
+        return ws.isSelected() || !service.getServiceType().remote();
     }
 
     public boolean isChemicalService(QueryService service){
@@ -245,7 +244,8 @@ public class DownloadStructuresDialog
 
         for (Identifier id : services.getIdentifiers(StructureService.class)) {
             if (services.hasService(id, StructureService.class) &&
-                    canUse(services.getService(id, StructureService.class))) {
+                    canUse(services.getService(id, StructureService.class))
+                          && isChemicalService(services.getService(id, StructureService.class))) {
                 available.add(id);
             }
         }
