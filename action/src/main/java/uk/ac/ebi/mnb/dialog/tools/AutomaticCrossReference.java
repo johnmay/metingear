@@ -27,6 +27,7 @@ import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.utility.TextUtility;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
@@ -39,11 +40,13 @@ import uk.ac.ebi.mdk.tool.resolve.ChemicalFingerprintEncoder;
 import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
 import uk.ac.ebi.mdk.ui.component.ResourceList;
 import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CompoundEdit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -79,9 +82,6 @@ public class AutomaticCrossReference
     private JLabel       resourceLabel     = LabelFactory.newFormLabel("Resource priority:");
     private JCheckBox    approximate       = CheckBoxFactory.newCheckBox();
     private ResourceList resourceSelection = new ResourceList();
-
-    private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 200, 10));
-
 
     public AutomaticCrossReference(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
 
@@ -133,11 +133,6 @@ public class AutomaticCrossReference
         form.add(greedyLabel, cc.xy(1, 7));
         form.add(greedy, cc.xy(3, 7));
 
-
-        //        JLabel label = LabelFactory.newFormLabel("Method", TextUtility.html("The method to use for name matching, Generally they<br> aim to improve recall at the cost of precision"));
-        //        options.add(label, cc.xy(1, 7));
-        //        options.add(ComboBoxFactory.newComboBox("Direct", "Fingerprint", "N-gram"), cc.xy(3, 7));
-
         return form;
     }
 
@@ -174,6 +169,8 @@ public class AutomaticCrossReference
         }
 
 
+        CompoundEdit edit = new CompoundEdit();
+
         for (int i = 0; i < metabolites.size(); i++) {
 
             Metabolite m = metabolites.get(i);
@@ -195,7 +192,9 @@ public class AutomaticCrossReference
 
                 for (Candidate candidate : candidates) {
                     if (candidate.getDistance() == 0) {
-                        m.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(candidate.getIdentifier()));
+                        Annotation annotation = DefaultAnnotationFactory.getInstance().getCrossReference(candidate.getIdentifier());
+                        edit.addEdit(new AddAnnotationEdit(m, annotation));
+                        m.addAnnotation(annotation);
                         found = true;
                     }
                 }
@@ -206,8 +205,11 @@ public class AutomaticCrossReference
             }
         }
 
+        edit.end();
+        addEdit(edit);
+
         factories = null; // for cleanup
-        System.gc();
+        System.gc(); // only a suggestion ot the vm
 
     }
 

@@ -26,6 +26,7 @@ import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -38,11 +39,13 @@ import uk.ac.ebi.mdk.service.query.structure.StructureService;
 import uk.ac.ebi.mdk.ui.component.ResourceList;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.WarningMessage;
+import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CompoundEdit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -135,12 +138,14 @@ public class DownloadStructuresDialog
     @Override
     public void process(final SpinningDialWaitIndicator wait) {
 
-        List<Identifier> problemIdentifiers = new ArrayList();
+        List<Identifier> problemIdentifiers = new ArrayList<Identifier>();
 
         ServiceManager services = DefaultServiceManager.getInstance();
 
         int i = 0;
         int n = getSelection().get(Metabolite.class).size();
+
+        CompoundEdit edit = new CompoundEdit();
 
         // could re-arrange data to make this easier
         for (Metabolite m : getSelection().get(Metabolite.class)) {
@@ -161,14 +166,17 @@ public class DownloadStructuresDialog
 
                             // don't add empty structures
                             if (structure.getAtomCount() > 1) {
-                                m.addAnnotation(new AtomContainerAnnotation(structure));
+
+                                Annotation annotation = new AtomContainerAnnotation(structure);
+                                edit.addEdit(new AddAnnotationEdit(m, annotation));
+                                m.addAnnotation(annotation);
 
                                 // only get first
                                 if (!fetchAll.isSelected())
                                     break ANNOTATION;
 
                             } else {
-                                // record one's that wern't downloaded
+                                // log which couldn't be found
                                 problemIdentifiers.add(reference.getIdentifier());
                             }
 
@@ -192,8 +200,11 @@ public class DownloadStructuresDialog
 
         }
 
+        addEdit(edit);
+        edit.end();
 
-        if (problemIdentifiers.isEmpty() == false) {
+
+        if (!problemIdentifiers.isEmpty()) {
             addMessage(new WarningMessage("The following identifiers had empty or missing structures: " + StringUtils.join(problemIdentifiers, ", ")));
         }
 
