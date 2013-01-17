@@ -33,8 +33,9 @@ import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
+import uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.observation.Candidate;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.data.MolecularChargeService;
@@ -235,26 +236,28 @@ public class DatabaseSearch
 
         Identifier identifier = resourceList.getSelectedValue();
 
-        if (identifier == null) {
+        // check if the value is null
+        if (identifier == null || identifier == IdentifierFactory.EMPTY_IDENTIFIER) {
+
+            // if the list is not empty take the first entry
             if (!resourceList.getModel().isEmpty()) {
                 identifier = resourceList.getElements().get(0);
-                if (identifier == null)
+                if (identifier == null || identifier == IdentifierFactory.EMPTY_IDENTIFIER)
                     return;
+            } else {
+                return;
             }
+
         }
 
         NameService service = serviceManager.getService(identifier,
                                                         NameService.class);
-
-        System.out.println(service);
 
 
         NameCandidateFactory factory = new NameCandidateFactory(new ChemicalFingerprintEncoder(),
                                                                 service);
 
         Set<Candidate> candidates = factory.getCandidates(name, approximate.isSelected());
-
-        System.out.println(candidates);
 
         List<Metabolite> metabolites = new ArrayList<Metabolite>();
 
@@ -312,6 +315,10 @@ public class DatabaseSearch
                 return o1.getShortDescription().compareTo(o2.getShortDescription());
             }
         });
+
+        // add the sorted identifiers
+        for (Identifier identifier : available)
+            resourceList.addElement(identifier);
 
         component.revalidate();
 
