@@ -44,8 +44,7 @@ import java.util.Map;
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @name PopupDialog - 2011.10.07 <br>
- * Class description
+ * @name PopupDialog - 2011.10.07 <br> Class description
  */
 public class PopupDialog extends JDialog {
 
@@ -98,10 +97,14 @@ public class PopupDialog extends JDialog {
         setAlwaysOnTop(true);
         add(background);
 
-        WindowUtils.makeWindowNonOpaque(this);
+        try {
+            WindowUtils.makeWindowNonOpaque(this);
+            getRootPane().setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
+        } catch (UnsupportedOperationException ex) {
+            // transparency not supported - set a white background
+            getRootPane().setBackground(new Color(1.0f, 1.0f, 1.0f, 1.0f));
+        }
 
-        //getRootPane().setOpaque(false);
-        getRootPane().setBackground(new Color(1.0f, 1.0f, 1.0f, 0.0f));
         panel.setOpaque(false);
         background.setLayout(new FormLayout("8px, 16px, p, 16px, 8px", "8px, 16px, p, 16px, 8px"));
         CellConstraints cc = new CellConstraints();
@@ -140,8 +143,8 @@ public class PopupDialog extends JDialog {
 
 
     /**
-     * Sets the pop-up location based on mouse position. The tip of the callout will be at the mouse point with no
-     * offset
+     * Sets the pop-up location based on mouse position. The tip of the callout
+     * will be at the mouse point with no offset
      */
     public void setOnMouse() {
         setOnMouse(offset);
@@ -149,8 +152,8 @@ public class PopupDialog extends JDialog {
 
 
     /**
-     * Sets the location on the mouse with a specified offset. This will place the dialog tip at the offset above the
-     * mouse
+     * Sets the location on the mouse with a specified offset. This will place
+     * the dialog tip at the offset above the mouse
      *
      * @param offset
      */
