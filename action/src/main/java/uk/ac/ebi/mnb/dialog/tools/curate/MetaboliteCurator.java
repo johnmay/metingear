@@ -78,7 +78,7 @@ public class MetaboliteCurator extends DropdownDialog {
         modules = new CrossreferenceModule[]{
                 new DatabaseSearch(manager, undoManager),
                 new AssignStructure(undoManager),
-                new PeptideGenerator(DefaultEntityFactory.getInstance(), undoManager),
+                new PeptideGenerator(this, DefaultEntityFactory.getInstance(), undoManager),
                 new ManualCrossReferenceModule(this, undoManager),
                 new WebSearch(undoManager),};
         setDefaultLayout();

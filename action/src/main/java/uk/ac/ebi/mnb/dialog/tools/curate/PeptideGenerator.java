@@ -19,8 +19,7 @@ package uk.ac.ebi.mnb.dialog.tools.curate;
 import com.jgoodies.forms.layout.CellConstraints;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.component.ExpandingComponentList;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.Synonym;
@@ -32,6 +31,7 @@ import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 
 import javax.swing.*;
 import javax.swing.undo.UndoManager;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,34 +53,28 @@ public class PeptideGenerator implements CrossreferenceModule {
 
     private static final Logger LOGGER = Logger.getLogger(PeptideGenerator.class);
 
-    private JPanel component;
+    private JComponent component;
 
     private CellConstraints cc = new CellConstraints();
 
     private PeptideFactory factory;
 
-    private JComboBox[] boxes = new JComboBox[]{
-            new JComboBox(PeptideFactory.AminoAcid.values()),
-            new JComboBox(PeptideFactory.AminoAcid.values())
-    };
+    private ExpandingComponentList<JComboBox> expandingList;
 
     private Metabolite context;
     private final UndoManager undoManager;
 
 
-    public PeptideGenerator(EntityFactory factory, UndoManager undoManager) {
-
+    public PeptideGenerator(Window window, EntityFactory factory, UndoManager undoManager) {
         this.factory = new PeptideFactory(factory);
         this.undoManager = undoManager;
-
-        component = PanelFactory.createDialogPanel("p, 4dlu, p, 4dlu, p, 4dlu, p", "p");
-
-        component.add(LabelFactory.newFormLabel("N-Terminus:"), cc.xy(1, 1));
-        component.add(boxes[0], cc.xy(3, 1));
-
-        component.add(LabelFactory.newFormLabel("C-Terminus:"), cc.xy(5, 1));
-        component.add(boxes[1], cc.xy(7, 1));
-
+        expandingList = new ExpandingComponentList<JComboBox>(window) {
+            @Override public JComboBox newComponent() {
+                return new JComboBox(PeptideFactory.AminoAcid.values());
+            }
+        };
+        expandingList.setBackground(window.getBackground());
+        component = expandingList.getComponent();
     }
 
 
@@ -99,9 +93,11 @@ public class PeptideGenerator implements CrossreferenceModule {
 
         PeptideFactory.AminoAcid[] aa = factory.guessPeptide(context.getName());
 
-        for (int i = 0; i < boxes.length; i++) {
-            boxes[i].setSelectedItem(i < aa.length ? aa[i] : null);
+        expandingList.setSize(aa.length); // ensure capacity
+        for (int i = 0; i < aa.length; i++) {
+            expandingList.getComponent(i).setSelectedItem(aa[i]);
         }
+
 
     }
 
@@ -114,10 +110,10 @@ public class PeptideGenerator implements CrossreferenceModule {
     public void transferAnnotations() {
         // make the peptide
 
-        List<PeptideFactory.AminoAcid> aminoacids = new ArrayList<PeptideFactory.AminoAcid>(boxes.length);
+        List<PeptideFactory.AminoAcid> aminoacids = new ArrayList<PeptideFactory.AminoAcid>(expandingList.getSize());
 
-        for (JComboBox comboBox : boxes) {
-            aminoacids.add((PeptideFactory.AminoAcid) comboBox.getSelectedItem());
+        for (int i = 0; i < expandingList.getSize(); i++) {
+            aminoacids.add((PeptideFactory.AminoAcid) expandingList.getComponent(i).getSelectedItem());
         }
 
         PeptideFactory.AminoAcid[] chain = aminoacids.toArray(new PeptideFactory.AminoAcid[0]);
@@ -126,7 +122,7 @@ public class PeptideGenerator implements CrossreferenceModule {
         try {
             // create the annotation and add to the undo manager and apply the actual edit
             Collection<? extends Annotation> annotations = Arrays.asList(new AtomContainerAnnotation(factory.generateStructure(chain)),
-                                                                         new Synonym(factory.generateName(chain)),
+                                                                         new Synonym(factory.generateAbbreviation(chain)),
                                                                          new Synonym(factory.generateName(chain)));
 
             undoManager.addEdit(new AddAnnotationEdit(context, annotations));
