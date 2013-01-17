@@ -115,8 +115,7 @@ public class DatabaseSearch
         field = FieldFactory.newField(25);
         approximate = new JCheckBox("Approximate");
         table = new MoleculeTable(new NameAccessor(),
-                                  new AccessionAccessor(),
-                                  new AnnotationAccess(new Source()));
+                                  new AccessionAccessor());
         table.setPreferredSize(new Dimension(300, 185));
         table.setBackground(component.getBackground());
         table.setSelectionBackground(component.getBackground().brighter());
@@ -263,12 +262,16 @@ public class DatabaseSearch
 
         for (Candidate candidate : candidates) {
 
+            LOGGER.info("updating table: " + candidate.getIdentifier() + " - " + candidate.getName());
+
             Metabolite m = factory.convertToMetabolite(DefaultEntityFactory.getInstance(), candidate);
             if (serviceManager.hasService(candidate.getIdentifier(),
                                           MolecularChargeService.class)) {
                 m.setCharge(serviceManager.getService(candidate.getIdentifier(),
                                                       MolecularChargeService.class).getCharge(m.getIdentifier()));
 
+            } else {
+                LOGGER.debug("no molecular charge service available for " + candidate.getIdentifier().getShortDescription());
             }
             if (serviceManager.hasService(candidate.getIdentifier(),
                                           MolecularFormulaService.class)) {
@@ -276,6 +279,8 @@ public class DatabaseSearch
                                                       MolecularFormulaService.class).getMolecularFormula(m.getIdentifier());
                 m.addAnnotation(new MolecularFormula(mf));
 
+            } else {
+                LOGGER.debug("no molecular formula service available for " + candidate.getIdentifier().getShortDescription());
             }
             metabolites.add(m);
 
@@ -302,6 +307,7 @@ public class DatabaseSearch
         for (Identifier identifier : serviceManager.getIdentifiers(NameService.class)) {
             // only add those services which are available
             if (serviceManager.hasService(identifier, NameService.class)
+                    && !serviceManager.getService(identifier, NameService.class).getServiceType().remote()
                     && identifier instanceof ChemicalIdentifier) {
                 available.add(identifier);
             }
