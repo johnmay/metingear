@@ -20,12 +20,11 @@
  */
 package uk.ac.ebi.mnb.menu.file;
 
+import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
-import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
-import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.io.IOConstants;
@@ -33,7 +32,6 @@ import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.main.MainView;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
 
 
 /**
@@ -56,25 +54,47 @@ public class SaveAction extends GeneralAction {
 
 
     public void actionPerformed(ActionEvent e) {
-        try {
-            DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-            Reconstruction reconstruction = manager.getActive();
 
-            Version version = IOConstants.VERSION;
-
-            if(!reconstruction.getContainer().exists())
-                reconstruction.setContainer(reconstruction.defaultLocation());
-
-            long start = System.currentTimeMillis();
-            ReconstructionIOHelper.write(reconstruction, reconstruction.getContainer());
-            long end = System.currentTimeMillis();
-
-            LOGGER.info("Wrote reconstruction in " + (end - start) + " ms");
+        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        final Reconstruction reconstruction = manager.getActive();
 
 
-        } catch (Exception ex) {
-            MainView.getInstance().getMessageManager().addReport(new ErrorMessage("Unable to save reconstruction: " + ex.getMessage()));
-            ex.printStackTrace();
-        }
+        if (!reconstruction.getContainer().exists())
+            reconstruction.setContainer(reconstruction.defaultLocation());
+
+
+        final SpinningDialWaitIndicator waitIndicator = new SpinningDialWaitIndicator(MainView.getInstance());
+        waitIndicator.setText("Saving reconstruction to " + reconstruction.getContainer());
+        final long start = System.currentTimeMillis();
+
+        Thread t = new Thread(new Runnable() {
+            @Override public void run() {
+
+
+                try {
+                    Version version = IOConstants.VERSION;
+                    ReconstructionIOHelper.write(reconstruction, reconstruction.getContainer());
+                    final long end = System.currentTimeMillis();
+                    LOGGER.info("Wrote reconstruction in " + (end - start) + " ms");
+                } catch (Exception ex) {
+                    MainView.getInstance().getMessageManager().addReport(new ErrorMessage("Unable to save reconstruction: " + ex.getMessage()));
+                    ex.printStackTrace();
+                } finally {
+                    // determine how long to sleep, if it took longer then 1900 ms since
+                    // we displayed the wait indicator we don't sleep
+                    long sleepFor = 2000 - (System.currentTimeMillis() - start);
+                    try {
+                        if(sleepFor > 100)
+                            Thread.sleep(sleepFor);
+                    } catch (InterruptedException e1) {
+                        // doesn't matter
+                    }
+                    waitIndicator.dispose();
+                }
+
+            }
+        });
+        t.setName("save-reconstruction");
+        t.start();
     }
 }
