@@ -95,7 +95,7 @@ public class ImportSBML extends DelayedBuildAction {
             final File choosen = chooser.getSelectedFile();
 
             final SpinningDialWaitIndicator wait = new SpinningDialWaitIndicator((JFrame) controller);
-            wait.setText("Reading SBML");
+            wait.setText("Importing " + choosen.getName());
 
             Thread t = new Thread(new Runnable() {
 
@@ -118,7 +118,8 @@ public class ImportSBML extends DelayedBuildAction {
                         messages.add(new ErrorMessage(ex.getMessage()));
                     } finally {
                         try {
-                            in.close();
+                            if(in != null)
+                                in.close();
                         } catch (IOException ex) {
                             java.util.logging.Logger.getLogger(ImportSBML.class.getName()).log(Level.SEVERE, null, ex);
                         }
