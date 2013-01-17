@@ -320,7 +320,7 @@ public class SourceController
                     && ((EntitySourceItem) item).getEntity() instanceof RunnableTask) {
                 view.setTaskView();
             } else {
-                System.out.println("Unhandled item clicked: " + item.getText());
+                logger.debug("did not handle source item click: " + item.getText());
             }
         }
 
