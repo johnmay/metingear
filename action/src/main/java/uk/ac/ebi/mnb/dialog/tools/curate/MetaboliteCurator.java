@@ -1,4 +1,4 @@
-package mnb.io.resolve;
+package uk.ac.ebi.mnb.dialog.tools.curate;
 
 /**
  * MetaboliteCurator.java
@@ -34,11 +34,6 @@ import uk.ac.ebi.mdk.ui.component.MatchIndication;
 import uk.ac.ebi.mdk.ui.component.table.MoleculeTable;
 import uk.ac.ebi.mdk.ui.component.table.accessor.CrossReferenceAccessor;
 import uk.ac.ebi.mdk.ui.component.table.accessor.NameAccessor;
-import uk.ac.ebi.mdk.ui.edit.crossreference.module.AssignStructure;
-import uk.ac.ebi.mdk.ui.edit.crossreference.module.DatabaseSearch;
-import uk.ac.ebi.mdk.ui.edit.crossreference.module.ManualCrossReferenceModule;
-import uk.ac.ebi.mdk.ui.edit.crossreference.module.PeptideGenerator;
-import uk.ac.ebi.mdk.ui.edit.crossreference.module.WebSearch;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
 import uk.ac.ebi.mnb.view.DropdownDialog;

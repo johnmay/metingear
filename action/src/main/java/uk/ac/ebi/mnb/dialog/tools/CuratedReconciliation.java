@@ -16,7 +16,7 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
-import mnb.io.resolve.MetaboliteCurator;
+import uk.ac.ebi.mnb.dialog.tools.curate.MetaboliteCurator;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
@@ -48,7 +48,7 @@ public class CuratedReconciliation
 
     @Override
     public void buildComponents() {
-        dialog = new MetaboliteCurator((JFrame) controller, DefaultServiceManager.getInstance());
+        dialog = new MetaboliteCurator((JFrame) controller, DefaultServiceManager.getInstance(), controller.getUndoManager());
     }
 
     @Override
