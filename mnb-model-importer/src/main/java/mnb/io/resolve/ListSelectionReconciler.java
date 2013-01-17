@@ -62,7 +62,7 @@ public class ListSelectionReconciler implements EntryReconciler {
 
     private JFrame frame;
 
-    private CandidateSelector curater;
+    private MetaboliteCurator curater;
 
     private Reconstruction recon;
 
@@ -75,7 +75,7 @@ public class ListSelectionReconciler implements EntryReconciler {
         this.factory = factory;
         this.template = factoryIdClass;
         this.frame = frame;
-        curater = new CandidateSelector(frame, DefaultServiceManager.getInstance());
+        curater = new MetaboliteCurator(frame, DefaultServiceManager.getInstance());
 
         recon = DefaultReconstructionManager.getInstance().getActive();
         nameMap = HashMultimap.create();

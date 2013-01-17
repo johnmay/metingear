@@ -16,16 +16,14 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
-import mnb.io.resolve.CandidateSelector;
+import mnb.io.resolve.MetaboliteCurator;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
-import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 
 /**
  * ResolveMissingInfo 2012.01.11
@@ -40,7 +38,7 @@ import java.awt.event.ActionEvent;
 public class CuratedReconciliation
         extends DelayedBuildAction {
 
-    private CandidateSelector dialog;
+    private MetaboliteCurator dialog;
     private MainController controller;
 
     public CuratedReconciliation(MainController controller) {
@@ -50,7 +48,7 @@ public class CuratedReconciliation
 
     @Override
     public void buildComponents() {
-        dialog = new CandidateSelector((JFrame) controller, DefaultServiceManager.getInstance());
+        dialog = new MetaboliteCurator((JFrame) controller, DefaultServiceManager.getInstance());
     }
 
     @Override

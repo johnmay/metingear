@@ -52,7 +52,8 @@ public class ExpandableComponentGroup extends JComponent {
 
 
     public ExpandableComponentGroup(String name, JComponent component, JDialog root) {
-        setLayout(new FormLayout("p:grow", "min, 2dlu, p:grow"));
+        setLayout(new FormLayout("p:grow",
+                                 "min, 2dlu, p:grow"));
         excomp = new ExpandComponent(component, root);
         button = new ExpandButton(excomp);
 
@@ -60,15 +61,16 @@ public class ExpandableComponentGroup extends JComponent {
 
         button.setSelected(false);
 
-        JLabel label = LabelFactory.newFormLabel(name);
+        JLabel label = LabelFactory.newLabel(name);
         label.setVerticalAlignment(JLabel.CENTER);
+
 
         CellConstraints cc = new CellConstraints();
 
         controller.add(button);
         controller.add(Box.createRigidArea(new Dimension(16, 16)));
         controller.add(label);
-        controller.add(Box.createRigidArea(new Dimension(16, 16)));
+        controller.add(Box.createGlue());
 
 
         JSeparator separator = new JSeparator();

@@ -1,7 +1,7 @@
 package mnb.io.resolve;
 
 /**
- * CandidateSelector.java
+ * MetaboliteCurator.java
  *
  * 2011.10.31
  *
@@ -20,7 +20,11 @@ package mnb.io.resolve;
  * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.jgoodies.forms.layout.*;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.Sizes;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
@@ -30,30 +34,29 @@ import uk.ac.ebi.mdk.ui.component.MatchIndication;
 import uk.ac.ebi.mdk.ui.component.table.MoleculeTable;
 import uk.ac.ebi.mdk.ui.component.table.accessor.CrossReferenceAccessor;
 import uk.ac.ebi.mdk.ui.component.table.accessor.NameAccessor;
-import uk.ac.ebi.mdk.ui.edit.crossreference.module.*;
+import uk.ac.ebi.mdk.ui.edit.crossreference.module.AssignStructure;
+import uk.ac.ebi.mdk.ui.edit.crossreference.module.DatabaseSearch;
+import uk.ac.ebi.mdk.ui.edit.crossreference.module.ManualCrossReferenceModule;
+import uk.ac.ebi.mdk.ui.edit.crossreference.module.PeptideGenerator;
+import uk.ac.ebi.mdk.ui.edit.crossreference.module.WebSearch;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 import uk.ac.ebi.mnb.core.ExpandableComponentGroup;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
 import javax.swing.*;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
 
 
 /**
- * CandidateSelector - 2011.10.31 <br> A dialog to select candidate
- * reconciliation entries
- *
- * @version $Rev$ : Last Changed $Date: 2011-12-13 16:43:11 +0000 (Tue,
- * 13 Dec 2011) $
- * @author johnmay
- * @author $Author$ (this version)
+ * A dialog housing several curation modules to help in curating information on
+ * a metabolite.
  */
-public class CandidateSelector
-        extends DropdownDialog {
+public class MetaboliteCurator extends DropdownDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(CandidateSelector.class);
+    private static final Logger LOGGER = Logger.getLogger(MetaboliteCurator.class);
 
     private MoleculeTable table = new MoleculeTable(new CrossReferenceAccessor(), new NameAccessor());
 
@@ -72,17 +75,17 @@ public class CandidateSelector
     private final CrossreferenceModule[] modules;
 
 
-    public CandidateSelector(JFrame frame, ServiceManager manager) {
+    public MetaboliteCurator(JFrame frame, ServiceManager manager, UndoManager undoManager) {
         super(frame, "OkayDialog");
         getClose().setText("Skip");
 
 
         modules = new CrossreferenceModule[]{
-            new DatabaseSearch(manager),
-            new AssignStructure(),
-            new PeptideGenerator(DefaultEntityFactory.getInstance()),
-            new ManualCrossReferenceModule(this),
-            new WebSearch(),};
+                new DatabaseSearch(manager, undoManager),
+                new AssignStructure(undoManager),
+                new PeptideGenerator(DefaultEntityFactory.getInstance(), undoManager),
+                new ManualCrossReferenceModule(this, undoManager),
+                new WebSearch(undoManager),};
         setDefaultLayout();
 
 
@@ -94,9 +97,7 @@ public class CandidateSelector
 
     private MatchIndication chargeMatch = new MatchIndication(300, 300);
 
-
     private Metabolite query;
-
 
     public void setSkipall(boolean skipall) {
         this.skipall = skipall;
@@ -129,6 +130,23 @@ public class CandidateSelector
     }
 
 
+    private static final String KEY_STROKE_MASK = keyStrokeMask();
+    private static final String KEY_STROKE_SYMBOL = keyStrokeSymbol();
+
+    private static String keyStrokeMask() {
+        if (System.getProperty("os.name").equals("Mac OS X")) {
+            return "meta";
+        }
+        return "ctrl";
+    }
+
+    private static String keyStrokeSymbol() {
+        if (System.getProperty("os.name").equals("Mac OS X")) {
+            return "⌘";
+        }
+        return "^";
+    }
+
     @Override
     public JPanel getForm() {
 
@@ -142,7 +160,7 @@ public class CandidateSelector
 
             layout.appendRow(new RowSpec(Sizes.PREFERRED));
 
-            String moduleDescription = module.getDescription() + " [meta + " + (i + 1) + "]";
+            String moduleDescription = "<html>" + module.getDescription() + " [<b>"+ KEY_STROKE_SYMBOL + (i + 1) + "</b>]</html>";
             final ExpandableComponentGroup expanding = new ExpandableComponentGroup(moduleDescription,
                                                                                     module.getComponent(), this);
             // allows quick switching with number keys
@@ -152,21 +170,12 @@ public class CandidateSelector
                     expanding.toggle();
                     options.revalidate();
                 }
-            }, KeyStroke.getKeyStroke("meta " + Integer.toString(i + 1)), JComponent.WHEN_IN_FOCUSED_WINDOW);
+            }, KeyStroke.getKeyStroke(KEY_STROKE_MASK + " " + Integer.toString(i + 1)), JComponent.WHEN_IN_FOCUSED_WINDOW);
             options.add(expanding, cc.xy(1, layout.getRowCount()));
             layout.appendRow(new RowSpec(Sizes.DLUY4));
         }
 
         JPanel panel = PanelFactory.createDialogPanel();
-
-        // wrap the whole thin in a pane
-//        JScrollPane pane = new BorderlessScrollPane(options);
-//
-//        pane.getViewport().setBackground(panel.getBackground());
-//        pane.setPreferredSize(new Dimension(800, 494));
-//
-//        pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-//        panel.add(pane);
 
         return options;
 
