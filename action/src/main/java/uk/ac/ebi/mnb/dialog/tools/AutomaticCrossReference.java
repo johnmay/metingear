@@ -23,14 +23,15 @@ import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.utility.TextUtility;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.AbstractChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.observation.Candidate;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
@@ -162,7 +163,7 @@ public class AutomaticCrossReference
         for (Identifier identifier : resourceSelection.getElements()) {
             NameService<?> service = DefaultServiceManager.getInstance().getService(identifier,
                                                                                     NameService.class);
-            if (canUse(service)) {
+            if (isUsable(service) && isChemicalService(service)) {
                 factories.add(new NameCandidateFactory(new ChemicalFingerprintEncoder(),
                                                        service));
             }
@@ -213,13 +214,15 @@ public class AutomaticCrossReference
 
     }
 
-    public boolean canUse(QueryService service) {
+    public boolean isUsable(QueryService service) {
         QueryService.ServiceType type = service.getServiceType();
-        return ws.isSelected()
-                || !type.equals(QueryService.ServiceType.SOAP_WEB_SERVICE)
-                && !type.equals(QueryService.ServiceType.REST_WEB_SERVICE);
+        return !ws.isSelected() || !service.getServiceType().remote();
     }
 
+
+    public boolean isChemicalService(QueryService service){
+        return service.getIdentifier() instanceof ChemicalIdentifier;
+    }
 
     private void updateResourceList() {
         // should be in a setup() method
@@ -228,7 +231,8 @@ public class AutomaticCrossReference
         for (Identifier identifier : services.getIdentifiers(NameService.class)) {
             // check it's actually available
             if (services.hasService(identifier, NameService.class)) {
-                if (canUse(services.getService(identifier, NameService.class))) {
+                QueryService service = services.getService(identifier, NameService.class);
+                if (isUsable(service) && isChemicalService(service)) {
                     resourceSelection.addElement(identifier);
                 }
             }

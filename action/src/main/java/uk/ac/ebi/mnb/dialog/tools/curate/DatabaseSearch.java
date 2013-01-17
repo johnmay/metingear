@@ -26,12 +26,14 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.Source;
 import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Candidate;
 import uk.ac.ebi.mdk.service.ServiceManager;
@@ -47,6 +49,7 @@ import uk.ac.ebi.mdk.ui.component.table.accessor.AccessionAccessor;
 import uk.ac.ebi.mdk.ui.component.table.accessor.AnnotationAccess;
 import uk.ac.ebi.mdk.ui.component.table.accessor.NameAccessor;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
+import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -63,6 +66,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -71,9 +76,7 @@ import java.util.Set;
  * DatabaseSearch 2012.02.01
  *
  * @author johnmay
- * @author $Author$ (this version)
- *         <p/>
- *         Class description
+ * @author $Author$ (this version) <p/> Class description
  * @version $Rev$ : Last Changed $Date$
  */
 public class DatabaseSearch
@@ -83,10 +86,10 @@ public class DatabaseSearch
 
     private JComponent component;
     private MetaboliteMatchIndication match = new MetaboliteMatchIndication();
-    private MoleculeTable  table;
-    private JTextField     field;
-    private JCheckBox      approximate;
-    private Metabolite     context;
+    private MoleculeTable table;
+    private JTextField field;
+    private JCheckBox approximate;
+    private Metabolite context;
     private ServiceManager serviceManager;
     private ResourceList resourceList = new ResourceList();
     private final UndoManager undoManager;
@@ -211,7 +214,6 @@ public class DatabaseSearch
         }), cc.xy(1, 7));
 
 
-
         return options;
     }
 
@@ -234,9 +236,9 @@ public class DatabaseSearch
         Identifier identifier = resourceList.getSelectedValue();
 
         if (identifier == null) {
-            if(!resourceList.getModel().isEmpty()){
+            if (!resourceList.getModel().isEmpty()) {
                 identifier = resourceList.getElements().get(0);
-                if(identifier == null)
+                if (identifier == null)
                     return;
             }
         }
@@ -293,9 +295,23 @@ public class DatabaseSearch
 
         DefaultListModel model = resourceList.getModel();
         model.removeAllElements();
+        List<Identifier> available = new ArrayList<Identifier>();
         for (Identifier identifier : serviceManager.getIdentifiers(NameService.class)) {
-            resourceList.addElement(identifier);
+            // only add those services which are available
+            if (serviceManager.hasService(identifier, NameService.class)
+                    && identifier instanceof ChemicalIdentifier) {
+                available.add(identifier);
+            }
         }
+        Collections.sort(available, new Comparator<Identifier>() {
+            @Override public int compare(Identifier o1, Identifier o2) {
+                // sort by service type local >> remote
+                int cmp = serviceManager.getService(o1, NameService.class).getServiceType().compareTo(serviceManager.getService(o2, NameService.class).getServiceType());
+                if (cmp != 0) return cmp;
+                // sort by name
+                return o1.getShortDescription().compareTo(o2.getShortDescription());
+            }
+        });
 
         component.revalidate();
 
@@ -309,13 +325,17 @@ public class DatabaseSearch
 
     public void transferAnnotations() {
 
-        for (Metabolite metabolte : table.getSelectedEntities()) {
+        for (Metabolite m : table.getSelectedEntities()) {
 
-            if (!context.getName().equals(metabolte.getName())) {
-                context.addAnnotation(new Synonym(metabolte.getName()));
+            if (!context.getName().equals(m.getName())) {
+                Annotation synonym = new Synonym(m.getName());
+                undoManager.addEdit(new AddAnnotationEdit(context, synonym));
+                context.addAnnotation(synonym);
             }
 
-            context.addAnnotation(CrossReference.create(metabolte.getIdentifier()));
+            Annotation xref = CrossReference.create(m.getIdentifier());
+            undoManager.addEdit(new AddAnnotationEdit(context, xref));
+            context.addAnnotation(xref);
 
         }
 

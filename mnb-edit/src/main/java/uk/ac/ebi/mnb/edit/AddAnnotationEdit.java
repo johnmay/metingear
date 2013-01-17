@@ -45,7 +45,7 @@ public class AddAnnotationEdit
     private AnnotatedEntity entity;
     private Collection<Annotation> annotations;
 
-    public AddAnnotationEdit(AnnotatedEntity entity, Collection<Annotation> annotations) {
+    public AddAnnotationEdit(AnnotatedEntity entity, Collection<? extends Annotation> annotations) {
         this.entity      = entity;
         this.annotations = new ArrayList<Annotation>(annotations);
     }

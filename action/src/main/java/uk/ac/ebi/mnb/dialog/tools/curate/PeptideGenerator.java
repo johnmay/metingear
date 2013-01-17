@@ -21,30 +21,33 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.tool.domain.PeptideFactory;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
+import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 
 import javax.swing.*;
 import javax.swing.undo.UndoManager;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 
 
 /**
+ * PeptideGenerator 2012.01.24
  *
- *          PeptideGenerator 2012.01.24
+ * @author johnmay
+ * @author $Author$ (this version)
+ *
+ *         Class provides a UI to use the {@see PeptideFactory}
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Class provides a UI to use the {@see PeptideFactory}
- *
  */
 public class PeptideGenerator implements CrossreferenceModule {
 
@@ -57,8 +60,8 @@ public class PeptideGenerator implements CrossreferenceModule {
     private PeptideFactory factory;
 
     private JComboBox[] boxes = new JComboBox[]{
-        new JComboBox(PeptideFactory.AminoAcid.values()),
-        new JComboBox(PeptideFactory.AminoAcid.values())
+            new JComboBox(PeptideFactory.AminoAcid.values()),
+            new JComboBox(PeptideFactory.AminoAcid.values())
     };
 
     private Metabolite context;
@@ -121,9 +124,14 @@ public class PeptideGenerator implements CrossreferenceModule {
 
 
         try {
-            context.addAnnotation(new AtomContainerAnnotation(factory.generateStructure(chain)));
-            context.addAnnotation(new Synonym(factory.generateName(chain)));
-            context.addAnnotation(new Synonym(factory.generateAbbreviation(chain)));
+            // create the annotation and add to the undo manager and apply the actual edit
+            Collection<? extends Annotation> annotations = Arrays.asList(new AtomContainerAnnotation(factory.generateStructure(chain)),
+                                                                         new Synonym(factory.generateName(chain)),
+                                                                         new Synonym(factory.generateName(chain)));
+
+            undoManager.addEdit(new AddAnnotationEdit(context, annotations));
+            context.addAnnotations(annotations); // apply edit
+
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(PeptideGenerator.class.getName()).log(Level.SEVERE, null, ex);
         } catch (CDKException ex) {

@@ -33,11 +33,13 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
+import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -53,7 +55,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 
 /**
@@ -200,19 +204,29 @@ public final class AssignStructure
         }
         SMILES smilesAnnotation = new SMILES(smiles);
 
-        metabolite.addAnnotation(smilesAnnotation);
+        Collection<Annotation> annotations = new ArrayList<Annotation>(2);
+        annotations.add(smilesAnnotation);
 
-        // add a structure annotation
-        if(smilesAnnotation.getStructure() != null)
-            metabolite.addAnnotation(new AtomContainerAnnotation(smilesAnnotation.getStructure()));
+        // try parsing smiles (stored internally) - if it fails we don't add a null atom container
+        if (smilesAnnotation.getStructure() != null)
+            annotations.add(new AtomContainerAnnotation(smilesAnnotation.getStructure()));
+
+        undoManager.addEdit(new AddAnnotationEdit(metabolite, annotations));
+        metabolite.addAnnotations(annotations);
+
+
     }
 
-    public void transferCML() throws CDKException, UnsupportedEncodingException, IOException {
+    public void transferCML() throws CDKException, UnsupportedEncodingException,
+                                     IOException {
         String cmltext = area.getText();
         CMLReader cmlreader = new CMLReader(new ByteArrayInputStream(cmltext.getBytes("UTF-8")));
         IChemFile chemfile = cmlreader.read(SilentChemObjectBuilder.getInstance().newInstance(ChemFile.class));
         cmlreader.close();
-        metabolite.addAnnotation(new AtomContainerAnnotation(ChemFileManipulator.getAllAtomContainers(chemfile).get(0)));
+        Annotation annotation = new AtomContainerAnnotation(ChemFileManipulator.getAllAtomContainers(chemfile).get(0));
+        undoManager.addEdit(new AddAnnotationEdit(metabolite, annotation));
+        metabolite.addAnnotation(annotation);
+
     }
 
 
@@ -220,7 +234,9 @@ public final class AssignStructure
         MDLV2000Reader reader = new MDLV2000Reader(new StringReader(area.getText()));
         IMolecule molecule = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class));
         reader.close();
-        metabolite.addAnnotation(new AtomContainerAnnotation(molecule));
+        Annotation annotation = new AtomContainerAnnotation(molecule);
+        undoManager.addEdit(new AddAnnotationEdit(metabolite, annotation));
+        metabolite.addAnnotation(annotation);
     }
 
 
@@ -228,7 +244,9 @@ public final class AssignStructure
         MDLV3000Reader reader = new MDLV3000Reader(new StringReader(area.getText()));
         IMolecule molecule = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class));
         reader.close();
-        metabolite.addAnnotation(new AtomContainerAnnotation(molecule));
+        Annotation annotation = new AtomContainerAnnotation(molecule);
+        undoManager.addEdit(new AddAnnotationEdit(metabolite, annotation));
+        metabolite.addAnnotation(annotation);
     }
 
 
@@ -241,9 +259,11 @@ public final class AssignStructure
         InChIToStructure structureGenerator = inchifactory.getInChIToStructure(inchi, DefaultChemObjectBuilder.getInstance());
         INCHI_RET status = structureGenerator.getReturnStatus();
         if (status != INCHI_RET.OKAY) {
-            throw new InvalidParameterException("Unable to parse InCHI for " + metabolite.getName() + ": " + structureGenerator.getMessage());
+            throw new CDKException("Unable to parse InCHI for " + metabolite.getName() + ": " + structureGenerator.getMessage());
         }
-        metabolite.addAnnotation(new AtomContainerAnnotation(structureGenerator.getAtomContainer()));
-        metabolite.addAnnotation(new InChI(inchi));
+        Collection<? extends Annotation> annotations = Arrays.asList(new AtomContainerAnnotation(structureGenerator.getAtomContainer()),
+                                                                     new InChI(inchi));
+        undoManager.addEdit(new AddAnnotationEdit(metabolite, annotations));
+        metabolite.addAnnotations(annotations);
     }
 }

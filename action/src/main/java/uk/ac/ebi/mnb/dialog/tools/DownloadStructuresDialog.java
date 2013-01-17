@@ -31,7 +31,9 @@ import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.identifier.AbstractChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.QueryService;
@@ -160,7 +162,7 @@ public class DownloadStructuresDialog
                         StructureService service = services.getService(identifier,
                                                                        StructureService.class);
 
-                        if (canUse(service)) {
+                        if (canUse(service) && isChemicalService(service)) {
 
                             IAtomContainer structure = service.getStructure(reference.getIdentifier());
 
@@ -219,11 +221,12 @@ public class DownloadStructuresDialog
 
     public boolean canUse(QueryService service) {
         QueryService.ServiceType type = service.getServiceType();
-        return ws.isSelected()
-                || !type.equals(QueryService.ServiceType.SOAP_WEB_SERVICE)
-                && !type.equals(QueryService.ServiceType.REST_WEB_SERVICE);
+        return !ws.isSelected() && !service.getServiceType().remote();
     }
 
+    public boolean isChemicalService(QueryService service){
+        return service.getIdentifier() instanceof ChemicalIdentifier;
+    }
 
     @Override
     public boolean update() {

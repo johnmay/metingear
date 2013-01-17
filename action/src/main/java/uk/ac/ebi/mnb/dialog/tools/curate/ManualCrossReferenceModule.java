@@ -18,11 +18,14 @@ package uk.ac.ebi.mnb.dialog.tools.curate;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.ui.edit.crossreference.IdentifierEditor;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
+import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 
 import javax.swing.*;
 import javax.swing.undo.UndoManager;
@@ -86,7 +89,9 @@ public class ManualCrossReferenceModule implements CrossreferenceModule {
         for (int i = 0; i < expand.getSize(); i++) {
             if (expand.getComponent(i).isFilled()) {
                 Identifier id = expand.getComponent(i).getIdentifier();
-                metabolite.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(id));
+                Annotation xref = CrossReference.create(id);
+                undoManager.addEdit(new AddAnnotationEdit(metabolite, xref));
+                metabolite.addAnnotation(xref);
             }
         }
     }
