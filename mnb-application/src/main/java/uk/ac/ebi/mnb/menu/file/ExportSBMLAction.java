@@ -18,6 +18,8 @@ import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileView;
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
@@ -45,16 +47,49 @@ public class ExportSBMLAction
         this.controller = controller;
     }
 
+    private boolean xmlSuffix(File file) {
+        return file.getName().endsWith(".xml");
+    }
+
+    @Override public void buildComponents() {
+        super.buildComponents();
+        super.getChooser().setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+
+        super.getChooser().setFileView(new FileView() {
+            @Override public String getDescription(File f) {
+                if (f.isDirectory() && f.getName().endsWith(".mr"))
+                    return "Metingear Reconstruction";
+                return super.getDescription(f);
+            }
+
+            @Override public Boolean isTraversable(File f) {
+                // do not allow traversal into .mr folders
+                if (f.isDirectory() && f.getName().endsWith(".mr"))
+                    return false;
+                return super.isTraversable(f);
+            }
+        });
+    }
 
     @Override
     public void activateActions() {
 
-        final File file = getFile(showSaveDialog());
+        File tmp = getFile(showSaveDialog());
+
+        // no file selected
+        if (tmp == null)
+            return;
+
+        // correct file name if not sbml/xml
+        final File file =
+                tmp.getName().endsWith("xml") || tmp.getName().endsWith("sbml")
+                ? tmp : new File(tmp.getPath() + ".xml");
+
         final SpinningDialWaitIndicator waitIndicator = new SpinningDialWaitIndicator((JFrame) controller);
 
         waitIndicator.setText("Export SBML to " + file);
 
-        final int level   = 2;
+        final int level = 2;
         final int version = 4;
 
         final List<Report> messages = new ArrayList<Report>();
@@ -66,7 +101,7 @@ public class ExportSBMLAction
                     SBMLIOUtil util = new SBMLIOUtil(DefaultEntityFactory.getInstance(), level, version);
 
                     SBMLDocument document = util.getDocument(DefaultReconstructionManager.getInstance().getActive());
-                    SBMLWriter writer     = new SBMLWriter(' ', (short) 2);
+                    SBMLWriter writer = new SBMLWriter(' ', (short) 2);
                     writer.write(document, file);
 
                 } catch (IOException ex) {
