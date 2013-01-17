@@ -76,7 +76,7 @@ public class FileMenu
         add(new ImportENAXML(), activeProject);
         add(new JSeparator());
         add(exportMenu);
-        add(new ExportSBMLAction(), new ContextResponder() {
+        add(new ExportSBMLAction(MainView.getInstance()), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return active != null && (!active.getReactome().isEmpty() || !active.getMetabolome().isEmpty());
