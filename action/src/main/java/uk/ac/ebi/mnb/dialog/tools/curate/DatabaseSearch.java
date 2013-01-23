@@ -28,7 +28,6 @@ import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
-import uk.ac.ebi.mdk.domain.annotation.Source;
 import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
@@ -38,6 +37,7 @@ import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.observation.Candidate;
 import uk.ac.ebi.mdk.service.ServiceManager;
+import uk.ac.ebi.mdk.service.query.QueryService;
 import uk.ac.ebi.mdk.service.query.data.MolecularChargeService;
 import uk.ac.ebi.mdk.service.query.data.MolecularFormulaService;
 import uk.ac.ebi.mdk.service.query.name.NameService;
@@ -47,7 +47,6 @@ import uk.ac.ebi.mdk.ui.component.MetaboliteMatchIndication;
 import uk.ac.ebi.mdk.ui.component.ResourceList;
 import uk.ac.ebi.mdk.ui.component.table.MoleculeTable;
 import uk.ac.ebi.mdk.ui.component.table.accessor.AccessionAccessor;
-import uk.ac.ebi.mdk.ui.component.table.accessor.AnnotationAccess;
 import uk.ac.ebi.mdk.ui.component.table.accessor.NameAccessor;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
@@ -303,28 +302,34 @@ public class DatabaseSearch
 
         DefaultListModel model = resourceList.getModel();
         model.removeAllElements();
-        List<Identifier> available = new ArrayList<Identifier>();
+
+        List<QueryService> available = new ArrayList<QueryService>();
+
+
         for (Identifier identifier : serviceManager.getIdentifiers(NameService.class)) {
             // only add those services which are available
-            if (serviceManager.hasService(identifier, NameService.class)
-                    && !serviceManager.getService(identifier, NameService.class).getServiceType().remote()
-                    && identifier instanceof ChemicalIdentifier) {
-                available.add(identifier);
+            if (serviceManager.hasService(identifier, NameService.class)) {
+                QueryService service = serviceManager.getService(identifier, NameService.class);
+                if (!service.getServiceType().remote() && identifier instanceof ChemicalIdentifier) {
+                    available.add(service);
+                }
             }
+
         }
-        Collections.sort(available, new Comparator<Identifier>() {
-            @Override public int compare(Identifier o1, Identifier o2) {
-                // sort by service type local >> remote
-                int cmp = serviceManager.getService(o1, NameService.class).getServiceType().compareTo(serviceManager.getService(o2, NameService.class).getServiceType());
-                if (cmp != 0) return cmp;
-                // sort by name
-                return o1.getShortDescription().compareTo(o2.getShortDescription());
+
+        Collections.sort(available, new Comparator<QueryService>() {
+            @Override public int compare(QueryService o1, QueryService o2) {
+                int cmp = o1.getServiceType().compareTo(o2.getServiceType());
+                if(cmp != 0) return cmp;
+                return o1.getIdentifier().compareTo(o2.getIdentifier());
             }
         });
 
+
+
         // add the sorted identifiers
-        for (Identifier identifier : available)
-            resourceList.addElement(identifier);
+        for (QueryService service : available)
+            resourceList.addElement(service.getIdentifier());
 
         component.revalidate();
 

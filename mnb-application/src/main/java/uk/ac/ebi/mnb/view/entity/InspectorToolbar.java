@@ -92,6 +92,7 @@ public class InspectorToolbar
             @Override
             public void activateActions() {
                 dialog.getSelection().add(inspector.getEntity());
+                dialog.prepare();
                 dialog.setVisible(true);
             }
         });

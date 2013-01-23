@@ -103,15 +103,13 @@ public class MetaboliteCurator extends DropdownDialog {
 
         this.query = query;
 
-        String descText = String.format("The molecule '%s' was not found:", query.getName());
+        String descText = String.format("Currently curating '%s':", query.getName());
 
         desc.setText(descText);
         desc.setToolTipText(descText);
-
         for (CrossreferenceModule module : modules) {
             module.setup(query);
         }
-
 
     }
 
@@ -124,23 +122,9 @@ public class MetaboliteCurator extends DropdownDialog {
         return desc;
     }
 
-
-    private static final String KEY_STROKE_MASK = keyStrokeMask();
-    private static final String KEY_STROKE_SYMBOL = keyStrokeSymbol();
-
-    private static String keyStrokeMask() {
-        if (System.getProperty("os.name").equals("Mac OS X")) {
-            return "meta";
-        }
-        return "ctrl";
-    }
-
-    private static String keyStrokeSymbol() {
-        if (System.getProperty("os.name").equals("Mac OS X")) {
-            return "⌘";
-        }
-        return "^";
-    }
+    private static final boolean OS_X = System.getProperty("os.name").equals("Mac OS X");
+    private static final String KEY_STROKE_MASK = OS_X ? "meta" : "ctrl";
+    private static final String KEY_STROKE_SYMBOL = OS_X ? "⌘" : "^";
 
     @Override
     public JPanel getForm() {
@@ -155,7 +139,7 @@ public class MetaboliteCurator extends DropdownDialog {
 
             layout.appendRow(new RowSpec(Sizes.PREFERRED));
 
-            String moduleDescription = "<html>" + module.getDescription() + " [<b>"+ KEY_STROKE_SYMBOL + (i + 1) + "</b>]</html>";
+            String moduleDescription = "<html>" + module.getDescription() + " [<b>" + KEY_STROKE_SYMBOL + (i + 1) + "</b>]</html>";
             final ExpandableComponentGroup expanding = new ExpandableComponentGroup(moduleDescription,
                                                                                     module.getComponent(), this);
             // allows quick switching with number keys

@@ -16,11 +16,11 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
-import uk.ac.ebi.mnb.dialog.tools.curate.MetaboliteCurator;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
+import uk.ac.ebi.mnb.dialog.tools.curate.MetaboliteCurator;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 import javax.swing.*;
@@ -29,10 +29,9 @@ import javax.swing.*;
  * ResolveMissingInfo 2012.01.11
  *
  * @author johnmay
- * @author $Author$ (this version)
- *         <p/>
- *         Class provides resolution to small molecule metabolites that are not assigned
- *         to a database or structure
+ * @author $Author$ (this version) <p/> Class provides resolution to small
+ *         molecule metabolites that are not assigned to a database or
+ *         structure
  * @version $Rev$ : Last Changed $Date$
  */
 public class CuratedReconciliation
@@ -53,7 +52,6 @@ public class CuratedReconciliation
 
     @Override
     public void activateActions() {
-
         EntityCollection manager = controller.getViewController().getSelection();
 
         dialog.setSkipall(false); // reset the skip-all flag
