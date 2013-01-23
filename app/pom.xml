@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>mnb</artifactId>
+        <artifactId>metingear</artifactId>
         <groupId>uk.ac.ebi.metingear</groupId>
         <version>0.9.5-SNAPSHOT</version>
     </parent>
@@ -116,17 +116,17 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-core</artifactId>
+            <artifactId>metingear-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-importer</artifactId>
+            <artifactId>metingear-import</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-interfaces</artifactId>
+            <artifactId>metingear-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -141,12 +141,12 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-simulation</artifactId>
+            <artifactId>metingear-optimise</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-edit</artifactId>
+            <artifactId>metingear-edit</artifactId>
             <version>${project.version}</version>
         </dependency>
 

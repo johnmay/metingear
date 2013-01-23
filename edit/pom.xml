@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>mnb</artifactId>
+        <artifactId>metingear</artifactId>
         <groupId>uk.ac.ebi.metingear</groupId>
         <version>0.9.5-SNAPSHOT</version>
     </parent>
-    <artifactId>mnb-edit</artifactId>
+    <artifactId>metingear-edit</artifactId>
     <packaging>jar</packaging>
 
     <name>Edit</name>
@@ -25,7 +25,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mnb-interfaces</artifactId>
+            <artifactId>metingear-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

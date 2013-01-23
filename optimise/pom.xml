@@ -4,12 +4,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>mnb</artifactId>
+        <artifactId>metingear</artifactId>
         <groupId>uk.ac.ebi.metingear</groupId>
         <version>0.9.5-SNAPSHOT</version>
     </parent>
     <packaging>jar</packaging>
-    <artifactId>mnb-simulation</artifactId>
+    <artifactId>metingear-optimise</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

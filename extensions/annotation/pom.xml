@@ -17,17 +17,17 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <artifactId>mnb-core</artifactId>
+            <artifactId>metingear-core</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <artifactId>mnb-interfaces</artifactId>
+            <artifactId>metingear-api</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <artifactId>mnb-edit</artifactId>
+            <artifactId>metingear-edit</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>
