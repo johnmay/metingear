@@ -39,6 +39,7 @@
         
     </script> 
 
+    <!-- QTObject embed by Geoff Stearns geoff@deconcept.com http://blog.deconcept.com/ -->
     <script type="text/javascript" src="http://johnmay.github.com/metingear/javascripts/qtobject.js"></script>
 
   <body>
@@ -161,13 +162,17 @@
 </ul>
 <p>
 
+<h2>Screen Casts</h2>
 <div id="screencast"/>
 <!-- screen cast section -->
 
 <script type="text/javascript">
         // <![CDATA[
-            var myQTObject = new QTObject("http://www.ebi.ac.uk/steinbeck-srv/metingear/tutorial/metingear-tutorial-1.m4v", "Tutorial-1", "320", "255");
+            var myQTObject = new QTObject("http://www.ebi.ac.uk/steinbeck-srv/metingear/tutorial/metingear-tutorial-1.m4v", "Tutorial-1", "720", "540");
             myQTObject.addParam("autostart", "false");
+            myQTObject.addParam("href", "http://www.ebi.ac.uk/steinbeck-srv/metingear/tutorial/metingear-tutorial-1.m4v");
+            myQTObject.addParam("target", "myself");
+            myQTObject.addParam("controller", "true");
             myQTObject.write();
             
         // ]]>
