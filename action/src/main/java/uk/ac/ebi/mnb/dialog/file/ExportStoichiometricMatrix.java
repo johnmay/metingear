@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012. John May <jwmay@sf.net>
+ * Copyright (c) 2013. John May <jwmay@users.sf.net>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
