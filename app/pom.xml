@@ -11,7 +11,7 @@
         <version>0.9.5-SNAPSHOT</version>
     </parent>
 
-    <artifactId>mnb-application</artifactId>
+    <artifactId>metingear-app</artifactId>
     <packaging>jar</packaging>
 
     <properties>

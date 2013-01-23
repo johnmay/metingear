@@ -8,7 +8,6 @@
         <version>0.9.5-SNAPSHOT</version>
     </parent>
     <artifactId>metingear-api</artifactId>
-    <name>Interfaces</name>
     <packaging>jar</packaging>
     <url>http://maven.apache.org</url>
     <properties>

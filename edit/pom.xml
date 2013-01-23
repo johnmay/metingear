@@ -10,7 +10,6 @@
     <artifactId>metingear-edit</artifactId>
     <packaging>jar</packaging>
 
-    <name>Edit</name>
     <url>http://maven.apache.org</url>
 
     <properties>

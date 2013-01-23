@@ -9,7 +9,6 @@
         <version>0.9.5-SNAPSHOT</version>
     </parent>
     <artifactId>metingear-import</artifactId>
-    <name>Importer</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,12 +40,6 @@
             <artifactId>metingear-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-service-core</artifactId>
-            <version>${mdk.version}</version>
-        </dependency>
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>mdk-domain-annotation</artifactId>
@@ -75,11 +68,6 @@
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>mdk-service-core</artifactId>
-            <version>${mdk.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-domain-identifier</artifactId>
             <version>${mdk.version}</version>
         </dependency>
         <dependency>
