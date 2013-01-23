@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>extension</module>
         <module>structure</module>
         <module>annotation</module>
     </modules>

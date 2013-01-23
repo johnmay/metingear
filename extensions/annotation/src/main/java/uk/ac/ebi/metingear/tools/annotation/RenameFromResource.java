@@ -37,12 +37,10 @@ import uk.ac.ebi.metingear.edit.entity.RenameMetaboliteEdit;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
 
 import javax.swing.*;
-import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CompoundEdit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;

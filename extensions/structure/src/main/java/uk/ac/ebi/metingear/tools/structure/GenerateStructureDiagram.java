@@ -28,8 +28,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.caf.component.injection.Inject;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;

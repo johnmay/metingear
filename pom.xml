@@ -12,22 +12,13 @@
 
     <modules>
         <module>app</module>
-
-
         <module>core</module>
         <module>optimise</module>
         <module>edit</module>
         <module>api</module>
         <module>action</module>
-
-
         <module>import</module>
-
-        <!-- core extension module, should be moved-->
-        <module>extension</module>
-
         <module>extensions</module>
-
     </modules>
 
     <licenses>
