@@ -173,11 +173,12 @@ Before you start you will want to check out the <a href="https://github.com/john
 
 <script type="text/javascript">
         // <![CDATA[
-            var myQTObject = new QTObject("http://www.ebi.ac.uk/steinbeck-srv/metingear/tutorial/metingear-tutorial-1.m4v", "Tutorial-1", "720", "555");
+            var myQTObject = new QTObject("http://www.ebi.ac.uk/steinbeck-srv/metingear/tutorial/metingear-tutorial-1.m4v", "Tutorial-1", "640", "480");
             myQTObject.addParam("autostart", "false");
             myQTObject.addParam("href", "http://www.ebi.ac.uk/steinbeck-srv/metingear/tutorial/metingear-tutorial-1.m4v");
             myQTObject.addParam("target", "myself");
             myQTObject.addParam("controller", "true");
+            myQTObject.addParam("scale", "tofit");
             myQTObject.write();
             
         // ]]>
