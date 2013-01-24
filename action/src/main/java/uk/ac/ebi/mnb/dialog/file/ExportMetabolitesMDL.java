@@ -17,8 +17,10 @@
 package uk.ac.ebi.mnb.dialog.file;
 
 import org.apache.log4j.Logger;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.io.MDLV2000Writer;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.SDFWriter;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
@@ -87,21 +89,29 @@ public class ExportMetabolitesMDL extends ControllerAction {
             }
 
         }
-        BufferedWriter writer = null;
+        SDFWriter writer = null;
 
         try {
-            // check if overwritting
+            writer = new SDFWriter(new BufferedWriter(new FileWriter(file)));
 
-            writer = new BufferedWriter(new FileWriter(file));
-            MDLV2000Writer mdl = new MDLV2000Writer(writer);
 
             String recordSeparator = "$$$$" + System.getProperty("line.separator");
 
             for (Metabolite m : metabolites) {
                 if (m.hasStructure()) {
                     for (AtomContainerAnnotation structure : m.getAnnotations(AtomContainerAnnotation.class)) {
-                        mdl.write(structure.getStructure());
-                        writer.write(recordSeparator);
+
+                        IAtomContainer container = structure.getStructure();
+                        container.setProperty(CDKConstants.TITLE, m.getAccession());
+
+                        if (!m.getName().isEmpty())
+                            container.setProperty("name", m.getName());
+                        if (!m.getAbbreviation().isEmpty())
+                            container.setProperty("abbreviation", m.getAbbreviation());
+
+                        writer.write(container);
+
+
                     }
                 }
             }
@@ -115,7 +125,7 @@ public class ExportMetabolitesMDL extends ControllerAction {
                 if (writer != null)
                     writer.close();
             } catch (IOException e1) {
-                System.err.println(e1.getMessage());
+                // can't do anything
             }
         }
 
