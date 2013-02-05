@@ -164,6 +164,10 @@ public class ToolsMenu extends ContextMenu {
             }
         });
 
+        // TODO: features below here are not complete
+        if(true)
+            return;
+
         gapMenu = new GapAnalysis(view);
         add(gapMenu);
 
