@@ -66,7 +66,9 @@ public class ToolsMenu extends ContextMenu {
 
         MainView view = MainView.getInstance();
 
+        // sub-menus
         annotation = new ContextMenu("Annotation", MainView.getInstance());
+        gapMenu = new GapAnalysis(view);
 
         add(annotation);
 
@@ -168,7 +170,7 @@ public class ToolsMenu extends ContextMenu {
         if(true)
             return;
 
-        gapMenu = new GapAnalysis(view);
+
         add(gapMenu);
 
         /**
