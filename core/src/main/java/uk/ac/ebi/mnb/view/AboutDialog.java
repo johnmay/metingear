@@ -57,11 +57,11 @@ public class AboutDialog extends JDialog {
 
         logo = new JLabel(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/networkbuilder_256x256.png"));
         label = new JLabel(
-          "<html><b>Metabolic Network Builder</b><br/>John May<br/>EMBL-EBI<br/>2011</html>");
+          "<html><b>Metingear</b><br/>John May<br/>EMBL-EBI<br/>2013</html>");
         progressBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, progressBarMax);
         progressBar.setBorderPainted(false);
         setBackground(ThemeManager.getInstance().getTheme().getBackground());
-        setTitle("About Metabolic Network Builder");
+        setTitle("About Metingear");
         setUndecorated(isSplash);
         setAlwaysOnTop(true);
         setResizable(false);
