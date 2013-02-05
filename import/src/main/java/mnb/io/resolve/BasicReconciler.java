@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package mnb.io.resolve;
 
 import com.google.common.collect.HashMultimap;
@@ -51,24 +52,17 @@ import static mnb.io.tabular.type.EntityColumn.FORMULA;
  * @version $Rev$ : Last Changed $Date: 2011-11-19 10:15:40 +0000 (Sat, 19
  *          Nov 2011) $
  */
-public class AutomatedReconciler
+public class BasicReconciler
         implements EntryReconciler {
 
-    private static final Logger LOGGER = Logger.getLogger(AutomatedReconciler.class);
-
-    private NameCandidateFactory factory;
-
-    private Identifier template;
+    private static final Logger LOGGER = Logger.getLogger(BasicReconciler.class);
 
     private Reconstruction recon;
 
     private Multimap<String, Metabolite> nameMap;
 
 
-    public AutomatedReconciler(NameCandidateFactory factory, Identifier factoryIdClass) {
-        this.factory = factory;
-        this.template = factoryIdClass;
-
+    public BasicReconciler() {
         recon = DefaultReconstructionManager.getInstance().getActive();
         nameMap = HashMultimap.create();
         if (recon != null && !recon.getMetabolome().isEmpty()) {
@@ -76,7 +70,6 @@ public class AutomatedReconciler
                 nameMap.put(m.getName(), m);
             }
         }
-
     }
 
 
@@ -131,20 +124,6 @@ public class AutomatedReconciler
             for (String synonym : entry.getValues(EntityColumn.SYNONYMS)) {
                 metabolite.addAnnotation(new Synonym(synonym));
             }
-        }
-
-        try {
-            Set<Candidate> candidates = factory.getCandidates(name, false);
-
-            // contains a candidate with a score of 0
-            for (Candidate candidate : candidates) {
-                if(candidate.getDistance() == 0) {
-                    metabolite.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(candidate.getIdentifier()));
-                }
-            }
-
-        } catch (ExceptionInInitializerError ex) {
-            LOGGER.info("Unable to resolve candidates: " + ex.getMessage());
         }
 
         // molecula formula
