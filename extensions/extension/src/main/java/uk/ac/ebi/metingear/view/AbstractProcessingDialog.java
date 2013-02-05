@@ -110,7 +110,7 @@ public abstract class AbstractProcessingDialog
 
         JPanel panel = PanelFactory.createDialogPanel("p:grow, p, p:grow",
                                                       "p, 4dlu, p, 4dlu, p, 4dlu, p");
-
+        panel.setBackground(getBackground());
         panel.add(getInformation(), CELL_CONSTRAINTS.xyw(1, 1, 3));
         panel.add(new JSeparator(), CELL_CONSTRAINTS.xyw(1, 3, 3));
         panel.add(getForm(), CELL_CONSTRAINTS.xy(2, 5));
@@ -235,7 +235,7 @@ public abstract class AbstractProcessingDialog
         });
     }
 
-    // background shaddow
+    // background shadow
 
     private Paint paint = new GradientPaint(0, 0, getBackground().darker(), 0, 10, getBackground());
 
