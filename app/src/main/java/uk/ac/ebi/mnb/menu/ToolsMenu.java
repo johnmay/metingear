@@ -38,6 +38,7 @@ import uk.ac.ebi.mnb.dialog.tools.CompareReconstruction;
 import uk.ac.ebi.mnb.dialog.tools.CuratedReconciliation;
 import uk.ac.ebi.mnb.dialog.tools.DownloadStructuresDialog;
 import uk.ac.ebi.mnb.dialog.tools.MergeLoci;
+import uk.ac.ebi.mnb.dialog.tools.RemoveWorstStructures;
 import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
 import uk.ac.ebi.mnb.dialog.tools.TransferAnnotations;
 import uk.ac.ebi.mnb.dialog.tools.compare.AlignReconstruction;
@@ -150,6 +151,12 @@ public class ToolsMenu extends ContextMenu {
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection.hasSelection(Metabolite.class);
 
+            }
+        });
+        add(new RemoveWorstStructures(MainView.getInstance()), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return selection.hasSelection(Metabolite.class);
             }
         });
 

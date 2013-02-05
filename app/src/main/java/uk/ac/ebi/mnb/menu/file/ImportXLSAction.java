@@ -97,7 +97,6 @@ public class ImportXLSAction
                 // update the views
                 MainView.getInstance().getSourceListController().update();
                 MainView.getInstance().getViewController().update();
-                System.out.println("done..");
 
             } catch (Exception ex) {
                 MainView.getInstance().addErrorMessage("Unable to import Excel file: " + ex.getMessage());
