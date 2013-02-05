@@ -24,12 +24,11 @@ import uk.ac.ebi.mnb.menu.MainMenuBar;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * ApplicationLauncher - 13.03.2012 <br/>
- * <p/>
- * Class descriptions.
+ * ApplicationLauncher - 13.03.2012 <br/> <p/> Class descriptions.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -37,33 +36,42 @@ import java.util.Properties;
  */
 public class ApplicationLauncher implements Runnable {
 
+    private static final String LOG4J_CONFIG = "/config/metingear-log.properties";
+
     public ApplicationLauncher() {
 
         // configure loader
+        InputStream in = null;
         try {
             Properties properties = new Properties();
-            properties.load(getClass().getResourceAsStream("/config/metingear-log.properties"));
+            in = getClass().getResourceAsStream(LOG4J_CONFIG);
+            properties.load(in);
             for (Object key : properties.keySet()) {
                 String value = properties.getProperty(key.toString());
                 if (value != null && value.contains("<os.app.data>")) {
                     properties.put(key,
                                    value.replaceAll("<os.app.data>",
                                                     FilePreference.OS_APP_DATA_PATH));
-
-                    System.out.println(value.replaceAll("<os.app.data>",
-                                       FilePreference.OS_APP_DATA_PATH));
                 }
             }
             PropertyConfigurator.configure(properties);
         } catch (IOException ex) {
             System.err.println("Unable to load logging configuration file");
+        } finally {
+            try {
+                if (in != null)
+                    in.close();
+            } catch (IOException ex) {
+                // nothing we can do
+            }
         }
 
     }
 
     public void loadLookAndFeel() {
         try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+            for (UIManager.LookAndFeelInfo info : UIManager
+                    .getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     UIManager.setLookAndFeel(info.getClassName());
                     break;
@@ -71,7 +79,8 @@ public class ApplicationLauncher implements Runnable {
             }
         } catch (Exception ex) {
             try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                UIManager.setLookAndFeel(UIManager
+                                                 .getSystemLookAndFeelClassName());
             } catch (Exception e) {
                 System.err.println("Could not set look at feel");
             }
@@ -92,7 +101,6 @@ public class ApplicationLauncher implements Runnable {
         beforeVisible();
 
         view.setVisible(true);
-
 
 
     }
