@@ -137,8 +137,10 @@ public class MetaboliteCurator extends DropdownDialog {
             layout.appendRow(new RowSpec(Sizes.PREFERRED));
 
             String moduleDescription = "<html>" + module.getDescription() + " [<b>" + KEY_STROKE_SYMBOL + (i + 1) + "</b>]</html>";
+            final JComponent component = module.getComponent();
+            component.setBackground(getBackground() );
             final ExpandableComponentGroup expanding = new ExpandableComponentGroup(moduleDescription,
-                                                                                    module.getComponent(), this);
+                                                                                    component, this);
             // allows quick switching with number keys
             expanding.registerKeyboardAction(new AbstractAction() {
 
