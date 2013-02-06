@@ -149,7 +149,6 @@ public class RenameMetaboliteEditTest {
         Metabolite e = r1.getReactants().toArray(new MetabolicParticipant[0])[1].getMolecule();
 
         Assert.assertEquals(3, reconstruction.getReactome().getReactions(e).size());
-        Assert.assertEquals(0, reconstruction.getReactome().getReactions(a).size());
 
         Assert.assertFalse(reconstruction.getMetabolome().contains(a));
         Assert.assertTrue(reconstruction.getMetabolome().contains(e));
