@@ -26,6 +26,7 @@ import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.chemet.tools.annotation.BasicPatternMatcher;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.Charge;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.Locus;
@@ -44,6 +45,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,9 +144,9 @@ public class ExtractAnnotations extends AbstractControlDialog {
                 : Pattern.compile(patternField.getText());
 
         BasicPatternMatcher<Note> matcher = new BasicPatternMatcher<Note>(Note.class,
-                                                                          pattern);
+                                                                       pattern);
 
-        StringAnnotation target = (StringAnnotation) annotationComboBox.getSelectedItem();
+        Annotation target = (Annotation) annotationComboBox.getSelectedItem();
 
         List<Annotation> queue = new ArrayList<Annotation>();
 
@@ -154,7 +157,13 @@ public class ExtractAnnotations extends AbstractControlDialog {
                 String matched = annotation.accept(matcher);
 
                 if (!matched.isEmpty()) {
-                    queue.add(target.getInstance(matched));
+                    if(target instanceof StringAnnotation){
+                        queue.add(((StringAnnotation) target).getInstance(matched));
+                    } else if(target.getClass().equals(Charge.class)) {
+                        Charge charge = (Charge) target.newInstance();
+                        charge.setValue(Double.parseDouble(matched));
+                        queue.add(charge);
+                    }
                 }
 
             }
@@ -178,15 +187,27 @@ public class ExtractAnnotations extends AbstractControlDialog {
     }
 
 
-    private static Collection<? extends StringAnnotation> getSelectableAnnotations() {
-
+    private static Collection<Annotation> getSelectableAnnotations() {
         AnnotationFactory factory = DefaultAnnotationFactory.getInstance();
-        Collection<StringAnnotation> annotations = new ArrayList<StringAnnotation>();
-        annotations.add(null);
+        List<Annotation> annotations = new ArrayList<Annotation>();
+
         annotations.addAll(factory.getSubclassInstances(StringAnnotation.class));
+        annotations.add(factory.ofClass(Charge.class));
+
+        // display name order
+        Collections.sort(annotations, new Comparator<Annotation>() {
+            @Override public int compare(Annotation o1, Annotation o2) {
+                return name(o1).compareTo(name(o2));
+            }
+            private String name(Annotation a) {
+                return a.getBrief() != null ? a.getBrief() : a.getClass().getSimpleName();
+            }
+        });
+
+        // displayed as: -- select annotation --
+        annotations.add(0, null);
 
         return annotations;
-
     }
 
     private String getDefault(Class<? extends Object> c) {
@@ -203,6 +224,7 @@ public class ExtractAnnotations extends AbstractControlDialog {
         patterns.put(InChI.class,            "InChI:\\s+(InChI=1S?/.+)");
         patterns.put(Locus.class,            "Locus:\\s+(.+)");
         patterns.put(SMILES.class,           "SMILES:\\s+([^J][0-9BCOHNSOPrIFla@+\\-\\[\\]\\(\\)\\\\/%=#$]+)");
+        patterns.put(Charge.class,           "Charge:\\s+([-+]?[0-9]*\\.?[0-9]+(?:[eE][-+]?[0-9]+)?)");
 
         return patterns;
 
