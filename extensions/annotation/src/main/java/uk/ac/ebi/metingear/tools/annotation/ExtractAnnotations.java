@@ -37,6 +37,7 @@ import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
 import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
+import uk.ac.ebi.mnb.edit.RemoveAnnotationEdit;
 
 import javax.swing.*;
 import javax.swing.undo.CompoundEdit;
@@ -60,6 +61,7 @@ public class ExtractAnnotations extends AbstractControlDialog {
     private final JCheckBox caseInsensitive = CheckBoxFactory.newCheckBox();
     private final JTextField patternField = FieldFactory.newField(20);
     private final JComboBox annotationComboBox = ComboBoxFactory.newComboBox(getSelectableAnnotations());
+    private final JCheckBox removeMatched = CheckBoxFactory.newCheckBox();
 
     private final Map<Class, String> defaults = getDefaults();
 
@@ -94,7 +96,7 @@ public class ExtractAnnotations extends AbstractControlDialog {
         });
 
         component.setLayout(new FormLayout("right:p, 4dlu, left:p",
-                                           "p, 4dlu, p, 4dlu, p"));
+                                           "p, 4dlu, p, 4dlu, p, 4dlu, p"));
 
         CellConstraints cc = new CellConstraints();
 
@@ -104,6 +106,8 @@ public class ExtractAnnotations extends AbstractControlDialog {
         component.add(patternField, cc.xy(3, 3));
         component.add(getLabel("ciLabel"), cc.xy(1, 5));
         component.add(caseInsensitive, cc.xy(3, 5));
+        component.add(getLabel("remove"), cc.xy(1, 7));
+        component.add(removeMatched, cc.xy(3, 7));
 
         patternField.setEnabled(false);
         caseInsensitive.setSelected(true);
@@ -139,6 +143,8 @@ public class ExtractAnnotations extends AbstractControlDialog {
         // put all the edits together
         CompoundEdit edit = new CompoundEdit();
 
+        boolean removeAnnotation = removeMatched.isSelected();
+
         Pattern pattern = caseInsensitive.isSelected()
                 ? Pattern.compile(patternField.getText(), Pattern.CASE_INSENSITIVE)
                 : Pattern.compile(patternField.getText());
@@ -148,7 +154,8 @@ public class ExtractAnnotations extends AbstractControlDialog {
 
         Annotation target = (Annotation) annotationComboBox.getSelectedItem();
 
-        List<Annotation> queue = new ArrayList<Annotation>();
+        List<Annotation> createdAnnotations    = new ArrayList<Annotation>();
+        List<Annotation> removedAnnotations = new ArrayList<Annotation>();
 
         for (AnnotatedEntity entity : getSelectionController().getSelection().getEntities()) {
 
@@ -158,20 +165,31 @@ public class ExtractAnnotations extends AbstractControlDialog {
 
                 if (!matched.isEmpty()) {
                     if(target instanceof StringAnnotation){
-                        queue.add(((StringAnnotation) target).getInstance(matched));
+                        createdAnnotations.add(((StringAnnotation) target)
+                                                     .getInstance(matched));
+                        if(removeAnnotation){
+                            removedAnnotations.add(annotation);
+                        }
                     } else if(target.getClass().equals(Charge.class)) {
                         Charge charge = (Charge) target.newInstance();
                         charge.setValue(Double.parseDouble(matched));
-                        queue.add(charge);
+                        createdAnnotations.add(charge);
+                        if(removeAnnotation){
+                            removedAnnotations.add(annotation);
+                        }
                     }
                 }
 
             }
 
-            edit.addEdit(new AddAnnotationEdit(entity, queue));
-            entity.addAnnotations(queue);
-            queue.clear();
-
+            edit.addEdit(new AddAnnotationEdit(entity, createdAnnotations));
+            for(Annotation a : removedAnnotations){
+                edit.addEdit(new RemoveAnnotationEdit(entity, a));
+                entity.removeAnnotation(a);
+            }
+            entity.addAnnotations(createdAnnotations);
+            createdAnnotations.clear();
+            removedAnnotations.clear();
         }
 
         // inform the compound edit that we've finished editing
