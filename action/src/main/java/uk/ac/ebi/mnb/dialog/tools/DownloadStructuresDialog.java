@@ -31,7 +31,6 @@ import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.identifier.AbstractChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
@@ -66,13 +65,15 @@ import java.util.Set;
 public class DownloadStructuresDialog
         extends ControllerDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(DownloadStructuresDialog.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(DownloadStructuresDialog.class);
 
 
-    private JLabel allowWebServiceLabel = LabelFactory.newFormLabel("Allow Web services:",
-                                                                    "Indicate you want to allow the use of web services to download" +
-                                                                            " structures. Web services will dramatically reduce the speed and should" +
-                                                                            " only be used for small numbers of entries");
+    private JLabel allowWebServiceLabel = LabelFactory
+            .newFormLabel("Allow Web services:",
+                          "Indicate you want to allow the use of web services to download" +
+                                  " structures. Web services will dramatically reduce the speed and should" +
+                                  " only be used for small numbers of entries");
     private JLabel fetchAllLabel = LabelFactory.newFormLabel("Greedy mode:",
                                                              "Retrieve all structures for all cross-references - structures can be filtered post download");
 
@@ -91,7 +92,8 @@ public class DownloadStructuresDialog
 
         // blend the list in
         resourceSelection.setBackground(getBackground());
-        resourceSelection.setForeground(LabelFactory.newFormLabel("").getForeground());
+        resourceSelection.setForeground(LabelFactory.newFormLabel("")
+                                                    .getForeground());
         resourceSelection.setVisibleRowCount(6);
 
         ws.addItemListener(new ItemListener() {
@@ -127,7 +129,8 @@ public class DownloadStructuresDialog
         panel.add(fetchAll, cc.xy(3, 3));
 
         panel.add(LabelFactory.newFormLabel("Resource Priority:"), cc.xy(1, 5));
-        panel.add(new MutableJListController(resourceSelection).getListWithController(),
+        panel.add(new MutableJListController(resourceSelection)
+                          .getListWithController(),
                   cc.xy(3, 5, CellConstraints.FILL, CellConstraints.FILL));
 
         return panel;
@@ -153,17 +156,21 @@ public class DownloadStructuresDialog
         for (Metabolite m : getSelection().get(Metabolite.class)) {
 
             ANNOTATION:
-            for (CrossReference reference : m.getAnnotationsExtending(CrossReference.class)) {
+            for (CrossReference reference : m
+                    .getAnnotationsExtending(CrossReference.class)) {
                 for (Identifier identifier : resourceSelection.getElements()) {
 
-                    if (identifier.getClass().equals(reference.getIdentifier().getClass())) {
+                    if (identifier.getClass().equals(reference.getIdentifier()
+                                                              .getClass())) {
 
                         // get the appropiate service for the given ientifier
-                        StructureService service = services.getService(identifier,
-                                                                       StructureService.class);
+                        StructureService service = services
+                                .getService(identifier,
+                                            StructureService.class);
                         if (canUse(service) && isChemicalService(service)) {
 
-                            IAtomContainer structure = service.getStructure(reference.getIdentifier());
+                            IAtomContainer structure = service
+                                    .getStructure(reference.getIdentifier());
 
                             // don't add empty structures
                             if (!structure.isEmpty()) {
@@ -178,7 +185,8 @@ public class DownloadStructuresDialog
 
                             } else {
                                 // log which couldn't be found
-                                problemIdentifiers.add(reference.getIdentifier());
+                                problemIdentifiers.add(reference
+                                                               .getIdentifier());
                             }
 
                         }
@@ -206,7 +214,8 @@ public class DownloadStructuresDialog
 
 
         if (!problemIdentifiers.isEmpty()) {
-            addMessage(new WarningMessage("The following identifiers had empty or missing structures: " + StringUtils.join(problemIdentifiers, ", ")));
+            addMessage(new WarningMessage("The following identifiers had empty or missing structures: " + StringUtils
+                    .join(problemIdentifiers, ", ")));
         }
 
 
@@ -223,17 +232,21 @@ public class DownloadStructuresDialog
         return ws.isSelected() || !service.getServiceType().remote();
     }
 
-    public boolean isChemicalService(QueryService service){
+    public boolean isChemicalService(QueryService service) {
         return service.getIdentifier() instanceof ChemicalIdentifier;
     }
 
     @Override
     public boolean update() {
 
+        long start = System.nanoTime();
         // rebuild the map to avoid problems with non-matches hashes
         DefaultReconstructionManager.getInstance().getActive().getReactome().rebuildMaps();
+        long end = System.nanoTime();
 
-        return update(getSelection());
+        LOGGER.debug((end - start) / 1e6 + " ms to rebuild reaction map");
+
+        return super.update();
 
     }
 
@@ -245,7 +258,7 @@ public class DownloadStructuresDialog
         for (Identifier id : services.getIdentifiers(StructureService.class)) {
             if (services.hasService(id, StructureService.class) &&
                     canUse(services.getService(id, StructureService.class))
-                          && isChemicalService(services.getService(id, StructureService.class))) {
+                    && isChemicalService(services.getService(id, StructureService.class))) {
                 available.add(id);
             }
         }
@@ -256,9 +269,11 @@ public class DownloadStructuresDialog
         resourceSelection.getModel().removeAllElements();
         // set up the resources
         for (Metabolite metabolite : getSelection().get(Metabolite.class)) {
-            for (CrossReference xref : metabolite.getAnnotationsExtending(CrossReference.class)) {
+            for (CrossReference xref : metabolite
+                    .getAnnotationsExtending(CrossReference.class)) {
                 for (Identifier identifier : available) {
-                    if (xref.getIdentifier().getClass().equals(identifier.getClass())) {
+                    if (xref.getIdentifier().getClass().equals(identifier
+                                                                       .getClass())) {
                         resourceSelection.addElement(identifier);
                         accept.add(identifier);
                         break;

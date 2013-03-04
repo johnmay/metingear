@@ -183,7 +183,11 @@ public class ExtractAnnotations extends AbstractControlDialog {
 
     @Override
     public void update() {
-        super.update(getSelectionController().getSelection());
+        if(getSelectionController().getSelection().getEntities().size() > 200) {
+            super.update();
+        } else {
+            super.update(getSelectionController().getSelection());
+        }
     }
 
 

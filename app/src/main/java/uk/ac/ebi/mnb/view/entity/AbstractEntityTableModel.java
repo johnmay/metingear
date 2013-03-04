@@ -140,7 +140,6 @@ public abstract class AbstractEntityTableModel
             LOGGER.error("Skipping update on item: " + entity);
         }
 
-
         // for adding new entities
         if (index >= data.length) {
             int length = data.length;
