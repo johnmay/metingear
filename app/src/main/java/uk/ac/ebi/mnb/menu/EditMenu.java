@@ -50,7 +50,7 @@ public class EditMenu extends ContextMenu {
 
     private static final Logger LOGGER = Logger.getLogger(EditMenu.class);
 
-    private JComponent items[] = new JComponent[3];
+    private boolean prefItemLoaded = false;
 
 
     public EditMenu() {
@@ -83,13 +83,17 @@ public class EditMenu extends ContextMenu {
         add(create(MergeEntities.class), new ContextResponder() {
             @Override
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return active != null && selection.hasSelection(Metabolite.class) && selection.get(Metabolite.class).size() > 1;
+                return active != null && selection
+                        .hasSelection(Metabolite.class) && selection
+                        .get(Metabolite.class).size() > 1;
             }
         });
         add(create(SplitMetabolites.class), new ContextResponder() {
             @Override
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return active != null && selection.hasSelection(Metabolite.class) && selection.get(Metabolite.class).size() == 1;
+                return active != null && selection
+                        .hasSelection(Metabolite.class) && selection
+                        .get(Metabolite.class).size() == 1;
             }
         });
         add(new DeleteEntities(MainView.getInstance()));
@@ -117,29 +121,24 @@ public class EditMenu extends ContextMenu {
                 return active != null;
             }
         });
-        add(new JSeparator());
-        add(new AbstractAction("Preferences") {
 
-            PreferenceFrame preferences = new PreferenceFrame();
+    }
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                preferences.setVisible(true);
-                preferences.pack();
-            }
-        });
-        // add citation
-        //add(new ContextDialogItem(view, view.getViewController(), ContextDialog.class));
+    // work around to allow plugins to load before the preferences item
+    public void addPreferenceItem() {
+        if (!prefItemLoaded) {
+            add(new JSeparator());
+            add(new AbstractAction("Preferences") {
 
-//        for (JComponent component : items) {
-//            add(component);
-//            if (component instanceof DynamicMenuItem) {
-//                ((DynamicMenuItem) component).reloadEnabled();
-//            }
-//        }
+                PreferenceFrame preferences = new PreferenceFrame();
 
-        //new UndoableEditSupport().addUndoableEditListener(MainView.getInstance().getUndoManager());
-
-
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    preferences.setVisible(true);
+                    preferences.pack();
+                }
+            });
+            prefItemLoaded = true;
+        }
     }
 }

@@ -97,7 +97,7 @@ public class ApplicationLauncher implements Runnable {
 
         PluginLoader loader = new PluginLoader(view, view.getJMenuBar());
         loader.load();
-
+        view.getJMenuBar().getEditMenu().addPreferenceItem();
         beforeVisible();
 
         view.setVisible(true);
