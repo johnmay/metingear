@@ -1,3 +1,4 @@
+uk.ac.ebi.metingear.edit.AddNotePlugin
 uk.ac.ebi.metingear.tools.annotation.ExtractReferencesPlugin
 uk.ac.ebi.metingear.tools.annotation.ExtractAnnotationsPlugin
 uk.ac.ebi.metingear.tools.annotation.RenameFromResourcePlugin
