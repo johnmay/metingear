@@ -1,22 +1,18 @@
-/**
- * ImportSBML.java
+/*
+ * Copyright (c) 2013. John May <jwmay@users.sf.net>
  *
- * 2011.12.01
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ * GNU Lesser General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mnb.dialog.file.importation;
 
@@ -99,7 +95,7 @@ public class ImportSBML extends DelayedBuildAction {
             final File choosen = chooser.getSelectedFile();
 
             final SpinningDialWaitIndicator wait = new SpinningDialWaitIndicator((JFrame) controller);
-            wait.setText("Reading SBML");
+            wait.setText("Importing " + choosen.getName());
 
             Thread t = new Thread(new Runnable() {
 
@@ -122,7 +118,8 @@ public class ImportSBML extends DelayedBuildAction {
                         messages.add(new ErrorMessage(ex.getMessage()));
                     } finally {
                         try {
-                            in.close();
+                            if(in != null)
+                                in.close();
                         } catch (IOException ex) {
                             java.util.logging.Logger.getLogger(ImportSBML.class.getName()).log(Level.SEVERE, null, ex);
                         }

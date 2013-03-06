@@ -1,22 +1,18 @@
-/**
- * SequenceComparisson.java
+/*
+ * Copyright (c) 2013. John May <jwmay@users.sf.net>
  *
- * 2011.10.07
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ * GNU Lesser General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
@@ -62,7 +58,7 @@ public class SequenceHomology
     private JCheckBox remote = CheckBoxFactory.newCheckBox("Remote (webservices)");
     private JComboBox tool = ComboBoxFactory.newComboBox("BLAST");
     private JComboBox database = ComboBoxFactory.newComboBox(HomologyDatabaseManager.getInstance().getNames());
-    private JSpinner cpu = new JSpinner(new SpinnerNumberModel(1, 1, 4, 1));
+    private JSpinner cpu = new JSpinner(new SpinnerNumberModel(1, 1, Runtime.getRuntime().availableProcessors(), 1));
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 2500, 50));
     private JTextField field = FieldFactory.newField("1e-30");
     private JCheckBox alignments = CheckBoxFactory.newCheckBox("Parse alignments (increases save sizes)");
@@ -71,6 +67,7 @@ public class SequenceHomology
         super(frame, updater, messages, controller, undoableEdits, "BuildDialog");
 
         remote.setEnabled(false);
+        cpu.setValue(Runtime.getRuntime().availableProcessors());
         setDefaultLayout();
     }
 

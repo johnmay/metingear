@@ -1,0 +1,3 @@
+Module serves to hold dialogs which are pluged in at runtime via the extension loader
+
+structure - provides tools for handling/editing structure

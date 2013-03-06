@@ -1,21 +1,18 @@
-/**
- * CompareReconstruction.java
+/*
+ * Copyright (c) 2013. John May <jwmay@users.sf.net>
  *
- * 2011.11.28
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- *
- * CheMet is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
@@ -31,8 +28,14 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
+import uk.ac.ebi.mdk.prototype.hash.seed.StereoSeed;
 import uk.ac.ebi.mdk.tool.domain.ReconstructionComparison;
-import uk.ac.ebi.mdk.tool.domain.hash.*;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -40,7 +43,7 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.Collection;
 
 
 /**
@@ -48,8 +51,8 @@ import java.util.Set;
  *
  * @author johnmay
  * @author $Author$ (this version)
- * @version $Rev$ : Last Changed $Date: 2011-12-15 22:07:54 +0000 (Thu,
- *          15 Dec 2011) $
+ * @version $Rev$ : Last Changed $Date: 2011-12-15 22:07:54 +0000 (Thu, 15 Dec
+ *          2011) $
  */
 public class CompareReconstruction
         extends ControllerDialog {
@@ -128,13 +131,14 @@ public class CompareReconstruction
 
         ReconstructionImpl reconA = (ReconstructionImpl) recon1.getSelectedItem();
         ReconstructionImpl reconB = (ReconstructionImpl) recon2.getSelectedItem();
-        ReconstructionImpl reconC = (ReconstructionImpl) (recon3.getSelectedItem() == "-" ? null : recon3.getSelectedItem());
+        ReconstructionImpl reconC = (ReconstructionImpl) (recon3.getSelectedItem() == "-" ? null
+                : recon3.getSelectedItem());
 
         venn = null;
 
-        Set<AtomSeed> methods = SeedFactory.getInstance().getSeeds(BondOrderSumSeed.class,
-                                                                   AtomicNumberSeed.class,
-                                                                   ConnectedAtomSeed.class);
+        Collection<AtomSeed> methods = SeedFactory.getInstance().getSeeds(BondOrderSumSeed.class,
+                                                                          AtomicNumberSeed.class,
+                                                                          ConnectedAtomSeed.class);
         if (stereo.isSelected()) {
             methods.add(SeedFactory.getInstance().getSeed(StereoSeed.class));
         }

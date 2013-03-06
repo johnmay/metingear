@@ -1,25 +1,21 @@
-package uk.ac.ebi.mnb.dialog.tools;
-
-/**
- * AutomaticCrossReferenceDialog.java
+/*
+ * Copyright (c) 2013. John May <jwmay@users.sf.net>
  *
- * 2011.09.30
- *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package uk.ac.ebi.mnb.dialog.tools;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -27,13 +23,15 @@ import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.utility.TextUtility;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.AbstractChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.observation.Candidate;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
@@ -43,11 +41,15 @@ import uk.ac.ebi.mdk.tool.resolve.ChemicalFingerprintEncoder;
 import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
 import uk.ac.ebi.mdk.ui.component.ResourceList;
 import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CompoundEdit;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -66,10 +68,6 @@ public class AutomaticCrossReference
 
     private static final Logger LOGGER = Logger.getLogger(AutomaticCrossReference.class);
 
-    private JCheckBox chebi = CheckBoxFactory.newCheckBox("ChEBI");
-
-    private JCheckBox kegg = CheckBoxFactory.newCheckBox("KEGG Compound");
-    private JCheckBox hmdb = CheckBoxFactory.newCheckBox("HMDB");
 
     private JLabel    wsLabel     = LabelFactory.newFormLabel("Allow Web services:", "Dramatic performance reduction on large data-sets");
     private JLabel    greedyLabel = LabelFactory.newFormLabel("Greedy Mode:",
@@ -86,9 +84,6 @@ public class AutomaticCrossReference
     private JCheckBox    approximate       = CheckBoxFactory.newCheckBox();
     private ResourceList resourceSelection = new ResourceList();
 
-    private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 200, 10));
-
-
     public AutomaticCrossReference(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
 
         super(frame, updater, messages, controller, undoableEdits, "RunDialog");
@@ -100,6 +95,13 @@ public class AutomaticCrossReference
         resourceSelection.setVisibleRowCount(6);
 
         setDefaultLayout();
+
+        ws.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                updateResourceList();
+            }
+        });
 
 
     }
@@ -116,7 +118,7 @@ public class AutomaticCrossReference
     @Override
     public JPanel getForm() {
 
-        JPanel form = PanelFactory.createDialogPanel();
+        JPanel form = super.getForm();
 
         CellConstraints cc = new CellConstraints();
 
@@ -132,11 +134,6 @@ public class AutomaticCrossReference
         form.add(greedyLabel, cc.xy(1, 7));
         form.add(greedy, cc.xy(3, 7));
 
-
-        //        JLabel label = LabelFactory.newFormLabel("Method", TextUtility.html("The method to use for name matching, Generally they<br> aim to improve recall at the cost of precision"));
-        //        options.add(label, cc.xy(1, 7));
-        //        options.add(ComboBoxFactory.newComboBox("Direct", "Fingerprint", "N-gram"), cc.xy(3, 7));
-
         return form;
     }
 
@@ -144,17 +141,7 @@ public class AutomaticCrossReference
     @Override
     public void setVisible(boolean b) {
         if (b) {
-
-            // should be in a setup() method
-            resourceSelection.getModel().clear();
-            ServiceManager services = DefaultServiceManager.getInstance();
-            for (Identifier identifier : services.getIdentifiers(NameService.class)) {
-                // check it's actually available
-                if (services.hasService(identifier, NameService.class))
-                    resourceSelection.addElement(identifier);
-            }
-            resourceSelection.setSelectedIndex(0);
-            pack();
+            updateResourceList();
         }
         super.setVisible(b);
 
@@ -176,12 +163,14 @@ public class AutomaticCrossReference
         for (Identifier identifier : resourceSelection.getElements()) {
             NameService<?> service = DefaultServiceManager.getInstance().getService(identifier,
                                                                                     NameService.class);
-            if (canUse(service)) {
+            if (isUsable(service) && isChemicalService(service)) {
                 factories.add(new NameCandidateFactory(new ChemicalFingerprintEncoder(),
                                                        service));
             }
         }
 
+
+        CompoundEdit edit = new CompoundEdit();
 
         for (int i = 0; i < metabolites.size(); i++) {
 
@@ -204,7 +193,9 @@ public class AutomaticCrossReference
 
                 for (Candidate candidate : candidates) {
                     if (candidate.getDistance() == 0) {
-                        m.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(candidate.getIdentifier()));
+                        Annotation annotation = DefaultAnnotationFactory.getInstance().getCrossReference(candidate.getIdentifier());
+                        edit.addEdit(new AddAnnotationEdit(m, annotation));
+                        m.addAnnotation(annotation);
                         found = true;
                     }
                 }
@@ -215,20 +206,48 @@ public class AutomaticCrossReference
             }
         }
 
+        edit.end();
+        addEdit(edit);
+
         factories = null; // for cleanup
-        System.gc();
+        System.gc(); // only a suggestion ot the vm
 
     }
 
-    public boolean canUse(QueryService service) {
+    public boolean isUsable(QueryService service) {
         QueryService.ServiceType type = service.getServiceType();
-        return ws.isSelected()
-                || !type.equals(QueryService.ServiceType.SOAP_WEB_SERVICE)
-                && !type.equals(QueryService.ServiceType.REST_WEB_SERVICE);
+        return ws.isSelected() || !service.getServiceType().remote();
+    }
+
+
+    public boolean isChemicalService(QueryService service){
+        return service.getIdentifier() instanceof ChemicalIdentifier;
+    }
+
+    private void updateResourceList() {
+        // should be in a setup() method
+        resourceSelection.getModel().clear();
+        ServiceManager services = DefaultServiceManager.getInstance();
+        for (Identifier identifier : services.getIdentifiers(NameService.class)) {
+            // check it's actually available
+            if (services.hasService(identifier, NameService.class)) {
+                QueryService service = services.getService(identifier, NameService.class);
+                if (isUsable(service) && isChemicalService(service)) {
+                    resourceSelection.addElement(identifier);
+                }
+            }
+        }
+        if (resourceSelection.getElements().size() > 1)
+            resourceSelection.setSelectedIndex(0);
+
+        pack();
+
     }
 
     @Override
     public boolean update() {
         return update(getSelection());
     }
+
+
 }

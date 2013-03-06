@@ -1,23 +1,20 @@
-/**
- * AddAnnotation.java
+/*
+ * Copyright (c) 2013. John May <jwmay@users.sf.net>
  *
- * 2012.02.14
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ * GNU Lesser General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mnb.dialog.edit;
 
 import org.apache.log4j.Logger;
@@ -36,14 +33,13 @@ import java.awt.*;
 
 
 /**
+ * AddAnnotation 2012.02.14
  *
- *          AddAnnotation 2012.02.14
+ * @author johnmay
+ * @author $Author$ (this version)
+ *
+ *         Class description
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Class description
- *
  */
 public class AddAnnotation
         extends ControllerDialog {
@@ -51,7 +47,7 @@ public class AddAnnotation
     private static final Logger LOGGER = Logger.getLogger(AddAnnotation.class);
 
     private ExpandingComponentList<AnnotationChoiceEditor> list;
-
+    private Class<? extends AnnotatedEntity> currentContext = AnnotatedEntity.class;
 
     public AddAnnotation(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "OkayDialog");
@@ -60,11 +56,11 @@ public class AddAnnotation
 
             @Override
             public AnnotationChoiceEditor newComponent() {
-                return new AnnotationChoiceEditor(window);
+                return new AnnotationChoiceEditor(window, currentContext);
             }
         };
-        setDefaultLayout();
         list.setBackground(getBackground());
+        setDefaultLayout();
     }
 
 
@@ -86,20 +82,16 @@ public class AddAnnotation
 
 
     private void setup() {
-
-        // ensure size of 1
-        list.reset();
-
-        // set the context of the annotation editor
-        AnnotatedEntity entity = getSelection().getFirstEntity();
-        list.getComponent(0).setContext(entity.getClass());
-
     }
 
+    @Override public void prepare() {
+        // reset the list and change the current context
+        currentContext = getSelection().getFirstEntity().getClass();
+        list.reset();
+    }
 
     /**
-     * Transfer the new annotations to the
-     * selected entities
+     * Transfer the new annotations to the selected entities
      */
     @Override
     public void process() {
@@ -108,8 +100,6 @@ public class AddAnnotation
             AnnotationChoiceEditor chooser = list.getComponent(i);
 
             Annotation annotation = chooser.getEditor().newAnnotation();
-            
-            System.out.println(annotation);
 
             for (AnnotatedEntity entity : getSelection().getEntities()) {
                 entity.addAnnotation(annotation);
