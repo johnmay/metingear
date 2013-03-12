@@ -6,7 +6,7 @@
     <parent>
         <artifactId>metingear</artifactId>
         <groupId>uk.ac.ebi.metingear</groupId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
     </parent>
     <artifactId>metingear-import</artifactId>
     <url>http://maven.apache.org</url>
