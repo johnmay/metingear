@@ -60,6 +60,7 @@ public class ToolsMenu extends ContextMenu {
     private GapAnalysis gapMenu;
     private final ContextMenu annotation;
 
+    private boolean developer = Boolean.getBoolean("metingear.developer");
 
     public ToolsMenu() {
 
@@ -73,12 +74,13 @@ public class ToolsMenu extends ContextMenu {
 
         add(annotation);
 
-        annotation.add(create(AutomaticCrossReference.class), new ContextResponder() {
+        annotation
+                .add(create(AutomaticCrossReference.class), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(Metabolite.class);
-            }
-        });
+                    public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                        return selection.hasSelection(Metabolite.class);
+                    }
+                });
 
         annotation.add(new AddFlags(view), new ContextResponder() {
 
@@ -87,12 +89,13 @@ public class ToolsMenu extends ContextMenu {
             }
         });
 
-        annotation.add(create(DownloadStructuresDialog.class), new ContextResponder() {
+        annotation
+                .add(create(DownloadStructuresDialog.class), new ContextResponder() {
 
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(Metabolite.class);
-            }
-        });
+                    public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                        return selection.hasSelection(Metabolite.class);
+                    }
+                });
 
 
         annotation.add(new JSeparator());
@@ -159,46 +162,32 @@ public class ToolsMenu extends ContextMenu {
                 return selection.hasSelection(Metabolite.class);
             }
         });
-
         add(new JSeparator());
-        /**
-         * ***********************
-         * Stoichiometric Matrix *
-         ************************
-         */
         add(create(CreateMatrix.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return selection.hasSelection(MetabolicReactionImpl.class) || (active != null && active.getReactome().isEmpty() == false);
+                return selection
+                        .hasSelection(MetabolicReactionImpl.class) || (active != null && active
+                        .getReactome().isEmpty() == false);
             }
         });
 
-        // TODO: features below here are not complete
-        if(true)
-            return;
+        if (developer) {
+            add(gapMenu);
+            add(new JSeparator());
+            add(create(CompareReconstruction.class), new ContextResponder() {
 
+                public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                    return reconstructions.getProjects().size() > 1;
+                }
+            });
+            add(create(AlignReconstruction.class), new ContextResponder() {
 
-        add(gapMenu);
-
-        /**
-         * ***********************
-         * Comparisson *
-         ************************
-         */
-        add(new JSeparator());
-
-        add(create(CompareReconstruction.class), new ContextResponder() {
-
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return reconstructions.getProjects().size() > 1;
-            }
-        });
-        add(create(AlignReconstruction.class), new ContextResponder() {
-
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return active != null;
-            }
-        });
+                public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                    return active != null;
+                }
+            });
+        }
 
     }
 

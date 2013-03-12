@@ -78,7 +78,8 @@ import java.util.List;
 public class ExcelImportDialog
         extends ControllerDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(ExcelImportDialog.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ExcelImportDialog.class);
 
     private CardLayout layout = new CardLayout();
 
@@ -132,7 +133,8 @@ public class ExcelImportDialog
         stages[3] = new AdditionalOptions(properties);
 
         for (int i = 0; i < 4; i++) {
-            shiftPanel.add((JPanel) stages[i], stages[i].getClass().getSimpleName());
+            shiftPanel.add((JPanel) stages[i], stages[i].getClass()
+                                                        .getSimpleName());
         }
 
         getActivate().setEnabled(false);
@@ -205,8 +207,10 @@ public class ExcelImportDialog
             File xls = new File(properties.getFilePath());
             HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(xls));
 
-            Integer rxnI = Integer.parseInt(properties.getProperty("rxn.sheet"));
-            Integer metI = Integer.parseInt(properties.getProperty("ent.sheet"));
+            Integer rxnI = Integer.parseInt(properties
+                                                    .getProperty("rxn.sheet"));
+            Integer metI = Integer.parseInt(properties
+                                                    .getProperty("ent.sheet"));
 
             final PreparsedSheet rxnSht = new HSSFPreparsedSheet(workbook.getSheetAt(rxnI),
                                                                  properties,
@@ -224,15 +228,17 @@ public class ExcelImportDialog
             waitIndicator.setText(String.format("initialising.."));
             waitIndicator.repaint();
 
+            NameService<ChEBIIdentifier> service = manager
+                    .getService(ChEBIIdentifier.class, NameService.class);
 
-            NameCandidateFactory factory =
-                    new NameCandidateFactory(new ChemicalFingerprintEncoder(),
-                                             manager.getService(ChEBIIdentifier.class, NameService.class));
+            NameCandidateFactory<ChEBIIdentifier> factory = new NameCandidateFactory<ChEBIIdentifier>(new ChemicalFingerprintEncoder(),
+                                                                                                      service);
 
             // todo resource should be selectable
             EntryReconciler reconciler = new AutomatedReconciler(factory, new ChEBIIdentifier());
 
-            ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler, DefaultEntityFactory.getInstance());
+            ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler, DefaultEntityFactory
+                    .getInstance());
             parser = new ReactionParser(entitySheet, new DialogCompartmentResolver(new AutomaticCompartmentResolver(), this));
 
             waitIndicator.setText(String.format("initialising..."));
@@ -260,7 +266,8 @@ public class ExcelImportDialog
 
                 completed++;
 
-                final int done = (int) (((float) completed / (float) rxnSht.getRowCount()) * 100);
+                final int done = (int) (((float) completed / (float) rxnSht
+                        .getRowCount()) * 100);
 
                 waitIndicator.setText(String.format("importing... %d%%", done));
                 waitIndicator.repaint();
@@ -269,12 +276,14 @@ public class ExcelImportDialog
 
 
         } catch (Exception ex) {
-            addMessage(new ErrorMessage("Unable to import document " + ex.getMessage()));
+            addMessage(new ErrorMessage("Unable to import document " + ex
+                    .getMessage()));
             ex.printStackTrace();
         }
 
         if (!problemReactions.isEmpty()) {
-            addMessage(new WarningMessage("The following reaction producted errors whilst loading: " + Joiner.on(", ").join(problemReactions)));
+            addMessage(new WarningMessage("The following reaction producted errors whilst loading: " + Joiner
+                    .on(", ").join(problemReactions)));
         }
 
         if (parser != null) {
@@ -304,7 +313,8 @@ public class ExcelImportDialog
                 if (activeStage + 1 < stages.length) {
                     activeStage++;
                     stages[activeStage].reloadPanel();
-                    layout.show(shiftPanel, stages[activeStage].getClass().getSimpleName());
+                    layout.show(shiftPanel, stages[activeStage].getClass()
+                                                               .getSimpleName());
                     label.setText(stages[activeStage].getDescription());
                     pack();
                     position();
@@ -329,7 +339,8 @@ public class ExcelImportDialog
         shiftSize =
                 shiftSize == null ? shiftPanel.getPreferredSize() : shiftSize;
 
-        Dimension actualSize = ((JPanel) stages[activeStage]).getPreferredSize();
+        Dimension actualSize = ((JPanel) stages[activeStage])
+                .getPreferredSize();
         shiftPanel.setPreferredSize(actualSize);
 
         return new Dimension(orgSize.width - shiftSize.width + actualSize.width, orgSize.height - shiftSize.height + actualSize.height + 20);
@@ -349,7 +360,8 @@ public class ExcelImportDialog
             if (activeStage - 1 >= 0) {
                 activeStage--;
                 stages[activeStage].reloadPanel();
-                layout.show(shiftPanel, stages[activeStage].getClass().getSimpleName());
+                layout.show(shiftPanel, stages[activeStage].getClass()
+                                                           .getSimpleName());
                 pack();
                 position();
             }
