@@ -23,7 +23,9 @@ import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 
 /**
@@ -37,7 +39,8 @@ import java.util.Map;
 public class NamedEntityResolver implements EntityResolver {
 
     private static final Logger LOGGER = Logger.getLogger(NamedEntityResolver.class);
-
+    private static Pattern clean = Pattern.compile("[^A-z0-9]+");
+    private static Pattern split = Pattern.compile("\\s+|\\-+");
     private Map<String, Metabolite> nameMap = new HashMap<String, Metabolite>();
 
     private Map<String, Metabolite> created = new HashMap<String, Metabolite>();
@@ -64,11 +67,35 @@ public class NamedEntityResolver implements EntityResolver {
             Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class,
                                                                           BasicChemicalIdentifier.nextIdentifier(),
                                                                           name,
-                                                                          name);
+                                                                          createAbbreviation(name, 4));
             created.put(name, m);
         }
 
         return created.get(name);
+
+    }
+
+    public static String createAbbreviation(String text, int target) {
+
+        if (text.length() < target) {
+            return text.toLowerCase(Locale.ENGLISH);
+        }
+
+        StringBuilder builder = new StringBuilder(6);
+
+        String[] chunks = split.split(text.trim());
+
+        int extra = (target - chunks.length) / chunks.length;
+
+        for (String chunk : chunks) {
+            chunk = clean.matcher(chunk).replaceAll("");
+            if (!chunk.isEmpty())
+                builder.append(chunk.charAt(0));
+            for (int i = 0; i < extra && chunk.length() > i + 1; i++)
+                builder.append(chunk.charAt(i + 1));
+        }
+
+        return builder.toString().toLowerCase(Locale.ENGLISH);
 
     }
 

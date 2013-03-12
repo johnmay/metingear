@@ -128,7 +128,7 @@ public abstract class NewEntity extends ControllerDialog {
     public static String createAbbreviation(String text, int target) {
 
         if (text.length() < target) {
-            return text;
+            return text.toLowerCase(Locale.ENGLISH);
         }
 
         StringBuilder builder = new StringBuilder(6);
