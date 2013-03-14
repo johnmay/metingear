@@ -25,13 +25,18 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV3000Reader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
+import org.openscience.cdk.tools.periodictable.PeriodicTable;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
@@ -59,6 +64,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -209,8 +215,10 @@ public final class AssignStructure
         annotations.add(smilesAnnotation);
 
         // try parsing smiles (stored internally) - if it fails we don't add a null atom container
-        if (smilesAnnotation.getStructure() != null)
+        if (smilesAnnotation.getStructure() != null) {
+            configure(smilesAnnotation.getStructure());
             annotations.add(new AtomContainerAnnotation(smilesAnnotation.getStructure()));
+        }
 
         undoManager.addEdit(new AddAnnotationEdit(metabolite, annotations));
         metabolite.addAnnotations(annotations);
@@ -224,7 +232,12 @@ public final class AssignStructure
         CMLReader cmlreader = new CMLReader(new ByteArrayInputStream(cmltext.getBytes("UTF-8")));
         IChemFile chemfile = cmlreader.read(SilentChemObjectBuilder.getInstance().newInstance(ChemFile.class));
         cmlreader.close();
-        Annotation annotation = new AtomContainerAnnotation(ChemFileManipulator.getAllAtomContainers(chemfile).get(0));
+
+        List<IAtomContainer> molecules = ChemFileManipulator.getAllAtomContainers(chemfile);
+
+        IAtomContainer molecule = ChemFileManipulator.getAllAtomContainers(chemfile).get(0);
+        configure(molecule);
+        Annotation annotation = new AtomContainerAnnotation(molecule);
         undoManager.addEdit(new AddAnnotationEdit(metabolite, annotation));
         metabolite.addAnnotation(annotation);
 
@@ -235,6 +248,7 @@ public final class AssignStructure
         MDLV2000Reader reader = new MDLV2000Reader(new StringReader(area.getText()));
         IMolecule molecule = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class));
         reader.close();
+        configure(molecule);
         Annotation annotation = new AtomContainerAnnotation(molecule);
         undoManager.addEdit(new AddAnnotationEdit(metabolite, annotation));
         metabolite.addAnnotation(annotation);
@@ -245,6 +259,7 @@ public final class AssignStructure
         MDLV3000Reader reader = new MDLV3000Reader(new StringReader(area.getText()));
         IMolecule molecule = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class));
         reader.close();
+        configure(molecule);
         Annotation annotation = new AtomContainerAnnotation(molecule);
         undoManager.addEdit(new AddAnnotationEdit(metabolite, annotation));
         metabolite.addAnnotation(annotation);
@@ -262,9 +277,28 @@ public final class AssignStructure
         if (status != INCHI_RET.OKAY) {
             throw new CDKException("Unable to parse InCHI for " + metabolite.getName() + ": " + structureGenerator.getMessage());
         }
-        Collection<? extends Annotation> annotations = Arrays.asList(new AtomContainerAnnotation(structureGenerator.getAtomContainer()),
+        IAtomContainer container = structureGenerator.getAtomContainer();
+        configure(container);
+        Collection<? extends Annotation> annotations = Arrays.asList(new AtomContainerAnnotation(container),
                                                                      new InChI(inchi));
         undoManager.addEdit(new AddAnnotationEdit(metabolite, annotations));
         metabolite.addAnnotations(annotations);
+    }
+
+    public static void configure(IAtomContainer structure) {
+        for(IAtom atom : structure.atoms()) {
+            if(atom.getAtomicNumber() == null && atom.getSymbol() != null) {
+                Integer an = PeriodicTable.getAtomicNumber(atom.getSymbol());
+                if(an != null){
+                    atom.setAtomicNumber(an);
+                }
+            }
+        }
+        try {
+            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(structure);
+            CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance()).addImplicitHydrogens(structure);
+        } catch (CDKException ex){
+            // ignore
+        }
     }
 }
