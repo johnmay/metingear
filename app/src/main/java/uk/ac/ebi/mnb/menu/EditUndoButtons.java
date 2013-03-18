@@ -64,7 +64,8 @@ public class EditUndoButtons {
                 }
             }
         });
-        back.setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/back.png"));
+        back.setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/undo_16x16.png"));
+        back.setToolTipText("Undo");
         forward.setAction(new AbstractAction() {
 
             public void actionPerformed(ActionEvent e) {
@@ -75,7 +76,8 @@ public class EditUndoButtons {
                 }
             }
         });
-        forward.setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/forward.png"));
+        forward.setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/redo_16x16.png"));
+        forward.setToolTipText("Redo");
 
 
 
@@ -83,6 +85,6 @@ public class EditUndoButtons {
 
 
     public LabeledComponentGroup getButtonGroup() {
-        return new LabeledComponentGroup("Undo/Redo", back, forward);
+        return new LabeledComponentGroup("Undo Redo", back, forward);
     }
 }
