@@ -28,6 +28,8 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -85,6 +87,11 @@ public class AnnotationTableModel
     private void setAnnotations(Collection<Annotation> annotations) {
         this.annotations.clear();
         this.annotations.addAll(annotations);
+        Collections.sort(this.annotations, new Comparator<Annotation>() {
+            @Override public int compare(Annotation o1, Annotation o2) {
+                return o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName());
+            }
+        });
     }
 
 
