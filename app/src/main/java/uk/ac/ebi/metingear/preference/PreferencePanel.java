@@ -130,7 +130,7 @@ public class PreferencePanel extends JPanel {
         options.add(new CenteringPanel(new Tools()), "Tools");
 
 
-        add(options, cc.xywh(2, 1, 1, 3));
+        add(new JScrollPane(options), cc.xywh(2, 1, 1, 3));
 
 
         category.setSelectedValue("Resources", true);
