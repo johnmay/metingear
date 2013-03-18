@@ -228,8 +228,9 @@ public class ExcelImportDialog
             waitIndicator.setText(String.format("initialising.."));
             waitIndicator.repaint();
 
-            NameService<ChEBIIdentifier> service = manager
-                    .getService(ChEBIIdentifier.class, NameService.class);
+            @SuppressWarnings("unchecked")
+            NameService<ChEBIIdentifier> service = manager.getService(ChEBIIdentifier.class,
+                                                                      NameService.class);
 
             NameCandidateFactory<ChEBIIdentifier> factory = new NameCandidateFactory<ChEBIIdentifier>(new ChemicalFingerprintEncoder(),
                                                                                                       service);
