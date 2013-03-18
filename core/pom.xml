@@ -6,7 +6,7 @@
     <parent>
         <artifactId>metingear</artifactId>
         <groupId>uk.ac.ebi.metingear</groupId>
-        <version>1.0.2</version>
+        <version>1.0.2.1</version>
     </parent>
 
     <artifactId>metingear-core</artifactId>
