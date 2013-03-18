@@ -57,7 +57,7 @@ public class ReactionParser {
     private static final Logger LOGGER = Logger.getLogger(ReactionParser.class);
     // Reaction arrow matcher (note excess space is gobbeled up in split)
 
-    public static final Pattern EQUATION_ARROW = Pattern.compile("(<[-=]+>)|(<[-=]*)|([-=]*>)");
+    public static final Pattern EQUATION_ARROW = Pattern.compile("(<[-=]+>)|(<[-=]*)|([-=]*>)|(=+)");
 
     public static final Pattern EQUATION_ADDITION = Pattern.compile("\\s+[+]\\s+");
 
@@ -76,7 +76,8 @@ public class ReactionParser {
     private static final Direction[] NORMALISED_ARROWS =
             new Direction[]{Direction.BIDIRECTIONAL,
                             Direction.BACKWARD,
-                            Direction.FORWARD};
+                            Direction.FORWARD,
+                            Direction.BIDIRECTIONAL};
 
     private EntityResolver entites;
     private EntityFactory factory = DefaultEntityFactory.getInstance();
