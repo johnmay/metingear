@@ -110,7 +110,7 @@ public class NewReaction extends NewEntity {
 
         JPanel panel = super.getForm();
 
-        equation = new SuggestionField(SwingUtilities.getWindowAncestor(this),
+        equation = new SuggestionField(this,
                                        5,
                                        new ReactionSuggestionHandler(),
                                        new ReplacementHandler());

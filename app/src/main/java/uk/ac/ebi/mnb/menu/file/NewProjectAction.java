@@ -23,6 +23,8 @@ package uk.ac.ebi.mnb.menu.file;
 
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 
+import javax.swing.*;
+
 
 /**
  * NewProjectAction.java
@@ -47,7 +49,11 @@ public class NewProjectAction
     @Override
     public void activateActions() {
         dialog.pack();
-        dialog.setVisible(enabled);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override public void run() {
+                dialog.setVisible(true);
+            }
+        });
     }
 
 

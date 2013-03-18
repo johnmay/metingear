@@ -200,13 +200,24 @@ public class NewProject extends DropdownDialog {
 
     }
 
+
+
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
-
         // try and get a new service is the current one isn't avaialble
-        if (!service.startup())
+        if (!service.startup()) {
             service = new TaxonomyQueryService();
+        }
+    }
+
+    @Override
+    public void clear(){
+        codeField.clear();
+        taxonField.clear();
+        nameField.clear();
+        idField.setText("");
+        kingdomField.setText("");
     }
 
     public String getCode() {

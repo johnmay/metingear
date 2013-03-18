@@ -308,5 +308,9 @@ public abstract class DropdownDialog
      */
     public abstract boolean update();
 
+    public void clear() {
+        // do nothing
+    }
+
 
 }

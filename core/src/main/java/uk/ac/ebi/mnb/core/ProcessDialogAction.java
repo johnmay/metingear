@@ -80,12 +80,14 @@ public class ProcessDialogAction extends GeneralAction {
 
                         public void run() {
                             waiter.dispose();
+                            dialog.clear();
                             dialog.setVisible(false);
                             dialog.update();
                         }
                     });
                 } catch (RuntimeException e) {
                     waiter.dispose();
+                    dialog.clear();
                     dialog.setVisible(false);
                     if (dialog instanceof ControllerDialog) {
                         ControllerDialog controllerDialog = (ControllerDialog) dialog;
@@ -94,6 +96,7 @@ public class ProcessDialogAction extends GeneralAction {
                     }
                 } catch (Exception e) {
                     waiter.dispose();
+                    dialog.clear();
                     dialog.setVisible(false);
                     if (dialog instanceof ControllerDialog) {
                         ControllerDialog controllerDialog = (ControllerDialog) dialog;

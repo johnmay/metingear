@@ -22,6 +22,8 @@
 package uk.ac.ebi.mnb.core;
 
 import uk.ac.ebi.caf.action.GeneralAction;
+import uk.ac.ebi.mnb.view.DropdownDialog;
+
 import java.awt.event.ActionEvent;
 import javax.swing.JDialog;
 
@@ -48,6 +50,9 @@ public class CloseDialogAction extends GeneralAction {
     }
 
     public void actionPerformed(ActionEvent e) {
+        if(dialog instanceof DropdownDialog){
+            ((DropdownDialog) dialog).clear();
+        }
         dialog.setVisible(false);
     }
 }
