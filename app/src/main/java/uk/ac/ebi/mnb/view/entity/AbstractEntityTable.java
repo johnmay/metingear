@@ -17,6 +17,7 @@
 package uk.ac.ebi.mnb.view.entity;
 
 import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
+import com.explodingpixels.widgets.TableUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
@@ -24,9 +25,11 @@ import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
+import uk.ac.ebi.mnb.interfaces.EntityTableModel;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 import javax.swing.*;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +55,12 @@ public abstract class AbstractEntityTable
         setAutoscrolls(true);
         setFont(ThemeManager.getInstance().getTheme().getBodyFont());
         setAutoCreateRowSorter(true);
+        TableUtils.makeSortable(this, new TableUtils.SortDelegate() {
+            @Override
+            public void sort(int columnModelIndex, TableUtils.SortDirection sortDirection) {
+                // handled by the auto row sorter
+            }
+        });
         // force double click to edit -> annoying because ctrl-z/cmd-z will start editing the cell
         putClientProperty("JTable.autoStartsEdit", Boolean.FALSE);
         setColumnModel(columnModel);
