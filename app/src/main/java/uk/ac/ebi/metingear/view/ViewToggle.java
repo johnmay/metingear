@@ -76,18 +76,22 @@ public class ViewToggle {
         genes.putClientProperty("JButton.buttonType", "segmentedTextured");
         genes.putClientProperty("JButton.segmentPosition", "first");
         genes.setFocusable(false);
+        genes.setToolTipText("Genes");
 
         products.putClientProperty("JButton.buttonType", "segmentedTextured");
         products.putClientProperty("JButton.segmentPosition", "middle");
         products.setFocusable(false);
+        products.setToolTipText("Gene Products");
 
         metabolites.putClientProperty("JButton.buttonType", "segmentedTextured");
         metabolites.putClientProperty("JButton.segmentPosition", "middle");
         metabolites.setFocusable(false);
+        metabolites.setToolTipText("Metabolites");
 
         reactions.putClientProperty("JButton.buttonType", "segmentedTextured");
         reactions.putClientProperty("JButton.segmentPosition", "last");
         reactions.setFocusable(false);
+        reactions.setToolTipText("Reactions");
 
         ButtonGroup group = new ButtonGroup();
         group.add(genes);
