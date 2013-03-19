@@ -17,10 +17,8 @@
 
 package uk.ac.ebi.metingear.launch;
 
-import com.apple.eawt.FullScreenUtilities;
 import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.metingear.preference.PreferenceFrame;
-import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.view.AboutDialog;
 
 /**
@@ -76,6 +74,7 @@ MacApplicationLauncher extends ApplicationLauncher {
 
     @Override
     public void beforeVisible() {
-        FullScreenUtilities.setWindowCanFullScreen(MainView.getInstance(), true);
+        // breaks on OS X
+        // FullScreenUtilities.setWindowCanFullScreen(MainView.getInstance(), true);
     }
 }
