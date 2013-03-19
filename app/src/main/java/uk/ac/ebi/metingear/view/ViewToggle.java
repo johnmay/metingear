@@ -114,7 +114,7 @@ public class ViewToggle {
 
 
     public JComponent getButtonGroup() {
-        return new LabeledComponentGroup(viewLabel, genes, products, metabolites, reactions).getComponent();
+        return new LabeledComponentGroup(viewLabel.getText(), genes, products, metabolites, reactions).getComponent();
     }
 
 

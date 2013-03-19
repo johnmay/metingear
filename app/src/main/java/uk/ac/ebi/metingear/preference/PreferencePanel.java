@@ -95,6 +95,7 @@ public class PreferencePanel extends JPanel {
         category.setCellRenderer(new MyListRenderer());
 
         model.addElement("Resources");
+        model.addElement("General");
         model.addElement("Rendering");
         model.addElement("Tools");
         model.addElement("Databases");
@@ -125,6 +126,7 @@ public class PreferencePanel extends JPanel {
 
         Multimap<String, Preference> map = ComponentPreferences.getInstance().getCategoryMap();
 
+        options.add(new CenteringPanel(new GeneralPanel()), "General");
         options.add(new CenteringPanel(PreferencePanelFactory.getPreferencePanel(map.get("Rendering"))), "Rendering");
         options.add(new CenteringPanel(new ResourceLoading(window)), "Resources");
         options.add(new CenteringPanel(new Tools()), "Tools");
@@ -136,6 +138,26 @@ public class PreferencePanel extends JPanel {
         category.setSelectedValue("Resources", true);
 
 
+    }
+
+    private class GeneralPanel extends Box {
+        private GeneralPanel() {
+            super(BoxLayout.PAGE_AXIS);
+
+            DomainPreferences domainPref = DomainPreferences.getInstance();
+            ServicePreferences servicesPref = ServicePreferences.getInstance();
+            JLabel label = LabelFactory.newLabel("Saving", LabelFactory.Size.HUGE);
+            label.setHorizontalAlignment(SwingConstants.LEFT);
+            add(DefaultComponentFactory.getInstance().createSeparator(label));
+            add(PreferencePanelFactory.getPreferencePanel(domainPref.getPreference("SAVE_LOCATION")));
+            JLabel proxyLabel = LabelFactory.newLabel("HTTP Proxy", LabelFactory.Size.HUGE);
+            proxyLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            add(DefaultComponentFactory.getInstance().createSeparator(proxyLabel));
+            add(PreferencePanelFactory
+                        .getPreferencePanel(servicesPref.getPreference("PROXY_SET"),
+                                            servicesPref.getPreference("PROXY_HOST"),
+                                            servicesPref.getPreference("PROXY_PORT")));
+        }
     }
 
     private class CenteringPanel extends JPanel {

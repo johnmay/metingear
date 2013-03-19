@@ -24,6 +24,8 @@ import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 
+import java.util.Arrays;
+
 /**
  *          Toolbar - 2011.11.03 <br>
  *          Class description
@@ -39,13 +41,13 @@ public class Toolbar extends UnifiedToolBar {
     }
 
     public void addComponentToRight(JLabel label, JComponent... components) {
-        addComponentToRight(new LabeledComponentGroup(label, components).getComponent());
+        addComponentToRight(new LabeledComponentGroup(label.getText(), components).getComponent());
     }
 
     public void addComponentToRight(String text, JComponent... components) {
         JLabel label = LabelFactory.newLabel(text);
         label.setFont(label.getFont().deriveFont(11.0f));
         label.setUI(new EmphasizedLabelUI());
-        addComponentToRight(new LabeledComponentGroup(label, components).getComponent());
+        addComponentToRight(new LabeledComponentGroup(label.getText(), components).getComponent());
     }
 }
