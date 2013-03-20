@@ -145,18 +145,23 @@ public class PreferencePanel extends JPanel {
             super(BoxLayout.PAGE_AXIS);
 
             DomainPreferences domainPref = DomainPreferences.getInstance();
-            ServicePreferences servicesPref = ServicePreferences.getInstance();
+            ServicePreferences servicePref = ServicePreferences.getInstance();
+            ResourcePreferences resourcePref = ResourcePreferences.getInstance();
             JLabel label = LabelFactory.newLabel("Saving", LabelFactory.Size.HUGE);
             label.setHorizontalAlignment(SwingConstants.LEFT);
             add(DefaultComponentFactory.getInstance().createSeparator(label));
             add(PreferencePanelFactory.getPreferencePanel(domainPref.getPreference("SAVE_LOCATION")));
+            add(PreferencePanelFactory.getPreferencePanel(resourcePref.getPreference("IDENTIFIERS_DOT_ORG_URL")));
+
             JLabel proxyLabel = LabelFactory.newLabel("HTTP Proxy", LabelFactory.Size.HUGE);
             proxyLabel.setHorizontalAlignment(SwingConstants.LEFT);
             add(DefaultComponentFactory.getInstance().createSeparator(proxyLabel));
             add(PreferencePanelFactory
-                        .getPreferencePanel(servicesPref.getPreference("PROXY_SET"),
-                                            servicesPref.getPreference("PROXY_HOST"),
-                                            servicesPref.getPreference("PROXY_PORT")));
+                        .getPreferencePanel(servicePref.getPreference("PROXY_SET"),
+                                            servicePref.getPreference("PROXY_HOST"),
+                                            servicePref.getPreference("PROXY_PORT")));
+
+
         }
     }
 
