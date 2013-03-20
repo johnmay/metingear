@@ -25,9 +25,10 @@ import uk.ac.ebi.caf.action.ActionProperties;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.caf.component.injection.AbstractComponentInjector;
+import uk.ac.ebi.caf.component.injection.ComponentInjector;
 import uk.ac.ebi.caf.component.injection.Inject;
 import uk.ac.ebi.caf.component.injection.PropertyComponentInjector;
+import uk.ac.ebi.caf.component.injection.YAMLComponentInjector;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 
 import javax.swing.*;
@@ -35,6 +36,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author johnmay
@@ -45,7 +48,8 @@ public abstract class AbstractProcessingDialog
         extends JDialog
         implements ProcessingDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractProcessingDialog.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(AbstractProcessingDialog.class);
 
     private DialogController controller;
 
@@ -56,11 +60,14 @@ public abstract class AbstractProcessingDialog
     private JButton okay;
 
     @Inject
-    private JLabel     information;
+    private JLabel information;
     private JComponent form;
     private JComponent navigation;
 
-    private AbstractComponentInjector INJECTOR;
+    @Deprecated
+    private ComponentInjector propertyInjector;
+
+    private ComponentInjector yamlInjector;
 
     private static final CellConstraints CELL_CONSTRAINTS = new CellConstraints();
 
@@ -79,14 +86,40 @@ public abstract class AbstractProcessingDialog
 
     private final void inject() {
         prepareInjector();
-        INJECTOR.inject(this);
+        if(propertyInjector != null)
+            propertyInjector.inject(this);
+        if(yamlInjector != null)
+            yamlInjector.inject(this);
+    }
+
+    final void inject(Class<?> c, JComponent comp, String name) {
+        if(propertyInjector != null)
+            propertyInjector.inject(c, comp, name);
+        if(yamlInjector != null)
+            yamlInjector.inject(c, comp, name);
     }
 
 
     private void prepareInjector() {
         // inject from property component injector using action.properties
-        if (INJECTOR == null)
-            INJECTOR = new PropertyComponentInjector(ActionProperties.getInstance());
+        if (propertyInjector == null)
+            propertyInjector = new PropertyComponentInjector(ActionProperties
+                                                                     .getInstance());
+        if (yamlInjector == null) {
+            InputStream in = getClass().getResourceAsStream("/uk/ac/ebi/caf/dialog-config.yml");
+            if (in != null)
+                try {
+                    yamlInjector = new YAMLComponentInjector(in);
+                } catch (IOException e) {
+                    LOGGER.error(e);
+                } finally {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        // ignored
+                    }
+                }
+        }
     }
 
     public void prepare() {
@@ -98,11 +131,12 @@ public abstract class AbstractProcessingDialog
     }
 
     /**
-     * Set whether the "okay"/"process" button is enabled. Allows subclasses
-     * to inhibit processing without a complete form.
+     * Set whether the "okay"/"process" button is enabled. Allows subclasses to
+     * inhibit processing without a complete form.
+     *
      * @param enabled whether to enable the button
      */
-    public void setEnabled(boolean enabled){
+    public void setEnabled(boolean enabled) {
         okay.setEnabled(enabled);
     }
 
@@ -237,7 +271,8 @@ public abstract class AbstractProcessingDialog
 
     // background shadow
 
-    private Paint paint = new GradientPaint(0, 0, getBackground().darker(), 0, 10, getBackground());
+    private Paint paint = new GradientPaint(0, 0, getBackground()
+            .darker(), 0, 10, getBackground());
 
 
     public void paint(Graphics g) {
@@ -252,16 +287,52 @@ public abstract class AbstractProcessingDialog
 
         prepareInjector();
 
-        JLabel label = LabelFactory.newFormLabel(name, "no information injected");
+        JLabel label = LabelFactory
+                .newFormLabel(name, "no information injected");
 
-        INJECTOR.inject(c, label, name);
+        inject(c, label, name);
 
         return label;
 
     }
 
+    public final JButton button(Class c, String name, Action action) {
+        prepareInjector();
+        JButton button = ButtonFactory.newButton(action);
+        inject(c, button, name);
+        return button;
+    }
+
+    public final JButton iconButton(Class c, String name, Action action) {
+        prepareInjector();
+        JButton button = ButtonFactory.newCleanButton(action);
+        button.setText(""); // name is injected if required
+        inject(c, button, name);
+        return button;
+    }
+
     public final JLabel getLabel(String name) {
         return getLabel(getClass(), name);
+    }
+
+    public final JButton button(String name, Action action) {
+        return button(getClass(), name, action);
+    }
+
+    public final JButton button(Action action) {
+        if(action.getValue(Action.NAME) == null)
+            throw new IllegalArgumentException("Name required");
+        return button(action.getValue(Action.NAME).toString(), action);
+    }
+
+    public final JButton iconButton(String name, Action action) {
+        return iconButton(getClass(), name, action);
+    }
+
+    public final JButton iconButton(Action action) {
+        if(action.getValue(Action.NAME) == null)
+            throw new IllegalArgumentException("Name required");
+        return iconButton(action.getValue(Action.NAME).toString(), action);
     }
 
 
