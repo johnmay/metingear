@@ -24,14 +24,22 @@ import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.chemet.tools.annotation.IdentifierMapper;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.AnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
+import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.undo.CompoundEdit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
@@ -40,9 +48,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author John May
@@ -67,17 +75,46 @@ public class ImportCrossReferences extends AbstractControlDialog {
         }
     }
 
+    enum KeyType implements IdentifierMapper.KeyAccessor {
+
+        IDENTIFIER("Identifier") {
+            @Override public String key(AnnotatedEntity entity) {
+                return entity.getIdentifier().getAccession();
+            }
+        },
+        ABBREVIATION("Abbreviation") {
+            @Override public String key(AnnotatedEntity entity) {
+                return entity.getAbbreviation();
+            }
+        },
+        NAME("Name") {
+            @Override public String key(AnnotatedEntity entity) {
+                return entity.getName();
+            }
+        };
+
+        private final String displayName;
+
+        KeyType(String displayName) {
+            this.displayName = displayName;
+        }
+
+        @Override public String toString() {
+            return displayName;
+        }
+    }
+
     private File selected;
     private JLabel selectedLabel;
-    private JTable preview;
     private JComboBox separator = ComboBoxFactory.newComboBox(Separators
                                                                       .values());
     private JCheckBox headerCheck;
-    private JCheckBox inferCheck;
-    private JComboBox resource = ComboBoxFactory.newComboBox(DefaultIdentifierFactory.getInstance().getSupportedIdentifiers());
-    private JComboBox mapTo    = ComboBoxFactory.newComboBox("Identifier", "Abbreviation", "Name");
+    private JRadioButton infer, single, mapped;
+    private JComboBox resource = ComboBoxFactory
+            .newComboBox(DefaultIdentifierFactory.getInstance()
+                                                 .getSupportedIdentifiers());
+    private JComboBox mapTo = ComboBoxFactory.newComboBox(KeyType.values());
     private boolean header;
-    private boolean infer;
     private int previewLength = 5;
     private int nCols = 2;
     private DefaultTableModel model;
@@ -124,14 +161,6 @@ public class ImportCrossReferences extends AbstractControlDialog {
             }
         });
 
-        inferCheck = CheckBoxFactory.newCheckBox();
-        inferCheck.addItemListener(new ItemListener() {
-            @Override public void itemStateChanged(ItemEvent e) {
-                header = headerCheck.isSelected();
-                loadPreview();
-            }
-        });
-
 
         selection.add(getLabel("header"), cc.xy(1, 3));
         selection.add(headerCheck, cc.xy(3, 3));
@@ -139,7 +168,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
         selection.add(separator, cc.xy(3, 5));
 
 
-        JRadioButton infer, single, mapped;
+
 
         final JPanel config = new JPanel();
         final CardLayout configLayout = new CardLayout();
@@ -191,17 +220,19 @@ public class ImportCrossReferences extends AbstractControlDialog {
         selection.add(mapTo, cc.xy(3, 7));
 
 
-        JPanel inferConfig  = new JPanel(new FormLayout("p:grow", "p"));
+        JPanel inferConfig = new JPanel(new FormLayout("p:grow", "p"));
         JPanel singleConfig = new JPanel(new FormLayout("p:grow", "p, 4dlu, p"));
         JPanel mappedConfig = new JPanel(new FormLayout("p:grow", "p"));
 
-        inferConfig.add(area("inferArea"), cc.xy(1,1));
-        singleConfig.add(area("singleArea"), cc.xy(1,1));
+        inferConfig.add(area("inferArea"), cc.xy(1, 1));
+        singleConfig.add(area("singleArea"), cc.xy(1, 1));
         singleConfig.add(resource, cc.xy(1, 3));
-        final DefaultIdentifierFactory ids = DefaultIdentifierFactory.getInstance();
+        final DefaultIdentifierFactory ids = DefaultIdentifierFactory
+                .getInstance();
         resource.setRenderer(new ListCellRenderer() {
 
-            private JLabel label = LabelFactory.newLabel("N/A", LabelFactory.Size.SMALL);
+            private JLabel label = LabelFactory
+                    .newLabel("N/A", LabelFactory.Size.SMALL);
 
             @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -209,12 +240,14 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 Identifier id = (Identifier) value;
                 label.setText(id.getShortDescription());
                 label.setToolTipText(id.getLongDescription());
-                label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
-                label.setBackground(isSelected ? list.getSelectionForeground() : list.getForeground());
+                label.setBackground(isSelected ? list.getSelectionBackground()
+                                               : list.getBackground());
+                label.setBackground(isSelected ? list.getSelectionForeground()
+                                               : list.getForeground());
                 return label;
             }
         });
-        mappedConfig.add(area("mappedArea"), cc.xy(1,1));
+        mappedConfig.add(area("mappedArea"), cc.xy(1, 1));
 
         config.setLayout(configLayout);
         config.add(inferConfig, "infer");
@@ -230,7 +263,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
         });
 
         model = new DefaultTableModel(previewLength, 3);
-        preview = new JTable(model);
+        JTable preview = new JTable(model);
 
         component.add(selection);
         component.add(config);
@@ -258,22 +291,24 @@ public class ImportCrossReferences extends AbstractControlDialog {
                                        separatingChar(),
                                        '\0');
                 String[][] rows = new String[previewLength + 1][];
-                String[]     row;
+                String[] row;
                 String[] tmpHeader = null;
 
                 if (header) {
                     tmpHeader = reader.readNext();
                 }
 
-                for(int i = 0; i < rows.length && (row = reader.readNext()) != null; i++){
+                for (int i = 0; i < rows.length && (row = reader
+                        .readNext()) != null; i++) {
                     rows[i] = Arrays.copyOf(row, nCols);
                 }
 
 
                 final String[][] data = rows;
 
-                final String[] header = tmpHeader != null ? Arrays.copyOf(tmpHeader, nCols)
-                                                          : new String[nCols];
+                final String[] header =
+                        tmpHeader != null ? Arrays.copyOf(tmpHeader, nCols)
+                                          : new String[nCols];
 
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override public void run() {
@@ -285,10 +320,10 @@ public class ImportCrossReferences extends AbstractControlDialog {
 
 
             } catch (FileNotFoundException e) {
-                report(new ErrorMessage("File was not found: " + e
-                        .getMessage()));
+                report(new ErrorMessage("File not found: " + e.getMessage()));
             } catch (IOException e) {
-                System.err.println(e.getMessage());
+                report(new ErrorMessage("An error occurred whilst reading the file: " + e
+                        .getMessage()));
             } finally {
                 try {
                     if (reader != null)
@@ -297,5 +332,77 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 }
             }
         }
+    }
+
+    @Override public void process() {
+
+        final CompoundEdit edit = new CompoundEdit();
+        final AnnotationFactory annotations = DefaultAnnotationFactory.getInstance();
+
+        @SuppressWarnings("unchecked")
+        IdentifierMapper.KeyAccessor<String> accessor =
+                (IdentifierMapper.KeyAccessor<String>) mapTo.getSelectedItem();
+
+        Reconstruction recon = DefaultReconstructionManager.getInstance()
+                                                           .getActive();
+
+        IdentifierMapper.Handler handler = new IdentifierMapper.Handler(){
+            @Override
+            public boolean handle(AnnotatedEntity entity, Identifier id) {
+                final Annotation annotation = annotations.getCrossReference(id);
+                edit.addEdit(new AddAnnotationEdit(entity, annotation));
+                entity.addAnnotation(annotation);
+                return true;
+            }
+        };
+
+        IdentifierMapper<String> mapper
+                = new IdentifierMapper<String>(recon.getMetabolome(),
+                                               accessor,
+                                               handler,
+                                               DefaultIdentifierFactory.getInstance());
+
+
+        CSVReader reader = null;
+        try {
+            reader = new CSVReader(new FileReader(selected),
+                                   separatingChar(),
+                                   '\0');
+            String[] row = null;
+
+            if(infer.isSelected()) {
+                while ((row = reader.readNext()) != null){
+                    mapper.map(row[0], row[1]);
+                }
+            } else if(single.isSelected()) {
+                Identifier identifier = ((Identifier) resource.getSelectedItem()).newInstance();
+                while ((row = reader.readNext()) != null){
+                    identifier.setAccession(row[1]);
+                    if(identifier.isValid()){
+                        mapper.map(row[0], identifier);
+                    }
+                }
+            } else if(mapped.isSelected()) {
+                while ((row = reader.readNext()) != null){
+                    mapper.map(row[0], row[1], row[2]);
+                }
+            }
+
+
+        } catch (IOException e) {
+            report(new ErrorMessage("unable to map identifiers: " + e.getMessage()));
+        } finally {
+            try {
+                if (reader != null)
+                    reader.close();
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+
+
+        // finished editing
+        edit.end();
+        addEdit(edit);
     }
 }
