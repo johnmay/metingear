@@ -25,11 +25,9 @@ import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
-import uk.ac.ebi.mnb.interfaces.EntityTableModel;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 import javax.swing.*;
-import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +44,10 @@ public abstract class AbstractEntityTable
         implements EntityTable,
                    SelectionController {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractEntityTable.class);
-    private EntityCollection selection = new EntityMap(DefaultEntityFactory.getInstance());
+    private static final Logger LOGGER = Logger
+            .getLogger(AbstractEntityTable.class);
+    private EntityCollection selection = new EntityMap(DefaultEntityFactory
+                                                               .getInstance());
 
     public AbstractEntityTable(AbstractEntityTableModel model) {
         super(model);
@@ -75,7 +75,36 @@ public abstract class AbstractEntityTable
      * Update the table model with the current
      */
     public boolean update() {
-        return getModel().update();
+        int[] selected = getSelectedRows();
+        boolean updated = getModel().update();
+        select(selected);
+        return updated;
+    }
+
+    void select(int[] rows){
+        clearSelection();
+        for(int[] r : intervals(rows)){
+            addRowSelectionInterval(r[0], r[1]);
+        }
+    }
+
+    static int[][] intervals(int[] rows) {
+        if (rows.length == 0)
+            return new int[0][];
+        if (rows.length == 1)
+            return new int[][]{{rows[0], rows[0]}};
+
+        List<int[]> intervals = new ArrayList<int[]>();
+        int last = rows.length - 1;
+        for (int i = 0; i < rows.length; i++) {
+            int j = i, k = i;
+            for(j = i + 1; j < rows.length && rows[j] == rows[j - 1] + 1; j++){
+                k = j;
+            }
+            intervals.add(new int[]{rows[i], rows[k]});
+            i = k;
+        }
+        return intervals.toArray(new int[intervals.size()][]);
     }
 
     /**
@@ -98,12 +127,13 @@ public abstract class AbstractEntityTable
     /**
      * Sets a single selection in the table
      *
-     * @param component
+     * @param selectionManager
      */
     public boolean setSelection(EntityCollection selectionManager) {
 
 
-        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>(selectionManager.getEntities());
+        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>(selectionManager
+                                                                                .getEntities());
 
         LOGGER.debug("selecting " + entities.size() + " entities");
 
@@ -111,7 +141,8 @@ public abstract class AbstractEntityTable
         getSelectionModel().setValueIsAdjusting(true);
 
         for (int i = 0; i < entities.size(); i++) {
-            int index = convertRowIndexToView(getModel().indexOf(entities.get(i)));
+            int index = convertRowIndexToView(getModel()
+                                                      .indexOf(entities.get(i)));
             if (index != -1) {
                 addRowSelectionInterval(index, index);
             }
@@ -127,7 +158,9 @@ public abstract class AbstractEntityTable
 
         if (parent != null) {
 
-            int y = getTableHeader().getHeight() + (getRowHeight() * selected) - ((int) parent.getHeight()
+            int y = getTableHeader()
+                    .getHeight() + (getRowHeight() * selected) - ((int) parent
+                    .getHeight()
                     / 2);
             scrollRectToVisible(new Rectangle(0, y,
                                               parent.getWidth(),
