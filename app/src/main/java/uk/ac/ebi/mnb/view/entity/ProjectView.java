@@ -165,6 +165,8 @@ public class ProjectView
             controller.setSelected(c);
         if (selector != null)
             selector.setSelected(c);
+        // update available menu items
+        MainView.getInstance().getJMenuBar().updateContext();
     }
 
 
