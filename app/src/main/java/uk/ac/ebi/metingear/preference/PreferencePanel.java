@@ -203,56 +203,79 @@ public class PreferencePanel extends JPanel {
             LoaderGroupFactory factory = new LoaderGroupFactory(window, DefaultLocationFactory.getInstance());
             try {
 
-                add(Box.createHorizontalStrut(50));
-                add(PreferencePanelFactory.getPreferenceEditor(ServicePreferences.getInstance().getPreference("SERVICE_ROOT"),
-                                                               new AbstractAction() {
-                                                                   @Override
-                                                                   public void actionPerformed(ActionEvent e) {
-                                                                       int choice = JOptionPane.showConfirmDialog(window,
-                                                                                                                  "<html>You have changed the storage location of services and you must <br/> " +
-                                                                                                                          "restart Metingear before updating any service data.<br/><br/>" +
-                                                                                                                          "Would you like to restart now? <br/>" +
-                                                                                                                          "If you wish to continue editing, please select 'No'." +
-                                                                                                                          "</html>", "Restart Required", JOptionPane.YES_NO_OPTION);
-                                                                       if (choice == JOptionPane.OK_OPTION) {
-                                                                           try {
-                                                                               Main.relaunch();
-                                                                           } catch (Exception e1) {
-                                                                               JOptionPane.showMessageDialog(window, "Unable to restart the application! Please restart manually.", "Error", JOptionPane.ERROR_MESSAGE);
-                                                                           }
-                                                                       }
-                                                                   }
-                                                               }));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createGlue());
+                JTextArea area = new JTextArea();
+                area.setLineWrap(true);
+                area.setEditable(false);
+                area.setOpaque(false);
+                area.setEnabled(false);
+                Theme theme = ThemeManager.getInstance().getTheme();
+                area.setForeground(theme.getForeground());
+                area.setFont(theme.getBodyFont());
+                area.setWrapStyleWord(true);
+                area.setBorder(Borders.EMPTY_BORDER);
+                area.setText("Load resources from remote and local locations. When a resource is not publically available or the download is very large " +
+                                                                 "it will not be update it. If a resource can not be updated (non-bold arrow) you will " +
+                                                                 "need to configure the loader by specifying local or remove locations of required resources. " +
+                                                                 "Each loader can be configured by clicking the 'cog' icon and entering the required locations. " +
+                                                                 "A description of location is available by hovering over the location name.");
+                add(Box.createVerticalStrut(5));
+                add(PreferencePanelFactory
+                            .getPreferenceEditor(ServicePreferences
+                                                         .getInstance()
+                                                         .getPreference("SERVICE_ROOT"),
+                                                 new AbstractAction() {
+                                                     @Override
+                                                     public void actionPerformed(ActionEvent e) {
+                                                         int choice = JOptionPane
+                                                                 .showConfirmDialog(window,
+                                                                                    "<html>You have changed the storage location of services and you must <br/> " +
+                                                                                            "restart Metingear before updating any service data.<br/><br/>" +
+                                                                                            "Would you like to restart now? <br/>" +
+                                                                                            "If you wish to continue editing, please select 'No'." +
+                                                                                            "</html>", "Restart Required", JOptionPane.YES_NO_OPTION);
+                                                         if (choice == JOptionPane.OK_OPTION) {
+                                                             try {
+                                                                 Main.relaunch();
+                                                             } catch (Exception e1) {
+                                                                 JOptionPane
+                                                                         .showMessageDialog(window, "Unable to restart the application! Please restart manually.", "Error", JOptionPane.ERROR_MESSAGE);
+                                                             }
+                                                         }
+                                                     }
+                                                 }));
+                add(Box.createVerticalStrut(5));
+                add(area);
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("ChEBI",
                                         new ChEBIStructureLoader(),
                                         new ChEBINameLoader(),
                                         new ChEBIDataLoader(),
                                         new ChEBICrossReferenceLoader()));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("KEGG",
                                         new KEGGCompoundLoader(),
                                         new KEGGCompoundStructureLoader()));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("BioCyc",
                                         new MetaCycCompoundLoader(),
                                         new MetaCycStructureLoader()));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("LIPID MAPS",
                                         new LipidMapsLoader(),
                                         new LipidMapsSDFLoader()));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("HMDB",
                                         new HMDBXMLLoader(),
                                         new HMDBStructureLoader(),
                                         new HMDBMetabocardsLoader()));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("UniProt",
                                         new TaxonomyLoader(),
                                         new UniProtCrossReferenceLoader(DefaultEntityFactory.getInstance(),
                                                                         DefaultIdentifierFactory.getInstance())));
                 add(Box.createGlue());
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
 
                 CellConstraints cc = new CellConstraints();
 
