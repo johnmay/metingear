@@ -29,6 +29,8 @@ import uk.ac.ebi.caf.component.injection.ComponentInjector;
 import uk.ac.ebi.caf.component.injection.Inject;
 import uk.ac.ebi.caf.component.injection.PropertyComponentInjector;
 import uk.ac.ebi.caf.component.injection.YAMLComponentInjector;
+import uk.ac.ebi.caf.component.theme.Theme;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 
 import javax.swing.*;
@@ -311,6 +313,36 @@ public abstract class AbstractProcessingDialog
         return button;
     }
 
+    public final JRadioButton radioButton(Class c, String name, Action action) {
+        prepareInjector();
+        JRadioButton button = new JRadioButton(action);
+        Theme theme = ThemeManager.getInstance().getTheme();
+        button.setForeground(theme.getForeground());
+        button.setFont(theme.getBodyFont());
+        inject(c, button, name);
+        return button;
+    }
+
+    public final JTextArea area(Class c, String name){
+        prepareInjector();
+        JTextArea area = new JTextArea();
+        inject(c, area, name);
+        Theme theme = ThemeManager.getInstance().getTheme();
+        area.setForeground(theme.getForeground());
+        area.setFont(theme.getBodyFont());
+        area.setEditable(false);
+        area.setEnabled(false);
+        area.setBorder(Borders.EMPTY_BORDER);
+        area.setOpaque(false);
+        area.setWrapStyleWord(true);
+        area.setLineWrap(true);
+        return area;
+    }
+
+    public final JTextArea area(String name){
+        return area(getClass(), name);
+    }
+
     public final JLabel getLabel(String name) {
         return getLabel(getClass(), name);
     }
@@ -335,5 +367,14 @@ public abstract class AbstractProcessingDialog
         return iconButton(action.getValue(Action.NAME).toString(), action);
     }
 
+    public final JRadioButton radioButton(Action action) {
+        if(action.getValue(Action.NAME) == null)
+            throw new IllegalArgumentException("Name required");
+        return radioButton(action.getValue(Action.NAME).toString(), action);
+    }
+
+    public final JRadioButton radioButton(String name, Action action) {
+        return radioButton(getClass(), name, action);
+    }
 
 }
