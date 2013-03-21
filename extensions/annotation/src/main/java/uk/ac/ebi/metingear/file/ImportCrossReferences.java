@@ -18,6 +18,7 @@
 package uk.ac.ebi.metingear.file;
 
 import au.com.bytecode.opencsv.CSVReader;
+import com.google.common.base.Joiner;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
@@ -35,6 +36,7 @@ import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
+import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 
 import javax.swing.*;
@@ -49,8 +51,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author John May
@@ -166,8 +166,6 @@ public class ImportCrossReferences extends AbstractControlDialog {
         selection.add(headerCheck, cc.xy(3, 3));
         selection.add(getLabel("separator"), cc.xy(1, 5));
         selection.add(separator, cc.xy(3, 5));
-
-
 
 
         final JPanel config = new JPanel();
@@ -337,7 +335,8 @@ public class ImportCrossReferences extends AbstractControlDialog {
     @Override public void process() {
 
         final CompoundEdit edit = new CompoundEdit();
-        final AnnotationFactory annotations = DefaultAnnotationFactory.getInstance();
+        final AnnotationFactory annotations = DefaultAnnotationFactory
+                .getInstance();
 
         @SuppressWarnings("unchecked")
         IdentifierMapper.KeyAccessor<String> accessor =
@@ -346,7 +345,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
         Reconstruction recon = DefaultReconstructionManager.getInstance()
                                                            .getActive();
 
-        IdentifierMapper.Handler handler = new IdentifierMapper.Handler(){
+        IdentifierMapper.Handler handler = new IdentifierMapper.Handler() {
             @Override
             public boolean handle(AnnotatedEntity entity, Identifier id) {
                 final Annotation annotation = annotations.getCrossReference(id);
@@ -360,7 +359,8 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 = new IdentifierMapper<String>(recon.getMetabolome(),
                                                accessor,
                                                handler,
-                                               DefaultIdentifierFactory.getInstance());
+                                               DefaultIdentifierFactory
+                                                       .getInstance());
 
 
         CSVReader reader = null;
@@ -370,33 +370,38 @@ public class ImportCrossReferences extends AbstractControlDialog {
                                    '\0');
             String[] row = null;
 
-            if(infer.isSelected()) {
-                while ((row = reader.readNext()) != null){
-                    mapper.map(row[0], row[1]);
-                }
-            } else if(single.isSelected()) {
-                Identifier identifier = ((Identifier) resource.getSelectedItem()).newInstance();
-                while ((row = reader.readNext()) != null){
-                    identifier.setAccession(row[1]);
-                    if(identifier.isValid()){
-                        mapper.map(row[0], identifier);
+            if (infer.isSelected()) {
+                while ((row = reader.readNext()) != null) {
+                    if (row.length == 2) {
+                        mapper.map(row[0], row[1]);
                     }
                 }
-            } else if(mapped.isSelected()) {
-                while ((row = reader.readNext()) != null){
-                    mapper.map(row[0], row[1], row[2]);
+            } else if (single.isSelected()) {
+                Identifier identifier = ((Identifier) resource
+                        .getSelectedItem()).newInstance();
+                while ((row = reader.readNext()) != null) {
+                    if (row.length == 2) {
+                        mapper.map(row[0], row[1], identifier.getShortDescription());
+                    }
+                }
+            } else if (mapped.isSelected()) {
+                while ((row = reader.readNext()) != null) {
+                    if (row.length == 3) {
+                        mapper.map(row[0], row[1], row[2]);
+                    }
                 }
             }
 
 
         } catch (IOException e) {
-            report(new ErrorMessage("unable to map identifiers: " + e.getMessage()));
+            report(new ErrorMessage("unable to map identifiers: " + e
+                    .getMessage()));
         } finally {
             try {
                 if (reader != null)
                     reader.close();
             } catch (IOException e) {
-                System.err.println(e.getMessage());
+                // ignored
             }
         }
 
@@ -404,5 +409,20 @@ public class ImportCrossReferences extends AbstractControlDialog {
         // finished editing
         edit.end();
         addEdit(edit);
+
+        // report problems
+        if(!mapper.ambiguous().isEmpty()){
+            addReport(new WarningMessage("The following accessions were ambiguous and could not be mapped: " + Joiner.on(",").join(mapper.ambiguous())));
+        }
+        if(!mapper.unknown().isEmpty()){
+            addReport(new WarningMessage("The following resouce names were unknown: " + Joiner.on(",").join(mapper.unknown())));
+        }
+        if(!mapper.invalid().isEmpty()){
+            addReport(new WarningMessage("The following accessions were invalid: " + Joiner.on(",").join(mapper.invalid())));
+        }
+        if(!mapper.unmapped().isEmpty()){
+            addReport(new WarningMessage("Unable to find entities matching: " + Joiner.on(",").join(mapper.unmapped())));
+        }
+
     }
 }
