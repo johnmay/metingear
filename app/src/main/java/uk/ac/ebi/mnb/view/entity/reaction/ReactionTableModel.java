@@ -102,7 +102,7 @@ public class ReactionTableModel extends AbstractEntityTableModel {
         Reaction rxn = (Reaction) component;
 
         if (name.equals(DEFAULT[0].getName())) {
-            return rxn.getDirection();
+            return rxn.getDirection().toString();
         } else if (name.equals(DEFAULT[1].getName())) {
             return rxn.toString();
         } else if (name.equals("Rating")) {
