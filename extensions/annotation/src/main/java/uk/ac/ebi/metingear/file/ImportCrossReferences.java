@@ -412,16 +412,16 @@ public class ImportCrossReferences extends AbstractControlDialog {
 
         // report problems
         if(!mapper.ambiguous().isEmpty()){
-            addReport(new WarningMessage("The following accessions were ambiguous and could not be mapped: " + Joiner.on(",").join(mapper.ambiguous())));
+            addReport(new WarningMessage("The following accessions were ambiguous and could not be mapped: " + Joiner.on(", ").join(mapper.ambiguous())));
         }
         if(!mapper.unknown().isEmpty()){
-            addReport(new WarningMessage("The following resouce names were unknown: " + Joiner.on(",").join(mapper.unknown())));
+            addReport(new WarningMessage("The following resouce names were unknown: " + Joiner.on(", ").join(mapper.unknown())));
         }
         if(!mapper.invalid().isEmpty()){
-            addReport(new WarningMessage("The following accessions were invalid: " + Joiner.on(",").join(mapper.invalid())));
+            addReport(new WarningMessage("The following accessions were invalid: " + Joiner.on(", ").join(mapper.invalid())));
         }
         if(!mapper.unmapped().isEmpty()){
-            addReport(new WarningMessage("Unable to find entities matching: " + Joiner.on(",").join(mapper.unmapped())));
+            addReport(new WarningMessage("Unable to find entities matching: " + Joiner.on(", ").join(mapper.unmapped())));
         }
 
     }
