@@ -176,7 +176,6 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 configLayout.show(config, "infer");
                 nCols = 2;
                 loadPreview();
-                revalidate();
                 pack();
             }
         });
@@ -186,7 +185,6 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 configLayout.show(config, "single");
                 nCols = 2;
                 loadPreview();
-                revalidate();
                 pack();
             }
         });
@@ -196,7 +194,6 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 configLayout.show(config, "mapped");
                 nCols = 3;
                 loadPreview();
-                revalidate();
                 pack();
             }
         });
@@ -275,6 +272,11 @@ public class ImportCrossReferences extends AbstractControlDialog {
         component.add(tableHolder);
 
         return component;
+    }
+
+    @Override
+    public void prepare() {
+        pack();
     }
 
     private char separatingChar() {
@@ -381,7 +383,8 @@ public class ImportCrossReferences extends AbstractControlDialog {
                         .getSelectedItem()).newInstance();
                 while ((row = reader.readNext()) != null) {
                     if (row.length == 2) {
-                        mapper.map(row[0], row[1], identifier.getShortDescription());
+                        mapper.map(row[0], row[1], identifier
+                                .getShortDescription());
                     }
                 }
             } else if (mapped.isSelected()) {
@@ -411,17 +414,21 @@ public class ImportCrossReferences extends AbstractControlDialog {
         addEdit(edit);
 
         // report problems
-        if(!mapper.ambiguous().isEmpty()){
-            addReport(new WarningMessage("The following accessions were ambiguous and could not be mapped: " + Joiner.on(", ").join(mapper.ambiguous())));
+        if (!mapper.ambiguous().isEmpty()) {
+            addReport(new WarningMessage("The following accessions were ambiguous and could not be mapped: " + Joiner
+                    .on(", ").join(mapper.ambiguous())));
         }
-        if(!mapper.unknown().isEmpty()){
-            addReport(new WarningMessage("The following resouce names were unknown: " + Joiner.on(", ").join(mapper.unknown())));
+        if (!mapper.unknown().isEmpty()) {
+            addReport(new WarningMessage("The following resouce names were unknown: " + Joiner
+                    .on(", ").join(mapper.unknown())));
         }
-        if(!mapper.invalid().isEmpty()){
-            addReport(new WarningMessage("The following accessions were invalid: " + Joiner.on(", ").join(mapper.invalid())));
+        if (!mapper.invalid().isEmpty()) {
+            addReport(new WarningMessage("The following accessions were invalid: " + Joiner
+                    .on(", ").join(mapper.invalid())));
         }
-        if(!mapper.unmapped().isEmpty()){
-            addReport(new WarningMessage("Unable to find entities matching: " + Joiner.on(", ").join(mapper.unmapped())));
+        if (!mapper.unmapped().isEmpty()) {
+            addReport(new WarningMessage("Unable to find entities matching: " + Joiner
+                    .on(", ").join(mapper.unmapped())));
         }
 
     }
