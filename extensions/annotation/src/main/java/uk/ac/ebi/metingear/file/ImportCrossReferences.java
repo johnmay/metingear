@@ -274,11 +274,6 @@ public class ImportCrossReferences extends AbstractControlDialog {
         return component;
     }
 
-    @Override
-    public void prepare() {
-        pack();
-    }
-
     private char separatingChar() {
         return ((Separators) separator.getSelectedItem()).c;
     }
