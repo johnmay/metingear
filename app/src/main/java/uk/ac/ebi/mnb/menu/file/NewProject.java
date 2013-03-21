@@ -97,7 +97,7 @@ public class NewProject extends DropdownDialog {
         };
 
         idField = FieldFactory.newField(15);
-        codeField = new SuggestionField(this, 5, new SuggestionHandler() {
+        codeField = new SuggestionField(this, 5, 10, new SuggestionHandler() {
 
             @Override
             public ListCellRenderer getRenderer() {
@@ -117,6 +117,7 @@ public class NewProject extends DropdownDialog {
                 };
             }
 
+
             @Override
             public Collection<Object> getSuggestions(String s) {
                 return service.startup()
@@ -124,7 +125,7 @@ public class NewProject extends DropdownDialog {
                        : new ArrayList();
             }
         }, handler);
-        taxonField = new SuggestionField(this, 5, new SuggestionHandler() {
+        taxonField = new SuggestionField(this, 5, 10, new SuggestionHandler() {
             @Override
             public Collection<Object> getSuggestions(String s) {
                 return service.startup()
@@ -132,7 +133,7 @@ public class NewProject extends DropdownDialog {
                        : Collections.emptyList();
             }
         }, handler);
-        nameField = new SuggestionField(this, 35, new SuggestionHandler() {
+        nameField = new SuggestionField(this, 35, 10, new SuggestionHandler() {
 
             @Override
             public ListCellRenderer getRenderer() {
