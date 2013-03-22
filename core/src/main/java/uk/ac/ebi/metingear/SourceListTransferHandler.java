@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.metingear;
 
+import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
@@ -39,13 +40,20 @@ import java.io.IOException;
 public class SourceListTransferHandler extends TransferHandler {
 
     @Override
+    public boolean canImport(TransferSupport support) {
+        support.setShowDropLocation(true);
+        return super.canImport(support);
+    }
+
+    @Override
     public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
+
         for (DataFlavor flavor : transferFlavors) {
             if (TransferableEntity.dataFlavor().equals(flavor)) {
                 JTree tree = (JTree) comp;
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree
                         .getSelectionPath().getLastPathComponent();
-                return true;
+                return node.getUserObject() instanceof ReconstructionSourceItem;
             }
         }
         return super.canImport(comp, transferFlavors);
