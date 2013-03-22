@@ -39,7 +39,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author johnmay
@@ -88,16 +87,16 @@ public abstract class AbstractProcessingDialog
 
     private final void inject() {
         prepareInjector();
-        if(propertyInjector != null)
+        if (propertyInjector != null)
             propertyInjector.inject(this);
-        if(yamlInjector != null)
+        if (yamlInjector != null)
             yamlInjector.inject(this);
     }
 
     final void inject(Class<?> c, JComponent comp, String name) {
-        if(propertyInjector != null)
+        if (propertyInjector != null)
             propertyInjector.inject(c, comp, name);
-        if(yamlInjector != null)
+        if (yamlInjector != null)
             yamlInjector.inject(c, comp, name);
     }
 
@@ -108,19 +107,11 @@ public abstract class AbstractProcessingDialog
             propertyInjector = new PropertyComponentInjector(ActionProperties
                                                                      .getInstance());
         if (yamlInjector == null) {
-            InputStream in = getClass().getResourceAsStream("/uk/ac/ebi/caf/dialog-config.yml");
-            if (in != null)
-                try {
-                    yamlInjector = new YAMLComponentInjector(in);
-                } catch (IOException e) {
-                    LOGGER.error(e);
-                } finally {
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                        // ignored
-                    }
-                }
+            try {
+                yamlInjector = new YAMLComponentInjector("/uk/ac/ebi/metingear/dialog-config.yml");
+            } catch (IOException e) {
+                LOGGER.error(e);
+            }
         }
     }
 
@@ -323,7 +314,7 @@ public abstract class AbstractProcessingDialog
         return button;
     }
 
-    public final JTextArea area(Class c, String name){
+    public final JTextArea area(Class c, String name) {
         prepareInjector();
         JTextArea area = new JTextArea();
         inject(c, area, name);
@@ -339,7 +330,7 @@ public abstract class AbstractProcessingDialog
         return area;
     }
 
-    public final JTextArea area(String name){
+    public final JTextArea area(String name) {
         return area(getClass(), name);
     }
 
@@ -352,7 +343,7 @@ public abstract class AbstractProcessingDialog
     }
 
     public final JButton button(Action action) {
-        if(action.getValue(Action.NAME) == null)
+        if (action.getValue(Action.NAME) == null)
             throw new IllegalArgumentException("Name required");
         return button(action.getValue(Action.NAME).toString(), action);
     }
@@ -362,13 +353,13 @@ public abstract class AbstractProcessingDialog
     }
 
     public final JButton iconButton(Action action) {
-        if(action.getValue(Action.NAME) == null)
+        if (action.getValue(Action.NAME) == null)
             throw new IllegalArgumentException("Name required");
         return iconButton(action.getValue(Action.NAME).toString(), action);
     }
 
     public final JRadioButton radioButton(Action action) {
-        if(action.getValue(Action.NAME) == null)
+        if (action.getValue(Action.NAME) == null)
             throw new IllegalArgumentException("Name required");
         return radioButton(action.getValue(Action.NAME).toString(), action);
     }

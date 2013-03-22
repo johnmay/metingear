@@ -21,8 +21,8 @@
         <containerDescriptorHandler>
             <handlerName>file-aggregator</handlerName>
             <configuration>
-                <filePattern>uk/ac/ebi/caf/dialog-config.yml</filePattern>
-                <outputPath>uk/ac/ebi/caf/dialog-config.yml</outputPath>
+                <filePattern>uk/ac/ebi/metingear/dialog-config.yml</filePattern>
+                <outputPath>uk/ac/ebi/metingear/dialog-config.yml</outputPath>
             </configuration>
         </containerDescriptorHandler>
 
