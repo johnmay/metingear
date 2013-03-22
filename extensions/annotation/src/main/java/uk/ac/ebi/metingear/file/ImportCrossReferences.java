@@ -222,8 +222,16 @@ public class ImportCrossReferences extends AbstractControlDialog {
         JPanel singleConfig = new JPanel(new FormLayout("p:grow", "p, 4dlu, p"));
         JPanel mappedConfig = new JPanel(new FormLayout("p:grow", "p"));
 
-        inferConfig.add(area("inferArea"), cc.xy(1, 1));
-        singleConfig.add(area("singleArea"), cc.xy(1, 1));
+        JTextArea inferInfo = area("inferArea");
+        JTextArea singleInfo = area("singleArea");
+        JTextArea mappedInfo = area("mappedArea");
+
+        inferInfo.setBackground(getBackground());
+        singleInfo.setBackground(getBackground());
+        mappedInfo.setBackground(getBackground());
+
+        inferConfig.add(inferInfo, cc.xy(1, 1));
+        singleConfig.add(singleInfo, cc.xy(1, 1));
         singleConfig.add(resource, cc.xy(1, 3));
         final DefaultIdentifierFactory ids = DefaultIdentifierFactory
                 .getInstance();
@@ -245,7 +253,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 return label;
             }
         });
-        mappedConfig.add(area("mappedArea"), cc.xy(1, 1));
+        mappedConfig.add(mappedInfo, cc.xy(1, 1));
 
         config.setLayout(configLayout);
         config.add(inferConfig, "infer");
