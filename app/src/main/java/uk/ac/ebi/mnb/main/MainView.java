@@ -22,7 +22,6 @@ import com.jgoodies.forms.factories.Borders;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.report.bar.MessageBar;
@@ -30,6 +29,7 @@ import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.metingear.SourceListTransferHandler;
 import uk.ac.ebi.metingear.search.SearchManager;
 import uk.ac.ebi.metingear.search.SearchableIndex;
 import uk.ac.ebi.metingear.view.ControlDialog;
@@ -219,6 +219,7 @@ public class MainView
         // source list (todo: wrap in a class MNBSourceList)
         sourceController = new SourceController();
         source = new SourceList(sourceController.model);
+        source.setTransferHandler(new SourceListTransferHandler());
         sourceController.setSource(source);
         project.setSourceController(sourceController);
 

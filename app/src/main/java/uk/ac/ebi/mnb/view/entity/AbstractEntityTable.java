@@ -22,14 +22,19 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.metingear.TransferableEntity;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -65,6 +70,33 @@ public abstract class AbstractEntityTable
         putClientProperty("JTable.autoStartsEdit", Boolean.FALSE);
         setColumnModel(columnModel);
         setDragEnabled(true);
+        setTransferHandler(new TransferHandler() {
+
+            @Override
+            public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
+                return super.canImport(comp, transferFlavors);
+            }
+
+            @Override protected Transferable createTransferable(JComponent c) {
+                AbstractEntityTable t = (AbstractEntityTable) c;
+                Collection<AnnotatedEntity> entities = t.getSelection()
+                                                        .getEntities();
+                return new TransferableEntity(DefaultReconstructionManager
+                                                      .getInstance()
+                                                      .getActive(),
+                                              entities);
+            }
+
+            @Override
+            public boolean importData(TransferSupport support) {
+                System.out.println("import");
+                return super.importData(support);
+            }
+
+            @Override public int getSourceActions(JComponent c) {
+                return COPY;
+            }
+        });
     }
 
     @Override
@@ -82,10 +114,12 @@ public abstract class AbstractEntityTable
         return updated;
     }
 
-    void select(int[] rows){
+    void select(int[] rows) {
         clearSelection();
-        for(int[] r : intervals(rows)){
-            addRowSelectionInterval(r[0], r[1]);
+        for (int[] r : intervals(rows)) {
+            if (r[1] < getRowCount()) {
+                addRowSelectionInterval(r[0], r[1]);
+            }
         }
     }
 
@@ -99,7 +133,7 @@ public abstract class AbstractEntityTable
         int last = rows.length - 1;
         for (int i = 0; i < rows.length; i++) {
             int j = i, k = i;
-            for(j = i + 1; j < rows.length && rows[j] == rows[j - 1] + 1; j++){
+            for (j = i + 1; j < rows.length && rows[j] == rows[j - 1] + 1; j++) {
                 k = j;
             }
             intervals.add(new int[]{rows[i], rows[k]});
