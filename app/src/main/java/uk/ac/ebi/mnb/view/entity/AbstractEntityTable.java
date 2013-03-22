@@ -64,6 +64,7 @@ public abstract class AbstractEntityTable
         // force double click to edit -> annoying because ctrl-z/cmd-z will start editing the cell
         putClientProperty("JTable.autoStartsEdit", Boolean.FALSE);
         setColumnModel(columnModel);
+        setDragEnabled(true);
     }
 
     @Override

@@ -235,6 +235,7 @@ public class PreferencePanel extends JPanel {
                                      "have to configure the loader by specifying local or remove locations of required resources. " +
                                      "Each loader can be configured by clicking the 'gear' icon and entering the required locations. " +
                                      "A description of location is available by hovering over the location name.");
+                area.setBackground(Color.WHITE);
                 add(Box.createVerticalStrut(5));
                 add(PreferencePanelFactory
                             .getPreferenceEditor(ServicePreferences

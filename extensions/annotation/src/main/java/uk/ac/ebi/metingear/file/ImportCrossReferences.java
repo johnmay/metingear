@@ -130,7 +130,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
 
         component.setLayout(new BoxLayout(component, BoxLayout.PAGE_AXIS));
 
-        JPanel selection = PanelFactory.createDialogPanel();
+        JPanel selection = new JPanel();
 
         selection.setLayout(new FormLayout("right:p, 4dlu, p, 4dlu, min",
                                            "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
@@ -176,6 +176,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 configLayout.show(config, "infer");
                 nCols = 2;
                 loadPreview();
+                component.revalidate();
                 pack();
             }
         });
@@ -185,6 +186,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 configLayout.show(config, "single");
                 nCols = 2;
                 loadPreview();
+                component.revalidate();
                 pack();
             }
         });
@@ -194,6 +196,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 configLayout.show(config, "mapped");
                 nCols = 3;
                 loadPreview();
+                component.revalidate();
                 pack();
             }
         });

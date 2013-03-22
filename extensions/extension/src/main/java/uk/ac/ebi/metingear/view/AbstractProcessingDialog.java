@@ -108,7 +108,7 @@ public abstract class AbstractProcessingDialog
                                                                      .getInstance());
         if (yamlInjector == null) {
             try {
-                yamlInjector = new YAMLComponentInjector("/uk/ac/ebi/metingear/dialog-config.yml");
+                yamlInjector = new YAMLComponentInjector("uk/ac/ebi/metingear/dialog-config.yml");
             } catch (IOException e) {
                 LOGGER.error(e);
             }
