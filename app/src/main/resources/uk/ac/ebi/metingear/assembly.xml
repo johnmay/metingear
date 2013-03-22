@@ -18,11 +18,17 @@
                 <outputPath>uk/ac/ebi/caf/action/action.properties</outputPath>
             </configuration>
         </containerDescriptorHandler>
+        <containerDescriptorHandler>
+            <handlerName>file-aggregator</handlerName>
+            <configuration>
+                <filePattern>uk/ac/ebi/caf/dialog-config.yml</filePattern>
+                <outputPath>uk/ac/ebi/caf/dialog-config.yml</outputPath>
+            </configuration>
+        </containerDescriptorHandler>
 
     </containerDescriptorHandlers>
 
     <dependencySets>
-
 
         <dependencySet>
             <outputDirectory>/</outputDirectory>
@@ -39,27 +45,31 @@
             <unpack>true</unpack>
             <unpackOptions>
                 <excludes>
-                    <exclude>**/NOTICE*</exclude>
-                    <exclude>**/LICENSE*</exclude>
-                    <exclude>**/NOTICE</exclude>
-                    <exclude>**/LICENSE</exclude>
-                    <exclude>NOTICE*</exclude>
-                    <exclude>LICENSE*</exclude>
+                    <exclude>META-INF/NOTICE.txt</exclude>
+                    <exclude>META-INF/LICENSE.txt</exclude>
+                    <exclude>META-INF/NOTICE</exclude>
+                    <exclude>META-INF/LICENSE</exclude>
+                    <exclude>NOTICE</exclude>
+                    <exclude>LICENSE</exclude>
+                    <exclude>license</exclude>
+                    <exclude>NOTICE.txt</exclude>
+                    <exclude>LICENSE.txt</exclude>
                 </excludes>
             </unpackOptions>
         </dependencySet>
-
 
     </dependencySets>
     <fileSets>
         <fileSet>
             <directory>${project.basedir}</directory>
             <outputDirectory>/</outputDirectory>
-            <includes>
-                <include>README</include>
-                <include>LICENSE</include>
-                <include>NOTICE</include>
-            </includes>
+            <excludes>
+                <exclude>LICENSE</exclude>
+                <exclude>license/*</exclude>
+                <exclude>NOTICE</exclude>
+                <exclude>LICENSE.txt</exclude>
+                <exclude>NOTICE.txt</exclude>
+            </excludes>
         </fileSet>
     </fileSets>
 </assembly>

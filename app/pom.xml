@@ -256,7 +256,7 @@
 
                     <finalName>Metingear-${project.version}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
-                    <classifier>wtf</classifier>
+                    <classifier>dummy</classifier>
 
                     <archive>
                         <manifest>
