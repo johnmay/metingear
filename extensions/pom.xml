@@ -16,6 +16,7 @@
         <module>extension</module>
         <module>structure</module>
         <module>annotation</module>
+        <module>link</module>
     </modules>
 
 
