@@ -63,7 +63,7 @@ public final class AssociateReactions extends AbstractControlDialog {
 
         Box mapping = Box.createHorizontalBox();
         mapping.add(reactionKeyComboBox);
-        mapping.add(LabelFactory.newLabel(" using product "));
+        mapping.add(LabelFactory.newLabel(" to product "));
         mapping.add(productKeyComboBox);
         component.add(getLabel("mapWith"), cc.xy(1, 1));
         component.add(mapping, cc.xy(3, 1));

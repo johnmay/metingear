@@ -5,5 +5,5 @@ AssociateReactions:
                    how they can be linked
           active:  true
   mapWith:
-          text:    "Link: reaction"
+          text:    "Associate using reaction"
           tooltip: Specify what values should be used to link reactions to gene products.
