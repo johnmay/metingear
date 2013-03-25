@@ -157,7 +157,9 @@ public class ImportPeptidesAction extends FileChooserAction {
             }
         }
 
-        recon.getProducts().addAll(peptides);
+        for(GeneProduct p : peptides){
+            recon.addProduct(p);
+        }
 
         ////        AbstractIdentifier[] clashingIdentifiers = ReconstructionManager.getInstance().
         ////          getActiveReconstruction().getProducts().addAll(project);

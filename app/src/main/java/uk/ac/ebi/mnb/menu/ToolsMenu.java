@@ -37,7 +37,7 @@ import uk.ac.ebi.mnb.dialog.tools.CollapseStructures;
 import uk.ac.ebi.mnb.dialog.tools.CompareReconstruction;
 import uk.ac.ebi.mnb.dialog.tools.CuratedReconciliation;
 import uk.ac.ebi.mnb.dialog.tools.DownloadStructuresDialog;
-import uk.ac.ebi.mnb.dialog.tools.MergeLoci;
+
 import uk.ac.ebi.mnb.dialog.tools.RemoveWorstStructures;
 import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
 import uk.ac.ebi.mnb.dialog.tools.TransferAnnotations;
@@ -142,12 +142,7 @@ public class ToolsMenu extends ContextMenu {
 
         add(new JSeparator());
 
-        /**
-         * *********************
-         * Merging *
-         **********************
-         */
-        add(new JMenuItem(new MergeLoci(MainView.getInstance())));
+
 
         add(create(CollapseStructures.class), new ContextResponder() {
 

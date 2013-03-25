@@ -28,9 +28,11 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * ProteinTableModel – 2011.09.28 <br> Class description
@@ -61,10 +63,14 @@ public class ProductTableModel extends AbstractEntityTableModel {
                                                            .active();
 
         if (recon != null) {
-            return recon.getProteome();
+            List<GeneProduct> products = new ArrayList<GeneProduct>(recon.proteome().size());
+            for(GeneProduct p : recon.proteome()){
+                products.add(p);
+            }
+            return products;
         }
 
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
 
     }
 

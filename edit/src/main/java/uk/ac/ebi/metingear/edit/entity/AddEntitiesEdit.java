@@ -65,13 +65,17 @@ public class AddEntitiesEdit extends AbstractUndoableEdit {
     public void undo() throws CannotUndoException {
         reconstruction.getMetabolome().removeAll(metabolites);
         reconstruction.getReactome().removeAll(reactions);
-        reconstruction.getProducts().removeAll(products);
+        for(GeneProduct product : products){
+            reconstruction.remove(product);
+        }
     }
 
     @Override
     public void redo() throws CannotRedoException {
         reconstruction.getMetabolome().addAll(metabolites);
         reconstruction.getReactome().addAll(reactions);
-        reconstruction.getProducts().addAll(products);
+        for(GeneProduct product : products){
+            reconstruction.addProduct(product);
+        }
     }
 }

@@ -109,7 +109,7 @@ public class NewGeneProduct extends NewEntity {
             product.setIdentifier(getIdentifier());
             product.setName(getName());
             product.setName(getAbbreviation());
-            reconstruction.getProducts().add(product);
+            reconstruction.proteome().add(product);
         }
     }
 

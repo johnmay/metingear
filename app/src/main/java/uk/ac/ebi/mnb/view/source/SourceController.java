@@ -241,7 +241,7 @@ public class SourceController
 
             if (active != null) {
                 genes.setCounterValue(active.getGenome().getGenes().size());
-                products.setCounterValue(active.getProducts().size());
+                products.setCounterValue(active.proteome().size());
                 metabolites.setCounterValue(active.getMetabolome().size());
                 reactions.setCounterValue(active.getReactome().size());
             }

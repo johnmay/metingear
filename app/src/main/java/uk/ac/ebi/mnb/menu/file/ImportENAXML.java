@@ -67,7 +67,9 @@ public class ImportENAXML extends FileChooserAction {
 
                 ReconstructionManager manager = DefaultReconstructionManager.getInstance();
                 Reconstruction recon = manager.active();
-                recon.getProducts().addAll(products);
+                for(GeneProduct p : products){
+                    recon.addProduct(p);
+                }
 
                 // bit of a hack for now
                 Chromosome c = new ChromosomeImplementation(1, new ChromosomeSequence(reader.getGenomeString()));

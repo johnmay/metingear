@@ -94,7 +94,7 @@ public final class AssociateReactions extends AbstractControlDialog {
             return;
         }
 
-        for (GeneProduct gp : reconstruction.getProteome()) {
+        for (GeneProduct gp : reconstruction.proteome()) {
             for (String key : productKey.keys(gp)) {
                 for (Reaction reaction : reactionMap.get(key)) {
                     if(reaction instanceof MetabolicReaction){

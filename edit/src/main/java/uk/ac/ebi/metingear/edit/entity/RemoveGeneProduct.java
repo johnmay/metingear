@@ -50,7 +50,7 @@ public class RemoveGeneProduct extends AbstractUndoableEdit {
             gene.removeProduct(product);
             product.remove(gene);
         }
-        reconstruction.getProteome().add(product);
+        reconstruction.proteome().add(product);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class RemoveGeneProduct extends AbstractUndoableEdit {
             gene.removeProduct(product);
             this.product.remove(gene);
         }
-        reconstruction.getProteome().remove(product);
+        reconstruction.proteome().remove(product);
     }
 
 }
