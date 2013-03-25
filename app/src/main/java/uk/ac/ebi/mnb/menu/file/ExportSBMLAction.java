@@ -35,7 +35,6 @@ import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
@@ -117,7 +116,7 @@ public class ExportSBMLAction
 
                     SBMLIOUtil util = new SBMLIOUtil(DefaultEntityFactory.getInstance(), level, version);
 
-                    SBMLDocument document = util.getDocument(DefaultReconstructionManager.getInstance().getActive());
+                    SBMLDocument document = util.getDocument(DefaultReconstructionManager.getInstance().active());
                     SBMLWriter writer = new SBMLWriter(' ', (short) 2);
                     writer.write(document, file);
 

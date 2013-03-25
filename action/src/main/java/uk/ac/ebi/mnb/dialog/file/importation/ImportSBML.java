@@ -21,7 +21,9 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.mdk.io.xml.sbml.SBMLReactionReader;
 import uk.ac.ebi.mdk.ui.edit.reaction.DialogCompartmentResolver;
@@ -31,18 +33,24 @@ import uk.ac.ebi.mnb.interfaces.MainController;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.xml.stream.XMLStreamException;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
 
 /**
- *          ImportSBML - 2011.12.01 <br>
- *          Class allows importation of SBML models/networks
+ * ImportSBML - 2011.12.01 <br> Class allows importation of SBML
+ * models/networks
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class ImportSBML extends DelayedBuildAction {
 
@@ -67,8 +75,10 @@ public class ImportSBML extends DelayedBuildAction {
             @Override
             public boolean accept(File f) {
                 String name = f.getName();
-                String extension = name.substring(Math.max(0, name.lastIndexOf('.')));
-                return f.isDirectory() || extension.equals(".xml") || extension.equals(".sbml");
+                String extension = name.substring(Math.max(0, name
+                        .lastIndexOf('.')));
+                return f.isDirectory() || extension.equals(".xml") || extension
+                        .equals(".sbml");
             }
 
 
@@ -85,7 +95,8 @@ public class ImportSBML extends DelayedBuildAction {
     public void activateActions() {
 
 
-        if (chooser.showOpenDialog((JFrame) controller) == JFileChooser.APPROVE_OPTION) {
+        if (chooser
+                .showOpenDialog((JFrame) controller) == JFileChooser.APPROVE_OPTION) {
             InputStream in = null;
 
 
@@ -97,20 +108,21 @@ public class ImportSBML extends DelayedBuildAction {
             final SpinningDialWaitIndicator wait = new SpinningDialWaitIndicator((JFrame) controller);
             wait.setText("Importing " + choosen.getName());
 
+            ReconstructionManager manager = DefaultReconstructionManager
+                    .getInstance();
+            final Reconstruction active = manager.active();
+
             Thread t = new Thread(new Runnable() {
 
                 public void run() {
                     InputStream in = null;
                     try {
                         in = new BufferedInputStream(new FileInputStream(choosen), 4096);
-                        SBMLReactionReader reader = new SBMLReactionReader(in, DefaultEntityFactory.getInstance(), new DialogCompartmentResolver(new AutomaticCompartmentResolver(),
-                                                                                                                                                 (JFrame) controller));
+                        SBMLReactionReader reader = new SBMLReactionReader(in, DefaultEntityFactory
+                                .getInstance(), new DialogCompartmentResolver(new AutomaticCompartmentResolver(),
+                                                                              (JFrame) controller));
                         while (reader.hasNext()) {
-
-
-                                DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-                                manager.getActive().addReaction(reader.next());
-
+                            active.addReaction(reader.next());
                         }
                     } catch (XMLStreamException ex) {
                         messages.add(new ErrorMessage(ex.getMessage()));
@@ -118,10 +130,12 @@ public class ImportSBML extends DelayedBuildAction {
                         messages.add(new ErrorMessage(ex.getMessage()));
                     } finally {
                         try {
-                            if(in != null)
+                            if (in != null)
                                 in.close();
                         } catch (IOException ex) {
-                            java.util.logging.Logger.getLogger(ImportSBML.class.getName()).log(Level.SEVERE, null, ex);
+                            java.util.logging.Logger.getLogger(ImportSBML.class
+                                                                       .getName())
+                                             .log(Level.SEVERE, null, ex);
                         }
                     }
 
@@ -130,7 +144,8 @@ public class ImportSBML extends DelayedBuildAction {
                         public void run() {
                             // add collected messages to the manager outside of thread
                             for (Report message : messages) {
-                                controller.getMessageManager().addReport(message);
+                                controller.getMessageManager()
+                                          .addReport(message);
                             }
                             wait.dispose();
                             controller.update();

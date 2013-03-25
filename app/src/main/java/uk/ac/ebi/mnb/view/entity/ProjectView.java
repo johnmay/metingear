@@ -21,6 +21,7 @@ import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.metingear.search.SearchManager;
@@ -213,8 +214,8 @@ public class ProjectView
      */
     public boolean update() {
 
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        Reconstruction reconstruction = manager.getActive();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        Reconstruction reconstruction = manager.active();
 
         if (reconstruction == null) {
             clear();

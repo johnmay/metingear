@@ -41,6 +41,7 @@ import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
@@ -138,9 +139,9 @@ public class NewReaction extends NewEntity {
     @Override
     public void process() {
 
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        if (manager.hasProjects()) {
-            Reconstruction reconstruction = manager.getActive();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        if (manager.active() != null) {
+            Reconstruction reconstruction = manager.active();
 
             ReactionParser parser = new ReactionParser(new NamedEntityResolver(), new AutomaticCompartmentResolver());
             PreparsedReaction ppRxn = new PreparsedReaction();

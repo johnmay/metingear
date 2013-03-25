@@ -86,7 +86,7 @@ public class ImportPeptidesAction extends FileChooserAction {
     public void activateActions() {
 
         // add the peptides to the active project and updateObservations the annotations table
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().active();
 
         if (recon == null) {
             MainView.getInstance().addErrorMessage("No active reconstruction to import peptides into");

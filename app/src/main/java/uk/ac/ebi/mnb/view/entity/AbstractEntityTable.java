@@ -83,7 +83,7 @@ public abstract class AbstractEntityTable
                                                         .getEntities();
                 return new TransferableEntity(DefaultReconstructionManager
                                                       .getInstance()
-                                                      .getActive(),
+                                                      .active(),
                                               entities);
             }
 

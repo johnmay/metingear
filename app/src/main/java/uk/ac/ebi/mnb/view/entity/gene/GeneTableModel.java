@@ -58,7 +58,7 @@ public class GeneTableModel extends AbstractEntityTableModel {
     public Collection<? extends AnnotatedEntity> getEntities() {
 
         Reconstruction recon = DefaultReconstructionManager.getInstance()
-                                                           .getActive();
+                                                           .active();
 
         if (recon != null) {
             return recon.getGenome().getGenes();

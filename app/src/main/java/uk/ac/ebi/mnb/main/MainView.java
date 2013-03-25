@@ -136,7 +136,7 @@ public class MainView
         searchField.getDocument().addDocumentListener(new DocumentListener() {
 
             public void insertUpdate(DocumentEvent e) {
-                final Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+                final Reconstruction recon = DefaultReconstructionManager.getInstance().active();
                 if (recon != null) {
                     try {
                         final String text =

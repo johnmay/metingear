@@ -47,7 +47,7 @@ public class ImportKGML extends FileChooserAction {
     @Override
     public void activateActions() {
 
-        if(!DefaultReconstructionManager.getInstance().hasProjects()){
+        if(DefaultReconstructionManager.getInstance().isEmpty()){
             MainView.getInstance().addWarningMessage("No reconstructions available");
             return;
         }
@@ -59,7 +59,7 @@ public class ImportKGML extends FileChooserAction {
                 stream = new FileInputStream(f);
                 KGMLReader reader = new KGMLReader(DefaultEntityFactory.getInstance(), stream);
                 for(MetabolicReaction rxn : reader.getReactions()){
-                    Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+                    Reconstruction recon = DefaultReconstructionManager.getInstance().active();
                     recon.addReaction(rxn);
                 }
                 MainView.getInstance().update();

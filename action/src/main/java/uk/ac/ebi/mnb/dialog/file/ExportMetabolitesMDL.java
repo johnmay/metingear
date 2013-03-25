@@ -65,7 +65,7 @@ public class ExportMetabolitesMDL extends ControllerAction {
 
         EntityCollection selection = getSelection();
 
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().active();
 
         Collection<Metabolite> metabolites =
                 selection.hasSelection(Metabolite.class)

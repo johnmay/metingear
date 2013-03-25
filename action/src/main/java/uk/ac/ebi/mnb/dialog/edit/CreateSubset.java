@@ -89,7 +89,7 @@ public class CreateSubset extends ControllerDialog {
 
 
 
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().active();
         EntitySubset subset = new EntitySubset(field.getText(), null);
 
         for (AnnotatedEntity entity : getSelection().getEntities()) {

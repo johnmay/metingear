@@ -99,7 +99,7 @@ public class OpenAction
                         Reconstruction reconstruction = ReconstructionIOHelper.read(file);
 
                         // set as the active reconstruction
-                        DefaultReconstructionManager.getInstance().setActiveReconstruction(reconstruction);
+                        DefaultReconstructionManager.getInstance().activate(reconstruction);
 
                         // update the view with the
                         SwingUtilities.invokeLater(new Runnable() {

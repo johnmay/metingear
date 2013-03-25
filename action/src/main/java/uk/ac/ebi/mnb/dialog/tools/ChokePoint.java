@@ -56,7 +56,7 @@ public class ChokePoint extends ControllerAction {
 
     public void actionPerformed(ActionEvent ae) {
 
-        int n = DefaultReconstructionManager.getInstance().getActive().getMetabolome().size();
+        int n = DefaultReconstructionManager.getInstance().active().getMetabolome().size();
 
         final Multimap<Metabolite, MetabolicReaction> reactants = HashMultimap.create(n, 5);
         final Multimap<Metabolite, MetabolicReaction> products = HashMultimap.create(n, 5);

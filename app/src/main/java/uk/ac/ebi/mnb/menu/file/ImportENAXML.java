@@ -29,7 +29,6 @@ import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.io.xml.ena.ENAXMLReader;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.FileChooserAction;
-import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.main.MainView;
 
 import javax.swing.*;
@@ -67,7 +66,7 @@ public class ImportENAXML extends FileChooserAction {
                 List<GeneProduct> products = reader.getProducts();
 
                 ReconstructionManager manager = DefaultReconstructionManager.getInstance();
-                Reconstruction recon = manager.getActive();
+                Reconstruction recon = manager.active();
                 recon.getProducts().addAll(products);
 
                 // bit of a hack for now

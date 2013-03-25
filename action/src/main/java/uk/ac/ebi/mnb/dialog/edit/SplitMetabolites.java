@@ -124,7 +124,7 @@ public class SplitMetabolites extends ControllerDialog {
         final Metabolite metabolite = metabolites.iterator().next();
 
         final ReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        final Collection<MetabolicReaction> reactions = manager.getActive().getReactome().getReactions(metabolite);
+        final Collection<MetabolicReaction> reactions = manager.active().getReactome().getReactions(metabolite);
 
         left.getModel().removeAllElements();
         right.getModel().removeAllElements();
@@ -172,7 +172,7 @@ public class SplitMetabolites extends ControllerDialog {
         SplitMetaboliteEdit edit = new SplitMetaboliteEdit(original,
                                                            left, leftReactions,
                                                            right, rightReactions,
-                                                           DefaultReconstructionManager.getInstance().getActive());
+                                                           DefaultReconstructionManager.getInstance().active());
 
         addEdit(edit);
 

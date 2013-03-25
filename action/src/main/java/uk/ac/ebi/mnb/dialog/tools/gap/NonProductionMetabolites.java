@@ -53,7 +53,7 @@ public class NonProductionMetabolites
     public void actionPerformed(ActionEvent e) {
 
         try {
-            Reconstruction active = DefaultReconstructionManager.getInstance().getActive();
+            Reconstruction active = DefaultReconstructionManager.getInstance().active();
             StoichiometricMatrix<CompartmentalisedMetabolite,?> s = active.getMatrix();
 
 

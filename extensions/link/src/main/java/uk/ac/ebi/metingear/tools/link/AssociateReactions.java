@@ -74,7 +74,7 @@ public final class AssociateReactions extends AbstractControlDialog {
     @Override public void process() {
 
         Reconstruction reconstruction = DefaultReconstructionManager
-                .getInstance().getActive();
+                .getInstance().active();
 
         Key reactionKey = (Key) reactionKeyComboBox.getSelectedItem();
         Key productKey = (Key) productKeyComboBox.getSelectedItem();

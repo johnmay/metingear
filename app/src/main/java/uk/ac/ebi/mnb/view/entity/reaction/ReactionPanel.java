@@ -255,7 +255,7 @@ public class ReactionPanel
         }
 
         // should be synced with a listener
-        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
         if (reconstruction != null) {
             reconstruction.getReactome().rebuildMaps();
         }

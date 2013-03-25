@@ -25,6 +25,7 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.IdentifierReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
@@ -63,8 +64,8 @@ public class AssignReactions extends ControllerAction {
     public void actionPerformed(ActionEvent e) {
 
         EntityCollection selection = getSelection();
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        Reconstruction recon = manager.getActive();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        Reconstruction recon = manager.active();
 
         Collection<GeneProduct> products = selection.getGeneProducts();
 

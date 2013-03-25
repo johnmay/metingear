@@ -125,7 +125,7 @@ public class AlignReconstruction
             resolver.push(description.getMatcher());
         }
 
-        Reconstruction active = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction active = DefaultReconstructionManager.getInstance().active();
 
         Collection<Metabolite> queries = getSelection().get(Metabolite.class);
         int matched = 0;

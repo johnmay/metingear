@@ -43,7 +43,7 @@ public class SetActiveProject extends GeneralAction implements ContextAction {
     }
 
     public void actionPerformed(ActionEvent e) {
-        DefaultReconstructionManager.getInstance().setActiveReconstruction(reconstruction);
+        DefaultReconstructionManager.getInstance().activate(reconstruction);
         MainView.getInstance().getViewController().clear();
         MainView.getInstance().update();
     }

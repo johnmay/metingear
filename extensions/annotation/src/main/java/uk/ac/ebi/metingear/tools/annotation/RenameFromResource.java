@@ -178,9 +178,9 @@ public class RenameFromResource extends AbstractControlDialog {
 
         // get the preferred name service
         PreferredNameService service = (PreferredNameService) resourceSelection.getSelectedItem();
-        final Reactome reactome = DefaultReconstructionManager.getInstance().getActive().getReactome();
+        final Reactome reactome = DefaultReconstructionManager.getInstance().active().getReactome();
 
-        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
 
         // for each selected metabolite select the first cross-reference which
         // matches the class of the identifier and set the new name

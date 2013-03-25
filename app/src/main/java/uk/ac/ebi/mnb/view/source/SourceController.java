@@ -16,12 +16,28 @@
  */
 package uk.ac.ebi.mnb.view.source;
 
-import com.explodingpixels.macwidgets.*;
+import com.explodingpixels.macwidgets.SourceList;
+import com.explodingpixels.macwidgets.SourceListCategory;
+import com.explodingpixels.macwidgets.SourceListClickListener;
+import com.explodingpixels.macwidgets.SourceListItem;
+import com.explodingpixels.macwidgets.SourceListModel;
+import com.explodingpixels.macwidgets.SourceListSelectionListener;
 import com.explodingpixels.widgets.PopupMenuCustomizer;
-import uk.ac.ebi.chemet.render.source.*;
-import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.chemet.render.source.CollectionSourceItem;
+import uk.ac.ebi.chemet.render.source.EntitySourceItem;
+import uk.ac.ebi.chemet.render.source.EntitySubset;
+import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
+import uk.ac.ebi.chemet.render.source.TaskSourceItem;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Entity;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.core.TaskManager;
@@ -35,13 +51,18 @@ import uk.ac.ebi.mnb.view.entity.general.GeneralTableModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
- * SourceController.java – MetabolicDevelopmentKit – Jun 3, 2011
- * Class is a wrapper around SoureListModel from Mac Widgets creating the child components
+ * SourceController.java – MetabolicDevelopmentKit – Jun 3, 2011 Class is a
+ * wrapper around SoureListModel from Mac Widgets creating the child components
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
@@ -80,7 +101,7 @@ public class SourceController
 
     private List<EntitySourceItem> items = new ArrayList(); // list of items to update
 
-    private Map<AnnotatedEntity, EntitySourceItem> itemMap = new HashMap();
+    private Map<AnnotatedEntity, EntitySourceItem> itemMap = new IdentityHashMap<AnnotatedEntity, EntitySourceItem>();
 
     private SourceList source;
 
@@ -143,7 +164,8 @@ public class SourceController
 
     public void cleanModel() {
 
-        for (SourceListItem item : Arrays.asList(genes, products, metabolites, reactions)) {
+        for (SourceListItem item : Arrays
+                .asList(genes, products, metabolites, reactions)) {
             removeLeaves(item);
         }
 
@@ -168,13 +190,15 @@ public class SourceController
 
 
     /**
-     * Updates all currently available items to that in the active reconstruction.
+     * Updates all currently available items to that in the active
+     * reconstruction.
      */
     public boolean update() {
 
 
         // metabolite first
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        ReconstructionManager manager = DefaultReconstructionManager
+                .getInstance();
 
         // with each update item we remove it from the item collector. then at the end all items
         // still in the collector are removed
@@ -185,22 +209,20 @@ public class SourceController
         metabolites.setCounterValue(0);
         reactions.setCounterValue(0);
 
-        if (manager.hasProjects()) {
+        if (!manager.isEmpty()) {
 
-            Reconstruction active = manager.getActive();
+            Reconstruction active = manager.active();
 
             // reconstructions
-            for (int i = 0; i < manager.size(); i++) {
-                // todo: remove cast
-                ReconstructionImpl reconstruction = (ReconstructionImpl) manager.getProject(i);
-                if (!itemMap.containsKey(reconstruction)) {
-                    EntitySourceItem item = new ReconstructionSourceItem(reconstruction,
+            for (Reconstruction recon : manager.reconstructions()) {
+                if (!itemMap.containsKey(recon)) {
+                    EntitySourceItem item = new ReconstructionSourceItem(recon,
                                                                          reconstructions);
-                    itemMap.put(reconstruction, item);
+                    itemMap.put(recon, item);
                     model.addItemToCategory(item, reconstructions);
                 }
-                itemCollector.remove(reconstruction);
-                itemMap.get(reconstruction).update();
+                itemCollector.remove(recon);
+                itemMap.get(recon).update();
             }
 
 
@@ -217,11 +239,12 @@ public class SourceController
             }
 
 
-            genes.setCounterValue(active.getGenome().getGenes().size());
-            products.setCounterValue(active.getProducts().size());
-            metabolites.setCounterValue(active.getMetabolome().size());
-            reactions.setCounterValue(active.getReactome().size());
-
+            if (active != null) {
+                genes.setCounterValue(active.getGenome().getGenes().size());
+                products.setCounterValue(active.getProducts().size());
+                metabolites.setCounterValue(active.getMetabolome().size());
+                reactions.setCounterValue(active.getReactome().size());
+            }
 
         }
 
@@ -282,7 +305,8 @@ public class SourceController
 
         selected = item;
 
-        ProjectView view = (ProjectView) MainView.getInstance().getViewController();
+        ProjectView view = (ProjectView) MainView.getInstance()
+                                                 .getViewController();
 
         //        if (item instanceof EntitySourceItem && !(item instanceof ReconstructionSourceItem)) {
         //            EntityCollection selection = view.getSelection();// reuse view selection object
@@ -296,10 +320,12 @@ public class SourceController
 
             view.setGenericView();
 
-            AbstractEntityTable table = (AbstractEntityTable) view.getActiveView().getTable();
+            AbstractEntityTable table = (AbstractEntityTable) view
+                    .getActiveView().getTable();
 
-            if(table instanceof GeneralTable){
-                ((GeneralTableModel)table.getModel()).setGeneralEntities(subset.getEntities());
+            if (table instanceof GeneralTable) {
+                ((GeneralTableModel) table.getModel())
+                        .setGeneralEntities(subset.getEntities());
             }
 
             view.getActiveView().update();
@@ -317,10 +343,12 @@ public class SourceController
             } else if (item == genes) {
                 view.setGeneView();
             } else if (item instanceof EntitySourceItem
-                    && ((EntitySourceItem) item).getEntity() instanceof RunnableTask) {
+                    && ((EntitySourceItem) item)
+                    .getEntity() instanceof RunnableTask) {
                 view.setTaskView();
             } else {
-                logger.debug("did not handle source item click: " + item.getText());
+                logger.debug("did not handle source item click: " + item
+                        .getText());
             }
         }
 
@@ -332,7 +360,8 @@ public class SourceController
                                           Button button,
                                           int clickCount) {
         if (category.equals(tasks)) {
-            ((ProjectView) MainView.getInstance().getViewController()).setTaskView();
+            ((ProjectView) MainView.getInstance().getViewController())
+                    .setTaskView();
         }
     }
 
@@ -341,7 +370,8 @@ public class SourceController
 
     public void customizePopup(JPopupMenu popup) {
 
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        ReconstructionManager manager = DefaultReconstructionManager
+                .getInstance();
 
         // if there's no item add them all
         if (popup.getComponents().length == 0) {

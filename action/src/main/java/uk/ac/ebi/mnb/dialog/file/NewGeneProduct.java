@@ -22,6 +22,7 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicRNAIdentifier;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
@@ -99,9 +100,9 @@ public class NewGeneProduct extends NewEntity {
 
     @Override
     public void process() {
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        if (manager.hasProjects()) {
-            Reconstruction reconstruction = manager.getActive();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        if (manager.active() != null) {
+            Reconstruction reconstruction = manager.active();
 
             EntityFactory factory = DefaultEntityFactory.getInstance();
             GeneProduct product = factory.newInstance(protein.isSelected() ? ProteinProduct.class : rrna.isSelected() ? RibosomalRNA.class : TransferRNA.class);

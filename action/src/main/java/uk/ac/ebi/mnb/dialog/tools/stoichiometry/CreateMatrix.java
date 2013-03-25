@@ -78,7 +78,7 @@ public class CreateMatrix
     public void process() {
 
         EntityCollection manager = getSelection();
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().active();
 
         Collection<MetabolicReaction> rxns =
                 manager.hasSelection(MetabolicReaction.class) && manager.get(MetabolicReaction.class).size() > 1
@@ -104,7 +104,7 @@ public class CreateMatrix
     @Override
     public boolean update() {
 
-        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
 
         JFrame frame = new JFrame("Stoichiometric Matrix ("
                                           + reconstruction.getAccession()
@@ -114,7 +114,7 @@ public class CreateMatrix
         frame.add(new MatrixPane(matrix));
         frame.setVisible(true);
 
-        Reconstruction active = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction active = DefaultReconstructionManager.getInstance().active();
 
         active.setMatrix(matrix);
 

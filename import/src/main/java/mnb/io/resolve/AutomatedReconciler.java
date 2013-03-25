@@ -69,7 +69,7 @@ public class AutomatedReconciler
         this.factory = factory;
         this.template = factoryIdClass;
 
-        recon = DefaultReconstructionManager.getInstance().getActive();
+        recon = DefaultReconstructionManager.getInstance().active();
         nameMap = HashMultimap.create();
         if (recon != null && !recon.getMetabolome().isEmpty()) {
             for (Metabolite m : recon.getMetabolome()) {

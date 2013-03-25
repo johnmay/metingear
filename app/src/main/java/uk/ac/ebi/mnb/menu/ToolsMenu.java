@@ -178,7 +178,7 @@ public class ToolsMenu extends ContextMenu {
             add(create(CompareReconstruction.class), new ContextResponder() {
 
                 public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                    return reconstructions.getProjects().size() > 1;
+                    return reconstructions.reconstructions().size() > 1;
                 }
             });
             add(create(AlignReconstruction.class), new ContextResponder() {

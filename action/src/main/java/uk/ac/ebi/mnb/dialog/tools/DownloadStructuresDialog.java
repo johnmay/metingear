@@ -241,7 +241,7 @@ public class DownloadStructuresDialog
 
         long start = System.nanoTime();
         // rebuild the map to avoid problems with non-matches hashes
-        DefaultReconstructionManager.getInstance().getActive().getReactome().rebuildMaps();
+        DefaultReconstructionManager.getInstance().active().getReactome().rebuildMaps();
         long end = System.nanoTime();
 
         LOGGER.debug((end - start) / 1e6 + " ms to rebuild reaction map");

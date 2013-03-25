@@ -56,7 +56,7 @@ public class DeleteEntities extends ControllerAction {
     public void actionPerformed(ActionEvent e) {
 
         Reconstruction recon = DefaultReconstructionManager.getInstance()
-                                                           .getActive();
+                                                           .active();
         EntityCollection selection = getSelection();
 
         EntityCollection collection = new EntityMap(DefaultEntityFactory.getInstance());

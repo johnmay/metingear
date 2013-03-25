@@ -140,7 +140,7 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
         if (choice == JFileChooser.APPROVE_OPTION) {
 
             File f = chooser.getSelectedFile();
-            Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+            Reconstruction recon = DefaultReconstructionManager.getInstance().active();
             StoichiometricMatrix s = recon.getMatrix();
 
             try {

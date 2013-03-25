@@ -82,7 +82,7 @@ public class ImportXLSAction
         if (choosenFile != null && choosenFile.isFile()) {
             String name = choosenFile.getName();
             try {
-                Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
+                Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
                 // todo. add XLSX implementation
                 InputStream stream = new FileInputStream(choosenFile);
                 ExcelHelper importer = name.endsWith(".xls")

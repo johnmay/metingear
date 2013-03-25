@@ -74,7 +74,7 @@ public class ReconstructionChooser {
 
                                                                Reconstruction reconstruction = ReconstructionIOHelper.read(file);
 
-                                                               DefaultReconstructionManager.getInstance().addReconstruction(reconstruction);
+                                                               DefaultReconstructionManager.getInstance().add(reconstruction);
                                                                combobox.refresh();
                                                                combobox.setSelected(reconstruction);
 

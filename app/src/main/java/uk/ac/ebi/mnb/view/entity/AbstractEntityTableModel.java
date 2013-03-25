@@ -28,6 +28,7 @@ import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
 import uk.ac.ebi.mdk.ui.render.table.RatingCellRenderer;
 import uk.ac.ebi.mnb.interfaces.EntityTableModel;
@@ -57,7 +58,7 @@ public abstract class AbstractEntityTableModel
 
     private ReconstructionImpl currentReconstruction;
 
-    private DefaultReconstructionManager pm = DefaultReconstructionManager.getInstance();
+    private ReconstructionManager pm = DefaultReconstructionManager.getInstance();
 
     private List<ColumnDescriptor> columnDescriptors = new ArrayList();
 

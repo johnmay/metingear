@@ -81,7 +81,7 @@ public class MetaboliteTableModel
     public Collection<? extends AnnotatedEntity> getEntities() {
 
         Reconstruction project = DefaultReconstructionManager.getInstance()
-                                                             .getActive();
+                                                             .active();
 
         if (project != null) {
             return project.getMetabolome();

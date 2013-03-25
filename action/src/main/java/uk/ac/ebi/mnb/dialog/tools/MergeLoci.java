@@ -52,7 +52,7 @@ public class MergeLoci extends ControllerAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().active();
 
         Multimap<String, MetabolicReaction> monomeric = HashMultimap.create();
         Multimap<String, MetabolicReaction> multimeric = HashMultimap.create();

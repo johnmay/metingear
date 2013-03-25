@@ -67,7 +67,7 @@ public class ReactionTableModel extends AbstractEntityTableModel {
     public Collection<? extends AnnotatedEntity> getEntities() {
 
         Reconstruction project = DefaultReconstructionManager.getInstance()
-                                                             .getActive();
+                                                             .active();
 
         if (project != null)
             return project.getReactome();

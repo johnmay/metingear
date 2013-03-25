@@ -149,7 +149,7 @@ public class ContextMenu extends JMenu {
     public void updateContext() {
 
         ReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
         EntityCollection selection = controller.getViewController().getSelection();
 
         for (Entry<JMenuItem, ContextResponder> e : items.entrySet()) {

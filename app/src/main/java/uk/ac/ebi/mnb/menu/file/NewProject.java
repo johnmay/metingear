@@ -293,7 +293,7 @@ public class NewProject extends DropdownDialog {
             ReconstructionIdentifier proId = new ReconstructionIdentifier(getProjectIdentifier());
 
             ReconstructionImpl proj = new ReconstructionImpl(UUID.randomUUID(), proId, orgId);
-            DefaultReconstructionManager.getInstance().setActiveReconstruction(proj);
+            DefaultReconstructionManager.getInstance().activate(proj);
 
         }
     }

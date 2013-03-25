@@ -24,7 +24,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.tools.annotation.IdentifierMapper;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
@@ -351,7 +350,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 (IdentifierMapper.KeyAccessor<String>) mapTo.getSelectedItem();
 
         Reconstruction recon = DefaultReconstructionManager.getInstance()
-                                                           .getActive();
+                                                           .active();
 
         IdentifierMapper.Handler handler = new IdentifierMapper.Handler() {
             @Override

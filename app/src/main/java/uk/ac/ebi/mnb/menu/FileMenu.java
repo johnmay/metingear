@@ -36,7 +36,7 @@ import uk.ac.ebi.mnb.menu.popup.CloseProject;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -116,7 +116,7 @@ public class FileMenu
 
     public void rebuildRecentlyOpen() {
         recent.removeAll(); // could just add and remove items... but for now
-        LinkedList<String> items = DefaultReconstructionManager.getInstance().getRecent();
+        List<String> items = DefaultReconstructionManager.getInstance().recent();
         for (int i = items.size() - 1; i >= 0; i--) {
             String path = items.get(i);
             File file = new File(path);

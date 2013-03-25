@@ -17,14 +17,11 @@
 
 package uk.ac.ebi.mnb.dialog.file.importation;
 
-import mnb.io.resolve.AutomatedReconciler;
 import mnb.io.resolve.BasicReconciler;
-import mnb.io.resolve.EntryReconciler;
 import mnb.io.tabular.ExcelEntityResolver;
 import mnb.io.tabular.ExcelModelProperties;
 import mnb.io.tabular.parser.ReactionParser;
 import mnb.io.tabular.parser.UnparsableReactionError;
-import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedReaction;
 import mnb.io.tabular.preparse.PreparsedSheet;
 import mnb.io.tabular.type.EntityColumn;
@@ -34,18 +31,10 @@ import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
-import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
-import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.domain.entity.MetaboliteImpl;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
-import uk.ac.ebi.mdk.service.query.name.ChEBINameService;
-import uk.ac.ebi.mdk.service.query.name.NameService;
-import uk.ac.ebi.mdk.tool.resolve.ChemicalFingerprintEncoder;
-import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
@@ -114,7 +103,7 @@ public class ImportModelSeed extends DelayedBuildAction {
 
     public void importXLS(final File xls) {
 
-        final Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        final Reconstruction recon = DefaultReconstructionManager.getInstance().active();
 
         final SpinningDialWaitIndicator waitIndicator = new SpinningDialWaitIndicator((JFrame) controller);
 

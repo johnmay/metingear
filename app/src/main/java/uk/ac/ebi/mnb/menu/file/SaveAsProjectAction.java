@@ -26,6 +26,7 @@ import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.ui.component.ReconstructionFileChooser;
 import uk.ac.ebi.mnb.main.MainView;
 
@@ -60,7 +61,7 @@ public class SaveAsProjectAction
     @Override
     public void activateActions() {
 
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
 
         // get the name to choose
         int choice = chooser.showSaveDialog(null);
@@ -72,7 +73,7 @@ public class SaveAsProjectAction
                 f = new File(f.getPath() + ".mr");
             }
 
-            Reconstruction reconstruction = manager.getActive();
+            Reconstruction reconstruction = manager.active();
             try {
                 ReconstructionIOHelper.write(reconstruction, f);
             } catch (IOException e) {
