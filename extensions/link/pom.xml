@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.ac.ebi.metingear</groupId>
-    <artifactId>link</artifactId>
+    <artifactId>metingear-extenstions-link</artifactId>
 
     <dependencies>
         <dependency>

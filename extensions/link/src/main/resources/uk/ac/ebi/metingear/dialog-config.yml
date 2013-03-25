@@ -1,0 +1,9 @@
+AssociateReactions:
+  information:
+          text:    Link reactions to gene products
+          tooltip: This tool allows you to link reactions to gene products by specifying
+                   how they can be linked
+          active:  true
+  mapWith:
+          text:    "Link: reaction"
+          tooltip: Specify what values should be used to link reactions to gene products.
