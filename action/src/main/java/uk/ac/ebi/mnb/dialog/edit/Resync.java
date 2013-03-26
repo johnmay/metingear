@@ -38,7 +38,6 @@ public class Resync extends ControllerAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        DefaultReconstructionManager.getInstance().active().getReactome().rebuildMaps();
         getController().update();
     }
 }

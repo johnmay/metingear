@@ -44,6 +44,7 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -235,7 +236,9 @@ public class ReactionPanel
 
     @Override
     public Collection<? extends AnnotatedEntity> getReferences() {
-        return entity.getModifiers();
+        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>();
+        entities.addAll(DefaultReconstructionManager.getInstance().active().enzymesOf(entity));
+        return entities;
     }
 
 
@@ -256,9 +259,6 @@ public class ReactionPanel
 
         // should be synced with a listener
         Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
-        if (reconstruction != null) {
-            reconstruction.getReactome().rebuildMaps();
-        }
 
         MainView.getInstance().update(collection);
 

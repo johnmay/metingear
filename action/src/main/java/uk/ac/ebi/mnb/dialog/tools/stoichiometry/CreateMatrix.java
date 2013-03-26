@@ -80,23 +80,35 @@ public class CreateMatrix
         EntityCollection manager = getSelection();
         Reconstruction recon = DefaultReconstructionManager.getInstance().active();
 
-        Collection<MetabolicReaction> rxns =
-                manager.hasSelection(MetabolicReaction.class) && manager.get(MetabolicReaction.class).size() > 1
-                ? manager.get(MetabolicReaction.class)
-                : recon.getReactome();
+        if( manager.hasSelection(MetabolicReaction.class)){
+            Collection<MetabolicReaction> reactions = manager.get(MetabolicReaction.class);
+            LOGGER.info("Creating reaction matrix for " + reactions.size() + " reactions");
+            matrix = DefaultStoichiometricMatrix.create((int) (reactions.size() * 1.5),
+                                                        reactions.size());
+            for (MetabolicReaction rxn : reactions) {
 
-        LOGGER.info("Creating reaction matrix for " + rxns.size() + " reactions");
-        matrix = DefaultStoichiometricMatrix.create((int) (rxns.size() * 1.5),
-                                                    rxns.size());
-        for (MetabolicReaction rxn : rxns) {
+                // transpose
+                if (rxn.getDirection() == Direction.BACKWARD) {
+                    rxn.transpose();
+                    rxn.setDirection(Direction.FORWARD);
+                }
 
-            // transpose
-            if (rxn.getDirection() == Direction.BACKWARD) {
-                rxn.transpose();
-                rxn.setDirection(Direction.FORWARD);
+                matrix.addReaction(rxn);
             }
+        } else {
+            LOGGER.info("Creating reaction matrix for " + recon.reactome().size() + " reactions");
+            matrix = DefaultStoichiometricMatrix.create((int) (recon.reactome().size() * 1.5),
+                                                        recon.getMetabolome().size());
+            for (MetabolicReaction rxn : recon.reactome()) {
 
-            matrix.addReaction(rxn);
+                // transpose
+                if (rxn.getDirection() == Direction.BACKWARD) {
+                    rxn.transpose();
+                    rxn.setDirection(Direction.FORWARD);
+                }
+
+                matrix.addReaction(rxn);
+            }
         }
     }
 

@@ -68,7 +68,7 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
         // update reaction and the participants
         for (final Metabolite replace : separate) {
             // access the reactions that reference the molecule to replace
-            List<MetabolicReaction> reactions = new ArrayList<MetabolicReaction>(reconstruction.getReactome().getReactions(replace));
+            List<MetabolicReaction> reactions = new ArrayList<MetabolicReaction>(reconstruction.participatesIn(replace));
             for (final MetabolicReaction reaction : reactions) {
 
                 List<MetabolicParticipant> reactants = new ArrayList<MetabolicParticipant>(reaction.getReactants());
@@ -89,8 +89,8 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
                 }
 
                 // update reactome maps
-                reconstruction.getReactome().removeKey(replace, reaction);
-                reconstruction.getReactome().update(reaction);
+                reconstruction.dissociate(replace, reaction);
+                reconstruction.associate(union, reaction);
 
             }
         }
@@ -132,17 +132,17 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
 
         // add the undoable edits for the reaction reactants/products
         for (final Metabolite replace : separate) {
-            for (final MetabolicReaction reaction : reconstruction.getReactome().getReactions(replace)) {
+            for (final MetabolicReaction reaction : reconstruction.participatesIn(replace)) {
 
                 addEdit(new AbstractUndoableEdit() {
                     @Override
                     public void undo() throws CannotUndoException {
-                        reconstruction.getReactome().update(reaction);
+                        reconstruction.associate(replace, reaction);
                     }
 
                     @Override
                     public void redo() throws CannotRedoException {
-                        reconstruction.getReactome().removeKey(replace, reaction);
+                        reconstruction.dissociate(replace, reaction);
                     }
                 });
 
@@ -163,12 +163,12 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
                 addEdit(new AbstractUndoableEdit() {
                     @Override
                     public void undo() throws CannotUndoException {
-                        reconstruction.getReactome().removeKey(union, reaction);
+                        reconstruction.dissociate(union, reaction);
                     }
 
                     @Override
                     public void redo() throws CannotRedoException {
-                        reconstruction.getReactome().update(reaction);
+                        reconstruction.associate(union, reaction);
                     }
                 }); // make sure reaction is kept in sync
 

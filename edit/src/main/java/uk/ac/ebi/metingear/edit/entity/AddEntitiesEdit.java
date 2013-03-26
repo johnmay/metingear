@@ -22,8 +22,10 @@ import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -64,7 +66,10 @@ public class AddEntitiesEdit extends AbstractUndoableEdit {
     @Override
     public void undo() throws CannotUndoException {
         reconstruction.getMetabolome().removeAll(metabolites);
-        reconstruction.getReactome().removeAll(reactions);
+        Reactome reactome = reconstruction.getReactome();
+        for(MetabolicReaction reaction : reactions){
+            reactome.remove(reaction);
+        }
         for(GeneProduct product : products){
             reconstruction.remove(product);
         }
@@ -73,7 +78,10 @@ public class AddEntitiesEdit extends AbstractUndoableEdit {
     @Override
     public void redo() throws CannotRedoException {
         reconstruction.getMetabolome().addAll(metabolites);
-        reconstruction.getReactome().addAll(reactions);
+        Reactome reactome = reconstruction.getReactome();
+        for(MetabolicReaction reaction : reactions){
+            reactome.add(reaction);
+        }
         for(GeneProduct product : products){
             reconstruction.addProduct(product);
         }

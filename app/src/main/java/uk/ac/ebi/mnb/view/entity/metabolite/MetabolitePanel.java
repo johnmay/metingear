@@ -194,7 +194,7 @@ public class MetabolitePanel
     public Collection<? extends AnnotatedEntity> getReferences() {
         Reconstruction recon = DefaultReconstructionManager.getInstance().active();
         if (entity != null && recon != null) {
-            return recon.getReactome().getReactions(entity);
+            return recon.participatesIn(entity);
         }
         return new ArrayList();
     }

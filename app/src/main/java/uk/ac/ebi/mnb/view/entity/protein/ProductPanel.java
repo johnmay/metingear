@@ -28,10 +28,12 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -137,6 +139,9 @@ public class ProductPanel
 
     @Override
     public Collection<? extends AnnotatedEntity> getReferences() {
-        return entity.getGenes();
+        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>();
+        entities.addAll(entity.getGenes());
+        entities.addAll(DefaultReconstructionManager.getInstance().active().reactionsOf(entity));
+        return entities;
     }
 }

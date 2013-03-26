@@ -77,7 +77,7 @@ public class RenameMetaboliteEditTest {
 
         Metabolite e = r1.getReactants().toArray(new MetabolicParticipant[0])[1].getMolecule();
 
-        Assert.assertEquals(3, reconstruction.getReactome().getReactions(e).size());
+        Assert.assertEquals(3, reconstruction.getReactome().participatesIn(e).size());
 
         Assert.assertFalse(reconstruction.getMetabolome().contains(a));
         Assert.assertTrue(reconstruction.getMetabolome().contains(e));
@@ -95,7 +95,7 @@ public class RenameMetaboliteEditTest {
         Assert.assertEquals(a, r2.getReactants().toArray(new MetabolicParticipant[0])[0].getMolecule());
         Assert.assertEquals(a, r3.getReactants().toArray(new MetabolicParticipant[0])[0].getMolecule());
 
-        Assert.assertEquals(3, reconstruction.getReactome().getReactions(a).size());
+        Assert.assertEquals(3, reconstruction.getReactome().participatesIn(a).size());
 
         Assert.assertFalse(reconstruction.getMetabolome().contains(e));
         Assert.assertTrue(reconstruction.getMetabolome().contains(a));
@@ -148,7 +148,7 @@ public class RenameMetaboliteEditTest {
 
         Metabolite e = r1.getReactants().toArray(new MetabolicParticipant[0])[1].getMolecule();
 
-        Assert.assertEquals(3, reconstruction.getReactome().getReactions(e).size());
+        Assert.assertEquals(3, reconstruction.getReactome().participatesIn(e).size());
 
         Assert.assertFalse(reconstruction.getMetabolome().contains(a));
         Assert.assertTrue(reconstruction.getMetabolome().contains(e));
@@ -166,7 +166,7 @@ public class RenameMetaboliteEditTest {
         Assert.assertEquals(a, r2.getReactants().toArray(new MetabolicParticipant[0])[0].getMolecule());
         Assert.assertEquals(a, r3.getReactants().toArray(new MetabolicParticipant[0])[0].getMolecule());
 
-        Assert.assertEquals(3, reconstruction.getReactome().getReactions(a).size());
+        Assert.assertEquals(3, reconstruction.getReactome().participatesIn(a).size());
 
         Assert.assertFalse(reconstruction.getMetabolome().contains(e));
         Assert.assertTrue(reconstruction.getMetabolome().contains(a));
@@ -184,7 +184,7 @@ public class RenameMetaboliteEditTest {
         Assert.assertEquals(e, r2.getReactants().toArray(new MetabolicParticipant[0])[0].getMolecule());
         Assert.assertEquals(e, r3.getReactants().toArray(new MetabolicParticipant[0])[0].getMolecule());
 
-        Assert.assertEquals(3, reconstruction.getReactome().getReactions(e).size());
+        Assert.assertEquals(3, reconstruction.getReactome().participatesIn(e).size());
 
         Assert.assertFalse(reconstruction.getMetabolome().contains(a));
         Assert.assertTrue(reconstruction.getMetabolome().contains(e));

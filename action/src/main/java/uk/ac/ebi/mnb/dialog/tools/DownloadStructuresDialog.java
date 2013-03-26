@@ -236,20 +236,6 @@ public class DownloadStructuresDialog
         return service.getIdentifier() instanceof ChemicalIdentifier;
     }
 
-    @Override
-    public boolean update() {
-
-        long start = System.nanoTime();
-        // rebuild the map to avoid problems with non-matches hashes
-        DefaultReconstructionManager.getInstance().active().getReactome().rebuildMaps();
-        long end = System.nanoTime();
-
-        LOGGER.debug((end - start) / 1e6 + " ms to rebuild reaction map");
-
-        return super.update();
-
-    }
-
     private void updateResourceList() {
 
         ServiceManager services = DefaultServiceManager.getInstance();

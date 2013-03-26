@@ -52,8 +52,7 @@ public class RemoveMetaboliteEdit extends CompoundEdit {
                                 final Metabolite metabolite) {
 
         final Reactome reactome = reconstruction.getReactome();
-        this.reactions = new HashSet<MetabolicReaction>(reconstruction.getReactome()
-                                                                      .getReactions(metabolite));
+        this.reactions = new HashSet<MetabolicReaction>(reconstruction.participatesIn(metabolite));
 
         // remove from metabolome
         super.addEdit(new AbstractUndoableEdit() {
@@ -73,12 +72,12 @@ public class RemoveMetaboliteEdit extends CompoundEdit {
             super.addEdit(new AbstractUndoableEdit() {
                 @Override
                 public void undo() throws CannotUndoException {
-                    reactome.update(reaction);
+                    reconstruction.associate(metabolite, reaction);
                 }
 
                 @Override
                 public void redo() throws CannotRedoException {
-                    reactome.removeKey(metabolite, reaction);
+                    reconstruction.dissociate(metabolite, reaction);
                 }
             });
             super.addEdit(new RemoveParticipantEdit(metabolite, reaction));
