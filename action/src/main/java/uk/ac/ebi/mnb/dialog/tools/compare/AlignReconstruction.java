@@ -118,7 +118,7 @@ public class AlignReconstruction
     public void process() {
 
         Reconstruction reference = reconstructionChooser.getSelected();
-        AbstractEntityAligner resolver = new MappedEntityAligner(reference.getMetabolome());
+        AbstractEntityAligner resolver = new MappedEntityAligner(reference.getMetabolome().toList());
 
         // set up the resolver
         for (MatcherDescription description : matcherStack.getElements()) {

@@ -65,7 +65,9 @@ public class AddEntitiesEdit extends AbstractUndoableEdit {
 
     @Override
     public void undo() throws CannotUndoException {
-        reconstruction.getMetabolome().removeAll(metabolites);
+        for(Metabolite m : metabolites){
+            reconstruction.getMetabolome().remove(m);
+        }
         Reactome reactome = reconstruction.getReactome();
         for(MetabolicReaction reaction : reactions){
             reactome.remove(reaction);
@@ -77,7 +79,9 @@ public class AddEntitiesEdit extends AbstractUndoableEdit {
 
     @Override
     public void redo() throws CannotRedoException {
-        reconstruction.getMetabolome().addAll(metabolites);
+        for(Metabolite m : metabolites){
+            reconstruction.getMetabolome().add(m);
+        }
         Reactome reactome = reconstruction.getReactome();
         for(MetabolicReaction reaction : reactions){
             reactome.add(reaction);

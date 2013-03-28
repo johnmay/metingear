@@ -363,7 +363,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
         };
 
         IdentifierMapper<String> mapper
-                = new IdentifierMapper<String>(recon.getMetabolome(),
+                = new IdentifierMapper<String>(recon.getMetabolome().toList(),
                                                accessor,
                                                handler,
                                                DefaultIdentifierFactory
