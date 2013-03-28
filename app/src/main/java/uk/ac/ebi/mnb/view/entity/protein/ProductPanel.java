@@ -28,6 +28,7 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
@@ -140,8 +141,9 @@ public class ProductPanel
     @Override
     public Collection<? extends AnnotatedEntity> getReferences() {
         List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>();
-        entities.addAll(entity.getGenes());
-        entities.addAll(DefaultReconstructionManager.getInstance().active().reactionsOf(entity));
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
+        entities.addAll(reconstruction.genesOf(entity));
+        entities.addAll(reconstruction.reactionsOf(entity));
         return entities;
     }
 }

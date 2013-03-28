@@ -17,13 +17,11 @@
 package uk.ac.ebi.mnb.menu.file;
 
 import org.apache.log4j.Logger;
-import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
-import uk.ac.ebi.mdk.domain.entity.collection.ChromosomeImplementation;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.io.xml.ena.ENAXMLReader;
@@ -37,6 +35,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * NewFromENA - 2011.10.17 <br> Imports ENA XML format genome/proteome
@@ -59,7 +58,7 @@ public class ImportENAXML extends FileChooserAction {
         getChooser().setFileSelectionMode(JFileChooser.FILES_ONLY);
         File choosenFile = getFile(showOpenDialog());
 
-        if (choosenFile instanceof File) {
+        if (choosenFile != null) {
             try {
                 ENAXMLReader reader = new ENAXMLReader(DefaultEntityFactory.getInstance(), new FileInputStream(choosenFile));
 
@@ -71,13 +70,17 @@ public class ImportENAXML extends FileChooserAction {
                     recon.addProduct(p);
                 }
 
-                // bit of a hack for now
-                Chromosome c = new ChromosomeImplementation(1, new ChromosomeSequence(reader.getGenomeString()));
+                // bit of a hack for now - add a single chromosome
+                Chromosome c = recon.getGenome().chromosome(1);
                 List<Gene> genes = reader.getGeneMap();
                 for (Gene gene : genes) {
                     c.add(gene);
                 }
-                recon.getGenome().add(c);
+
+
+                for(Map.Entry<Gene,GeneProduct> e : reader.associations()){
+                    recon.associate(e.getKey(), e.getValue());
+                }
 
                 for (String warning : reader.getWarnings()) {
                     MainView.getInstance()
