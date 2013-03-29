@@ -60,11 +60,6 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
      */
     public final void apply() {
 
-        for (final Metabolite replace : separate) {
-            reconstruction.getMetabolome().remove(replace);
-        }
-        reconstruction.getMetabolome().add(union);
-
         // update reaction and the participants
         for (final Metabolite replace : separate) {
             // access the reactions that reference the molecule to replace
@@ -76,6 +71,7 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
 
                 for (MetabolicParticipant reactant : reactants) {
                     if (reactant.getMolecule() == replace) {
+                        System.out.println("replacing");
                         reaction.removeReactant(reactant);
                         reaction.addReactant(createReplacement(reactant, union));
                     }
@@ -95,6 +91,10 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
             }
         }
 
+        for (final Metabolite replace : separate) {
+            reconstruction.metabolome().remove(replace);
+        }
+        reconstruction.metabolome().add(union);
 
     }
 
@@ -108,12 +108,12 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
             addEdit(new AbstractUndoableEdit() {
                 @Override
                 public void undo() throws CannotUndoException {
-                    reconstruction.getMetabolome().add(replace);
+                    reconstruction.metabolome().add(replace);
                 }
 
                 @Override
                 public void redo() throws CannotRedoException {
-                    reconstruction.getMetabolome().remove(replace);
+                    reconstruction.metabolome().remove(replace);
                 }
             });
         }
@@ -121,12 +121,12 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
         addEdit(new AbstractUndoableEdit() {
             @Override
             public void undo() throws CannotUndoException {
-                reconstruction.getMetabolome().remove(union);
+                reconstruction.metabolome().remove(union);
             }
 
             @Override
             public void redo() throws CannotRedoException {
-                reconstruction.getMetabolome().add(union);
+                reconstruction.metabolome().add(union);
             }
         });
 
