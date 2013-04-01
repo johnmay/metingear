@@ -51,7 +51,9 @@ import java.util.Collection;
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$
+ * @deprecated not currently used
  */
+@Deprecated
 public class AssignReactions extends ControllerAction {
 
     private static final Logger LOGGER = Logger.getLogger(AssignReactions.class);
@@ -111,8 +113,7 @@ public class AssignReactions extends ControllerAction {
 
                         }
 
-                        rxn.addModifier(product);
-
+                        recon.associate(product, rxn);
                         recon.addReaction(rxn);
 
                     }
