@@ -103,6 +103,8 @@ public class AddProductEditTest {
 
         UndoableEdit edit = new AddProductEdit(new MetabolicParticipantImplementation(c), r1);
 
+        edit.undo();
+
         Assert.assertThat(r1.getProductCount(), is(0));
 
         edit.redo();
@@ -128,6 +130,8 @@ public class AddProductEditTest {
         r1.addProduct(new MetabolicParticipantImplementation(d));
 
         UndoableEdit edit = new AddProductEdit(new MetabolicParticipantImplementation(c), r1);
+
+        edit.undo();
 
         Assert.assertThat(r1.getProductCount(), is(1));
 

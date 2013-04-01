@@ -86,13 +86,13 @@ public class RemoveReactantEditTest {
         reaction.addProduct(product);
 
         UndoableEdit edit = new RemoveReactantEdit(reactant, reaction);
-
-        reaction.addReactant(reactant);
+        edit.undo();
 
         assertEquals("reactant count was different,",
                      1, reaction.getReactantCount());
         assertEquals("product count was different,",
                      1, reaction.getProductCount());
+
 
         edit.redo(); // redo the removal
 

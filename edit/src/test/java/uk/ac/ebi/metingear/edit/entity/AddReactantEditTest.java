@@ -103,6 +103,10 @@ public class AddReactantEditTest {
 
         UndoableEdit edit = new AddReactantEdit(new MetabolicParticipantImplementation(c), r1);
 
+        r1.addReactant(c);
+
+        edit.undo();
+
         Assert.assertThat(r1.getReactantCount(), is(0));
 
         edit.redo();
@@ -128,6 +132,10 @@ public class AddReactantEditTest {
         r1.addReactant(new MetabolicParticipantImplementation(d));
 
         UndoableEdit edit = new AddReactantEdit(new MetabolicParticipantImplementation(c), r1);
+
+        r1.addReactant(c);
+
+        edit.undo();
 
         Assert.assertThat(r1.getReactantCount(), is(1));
 
