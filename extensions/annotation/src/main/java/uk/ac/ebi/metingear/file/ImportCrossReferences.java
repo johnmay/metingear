@@ -30,8 +30,11 @@ import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
@@ -49,7 +52,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author John May
@@ -119,6 +124,14 @@ public class ImportCrossReferences extends AbstractControlDialog {
     private DefaultTableModel model;
     private final JDialog self;
 
+    private final JCheckBox mapToMetabolites = CheckBoxFactory
+            .newCheckBox("Metabolites");
+    private final JCheckBox mapToReactions = CheckBoxFactory
+            .newCheckBox("Reactions");
+    private final JCheckBox mapToGenes = CheckBoxFactory.newCheckBox("Genes");
+    private final JCheckBox mapToGeneProducts = CheckBoxFactory
+            .newCheckBox("Gene Products");
+
     public ImportCrossReferences(Window window) {
         super(window);
         this.self = this;
@@ -132,7 +145,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
         JPanel selection = new JPanel();
 
         selection.setLayout(new FormLayout("right:p, 4dlu, p, 4dlu, min",
-                                           "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
+                                           "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
         CellConstraints cc = new CellConstraints();
         selection.add(getLabel("selected"), cc.xy(1, 1));
         JButton button = iconButton(new AbstractAction("browse") {
@@ -210,8 +223,18 @@ public class ImportCrossReferences extends AbstractControlDialog {
         modes.add(single);
         modes.add(mapped);
 
-        selection.add(getLabel("mode"), cc.xy(1, 9));
-        selection.add(modes, cc.xy(3, 9));
+        // which entities to map with
+        Box dest = Box.createHorizontalBox();
+        dest.add(mapToGenes);
+        dest.add(mapToGeneProducts);
+        dest.add(mapToReactions);
+        dest.add(mapToMetabolites);
+
+        selection.add(getLabel("dest"), cc.xy(1, 9));
+        selection.add(dest, cc.xy(3, 9));
+
+        selection.add(getLabel("mode"), cc.xy(1, 11));
+        selection.add(modes, cc.xy(3, 11));
 
         selection.add(getLabel("mapTo"), cc.xy(1, 7));
         selection.add(mapTo, cc.xy(3, 7));
@@ -225,9 +248,9 @@ public class ImportCrossReferences extends AbstractControlDialog {
         JTextArea singleInfo = area("singleArea");
         JTextArea mappedInfo = area("mappedArea");
 
-        inferInfo.setBackground(getBackground());
-        singleInfo.setBackground(getBackground());
-        mappedInfo.setBackground(getBackground());
+        inferInfo.setBackground(selection.getBackground());
+        singleInfo.setBackground(selection.getBackground());
+        mappedInfo.setBackground(selection.getBackground());
 
         inferConfig.add(inferInfo, cc.xy(1, 1));
         singleConfig.add(singleInfo, cc.xy(1, 1));
@@ -279,7 +302,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
         tableHolder.add(preview.getTableHeader(), BorderLayout.NORTH);
         tableHolder.add(preview, BorderLayout.CENTER);
 
-        component.add(tableHolder);
+        //component.add(tableHolder);
 
         return component;
     }
@@ -362,8 +385,34 @@ public class ImportCrossReferences extends AbstractControlDialog {
             }
         };
 
+
+        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>();
+
+        if (mapToGenes.isSelected()) {
+            entities.addAll(recon.genome().genes());
+        }
+        if (mapToGeneProducts.isSelected()) {
+            for (GeneProduct product : recon.proteome()) {
+                entities.add(product);
+            }
+        }
+        if (mapToReactions.isSelected()) {
+            for (MetabolicReaction r : recon.reactome()) {
+                entities.add(r);
+            }
+        }
+        if (mapToMetabolites.isSelected()) {
+            for (Metabolite m : recon.metabolome()) {
+                entities.add(m);
+            }
+        }
+
+
+        if (entities.isEmpty())
+            addReport(new ErrorMessage("No destination entites selected"));
+
         IdentifierMapper<String> mapper
-                = new IdentifierMapper<String>(recon.getMetabolome().toList(),
+                = new IdentifierMapper<String>(entities,
                                                accessor,
                                                handler,
                                                DefaultIdentifierFactory

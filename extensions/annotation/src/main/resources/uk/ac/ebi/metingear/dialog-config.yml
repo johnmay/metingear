@@ -44,3 +44,6 @@ ImportCrossReferences:
                  the second is the cross-reference. The third column specifies the identifier type as it appears
                  in the MIRIAM registry, for example, you must specify 'KEGG Compound' instead of 'KEGG'. For a
                  full list of valid identifiers please refer to http://www.ebi.ac.uk/miriam/main/.
+    dest:
+        text:    "Destination:"
+        tooltip: Select one or more entities to which you which to map the loaded identifiers
