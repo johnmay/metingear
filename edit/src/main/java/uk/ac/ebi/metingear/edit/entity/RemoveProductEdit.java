@@ -48,11 +48,13 @@ public class RemoveProductEdit extends AbstractUndoableEdit {
 
     @Override
     public void redo() throws CannotRedoException {
+        super.redo();
         reaction.removeProduct(participant);
     }
 
     @Override
     public void undo() throws CannotRedoException {
+        super.undo();
         reaction.addProduct(participant);
     }
 

@@ -53,6 +53,7 @@ public class AddAnnotationEdit
 
     @Override
     public void redo() throws CannotRedoException {
+        super.redo();
         for (Annotation annotation : annotations) {
             entity.addAnnotation(annotation);
         }
@@ -60,6 +61,7 @@ public class AddAnnotationEdit
 
     @Override
     public void undo() throws CannotUndoException {
+        super.undo();
         for (Annotation annotation : annotations) {
             entity.removeAnnotation(annotation);
         }

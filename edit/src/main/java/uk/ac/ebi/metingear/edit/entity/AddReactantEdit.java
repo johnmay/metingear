@@ -48,11 +48,13 @@ public class AddReactantEdit extends AbstractUndoableEdit {
 
     @Override
     public void redo() throws CannotRedoException {
+        super.redo();
         reaction.addReactant(participant);
     }
 
     @Override
     public void undo() throws CannotRedoException {
+        super.undo();
         reaction.removeReactant(participant);
     }
 

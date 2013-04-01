@@ -52,6 +52,7 @@ public class RemoveAnnotationEdit
 
     @Override
     public void redo() throws CannotRedoException {
+        super.redo();
         for (Annotation annotation : annotations) {
             entity.removeAnnotation(annotation);
         }
@@ -59,6 +60,7 @@ public class RemoveAnnotationEdit
 
     @Override
     public void undo() throws CannotUndoException {
+        super.undo();
         for (Annotation annotation : annotations) {
             entity.addAnnotation(annotation);
         }
@@ -67,16 +69,6 @@ public class RemoveAnnotationEdit
     @Override
     public String getPresentationName() {
         return "Remove annotations";
-    }
-
-    @Override
-    public boolean canUndo() {
-        return true;
-    }
-
-    @Override
-    public boolean canRedo() {
-        return true;
     }
 
     @Override

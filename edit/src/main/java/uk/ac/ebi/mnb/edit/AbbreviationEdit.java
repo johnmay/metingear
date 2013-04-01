@@ -45,11 +45,13 @@ public class AbbreviationEdit extends UndoableEntityEdit {
 
     @Override
     public void undo() throws CannotUndoException {
+        super.undo();
         entity.setAbbreviation(oldName);
     }
 
     @Override
     public void redo() throws CannotRedoException {
+        super.redo();
         entity.setAbbreviation(newName);
     }
 

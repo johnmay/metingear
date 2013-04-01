@@ -45,22 +45,14 @@ public class NameEdit extends UndoableEntityEdit {
 
     @Override
     public void undo() throws CannotUndoException {
+        super.undo();
         entity.setName(oldName);
     }
 
     @Override
     public void redo() throws CannotRedoException {
+        super.redo();
         entity.setName(newName);
-    }
-
-    @Override
-    public boolean canUndo() {
-        return true;
-    }
-
-    @Override
-    public boolean canRedo() {
-        return true;
     }
 
     @Override

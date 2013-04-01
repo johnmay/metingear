@@ -52,29 +52,12 @@ public class ReplaceAnnotationEdit extends UndoableEntityEdit {
     }
 
     /**
-     * Can redo if the entity has the original annotation
-     * @return
-     */
-    @Override
-    public boolean canRedo() {
-        return entity.hasAnnotation(original);
-    }
-
-    /**
-     * Can undo if the entity has the replacement annotation
-     * @return
-     */
-    @Override
-    public boolean canUndo() {
-        return entity.hasAnnotation(replacement);
-    }
-
-    /**
      * Removes original annotation and adds the replacement
      * @throws CannotRedoException
      */
     @Override
     public void redo() throws CannotRedoException {
+        super.redo();
         entity.removeAnnotation(original);
         entity.addAnnotation(replacement);
     }
@@ -85,6 +68,7 @@ public class ReplaceAnnotationEdit extends UndoableEntityEdit {
      */
     @Override
     public void undo() throws CannotUndoException {
+        super.undo();
         entity.removeAnnotation(replacement);
         entity.addAnnotation(original);
     }
