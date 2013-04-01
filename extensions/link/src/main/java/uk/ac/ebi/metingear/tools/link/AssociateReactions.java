@@ -31,6 +31,7 @@ import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.metingear.EditBuilder;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
 import uk.ac.ebi.mnb.core.WarningMessage;
 
@@ -94,18 +95,19 @@ public final class AssociateReactions extends AbstractControlDialog {
             return;
         }
 
+        EditBuilder builder = new EditBuilder(reconstruction);
+
         for (GeneProduct gp : reconstruction.proteome()) {
             for (String key : productKey.keys(gp)) {
                 for (Reaction reaction : reactionMap.get(key)) {
                     if(reaction instanceof MetabolicReaction){
-                        // TODO undoable edit
-                        ((MetabolicReaction) reaction).addModifier(gp);
+                        builder.associate(gp).with((MetabolicReaction) reaction);
                     }
                 }
             }
         }
 
-
+        addEdit(builder.apply());
     }
 
     /**
