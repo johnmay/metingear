@@ -51,8 +51,6 @@ public final class ReplaceMetaboliteEdit extends CompoundEdit {
     }
 
     public void apply() {
-        reconstruction.getMetabolome().remove(original);
-        reconstruction.getMetabolome().add(replacement);
         for (final MetabolicReaction reaction : new ArrayList<MetabolicReaction>(reactions)) {
 
             reconstruction.dissociate(original, reaction);
@@ -72,6 +70,8 @@ public final class ReplaceMetaboliteEdit extends CompoundEdit {
 
             reconstruction.associate(replacement, reaction);
         }
+        reconstruction.metabolome().remove(original);
+        reconstruction.metabolome().add(replacement);
     }
 
     private void build() {

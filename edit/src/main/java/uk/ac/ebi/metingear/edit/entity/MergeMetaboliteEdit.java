@@ -21,6 +21,7 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.metingear.AppliableEdit;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
@@ -30,13 +31,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A compound edit which merge several <i>separate</i> metabolites into a single
+ * A compound edit which merges several <i>separate</i> metabolites into a single
  * union. The undoable edit allows you <i>apply</i> the edit to the data model
  * with {@link #apply()}.
  *
  * @author John May
  */
-public final class MergeMetaboliteEdit extends CompoundEdit {
+public final class MergeMetaboliteEdit extends CompoundEdit
+                                       implements AppliableEdit {
 
     private final Reconstruction reconstruction;
     private final Metabolite union;
@@ -58,7 +60,7 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
      * Applies the edit to the object model. This edit is rather complex and can
      * be difficult to correctly perform all required steps.
      */
-    public final void apply() {
+    @Override public final void apply() {
 
         // update reaction and the participants
         for (final Metabolite replace : separate) {
