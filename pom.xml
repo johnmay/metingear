@@ -36,6 +36,19 @@
         <cdk.version>1.4.15</cdk.version>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>ebi-repo</id>
+            <name>EBI Repoistory</name>
+            <url>${ebi.repo.nexus.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI Snapshots Repoistory</name>
+            <url>${ebi.repo.snapshots.nexus.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
 
         <!-- lets maven know that we are using Java 1.6. This plugin will be
