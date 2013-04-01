@@ -30,6 +30,8 @@ import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.metingear.edit.entity.AddEntitiesEdit;
+import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
@@ -110,6 +112,10 @@ public class NewGeneProduct extends NewEntity {
             product.setName(getName());
             product.setName(getAbbreviation());
             reconstruction.proteome().add(product);
+            AddEntitiesEdit edit = new AddEntitiesEdit(reconstruction, EntityMap
+                    .singleton(DefaultEntityFactory.getInstance(),
+                               product));
+            addEdit(edit);
         }
     }
 

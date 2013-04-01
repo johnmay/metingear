@@ -40,6 +40,12 @@ public class EntityMap implements EntityCollection {
     private EntityFactory factory;
 
 
+    public static EntityCollection singleton(EntityFactory factory, AnnotatedEntity entity){
+        EntityMap map = new EntityMap(factory);
+        map.add(entity);
+        return map;
+    }
+
     public EntityMap(EntityFactory factory) {
         this.factory = factory;
     }

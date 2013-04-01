@@ -50,9 +50,11 @@ import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.mdk.domain.tool.PrefixCompartmentResolver;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
+import uk.ac.ebi.metingear.edit.entity.AddEntitiesEdit;
 import uk.ac.ebi.metingear.search.FieldType;
 import uk.ac.ebi.metingear.search.SearchManager;
 import uk.ac.ebi.metingear.search.SearchableIndex;
+import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -154,6 +156,10 @@ public class NewReaction extends NewEntity {
                 MetabolicReaction reaction = parser.parseReaction(ppRxn);
                 reaction.setIdentifier(getIdentifier());
                 reconstruction.addReaction(reaction);
+                AddEntitiesEdit edit = new AddEntitiesEdit(reconstruction, EntityMap
+                        .singleton(DefaultEntityFactory.getInstance(),
+                                   reaction));
+                addEdit(edit);
             } catch (UnparsableReactionError ex) {
                 addMessage(new ErrorMessage("Malformed reaction: " + ex.getMessage()));
             }
