@@ -230,7 +230,7 @@ public class PreferencePanel extends JPanel {
                 area.setFont(theme.getBodyFont());
                 area.setWrapStyleWord(true);
                 area.setBorder(Borders.EMPTY_BORDER);
-                area.setText("Load resources from remote and local locations. When a resource is not publically available the download is very large or the location is unreachable " +
+                area.setText("Load resources from remote and local locations. When a resource is not publically available, the download is very large or the location is unreachable " +
                                      "you will not be able to update it. If a resource can not be updated (non-bold arrow) you will " +
                                      "have to configure the loader by specifying local or remove locations of required resources. " +
                                      "Each loader can be configured by clicking the 'gear' icon and entering the required locations. " +
