@@ -65,7 +65,7 @@ public class EditUndoButtons {
                 }
             }
         });
-        back.setIcon(EBIIcon.UNDO.create().icon());
+        back.setIcon(EBIIcon.UNDO.create().highlight().icon());
         back.setToolTipText("Undo");
         forward.setAction(new AbstractAction() {
 
@@ -77,7 +77,7 @@ public class EditUndoButtons {
                 }
             }
         });
-        forward.setIcon(EBIIcon.REDO.create().icon());
+        forward.setIcon(EBIIcon.REDO.create().highlight().icon());
         forward.setToolTipText("Redo");
 
 

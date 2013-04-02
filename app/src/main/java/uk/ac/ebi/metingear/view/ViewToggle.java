@@ -70,15 +70,14 @@ public class ViewToggle {
 
         controller.setViewSelector(this);
 
-        metabolites.setIcon(EBIIcon.TOP_LEVEL_CHEMICAL.create().size(18f).icon());
-        products.setIcon(EBIIcon.TOP_LEVEL_STRUCTURES.create().size(18f).icon());
-        genes.setIcon(EBIIcon.TOP_LEVEL_GENE.create().size(18f).icon());
-        reactions.setIcon(EBIIcon.DIRECTION_REVERSIBLE.create().size(18f).icon());
-        metabolites.setSelectedIcon(EBIIcon.TOP_LEVEL_CHEMICAL.create()
-                                           .size(18f).color(Color.WHITE).icon());
-        products.setSelectedIcon(EBIIcon.TOP_LEVEL_STRUCTURES.create().size(18f).color(Color.WHITE).icon());
-        genes.setSelectedIcon(EBIIcon.TOP_LEVEL_GENE.create().size(18f).color(Color.WHITE).icon());
-        reactions.setSelectedIcon(EBIIcon.DIRECTION_REVERSIBLE.create().size(18f).color(Color.WHITE).icon());
+        metabolites.setIcon(EBIIcon.TOP_LEVEL_CHEMICAL.create().size(18f).highlight().icon());
+        products.setIcon(EBIIcon.TOP_LEVEL_STRUCTURES.create().size(18f).highlight().icon());
+        genes.setIcon(EBIIcon.TOP_LEVEL_GENE.create().size(18f).highlight().icon());
+        reactions.setIcon(EBIIcon.DIRECTION_REVERSIBLE.create().size(18f).highlight().icon());
+        metabolites.setSelectedIcon(EBIIcon.TOP_LEVEL_CHEMICAL.create().size(18f).lowlight().color(Color.WHITE).icon());
+        products.setSelectedIcon(EBIIcon.TOP_LEVEL_STRUCTURES.create().size(18f).lowlight().color(Color.WHITE).icon());
+        genes.setSelectedIcon(EBIIcon.TOP_LEVEL_GENE.create().size(18f).lowlight().color(Color.WHITE).icon());
+        reactions.setSelectedIcon(EBIIcon.DIRECTION_REVERSIBLE.create().size(18f).lowlight().color(Color.WHITE).icon());
 
         genes.putClientProperty("JButton.buttonType", "segmentedTextured");
         genes.putClientProperty("JButton.segmentPosition", "first");
