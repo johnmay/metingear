@@ -18,23 +18,21 @@
 package uk.ac.ebi.mnb.dialog.edit;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mnb.core.ControllerAction;
+import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
+import javax.swing.undo.CompoundEdit;
 import java.awt.event.ActionEvent;
 import java.util.Collection;
 
 /**
- * AssignFlags - 21.03.2012 <br/>
- * <p/>
- * Automatically add flags to the model
+ * Action to automatically add annotation flags to selected entities.
  *
  * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$
  */
 public class AssignFlags extends ControllerAction {
 
@@ -47,17 +45,20 @@ public class AssignFlags extends ControllerAction {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        DefaultAnnotationFactory factory = DefaultAnnotationFactory.getInstance();
+        DefaultAnnotationFactory factory = DefaultAnnotationFactory
+                .getInstance();
+
+        CompoundEdit edit = new CompoundEdit();
 
         Collection<AnnotatedEntity> entities = getSelection().getEntities();
-        for(AnnotatedEntity entity : entities){
-            for(Annotation flag : factory.getMatchingFlags(entity)){
-                entity.addAnnotation(flag);
+        for (AnnotatedEntity entity : entities) {
+            for (Annotation flag : factory.getMatchingFlags(entity)) {
+                edit.addEdit(AddAnnotationEdit.edit(entity, flag));
             }
         }
 
-        update(getSelection());
-
+        edit.end();
+        update();
     }
 
 }

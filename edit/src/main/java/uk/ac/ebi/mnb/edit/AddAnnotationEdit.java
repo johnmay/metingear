@@ -72,14 +72,9 @@ public class AddAnnotationEdit
         return "Remove annotations";
     }
 
-    @Override
-    public boolean canUndo() {
-        return true;
-    }
-
-    @Override
-    public boolean canRedo() {
-        return true;
+    public static UndoableEntityEdit edit(AnnotatedEntity entity, Annotation annotation){
+        entity.addAnnotation(annotation);
+        return new AddAnnotationEdit(entity, annotation);
     }
 
     @Override
