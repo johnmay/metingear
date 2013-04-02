@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.caf.utility.font.EBIIcon;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
 
@@ -68,10 +69,14 @@ public class ViewToggle {
 
         controller.setViewSelector(this);
 
-        genes.setSelectedIcon(ResourceUtility.getIcon(getClass(), "gen-selected.png"));
-        products.setSelectedIcon(ResourceUtility.getIcon(getClass(), "pro-selected.png"));
-        metabolites.setSelectedIcon(ResourceUtility.getIcon(getClass(), "met-selected.png"));
-        reactions.setSelectedIcon(ResourceUtility.getIcon(getClass(), "rxn-selected.png"));
+        metabolites.setIcon(EBIIcon.CHEMICAL.create().size(18f).icon());
+        products.setIcon(EBIIcon.STRUCTURES.create().size(18f).icon());
+        genes.setIcon(EBIIcon.GENE.create().size(18f).icon());
+        reactions.setIcon(EBIIcon.DIRECTION_REVERSIBLE.create().size(18f).icon());
+        metabolites.setSelectedIcon(EBIIcon.CHEMICAL.create().size(18f).icon());
+        products.setSelectedIcon(EBIIcon.STRUCTURES.create().size(18f).icon());
+        genes.setSelectedIcon(EBIIcon.GENE.create().size(18f).icon());
+        reactions.setSelectedIcon(EBIIcon.DIRECTION_REVERSIBLE.create().size(18f).icon());
 
         genes.putClientProperty("JButton.buttonType", "segmentedTextured");
         genes.putClientProperty("JButton.segmentPosition", "first");
