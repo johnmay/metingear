@@ -19,6 +19,7 @@ package uk.ac.ebi.mnb.menu;
 import com.explodingpixels.macwidgets.LabeledComponentGroup;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.caf.utility.font.EBIIcon;
 import uk.ac.ebi.mnb.main.MainView;
 
 import javax.swing.*;
@@ -64,7 +65,7 @@ public class EditUndoButtons {
                 }
             }
         });
-        back.setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/undo_16x16.png"));
+        back.setIcon(EBIIcon.UNDO.create().icon());
         back.setToolTipText("Undo");
         forward.setAction(new AbstractAction() {
 
@@ -76,7 +77,7 @@ public class EditUndoButtons {
                 }
             }
         });
-        forward.setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/redo_16x16.png"));
+        forward.setIcon(EBIIcon.REDO.create().icon());
         forward.setToolTipText("Redo");
 
 

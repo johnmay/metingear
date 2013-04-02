@@ -69,13 +69,13 @@ public class ViewToggle {
 
         controller.setViewSelector(this);
 
-        metabolites.setIcon(EBIIcon.CHEMICAL.create().size(18f).icon());
-        products.setIcon(EBIIcon.STRUCTURES.create().size(18f).icon());
-        genes.setIcon(EBIIcon.GENE.create().size(18f).icon());
+        metabolites.setIcon(EBIIcon.TOP_LEVEL_CHEMICAL.create().size(18f).icon());
+        products.setIcon(EBIIcon.TOP_LEVEL_STRUCTURES.create().size(18f).icon());
+        genes.setIcon(EBIIcon.TOP_LEVEL_GENE.create().size(18f).icon());
         reactions.setIcon(EBIIcon.DIRECTION_REVERSIBLE.create().size(18f).icon());
-        metabolites.setSelectedIcon(EBIIcon.CHEMICAL.create().size(18f).icon());
-        products.setSelectedIcon(EBIIcon.STRUCTURES.create().size(18f).icon());
-        genes.setSelectedIcon(EBIIcon.GENE.create().size(18f).icon());
+        metabolites.setSelectedIcon(EBIIcon.TOP_LEVEL_CHEMICAL.create().size(18f).icon());
+        products.setSelectedIcon(EBIIcon.TOP_LEVEL_STRUCTURES.create().size(18f).icon());
+        genes.setSelectedIcon(EBIIcon.TOP_LEVEL_GENE.create().size(18f).icon());
         reactions.setSelectedIcon(EBIIcon.DIRECTION_REVERSIBLE.create().size(18f).icon());
 
         genes.putClientProperty("JButton.buttonType", "segmentedTextured");
