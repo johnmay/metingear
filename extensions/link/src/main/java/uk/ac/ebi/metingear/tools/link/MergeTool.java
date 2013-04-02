@@ -120,6 +120,11 @@ public final class MergeTool extends AbstractControlDialog {
      * How to key entities
      */
     enum Key {
+        IDENTIFIER("Identifier") {
+            @Override String key(AnnotatedEntity entity) {
+                return entity.getIdentifier().getAccession();
+            }
+        },
         ABBREVIATION("Abbreviation") {
             @Override String key(AnnotatedEntity entity) {
                 return entity.getAbbreviation();

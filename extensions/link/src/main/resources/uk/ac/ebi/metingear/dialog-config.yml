@@ -9,7 +9,7 @@ AssociateReactions:
           tooltip: Specify what values should be used to link reactions to gene products.
 MergeTool:
   information:
-          text:    Merge metabolites by name or abbreviation
+          text:    Merge metabolites by identifier, name or abbreviation
   mergeBy:
           text:    "Merge By:"
           tooltip: Select whether to merge entities by name or abbrevation
