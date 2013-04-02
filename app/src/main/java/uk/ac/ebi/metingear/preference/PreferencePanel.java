@@ -32,6 +32,7 @@ import uk.ac.ebi.caf.component.theme.ComponentPreferences;
 import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.caf.utility.preference.Preference;
+import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
 import uk.ac.ebi.mdk.ResourcePreferences;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
@@ -218,9 +219,20 @@ public class PreferencePanel extends JPanel {
             LoaderGroupFactory factory = new LoaderGroupFactory(window, DefaultLocationFactory
                     .getInstance());
             try {
+                final JTextArea area = new JTextArea();
+                final BooleanPreference hints = ServicePreferences.getInstance()
+                                                             .getPreference("SHOW_HINTS");
 
                 add(Box.createGlue());
-                JTextArea area = new JTextArea();
+                add(PreferencePanelFactory.getPreferenceEditor(hints, new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        area.setVisible(hints.get());
+                    }
+                }));
+                add(Box.createVerticalStrut(5));
+                JCheckBox checkBox = new JCheckBox();
+                area.setVisible(hints.get());
                 area.setLineWrap(true);
                 area.setEditable(false);
                 area.setOpaque(false);
