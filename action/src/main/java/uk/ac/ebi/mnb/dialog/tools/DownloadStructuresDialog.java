@@ -30,7 +30,6 @@ import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
@@ -44,7 +43,11 @@ import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.CompoundEdit;
 import java.awt.event.ItemEvent;
@@ -52,6 +55,7 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 
@@ -242,10 +246,14 @@ public class DownloadStructuresDialog
         Set<Identifier> available = new HashSet<Identifier>();
 
         for (Identifier id : services.getIdentifiers(StructureService.class)) {
-            if (services.hasService(id, StructureService.class) &&
-                    canUse(services.getService(id, StructureService.class))
-                    && isChemicalService(services.getService(id, StructureService.class))) {
-                available.add(id);
+            try {
+                if (services.hasService(id, StructureService.class) &&
+                        canUse(services.getService(id, StructureService.class))
+                        && isChemicalService(services.getService(id, StructureService.class))) {
+                    available.add(id);
+                }
+            } catch (NoSuchElementException ex) {
+                // connection problems to ws
             }
         }
 
