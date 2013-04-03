@@ -25,6 +25,7 @@ import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.StarRating;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
@@ -48,7 +49,7 @@ public class ReactionTableModel extends AbstractEntityTableModel {
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
             new ColumnDescriptor("Reversibility", null,
                                  DataType.FIXED,
-                                 String.class),
+                                 Direction.class),
             new ColumnDescriptor("Equation", null,
                                  DataType.FIXED,
                                  String.class),
@@ -102,7 +103,7 @@ public class ReactionTableModel extends AbstractEntityTableModel {
         Reaction rxn = (Reaction) component;
 
         if (name.equals(DEFAULT[0].getName())) {
-            return rxn.getDirection().toString();
+            return rxn.getDirection();
         } else if (name.equals(DEFAULT[1].getName())) {
             return rxn.toString();
         } else if (name.equals("Rating")) {
