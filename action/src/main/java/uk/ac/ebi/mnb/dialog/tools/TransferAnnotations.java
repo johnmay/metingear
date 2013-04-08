@@ -27,6 +27,7 @@ import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
 import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.UniProtIdentifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 import uk.ac.ebi.mdk.service.query.CrossReferenceService;
@@ -65,7 +66,7 @@ public class TransferAnnotations
     public void process() {
 
         // replace with service manager
-        CrossReferenceService<SwissProtIdentifier> service = new UniProtCrossReferenceService();
+        CrossReferenceService<UniProtIdentifier> service = new UniProtCrossReferenceService();
 
         if(!service.startup()){
             addMessage(new ErrorMessage("Could not start UniProt Cross-references - please" +
