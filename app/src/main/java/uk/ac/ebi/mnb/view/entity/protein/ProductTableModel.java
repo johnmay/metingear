@@ -18,12 +18,14 @@ package uk.ac.ebi.mnb.view.entity.protein;
 
 import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.StarRating;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
@@ -48,6 +50,7 @@ public class ProductTableModel extends AbstractEntityTableModel {
             new ColumnDescriptor("Sequence", null,
                                  DataType.FIXED,
                                  String.class),
+            new ColumnDescriptor(new EnzymeClassification<Observation>()),
             new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class)
     };
 

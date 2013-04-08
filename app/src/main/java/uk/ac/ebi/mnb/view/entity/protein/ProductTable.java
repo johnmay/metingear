@@ -17,12 +17,16 @@
  */
 package uk.ac.ebi.mnb.view.entity.protein;
 
+import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
+import uk.ac.ebi.mdk.ui.render.table.AnnotationCellRenderer;
 import uk.ac.ebi.mdk.ui.render.table.RatingCellRenderer;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
+
+import java.util.regex.Pattern;
 
 
 /**
@@ -42,10 +46,18 @@ public class ProductTable extends AbstractEntityTable {
 
         setDefaultRenderer(Rating.class, new RatingCellRenderer());
         setDefaultEditor(Rating.class, new RatingCellEditor());
-
+        AnnotationCellRenderer annotationRenderer = new AnnotationCellRenderer();
+        setDefaultRenderer(EnzymeClassification.class,
+                           annotationRenderer);
 
     }
 
+
+    public static void main(String[] args) {
+        Pattern p = Pattern.compile("^[A-Z-0-9]+(?<!CHEBI)(\\:)?[A-Za-z0-9-]+$");
+        System.out.println(p.matcher("META:12").matches());
+        System.out.println(p.matcher("CHEBI:12").matches());
+    }
 
 
 }
