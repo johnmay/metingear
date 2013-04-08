@@ -208,4 +208,10 @@ public class MetabolitePanel
         entity.setGeneric(((String) markushEditor.getSelectedItem()).equals("Yes") ? true : false);
         entity.setType((MetaboliteClassImplementation) typeEditor.getSelectedItem());
     }
+
+    @Override public void clear() {
+        super.clear();
+        structure.setIcon(null);
+        formularViewer.setText("");
+    }
 }
