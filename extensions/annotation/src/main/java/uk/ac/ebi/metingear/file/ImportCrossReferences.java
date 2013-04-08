@@ -302,7 +302,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
         tableHolder.add(preview.getTableHeader(), BorderLayout.NORTH);
         tableHolder.add(preview, BorderLayout.CENTER);
 
-        //component.add(tableHolder);
+        component.add(tableHolder);
 
         return component;
     }
