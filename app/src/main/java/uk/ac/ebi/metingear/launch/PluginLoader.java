@@ -17,46 +17,80 @@
 
 package uk.ac.ebi.metingear.launch;
 
+import uk.ac.ebi.metingear.view.PlugableAction;
 import uk.ac.ebi.metingear.view.PlugableDialog;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.ContextMenu;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+import java.awt.Component;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-/**
- * @version $Rev$
- */
+/** @version $Rev$ */
 public class PluginLoader {
 
 
-    private ServiceLoader<PlugableDialog> loader;
-    private MainView                      view;
-    private MainMenuBar                   menu;
-    private DialogLauncherFactory         factory;
+    private ServiceLoader<PlugableDialog> dialogs;
+    private ServiceLoader<PlugableAction> actions;
+    private MainView view;
+    private MainMenuBar menu;
+    private DialogLauncherFactory factory;
+    private ActionLauncherFactory actionFactory;
 
     public PluginLoader(MainView view, MainMenuBar menu) {
         this.view = view;
         this.menu = menu;
-        this.loader = ServiceLoader.load(PlugableDialog.class);
+        this.dialogs = ServiceLoader.load(PlugableDialog.class);
+        this.actions = ServiceLoader.load(PlugableAction.class);
         this.factory = new DialogLauncherFactory(view,
                                                  view,
                                                  view.getViewController(),
                                                  view.getUndoManager(),
                                                  view.getMessageManager(),
                                                  view);
+        this.actionFactory = new ActionLauncherFactory(view,
+                                                       view,
+                                                       view.getViewController(),
+                                                       view.getUndoManager(),
+                                                       view.getMessageManager(),
+                                                       view);
     }
 
     public void load() {
-        System.out.println("[PLUGIN] Loading Extensions from META-INF/services");
-        Iterator<PlugableDialog> plugin = loader.iterator();
+        System.out
+              .println("[PLUGIN] Loading Extensions from META-INF/services");
+        Iterator<PlugableDialog> plugin = dialogs.iterator();
         while (plugin.hasNext()) {
             PlugableDialog plugableDialog = plugin.next();
-            System.out.println("[PLUGIN] " + load(plugableDialog) + " (" + plugableDialog.getClass() + ") loaded");
+            System.out
+                  .println("[PLUGIN] " + load(plugableDialog) + " (" + plugableDialog
+                          .getClass() + ") loaded");
         }
+
+        for (final PlugableAction action : actions) {
+            System.out
+                  .println("[PLUGIN] " + load(action) + " loaded");
+        }
+    }
+
+    public String load(PlugableAction plugin) {
+        JMenu menu = getMenu(plugin.getMenuPath().iterator());
+        AbstractAction action = actionFactory.getLauncher(plugin.action());
+
+        if (menu instanceof ContextMenu) {
+            ((ContextMenu) menu).add(action, plugin.getContext());
+        } else {
+            menu.add(action);
+        }
+
+        Object name = action.getValue(Action.NAME);
+        return name != null ? name.toString()
+                            : plugin.action().getSimpleName();
     }
 
     public String load(PlugableDialog plugin) {
@@ -72,7 +106,8 @@ public class PluginLoader {
         }
 
         Object name = action.getValue(Action.NAME);
-        return name != null ? name.toString() : plugin.getDialogClass().getSimpleName();
+        return name != null ? name.toString()
+                            : plugin.getDialogClass().getSimpleName();
 
     }
 
@@ -89,7 +124,8 @@ public class PluginLoader {
 
     public JMenu getMenu(JComponent root, String query) {
 
-        for (Component component : root instanceof JMenu ? ((JMenu) root).getMenuComponents() : root.getComponents()) {
+        for (Component component : root instanceof JMenu ? ((JMenu) root)
+                .getMenuComponents() : root.getComponents()) {
             if (component instanceof JMenu) {
                 String subject = ((JMenu) component).getText();
                 if (subject.equalsIgnoreCase(query)) {

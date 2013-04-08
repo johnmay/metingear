@@ -26,25 +26,21 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 import javax.swing.event.UndoableEditListener;
 
+/** @author John May */
+public interface Controllable {
 
-/**
- * @author johnmay
- */
-public interface ControlDialog extends ProcessingDialog {
+    void setSelectionController(SelectionController controller);
 
+    void setUndoManager(UndoableEditListener undoManager);
 
-     void setSelectionController(SelectionController controller);
+    void setReportManager(ReportManager report);
 
-     void setUndoManager(UndoableEditListener undoManager);
+    void setUpdateManager(TargetedUpdate update);
 
-     void setReportManager(ReportManager report);
+    void setEntityFactory(EntityFactory entityFactory);
 
-     void setUpdateManager(TargetedUpdate update);
+    void setIdentifierFactory(IdentifierFactory identifierFactory);
 
-     void setEntityFactory(EntityFactory entityFactory);
-
-     void setIdentifierFactory(IdentifierFactory identifierFactory);
-
-     void setAnnotationFactory(AnnotationFactory annotationFactory);
+    void setAnnotationFactory(AnnotationFactory annotationFactory);
 
 }
