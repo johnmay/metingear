@@ -32,6 +32,7 @@ import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditListener;
 
 /** @author John May */
@@ -98,6 +99,12 @@ public class ActionLauncherFactory {
                         } catch (Exception e) {
                             LOGGER.error(e);
                         } finally {
+                            listener.progressed("updating views");
+                            SwingUtilities.invokeLater(new Runnable() {
+                                @Override public void run() {
+                                    updateManager.update();
+                                }
+                            });
                             indicator.dispose();
                         }
                     }

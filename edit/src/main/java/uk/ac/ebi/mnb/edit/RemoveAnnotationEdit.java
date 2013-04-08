@@ -19,35 +19,44 @@ package uk.ac.ebi.mnb.edit;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.metingear.AppliableEdit;
 import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
 
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * @name    RemoveAnnotations - 2011.10.02 <br>
- *          Keeps track of a annotation removal
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name RemoveAnnotations - 2011.10.02 <br> Keeps track of a annotation
+ * removal
  */
 public class RemoveAnnotationEdit
-        extends UndoableEntityEdit {
+        extends UndoableEntityEdit implements AppliableEdit {
 
-    private static final Logger LOGGER = Logger.getLogger(RemoveAnnotationEdit.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(RemoveAnnotationEdit.class);
     private AnnotatedEntity entity;
-    private Collection<Annotation> annotations;
+    private Collection<? extends Annotation> annotations;
 
-    public RemoveAnnotationEdit(AnnotatedEntity entity, Collection<Annotation> annotations) {
+    public RemoveAnnotationEdit(AnnotatedEntity entity, Collection<? extends Annotation> annotations) {
         this.entity = entity;
-        this.annotations = annotations;
+        this.annotations = new ArrayList<Annotation>(annotations);
     }
 
     public RemoveAnnotationEdit(AnnotatedEntity entity, Annotation... annotations) {
         this.entity = entity;
         this.annotations = Arrays.asList(annotations);
+    }
+
+    @Override public void apply() {
+        for (Annotation annotation : annotations) {
+            entity.removeAnnotation(annotation);
+        }
     }
 
     @Override
