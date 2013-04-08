@@ -74,25 +74,29 @@ public class NewProject extends DropdownDialog {
 
         ReplacementHandler handler = new ReplacementHandler() {
             @Override
-            public void replace(JTextField field, Object value) {
-                codeField.setSuggest(false);
-                taxonField.setSuggest(false);
-                nameField.setSuggest(false);
-                Taxonomy taxonomy = (Taxonomy) value;
-                if (idField.getText().isEmpty()) {
-                    String[] nameTokens = taxonomy.getOfficialName().split("\\s+");
-                    if (nameTokens.length > 1)
-                        idField.setText("i" + nameTokens[0].substring(0, 1).toUpperCase() + nameTokens[1].substring(0, 2).toLowerCase() + "%n");
-                    else
-                        idField.setText("i" + taxonomy.getCode().toLowerCase());
-                }
-                codeField.setText(taxonomy.getCode());
-                taxonField.setText(taxonomy.getAccession());
-                kingdomField.setText(taxonomy.getKingdom().toString());
-                nameField.setText(taxonomy.getOfficialName());
-                codeField.setSuggest(true);
-                taxonField.setSuggest(true);
-                nameField.setSuggest(true);
+            public void replace(final JTextField field, final Object value) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override public void run() {
+                        codeField.setSuggest(false);
+                        taxonField.setSuggest(false);
+                        nameField.setSuggest(false);
+                        Taxonomy taxonomy = (Taxonomy) value;
+                        if (idField.getText().isEmpty()) {
+                            String[] nameTokens = taxonomy.getOfficialName().split("\\s+");
+                            if (nameTokens.length > 1)
+                                idField.setText("i" + nameTokens[0].substring(0, 1).toUpperCase() + nameTokens[1].substring(0, 2).toLowerCase() + "%n");
+                            else
+                                idField.setText("i" + taxonomy.getCode().toLowerCase());
+                        }
+                        codeField.setText(taxonomy.getCode());
+                        taxonField.setText(taxonomy.getAccession());
+                        kingdomField.setText(taxonomy.getKingdom().toString());
+                        nameField.setText(taxonomy.getOfficialName());
+                        codeField.setSuggest(true);
+                        taxonField.setSuggest(true);
+                        nameField.setSuggest(true);
+                    }
+                });
             }
         };
 
