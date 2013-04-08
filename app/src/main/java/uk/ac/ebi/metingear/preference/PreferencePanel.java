@@ -57,10 +57,29 @@ import uk.ac.ebi.mdk.service.loader.structure.MetaCycStructureLoader;
 import uk.ac.ebi.mdk.ui.component.service.LoaderGroupFactory;
 import uk.ac.ebi.metingear.Main;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ListCellRenderer;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
@@ -89,7 +108,8 @@ public class PreferencePanel extends JPanel {
 
         CellConstraints cc = new CellConstraints();
 
-        setBackground(Color.WHITE);
+        // off white
+        setBackground(new Color(240, 240, 240));
 
         category.setBackground(new Color(234, 237, 243));
         category.setPreferredSize(new Dimension(200, 150));
@@ -221,17 +241,17 @@ public class PreferencePanel extends JPanel {
             try {
                 final JTextArea area = new JTextArea();
                 final BooleanPreference hints = ServicePreferences.getInstance()
-                                                             .getPreference("SHOW_HINTS");
+                                                                  .getPreference("SHOW_HINTS");
 
                 add(Box.createGlue());
-                add(PreferencePanelFactory.getPreferenceEditor(hints, new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        area.setVisible(hints.get());
-                    }
-                }));
+                add(PreferencePanelFactory
+                            .getPreferenceEditor(hints, new AbstractAction() {
+                                @Override
+                                public void actionPerformed(ActionEvent actionEvent) {
+                                    area.setVisible(hints.get());
+                                }
+                            }));
                 add(Box.createVerticalStrut(5));
-                JCheckBox checkBox = new JCheckBox();
                 area.setVisible(hints.get());
                 area.setLineWrap(true);
                 area.setEditable(false);
