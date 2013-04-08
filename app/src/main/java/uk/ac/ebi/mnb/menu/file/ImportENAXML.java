@@ -17,6 +17,7 @@
 package uk.ac.ebi.mnb.menu.file;
 
 import org.apache.log4j.Logger;
+import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
@@ -60,6 +61,7 @@ public class ImportENAXML extends FileChooserAction {
 
         if (choosenFile != null) {
             try {
+
                 ENAXMLReader reader = new ENAXMLReader(DefaultEntityFactory.getInstance(), new FileInputStream(choosenFile));
 
                 List<GeneProduct> products = reader.getProducts();
@@ -71,7 +73,8 @@ public class ImportENAXML extends FileChooserAction {
                 }
 
                 // bit of a hack for now - add a single chromosome
-                Chromosome c = recon.getGenome().chromosome(1);
+                Chromosome c = recon.genome().createChromosome(1,
+                                                               new ChromosomeSequence(reader.getGenomeString()));
                 List<Gene> genes = reader.getGeneMap();
                 for (Gene gene : genes) {
                     c.add(gene);
