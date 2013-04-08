@@ -20,6 +20,7 @@ package uk.ac.ebi.metingear.view;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.ActionProperties;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
@@ -33,13 +34,26 @@ import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author johnmay
@@ -71,11 +85,13 @@ public abstract class AbstractProcessingDialog
 
     private ComponentInjector yamlInjector;
 
+    private JDialog self;
+
     private static final CellConstraints CELL_CONSTRAINTS = new CellConstraints();
 
     public AbstractProcessingDialog(final Window window) {
         super(window, ModalityType.APPLICATION_MODAL);
-
+        self = this;
         setUndecorated(true);
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -88,16 +104,16 @@ public abstract class AbstractProcessingDialog
 
     private final void inject() {
         prepareInjector();
-        if(propertyInjector != null)
+        if (propertyInjector != null)
             propertyInjector.inject(this);
-        if(yamlInjector != null)
+        if (yamlInjector != null)
             yamlInjector.inject(this);
     }
 
     final void inject(Class<?> c, JComponent comp, String name) {
-        if(propertyInjector != null)
+        if (propertyInjector != null)
             propertyInjector.inject(c, comp, name);
-        if(yamlInjector != null)
+        if (yamlInjector != null)
             yamlInjector.inject(c, comp, name);
     }
 
@@ -108,13 +124,13 @@ public abstract class AbstractProcessingDialog
             propertyInjector = new PropertyComponentInjector(ActionProperties
                                                                      .getInstance());
         if (yamlInjector == null) {
-                try {
-                    yamlInjector = new YAMLComponentInjector("uk/ac/ebi/metingear/dialog-config.yml");
-                } catch (IOException e) {
-                    LOGGER.error(e);
-                } finally {
+            try {
+                yamlInjector = new YAMLComponentInjector("uk/ac/ebi/metingear/dialog-config.yml");
+            } catch (IOException e) {
+                LOGGER.error(e);
+            } finally {
 
-                }
+            }
         }
     }
 
@@ -124,6 +140,10 @@ public abstract class AbstractProcessingDialog
 
     public void process() {
         // do nothing
+    }
+
+    public void process(SpinningDialWaitIndicator indicator) {
+        process();
     }
 
     /**
@@ -229,13 +249,13 @@ public abstract class AbstractProcessingDialog
     private JButton createOkayButton() {
         return ButtonFactory.newButton(new AbstractAction("Okay") {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
+                final SpinningDialWaitIndicator indicator = new SpinningDialWaitIndicator(self);
                 Thread t = new Thread(new Runnable() {
 
                     public void run() {
                         try {
-                            process();
-
+                            process(indicator);
                             SwingUtilities.invokeLater(new Runnable() {
 
                                 public void run() {
@@ -244,9 +264,12 @@ public abstract class AbstractProcessingDialog
                                 }
 
                             });
+                        } catch (RuntimeException e) {
+                            LOGGER.equals(e);
                         } catch (Exception e) {
-                            e.printStackTrace();
-//                            (new ErrorMessage("An error occurred: " + e.getMessage() + e.getCause()));
+                            LOGGER.equals(e);
+                        } finally {
+                            indicator.dispose();
                         }
                     }
                 });
@@ -317,7 +340,7 @@ public abstract class AbstractProcessingDialog
         return button;
     }
 
-    public final JTextArea area(Class c, String name){
+    public final JTextArea area(Class c, String name) {
         prepareInjector();
         JTextArea area = new JTextArea();
         inject(c, area, name);
@@ -333,7 +356,7 @@ public abstract class AbstractProcessingDialog
         return area;
     }
 
-    public final JTextArea area(String name){
+    public final JTextArea area(String name) {
         return area(getClass(), name);
     }
 
@@ -346,7 +369,7 @@ public abstract class AbstractProcessingDialog
     }
 
     public final JButton button(Action action) {
-        if(action.getValue(Action.NAME) == null)
+        if (action.getValue(Action.NAME) == null)
             throw new IllegalArgumentException("Name required");
         return button(action.getValue(Action.NAME).toString(), action);
     }
@@ -356,13 +379,13 @@ public abstract class AbstractProcessingDialog
     }
 
     public final JButton iconButton(Action action) {
-        if(action.getValue(Action.NAME) == null)
+        if (action.getValue(Action.NAME) == null)
             throw new IllegalArgumentException("Name required");
         return iconButton(action.getValue(Action.NAME).toString(), action);
     }
 
     public final JRadioButton radioButton(Action action) {
-        if(action.getValue(Action.NAME) == null)
+        if (action.getValue(Action.NAME) == null)
             throw new IllegalArgumentException("Name required");
         return radioButton(action.getValue(Action.NAME).toString(), action);
     }

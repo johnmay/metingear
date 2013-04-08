@@ -19,6 +19,7 @@ package uk.ac.ebi.metingear.tools.annotation;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
@@ -42,6 +43,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -180,29 +182,31 @@ public class RenameFromResource extends AbstractControlDialog {
     }
 
     @Override
-    public void process() {
+    public void process(final SpinningDialWaitIndicator indicator) {
 
         // new edit action (one for all entries)
         CompoundEdit edits = new CompoundEdit();
 
         // get the preferred name service
-        PreferredNameService service = (PreferredNameService) resourceSelection
-                .getSelectedItem();
-        final Reactome reactome = DefaultReconstructionManager.getInstance()
-                                                              .active()
-                                                              .getReactome();
+        PreferredNameService service = (PreferredNameService) resourceSelection.getSelectedItem();
 
-        Reconstruction reconstruction = DefaultReconstructionManager
-                .getInstance().active();
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
 
         List<Metabolite> selection = new ArrayList<Metabolite>(getSelection(Metabolite.class));
+
+        int done = 0;
 
         // for each selected metabolite select the first cross-reference which
         // matches the class of the identifier and set the new name
         for (final Metabolite metabolite : selection) {
+            final String progress = String.format("%.1f%%", 100 * (done / (float) selection.size()));
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override public void run() {
+                    indicator.setText("renaming " + metabolite.getName() + "... " + progress);
+                }
+            });
 
-            for (CrossReference xref : metabolite
-                    .getAnnotationsExtending(CrossReference.class)) {
+            for (CrossReference xref : metabolite.getAnnotationsExtending(CrossReference.class)) {
                 if (xref.getIdentifier().getClass()
                         .equals(service.getIdentifier().getClass())) {
 
@@ -225,7 +229,9 @@ public class RenameFromResource extends AbstractControlDialog {
 
                 }
             }
+            done++;
         }
+
 
         edits.end();
 
