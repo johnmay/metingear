@@ -73,7 +73,6 @@ public final class MergeMetaboliteEdit extends CompoundEdit
 
                 for (MetabolicParticipant reactant : reactants) {
                     if (reactant.getMolecule() == replace) {
-                        System.out.println("replacing");
                         reaction.removeReactant(reactant);
                         reaction.addReactant(createReplacement(reactant, union));
                     }
