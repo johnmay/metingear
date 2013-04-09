@@ -184,11 +184,6 @@
             <artifactId>mdk-domain-identifier</artifactId>
             <version>${mdk.version}</version>
         </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>mdk-domain-identifier</artifactId>
-            <version>${mdk.version}</version>
-        </dependency>
 
         <!-- CAF -->
         <dependency>
