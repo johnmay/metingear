@@ -18,9 +18,12 @@ package uk.ac.ebi.mnb.dialog.file.importation;
 
 import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
+import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLReader;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
@@ -30,18 +33,18 @@ import uk.ac.ebi.mdk.ui.edit.reaction.DialogCompartmentResolver;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.xml.stream.XMLStreamException;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
 
 
 /**
@@ -117,25 +120,44 @@ public class ImportSBML extends DelayedBuildAction {
                 public void run() {
                     InputStream in = null;
                     try {
-                        in = new BufferedInputStream(new FileInputStream(choosen), 4096);
-                        SBMLReactionReader reader = new SBMLReactionReader(in, DefaultEntityFactory
-                                .getInstance(), new DialogCompartmentResolver(new AutomaticCompartmentResolver(),
-                                                                              (JFrame) controller));
+                        in = new BufferedInputStream(new FileInputStream(choosen));
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override public void run() {
+                                wait.setText("reading from XML to SBMLDocument (JSBML)...");
+                            }
+                        });
+                        long t0 = System.nanoTime();
+                        SBMLDocument document = SBMLReader.read(in);
+                        long t1 = System.nanoTime();
+
+                        System.out
+                              .println(((t1 - t0) / 1e6) + " ms to read with JSBML");
+
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override public void run() {
+                                wait.setText("reading from SBMLDocument to Reconstruction..");
+                            }
+                        });
+                        EntityFactory entities = DefaultEntityFactory
+                                .getInstance();
+                        SBMLReactionReader reader = new SBMLReactionReader(document,
+                                                                           entities,
+                                                                           new DialogCompartmentResolver(new AutomaticCompartmentResolver(),
+                                                                                                         (JFrame) controller));
                         while (reader.hasNext()) {
                             active.addReaction(reader.next());
                         }
+                    } catch (IOException e) {
+                        messages.add(new ErrorMessage(e.getMessage()));
                     } catch (XMLStreamException ex) {
-                        messages.add(new ErrorMessage(ex.getMessage()));
-                    } catch (FileNotFoundException ex) {
                         messages.add(new ErrorMessage(ex.getMessage()));
                     } finally {
                         try {
-                            if (in != null)
+                            if (in != null) {
                                 in.close();
-                        } catch (IOException ex) {
-                            java.util.logging.Logger.getLogger(ImportSBML.class
-                                                                       .getName())
-                                             .log(Level.SEVERE, null, ex);
+                            }
+                        } catch (IOException e) {
+                            // ignored
                         }
                     }
 
