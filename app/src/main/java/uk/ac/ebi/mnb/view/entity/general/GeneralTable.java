@@ -41,7 +41,7 @@ public class GeneralTable extends AbstractEntityTable {
 
     }
 
-    private class DoubleClickListener extends MouseAdapter {
+    private static class DoubleClickListener extends MouseAdapter {
 
         private AbstractEntityTable table;
 

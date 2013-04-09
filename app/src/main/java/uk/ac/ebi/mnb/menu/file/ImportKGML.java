@@ -69,7 +69,8 @@ public class ImportKGML extends FileChooserAction {
                 java.util.logging.Logger.getLogger(ImportKGML.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 try {
-                    stream.close();
+                    if(stream != null)
+                        stream.close();
                 } catch (IOException ex) {
                     java.util.logging.Logger.getLogger(ImportKGML.class.getName()).log(Level.SEVERE, null, ex);
                 }

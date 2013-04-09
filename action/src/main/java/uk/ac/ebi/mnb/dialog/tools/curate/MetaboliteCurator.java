@@ -153,8 +153,6 @@ public class MetaboliteCurator extends DropdownDialog {
             layout.appendRow(new RowSpec(Sizes.DLUY4));
         }
 
-        JPanel panel = PanelFactory.createDialogPanel();
-
         return options;
 
     }

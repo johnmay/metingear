@@ -104,7 +104,7 @@ public class AnnotationControlManager {
     }
 
 
-    private class NullControl implements AnnotationTableControl {
+    private static class NullControl implements AnnotationTableControl {
 
         public Object getController(Annotation annotation, AnnotatedEntity entity) {
             return null;

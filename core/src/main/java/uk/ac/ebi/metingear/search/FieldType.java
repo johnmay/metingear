@@ -47,13 +47,9 @@ public enum FieldType {
     public Term getTerm(String text) {
         return term.createTerm(text);
     }
-    private static String[] allFields;
 
     public static String[] getAllFields() {
-        if (allFields == null) {
-            allFields = getArray(values());
-        }
-        return allFields;
+        return getArray(values());
     }
 
     public static String[] getArray(FieldType[] types) {

@@ -370,9 +370,6 @@ public class SourceController
 
     public void customizePopup(JPopupMenu popup) {
 
-        ReconstructionManager manager = DefaultReconstructionManager
-                .getInstance();
-
         // if there's no item add them all
         if (popup.getComponents().length == 0) {
             for (Action action : Arrays.asList(setActiveProject,

@@ -257,8 +257,6 @@ public class ReactionPanel
             collection.add(p.getMolecule());
         }
 
-        // should be synced with a listener
-        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
 
         MainView.getInstance().update(collection);
 

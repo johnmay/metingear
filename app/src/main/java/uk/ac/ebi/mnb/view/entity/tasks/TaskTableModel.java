@@ -84,8 +84,7 @@ public class TaskTableModel extends AbstractEntityTableModel {
             } else if (name.equals("Status")) {
                 return task.getStatus();
             } else if (name.equals("Elapsed Time (mins)")) {
-                CALENDAR.setTime(task.getElapesedTime());
-                return CALENDAR.get(Calendar.MINUTE);
+                return task.getElapesedTime();
             }
         }
 
