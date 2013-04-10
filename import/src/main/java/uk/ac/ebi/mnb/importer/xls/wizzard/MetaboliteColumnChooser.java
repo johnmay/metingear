@@ -118,7 +118,7 @@ public class MetaboliteColumnChooser
 //
         add(new JSeparator(), cc.xyw(1, 3, 7));
 
-        add(LabelFactory.newFormLabel("Abbreviation"), cc.xy(1, 5));
+        add(LabelFactory.newFormLabel("Identifier/Abbreviation"), cc.xy(1, 5));
         add(abbreviation, cc.xy(3, 5));
         add(LabelFactory.newFormLabel("Name"), cc.xy(5, 5));
         add(description, cc.xy(7, 5));

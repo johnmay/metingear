@@ -131,8 +131,8 @@ public class ExcelImportDialog
         properties.setFile(file);
 
         stages[0] = new SheetChooserDialog(helper, properties);
-        stages[1] = new ReactionColumnChooser(helper, properties);
-        stages[2] = new MetaboliteColumnChooser(helper, properties);
+        stages[1] = new MetaboliteColumnChooser(helper, properties);
+        stages[2] = new ReactionColumnChooser(helper, properties);
         stages[3] = new AdditionalOptions(properties);
 
         for (int i = 0; i < 4; i++) {

@@ -69,8 +69,8 @@ public final class ExpandUniProtReference extends AbstractControlAction {
             long estimate = remaining * avg / NANO_SECONDS_IN_A_SECOND;
 
             if (done > ESTIMATE_THRESHOLD) {
-                listener.progressed("expanding " + p
-                        .getName() + "... (~" + estimate + " s remaining)");
+                listener.progressed("[" + estimate + " s left]: " + p
+                        .getName() + "...");
             } else {
                 listener.progressed("expanding " + p.getName() + "...");
             }
