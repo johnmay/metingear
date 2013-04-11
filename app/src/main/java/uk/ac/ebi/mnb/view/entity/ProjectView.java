@@ -246,7 +246,6 @@ public class ProjectView
             MainView.getInstance().addWarningMessage("Unable to index component for searching");
         }
 
-
         return true; // update successful
 
     }

@@ -120,7 +120,6 @@ public class PreferencePanel extends JPanel {
         model.addElement("General");
         model.addElement("Rendering");
         model.addElement("Tools");
-        model.addElement("Databases");
 
 
         category.addListSelectionListener(new ListSelectionListener() {

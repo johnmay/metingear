@@ -86,11 +86,10 @@ public class AbstractEntityView
 
 
         // action listener changes text on the bottom-bar
-        table.getSelectionModel()
-             .addListSelectionListener(listener);
+        table.addListSelectionListener(listener);
 
         // update inspector on selection and data change
-        table.getSelectionModel().addListSelectionListener(inspector);
+        table.addListSelectionListener(inspector);
         table.getModel().addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {

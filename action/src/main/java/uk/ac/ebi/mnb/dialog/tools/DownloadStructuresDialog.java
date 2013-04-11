@@ -160,12 +160,12 @@ public class DownloadStructuresDialog
         for (Metabolite m : getSelection().get(Metabolite.class)) {
 
             ANNOTATION:
-            for (CrossReference reference : m
-                    .getAnnotationsExtending(CrossReference.class)) {
+            for (CrossReference reference : m.getAnnotationsExtending(CrossReference.class)) {
                 for (Identifier identifier : resourceSelection.getElements()) {
 
-                    if (identifier.getClass().equals(reference.getIdentifier()
-                                                              .getClass())) {
+                    if (identifier.getClass().isAssignableFrom(reference
+                                                                       .getIdentifier()
+                                                                       .getClass())) {
 
                         // get the appropiate service for the given ientifier
                         StructureService service = services
@@ -231,6 +231,7 @@ public class DownloadStructuresDialog
         // do nothing
     }
 
+
     public boolean canUse(QueryService service) {
         QueryService.ServiceType type = service.getServiceType();
         return ws.isSelected() || !service.getServiceType().remote();
@@ -266,8 +267,7 @@ public class DownloadStructuresDialog
             for (CrossReference xref : metabolite
                     .getAnnotationsExtending(CrossReference.class)) {
                 for (Identifier identifier : available) {
-                    if (xref.getIdentifier().getClass().equals(identifier
-                                                                       .getClass())) {
+                    if (identifier.getClass().isAssignableFrom(xref.getIdentifier().getClass())) {
                         resourceSelection.addElement(identifier);
                         accept.add(identifier);
                         break;

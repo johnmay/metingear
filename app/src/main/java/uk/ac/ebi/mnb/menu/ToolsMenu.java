@@ -91,7 +91,6 @@ public class ToolsMenu extends ContextMenu {
 
         annotation
                 .add(create(DownloadStructuresDialog.class), new ContextResponder() {
-
                     public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                         return selection.hasSelection(Metabolite.class);
                     }

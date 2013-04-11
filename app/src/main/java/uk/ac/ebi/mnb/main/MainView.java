@@ -285,6 +285,7 @@ public class MainView
 
         // links the task manager with this
         TaskManager.getInstance().setController(this);
+        TaskManager.getInstance().setTaskTable(project.getTaskView().getTable());
 
         addFocusListener(new FocusListener() {
 

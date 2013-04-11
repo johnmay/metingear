@@ -24,16 +24,14 @@ import uk.ac.ebi.chemet.render.source.NameAccessor;
 import uk.ac.ebi.edit.entity.AbbreviationSetter;
 import uk.ac.ebi.edit.entity.NameSetter;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
-import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
-import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
-import uk.ac.ebi.mdk.ui.render.table.RatingCellRenderer;
 import uk.ac.ebi.mnb.interfaces.EntityTableModel;
 import uk.ac.ebi.mnb.main.MainView;
 
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.undo.UndoManager;
 import java.util.ArrayList;
@@ -54,11 +52,13 @@ import java.util.Map;
 public abstract class AbstractEntityTableModel
         extends AbstractTableModel implements EntityTableModel {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractEntityTableModel.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(AbstractEntityTableModel.class);
 
     private ReconstructionImpl currentReconstruction;
 
-    private ReconstructionManager pm = DefaultReconstructionManager.getInstance();
+    private ReconstructionManager pm = DefaultReconstructionManager
+            .getInstance();
 
     private List<ColumnDescriptor> columnDescriptors = new ArrayList();
 
@@ -91,12 +91,11 @@ public abstract class AbstractEntityTableModel
     }
 
 
-    /**
-     * Returns the default columns Accession, Abbreviation and Name
-     */
+    /** Returns the default columns Accession, Abbreviation and Name */
     public static List<ColumnDescriptor> getDefaultColumns() {
         return defaultColumns;
     }
+
 
 
     /**
@@ -106,15 +105,14 @@ public abstract class AbstractEntityTableModel
      * @return
      */
     public AnnotatedEntity getEntity(int index) {
-        return index != -1 && index < components.size() ? components.get(index) : null;
+        return index != -1 && index < components.size() ? components.get(index)
+                                                        : null;
     }
 
     private Object[][] data;
 
 
-    /**
-     * Updates the underlying table-model
-     */
+    /** Updates the underlying table-model */
     public boolean update() {
         setEntities(getEntities());
 
@@ -171,9 +169,7 @@ public abstract class AbstractEntityTableModel
     }
 
 
-    /**
-     * Updates only a subset of table data
-     */
+    /** Updates only a subset of table data */
     public boolean update(EntityCollection selection) {
 
         long start = System.currentTimeMillis();
@@ -198,9 +194,7 @@ public abstract class AbstractEntityTableModel
     }
 
 
-    /**
-     * Method is called on update before cells are copied over to data[][]
-     */
+    /** Method is called on update before cells are copied over to data[][] */
     public abstract Collection<? extends AnnotatedEntity> getEntities();
 
 
@@ -284,8 +278,9 @@ public abstract class AbstractEntityTableModel
         } else if (type == DataType.BASIC) {
             return getBasicInfo(entity, getColumnName(columnIndex));
         } else if (type == DataType.ANNOTATION) {
-            return entity.getAnnotationsExtending(columnDescriptors.get(columnIndex)
-                                                                   .getAccessClass());
+            return entity.getAnnotationsExtending(columnDescriptors
+                                                          .get(columnIndex)
+                                                          .getAccessClass());
         } else if (type == DataType.OBSERVATION) {
             return null;
             //            return entity.getObservationCollection().get(

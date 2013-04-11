@@ -29,8 +29,13 @@ import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.JTable;
+import javax.swing.TransferHandler;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.Container;
+import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
@@ -53,6 +58,19 @@ public abstract class AbstractEntityTable
             .getLogger(AbstractEntityTable.class);
     private EntityCollection selection = new EntityMap(DefaultEntityFactory
                                                                .getInstance());
+
+    private boolean updating = false;
+
+    public void addListSelectionListener(final ListSelectionListener listener) {
+        // only forward when not updating
+        getSelectionModel()
+                .addListSelectionListener(new ListSelectionListener() {
+                    @Override public void valueChanged(ListSelectionEvent e) {
+                        if (!updating)
+                            listener.valueChanged(e);
+                    }
+                });
+    }
 
     public AbstractEntityTable(AbstractEntityTableModel model) {
         super(model);
@@ -104,13 +122,13 @@ public abstract class AbstractEntityTable
         return (AbstractEntityTableModel) super.getModel();
     }
 
-    /**
-     * Update the table model with the current
-     */
+    /** Update the table model with the current */
     public boolean update() {
+        updating = true;
         int[] selected = getSelectedRows();
         boolean updated = getModel().update();
         select(selected);
+        updating = false;
         return updated;
     }
 
@@ -142,9 +160,7 @@ public abstract class AbstractEntityTable
         return intervals.toArray(new int[intervals.size()][]);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public boolean update(EntityCollection selection) {
         return getModel().update(selection);

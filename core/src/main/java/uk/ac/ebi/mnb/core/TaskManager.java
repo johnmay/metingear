@@ -19,8 +19,9 @@ package uk.ac.ebi.mnb.core;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.mdk.tool.task.TaskStatus;
 import uk.ac.ebi.mnb.interfaces.MainController;
+import uk.ac.ebi.mnb.interfaces.Updatable;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,15 +29,14 @@ import java.util.List;
 
 
 /**
- *
  * @author johnmay
- * @date   Apr 28, 2011
+ * @date Apr 28, 2011
  */
 public class TaskManager
         implements Runnable {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(TaskManager.class);
+            org.apache.log4j.Logger.getLogger(TaskManager.class);
 
     private int MAX_TASKS = 2;
 
@@ -47,6 +47,8 @@ public class TaskManager
     private ArrayList<RunnableTask> completedTasks;
 
     private MainController controller;
+
+    private Runnable updateTable;
 
 
     private TaskManager() {
@@ -64,6 +66,14 @@ public class TaskManager
 
     public void setController(MainController controller) {
         this.controller = controller;
+    }
+
+    public void setTaskTable(final Updatable updatable) {
+        this.updateTable = new Runnable() {
+            @Override public void run() {
+                updatable.update();
+            }
+        };
     }
 
 
@@ -96,6 +106,7 @@ public class TaskManager
 
     /**
      * Adds a single tasks to the queue
+     *
      * @param tasks
      * @return
      */
@@ -106,6 +117,7 @@ public class TaskManager
 
     /**
      * Adds all tasks to the queue
+     *
      * @param tasks
      * @return
      */
@@ -116,6 +128,7 @@ public class TaskManager
 
     /**
      * Adds one or more tasks to the queue
+     *
      * @param task
      * @return
      */
@@ -145,9 +158,10 @@ public class TaskManager
             }
 
 
-            // only check task management every second  to restrain CPU useage
+            // only check task management every 300 ms to restrain CPU useage
             try {
-                Thread.sleep(1000L);
+                Thread.sleep(300L);
+                SwingUtilities.invokeLater(updateTable);
             } catch (InterruptedException ex) {
                 logger.error("TaskManager Interrupted!");
             }
@@ -156,20 +170,22 @@ public class TaskManager
             for (int i = 0; i < runningTasks.size(); i++) {
                 RunnableTask task = runningTasks.get(i);
                 if (task.getStatus() == TaskStatus.COMPLETED
-                    || task.getStatus() == TaskStatus.ERROR) {
+                        || task.getStatus() == TaskStatus.ERROR) {
                     runningTasks.remove(task);
                     completedTasks.add(task);
                     if (task.isCompleted()) {
                         task.postrun();
                     } else {
-                        controller.getMessageManager().addReport(new WarningMessage("Task " + task.getName() + " finished in error"));
+                        controller.getMessageManager()
+                                  .addReport(new WarningMessage("Task " + task
+                                          .getName() + " finished in error"));
                     }
                     this.update();
                 }
             }
 
         } while (queuedTasks.size() > 0
-                 || runningTasks.size() > 0);
+                || runningTasks.size() > 0);
 
         this.update();
 
@@ -196,11 +212,6 @@ public class TaskManager
 
     public void setMaxSimultaneousJobs(int maxSimultaneousJobs) {
         this.MAX_TASKS = maxSimultaneousJobs;
-
-
-
-
-
 
 
     }
