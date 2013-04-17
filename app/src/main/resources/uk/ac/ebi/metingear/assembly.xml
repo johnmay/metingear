@@ -1,39 +1,15 @@
-<!--
-  ~ Copyright (c) 2013. EMBL, European Bioinformatics Institute
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU Lesser General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU Lesser General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU Lesser General Public License
-  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
-    <id>uber-jar</id>
+<assembly
+        xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <id>jar-with-dependencies</id>
     <formats>
         <format>jar</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
     <containerDescriptorHandlers>
-
         <containerDescriptorHandler>
             <handlerName>metaInf-services</handlerName>
-        </containerDescriptorHandler>
-        <containerDescriptorHandler>
-            <handlerName>file-aggregator</handlerName>
-            <configuration>
-                <filePattern>uk/ac/ebi/caf/action/action.properties</filePattern>
-                <outputPath>uk/ac/ebi/caf/action/action.properties</outputPath>
-            </configuration>
         </containerDescriptorHandler>
         <containerDescriptorHandler>
             <handlerName>file-aggregator</handlerName>
@@ -42,11 +18,16 @@
                 <outputPath>uk/ac/ebi/metingear/dialog-config.yml</outputPath>
             </configuration>
         </containerDescriptorHandler>
-
+        <containerDescriptorHandler>
+            <handlerName>file-aggregator</handlerName>
+            <configuration>
+                <filePattern>uk/ac/ebi/caf/action/action.properties
+                </filePattern>
+                <outputPath>uk/ac/ebi/caf/action/action.properties</outputPath>
+            </configuration>
+        </containerDescriptorHandler>
     </containerDescriptorHandlers>
-
     <dependencySets>
-
         <dependencySet>
             <outputDirectory>/</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
@@ -56,37 +37,6 @@
                 <exclude>ilog.cplex:cplex</exclude>
             </excludes>
         </dependencySet>
-
-        <dependencySet>
-            <outputDirectory>/</outputDirectory>
-            <unpack>true</unpack>
-            <unpackOptions>
-                <excludes>
-                    <exclude>META-INF/NOTICE.txt</exclude>
-                    <exclude>META-INF/LICENSE.txt</exclude>
-                    <exclude>META-INF/NOTICE</exclude>
-                    <exclude>META-INF/LICENSE</exclude>
-                    <exclude>NOTICE</exclude>
-                    <exclude>LICENSE</exclude>
-                    <exclude>license</exclude>
-                    <exclude>NOTICE.txt</exclude>
-                    <exclude>LICENSE.txt</exclude>
-                </excludes>
-            </unpackOptions>
-        </dependencySet>
-
     </dependencySets>
-    <fileSets>
-        <fileSet>
-            <directory>${project.basedir}</directory>
-            <outputDirectory>/</outputDirectory>
-            <excludes>
-                <exclude>LICENSE</exclude>
-                <exclude>license/*</exclude>
-                <exclude>NOTICE</exclude>
-                <exclude>LICENSE.txt</exclude>
-                <exclude>NOTICE.txt</exclude>
-            </excludes>
-        </fileSet>
-    </fileSets>
+
 </assembly>

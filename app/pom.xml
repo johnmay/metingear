@@ -265,40 +265,6 @@
     </dependencies>
     <build>
         <plugins>
-
-            <!-- build a standalone executable jar
-                 > cd mnb-application
-                 > mvn assembly:assembly
-            -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2.1</version>
-                <configuration>
-
-                    <finalName>Metingear-${project.version}</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <classifier>dummy</classifier>
-
-                    <archive>
-                        <manifest>
-                            <mainClass>uk.ac.ebi.metingear.Main</mainClass>
-                        </manifest>
-                        <manifestEntries>
-                            <SplashScreen-Image>uk/ac/ebi/metingear/splash.png
-                            </SplashScreen-Image>
-                        </manifestEntries>
-                    </archive>
-
-                    <descriptors>
-                        <descriptor>
-                            src/main/resources/uk/ac/ebi/metingear/assembly.xml
-                        </descriptor>
-                    </descriptors>
-
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -308,7 +274,28 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <finalName>Metingear-${project.version}</finalName>
+                    <classifier>uber</classifier>
+                    <archive>
+                        <manifest>
+                            <mainClass>uk.ac.ebi.metingear.Main</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <SplashScreen-Image>uk/ac/ebi/metingear/splash.png</SplashScreen-Image>
+                        </manifestEntries>
+                    </archive>
+                    <descriptors>
+                        <descriptor>
+                            ${project.basedir}/src/main/resources/uk/ac/ebi/metingear/assembly.xml
+                        </descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
         </plugins>
 
     </build>
