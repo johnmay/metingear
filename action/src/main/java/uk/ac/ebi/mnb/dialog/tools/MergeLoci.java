@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -52,7 +52,7 @@ public class MergeLoci extends ControllerAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().active();
 
         Multimap<String, MetabolicReaction> monomeric = HashMultimap.create();
         Multimap<String, MetabolicReaction> multimeric = HashMultimap.create();
@@ -68,35 +68,37 @@ public class MergeLoci extends ControllerAction {
             }
         }
 
-        Proteome proteome = recon.getProteome();
-
+        Proteome proteome = recon.proteome();
+        throw new UnsupportedOperationException("deprecated");
         // monomeric
-        for (String locus : monomeric.keySet()) {
-            for (GeneProduct product : proteome.get(locus)) {
-                for (MetabolicReaction rxn : monomeric.get(locus)) {
-                    rxn.addModifier(product); // needs to be an add
-                }
-            }
-        }
+//        for (String locus : monomeric.keySet()) {
+//            for (GeneProduct product : proteome.get(locus)) {
+//                for (MetabolicReaction rxn : monomeric.get(locus)) {
+//                    rxn.addModifier(product); // needs to be an add
+//                }
+//            }
+//        }
+//
+//        throw new UnsupportedOperationException("deprecated");
 
-        // multimeric
-        for (String locusAnnotation : multimeric.keySet()) {
+//        // multimeric
+//        for (String locusAnnotation : multimeric.keySet()) {
+//
+//            String[] loci = locusAnnotation.split("\\+");
+//            GeneProduct[] subunits = new GeneProduct[loci.length];
+//            for (int i = 0; i < loci.length; i++) {
+//                subunits[i] = proteome.get(loci[i]).iterator().next();
+//            }
+//
+//            GeneProduct product = new MultimerImpl(subunits);
+//            recon.getProducts().add(product);
+//
+//            for (MetabolicReaction rxn : multimeric.get(locusAnnotation)) {
+//                rxn.addModifier(product);
+//            }
+//        }
 
-            String[] loci = locusAnnotation.split("\\+");
-            GeneProduct[] subunits = new GeneProduct[loci.length];
-            for (int i = 0; i < loci.length; i++) {
-                subunits[i] = proteome.get(loci[i]).iterator().next();
-            }
-
-            GeneProduct product = new MultimerImpl(subunits);
-            recon.getProducts().add(product);
-
-            for (MetabolicReaction rxn : multimeric.get(locusAnnotation)) {
-                rxn.addModifier(product);
-            }
-        }
-
-        update();
+ //       update();
 
     }
 }

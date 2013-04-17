@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -57,7 +57,7 @@ public class ReactionParser {
     private static final Logger LOGGER = Logger.getLogger(ReactionParser.class);
     // Reaction arrow matcher (note excess space is gobbeled up in split)
 
-    public static final Pattern EQUATION_ARROW = Pattern.compile("(<[-=]+>)|(<[-=]*)|([-=]*>)");
+    public static final Pattern EQUATION_ARROW = Pattern.compile("(<[-=]+>)|(<[-=]*)|([-=]*>)|(=+)");
 
     public static final Pattern EQUATION_ADDITION = Pattern.compile("\\s+[+]\\s+");
 
@@ -76,7 +76,8 @@ public class ReactionParser {
     private static final Direction[] NORMALISED_ARROWS =
             new Direction[]{Direction.BIDIRECTIONAL,
                             Direction.BACKWARD,
-                            Direction.FORWARD};
+                            Direction.FORWARD,
+                            Direction.BIDIRECTIONAL};
 
     private EntityResolver entites;
     private EntityFactory factory = DefaultEntityFactory.getInstance();

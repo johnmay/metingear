@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,6 @@ import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 import javax.swing.*;
 import javax.swing.event.UndoableEditListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -99,7 +98,7 @@ public class MergeEntities extends ControllerDialog {
         Collection<Metabolite> entities = getSelection().get(Metabolite.class);
 
 
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().active();
 
         List<Annotation> annotations = new ArrayList<Annotation>();
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,17 +19,23 @@ package uk.ac.ebi.mnb.menu;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditListener;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -39,9 +45,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 /**
- * ContextMenu - 2011.11.28 <br>
- * The context menu holds actions/drop-down dialog classes with optional
- * context associations
+ * ContextMenu - 2011.11.28 <br> The context menu holds actions/drop-down dialog
+ * classes with optional context associations
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -65,7 +70,8 @@ public class ContextMenu extends JMenu {
                                      final SelectionController selection,
                                      final UndoableEditListener undo) {
 
-        return new DelayedBuildAction(dialogClass, dialogClass.getSimpleName()) {
+        return new DelayedBuildAction(dialogClass, dialogClass
+                .getSimpleName()) {
 
             private ControllerDialog dialog;
 
@@ -73,14 +79,17 @@ public class ContextMenu extends JMenu {
             public void buildComponents() {
                 try {
                     Constructor constructor = dialogClass.getConstructors()[0];
-                    LOGGER.debug("Building dialog: " + dialogClass.getSimpleName());
-                    dialog = (ControllerDialog) constructor.newInstance((JFrame) controller,
-                                                                        (TargetedUpdate) update,
-                                                                        (ReportManager) message,
-                                                                        (SelectionController) selection,
-                                                                        (UndoableEditListener) undo);
+                    LOGGER.debug("Building dialog: " + dialogClass
+                            .getSimpleName());
+                    dialog = (ControllerDialog) constructor
+                            .newInstance((JFrame) controller,
+                                         (TargetedUpdate) update,
+                                         (ReportManager) message,
+                                         (SelectionController) selection,
+                                         (UndoableEditListener) undo);
                 } catch (Exception ex) {
-                    LOGGER.error("Unable to construct dialog " + dialogClass.getSimpleName(), ex);
+                    LOGGER.error("Unable to construct dialog " + dialogClass
+                            .getSimpleName(), ex);
                 }
             }
 
@@ -114,8 +123,8 @@ public class ContextMenu extends JMenu {
     }
 
     /**
-     * Using the controller specified in the menu constructor a dialog is created using the controller
-     * as the update and selection manager
+     * Using the controller specified in the menu constructor a dialog is
+     * created using the controller as the update and selection manager
      */
     public void add(AbstractAction action,
                     ContextResponder context) {
@@ -129,8 +138,8 @@ public class ContextMenu extends JMenu {
 
 
     /**
-     * Using the controller specified in the menu constructor a dialog is created using the controller
-     * as the update and selection manager
+     * Using the controller specified in the menu constructor a dialog is
+     * created using the controller as the update and selection manager
      */
     public void add(JMenuItem item,
                     ContextResponder context) {
@@ -143,21 +152,36 @@ public class ContextMenu extends JMenu {
 
     }
 
-    /**
-     * Updates all item states based on the associated context responders
-     */
+    /** Updates all item states based on the associated context responders */
     public void updateContext() {
 
-        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
-        EntityCollection selection = controller.getViewController().getSelection();
+        final ReconstructionManager manager = DefaultReconstructionManager
+                .getInstance();
+        final Reconstruction reconstruction = DefaultReconstructionManager
+                .getInstance().active();
+        final EntityCollection selection = new EntityMap(DefaultEntityFactory
+                                                                 .getInstance());
+        selection.addAll(controller.getViewController()
+                                   .getSelection().getEntities());
 
         for (Entry<JMenuItem, ContextResponder> e : items.entrySet()) {
 
-            JMenuItem item = e.getKey();
-            ContextResponder context = e.getValue();
+            final JMenuItem item = e.getKey();
+            final ContextResponder context = e.getValue();
 
-            item.setEnabled(context.getContext(manager, reconstruction, selection));
+            new Thread(new Runnable() {
+                @Override public void run() {
+                    final boolean enable = context
+                            .getContext(manager, reconstruction, selection);
+                    if (item.isEnabled() != enable) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override public void run() {
+                                item.setEnabled(enable);
+                            }
+                        });
+                    }
+                }
+            }).start();
 
         }
 

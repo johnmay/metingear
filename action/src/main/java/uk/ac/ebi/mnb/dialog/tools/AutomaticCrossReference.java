@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -52,6 +52,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 
@@ -231,9 +232,13 @@ public class AutomaticCrossReference
         for (Identifier identifier : services.getIdentifiers(NameService.class)) {
             // check it's actually available
             if (services.hasService(identifier, NameService.class)) {
-                QueryService service = services.getService(identifier, NameService.class);
-                if (isUsable(service) && isChemicalService(service)) {
-                    resourceSelection.addElement(identifier);
+                try{
+                    QueryService service = services.getService(identifier, NameService.class);
+                    if (isUsable(service) && isChemicalService(service)) {
+                        resourceSelection.addElement(identifier);
+                    }
+                } catch (NoSuchElementException ex) {
+                    // connection problems to ws
                 }
             }
         }

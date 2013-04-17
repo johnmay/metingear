@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,6 +23,7 @@ import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.io.IOConstants;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.main.MainView;
@@ -51,8 +52,8 @@ public class SaveAction extends GeneralAction {
 
     public void actionPerformed(ActionEvent e) {
 
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        final Reconstruction reconstruction = manager.getActive();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        final Reconstruction reconstruction = manager.active();
 
 
         if (!reconstruction.getContainer().exists())

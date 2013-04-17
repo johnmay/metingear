@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -81,13 +81,13 @@ public class MetaboliteTableModel
     public Collection<? extends AnnotatedEntity> getEntities() {
 
         Reconstruction project = DefaultReconstructionManager.getInstance()
-                                                             .getActive();
+                                                             .active();
 
         if (project != null) {
-            return project.getMetabolome();
+            return project.getMetabolome().toList();
         }
 
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
 
     }
 

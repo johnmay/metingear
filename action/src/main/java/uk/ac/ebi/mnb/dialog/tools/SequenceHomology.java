@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -29,45 +29,69 @@ import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.mdk.tool.task.homology.HomologySearchFactory;
+import uk.ac.ebi.mdk.ui.render.list.DefaultRenderer;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.TaskManager;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
-import javax.swing.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.UndoableEditListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
 /**
- * @name    SequenceComparisson - 2011.10.07 <br>
- *          Dialog to build sequence analysis tasks
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name SequenceComparisson - 2011.10.07 <br> Dialog to build sequence analysis
+ * tasks
  */
 public class SequenceHomology
-        extends ControllerDialog
-          {
+        extends ControllerDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(SequenceHomology.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(SequenceHomology.class);
     private CellConstraints cc = new CellConstraints();
     // options
-    private JCheckBox remote = CheckBoxFactory.newCheckBox("Remote (webservices)");
+    private JCheckBox remote = CheckBoxFactory
+            .newCheckBox("Remote (webservices)");
     private JComboBox tool = ComboBoxFactory.newComboBox("BLAST");
-    private JComboBox database = ComboBoxFactory.newComboBox(HomologyDatabaseManager.getInstance().getNames());
-    private JSpinner cpu = new JSpinner(new SpinnerNumberModel(1, 1, Runtime.getRuntime().availableProcessors(), 1));
+
+    private JSpinner cpu = new JSpinner(new SpinnerNumberModel(1, 1, Runtime
+            .getRuntime().availableProcessors(), 1));
     private JSpinner results = new JSpinner(new SpinnerNumberModel(50, 10, 2500, 50));
     private JTextField field = FieldFactory.newField("1e-30");
-    private JCheckBox alignments = CheckBoxFactory.newCheckBox("Parse alignments (increases save sizes)");
+    private JCheckBox alignments = CheckBoxFactory
+            .newCheckBox("Parse alignments (increases save sizes)");
+
+    private final HomologyDatabaseManager dbs = HomologyDatabaseManager.getInstance();
+
+    private JComboBox database = ComboBoxFactory.newComboBox(dbs.index());
 
     public SequenceHomology(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits, "BuildDialog");
 
         remote.setEnabled(false);
         cpu.setValue(Runtime.getRuntime().availableProcessors());
+        database.setRenderer(new DefaultRenderer<String>() {
+            @Override
+            public JLabel getComponent(JList list, String name, int index) {
+                return super.getComponent(list, dbs.getAlias(name), index);
+            }
+        });
         setDefaultLayout();
     }
 
@@ -112,26 +136,43 @@ public class SequenceHomology
 
     }
 
+    @Override public void prepare() {
+        super.prepare();
+        DefaultComboBoxModel model = (DefaultComboBoxModel) this.database
+                .getModel();
+        model.removeAllElements();
+        for (String name : dbs.index()) {
+            model.addElement(name);
+        }
+    }
+
     @Override
     public void process() {
         HomologySearchFactory factory = HomologySearchFactory.getInstance();
 
         Collection<GeneProduct> products = getSelection().getGeneProducts();
-        File db = HomologyDatabaseManager.getInstance().getPath((String) database.getSelectedItem());
+        File db = HomologyDatabaseManager.getInstance()
+                                         .getPath((String) database
+                                                 .getSelectedItem());
 
         try {
             RunnableTask task;
             if (alignments.isSelected()) {
-                task = factory.getBlastP(products, db, 1e-30, (Integer) cpu.getValue(), (Integer) results.getValue(), 5);
+                task = factory.getBlastP(products, db, 1e-30, (Integer) cpu
+                        .getValue(), (Integer) results.getValue(), 5);
             } else {
-                task = factory.getTabularBLASTP(products, db, 1e-30, (Integer) cpu.getValue(), (Integer) results.getValue());
+                task = factory
+                        .getTabularBLASTP(products, db, 1e-30, (Integer) cpu
+                                .getValue(), (Integer) results.getValue());
             }
             TaskManager.getInstance().add(task);
         } catch (IOException ex) {
-            addMessage(new ErrorMessage("Unable to perform sequence homology search: " + ex.getMessage()));
+            addMessage(new ErrorMessage("Unable to perform sequence homology search: " + ex
+                    .getMessage()));
             ex.printStackTrace();
         } catch (Exception ex) {
-            addMessage(new ErrorMessage("Unable to perform sequence homology search: " + ex.getMessage()));
+            addMessage(new ErrorMessage("Unable to perform sequence homology search: " + ex
+                    .getMessage()));
             ex.printStackTrace();
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -74,30 +74,34 @@ public class NewProject extends DropdownDialog {
 
         ReplacementHandler handler = new ReplacementHandler() {
             @Override
-            public void replace(JTextField field, Object value) {
-                codeField.setSuggest(false);
-                taxonField.setSuggest(false);
-                nameField.setSuggest(false);
-                Taxonomy taxonomy = (Taxonomy) value;
-                if (idField.getText().isEmpty()) {
-                    String[] nameTokens = taxonomy.getOfficialName().split("\\s+");
-                    if (nameTokens.length > 1)
-                        idField.setText("i" + nameTokens[0].substring(0, 1).toUpperCase() + nameTokens[1].substring(0, 2).toLowerCase() + "%n");
-                    else
-                        idField.setText("i" + taxonomy.getCode().toLowerCase());
-                }
-                codeField.setText(taxonomy.getCode());
-                taxonField.setText(taxonomy.getAccession());
-                kingdomField.setText(taxonomy.getKingdom().toString());
-                nameField.setText(taxonomy.getOfficialName());
-                codeField.setSuggest(true);
-                taxonField.setSuggest(true);
-                nameField.setSuggest(true);
+            public void replace(final JTextField field, final Object value) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override public void run() {
+                        codeField.setSuggest(false);
+                        taxonField.setSuggest(false);
+                        nameField.setSuggest(false);
+                        Taxonomy taxonomy = (Taxonomy) value;
+                        if (idField.getText().isEmpty()) {
+                            String[] nameTokens = taxonomy.getOfficialName().split("\\s+");
+                            if (nameTokens.length > 1)
+                                idField.setText("i" + nameTokens[0].substring(0, 1).toUpperCase() + nameTokens[1].substring(0, 2).toLowerCase() + "%n");
+                            else
+                                idField.setText("i" + taxonomy.getCode().toLowerCase());
+                        }
+                        codeField.setText(taxonomy.getCode());
+                        taxonField.setText(taxonomy.getAccession());
+                        kingdomField.setText(taxonomy.getKingdom().toString());
+                        nameField.setText(taxonomy.getOfficialName());
+                        codeField.setSuggest(true);
+                        taxonField.setSuggest(true);
+                        nameField.setSuggest(true);
+                    }
+                });
             }
         };
 
         idField = FieldFactory.newField(15);
-        codeField = new SuggestionField(this, 5, new SuggestionHandler() {
+        codeField = new SuggestionField(this, 5, 10, new SuggestionHandler() {
 
             @Override
             public ListCellRenderer getRenderer() {
@@ -117,6 +121,7 @@ public class NewProject extends DropdownDialog {
                 };
             }
 
+
             @Override
             public Collection<Object> getSuggestions(String s) {
                 return service.startup()
@@ -124,7 +129,7 @@ public class NewProject extends DropdownDialog {
                        : new ArrayList();
             }
         }, handler);
-        taxonField = new SuggestionField(this, 5, new SuggestionHandler() {
+        taxonField = new SuggestionField(this, 5, 10, new SuggestionHandler() {
             @Override
             public Collection<Object> getSuggestions(String s) {
                 return service.startup()
@@ -132,7 +137,7 @@ public class NewProject extends DropdownDialog {
                        : Collections.emptyList();
             }
         }, handler);
-        nameField = new SuggestionField(this, 35, new SuggestionHandler() {
+        nameField = new SuggestionField(this, 35, 10, new SuggestionHandler() {
 
             @Override
             public ListCellRenderer getRenderer() {
@@ -200,13 +205,24 @@ public class NewProject extends DropdownDialog {
 
     }
 
+
+
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
-
         // try and get a new service is the current one isn't avaialble
-        if (!service.startup())
+        if (!service.startup()) {
             service = new TaxonomyQueryService();
+        }
+    }
+
+    @Override
+    public void clear(){
+        codeField.clear();
+        taxonField.clear();
+        nameField.clear();
+        idField.setText("");
+        kingdomField.setText("");
     }
 
     public String getCode() {
@@ -281,7 +297,7 @@ public class NewProject extends DropdownDialog {
             ReconstructionIdentifier proId = new ReconstructionIdentifier(getProjectIdentifier());
 
             ReconstructionImpl proj = new ReconstructionImpl(UUID.randomUUID(), proId, orgId);
-            DefaultReconstructionManager.getInstance().setActiveReconstruction(proj);
+            DefaultReconstructionManager.getInstance().activate(proj);
 
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -78,25 +78,37 @@ public class CreateMatrix
     public void process() {
 
         EntityCollection manager = getSelection();
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().active();
 
-        Collection<MetabolicReaction> rxns =
-                manager.hasSelection(MetabolicReaction.class) && manager.get(MetabolicReaction.class).size() > 1
-                ? manager.get(MetabolicReaction.class)
-                : recon.getReactome();
+        if( manager.hasSelection(MetabolicReaction.class)){
+            Collection<MetabolicReaction> reactions = manager.get(MetabolicReaction.class);
+            LOGGER.info("Creating reaction matrix for " + reactions.size() + " reactions");
+            matrix = DefaultStoichiometricMatrix.create((int) (reactions.size() * 1.5),
+                                                        reactions.size());
+            for (MetabolicReaction rxn : reactions) {
 
-        LOGGER.info("Creating reaction matrix for " + rxns.size() + " reactions");
-        matrix = DefaultStoichiometricMatrix.create((int) (rxns.size() * 1.5),
-                                                    rxns.size());
-        for (MetabolicReaction rxn : rxns) {
+                // transpose
+                if (rxn.getDirection() == Direction.BACKWARD) {
+                    rxn.transpose();
+                    rxn.setDirection(Direction.FORWARD);
+                }
 
-            // transpose
-            if (rxn.getDirection() == Direction.BACKWARD) {
-                rxn.transpose();
-                rxn.setDirection(Direction.FORWARD);
+                matrix.addReaction(rxn);
             }
+        } else {
+            LOGGER.info("Creating reaction matrix for " + recon.reactome().size() + " reactions");
+            matrix = DefaultStoichiometricMatrix.create((int) (recon.reactome().size() * 1.5),
+                                                        recon.getMetabolome().size());
+            for (MetabolicReaction rxn : recon.reactome()) {
 
-            matrix.addReaction(rxn);
+                // transpose
+                if (rxn.getDirection() == Direction.BACKWARD) {
+                    rxn.transpose();
+                    rxn.setDirection(Direction.FORWARD);
+                }
+
+                matrix.addReaction(rxn);
+            }
         }
     }
 
@@ -104,7 +116,7 @@ public class CreateMatrix
     @Override
     public boolean update() {
 
-        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
 
         JFrame frame = new JFrame("Stoichiometric Matrix ("
                                           + reconstruction.getAccession()
@@ -114,7 +126,7 @@ public class CreateMatrix
         frame.add(new MatrixPane(matrix));
         frame.setVisible(true);
 
-        Reconstruction active = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction active = DefaultReconstructionManager.getInstance().active();
 
         active.setMatrix(matrix);
 

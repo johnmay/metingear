@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -33,18 +33,18 @@ import javax.swing.event.UndoableEditListener;
 public interface ControlDialog extends ProcessingDialog {
 
 
-    public void setSelectionController(SelectionController controller);
+     void setSelectionController(SelectionController controller);
 
-    public void setUndoManager(UndoableEditListener undoManager);
+     void setUndoManager(UndoableEditListener undoManager);
 
-    public void setReportManager(ReportManager report);
+     void setReportManager(ReportManager report);
 
-    public void setUpdateManager(TargetedUpdate update);
+     void setUpdateManager(TargetedUpdate update);
 
-    public void setEntityFactory(EntityFactory entityFactory);
+     void setEntityFactory(EntityFactory entityFactory);
 
-    public void setIdentifierFactory(IdentifierFactory identifierFactory);
+     void setIdentifierFactory(IdentifierFactory identifierFactory);
 
-    public void setAnnotationFactory(AnnotationFactory annotationFactory);
+     void setAnnotationFactory(AnnotationFactory annotationFactory);
 
 }

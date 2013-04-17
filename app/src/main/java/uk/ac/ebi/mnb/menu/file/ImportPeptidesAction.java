@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -86,7 +86,7 @@ public class ImportPeptidesAction extends FileChooserAction {
     public void activateActions() {
 
         // add the peptides to the active project and updateObservations the annotations table
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().active();
 
         if (recon == null) {
             MainView.getInstance().addErrorMessage("No active reconstruction to import peptides into");
@@ -157,7 +157,9 @@ public class ImportPeptidesAction extends FileChooserAction {
             }
         }
 
-        recon.getProducts().addAll(peptides);
+        for(GeneProduct p : peptides){
+            recon.addProduct(p);
+        }
 
         ////        AbstractIdentifier[] clashingIdentifiers = ReconstructionManager.getInstance().
         ////          getActiveReconstruction().getProducts().addAll(project);

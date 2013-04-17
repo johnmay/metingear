@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -73,7 +73,7 @@ public class RemoveMetaboliteEditTest {
                     reconstruction.getMetabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      0,
-                     reconstruction.getReactome().getReactions(a).size());
+                     reconstruction.getReactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      1,
                      r1.getReactantCount());
@@ -88,7 +88,7 @@ public class RemoveMetaboliteEditTest {
                    reconstruction.getMetabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      2,
-                     reconstruction.getReactome().getReactions(a).size());
+                     reconstruction.getReactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      2,
                      r1.getReactantCount());
@@ -136,7 +136,7 @@ public class RemoveMetaboliteEditTest {
                     reconstruction.getMetabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      0,
-                     reconstruction.getReactome().getReactions(a).size());
+                     reconstruction.getReactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      1,
                      r1.getReactantCount());
@@ -154,7 +154,7 @@ public class RemoveMetaboliteEditTest {
                    reconstruction.getMetabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      2,
-                     reconstruction.getReactome().getReactions(a).size());
+                     reconstruction.getReactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      2,
                      r1.getReactantCount());
@@ -205,7 +205,7 @@ public class RemoveMetaboliteEditTest {
                     reconstruction.getMetabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      0,
-                     reconstruction.getReactome().getReactions(a).size());
+                     reconstruction.getReactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      1,
                      r1.getReactantCount());
@@ -220,7 +220,7 @@ public class RemoveMetaboliteEditTest {
                    reconstruction.getMetabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      2,
-                     reconstruction.getReactome().getReactions(a).size());
+                     reconstruction.getReactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      2,
                      r1.getReactantCount());
@@ -235,7 +235,7 @@ public class RemoveMetaboliteEditTest {
                     reconstruction.getMetabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      0,
-                     reconstruction.getReactome().getReactions(a).size());
+                     reconstruction.getReactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      1,
                      r1.getReactantCount());

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -124,7 +124,7 @@ public class SplitMetabolites extends ControllerDialog {
         final Metabolite metabolite = metabolites.iterator().next();
 
         final ReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        final Collection<MetabolicReaction> reactions = manager.getActive().getReactome().getReactions(metabolite);
+        final Collection<MetabolicReaction> reactions = manager.active().participatesIn(metabolite);
 
         left.getModel().removeAllElements();
         right.getModel().removeAllElements();
@@ -172,7 +172,7 @@ public class SplitMetabolites extends ControllerDialog {
         SplitMetaboliteEdit edit = new SplitMetaboliteEdit(original,
                                                            left, leftReactions,
                                                            right, rightReactions,
-                                                           DefaultReconstructionManager.getInstance().getActive());
+                                                           DefaultReconstructionManager.getInstance().active());
 
         addEdit(edit);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,18 +17,29 @@
 package uk.ac.ebi.mnb.view.entity;
 
 import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
+import com.explodingpixels.widgets.TableUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.metingear.TransferableEntity;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.JTable;
+import javax.swing.TransferHandler;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.Container;
+import java.awt.Rectangle;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -43,8 +54,23 @@ public abstract class AbstractEntityTable
         implements EntityTable,
                    SelectionController {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractEntityTable.class);
-    private EntityCollection selection = new EntityMap(DefaultEntityFactory.getInstance());
+    private static final Logger LOGGER = Logger
+            .getLogger(AbstractEntityTable.class);
+    private EntityCollection selection = new EntityMap(DefaultEntityFactory
+                                                               .getInstance());
+
+    private boolean updating = false;
+
+    public void addListSelectionListener(final ListSelectionListener listener) {
+        // only forward when not updating
+        getSelectionModel()
+                .addListSelectionListener(new ListSelectionListener() {
+                    @Override public void valueChanged(ListSelectionEvent e) {
+                        if (!updating)
+                            listener.valueChanged(e);
+                    }
+                });
+    }
 
     public AbstractEntityTable(AbstractEntityTableModel model) {
         super(model);
@@ -52,9 +78,43 @@ public abstract class AbstractEntityTable
         setAutoscrolls(true);
         setFont(ThemeManager.getInstance().getTheme().getBodyFont());
         setAutoCreateRowSorter(true);
+        TableUtils.makeSortable(this, new TableUtils.SortDelegate() {
+            @Override
+            public void sort(int columnModelIndex, TableUtils.SortDirection sortDirection) {
+                // handled by the auto row sorter
+            }
+        });
         // force double click to edit -> annoying because ctrl-z/cmd-z will start editing the cell
         putClientProperty("JTable.autoStartsEdit", Boolean.FALSE);
         setColumnModel(columnModel);
+        setDragEnabled(true);
+        setTransferHandler(new TransferHandler() {
+
+            @Override
+            public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
+                return super.canImport(comp, transferFlavors);
+            }
+
+            @Override protected Transferable createTransferable(JComponent c) {
+                AbstractEntityTable t = (AbstractEntityTable) c;
+                Collection<AnnotatedEntity> entities = t.getSelection()
+                                                        .getEntities();
+                return new TransferableEntity(DefaultReconstructionManager
+                                                      .getInstance()
+                                                      .active(),
+                                              entities);
+            }
+
+            @Override
+            public boolean importData(TransferSupport support) {
+                System.out.println("import");
+                return super.importData(support);
+            }
+
+            @Override public int getSourceActions(JComponent c) {
+                return COPY;
+            }
+        });
     }
 
     @Override
@@ -62,16 +122,45 @@ public abstract class AbstractEntityTable
         return (AbstractEntityTableModel) super.getModel();
     }
 
-    /**
-     * Update the table model with the current
-     */
+    /** Update the table model with the current */
     public boolean update() {
-        return getModel().update();
+        updating = true;
+        int[] selected = getSelectedRows();
+        boolean updated = getModel().update();
+        select(selected);
+        updating = false;
+        return updated;
     }
 
-    /**
-     * @inheritDoc
-     */
+    void select(int[] rows) {
+        clearSelection();
+        for (int[] r : intervals(rows)) {
+            if (r[1] < getRowCount()) {
+                addRowSelectionInterval(r[0], r[1]);
+            }
+        }
+    }
+
+    static int[][] intervals(int[] rows) {
+        if (rows.length == 0)
+            return new int[0][];
+        if (rows.length == 1)
+            return new int[][]{{rows[0], rows[0]}};
+
+        List<int[]> intervals = new ArrayList<int[]>();
+        int last = rows.length - 1;
+        for (int i = 0; i < rows.length; i++) {
+            int j = i, k = i;
+            for (j = i + 1; j < rows.length && rows[j] == rows[j - 1] + 1; j++) {
+                k = j;
+            }
+            intervals.add(new int[]{rows[i], rows[k]});
+            i = k;
+        }
+        return intervals.toArray(new int[intervals.size()][]);
+    }
+
+    /** @inheritDoc */
     @Override
     public boolean update(EntityCollection selection) {
         return getModel().update(selection);
@@ -89,12 +178,13 @@ public abstract class AbstractEntityTable
     /**
      * Sets a single selection in the table
      *
-     * @param component
+     * @param selectionManager
      */
     public boolean setSelection(EntityCollection selectionManager) {
 
 
-        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>(selectionManager.getEntities());
+        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>(selectionManager
+                                                                                .getEntities());
 
         LOGGER.debug("selecting " + entities.size() + " entities");
 
@@ -102,7 +192,8 @@ public abstract class AbstractEntityTable
         getSelectionModel().setValueIsAdjusting(true);
 
         for (int i = 0; i < entities.size(); i++) {
-            int index = convertRowIndexToView(getModel().indexOf(entities.get(i)));
+            int index = convertRowIndexToView(getModel()
+                                                      .indexOf(entities.get(i)));
             if (index != -1) {
                 addRowSelectionInterval(index, index);
             }
@@ -118,7 +209,9 @@ public abstract class AbstractEntityTable
 
         if (parent != null) {
 
-            int y = getTableHeader().getHeight() + (getRowHeight() * selected) - ((int) parent.getHeight()
+            int y = getTableHeader()
+                    .getHeight() + (getRowHeight() * selected) - ((int) parent
+                    .getHeight()
                     / 2);
             scrollRectToVisible(new Rectangle(0, y,
                                               parent.getWidth(),

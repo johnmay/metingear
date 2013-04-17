@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,10 +23,12 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.caf.utility.font.EBIIcon;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mnb.view.entity.ProjectView;
 
 import javax.swing.*;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,26 +70,34 @@ public class ViewToggle {
 
         controller.setViewSelector(this);
 
-        genes.setSelectedIcon(ResourceUtility.getIcon(getClass(), "gen-selected.png"));
-        products.setSelectedIcon(ResourceUtility.getIcon(getClass(), "pro-selected.png"));
-        metabolites.setSelectedIcon(ResourceUtility.getIcon(getClass(), "met-selected.png"));
-        reactions.setSelectedIcon(ResourceUtility.getIcon(getClass(), "rxn-selected.png"));
+        metabolites.setIcon(EBIIcon.TOP_LEVEL_CHEMICAL.create().size(18f).highlight().icon());
+        products.setIcon(EBIIcon.TOP_LEVEL_STRUCTURES.create().size(18f).highlight().icon());
+        genes.setIcon(EBIIcon.TOP_LEVEL_GENE.create().size(18f).highlight().icon());
+        reactions.setIcon(EBIIcon.DIRECTION_REVERSIBLE.create().size(18f).highlight().icon());
+        metabolites.setSelectedIcon(EBIIcon.TOP_LEVEL_CHEMICAL.create().size(18f).lowlight().color(Color.WHITE).icon());
+        products.setSelectedIcon(EBIIcon.TOP_LEVEL_STRUCTURES.create().size(18f).lowlight().color(Color.WHITE).icon());
+        genes.setSelectedIcon(EBIIcon.TOP_LEVEL_GENE.create().size(18f).lowlight().color(Color.WHITE).icon());
+        reactions.setSelectedIcon(EBIIcon.DIRECTION_REVERSIBLE.create().size(18f).lowlight().color(Color.WHITE).icon());
 
         genes.putClientProperty("JButton.buttonType", "segmentedTextured");
         genes.putClientProperty("JButton.segmentPosition", "first");
         genes.setFocusable(false);
+        genes.setToolTipText("Genes");
 
         products.putClientProperty("JButton.buttonType", "segmentedTextured");
         products.putClientProperty("JButton.segmentPosition", "middle");
         products.setFocusable(false);
+        products.setToolTipText("Gene Products");
 
         metabolites.putClientProperty("JButton.buttonType", "segmentedTextured");
         metabolites.putClientProperty("JButton.segmentPosition", "middle");
         metabolites.setFocusable(false);
+        metabolites.setToolTipText("Metabolites");
 
         reactions.putClientProperty("JButton.buttonType", "segmentedTextured");
         reactions.putClientProperty("JButton.segmentPosition", "last");
         reactions.setFocusable(false);
+        reactions.setToolTipText("Reactions");
 
         ButtonGroup group = new ButtonGroup();
         group.add(genes);
@@ -110,7 +120,7 @@ public class ViewToggle {
 
 
     public JComponent getButtonGroup() {
-        return new LabeledComponentGroup(viewLabel, genes, products, metabolites, reactions).getComponent();
+        return new LabeledComponentGroup(viewLabel.getText(), genes, products, metabolites, reactions).getComponent();
     }
 
 

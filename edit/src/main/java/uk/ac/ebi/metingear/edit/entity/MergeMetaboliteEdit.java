@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.metingear.AppliableEdit;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
@@ -30,13 +31,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A compound edit which merge several <i>separate</i> metabolites into a single
+ * A compound edit which merges several <i>separate</i> metabolites into a single
  * union. The undoable edit allows you <i>apply</i> the edit to the data model
  * with {@link #apply()}.
  *
  * @author John May
  */
-public final class MergeMetaboliteEdit extends CompoundEdit {
+public final class MergeMetaboliteEdit extends CompoundEdit
+                                       implements AppliableEdit {
 
     private final Reconstruction reconstruction;
     private final Metabolite union;
@@ -58,17 +60,12 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
      * Applies the edit to the object model. This edit is rather complex and can
      * be difficult to correctly perform all required steps.
      */
-    public final void apply() {
-
-        for (final Metabolite replace : separate) {
-            reconstruction.getMetabolome().remove(replace);
-        }
-        reconstruction.getMetabolome().add(union);
+    @Override public final void apply() {
 
         // update reaction and the participants
         for (final Metabolite replace : separate) {
             // access the reactions that reference the molecule to replace
-            List<MetabolicReaction> reactions = new ArrayList<MetabolicReaction>(reconstruction.getReactome().getReactions(replace));
+            List<MetabolicReaction> reactions = new ArrayList<MetabolicReaction>(reconstruction.participatesIn(replace));
             for (final MetabolicReaction reaction : reactions) {
 
                 List<MetabolicParticipant> reactants = new ArrayList<MetabolicParticipant>(reaction.getReactants());
@@ -89,12 +86,16 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
                 }
 
                 // update reactome maps
-                reconstruction.getReactome().removeKey(replace, reaction);
-                reconstruction.getReactome().update(reaction);
+                reconstruction.dissociate(replace, reaction);
+                reconstruction.associate(union, reaction);
 
             }
         }
 
+        for (final Metabolite replace : separate) {
+            reconstruction.metabolome().remove(replace);
+        }
+        reconstruction.metabolome().add(union);
 
     }
 
@@ -108,12 +109,12 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
             addEdit(new AbstractUndoableEdit() {
                 @Override
                 public void undo() throws CannotUndoException {
-                    reconstruction.getMetabolome().add(replace);
+                    reconstruction.metabolome().add(replace);
                 }
 
                 @Override
                 public void redo() throws CannotRedoException {
-                    reconstruction.getMetabolome().remove(replace);
+                    reconstruction.metabolome().remove(replace);
                 }
             });
         }
@@ -121,28 +122,28 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
         addEdit(new AbstractUndoableEdit() {
             @Override
             public void undo() throws CannotUndoException {
-                reconstruction.getMetabolome().remove(union);
+                reconstruction.metabolome().remove(union);
             }
 
             @Override
             public void redo() throws CannotRedoException {
-                reconstruction.getMetabolome().add(union);
+                reconstruction.metabolome().add(union);
             }
         });
 
         // add the undoable edits for the reaction reactants/products
         for (final Metabolite replace : separate) {
-            for (final MetabolicReaction reaction : reconstruction.getReactome().getReactions(replace)) {
+            for (final MetabolicReaction reaction : reconstruction.participatesIn(replace)) {
 
                 addEdit(new AbstractUndoableEdit() {
                     @Override
                     public void undo() throws CannotUndoException {
-                        reconstruction.getReactome().update(reaction);
+                        reconstruction.associate(replace, reaction);
                     }
 
                     @Override
                     public void redo() throws CannotRedoException {
-                        reconstruction.getReactome().removeKey(replace, reaction);
+                        reconstruction.dissociate(replace, reaction);
                     }
                 });
 
@@ -163,12 +164,12 @@ public final class MergeMetaboliteEdit extends CompoundEdit {
                 addEdit(new AbstractUndoableEdit() {
                     @Override
                     public void undo() throws CannotUndoException {
-                        reconstruction.getReactome().removeKey(union, reaction);
+                        reconstruction.dissociate(union, reaction);
                     }
 
                     @Override
                     public void redo() throws CannotRedoException {
-                        reconstruction.getReactome().update(reaction);
+                        reconstruction.associate(union, reaction);
                     }
                 }); // make sure reaction is kept in sync
 

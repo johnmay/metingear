@@ -19,6 +19,7 @@ package uk.ac.ebi.metingear.tools.annotation;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
@@ -36,12 +37,20 @@ import uk.ac.ebi.mdk.ui.render.list.DefaultRenderer;
 import uk.ac.ebi.metingear.edit.entity.RenameMetaboliteEdit;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
 
-import javax.swing.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
-import java.awt.*;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -53,7 +62,8 @@ import java.util.TreeMap;
 public class RenameFromResource extends AbstractControlDialog {
 
 
-    private static final Logger LOGGER = Logger.getLogger(RenameFromResource.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(RenameFromResource.class);
 
     /* indiciates whether web services can be used */
     private final JCheckBox webServices = CheckBoxFactory.newCheckBox();
@@ -91,9 +101,7 @@ public class RenameFromResource extends AbstractControlDialog {
         });
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public void prepare() {
 
@@ -101,23 +109,28 @@ public class RenameFromResource extends AbstractControlDialog {
         ServiceManager services = DefaultServiceManager.getInstance();
         Map<Identifier, QueryService> available = new TreeMap<Identifier, QueryService>();
 
-        for (Identifier id : services.getIdentifiers(PreferredNameService.class)) {
+        for (Identifier id : services
+                .getIdentifiers(PreferredNameService.class)) {
             if (services.hasService(id, PreferredNameService.class) &&
                     isUsable(services.getService(id, PreferredNameService.class))) {
-                available.put(id, services.getService(id, PreferredNameService.class));
+                available.put(id, services
+                        .getService(id, PreferredNameService.class));
             }
         }
 
         Set<Identifier> accept = new HashSet<Identifier>();
 
         long start = System.currentTimeMillis();
-        DefaultComboBoxModel model = (DefaultComboBoxModel) resourceSelection.getModel();
+        DefaultComboBoxModel model = (DefaultComboBoxModel) resourceSelection
+                .getModel();
         model.removeAllElements();
         // set up the resources
         for (Metabolite metabolite : getSelection(Metabolite.class)) {
-            for (CrossReference xref : metabolite.getAnnotationsExtending(CrossReference.class)) {
+            for (CrossReference xref : metabolite
+                    .getAnnotationsExtending(CrossReference.class)) {
                 for (Identifier identifier : available.keySet()) {
-                    if (xref.getIdentifier().getClass().equals(identifier.getClass())) {
+                    if (xref.getIdentifier().getClass().equals(identifier
+                                                                       .getClass())) {
                         model.addElement(available.get(identifier));
                         accept.add(identifier);
                         break;
@@ -147,9 +160,7 @@ public class RenameFromResource extends AbstractControlDialog {
         return webServices.isSelected() || !service.getServiceType().remote();
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public JComponent createForm() {
 
@@ -171,26 +182,37 @@ public class RenameFromResource extends AbstractControlDialog {
     }
 
     @Override
-    public void process() {
+    public void process(final SpinningDialWaitIndicator indicator) {
 
         // new edit action (one for all entries)
         CompoundEdit edits = new CompoundEdit();
 
         // get the preferred name service
         PreferredNameService service = (PreferredNameService) resourceSelection.getSelectedItem();
-        final Reactome reactome = DefaultReconstructionManager.getInstance().getActive().getReactome();
 
-        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
+
+        List<Metabolite> selection = new ArrayList<Metabolite>(getSelection(Metabolite.class));
+
+        int done = 0;
 
         // for each selected metabolite select the first cross-reference which
         // matches the class of the identifier and set the new name
-        for (final Metabolite metabolite : getSelection(Metabolite.class)) {
+        for (final Metabolite metabolite : selection) {
+            final String progress = String.format("%.1f%%", 100 * (done / (float) selection.size()));
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override public void run() {
+                    indicator.setText("renaming " + metabolite.getName() + "... " + progress);
+                }
+            });
 
             for (CrossReference xref : metabolite.getAnnotationsExtending(CrossReference.class)) {
-                if (xref.getIdentifier().getClass().equals(service.getIdentifier().getClass())) {
+                if (xref.getIdentifier().getClass()
+                        .equals(service.getIdentifier().getClass())) {
 
                     // old/new names for undo/redo closure
-                    final String newName = service.getPreferredName(xref.getIdentifier());
+                    final String newName = service
+                            .getPreferredName(xref.getIdentifier());
 
                     if (newName.isEmpty())
                         continue;
@@ -207,7 +229,9 @@ public class RenameFromResource extends AbstractControlDialog {
 
                 }
             }
+            done++;
         }
+
 
         edits.end();
 

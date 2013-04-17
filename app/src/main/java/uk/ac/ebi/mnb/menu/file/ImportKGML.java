@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -47,7 +47,7 @@ public class ImportKGML extends FileChooserAction {
     @Override
     public void activateActions() {
 
-        if(!DefaultReconstructionManager.getInstance().hasProjects()){
+        if(DefaultReconstructionManager.getInstance().isEmpty()){
             MainView.getInstance().addWarningMessage("No reconstructions available");
             return;
         }
@@ -59,7 +59,7 @@ public class ImportKGML extends FileChooserAction {
                 stream = new FileInputStream(f);
                 KGMLReader reader = new KGMLReader(DefaultEntityFactory.getInstance(), stream);
                 for(MetabolicReaction rxn : reader.getReactions()){
-                    Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+                    Reconstruction recon = DefaultReconstructionManager.getInstance().active();
                     recon.addReaction(rxn);
                 }
                 MainView.getInstance().update();
@@ -69,7 +69,8 @@ public class ImportKGML extends FileChooserAction {
                 java.util.logging.Logger.getLogger(ImportKGML.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 try {
-                    stream.close();
+                    if(stream != null)
+                        stream.close();
                 } catch (IOException ex) {
                     java.util.logging.Logger.getLogger(ImportKGML.class.getName()).log(Level.SEVERE, null, ex);
                 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -28,10 +28,13 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -137,6 +140,10 @@ public class ProductPanel
 
     @Override
     public Collection<? extends AnnotatedEntity> getReferences() {
-        return entity.getGenes();
+        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>();
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
+        entities.addAll(reconstruction.genesOf(entity));
+        entities.addAll(reconstruction.reactionsOf(entity));
+        return entities;
     }
 }

@@ -20,21 +20,40 @@ package uk.ac.ebi.metingear.view;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.action.ActionProperties;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.caf.component.injection.AbstractComponentInjector;
+import uk.ac.ebi.caf.component.injection.ComponentInjector;
 import uk.ac.ebi.caf.component.injection.Inject;
 import uk.ac.ebi.caf.component.injection.PropertyComponentInjector;
+import uk.ac.ebi.caf.component.injection.YAMLComponentInjector;
+import uk.ac.ebi.caf.component.theme.Theme;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mnb.interfaces.DialogController;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.IOException;
 
 /**
  * @author johnmay
@@ -45,7 +64,8 @@ public abstract class AbstractProcessingDialog
         extends JDialog
         implements ProcessingDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractProcessingDialog.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(AbstractProcessingDialog.class);
 
     private DialogController controller;
 
@@ -56,17 +76,22 @@ public abstract class AbstractProcessingDialog
     private JButton okay;
 
     @Inject
-    private JLabel     information;
+    private JLabel information;
     private JComponent form;
     private JComponent navigation;
 
-    private AbstractComponentInjector INJECTOR;
+    @Deprecated
+    private ComponentInjector propertyInjector;
+
+    private ComponentInjector yamlInjector;
+
+    private JDialog self;
 
     private static final CellConstraints CELL_CONSTRAINTS = new CellConstraints();
 
     public AbstractProcessingDialog(final Window window) {
         super(window, ModalityType.APPLICATION_MODAL);
-
+        self = this;
         setUndecorated(true);
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -79,14 +104,34 @@ public abstract class AbstractProcessingDialog
 
     private final void inject() {
         prepareInjector();
-        INJECTOR.inject(this);
+        if (propertyInjector != null)
+            propertyInjector.inject(this);
+        if (yamlInjector != null)
+            yamlInjector.inject(this);
+    }
+
+    final void inject(Class<?> c, JComponent comp, String name) {
+        if (propertyInjector != null)
+            propertyInjector.inject(c, comp, name);
+        if (yamlInjector != null)
+            yamlInjector.inject(c, comp, name);
     }
 
 
     private void prepareInjector() {
         // inject from property component injector using action.properties
-        if (INJECTOR == null)
-            INJECTOR = new PropertyComponentInjector(ActionProperties.getInstance());
+        if (propertyInjector == null)
+            propertyInjector = new PropertyComponentInjector(ActionProperties
+                                                                     .getInstance());
+        if (yamlInjector == null) {
+            try {
+                yamlInjector = new YAMLComponentInjector("uk/ac/ebi/metingear/dialog-config.yml");
+            } catch (IOException e) {
+                LOGGER.error(e);
+            } finally {
+
+            }
+        }
     }
 
     public void prepare() {
@@ -97,12 +142,17 @@ public abstract class AbstractProcessingDialog
         // do nothing
     }
 
+    public void process(SpinningDialWaitIndicator indicator) {
+        process();
+    }
+
     /**
-     * Set whether the "okay"/"process" button is enabled. Allows subclasses
-     * to inhibit processing without a complete form.
+     * Set whether the "okay"/"process" button is enabled. Allows subclasses to
+     * inhibit processing without a complete form.
+     *
      * @param enabled whether to enable the button
      */
-    public void setEnabled(boolean enabled){
+    public void setEnabled(boolean enabled) {
         okay.setEnabled(enabled);
     }
 
@@ -199,13 +249,13 @@ public abstract class AbstractProcessingDialog
     private JButton createOkayButton() {
         return ButtonFactory.newButton(new AbstractAction("Okay") {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
+                final SpinningDialWaitIndicator indicator = new SpinningDialWaitIndicator(self);
                 Thread t = new Thread(new Runnable() {
 
                     public void run() {
                         try {
-                            process();
-
+                            process(indicator);
                             SwingUtilities.invokeLater(new Runnable() {
 
                                 public void run() {
@@ -214,9 +264,12 @@ public abstract class AbstractProcessingDialog
                                 }
 
                             });
+                        } catch (RuntimeException e) {
+                            LOGGER.equals(e);
                         } catch (Exception e) {
-                            e.printStackTrace();
-//                            (new ErrorMessage("An error occurred: " + e.getMessage() + e.getCause()));
+                            LOGGER.equals(e);
+                        } finally {
+                            indicator.dispose();
                         }
                     }
                 });
@@ -237,7 +290,8 @@ public abstract class AbstractProcessingDialog
 
     // background shadow
 
-    private Paint paint = new GradientPaint(0, 0, getBackground().darker(), 0, 10, getBackground());
+    private Paint paint = new GradientPaint(0, 0, getBackground()
+            .darker(), 0, 10, getBackground());
 
 
     public void paint(Graphics g) {
@@ -252,17 +306,92 @@ public abstract class AbstractProcessingDialog
 
         prepareInjector();
 
-        JLabel label = LabelFactory.newFormLabel(name, "no information injected");
+        JLabel label = LabelFactory
+                .newFormLabel(name, "no information injected");
 
-        INJECTOR.inject(c, label, name);
+        inject(c, label, name);
 
         return label;
 
+    }
+
+    public final JButton button(Class c, String name, Action action) {
+        prepareInjector();
+        JButton button = ButtonFactory.newButton(action);
+        inject(c, button, name);
+        return button;
+    }
+
+    public final JButton iconButton(Class c, String name, Action action) {
+        prepareInjector();
+        JButton button = ButtonFactory.newCleanButton(action);
+        button.setText(""); // name is injected if required
+        inject(c, button, name);
+        return button;
+    }
+
+    public final JRadioButton radioButton(Class c, String name, Action action) {
+        prepareInjector();
+        JRadioButton button = new JRadioButton(action);
+        Theme theme = ThemeManager.getInstance().getTheme();
+        button.setForeground(theme.getForeground());
+        button.setFont(theme.getBodyFont());
+        inject(c, button, name);
+        return button;
+    }
+
+    public final JTextArea area(Class c, String name) {
+        prepareInjector();
+        JTextArea area = new JTextArea();
+        inject(c, area, name);
+        Theme theme = ThemeManager.getInstance().getTheme();
+        area.setForeground(theme.getForeground());
+        area.setFont(theme.getBodyFont());
+        area.setEditable(false);
+        area.setEnabled(false);
+        area.setBorder(Borders.EMPTY_BORDER);
+        area.setOpaque(false);
+        area.setWrapStyleWord(true);
+        area.setLineWrap(true);
+        return area;
+    }
+
+    public final JTextArea area(String name) {
+        return area(getClass(), name);
     }
 
     public final JLabel getLabel(String name) {
         return getLabel(getClass(), name);
     }
 
+    public final JButton button(String name, Action action) {
+        return button(getClass(), name, action);
+    }
+
+    public final JButton button(Action action) {
+        if (action.getValue(Action.NAME) == null)
+            throw new IllegalArgumentException("Name required");
+        return button(action.getValue(Action.NAME).toString(), action);
+    }
+
+    public final JButton iconButton(String name, Action action) {
+        return iconButton(getClass(), name, action);
+    }
+
+    public final JButton iconButton(Action action) {
+        if (action.getValue(Action.NAME) == null)
+            throw new IllegalArgumentException("Name required");
+        return iconButton(action.getValue(Action.NAME).toString(), action);
+    }
+
+    public final JRadioButton radioButton(Action action) {
+        if (action.getValue(Action.NAME) == null)
+            throw new IllegalArgumentException("Name required");
+        return radioButton(action.getValue(Action.NAME).toString(), action);
+    }
+
+    public final JRadioButton radioButton(String name, Action action) {
+        return radioButton(getClass(), name, action);
+    }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -45,22 +45,14 @@ public class NameEdit extends UndoableEntityEdit {
 
     @Override
     public void undo() throws CannotUndoException {
+        super.undo();
         entity.setName(oldName);
     }
 
     @Override
     public void redo() throws CannotRedoException {
+        super.redo();
         entity.setName(newName);
-    }
-
-    @Override
-    public boolean canUndo() {
-        return true;
-    }
-
-    @Override
-    public boolean canRedo() {
-        return true;
     }
 
     @Override

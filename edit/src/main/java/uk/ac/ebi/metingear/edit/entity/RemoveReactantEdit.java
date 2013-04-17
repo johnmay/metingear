@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -48,11 +48,13 @@ public class RemoveReactantEdit extends AbstractUndoableEdit {
 
     @Override
     public void redo() throws CannotRedoException {
+        super.redo();
         reaction.removeReactant(participant);
     }
 
     @Override
     public void undo() throws CannotRedoException {
+        super.undo();
         reaction.addReactant(participant);
     }
 

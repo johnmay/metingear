@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -35,7 +35,6 @@ import uk.ac.ebi.mnb.core.FileChooserAction;
 import uk.ac.ebi.mnb.interfaces.MainController;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
@@ -117,7 +116,7 @@ public class ExportSBMLAction
 
                     SBMLIOUtil util = new SBMLIOUtil(DefaultEntityFactory.getInstance(), level, version);
 
-                    SBMLDocument document = util.getDocument(DefaultReconstructionManager.getInstance().getActive());
+                    SBMLDocument document = util.getDocument(DefaultReconstructionManager.getInstance().active());
                     SBMLWriter writer = new SBMLWriter(' ', (short) 2);
                     writer.write(document, file);
 

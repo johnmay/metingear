@@ -133,6 +133,10 @@ public abstract class AbstractControlDialog
         this.reportManager.addReport(report);
     }
 
+    public void report(Report r){
+        this.reportManager.addReport(r);
+    }
+
     public <T extends Entity> Collection<T> getSelection(Class<T> c) {
         return selection.getSelection().get(c);
     }

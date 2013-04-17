@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,7 +23,6 @@ import mnb.io.tabular.preparse.PreparsedEntry;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import mnb.io.tabular.type.EntityColumn;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.KEGGCrossReference;
@@ -32,14 +31,10 @@ import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
-import uk.ac.ebi.mdk.domain.observation.Candidate;
-import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
 
 import java.util.Collection;
-import java.util.Set;
 
 import static mnb.io.tabular.type.EntityColumn.FORMULA;
 
@@ -63,7 +58,7 @@ public class BasicReconciler
 
 
     public BasicReconciler() {
-        recon = DefaultReconstructionManager.getInstance().getActive();
+        recon = DefaultReconstructionManager.getInstance().active();
         nameMap = HashMultimap.create();
         if (recon != null && !recon.getMetabolome().isEmpty()) {
             for (Metabolite m : recon.getMetabolome()) {

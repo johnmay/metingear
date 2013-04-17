@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +19,7 @@ package uk.ac.ebi.mnb.menu;
 import com.explodingpixels.macwidgets.LabeledComponentGroup;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.caf.utility.font.EBIIcon;
 import uk.ac.ebi.mnb.main.MainView;
 
 import javax.swing.*;
@@ -64,7 +65,8 @@ public class EditUndoButtons {
                 }
             }
         });
-        back.setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/back.png"));
+        back.setIcon(EBIIcon.UNDO.create().highlight().icon());
+        back.setToolTipText("Undo");
         forward.setAction(new AbstractAction() {
 
             public void actionPerformed(ActionEvent e) {
@@ -75,7 +77,8 @@ public class EditUndoButtons {
                 }
             }
         });
-        forward.setIcon(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/toolbar/forward.png"));
+        forward.setIcon(EBIIcon.REDO.create().highlight().icon());
+        forward.setToolTipText("Redo");
 
 
 
@@ -83,6 +86,6 @@ public class EditUndoButtons {
 
 
     public LabeledComponentGroup getButtonGroup() {
-        return new LabeledComponentGroup("Undo/Redo", back, forward);
+        return new LabeledComponentGroup("Undo Redo", back, forward);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -307,6 +307,10 @@ public abstract class DropdownDialog
      * thread safe
      */
     public abstract boolean update();
+
+    public void clear() {
+        // do nothing
+    }
 
 
 }

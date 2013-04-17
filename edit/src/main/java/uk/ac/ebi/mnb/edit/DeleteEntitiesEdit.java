@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -60,7 +60,7 @@ public class DeleteEntitiesEdit extends CompoundEdit implements EntityEdit {
             super.addEdit(new RemoveGeneProduct(recon, p));
         }
         for (Gene g : new HashSet<Gene>(collection.get(Gene.class))) {
-            super.addEdit(new RemoveGeneEdit(g));
+            super.addEdit(new RemoveGeneEdit(recon, g));
         }
 
         super.end();
@@ -116,8 +116,8 @@ public class DeleteEntitiesEdit extends CompoundEdit implements EntityEdit {
 //
 //        // might not work??
 //        for (Gene gene : collection.get(Gene.class)) {
-//            geneMap.put(gene, gene.getChromosome());
-//            gene.getChromosome().remove(gene);
+//            geneMap.put(gene, gene.chromosome());
+//            gene.chromosome().remove(gene);
 //        }
 //
 //    }

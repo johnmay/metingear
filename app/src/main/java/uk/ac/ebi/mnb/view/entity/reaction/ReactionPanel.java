@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -44,6 +44,7 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 import uk.ac.ebi.mnb.view.labels.InternalLinkLabel;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -235,7 +236,9 @@ public class ReactionPanel
 
     @Override
     public Collection<? extends AnnotatedEntity> getReferences() {
-        return entity.getModifiers();
+        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>();
+        entities.addAll(DefaultReconstructionManager.getInstance().active().enzymesOf(entity));
+        return entities;
     }
 
 
@@ -254,11 +257,6 @@ public class ReactionPanel
             collection.add(p.getMolecule());
         }
 
-        // should be synced with a listener
-        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().getActive();
-        if (reconstruction != null) {
-            reconstruction.getReactome().rebuildMaps();
-        }
 
         MainView.getInstance().update(collection);
 

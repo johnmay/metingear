@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,8 +22,10 @@ import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -63,15 +65,31 @@ public class AddEntitiesEdit extends AbstractUndoableEdit {
 
     @Override
     public void undo() throws CannotUndoException {
-        reconstruction.getMetabolome().removeAll(metabolites);
-        reconstruction.getReactome().removeAll(reactions);
-        reconstruction.getProducts().removeAll(products);
+        super.undo();
+        for(Metabolite m : metabolites){
+            reconstruction.metabolome().remove(m);
+        }
+        Reactome reactome = reconstruction.reactome();
+        for(MetabolicReaction reaction : reactions){
+            reactome.remove(reaction);
+        }
+        for(GeneProduct product : products){
+            reconstruction.remove(product);
+        }
     }
 
     @Override
     public void redo() throws CannotRedoException {
-        reconstruction.getMetabolome().addAll(metabolites);
-        reconstruction.getReactome().addAll(reactions);
-        reconstruction.getProducts().addAll(products);
+        super.redo();
+        for(Metabolite m : metabolites){
+            reconstruction.metabolome().add(m);
+        }
+        Reactome reactome = reconstruction.reactome();
+        for(MetabolicReaction reaction : reactions){
+            reactome.add(reaction);
+        }
+        for(GeneProduct product : products){
+            reconstruction.addProduct(product);
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -46,16 +46,14 @@ public final class ReplaceMetaboliteEdit extends CompoundEdit {
         this.original = original;
         this.replacement = replacement;
         this.reconstruction = reconstruction;
-        this.reactions = reconstruction.getReactome().getReactions(original);
+        this.reactions = reconstruction.participatesIn(original);
         build();
     }
 
     public void apply() {
-        reconstruction.getMetabolome().remove(original);
-        reconstruction.getMetabolome().add(replacement);
         for (final MetabolicReaction reaction : new ArrayList<MetabolicReaction>(reactions)) {
 
-            reconstruction.getReactome().removeKey(original, reaction);
+            reconstruction.dissociate(original, reaction);
 
             for (MetabolicParticipant reactant : new ArrayList<MetabolicParticipant>(reaction.getReactants())) {
                 if (reactant.getMolecule() == original) {
@@ -70,8 +68,10 @@ public final class ReplaceMetaboliteEdit extends CompoundEdit {
                 }
             }
 
-            reconstruction.getReactome().update(reaction);
+            reconstruction.associate(replacement, reaction);
         }
+        reconstruction.metabolome().remove(original);
+        reconstruction.metabolome().add(replacement);
     }
 
     private void build() {
@@ -92,12 +92,12 @@ public final class ReplaceMetaboliteEdit extends CompoundEdit {
             addEdit(new AbstractUndoableEdit() {
                 @Override
                 public void undo() throws CannotUndoException {
-                    reconstruction.getReactome().update(reaction);
+                    reconstruction.associate(original, reaction);
                 }
 
                 @Override
                 public void redo() throws CannotRedoException {
-                    reconstruction.getReactome().removeKey(original, reaction);
+                    reconstruction.dissociate(original, reaction);
                 }
             });
             for (MetabolicParticipant reactant : reaction.getReactants()) {
@@ -115,12 +115,12 @@ public final class ReplaceMetaboliteEdit extends CompoundEdit {
             addEdit(new AbstractUndoableEdit() {
                 @Override
                 public void undo() throws CannotUndoException {
-                    reconstruction.getReactome().removeKey(replacement, reaction);
+                    reconstruction.dissociate(replacement, reaction);
                 }
 
                 @Override
                 public void redo() throws CannotRedoException {
-                    reconstruction.getReactome().update(reaction);
+                    reconstruction.associate(replacement, reaction);
                 }
             });
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -126,7 +126,7 @@ public class EditMenu extends ContextMenu {
 
     // work around to allow plugins to load before the preferences item
     public void addPreferenceItem() {
-        if (!prefItemLoaded) {
+        if (!prefItemLoaded && !hasPreferenceOnMenuBar()) {
             add(new JSeparator());
             add(new AbstractAction("Preferences") {
 
@@ -140,5 +140,9 @@ public class EditMenu extends ContextMenu {
             });
             prefItemLoaded = true;
         }
+    }
+
+    public boolean hasPreferenceOnMenuBar() {
+        return System.getProperty("os.name").equals("Mac OS X") && "true".equals(System.getProperty("apple.laf.useScreenMenuBar"));
     }
 }

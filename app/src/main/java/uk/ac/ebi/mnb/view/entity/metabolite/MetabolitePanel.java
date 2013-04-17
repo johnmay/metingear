@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -192,9 +192,9 @@ public class MetabolitePanel
 
     @Override
     public Collection<? extends AnnotatedEntity> getReferences() {
-        Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction recon = DefaultReconstructionManager.getInstance().active();
         if (entity != null && recon != null) {
-            return recon.getReactome().getReactions(entity);
+            return recon.participatesIn(entity);
         }
         return new ArrayList();
     }
@@ -207,5 +207,11 @@ public class MetabolitePanel
 
         entity.setGeneric(((String) markushEditor.getSelectedItem()).equals("Yes") ? true : false);
         entity.setType((MetaboliteClassImplementation) typeEditor.getSelectedItem());
+    }
+
+    @Override public void clear() {
+        super.clear();
+        structure.setIcon(null);
+        formularViewer.setText("");
     }
 }

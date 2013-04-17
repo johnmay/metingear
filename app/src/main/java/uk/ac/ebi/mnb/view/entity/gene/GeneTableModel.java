@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -58,10 +58,10 @@ public class GeneTableModel extends AbstractEntityTableModel {
     public Collection<? extends AnnotatedEntity> getEntities() {
 
         Reconstruction recon = DefaultReconstructionManager.getInstance()
-                                                           .getActive();
+                                                           .active();
 
         if (recon != null) {
-            return recon.getGenome().getGenes();
+            return recon.getGenome().genes();
         }
 
         return Collections.EMPTY_LIST;

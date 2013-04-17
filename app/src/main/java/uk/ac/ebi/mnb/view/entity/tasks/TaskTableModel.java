@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -29,6 +29,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
+
 /**
  * TaskTableModel – 2011.09.28 <br> Class description
  *
@@ -45,9 +48,9 @@ public class TaskTableModel extends AbstractEntityTableModel {
             new ColumnDescriptor("Date", null,
                                  DataType.FIXED,
                                  Date.class),
-            new ColumnDescriptor("Elapsed Time (mins)", null,
+            new ColumnDescriptor("Elapsed Time", null,
                                  DataType.FIXED,
-                                 Integer.class),
+                                 String.class),
             new ColumnDescriptor(
                     "Status", null,
                     DataType.FIXED,
@@ -59,9 +62,7 @@ public class TaskTableModel extends AbstractEntityTableModel {
         addColumn(DEFAULT);
     }
 
-    /**
-     * @inheridDoc
-     */
+    /** @inheridDoc */
     @Override
     public Collection<? extends AnnotatedEntity> getEntities() {
 
@@ -70,9 +71,7 @@ public class TaskTableModel extends AbstractEntityTableModel {
 
     }
 
-    /**
-     * @inheridDoc
-     */
+    /** @inheridDoc */
     @Override
     public Object getFixedType(AnnotatedEntity entity, String name) {
 
@@ -83,13 +82,19 @@ public class TaskTableModel extends AbstractEntityTableModel {
                 return task.getStart();
             } else if (name.equals("Status")) {
                 return task.getStatus();
-            } else if (name.equals("Elapsed Time (mins)")) {
-                CALENDAR.setTime(task.getElapesedTime());
-                return CALENDAR.get(Calendar.MINUTE);
+            } else if (name.equals("Elapsed Time")) {
+                long elapsed = task.elapsed();
+                return String.format("%d min, %d sec",
+                                     NANOSECONDS.toMinutes(elapsed),
+                                     NANOSECONDS.toSeconds(elapsed)
+                                             - MINUTES.toSeconds(NANOSECONDS.toMinutes(elapsed))
+                                    );
             }
         }
 
         return "NA";
 
     }
+
+    private final static long NANO_TO_SECONDS = 1000000000;
 }

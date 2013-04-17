@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +22,6 @@ import com.jgoodies.forms.factories.Borders;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.caf.report.bar.MessageBar;
@@ -30,6 +29,7 @@ import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.metingear.SourceListTransferHandler;
 import uk.ac.ebi.metingear.search.SearchManager;
 import uk.ac.ebi.metingear.search.SearchableIndex;
 import uk.ac.ebi.metingear.view.ControlDialog;
@@ -136,7 +136,7 @@ public class MainView
         searchField.getDocument().addDocumentListener(new DocumentListener() {
 
             public void insertUpdate(DocumentEvent e) {
-                final Reconstruction recon = DefaultReconstructionManager.getInstance().getActive();
+                final Reconstruction recon = DefaultReconstructionManager.getInstance().active();
                 if (recon != null) {
                     try {
                         final String text =
@@ -219,6 +219,7 @@ public class MainView
         // source list (todo: wrap in a class MNBSourceList)
         sourceController = new SourceController();
         source = new SourceList(sourceController.model);
+        source.setTransferHandler(new SourceListTransferHandler());
         sourceController.setSource(source);
         project.setSourceController(sourceController);
 
@@ -284,6 +285,7 @@ public class MainView
 
         // links the task manager with this
         TaskManager.getInstance().setController(this);
+        TaskManager.getInstance().setTaskTable(project.getTaskView().getTable());
 
         addFocusListener(new FocusListener() {
 

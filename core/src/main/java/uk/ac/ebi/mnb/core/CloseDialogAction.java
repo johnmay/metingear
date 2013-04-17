@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,6 +22,8 @@
 package uk.ac.ebi.mnb.core;
 
 import uk.ac.ebi.caf.action.GeneralAction;
+import uk.ac.ebi.mnb.view.DropdownDialog;
+
 import java.awt.event.ActionEvent;
 import javax.swing.JDialog;
 
@@ -48,6 +50,9 @@ public class CloseDialogAction extends GeneralAction {
     }
 
     public void actionPerformed(ActionEvent e) {
+        if(dialog instanceof DropdownDialog){
+            ((DropdownDialog) dialog).clear();
+        }
         dialog.setVisible(false);
     }
 }

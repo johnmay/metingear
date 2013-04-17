@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@ import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.chemet.render.source.ReconstructionSourceItem;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextAction;
 import uk.ac.ebi.mnb.main.MainView;
 
@@ -54,7 +55,15 @@ public class CloseProject extends GeneralAction implements ContextAction {
 
     public void actionPerformed(ActionEvent e) {
         LOGGER.info("TODO: Offer save suggestion before close");
-        DefaultReconstructionManager.getInstance().removeProject(active ? DefaultReconstructionManager.getInstance().getActive() : reconstruction);
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        if(active){
+            manager.remove(manager.active());
+        } else {
+            manager.remove(reconstruction);
+        }
+        if(!manager.isEmpty()){
+            manager.activate(manager.reconstructions().iterator().next());
+        }
         MainView.getInstance().update();
     }
 

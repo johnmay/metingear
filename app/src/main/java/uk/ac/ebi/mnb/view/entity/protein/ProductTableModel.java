@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,19 +18,23 @@ package uk.ac.ebi.mnb.view.entity.protein;
 
 import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.StarRating;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * ProteinTableModel – 2011.09.28 <br> Class description
@@ -46,6 +50,7 @@ public class ProductTableModel extends AbstractEntityTableModel {
             new ColumnDescriptor("Sequence", null,
                                  DataType.FIXED,
                                  String.class),
+            new ColumnDescriptor(new EnzymeClassification<Observation>()),
             new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class)
     };
 
@@ -58,13 +63,17 @@ public class ProductTableModel extends AbstractEntityTableModel {
     public Collection<? extends AnnotatedEntity> getEntities() {
 
         Reconstruction recon = DefaultReconstructionManager.getInstance()
-                                                           .getActive();
+                                                           .active();
 
         if (recon != null) {
-            return recon.getProteome();
+            List<GeneProduct> products = new ArrayList<GeneProduct>(recon.proteome().size());
+            for(GeneProduct p : recon.proteome()){
+                products.add(p);
+            }
+            return products;
         }
 
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
 
     }
 

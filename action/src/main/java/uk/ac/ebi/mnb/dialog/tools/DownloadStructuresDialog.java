@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -30,7 +30,6 @@ import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
@@ -44,7 +43,11 @@ import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.CompoundEdit;
 import java.awt.event.ItemEvent;
@@ -52,6 +55,7 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 
@@ -156,12 +160,12 @@ public class DownloadStructuresDialog
         for (Metabolite m : getSelection().get(Metabolite.class)) {
 
             ANNOTATION:
-            for (CrossReference reference : m
-                    .getAnnotationsExtending(CrossReference.class)) {
+            for (CrossReference reference : m.getAnnotationsExtending(CrossReference.class)) {
                 for (Identifier identifier : resourceSelection.getElements()) {
 
-                    if (identifier.getClass().equals(reference.getIdentifier()
-                                                              .getClass())) {
+                    if (identifier.getClass().isAssignableFrom(reference
+                                                                       .getIdentifier()
+                                                                       .getClass())) {
 
                         // get the appropiate service for the given ientifier
                         StructureService service = services
@@ -227,6 +231,7 @@ public class DownloadStructuresDialog
         // do nothing
     }
 
+
     public boolean canUse(QueryService service) {
         QueryService.ServiceType type = service.getServiceType();
         return ws.isSelected() || !service.getServiceType().remote();
@@ -236,30 +241,20 @@ public class DownloadStructuresDialog
         return service.getIdentifier() instanceof ChemicalIdentifier;
     }
 
-    @Override
-    public boolean update() {
-
-        long start = System.nanoTime();
-        // rebuild the map to avoid problems with non-matches hashes
-        DefaultReconstructionManager.getInstance().getActive().getReactome().rebuildMaps();
-        long end = System.nanoTime();
-
-        LOGGER.debug((end - start) / 1e6 + " ms to rebuild reaction map");
-
-        return super.update();
-
-    }
-
     private void updateResourceList() {
 
         ServiceManager services = DefaultServiceManager.getInstance();
         Set<Identifier> available = new HashSet<Identifier>();
 
         for (Identifier id : services.getIdentifiers(StructureService.class)) {
-            if (services.hasService(id, StructureService.class) &&
-                    canUse(services.getService(id, StructureService.class))
-                    && isChemicalService(services.getService(id, StructureService.class))) {
-                available.add(id);
+            try {
+                if (services.hasService(id, StructureService.class) &&
+                        canUse(services.getService(id, StructureService.class))
+                        && isChemicalService(services.getService(id, StructureService.class))) {
+                    available.add(id);
+                }
+            } catch (NoSuchElementException ex) {
+                // connection problems to ws
             }
         }
 
@@ -272,8 +267,7 @@ public class DownloadStructuresDialog
             for (CrossReference xref : metabolite
                     .getAnnotationsExtending(CrossReference.class)) {
                 for (Identifier identifier : available) {
-                    if (xref.getIdentifier().getClass().equals(identifier
-                                                                       .getClass())) {
+                    if (identifier.getClass().isAssignableFrom(xref.getIdentifier().getClass())) {
                         resourceSelection.addElement(identifier);
                         accept.add(identifier);
                         break;

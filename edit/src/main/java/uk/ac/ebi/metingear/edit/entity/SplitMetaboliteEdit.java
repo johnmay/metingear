@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -97,8 +97,9 @@ public final class SplitMetaboliteEdit extends CompoundEdit {
                 }
             }
 
-            reactome.removeKey(original, leftReaction);
-            reactome.update(leftReaction);
+
+            reconstruction.dissociate(original, leftReaction);
+            reconstruction.associate(left, leftReaction);
 
 
         }
@@ -122,8 +123,8 @@ public final class SplitMetaboliteEdit extends CompoundEdit {
                 }
             }
 
-            reactome.removeKey(original, rightReaction);
-            reactome.update(rightReaction);
+            reconstruction.dissociate(original, rightReaction);
+            reconstruction.associate(right, rightReaction);
 
         }
 
@@ -159,12 +160,12 @@ public final class SplitMetaboliteEdit extends CompoundEdit {
             addEdit(new AbstractUndoableEdit() {
                 @Override
                 public void undo() throws CannotUndoException {
-                    reactome.update(leftReaction);
+                    reconstruction.associate(original, leftReaction);
                 }
 
                 @Override
                 public void redo() throws CannotRedoException {
-                    reactome.removeKey(original, leftReaction);
+                    reconstruction.dissociate(original, leftReaction);
                 }
             });
 
@@ -188,12 +189,12 @@ public final class SplitMetaboliteEdit extends CompoundEdit {
             addEdit(new AbstractUndoableEdit() {
                 @Override
                 public void undo() throws CannotUndoException {
-                    reactome.removeKey(left, leftReaction);
+                    reconstruction.dissociate(left, leftReaction);
                 }
 
                 @Override
                 public void redo() throws CannotRedoException {
-                    reactome.update(leftReaction);
+                    reconstruction.associate(left, leftReaction);
                 }
             });
 
@@ -205,12 +206,12 @@ public final class SplitMetaboliteEdit extends CompoundEdit {
             addEdit(new AbstractUndoableEdit() {
                 @Override
                 public void undo() throws CannotUndoException {
-                    reactome.update(rightReaction);
+                    reconstruction.associate(original, rightReaction);
                 }
 
                 @Override
                 public void redo() throws CannotRedoException {
-                    reactome.removeKey(original, rightReaction);
+                    reconstruction.dissociate(original, rightReaction);
                 }
             });
 
@@ -234,12 +235,12 @@ public final class SplitMetaboliteEdit extends CompoundEdit {
             addEdit(new AbstractUndoableEdit() {
                 @Override
                 public void undo() throws CannotUndoException {
-                    reactome.removeKey(right, rightReaction);
+                    reconstruction.dissociate(right, rightReaction);
                 }
 
                 @Override
                 public void redo() throws CannotRedoException {
-                    reactome.update(rightReaction);
+                    reconstruction.associate(right, rightReaction);
                 }
             });
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,11 +19,11 @@ package uk.ac.ebi.metingear.edit.entity;
 
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotUndoException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -37,11 +37,13 @@ public class RemoveGeneEdit extends AbstractUndoableEdit {
     private final Collection<GeneProduct> products;
     private final Chromosome chromosome;
     private final Gene gene;
+    private final Reconstruction reconstruction;
 
-    public RemoveGeneEdit(Gene gene) {
-        this.chromosome = gene.getChromosome();
-        this.products = new HashSet<GeneProduct>(gene.getProducts());
+    public RemoveGeneEdit(Reconstruction reconstruction, Gene gene) {
+        this.chromosome = gene.chromosome();
+        this.products = new HashSet<GeneProduct>(reconstruction.productsOf(gene));
         this.gene = gene;
+        this.reconstruction = reconstruction;
     }
 
     @Override
@@ -50,7 +52,7 @@ public class RemoveGeneEdit extends AbstractUndoableEdit {
 
         // add back product references
         for (GeneProduct product : products) {
-            product.addGene(this.gene);
+            reconstruction.associate(gene, product);
         }
         // add back to chromosome
         if(this.chromosome != null)
@@ -62,7 +64,7 @@ public class RemoveGeneEdit extends AbstractUndoableEdit {
         super.redo();
         // remove product references
         for (GeneProduct product : products) {
-            product.remove(this.gene);
+            reconstruction.dissociate(gene, product);
         }
 
         // remove from chromosome

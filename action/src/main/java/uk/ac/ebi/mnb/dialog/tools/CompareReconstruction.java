@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -31,13 +31,6 @@ import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.prototype.hash.HashGeneratorMaker;
-import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
-import uk.ac.ebi.mdk.prototype.hash.seed.StereoSeed;
 import uk.ac.ebi.mdk.tool.domain.ReconstructionComparison;
 import uk.ac.ebi.mnb.core.ControllerDialog;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
@@ -49,11 +42,9 @@ import javax.swing.event.UndoableEditListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collection;
 
 
 /**
@@ -124,9 +115,9 @@ public class CompareReconstruction
     @Override
     public void setVisible(boolean visible) {
 
-        recon1.setModel(new DefaultComboBoxModel(DefaultReconstructionManager.getInstance().getProjects().toArray()));
-        recon2.setModel(new DefaultComboBoxModel(DefaultReconstructionManager.getInstance().getProjects().toArray()));
-        recon3.setModel(new DefaultComboBoxModel(DefaultReconstructionManager.getInstance().getProjects().toArray()));
+        recon1.setModel(new DefaultComboBoxModel(DefaultReconstructionManager.getInstance().reconstructions().toArray()));
+        recon2.setModel(new DefaultComboBoxModel(DefaultReconstructionManager.getInstance().reconstructions().toArray()));
+        recon3.setModel(new DefaultComboBoxModel(DefaultReconstructionManager.getInstance().reconstructions().toArray()));
 
         ((DefaultComboBoxModel) recon3.getModel()).addElement("-");
         recon3.setSelectedItem("-");

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,6 +22,8 @@
 package uk.ac.ebi.mnb.menu.file;
 
 import uk.ac.ebi.caf.action.DelayedBuildAction;
+
+import javax.swing.*;
 
 
 /**
@@ -47,7 +49,11 @@ public class NewProjectAction
     @Override
     public void activateActions() {
         dialog.pack();
-        dialog.setVisible(enabled);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override public void run() {
+                dialog.setVisible(true);
+            }
+        });
     }
 
 

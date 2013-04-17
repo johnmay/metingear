@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -51,20 +51,19 @@ public class RemoveMetaboliteEdit extends CompoundEdit {
     public RemoveMetaboliteEdit(final Reconstruction reconstruction,
                                 final Metabolite metabolite) {
 
-        final Reactome reactome = reconstruction.getReactome();
-        this.reactions = new HashSet<MetabolicReaction>(reconstruction.getReactome()
-                                                                      .getReactions(metabolite));
+        final Reactome reactome = reconstruction.reactome();
+        this.reactions = new HashSet<MetabolicReaction>(reconstruction.participatesIn(metabolite));
 
         // remove from metabolome
         super.addEdit(new AbstractUndoableEdit() {
             @Override
             public void undo() throws CannotUndoException {
-                reconstruction.getMetabolome().add(metabolite);
+                reconstruction.metabolome().add(metabolite);
             }
 
             @Override
             public void redo() throws CannotRedoException {
-                reconstruction.getMetabolome().remove(metabolite);
+                reconstruction.metabolome().remove(metabolite);
             }
         });
 
@@ -73,12 +72,12 @@ public class RemoveMetaboliteEdit extends CompoundEdit {
             super.addEdit(new AbstractUndoableEdit() {
                 @Override
                 public void undo() throws CannotUndoException {
-                    reactome.update(reaction);
+                    reconstruction.associate(metabolite, reaction);
                 }
 
                 @Override
                 public void redo() throws CannotRedoException {
-                    reactome.removeKey(metabolite, reaction);
+                    reconstruction.dissociate(metabolite, reaction);
                 }
             });
             super.addEdit(new RemoveParticipantEdit(metabolite, reaction));

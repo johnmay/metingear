@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -25,6 +25,7 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.IdentifierReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
@@ -50,7 +51,9 @@ import java.util.Collection;
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$
+ * @deprecated not currently used
  */
+@Deprecated
 public class AssignReactions extends ControllerAction {
 
     private static final Logger LOGGER = Logger.getLogger(AssignReactions.class);
@@ -63,8 +66,8 @@ public class AssignReactions extends ControllerAction {
     public void actionPerformed(ActionEvent e) {
 
         EntityCollection selection = getSelection();
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        Reconstruction recon = manager.getActive();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        Reconstruction recon = manager.active();
 
         Collection<GeneProduct> products = selection.getGeneProducts();
 
@@ -110,8 +113,7 @@ public class AssignReactions extends ControllerAction {
 
                         }
 
-                        rxn.addModifier(product);
-
+                        recon.associate(product, rxn);
                         recon.addReaction(rxn);
 
                     }

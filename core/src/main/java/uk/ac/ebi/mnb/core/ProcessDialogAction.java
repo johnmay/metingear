@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,14 +20,13 @@ import net.sf.furbelow.SpinningDialWaitIndicator;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.mnb.view.DropdownDialog;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import java.awt.event.ActionEvent;
 
 
 /**
  * ProcessDialogAction <br> Class to handling the processing step of a dialog
- * (b). a) MenuItem > Create Dialog b) A Button > Process Dialog Values
- * <p/>
+ * (b). a) MenuItem > Create Dialog b) A Button > Process Dialog Values <p/>
  * Invokes {
  *
  * @author johnmay @date Apr 27, 2011
@@ -58,7 +57,6 @@ public class ProcessDialogAction extends GeneralAction {
      * Invokes the attached dialog process method {
      *
      * @param e redundant action
-     *
      * @see DropdownDialog#process()} in a different thread. On completion the
      *      provided dialog is hidden
      */
@@ -72,34 +70,35 @@ public class ProcessDialogAction extends GeneralAction {
 
             public void run() {
                 try {
-
                     dialog.process(waiter);
-                    dialog.pack();
-
-                    SwingUtilities.invokeLater(new Runnable() {
-
-                        public void run() {
-                            waiter.dispose();
-                            dialog.setVisible(false);
-                            dialog.update();
-                        }
-                    });
                 } catch (RuntimeException e) {
-                    waiter.dispose();
-                    dialog.setVisible(false);
                     if (dialog instanceof ControllerDialog) {
                         ControllerDialog controllerDialog = (ControllerDialog) dialog;
-                        controllerDialog.addMessage(new ErrorMessage("A runtime error occurred: " + e.getMessage() + e.getCause()));
+                        controllerDialog
+                                .addMessage(new ErrorMessage("A runtime error occurred: " + e
+                                        .getMessage() + e.getCause()));
                         e.printStackTrace();
                     }
                 } catch (Exception e) {
-                    waiter.dispose();
-                    dialog.setVisible(false);
+
                     if (dialog instanceof ControllerDialog) {
                         ControllerDialog controllerDialog = (ControllerDialog) dialog;
-                        controllerDialog.addMessage(new ErrorMessage("An error occurred: " + e.getMessage() + e.getCause()));
+                        controllerDialog
+                                .addMessage(new ErrorMessage("An error occurred: " + e
+                                        .getMessage() + e.getCause()));
                         e.printStackTrace();
                     }
+                } finally {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            waiter.dispose();
+                            dialog.clear();
+                            dialog.setVisible(false);
+                            if(dialog.getParent() != null)
+                                dialog.getParent().requestFocus();
+                            dialog.update();
+                        }
+                    });
                 }
             }
         });

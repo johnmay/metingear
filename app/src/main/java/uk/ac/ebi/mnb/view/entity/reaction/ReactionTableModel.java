@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -25,6 +25,7 @@ import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.StarRating;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
@@ -48,7 +49,7 @@ public class ReactionTableModel extends AbstractEntityTableModel {
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
             new ColumnDescriptor("Reversibility", null,
                                  DataType.FIXED,
-                                 String.class),
+                                 Direction.class),
             new ColumnDescriptor("Equation", null,
                                  DataType.FIXED,
                                  String.class),
@@ -67,10 +68,10 @@ public class ReactionTableModel extends AbstractEntityTableModel {
     public Collection<? extends AnnotatedEntity> getEntities() {
 
         Reconstruction project = DefaultReconstructionManager.getInstance()
-                                                             .getActive();
+                                                             .active();
 
         if (project != null)
-            return project.getReactome();
+            return project.getReactome().toList();
 
 
         return Collections.EMPTY_LIST;

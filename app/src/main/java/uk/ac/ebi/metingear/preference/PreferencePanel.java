@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +32,7 @@ import uk.ac.ebi.caf.component.theme.ComponentPreferences;
 import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.caf.utility.preference.Preference;
+import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
 import uk.ac.ebi.mdk.ResourcePreferences;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
@@ -56,10 +57,29 @@ import uk.ac.ebi.mdk.service.loader.structure.MetaCycStructureLoader;
 import uk.ac.ebi.mdk.ui.component.service.LoaderGroupFactory;
 import uk.ac.ebi.metingear.Main;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ListCellRenderer;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
@@ -73,7 +93,8 @@ import java.io.IOException;
  */
 public class PreferencePanel extends JPanel {
 
-    private static final Logger LOGGER = Logger.getLogger(PreferencePanel.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(PreferencePanel.class);
 
     private JPanel options = PanelFactory.createInfoPanel();
 
@@ -87,7 +108,8 @@ public class PreferencePanel extends JPanel {
 
         CellConstraints cc = new CellConstraints();
 
-        setBackground(Color.WHITE);
+        // off white
+        setBackground(new Color(240, 240, 240));
 
         category.setBackground(new Color(234, 237, 243));
         category.setPreferredSize(new Dimension(200, 150));
@@ -95,9 +117,9 @@ public class PreferencePanel extends JPanel {
         category.setCellRenderer(new MyListRenderer());
 
         model.addElement("Resources");
+        model.addElement("General");
         model.addElement("Rendering");
         model.addElement("Tools");
-        model.addElement("Databases");
 
 
         category.addListSelectionListener(new ListSelectionListener() {
@@ -115,7 +137,8 @@ public class PreferencePanel extends JPanel {
 
         add(topfill, cc.xy(1, 1, CellConstraints.FILL, CellConstraints.FILL));
         add(category, cc.xy(1, 2, CellConstraints.FILL, CellConstraints.FILL));
-        add(bottomfill, cc.xy(1, 3, CellConstraints.FILL, CellConstraints.FILL));
+        add(bottomfill, cc
+                .xy(1, 3, CellConstraints.FILL, CellConstraints.FILL));
 
 
         category.setMaximumSize(new Dimension(50, 2000));
@@ -123,19 +146,56 @@ public class PreferencePanel extends JPanel {
         options.setLayout(new CardLayout());
         options.setBackground(Color.WHITE);
 
-        Multimap<String, Preference> map = ComponentPreferences.getInstance().getCategoryMap();
+        Multimap<String, Preference> map = ComponentPreferences.getInstance()
+                                                               .getCategoryMap();
 
-        options.add(new CenteringPanel(PreferencePanelFactory.getPreferencePanel(map.get("Rendering"))), "Rendering");
+        options.add(new CenteringPanel(new GeneralPanel()), "General");
+        options.add(new CenteringPanel(PreferencePanelFactory
+                                               .getPreferencePanel(map.get("Rendering"))), "Rendering");
         options.add(new CenteringPanel(new ResourceLoading(window)), "Resources");
         options.add(new CenteringPanel(new Tools()), "Tools");
 
 
-        add(options, cc.xywh(2, 1, 1, 3));
+        add(new JScrollPane(options), cc.xywh(2, 1, 1, 3));
 
 
         category.setSelectedValue("Resources", true);
 
 
+    }
+
+    private class GeneralPanel extends Box {
+        private GeneralPanel() {
+            super(BoxLayout.PAGE_AXIS);
+
+            DomainPreferences domainPref = DomainPreferences.getInstance();
+            ServicePreferences servicePref = ServicePreferences.getInstance();
+            ResourcePreferences resourcePref = ResourcePreferences
+                    .getInstance();
+            JLabel label = LabelFactory
+                    .newLabel("Saving", LabelFactory.Size.HUGE);
+            label.setHorizontalAlignment(SwingConstants.LEFT);
+            add(DefaultComponentFactory.getInstance().createSeparator(label));
+            add(PreferencePanelFactory.getPreferencePanel(domainPref
+                                                                  .getPreference("SAVE_LOCATION")));
+            add(PreferencePanelFactory.getPreferencePanel(resourcePref
+                                                                  .getPreference("IDENTIFIERS_DOT_ORG_URL")));
+
+            JLabel proxyLabel = LabelFactory
+                    .newLabel("HTTP Proxy", LabelFactory.Size.HUGE);
+            proxyLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            add(DefaultComponentFactory.getInstance()
+                                       .createSeparator(proxyLabel));
+            add(PreferencePanelFactory
+                        .getPreferencePanel(servicePref
+                                                    .getPreference("PROXY_SET"),
+                                            servicePref
+                                                    .getPreference("PROXY_HOST"),
+                                            servicePref
+                                                    .getPreference("PROXY_PORT")));
+
+
+        }
     }
 
     private class CenteringPanel extends JPanel {
@@ -155,12 +215,14 @@ public class PreferencePanel extends JPanel {
 
             DomainPreferences CORE = DomainPreferences.getInstance();
             ResourcePreferences RESOURCE = ResourcePreferences.getInstance();
-            JLabel label = LabelFactory.newLabel("NCBI-BLAST+", LabelFactory.Size.HUGE);
+            JLabel label = LabelFactory
+                    .newLabel("NCBI-BLAST+", LabelFactory.Size.HUGE);
             label.setHorizontalAlignment(SwingConstants.LEFT);
             add(DefaultComponentFactory.getInstance().createSeparator(label));
-            add(PreferencePanelFactory.getPreferencePanel(CORE.getPreference("BLASTP_PATH"),
-                                                          CORE.getPreference("BLASTP_VERSION"),
-                                                          RESOURCE.getPreference("BLAST_DB_ROOT")));
+            add(PreferencePanelFactory
+                        .getPreferencePanel(CORE.getPreference("BLASTP_PATH"),
+                                            CORE.getPreference("BLASTP_VERSION"),
+                                            RESOURCE.getPreference("BLAST_DB_ROOT")));
 
 
         }
@@ -173,59 +235,97 @@ public class PreferencePanel extends JPanel {
         public ResourceLoading(final Window window) {
             super(BoxLayout.PAGE_AXIS);
 
-            LoaderGroupFactory factory = new LoaderGroupFactory(window, DefaultLocationFactory.getInstance());
+            LoaderGroupFactory factory = new LoaderGroupFactory(window, DefaultLocationFactory
+                    .getInstance());
             try {
+                final JTextArea area = new JTextArea();
+                final BooleanPreference hints = ServicePreferences.getInstance()
+                                                                  .getPreference("SHOW_HINTS");
 
-                add(Box.createHorizontalStrut(50));
-                add(PreferencePanelFactory.getPreferenceEditor(ServicePreferences.getInstance().getPreference("SERVICE_ROOT"),
-                                                               new AbstractAction() {
-                                                                   @Override
-                                                                   public void actionPerformed(ActionEvent e) {
-                                                                       int choice = JOptionPane.showConfirmDialog(window,
-                                                                                                                  "<html>You have changed the storage location of services and you must <br/> " +
-                                                                                                                          "restart Metingear before updating any service data.<br/><br/>" +
-                                                                                                                          "Would you like to restart now? <br/>" +
-                                                                                                                          "If you wish to continue editing, please select 'No'." +
-                                                                                                                          "</html>", "Restart Required", JOptionPane.YES_NO_OPTION);
-                                                                       if (choice == JOptionPane.OK_OPTION) {
-                                                                           try {
-                                                                               Main.relaunch();
-                                                                           } catch (Exception e1) {
-                                                                               JOptionPane.showMessageDialog(window, "Unable to restart the application! Please restart manually.", "Error", JOptionPane.ERROR_MESSAGE);
-                                                                           }
-                                                                       }
-                                                                   }
-                                                               }));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createGlue());
+                add(PreferencePanelFactory
+                            .getPreferenceEditor(hints, new AbstractAction() {
+                                @Override
+                                public void actionPerformed(ActionEvent actionEvent) {
+                                    area.setVisible(hints.get());
+                                }
+                            }));
+                add(Box.createVerticalStrut(5));
+                area.setVisible(hints.get());
+                area.setLineWrap(true);
+                area.setEditable(false);
+                area.setOpaque(false);
+                area.setEnabled(false);
+                Theme theme = ThemeManager.getInstance().getTheme();
+                area.setForeground(theme.getForeground());
+                area.setFont(theme.getBodyFont());
+                area.setWrapStyleWord(true);
+                area.setBorder(Borders.EMPTY_BORDER);
+                area.setText("Load resources from remote and local locations. When a resource is not publically available, the download is very large or the location is unreachable " +
+                                     "you will not be able to update it. If a resource can not be updated (non-bold arrow) you will " +
+                                     "have to configure the loader by specifying local or remove locations of required resources. " +
+                                     "Each loader can be configured by clicking the 'gear' icon and entering the required locations. " +
+                                     "A description of location is available by hovering over the location name.");
+                area.setBackground(Color.WHITE);
+                add(Box.createVerticalStrut(5));
+                add(PreferencePanelFactory
+                            .getPreferenceEditor(ServicePreferences
+                                                         .getInstance()
+                                                         .getPreference("SERVICE_ROOT"),
+                                                 new AbstractAction() {
+                                                     @Override
+                                                     public void actionPerformed(ActionEvent e) {
+                                                         int choice = JOptionPane
+                                                                 .showConfirmDialog(window,
+                                                                                    "<html>You have changed the storage location of services and you must <br/> " +
+                                                                                            "restart Metingear before updating any service data.<br/><br/>" +
+                                                                                            "Would you like to restart now? <br/>" +
+                                                                                            "If you wish to continue editing, please select 'No'." +
+                                                                                            "</html>", "Restart Required", JOptionPane.YES_NO_OPTION);
+                                                         if (choice == JOptionPane.OK_OPTION) {
+                                                             try {
+                                                                 Main.relaunch();
+                                                             } catch (Exception e1) {
+                                                                 JOptionPane
+                                                                         .showMessageDialog(window, "Unable to restart the application! Please restart manually.", "Error", JOptionPane.ERROR_MESSAGE);
+                                                             }
+                                                         }
+                                                     }
+                                                 }));
+                add(Box.createVerticalStrut(5));
+                add(area);
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("ChEBI",
                                         new ChEBIStructureLoader(),
                                         new ChEBINameLoader(),
                                         new ChEBIDataLoader(),
                                         new ChEBICrossReferenceLoader()));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("KEGG",
                                         new KEGGCompoundLoader(),
                                         new KEGGCompoundStructureLoader()));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("BioCyc",
                                         new MetaCycCompoundLoader(),
                                         new MetaCycStructureLoader()));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("LIPID MAPS",
                                         new LipidMapsLoader(),
                                         new LipidMapsSDFLoader()));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("HMDB",
                                         new HMDBXMLLoader(),
                                         new HMDBStructureLoader(),
                                         new HMDBMetabocardsLoader()));
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
                 add(factory.createGroup("UniProt",
                                         new TaxonomyLoader(),
-                                        new UniProtCrossReferenceLoader(DefaultEntityFactory.getInstance(),
-                                                                        DefaultIdentifierFactory.getInstance())));
+                                        new UniProtCrossReferenceLoader(DefaultEntityFactory
+                                                                                .getInstance(),
+                                                                        DefaultIdentifierFactory
+                                                                                .getInstance())));
                 add(Box.createGlue());
-                add(Box.createHorizontalStrut(50));
+                add(Box.createVerticalStrut(5));
 
                 CellConstraints cc = new CellConstraints();
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -43,7 +43,7 @@ public class SetActiveProject extends GeneralAction implements ContextAction {
     }
 
     public void actionPerformed(ActionEvent e) {
-        DefaultReconstructionManager.getInstance().setActiveReconstruction(reconstruction);
+        DefaultReconstructionManager.getInstance().activate(reconstruction);
         MainView.getInstance().getViewController().clear();
         MainView.getInstance().update();
     }

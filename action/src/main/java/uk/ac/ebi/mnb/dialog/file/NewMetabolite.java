@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,12 +18,15 @@ package uk.ac.ebi.mnb.dialog.file;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.ReportManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.metingear.edit.entity.AddEntitiesEdit;
+import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
@@ -63,11 +66,14 @@ public class NewMetabolite extends NewEntity {
 
     @Override
     public void process() {
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        if (manager.hasProjects()) {
-            Reconstruction reconstruction = manager.getActive();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        if (manager.active() != null) {
+            Reconstruction reconstruction = manager.active();
             Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class, getIdentifier(), getName(), getAbbreviation());
+            AddEntitiesEdit edit = new AddEntitiesEdit(reconstruction, EntityMap.singleton(DefaultEntityFactory.getInstance(),
+                                                                    m));
             reconstruction.addMetabolite(m);
+            addEdit(edit);
         }
     }
 }

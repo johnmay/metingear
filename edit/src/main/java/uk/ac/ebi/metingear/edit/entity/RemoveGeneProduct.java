@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -39,7 +39,7 @@ public class RemoveGeneProduct extends AbstractUndoableEdit {
                              GeneProduct product) {
         this.reconstruction = reconstruction;
         this.product = product;
-        this.genes = product.getGenes();
+        this.genes = reconstruction.genesOf(product);
     }
 
     @Override
@@ -47,10 +47,9 @@ public class RemoveGeneProduct extends AbstractUndoableEdit {
         super.undo();
         // add gene references
         for (Gene gene : this.genes) {
-            gene.removeProduct(product);
-            product.remove(gene);
+            reconstruction.associate(gene,  product);
         }
-        reconstruction.getProteome().add(product);
+        reconstruction.proteome().add(product);
     }
 
     @Override
@@ -59,10 +58,9 @@ public class RemoveGeneProduct extends AbstractUndoableEdit {
 
         // remove gene references
         for (Gene gene : this.genes) {
-            gene.removeProduct(product);
-            this.product.remove(gene);
+            reconstruction.dissociate(gene,  product);
         }
-        reconstruction.getProteome().remove(product);
+        reconstruction.proteome().remove(product);
     }
 
 }

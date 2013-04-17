@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -74,7 +74,7 @@ public class ReconstructionChooser {
 
                                                                Reconstruction reconstruction = ReconstructionIOHelper.read(file);
 
-                                                               DefaultReconstructionManager.getInstance().addReconstruction(reconstruction);
+                                                               DefaultReconstructionManager.getInstance().add(reconstruction);
                                                                combobox.refresh();
                                                                combobox.setSelected(reconstruction);
 

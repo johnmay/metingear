@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -41,6 +41,7 @@ import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
@@ -49,9 +50,11 @@ import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.mdk.domain.tool.PrefixCompartmentResolver;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
+import uk.ac.ebi.metingear.edit.entity.AddEntitiesEdit;
 import uk.ac.ebi.metingear.search.FieldType;
 import uk.ac.ebi.metingear.search.SearchManager;
 import uk.ac.ebi.metingear.search.SearchableIndex;
+import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
@@ -110,7 +113,7 @@ public class NewReaction extends NewEntity {
 
         JPanel panel = super.getForm();
 
-        equation = new SuggestionField(SwingUtilities.getWindowAncestor(this),
+        equation = new SuggestionField(this,
                                        5,
                                        new ReactionSuggestionHandler(),
                                        new ReplacementHandler());
@@ -138,9 +141,9 @@ public class NewReaction extends NewEntity {
     @Override
     public void process() {
 
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        if (manager.hasProjects()) {
-            Reconstruction reconstruction = manager.getActive();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        if (manager.active() != null) {
+            Reconstruction reconstruction = manager.active();
 
             ReactionParser parser = new ReactionParser(new NamedEntityResolver(), new AutomaticCompartmentResolver());
             PreparsedReaction ppRxn = new PreparsedReaction();
@@ -153,6 +156,10 @@ public class NewReaction extends NewEntity {
                 MetabolicReaction reaction = parser.parseReaction(ppRxn);
                 reaction.setIdentifier(getIdentifier());
                 reconstruction.addReaction(reaction);
+                AddEntitiesEdit edit = new AddEntitiesEdit(reconstruction, EntityMap
+                        .singleton(DefaultEntityFactory.getInstance(),
+                                   reaction));
+                addEdit(edit);
             } catch (UnparsableReactionError ex) {
                 addMessage(new ErrorMessage("Malformed reaction: " + ex.getMessage()));
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -118,14 +118,14 @@ public class AlignReconstruction
     public void process() {
 
         Reconstruction reference = reconstructionChooser.getSelected();
-        AbstractEntityAligner resolver = new MappedEntityAligner(reference.getMetabolome());
+        AbstractEntityAligner resolver = new MappedEntityAligner(reference.getMetabolome().toList());
 
         // set up the resolver
         for (MatcherDescription description : matcherStack.getElements()) {
             resolver.push(description.getMatcher());
         }
 
-        Reconstruction active = DefaultReconstructionManager.getInstance().getActive();
+        Reconstruction active = DefaultReconstructionManager.getInstance().active();
 
         Collection<Metabolite> queries = getSelection().get(Metabolite.class);
         int matched = 0;

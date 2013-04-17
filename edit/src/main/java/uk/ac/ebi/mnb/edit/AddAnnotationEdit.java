@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +19,7 @@ package uk.ac.ebi.mnb.edit;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.metingear.AppliableEdit;
 import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
 
 import javax.swing.undo.CannotRedoException;
@@ -35,7 +36,8 @@ import java.util.Collection;
  * @author  $Author$ (this version)
  */
 public class AddAnnotationEdit
-        extends UndoableEntityEdit {
+        extends UndoableEntityEdit
+        implements AppliableEdit {
 
     private static final Logger LOGGER = Logger.getLogger(AddAnnotationEdit.class);
     private AnnotatedEntity entity;
@@ -51,8 +53,15 @@ public class AddAnnotationEdit
         this.annotations = Arrays.asList(annotations);
     }
 
+    @Override public void apply() {
+        for (Annotation annotation : annotations) {
+            entity.addAnnotation(annotation);
+        }
+    }
+
     @Override
     public void redo() throws CannotRedoException {
+        super.redo();
         for (Annotation annotation : annotations) {
             entity.addAnnotation(annotation);
         }
@@ -60,6 +69,7 @@ public class AddAnnotationEdit
 
     @Override
     public void undo() throws CannotUndoException {
+        super.undo();
         for (Annotation annotation : annotations) {
             entity.removeAnnotation(annotation);
         }
@@ -70,14 +80,9 @@ public class AddAnnotationEdit
         return "Remove annotations";
     }
 
-    @Override
-    public boolean canUndo() {
-        return true;
-    }
-
-    @Override
-    public boolean canRedo() {
-        return true;
+    public static UndoableEntityEdit edit(AnnotatedEntity entity, Annotation annotation){
+        entity.addAnnotation(annotation);
+        return new AddAnnotationEdit(entity, annotation);
     }
 
     @Override

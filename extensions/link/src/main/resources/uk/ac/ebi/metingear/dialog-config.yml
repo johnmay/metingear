@@ -1,0 +1,15 @@
+AssociateReactions:
+  information:
+          text:    Link reactions to gene products
+          tooltip: This tool allows you to link reactions to gene products by specifying
+                   how they can be linked
+          active:  true
+  mapWith:
+          text:    "Associate using reaction"
+          tooltip: Specify what values should be used to link reactions to gene products.
+MergeTool:
+  information:
+          text:    Merge metabolites by identifier, name or abbreviation
+  mergeBy:
+          text:    "Merge By:"
+          tooltip: Select whether to merge entities by name or abbrevation

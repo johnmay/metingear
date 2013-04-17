@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@ import org.apache.lucene.store.LockObtainFailedException;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.metingear.search.SearchManager;
@@ -165,6 +166,8 @@ public class ProjectView
             controller.setSelected(c);
         if (selector != null)
             selector.setSelected(c);
+        // update available menu items
+        MainView.getInstance().getJMenuBar().updateContext();
     }
 
 
@@ -211,8 +214,8 @@ public class ProjectView
      */
     public boolean update() {
 
-        DefaultReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        Reconstruction reconstruction = manager.getActive();
+        ReconstructionManager manager = DefaultReconstructionManager.getInstance();
+        Reconstruction reconstruction = manager.active();
 
         if (reconstruction == null) {
             clear();
@@ -242,7 +245,6 @@ public class ProjectView
             LOGGER.info(ex.getMessage());
             MainView.getInstance().addWarningMessage("Unable to index component for searching");
         }
-
 
         return true; // update successful
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -87,7 +87,7 @@ public class RemoveProductEditTest {
 
         UndoableEdit edit = new RemoveProductEdit(product, reaction);
 
-        reaction.addProduct(product);
+        edit.undo();
 
         assertEquals("reactant count was different,",
                      1, reaction.getReactantCount());

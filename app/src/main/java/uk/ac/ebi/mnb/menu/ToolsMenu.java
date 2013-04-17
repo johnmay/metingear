@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,7 @@ import uk.ac.ebi.mnb.dialog.tools.CollapseStructures;
 import uk.ac.ebi.mnb.dialog.tools.CompareReconstruction;
 import uk.ac.ebi.mnb.dialog.tools.CuratedReconciliation;
 import uk.ac.ebi.mnb.dialog.tools.DownloadStructuresDialog;
-import uk.ac.ebi.mnb.dialog.tools.MergeLoci;
+
 import uk.ac.ebi.mnb.dialog.tools.RemoveWorstStructures;
 import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
 import uk.ac.ebi.mnb.dialog.tools.TransferAnnotations;
@@ -91,7 +91,6 @@ public class ToolsMenu extends ContextMenu {
 
         annotation
                 .add(create(DownloadStructuresDialog.class), new ContextResponder() {
-
                     public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                         return selection.hasSelection(Metabolite.class);
                     }
@@ -142,12 +141,7 @@ public class ToolsMenu extends ContextMenu {
 
         add(new JSeparator());
 
-        /**
-         * *********************
-         * Merging *
-         **********************
-         */
-        add(new JMenuItem(new MergeLoci(MainView.getInstance())));
+
 
         add(create(CollapseStructures.class), new ContextResponder() {
 
@@ -178,7 +172,7 @@ public class ToolsMenu extends ContextMenu {
             add(create(CompareReconstruction.class), new ContextResponder() {
 
                 public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                    return reconstructions.getProjects().size() > 1;
+                    return reconstructions.reconstructions().size() > 1;
                 }
             });
             add(create(AlignReconstruction.class), new ContextResponder() {

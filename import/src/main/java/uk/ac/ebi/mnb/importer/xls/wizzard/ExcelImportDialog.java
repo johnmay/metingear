@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -45,6 +45,7 @@ import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.mdk.service.ServiceManager;
+import uk.ac.ebi.mdk.service.query.QueryService;
 import uk.ac.ebi.mdk.service.query.name.NameService;
 import uk.ac.ebi.mdk.tool.resolve.ChemicalFingerprintEncoder;
 import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
@@ -64,6 +65,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -128,8 +131,8 @@ public class ExcelImportDialog
         properties.setFile(file);
 
         stages[0] = new SheetChooserDialog(helper, properties);
-        stages[1] = new ReactionColumnChooser(helper, properties);
-        stages[2] = new MetaboliteColumnChooser(helper, properties);
+        stages[1] = new MetaboliteColumnChooser(helper, properties);
+        stages[2] = new ReactionColumnChooser(helper, properties);
         stages[3] = new AdditionalOptions(properties);
 
         for (int i = 0; i < 4; i++) {
@@ -228,14 +231,7 @@ public class ExcelImportDialog
             waitIndicator.setText(String.format("initialising.."));
             waitIndicator.repaint();
 
-            NameService<ChEBIIdentifier> service = manager
-                    .getService(ChEBIIdentifier.class, NameService.class);
-
-            NameCandidateFactory<ChEBIIdentifier> factory = new NameCandidateFactory<ChEBIIdentifier>(new ChemicalFingerprintEncoder(),
-                                                                                                      service);
-
-            // todo resource should be selectable
-            EntryReconciler reconciler = new AutomatedReconciler(factory, new ChEBIIdentifier());
+            EntryReconciler reconciler = reconciler();
 
             ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler, DefaultEntityFactory
                     .getInstance());
@@ -292,6 +288,22 @@ public class ExcelImportDialog
             }
         }
 
+    }
+
+    private EntryReconciler reconciler() {
+        if (manager.hasService(ChEBIIdentifier.class, NameService.class)) {
+
+            @SuppressWarnings("unchecked")
+            NameService<ChEBIIdentifier> service = manager.getService(ChEBIIdentifier.class,NameService.class);
+
+            NameCandidateFactory<ChEBIIdentifier> factory = service.getServiceType().remote() ? empty_factory
+                                                                                                 : new NameCandidateFactory<ChEBIIdentifier>(new ChemicalFingerprintEncoder(),
+                                                                                                        service);
+
+            return new AutomatedReconciler(factory, new ChEBIIdentifier());
+        } else {
+            return new AutomatedReconciler(empty_factory, new ChEBIIdentifier());
+        }
     }
 
 
@@ -367,4 +379,47 @@ public class ExcelImportDialog
             }
         }
     }
+
+    NameCandidateFactory<ChEBIIdentifier> empty_factory = new NameCandidateFactory<ChEBIIdentifier>(new ChemicalFingerprintEncoder(),
+                                                                                                    new NameService<ChEBIIdentifier>() {
+                                                                                                        @Override
+                                                                                                        public Collection<ChEBIIdentifier> searchName(String name, boolean approximate) {
+                                                                                                            return Collections.emptyList();
+                                                                                                        }
+
+                                                                                                        @Override
+                                                                                                        public Collection<String> getNames(ChEBIIdentifier identifier) {
+                                                                                                            return Collections.emptyList();
+                                                                                                        }
+
+                                                                                                        @Override
+                                                                                                        public ChEBIIdentifier getIdentifier() {
+                                                                                                            return new ChEBIIdentifier();
+                                                                                                        }
+
+                                                                                                        @Override
+                                                                                                        public ServiceType getServiceType() {
+                                                                                                            return null;
+                                                                                                        }
+
+                                                                                                        @Override
+                                                                                                        public void renew() {
+
+                                                                                                        }
+
+                                                                                                        @Override
+                                                                                                        public void setMaxResults(int maxResults) {
+
+                                                                                                        }
+
+                                                                                                        @Override
+                                                                                                        public void setMinSimilarity(float similarity) {
+
+                                                                                                        }
+
+                                                                                                        @Override
+                                                                                                        public boolean startup() {
+                                                                                                            return false;
+                                                                                                        }
+                                                                                                    });
 }
