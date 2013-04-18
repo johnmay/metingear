@@ -43,7 +43,7 @@
                     <exclude>*.javafiles</exclude>
                     <exclude>*.set</exclude>
                     <exclude>license/**</exclude>
-                    <exclude>META-INF/liceneses</exclude>
+                    <exclude>META-INF/liceneses/**</exclude>
                     <exclude>**/LICENSE*</exclude>
                     <exclude>**/NOTICE*</exclude>
                     <exclude>**/README*</exclude>
