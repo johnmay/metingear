@@ -36,6 +36,19 @@
             <excludes>
                 <exclude>ilog.cplex:cplex</exclude>
             </excludes>
+            <unpackOptions>
+                <excludes>
+                    <exclude>log4j.properties</exclude>
+                    <exclude>simplelog.properties</exclude>
+                    <exclude>*.javafiles</exclude>
+                    <exclude>*.set</exclude>
+                    <exclude>license/**</exclude>
+                    <exclude>META-INF/liceneses</exclude>
+                    <exclude>**/LICENSE*</exclude>
+                    <exclude>**/NOTICE*</exclude>
+                    <exclude>**/README*</exclude>
+                </excludes>
+            </unpackOptions>
         </dependencySet>
     </dependencySets>
 
