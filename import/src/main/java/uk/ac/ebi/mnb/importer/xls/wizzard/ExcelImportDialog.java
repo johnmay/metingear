@@ -23,8 +23,10 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.Sizes;
 import mnb.io.resolve.AutomatedReconciler;
 import mnb.io.resolve.EntryReconciler;
+import mnb.io.tabular.EntityResolver;
 import mnb.io.tabular.ExcelEntityResolver;
 import mnb.io.tabular.ExcelModelProperties;
+import mnb.io.tabular.NamedEntityResolver;
 import mnb.io.tabular.parser.ReactionParser;
 import mnb.io.tabular.parser.UnparsableReactionError;
 import mnb.io.tabular.preparse.PreparsedReaction;
@@ -210,17 +212,11 @@ public class ExcelImportDialog
             File xls = new File(properties.getFilePath());
             HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(xls));
 
-            Integer rxnI = Integer.parseInt(properties
-                                                    .getProperty("rxn.sheet"));
-            Integer metI = Integer.parseInt(properties
-                                                    .getProperty("ent.sheet"));
+            Integer rxnI = Integer.parseInt(properties.getProperty("rxn.sheet"));
 
             final PreparsedSheet rxnSht = new HSSFPreparsedSheet(workbook.getSheetAt(rxnI),
                                                                  properties,
                                                                  ReactionColumn.DATA_BOUNDS);
-            PreparsedSheet entSht = new HSSFPreparsedSheet(workbook.getSheetAt(metI),
-                                                           properties,
-                                                           EntityColumn.DATA_BOUNDS);
             waitIndicator.setText(String.format("initialising."));
             waitIndicator.repaint();
 
@@ -231,10 +227,8 @@ public class ExcelImportDialog
             waitIndicator.setText(String.format("initialising.."));
             waitIndicator.repaint();
 
-            EntryReconciler reconciler = reconciler();
 
-            ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht, reconciler, DefaultEntityFactory
-                    .getInstance());
+            EntityResolver entitySheet = resolver(workbook);
             parser = new ReactionParser(entitySheet, new DialogCompartmentResolver(new AutomaticCompartmentResolver(), this));
 
             waitIndicator.setText(String.format("initialising..."));
@@ -288,6 +282,17 @@ public class ExcelImportDialog
             }
         }
 
+    }
+
+    private EntityResolver resolver(HSSFWorkbook workbook) {
+        String sheet = properties.getProperty("ent.sheet");
+        if(sheet != null) {
+            PreparsedSheet entSht = new HSSFPreparsedSheet(workbook.getSheetAt(Integer.parseInt(sheet)),
+                                                           properties,
+                                                           EntityColumn.DATA_BOUNDS);
+            return new ExcelEntityResolver(entSht, reconciler(), DefaultEntityFactory.getInstance());
+        }
+        return new NamedEntityResolver();
     }
 
     private EntryReconciler reconciler() {

@@ -37,6 +37,7 @@ import uk.ac.ebi.mdk.ResourcePreferences;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.hsql.Hsqldb;
 import uk.ac.ebi.mdk.service.ServicePreferences;
 import uk.ac.ebi.mdk.service.loader.crossreference.ChEBICrossReferenceLoader;
 import uk.ac.ebi.mdk.service.loader.crossreference.UniProtCrossReferenceLoader;
@@ -48,6 +49,7 @@ import uk.ac.ebi.mdk.service.loader.multiple.KEGGCompoundLoader;
 import uk.ac.ebi.mdk.service.loader.multiple.LipidMapsLoader;
 import uk.ac.ebi.mdk.service.loader.multiple.MetaCycCompoundLoader;
 import uk.ac.ebi.mdk.service.loader.name.ChEBINameLoader;
+import uk.ac.ebi.mdk.service.loader.reaction.KEGGReactionLoader;
 import uk.ac.ebi.mdk.service.loader.single.TaxonomyLoader;
 import uk.ac.ebi.mdk.service.loader.structure.ChEBIStructureLoader;
 import uk.ac.ebi.mdk.service.loader.structure.HMDBStructureLoader;
@@ -303,7 +305,8 @@ public class PreferencePanel extends JPanel {
                 add(Box.createVerticalStrut(5));
                 add(factory.createGroup("KEGG",
                                         new KEGGCompoundLoader(),
-                                        new KEGGCompoundStructureLoader()));
+                                        new KEGGCompoundStructureLoader(),
+                                        Hsqldb.keggReactionLoader()));
                 add(Box.createVerticalStrut(5));
                 add(factory.createGroup("BioCyc",
                                         new MetaCycCompoundLoader(),
