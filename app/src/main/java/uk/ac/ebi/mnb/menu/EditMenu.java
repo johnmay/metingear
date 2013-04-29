@@ -26,6 +26,7 @@ import uk.ac.ebi.metingear.preference.PreferenceFrame;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.edit.AddAnnotation;
 import uk.ac.ebi.mnb.dialog.edit.AddAuthorAnnotation;
+import uk.ac.ebi.mnb.dialog.edit.ClearAnnotations;
 import uk.ac.ebi.mnb.dialog.edit.CreateSubset;
 import uk.ac.ebi.mnb.dialog.edit.DeleteEntities;
 import uk.ac.ebi.mnb.dialog.edit.MergeEntities;
@@ -34,7 +35,9 @@ import uk.ac.ebi.mnb.dialog.edit.Resync;
 import uk.ac.ebi.mnb.dialog.edit.SplitMetabolites;
 import uk.ac.ebi.mnb.main.MainView;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.undo.UndoManager;
 import java.awt.event.ActionEvent;
 
@@ -121,6 +124,12 @@ public class EditMenu extends ContextMenu {
                 return active != null;
             }
         });
+        add(new ClearAnnotations(MainView.getInstance()), new ContextResponder() {
+            @Override
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return active != null && !selection.isEmpty();
+            }
+        });
 
     }
 
@@ -143,6 +152,7 @@ public class EditMenu extends ContextMenu {
     }
 
     public boolean hasPreferenceOnMenuBar() {
-        return System.getProperty("os.name").equals("Mac OS X") && "true".equals(System.getProperty("apple.laf.useScreenMenuBar"));
+        return System.getProperty("os.name").equals("Mac OS X") && "true"
+                .equals(System.getProperty("apple.laf.useScreenMenuBar"));
     }
 }
