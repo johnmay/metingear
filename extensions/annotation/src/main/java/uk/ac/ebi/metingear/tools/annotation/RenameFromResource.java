@@ -27,7 +27,6 @@ import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
@@ -52,6 +51,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -109,12 +109,15 @@ public class RenameFromResource extends AbstractControlDialog {
         ServiceManager services = DefaultServiceManager.getInstance();
         Map<Identifier, QueryService> available = new TreeMap<Identifier, QueryService>();
 
-        for (Identifier id : services
-                .getIdentifiers(PreferredNameService.class)) {
+        for (Identifier id : services.getIdentifiers(PreferredNameService.class)) {
             if (services.hasService(id, PreferredNameService.class) &&
                     isUsable(services.getService(id, PreferredNameService.class))) {
-                available.put(id, services
-                        .getService(id, PreferredNameService.class));
+                try {
+                    available.put(id, services
+                            .getService(id, PreferredNameService.class));
+                } catch (NoSuchElementException ex) {
+                    // timeout
+                }
             }
         }
 
