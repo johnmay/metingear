@@ -90,6 +90,7 @@ public class FileMenu
         add(importMenu);
         add(new ImportSBML(view), activeProject);
         add(new ImportXLSAction(), activeProject);
+        add(new ImportModelSeed(MainView.getInstance(), MainView.getInstance()), activeProject);
         add(new ImportENAXML(), activeProject);
         add(new JSeparator());
         add(exportMenu);
@@ -174,7 +175,6 @@ public class FileMenu
             super("Import...", MainView.getInstance());
             add(new ImportPeptidesAction(), activeProject);
             add(new ImportKGML(), activeProject);
-            add(new ImportModelSeed(MainView.getInstance(), MainView.getInstance()), activeProject);
         }
     }
 
