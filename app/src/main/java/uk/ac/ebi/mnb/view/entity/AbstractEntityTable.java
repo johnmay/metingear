@@ -39,6 +39,7 @@ import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -125,9 +126,9 @@ public abstract class AbstractEntityTable
     /** Update the table model with the current */
     public boolean update() {
         updating = true;
-        int[] selected = getSelectedRows();
+        Collection<AnnotatedEntity> entities = selection.getEntities();
         boolean updated = getModel().update();
-        select(selected);
+        select(entities);
         updating = false;
         return updated;
     }
@@ -175,40 +176,35 @@ public abstract class AbstractEntityTable
         return selection;
     }
 
-    /**
-     * Sets a single selection in the table
-     *
-     * @param selectionManager
-     */
-    public boolean setSelection(EntityCollection selectionManager) {
+    public int indexInView(AnnotatedEntity e) {
+        int i = getModel().indexOf(e);
+        return i < 0 ? i : convertRowIndexToView(i);
+    }
 
-
-        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>(selectionManager
-                                                                                .getEntities());
-
-        LOGGER.debug("selecting " + entities.size() + " entities");
-
-        clearSelection();
+    public void select(Collection<AnnotatedEntity> entities) {
         getSelectionModel().setValueIsAdjusting(true);
-
-        for (int i = 0; i < entities.size(); i++) {
-            int index = convertRowIndexToView(getModel()
-                                                      .indexOf(entities.get(i)));
-            if (index != -1) {
-                addRowSelectionInterval(index, index);
-            }
+        int[] rows = new int[entities.size()];
+        int i = 0;
+        for (AnnotatedEntity e : entities) {
+            int index = indexInView(e);
+            if (index >= 0)
+                rows[i++] = index;
         }
+        if (i < rows.length)
+            rows = Arrays.copyOf(rows, i);
+        Arrays.sort(rows);
+        select(rows);
+        scrollToSelected();
+        getSelectionModel().setValueIsAdjusting(false);
+    }
 
+    private void scrollToSelected() {
         int selected = getSelectedRow();
-
-        if (selected == -1) {
-            return false;
-        }
+        if (selected < 0)
+            return;
 
         Container parent = getParent();
-
         if (parent != null) {
-
             int y = getTableHeader()
                     .getHeight() + (getRowHeight() * selected) - ((int) parent
                     .getHeight()
@@ -216,14 +212,20 @@ public abstract class AbstractEntityTable
             scrollRectToVisible(new Rectangle(0, y,
                                               parent.getWidth(),
                                               parent.getHeight()));
-
         }
+    }
 
-        getSelectionModel().setValueIsAdjusting(false);
-
+    /**
+     * Sets a single selection in the table
+     *
+     * @param selectionManager
+     */
+    public boolean setSelection(EntityCollection selectionManager) {
+        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>(selectionManager.getEntities());
+        getSelectionModel().setValueIsAdjusting(true);
+        select(entities);
+        scrollToSelected();
         return true;
-
-
     }
 
     public void clear() {
