@@ -50,6 +50,14 @@ public final class ReplaceMetaboliteEdit extends CompoundEdit {
         build();
     }
 
+    public Metabolite original() {
+        return original;
+    }
+
+    public Metabolite replacement(){
+        return replacement;
+    }
+
     public void apply() {
         for (final MetabolicReaction reaction : new ArrayList<MetabolicReaction>(reactions)) {
 

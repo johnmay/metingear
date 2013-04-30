@@ -27,6 +27,7 @@ import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
@@ -109,7 +110,8 @@ public class RenameFromResource extends AbstractControlDialog {
         ServiceManager services = DefaultServiceManager.getInstance();
         Map<Identifier, QueryService> available = new TreeMap<Identifier, QueryService>();
 
-        for (Identifier id : services.getIdentifiers(PreferredNameService.class)) {
+        for (Identifier id : services
+                .getIdentifiers(PreferredNameService.class)) {
             if (services.hasService(id, PreferredNameService.class) &&
                     isUsable(services.getService(id, PreferredNameService.class))) {
                 try {
@@ -191,25 +193,32 @@ public class RenameFromResource extends AbstractControlDialog {
         CompoundEdit edits = new CompoundEdit();
 
         // get the preferred name service
-        PreferredNameService service = (PreferredNameService) resourceSelection.getSelectedItem();
+        PreferredNameService service = (PreferredNameService) resourceSelection
+                .getSelectedItem();
 
-        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
+        Reconstruction reconstruction = DefaultReconstructionManager
+                .getInstance().active();
 
         List<Metabolite> selection = new ArrayList<Metabolite>(getSelection(Metabolite.class));
 
         int done = 0;
 
+        List<Metabolite> newSelection = new ArrayList<Metabolite>();
+
         // for each selected metabolite select the first cross-reference which
         // matches the class of the identifier and set the new name
         for (final Metabolite metabolite : selection) {
-            final String progress = String.format("%.1f%%", 100 * (done / (float) selection.size()));
+            final String progress = String
+                    .format("%.1f%%", 100 * (done / (float) selection.size()));
             SwingUtilities.invokeLater(new Runnable() {
                 @Override public void run() {
-                    indicator.setText("renaming " + metabolite.getName() + "... " + progress);
+                    indicator.setText("renaming " + metabolite
+                            .getName() + "... " + progress);
                 }
             });
 
-            for (CrossReference xref : metabolite.getAnnotationsExtending(CrossReference.class)) {
+            for (CrossReference xref : metabolite
+                    .getAnnotationsExtending(CrossReference.class)) {
                 if (xref.getIdentifier().getClass()
                         .equals(service.getIdentifier().getClass())) {
 
@@ -227,6 +236,8 @@ public class RenameFromResource extends AbstractControlDialog {
                     // actually perform the edit
                     edit.apply();
 
+                    newSelection.add(edit.replacement());
+
                     // don't update the name any more
                     break;
 
@@ -239,8 +250,14 @@ public class RenameFromResource extends AbstractControlDialog {
         edits.end();
 
         addEdit(edits);
-
+        EntityCollection selectionControl = getSelectionController()
+                .getSelection();
+        selectionControl.clear();
+        selectionControl.addAll(newSelection);
     }
 
 
+    @Override public void update() {
+        super.update();
+    }
 }
