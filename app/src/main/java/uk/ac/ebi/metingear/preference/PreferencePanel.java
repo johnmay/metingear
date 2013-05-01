@@ -25,6 +25,7 @@ import com.jgoodies.forms.factories.DefaultComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
+import sun.net.idn.StringPrep;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.factory.PreferencePanelFactory;
@@ -33,6 +34,8 @@ import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.caf.utility.preference.Preference;
 import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
+import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.mdk.ResourcePreferences;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
@@ -49,7 +52,6 @@ import uk.ac.ebi.mdk.service.loader.multiple.KEGGCompoundLoader;
 import uk.ac.ebi.mdk.service.loader.multiple.LipidMapsLoader;
 import uk.ac.ebi.mdk.service.loader.multiple.MetaCycCompoundLoader;
 import uk.ac.ebi.mdk.service.loader.name.ChEBINameLoader;
-import uk.ac.ebi.mdk.service.loader.reaction.KEGGReactionLoader;
 import uk.ac.ebi.mdk.service.loader.single.TaxonomyLoader;
 import uk.ac.ebi.mdk.service.loader.structure.ChEBIStructureLoader;
 import uk.ac.ebi.mdk.service.loader.structure.HMDBStructureLoader;
@@ -60,10 +62,10 @@ import uk.ac.ebi.mdk.ui.component.service.LoaderGroupFactory;
 import uk.ac.ebi.metingear.Main;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -171,7 +173,7 @@ public class PreferencePanel extends JPanel {
             super(BoxLayout.PAGE_AXIS);
 
             DomainPreferences domainPref = DomainPreferences.getInstance();
-            ServicePreferences servicePref = ServicePreferences.getInstance();
+            final ServicePreferences servicePref = ServicePreferences.getInstance();
             ResourcePreferences resourcePref = ResourcePreferences
                     .getInstance();
             JLabel label = LabelFactory
@@ -188,13 +190,44 @@ public class PreferencePanel extends JPanel {
             proxyLabel.setHorizontalAlignment(SwingConstants.LEFT);
             add(DefaultComponentFactory.getInstance()
                                        .createSeparator(proxyLabel));
+            final BooleanPreference proxySet = servicePref.getPreference("PROXY_SET");
+            Preference[] proxyPrefs = new Preference[]{
+                    servicePref.getPreference("PROXY_SET"),
+                    servicePref.getPreference("PROXY_HOST"),
+                    servicePref.getPreference("PROXY_PORT")
+            };
+            Action[] proxyActions = new Action[]{
+                    new AbstractAction() {
+                        @Override public void actionPerformed(ActionEvent e) {
+                            if(proxySet.get()){
+                                System.getProperties().put("http.proxyHost",
+                                                           "");
+                                System.getProperties().put("http.proxyPort",
+                                                           "");
+                            }
+                        }
+                    },
+                    new AbstractAction() {
+                        @Override public void actionPerformed(ActionEvent e) {
+                            StringPreference pref = servicePref.getPreference("PROXY_HOST");
+                            if(proxySet.get()){
+                                System.getProperties().put("http.proxyHost",
+                                                           pref.get());
+                            }
+                        }
+                    },
+                    new AbstractAction() {
+                        @Override public void actionPerformed(ActionEvent e) {
+                            IntegerPreference pref = servicePref.getPreference("PROXY_PORT");
+                            if(proxySet.get()){
+                                System.getProperties().put("http.proxyPort",
+                                                           pref.get().toString());
+                            }
+                        }
+                    }
+            };
             add(PreferencePanelFactory
-                        .getPreferencePanel(servicePref
-                                                    .getPreference("PROXY_SET"),
-                                            servicePref
-                                                    .getPreference("PROXY_HOST"),
-                                            servicePref
-                                                    .getPreference("PROXY_PORT")));
+                        .getPreferencePanel(proxyPrefs, proxyActions));
 
 
         }

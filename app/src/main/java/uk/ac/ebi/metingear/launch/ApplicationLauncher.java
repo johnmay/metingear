@@ -114,32 +114,37 @@ public class ApplicationLauncher implements Runnable {
         ServicePreferences pref = ServicePreferences.getInstance();
         String host = System.getProperty("proxyHost");
         String port = System.getProperty("proxyPort");
-        String set = System.getProperty("proxySet");
 
         // pick up from http.* proxy settings
         if (host == null)
             host = System.getProperty("http.proxyHost");
         if (port == null)
             port = System.getProperty("http.proxyPort");
-        if (set == null)
-            set = System.getProperty("http.proxySet");
 
         StringPreference hostPref = pref.getPreference("PROXY_HOST");
         IntegerPreference portPref = pref.getPreference("PROXY_PORT");
-        BooleanPreference setPref = pref.getPreference("PROXY_SET");
+        BooleanPreference enabled = pref.getPreference("PROXY_SET");
+
         if (host != null && !host.isEmpty()) {
+            enabled.put(true);
             hostPref.put(host);
         }
         if (port != null && !port.isEmpty()) {
             try {
                 portPref.put(Integer.parseInt(port));
+                enabled.put(true);
             } catch (NumberFormatException e) {
 
             }
         }
-        if (set != null && !set.isEmpty()) {
-            setPref.put(Boolean.parseBoolean(set));
+
+        if(enabled.get()) {
+            System.getProperties().put("http.proxyHost",
+                                       hostPref.get());
+            System.getProperties().put("http.proxyPort",
+                                       portPref.get());
         }
+
     }
 
     public void beforeVisible() {
