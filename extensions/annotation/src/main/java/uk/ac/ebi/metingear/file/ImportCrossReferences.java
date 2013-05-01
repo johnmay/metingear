@@ -31,6 +31,7 @@ import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
+import uk.ac.ebi.mdk.domain.annotation.primitive.DoubleAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
@@ -555,6 +556,10 @@ public class ImportCrossReferences extends AbstractControlDialog {
         for (StringAnnotation a : annotations
                 .getSubclassInstances(StringAnnotation.class)) {
             importable.put(a, AnnotationParser.basic(a));
+        }
+        for (DoubleAnnotation a : annotations
+                .getSubclassInstances(DoubleAnnotation.class)) {
+            importable.put(a, AnnotationParser.number(a));
         }
         importable.put(new GibbsEnergy(), AnnotationParser.gibbs());
         return importable;
