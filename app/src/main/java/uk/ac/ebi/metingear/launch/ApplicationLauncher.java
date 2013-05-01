@@ -18,11 +18,15 @@
 package uk.ac.ebi.metingear.launch;
 
 import org.apache.log4j.PropertyConfigurator;
+import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
+import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.mdk.service.ServicePreferences;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 
-import javax.swing.*;
+import javax.swing.UIManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -91,6 +95,7 @@ public class ApplicationLauncher implements Runnable {
     public void run() {
 
         loadLookAndFeel();
+        configureProxy();
 
         MainView view = MainView.getInstance();
         view.setJMenuBar(new MainMenuBar());
@@ -103,6 +108,38 @@ public class ApplicationLauncher implements Runnable {
         view.setVisible(true);
 
 
+    }
+
+    void configureProxy() {
+        ServicePreferences pref = ServicePreferences.getInstance();
+        String host = System.getProperty("proxyHost");
+        String port = System.getProperty("proxyPort");
+        String set = System.getProperty("proxySet");
+
+        // pick up from http.* proxy settings
+        if (host == null)
+            host = System.getProperty("http.proxyHost");
+        if (port == null)
+            port = System.getProperty("http.proxyPort");
+        if (set == null)
+            set = System.getProperty("http.proxySet");
+
+        StringPreference hostPref = pref.getPreference("PROXY_HOST");
+        IntegerPreference portPref = pref.getPreference("PROXY_PORT");
+        BooleanPreference setPref = pref.getPreference("PROXY_SET");
+        if (host != null && !host.isEmpty()) {
+            hostPref.put(host);
+        }
+        if (port != null && !port.isEmpty()) {
+            try {
+                portPref.put(Integer.parseInt(port));
+            } catch (NumberFormatException e) {
+
+            }
+        }
+        if (set != null && !set.isEmpty()) {
+            setPref.put(Boolean.parseBoolean(set));
+        }
     }
 
     public void beforeVisible() {
