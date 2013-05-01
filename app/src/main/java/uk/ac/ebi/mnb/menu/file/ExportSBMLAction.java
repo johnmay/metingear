@@ -23,6 +23,7 @@
 package uk.ac.ebi.mnb.menu.file;
 
 import net.sf.furbelow.SpinningDialWaitIndicator;
+import org.apache.log4j.Logger;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.xml.stax.SBMLWriter;
@@ -41,6 +42,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -103,22 +105,36 @@ public class ExportSBMLAction
 
         final SpinningDialWaitIndicator waitIndicator = new SpinningDialWaitIndicator((JFrame) controller);
 
-        waitIndicator.setText("Export SBML to " + file);
+        waitIndicator.setText("Exporting SBML to " + file);
 
         final int level = 2;
         final int version = 4;
 
         final List<Report> messages = new ArrayList<Report>();
+        final long t0 = System.nanoTime();
 
         Thread thread = new Thread(new Runnable() {
             @Override public void run() {
                 try {
 
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override public void run() {
+                            waitIndicator.setText("Exporting SBML to " + file + " (transferring to jSBML)");
+                        }
+                    });
                     SBMLIOUtil util = new SBMLIOUtil(DefaultEntityFactory.getInstance(), level, version);
-
                     SBMLDocument document = util.getDocument(DefaultReconstructionManager.getInstance().active());
+                    long t1 = System.nanoTime();
+                    Logger.getLogger(getClass()).info(TimeUnit.NANOSECONDS.toMillis(t1-t0) + " ms to transfer to SBML");
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override public void run() {
+                            waitIndicator.setText("Exporting SBML to " + file + " (writing using jSBML)");
+                        }
+                    });
                     SBMLWriter writer = new SBMLWriter(' ', (short) 2);
                     writer.write(document, file);
+                    long t2 = System.nanoTime();
+                    Logger.getLogger(getClass()).info(TimeUnit.NANOSECONDS.toMillis(t2-t1) + " ms to write to SBML");
 
                 } catch (IOException ex) {
                     messages.add(new ErrorMessage("unable to export SBML: " + ex.getMessage()));
