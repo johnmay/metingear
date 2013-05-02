@@ -31,6 +31,11 @@
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <artifactId>caf-component</artifactId>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <version>${caf.version}</version>
+        </dependency>
 
         <dependency>
             <artifactId>mdk-tool-annotation</artifactId>
