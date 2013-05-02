@@ -53,7 +53,7 @@ public class AddNote extends AbstractControlDialog {
 
     private final JTextArea area = new JTextArea(20, 40);
     private final PrefixSearch englishWords = PrefixSearch.englishWords();
-    private PrefixSearch currentProject = new PrefixSearch(Collections
+    private PrefixSearch currentProject = PrefixSearch.forStrings(Collections
                                                                    .<String>emptyList());
 
 
@@ -66,8 +66,7 @@ public class AddNote extends AbstractControlDialog {
         super(window);
         area.setWrapStyleWord(true);
         area.setLineWrap(true);
-        area.getInputMap().put(KeyStroke
-                                       .getKeyStroke("TAB"), new AbstractAction() {
+        area.getInputMap().put(KeyStroke.getKeyStroke("TAB"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (suggestions.isEmpty()) {
@@ -137,25 +136,24 @@ public class AddNote extends AbstractControlDialog {
     @Override public void prepare() {
         Reconstruction reconstruction = DefaultReconstructionManager
                 .getInstance().active();
-        List<String> projectWords = new ArrayList<String>();
+        List<String> dict = new ArrayList<String>();
         for (Metabolite m : reconstruction.metabolome()) {
-            projectWords.add(m.getName());
-            projectWords.add(m.getAccession());
+            dict.add(m.getName());
+            dict.add(m.getAccession());
         }
         for (MetabolicReaction r : reconstruction.reactome()) {
-            projectWords.add(r.getName());
-            projectWords.add(r.getAccession());
+            dict.add(r.getName());
+            dict.add(r.getAccession());
         }
         for (GeneProduct p : reconstruction.proteome()) {
-            projectWords.add(p.getName());
-            projectWords.add(p.getAccession());
+            dict.add(p.getName());
+            dict.add(p.getAccession());
         }
         for (GeneProduct g : reconstruction.proteome()) {
-            projectWords.add(g.getName());
-            projectWords.add(g.getAccession());
+            dict.add(g.getName());
+            dict.add(g.getAccession());
         }
-        Collections.shuffle(projectWords);
-        currentProject = new PrefixSearch(projectWords);
+        currentProject = PrefixSearch.forStrings(dict);
     }
 
     @Override public void process() {
