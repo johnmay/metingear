@@ -52,13 +52,21 @@ import uk.ac.ebi.mdk.ui.component.table.accessor.NameAccessor;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Box;
+import javax.swing.DefaultListModel;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.undo.UndoManager;
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -70,6 +78,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 
@@ -119,7 +128,8 @@ public class DatabaseSearch
         table.setPreferredSize(new Dimension(300, 185));
         table.setBackground(component.getBackground());
         table.setSelectionBackground(component.getBackground().brighter());
-        table.setSelectionForeground(ThemeManager.getInstance().getTheme().getForeground());
+        table.setSelectionForeground(ThemeManager.getInstance().getTheme()
+                                                 .getForeground());
 
 
         field.getDocument().addDocumentListener(new DocumentListener() {
@@ -150,23 +160,27 @@ public class DatabaseSearch
                 timer.restart();
             }
         });
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        table.getSelectionModel()
+             .addListSelectionListener(new ListSelectionListener() {
 
-            public void valueChanged(ListSelectionEvent e) {
-                Collection<Metabolite> entites = table.getSelectedEntities();
-                if (entites.isEmpty()) {
-                    return;
-                }
-                Metabolite m = entites.iterator().next();
-                match.setSubject(m);
-            }
-        });
+                 public void valueChanged(ListSelectionEvent e) {
+                     Collection<Metabolite> entites = table
+                             .getSelectedEntities();
+                     if (entites.isEmpty()) {
+                         return;
+                     }
+                     Metabolite m = entites.iterator().next();
+                     match.setSubject(m);
+                 }
+             });
 
 
         CellConstraints cc = new CellConstraints();
-        component.add(match.getComponent(), cc.xy(1, 1, cc.CENTER, cc.CENTER)); // visual inspector
+        component.add(match.getComponent(), cc
+                .xy(1, 1, cc.CENTER, cc.CENTER)); // visual inspector
 
-        component.add(getSearchOptions(), cc.xy(1, 3, cc.CENTER, cc.CENTER)); // search options
+        component.add(getSearchOptions(), cc
+                .xy(1, 3, cc.CENTER, cc.CENTER)); // search options
 
 
     }
@@ -188,8 +202,9 @@ public class DatabaseSearch
     public final JComponent getSearchOptions() {
 
         JComponent options = Box.createHorizontalBox();
-        JComponent config = PanelFactory.createDialogPanel("p:grow, 4dlu, p:grow",
-                                                           "p, 4dlu, p, 4dlu, p, 4dlu, p");
+        JComponent config = PanelFactory
+                .createDialogPanel("p:grow, 4dlu, p:grow",
+                                   "p, 4dlu, p, 4dlu, p, 4dlu, p");
 
         options.add(config); // search box and database selection
 
@@ -205,7 +220,8 @@ public class DatabaseSearch
         config.add(LabelFactory.newFormLabel("Query"), cc.xy(1, 1));
         config.add(field, cc.xy(3, 1));
         config.add(approximate, cc.xyw(1, 3, 3));
-        config.add(new MutableJListController(resourceList).getListWithController(), cc.xyw(1, 5, 3));
+        config.add(new MutableJListController(resourceList)
+                           .getListWithController(), cc.xyw(1, 5, 3));
         config.add(ButtonFactory.newButton(new AbstractAction("Assign") {
 
             public void actionPerformed(ActionEvent e) {
@@ -256,31 +272,38 @@ public class DatabaseSearch
         NameCandidateFactory factory = new NameCandidateFactory(new ChemicalFingerprintEncoder(),
                                                                 service);
 
-        Set<Candidate> candidates = factory.getCandidates(name, approximate.isSelected());
+        Set<Candidate> candidates = factory.getCandidates(name, approximate
+                .isSelected());
 
         List<Metabolite> metabolites = new ArrayList<Metabolite>();
 
         for (Candidate candidate : candidates) {
 
-            LOGGER.info("updating table: " + candidate.getIdentifier() + " - " + candidate.getName());
+            LOGGER.info("updating table: " + candidate
+                    .getIdentifier() + " - " + candidate.getName());
 
-            Metabolite m = factory.convertToMetabolite(DefaultEntityFactory.getInstance(), candidate);
+            Metabolite m = factory.convertToMetabolite(DefaultEntityFactory
+                                                               .getInstance(), candidate);
             if (serviceManager.hasService(candidate.getIdentifier(),
                                           MolecularChargeService.class)) {
                 m.setCharge(serviceManager.getService(candidate.getIdentifier(),
-                                                      MolecularChargeService.class).getCharge(m.getIdentifier()));
+                                                      MolecularChargeService.class)
+                                          .getCharge(m.getIdentifier()));
 
             } else {
-                LOGGER.debug("no molecular charge service available for " + candidate.getIdentifier().getShortDescription());
+                LOGGER.debug("no molecular charge service available for " + candidate
+                        .getIdentifier().getShortDescription());
             }
             if (serviceManager.hasService(candidate.getIdentifier(),
                                           MolecularFormulaService.class)) {
                 String mf = serviceManager.getService(candidate.getIdentifier(),
-                                                      MolecularFormulaService.class).getMolecularFormula(m.getIdentifier());
+                                                      MolecularFormulaService.class)
+                                          .getMolecularFormula(m.getIdentifier());
                 m.addAnnotation(new MolecularFormula(mf));
 
             } else {
-                LOGGER.debug("no molecular formula service available for " + candidate.getIdentifier().getShortDescription());
+                LOGGER.debug("no molecular formula service available for " + candidate
+                        .getIdentifier().getShortDescription());
             }
             metabolites.add(m);
 
@@ -307,12 +330,19 @@ public class DatabaseSearch
         List<QueryService> available = new ArrayList<QueryService>();
 
 
-        for (Identifier identifier : serviceManager.getIdentifiers(NameService.class)) {
+        for (Identifier identifier : serviceManager
+                .getIdentifiers(NameService.class)) {
             // only add those services which are available
             if (serviceManager.hasService(identifier, NameService.class)) {
-                QueryService service = serviceManager.getService(identifier, NameService.class);
-                if (!service.getServiceType().remote() && identifier instanceof ChemicalIdentifier) {
-                    available.add(service);
+                try {
+                    QueryService service = serviceManager
+                            .getService(identifier, NameService.class);
+                    if (!service.getServiceType()
+                                .remote() && identifier instanceof ChemicalIdentifier) {
+                        available.add(service);
+                    }
+                } catch (NoSuchElementException e) {
+                    // timeout :/
                 }
             }
 
@@ -321,11 +351,10 @@ public class DatabaseSearch
         Collections.sort(available, new Comparator<QueryService>() {
             @Override public int compare(QueryService o1, QueryService o2) {
                 int cmp = o1.getServiceType().compareTo(o2.getServiceType());
-                if(cmp != 0) return cmp;
+                if (cmp != 0) return cmp;
                 return o1.getIdentifier().compareTo(o2.getIdentifier());
             }
         });
-
 
 
         // add the sorted identifiers

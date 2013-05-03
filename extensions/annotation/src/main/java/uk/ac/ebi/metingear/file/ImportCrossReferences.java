@@ -24,11 +24,15 @@ import com.jgoodies.forms.layout.FormLayout;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.chemet.tools.annotation.IdentifierMapper;
+import uk.ac.ebi.chemet.tools.annotation.AnnotationMapper;
+import uk.ac.ebi.chemet.tools.annotation.parse.AnnotationParser;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
+import uk.ac.ebi.mdk.domain.annotation.primitive.DoubleAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -36,15 +40,37 @@ import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.ui.render.list.DefaultRenderer;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.core.WarningMessage;
 import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.undo.CompoundEdit;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -54,11 +80,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-/**
- * @author John May
- */
+/** @author John May */
 public class ImportCrossReferences extends AbstractControlDialog {
 
     enum Separators {
@@ -79,7 +105,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
         }
     }
 
-    enum KeyType implements IdentifierMapper.KeyAccessor {
+    enum KeyType implements AnnotationMapper.KeyAccessor {
 
         IDENTIFIER("Identifier") {
             @Override public String key(AnnotatedEntity entity) {
@@ -113,7 +139,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
     private JComboBox separator = ComboBoxFactory.newComboBox(Separators
                                                                       .values());
     private JCheckBox headerCheck;
-    private JRadioButton infer, single, mapped;
+    private JRadioButton infer, single, mapped, annotation;
     private JComboBox resource = ComboBoxFactory
             .newComboBox(DefaultIdentifierFactory.getInstance()
                                                  .getSupportedIdentifiers());
@@ -132,9 +158,21 @@ public class ImportCrossReferences extends AbstractControlDialog {
     private final JCheckBox mapToGeneProducts = CheckBoxFactory
             .newCheckBox("Gene Products");
 
+    private final Map<Annotation, AnnotationParser> importable = importable();
+    private final JComboBox importableBox = ComboBoxFactory
+            .newComboBox(importable.keySet());
+
     public ImportCrossReferences(Window window) {
         super(window);
         this.self = this;
+        importableBox.setRenderer(new DefaultRenderer<Annotation>() {
+            @Override
+            public JLabel getComponent(JList list, Annotation value, int index) {
+                JLabel label = super.getComponent(list, value, index);
+                label.setText(value.getShortDescription());
+                return label;
+            }
+        });
     }
 
     @Override public JComponent createForm() {
@@ -213,15 +251,27 @@ public class ImportCrossReferences extends AbstractControlDialog {
             }
         });
 
+        annotation = radioButton(new AbstractAction("annotation") {
+            @Override public void actionPerformed(ActionEvent e) {
+                configLayout.show(config, "annotation");
+                nCols = 2;
+                loadPreview();
+                component.revalidate();
+                pack();
+            }
+        });
+
         ButtonGroup group = new ButtonGroup();
         group.add(infer);
         group.add(single);
         group.add(mapped);
+        group.add(annotation);
 
         Box modes = Box.createHorizontalBox();
         modes.add(infer);
         modes.add(single);
         modes.add(mapped);
+        modes.add(annotation);
 
         // which entities to map with
         Box dest = Box.createHorizontalBox();
@@ -239,18 +289,20 @@ public class ImportCrossReferences extends AbstractControlDialog {
         selection.add(getLabel("mapTo"), cc.xy(1, 7));
         selection.add(mapTo, cc.xy(3, 7));
 
-
         JPanel inferConfig = new JPanel(new FormLayout("p:grow", "p"));
         JPanel singleConfig = new JPanel(new FormLayout("p:grow", "p, 4dlu, p"));
         JPanel mappedConfig = new JPanel(new FormLayout("p:grow", "p"));
+        JPanel annotationConfig = new JPanel(new FormLayout("p:grow", "p, 4dlu, p"));
 
         JTextArea inferInfo = area("inferArea");
         JTextArea singleInfo = area("singleArea");
         JTextArea mappedInfo = area("mappedArea");
+        JTextArea annotationInfo = area("annotationArea");
 
         inferInfo.setBackground(selection.getBackground());
         singleInfo.setBackground(selection.getBackground());
         mappedInfo.setBackground(selection.getBackground());
+        annotationInfo.setBackground(selection.getBackground());
 
         inferConfig.add(inferInfo, cc.xy(1, 1));
         singleConfig.add(singleInfo, cc.xy(1, 1));
@@ -276,11 +328,14 @@ public class ImportCrossReferences extends AbstractControlDialog {
             }
         });
         mappedConfig.add(mappedInfo, cc.xy(1, 1));
+        annotationConfig.add(annotationInfo, cc.xy(1, 1));
+        annotationConfig.add(importableBox, cc.xy(1, 3));
 
         config.setLayout(configLayout);
         config.add(inferConfig, "infer");
         config.add(singleConfig, "single");
         config.add(mappedConfig, "mapped");
+        config.add(annotationConfig, "annotation");
 
         infer.setSelected(true);
 
@@ -369,16 +424,15 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 .getInstance();
 
         @SuppressWarnings("unchecked")
-        IdentifierMapper.KeyAccessor<String> accessor =
-                (IdentifierMapper.KeyAccessor<String>) mapTo.getSelectedItem();
+        AnnotationMapper.KeyAccessor<String> accessor =
+                (AnnotationMapper.KeyAccessor<String>) mapTo.getSelectedItem();
 
         Reconstruction recon = DefaultReconstructionManager.getInstance()
                                                            .active();
 
-        IdentifierMapper.Handler handler = new IdentifierMapper.Handler() {
+        AnnotationMapper.Handler handler = new AnnotationMapper.Handler() {
             @Override
-            public boolean handle(AnnotatedEntity entity, Identifier id) {
-                final Annotation annotation = annotations.getCrossReference(id);
+            public boolean handle(AnnotatedEntity entity, Annotation annotation) {
                 edit.addEdit(new AddAnnotationEdit(entity, annotation));
                 entity.addAnnotation(annotation);
                 return true;
@@ -411,8 +465,8 @@ public class ImportCrossReferences extends AbstractControlDialog {
         if (entities.isEmpty())
             addReport(new ErrorMessage("No destination entites selected"));
 
-        IdentifierMapper<String> mapper
-                = new IdentifierMapper<String>(entities,
+        AnnotationMapper<String> mapper
+                = new AnnotationMapper<String>(entities,
                                                accessor,
                                                handler,
                                                DefaultIdentifierFactory
@@ -447,8 +501,16 @@ public class ImportCrossReferences extends AbstractControlDialog {
                         mapper.map(row[0], row[1], row[2]);
                     }
                 }
+            } else if (annotation.isSelected()) {
+                AnnotationParser<Annotation> parser = importable.get((Annotation) importableBox.getSelectedItem());
+                while ((row = reader.readNext()) != null) {
+                    if (row.length == 2) {
+                        Annotation a = parser.parse(row[1]);
+                        if(a != null)
+                            mapper.map(row[0], a);
+                    }
+                }
             }
-
 
         } catch (IOException e) {
             report(new ErrorMessage("unable to map identifiers: " + e
@@ -485,5 +547,21 @@ public class ImportCrossReferences extends AbstractControlDialog {
                     .on(", ").join(mapper.unmapped())));
         }
 
+    }
+
+    private static Map<Annotation, AnnotationParser> importable() {
+        DefaultAnnotationFactory annotations = DefaultAnnotationFactory
+                .getInstance();
+        Map<Annotation, AnnotationParser> importable = new HashMap<Annotation, AnnotationParser>();
+        for (StringAnnotation a : annotations
+                .getSubclassInstances(StringAnnotation.class)) {
+            importable.put(a, AnnotationParser.basic(a));
+        }
+        for (DoubleAnnotation a : annotations
+                .getSubclassInstances(DoubleAnnotation.class)) {
+            importable.put(a, AnnotationParser.number(a));
+        }
+        importable.put(new GibbsEnergy(), AnnotationParser.gibbs());
+        return importable;
     }
 }

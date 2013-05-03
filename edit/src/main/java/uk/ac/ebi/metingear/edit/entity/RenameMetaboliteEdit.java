@@ -54,6 +54,14 @@ public final class RenameMetaboliteEdit extends AbstractUndoableEdit {
         return m;
     }
 
+    public Metabolite original() {
+        return delegate.original();
+    }
+
+    public Metabolite replacement() {
+        return delegate.replacement();
+    }
+
     public void apply() {
         delegate.apply();
     }

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>metingear-extensions</artifactId>
         <groupId>uk.ac.ebi.metingear</groupId>
-        <version>1.1.1</version>
+        <version>1.1.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -30,6 +30,11 @@
             <artifactId>metingear-edit</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>caf-component</artifactId>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <version>${caf.version}</version>
         </dependency>
 
         <dependency>

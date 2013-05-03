@@ -130,8 +130,7 @@ public class ImportSBML extends DelayedBuildAction {
                         SBMLDocument document = SBMLReader.read(in);
                         long t1 = System.nanoTime();
 
-                        System.out
-                              .println(((t1 - t0) / 1e6) + " ms to read with JSBML");
+                        LOGGER.info(((t1 - t0) / 1e6) + " ms to read with JSBML");
 
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override public void run() {

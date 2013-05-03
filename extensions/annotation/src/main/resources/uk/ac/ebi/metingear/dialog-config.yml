@@ -1,8 +1,8 @@
 ImportCrossReferences:
     information:
-        text:    Imports cross-references to the active model
+        text:    Imports cross-references or annotations to the active model
         tooltip: This tool allows you to import a tab seperated value (TSV) table of
-                 identifiers and their cross-references into Metingear.
+                 identifiers and their cross-references or annotations into Metingear.
         active:  true
     okay:
         text:    Import
@@ -30,7 +30,9 @@ ImportCrossReferences:
     single:
         text:    Single Resource
     mapped:
-        text:    Column Mapping
+        text:    Resource Mapping
+    annotation:
+        text:    Single Annotation
     inferArea:
         text:    Load data from two columns, the first column is the identifier/abreviation in the model and
                  the second is the cross-reference. The resource of the cross-reference is automatically infered
@@ -44,6 +46,9 @@ ImportCrossReferences:
                  the second is the cross-reference. The third column specifies the identifier type as it appears
                  in the MIRIAM registry, for example, you must specify 'KEGG Compound' instead of 'KEGG'. For a
                  full list of valid identifiers please refer to http://www.ebi.ac.uk/miriam/main/.
+    annotationArea:
+        text:    Load the data from two columns. the first column is the identifier/abreviation in the model and
+                 the second is a single value which will be added as the selected annotation.
     dest:
         text:    "Destination:"
         tooltip: Select one or more entities to which you which to map the loaded identifiers

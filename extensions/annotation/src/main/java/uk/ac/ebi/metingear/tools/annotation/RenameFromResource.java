@@ -27,7 +27,7 @@ import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -113,8 +114,12 @@ public class RenameFromResource extends AbstractControlDialog {
                 .getIdentifiers(PreferredNameService.class)) {
             if (services.hasService(id, PreferredNameService.class) &&
                     isUsable(services.getService(id, PreferredNameService.class))) {
-                available.put(id, services
-                        .getService(id, PreferredNameService.class));
+                try {
+                    available.put(id, services
+                            .getService(id, PreferredNameService.class));
+                } catch (NoSuchElementException ex) {
+                    // timeout
+                }
             }
         }
 
@@ -188,25 +193,32 @@ public class RenameFromResource extends AbstractControlDialog {
         CompoundEdit edits = new CompoundEdit();
 
         // get the preferred name service
-        PreferredNameService service = (PreferredNameService) resourceSelection.getSelectedItem();
+        PreferredNameService service = (PreferredNameService) resourceSelection
+                .getSelectedItem();
 
-        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
+        Reconstruction reconstruction = DefaultReconstructionManager
+                .getInstance().active();
 
         List<Metabolite> selection = new ArrayList<Metabolite>(getSelection(Metabolite.class));
 
         int done = 0;
 
+        List<Metabolite> newSelection = new ArrayList<Metabolite>();
+
         // for each selected metabolite select the first cross-reference which
         // matches the class of the identifier and set the new name
         for (final Metabolite metabolite : selection) {
-            final String progress = String.format("%.1f%%", 100 * (done / (float) selection.size()));
+            final String progress = String
+                    .format("%.1f%%", 100 * (done / (float) selection.size()));
             SwingUtilities.invokeLater(new Runnable() {
                 @Override public void run() {
-                    indicator.setText("renaming " + metabolite.getName() + "... " + progress);
+                    indicator.setText("renaming " + metabolite
+                            .getName() + "... " + progress);
                 }
             });
 
-            for (CrossReference xref : metabolite.getAnnotationsExtending(CrossReference.class)) {
+            for (CrossReference xref : metabolite
+                    .getAnnotationsExtending(CrossReference.class)) {
                 if (xref.getIdentifier().getClass()
                         .equals(service.getIdentifier().getClass())) {
 
@@ -224,6 +236,8 @@ public class RenameFromResource extends AbstractControlDialog {
                     // actually perform the edit
                     edit.apply();
 
+                    newSelection.add(edit.replacement());
+
                     // don't update the name any more
                     break;
 
@@ -236,8 +250,14 @@ public class RenameFromResource extends AbstractControlDialog {
         edits.end();
 
         addEdit(edits);
-
+        EntityCollection selectionControl = getSelectionController()
+                .getSelection();
+        selectionControl.clear();
+        selectionControl.addAll(newSelection);
     }
 
 
+    @Override public void update() {
+        super.update();
+    }
 }

@@ -65,7 +65,7 @@ public class HSSFPreparsedSheet extends PreparsedSheet {
     public HSSFPreparsedSheet( HSSFSheet worksheet,
                                ExcelModelProperties properties,
                                TableDescription bounds ) {
-        super( properties, bounds );
+        super(worksheet, properties, bounds );
         dataType = bounds.getClass();
         this.worksheet = worksheet;
     }

@@ -120,7 +120,7 @@ public abstract class AbstractEntityTableModel
         long start = System.currentTimeMillis();
         for (int i = 0; i < components.size(); i++) {
             for (int j = 0; j < getColumnCount(); j++) {
-                Object newValue = getValue(components.get(i), j);
+                Object newValue = getValue(components.get(i), j, i);
                 if (newValue != null && !newValue.equals(data[i][j])) {
                     data[i][j] = newValue;
                 }
@@ -146,7 +146,7 @@ public abstract class AbstractEntityTableModel
             for (int i = length - 1; i < data.length; i++) {
                 data[i] = new Object[getColumnCount()];
                 for (int j = 0; j < getColumnCount(); j++) {
-                    data[i][j] = getValue(components.get(i), j);
+                    data[i][j] = getValue(components.get(i), j, index);
                 }
             }
             fireTableRowsInserted(length - 1, data.length - 1);
@@ -154,7 +154,7 @@ public abstract class AbstractEntityTableModel
         else {
 
             for (int j = 0; j < getColumnCount(); j++) {
-                Object newValue = getValue(components.get(index), j);
+                Object newValue = getValue(components.get(index), j, index);
                 if (!newValue.equals(data[index][j])) {
                     // do this and providing the equals method isn't to tasking
                     // there is little effect on speed and no user interuption
@@ -270,13 +270,14 @@ public abstract class AbstractEntityTableModel
 
 
     public Object getValue(AnnotatedEntity entity,
-                           Integer columnIndex) {
+                           Integer columnIndex,
+                           int row) {
 
         DataType type = getAccessType(columnIndex);
         if (type == DataType.FIXED) {
             return getFixedType(entity, getColumnName(columnIndex));
         } else if (type == DataType.BASIC) {
-            return getBasicInfo(entity, getColumnName(columnIndex));
+            return getBasicInfo(entity, getColumnName(columnIndex), row);
         } else if (type == DataType.ANNOTATION) {
             return entity.getAnnotationsExtending(columnDescriptors
                                                           .get(columnIndex)
@@ -299,19 +300,21 @@ public abstract class AbstractEntityTableModel
                                         String name);
 
 
-    public Integer indexOf(AnnotatedEntity component) {
+    public int indexOf(AnnotatedEntity component) {
         return components.indexOf(component);
     }
 
 
     private Object getBasicInfo(AnnotatedEntity entity,
-                                String name) {
+                                String name,
+                                int row) {
 
         Accessor accessor = accessMap.get(name);
 
         if (accessor != null) {
             return accessor.access(entity);
         }
+
         // maybe do this when os x has java 1.7
         //        switch (name) {
         //            case "Name":

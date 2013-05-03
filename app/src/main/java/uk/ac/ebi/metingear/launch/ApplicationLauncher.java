@@ -17,15 +17,36 @@
 
 package uk.ac.ebi.metingear.launch;
 
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
+import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.caf.utility.version.Version;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
+import uk.ac.ebi.mdk.service.ServicePreferences;
 import uk.ac.ebi.mnb.main.MainView;
 import uk.ac.ebi.mnb.menu.MainMenuBar;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.awt.Desktop;
+import java.awt.Window;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ApplicationLauncher - 13.03.2012 <br/> <p/> Class descriptions.
@@ -91,8 +112,9 @@ public class ApplicationLauncher implements Runnable {
     public void run() {
 
         loadLookAndFeel();
+        configureProxy();
 
-        MainView view = MainView.getInstance();
+        final MainView view = MainView.getInstance();
         view.setJMenuBar(new MainMenuBar());
 
         PluginLoader loader = new PluginLoader(view, view.getJMenuBar());
@@ -102,7 +124,146 @@ public class ApplicationLauncher implements Runnable {
 
         view.setVisible(true);
 
+        // check for update
+        Thread t = new Thread(new Runnable() {
+            @Override public void run() {
+                checkForUpdate(view);
+            }
+        });
+        t.setName("UPDATE-CHECK");
+        t.start();
 
+    }
+
+    void configureProxy() {
+        ServicePreferences pref = ServicePreferences.getInstance();
+        String host = System.getProperty("proxyHost");
+        String port = System.getProperty("proxyPort");
+
+        // pick up from http.* proxy settings
+        if (host == null)
+            host = System.getProperty("http.proxyHost");
+        if (port == null)
+            port = System.getProperty("http.proxyPort");
+
+        StringPreference hostPref = pref.getPreference("PROXY_HOST");
+        IntegerPreference portPref = pref.getPreference("PROXY_PORT");
+        BooleanPreference enabled = pref.getPreference("PROXY_SET");
+
+        if (host != null && !host.isEmpty()) {
+            enabled.put(true);
+            hostPref.put(host);
+        }
+        if (port != null && !port.isEmpty()) {
+            try {
+                portPref.put(Integer.parseInt(port));
+                enabled.put(true);
+            } catch (NumberFormatException e) {
+
+            }
+        }
+
+        if (enabled.get()) {
+            System.getProperties().put("http.proxyHost",
+                                       hostPref.get());
+            System.getProperties().put("http.proxyPort",
+                                       portPref.get());
+        }
+
+    }
+
+    private void checkForUpdate(final Window window) {
+        final StringPreference updatePref = DomainPreferences.getInstance()
+                                                             .getPreference("UPDATE_CHECK");
+        final long lastChecked = Long.parseLong(updatePref.get());
+        final long now = System.nanoTime();
+        final long delta = now - lastChecked;
+
+        if (TimeUnit.NANOSECONDS.toDays(delta) > 5) {
+            Logger.getLogger(getClass()).info("Checking for update");
+            InputStream in = null;
+            try {
+
+                URL url = new URL("http://www.ebi.ac.uk/steinbeck-srv/metingear/download/LATEST/version-info.xml");
+                in = url.openStream();
+                DocumentBuilder documentBuilder = DocumentBuilderFactory
+                        .newInstance().newDocumentBuilder();
+                Document doc = documentBuilder.parse(in);
+
+                String latestVersionString = doc.getElementsByTagName("version")
+                                                .item(0).getTextContent();
+                final String latestMessage = doc.getElementsByTagName("message")
+                                                .item(0).getTextContent();
+
+                String currentVersionString = getClass().getPackage()
+                        .getImplementationVersion();
+
+                // not running from the jar
+                if (currentVersionString == null)
+                    return;
+
+                Version latest = new Version(latestVersionString);
+                Version current = new Version(currentVersionString);
+
+                if (current.compareTo(latest) > 0) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override public void run() {
+                            String[] options = new String[]{"Remind Me Later", "Download Now"};
+                            int i = JOptionPane.showOptionDialog(window,
+                                                                 latestMessage,
+                                                                 "A new version is available",
+                                                                 JOptionPane.DEFAULT_OPTION,
+                                                                 JOptionPane.INFORMATION_MESSAGE,
+                                                                 ResourceUtility
+                                                                         .getIcon("/uk/ac/ebi/chemet/render/images/networkbuilder_64x64.png"),
+                                                                 options,
+                                                                 options[1]);
+                            if (i == 0) {
+                                // write the time to the preferences
+                                updatePref.put(Long.toString(now));
+                            } else if (i == 1) {
+                                String page = "http://johnmay.github.com/metingear";
+                                try {
+                                    Desktop.getDesktop().browse(new URI(page));
+                                } catch (IOException e) {
+                                    Logger.getLogger(getClass())
+                                          .warn("Unable to open page:", e);
+                                } catch (URISyntaxException e) {
+                                    Logger.getLogger(getClass())
+                                          .warn("Unable to open page:", e);
+                                }
+                            }
+                        }
+                    });
+                }
+
+            } catch (IOException e) {
+                Logger.getLogger(getClass())
+                      .warn("unable to check for update:", e);
+            } catch (ParserConfigurationException e) {
+                Logger.getLogger(getClass())
+                      .warn("unable to get dom document builder:", e);
+            } catch (SAXException e) {
+                Logger.getLogger(getClass())
+                      .warn("unable to get dom document builder:", e);
+            } catch (Exception e) {
+                // got to catch-em all, make sure we fail never
+                Logger.getLogger(getClass())
+                      .error("high level error on update check:", e);
+            } finally {
+                try {
+                    if (in != null) {
+                        in.close();
+                    }
+                } catch (IOException e) {
+                    // ignore
+                }
+            }
+
+        } else {
+            Logger.getLogger(getClass())
+                  .info("Skipping update check, time since user notified < 5 days");
+        }
     }
 
     public void beforeVisible() {

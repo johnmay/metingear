@@ -25,7 +25,7 @@
     <parent>
         <artifactId>metingear</artifactId>
         <groupId>uk.ac.ebi.metingear</groupId>
-        <version>1.1.1</version>
+        <version>1.1.2</version>
     </parent>
 
     <artifactId>metingear-app</artifactId>
@@ -316,6 +316,9 @@
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>uk.ac.ebi.metingear.Main
                                     </mainClass>
+                                    <manifestEntries>
+                                        <SplashScreen-Image>uk/ac/ebi/metingear/splash.png</SplashScreen-Image>
+                                    </manifestEntries>
                                 </transformer>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">

@@ -17,12 +17,15 @@
 
 package uk.ac.ebi.metingear.tools.annotation;
 
+import com.google.common.base.Function;
+import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.chemet.tools.annotation.ReferenceExtractor;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
@@ -38,9 +41,15 @@ import uk.ac.ebi.mdk.ui.render.list.DefaultRenderer;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
 import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.undo.CompoundEdit;
-import java.awt.*;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -58,15 +67,26 @@ import java.util.List;
 public class ExtractReferences
         extends AbstractControlDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(ExtractReferences.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ExtractReferences.class);
 
     private JCheckBox checkAccessionBox = CheckBoxFactory.newCheckBox();
     private JCheckBox override = CheckBoxFactory.newCheckBox();
 
-    private JComboBox resources = ComboBoxFactory.newComboBox(DefaultIdentifierFactory.getInstance().getSupportedIdentifiers());
+    private JComboBox resources = ComboBoxFactory
+            .newComboBox(DefaultIdentifierFactory.getInstance()
+                                                 .getSupportedIdentifiers());
     private JTextField resourcePattern = FieldFactory.newField(30);
     private JTextField separatorPattern = FieldFactory.newField(30);
     private JTextField accessionPattern = FieldFactory.newField(30);
+
+    private JComboBox source = ComboBoxFactory
+            .newComboBox("Identifier", "Name", "Abbreviation");
+    private JComboBox type = ComboBoxFactory
+            .newComboBox(DefaultIdentifierFactory.getInstance()
+                                                 .getSupportedIdentifiers());
+
+    private final JTabbedPane tabbedPane = new JTabbedPane();
 
     public ExtractReferences(Window window) {
         super(window);
@@ -90,6 +110,14 @@ public class ExtractReferences
                 return label;
             }
         });
+        type.setRenderer(new DefaultRenderer<Identifier>() {
+            @Override
+            public JLabel getComponent(JList list, Identifier value, int index) {
+                JLabel label = super.getComponent(list, value, index);
+                label.setText(value.getShortDescription());
+                return label;
+            }
+        });
         override.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
                 resources.setEnabled(override.isSelected());
@@ -101,7 +129,8 @@ public class ExtractReferences
         resources.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent e) {
                 // update the pattern e.g. ChEBI -> 'ChEBI\\s+[^\\s]+\\s+(.+)'
-                resourcePattern.setText(((Identifier) resources.getSelectedItem()).getShortDescription());
+                resourcePattern.setText(((Identifier) resources
+                        .getSelectedItem()).getShortDescription());
             }
         });
     }
@@ -111,51 +140,137 @@ public class ExtractReferences
 
         JComponent component = super.createForm();
 
-        component.setLayout(new FormLayout("right:p, 4dlu, left:p",
+        JComponent fromNotes = PanelFactory.createDialogPanel();
+        JComponent fromBasic = PanelFactory.createDialogPanel();
+        fromNotes.setLayout(new FormLayout("right:p, 4dlu, left:p",
                                            "p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p"));
+        fromBasic.setLayout(new FormLayout("right:p, 4dlu, left:p",
+                                           "p, 4dlu, p"));
+        fromNotes
+                .setBorder(Borders.createEmptyBorder("4dlu, 4dlu, 4dlu, 4dlu"));
+        fromBasic
+                .setBorder(Borders.createEmptyBorder("4dlu, 4dlu, 4dlu, 4dlu"));
 
         CellConstraints cc = new CellConstraints();
 
-        component.add(getLabel("checkId"), cc.xy(1, 1));
-        component.add(checkAccessionBox, cc.xy(3, 1));
-        component.add(getLabel("overrideLabel"), cc.xy(1, 3));
-        component.add(override, cc.xy(3, 3));
+        fromNotes.add(getLabel("checkId"), cc.xy(1, 1));
+        fromNotes.add(checkAccessionBox, cc.xy(3, 1));
+        fromNotes.add(getLabel("overrideLabel"), cc.xy(1, 3));
+        fromNotes.add(override, cc.xy(3, 3));
 
         // specific parsing
-        component.add(getLabel("resourceSelection"), cc.xy(1, 5));
-        component.add(resources, cc.xy(3, 5));
-        component.add(getLabel("resourcePattern"), cc.xy(1, 7));
-        component.add(resourcePattern, cc.xy(3, 7));
-        component.add(getLabel("separatorPattern"), cc.xy(1, 9));
-        component.add(separatorPattern, cc.xy(3, 9));
-        component.add(getLabel("accessionPattern"), cc.xy(1, 11));
-        component.add(accessionPattern, cc.xy(3, 11));
+        fromNotes.add(getLabel("resourceSelection"), cc.xy(1, 5));
+        fromNotes.add(resources, cc.xy(3, 5));
+        fromNotes.add(getLabel("resourcePattern"), cc.xy(1, 7));
+        fromNotes.add(resourcePattern, cc.xy(3, 7));
+        fromNotes.add(getLabel("separatorPattern"), cc.xy(1, 9));
+        fromNotes.add(separatorPattern, cc.xy(3, 9));
+        fromNotes.add(getLabel("accessionPattern"), cc.xy(1, 11));
+        fromNotes.add(accessionPattern, cc.xy(3, 11));
 
+        fromBasic.add(getLabel("source"), cc.xy(1, 1));
+        fromBasic.add(source, cc.xy(3, 1));
+        fromBasic.add(getLabel("type"), cc.xy(1, 3));
+        fromBasic.add(type, cc.xy(3, 3));
+
+
+        tabbedPane.add("Extract from Notes", fromNotes);
+        tabbedPane.add("Extract from Id, Name or Abrv", fromBasic);
+
+        component.add(tabbedPane);
         return component;
 
     }
 
-    @Override
-    public void process() {
+    @Override public void process() {
+        int i = tabbedPane.getSelectedIndex();
+        if (i == 0)
+            processNote();
+        else
+            processBasic();
+    }
+
+    public void processBasic() {
+        CompoundEdit edit = new CompoundEdit();
+
+        Function<AnnotatedEntity, String> accessor = accessor();
+        Identifier idType = (Identifier) type.getSelectedItem();
+
+        AnnotationFactory annotationFactory = DefaultAnnotationFactory
+                .getInstance();
+
+        for (AnnotatedEntity entity : getSelectionController().getSelection()
+                .getEntities()) {
+            String accession = accessor.apply(entity);
+            Identifier id = idType.newInstance();
+            id.setAccession(accession);
+            if (id.isValid()) {
+                // add to entity
+                Annotation xref = annotationFactory.getCrossReference(id);
+                edit.addEdit(new AddAnnotationEdit(entity, xref));
+                entity.addAnnotation(xref);
+            }
+        }
+
+        edit.end();
+        addEdit(edit);
+    }
+
+    public Function<AnnotatedEntity, String> accessor() {
+        String sourceItem = (String) source.getSelectedItem();
+        if (sourceItem.equals("Identifier"))
+            return new Function<AnnotatedEntity, String>() {
+                @Override
+                public String apply(AnnotatedEntity entity) {
+                    return entity.getAccession();
+                }
+            };
+        if (sourceItem.equals("Abbreviation"))
+            return new Function<AnnotatedEntity, String>() {
+                @Override
+                public String apply(AnnotatedEntity entity) {
+                    return entity.getAbbreviation();
+                }
+            };
+        if (sourceItem.equals("Name"))
+            return new Function<AnnotatedEntity, String>() {
+                @Override
+                public String apply(AnnotatedEntity entity) {
+                    return entity.getName();
+                }
+            };
+        throw new IllegalArgumentException("No accessor available");
+    }
+
+    public void processNote() {
 
         // put all the edits together
         CompoundEdit edit = new CompoundEdit();
 
-        String name = ((Identifier) resources.getSelectedItem()).getShortDescription();
+        String name = ((Identifier) resources.getSelectedItem())
+                .getShortDescription();
 
         ReferenceExtractor<Note> extractor = override.isSelected()
                                              ? new ReferenceExtractor<Note>(Note.class, name,
-                                                                            resourcePattern.getText().trim(),
-                                                                            separatorPattern.getText().trim(),
-                                                                            accessionPattern.getText().trim())
+                                                                            resourcePattern
+                                                                                    .getText()
+                                                                                    .trim(),
+                                                                            separatorPattern
+                                                                                    .getText()
+                                                                                    .trim(),
+                                                                            accessionPattern
+                                                                                    .getText()
+                                                                                    .trim())
                                              : new ReferenceExtractor<Note>(Note.class);
 
-        AnnotationFactory annotationFactory = DefaultAnnotationFactory.getInstance();
+        AnnotationFactory annotationFactory = DefaultAnnotationFactory
+                .getInstance();
 
         boolean checkAccession = checkAccessionBox.isSelected();
         List<Annotation> queue = new ArrayList<Annotation>();
 
-        for (AnnotatedEntity entity : getSelectionController().getSelection().getEntities()) {
+        for (AnnotatedEntity entity : getSelectionController().getSelection()
+                .getEntities()) {
 
             for (Annotation annotation : entity.getAnnotations()) {
 
@@ -167,11 +282,15 @@ public class ExtractReferences
                     // we use the pattern (from MIRIAM) to check the ID
                     if (checkAccession) {
                         Resource resource = identifier.getResource();
-                        if (resource != null && !resource.getCompiledPattern().matcher(identifier.getAccession()).matches())
+                        if (resource != null && !resource.getCompiledPattern()
+                                                         .matcher(identifier
+                                                                          .getAccession())
+                                                         .matches())
                             continue;
                     }
 
-                    CrossReference xref = (CrossReference) annotationFactory.getCrossReference(identifier);
+                    CrossReference xref = (CrossReference) annotationFactory
+                            .getCrossReference(identifier);
                     queue.add(xref);
 
                 }

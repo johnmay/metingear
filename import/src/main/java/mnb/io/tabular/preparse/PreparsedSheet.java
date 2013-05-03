@@ -21,6 +21,7 @@ import java.awt.Rectangle;
 import java.util.List;
 import mnb.io.tabular.ExcelModelProperties;
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Sheet;
 
 /**
  *          PreparsedSheet – 2011.08.29 <br>
@@ -38,19 +39,29 @@ public abstract class PreparsedSheet {
 
     private static final Logger LOGGER = Logger.getLogger(PreparsedSheet.class);
     private int rowIndex;
+    private final int minIndex;
     private final int maxIndex;
     private ExcelModelProperties properties;
     private Rectangle bounds;
     private List<TableDescription> columns;
 
-    public PreparsedSheet(ExcelModelProperties properties,
-            TableDescription bounds) {
+    public PreparsedSheet(Sheet sheet,
+                          ExcelModelProperties properties,
+                          TableDescription bounds) {
 
         this.properties = properties;
-        this.bounds = properties.getDataBounds(bounds.getKey());
-        this.rowIndex = this.bounds.y - 1;
-        this.maxIndex = this.bounds.y + this.bounds.height;
         this.columns = this.properties.getDefinedColumns(bounds.getClass());
+
+        if(properties.contains(bounds.getKey())){
+            this.bounds = properties.getDataBounds(bounds.getKey());
+            this.minIndex = this.bounds.y - 1;
+            this.maxIndex = this.bounds.y + this.bounds.height;
+        } else {
+            // unbounded (e.g. model-SEED)
+            this.minIndex = 0;
+            this.maxIndex = sheet.getLastRowNum();
+        }
+        this.rowIndex = minIndex;
 
     }
 
@@ -70,7 +81,7 @@ public abstract class PreparsedSheet {
      * @return
      */
     public int getRowCount() {
-        return maxIndex - this.bounds.y - 1;
+        return maxIndex - minIndex;
     }
 
     /**
@@ -89,7 +100,7 @@ public abstract class PreparsedSheet {
      * (as indicated in the ExcelModelProperties)
      */
     public void reset() {
-        rowIndex = this.bounds.y - 1;
+        rowIndex = minIndex;
     }
 
     /**

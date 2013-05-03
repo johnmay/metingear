@@ -51,9 +51,9 @@ public abstract class NewEntity extends ControllerDialog {
     private static final Logger LOGGER = Logger.getLogger(NewEntity.class);
 
 
-    private JTextField name = FieldFactory.newField(20);
+    JTextField name = FieldFactory.newField(20);
 
-    private JTextField abbreviation = FieldFactory.newField(4);
+    JTextField abbreviation = FieldFactory.newField(4);
 
     private CellConstraints cc = new CellConstraints();
 
