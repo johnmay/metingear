@@ -78,6 +78,7 @@ public class SaveAsProjectAction
                 ReconstructionIOHelper.write(reconstruction, f);
             } catch (IOException e) {
                 MainView.getInstance().addErrorMessage("unable to save reconstruction: " + e.getMessage());
+                LOGGER.error(e);
             }
 
         }

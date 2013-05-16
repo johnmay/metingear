@@ -75,6 +75,7 @@ public class SaveAction extends GeneralAction {
                     LOGGER.info("Wrote reconstruction in " + (end - start) + " ms");
                 } catch (Exception ex) {
                     MainView.getInstance().getMessageManager().addReport(new ErrorMessage("Unable to save reconstruction: " + ex.getMessage()));
+                    LOGGER.error(ex);
                     ex.printStackTrace();
                 } finally {
                     // determine how long to sleep, if it took longer then 1900 ms since
