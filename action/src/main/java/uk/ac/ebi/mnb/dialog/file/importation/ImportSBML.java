@@ -17,6 +17,7 @@
 package uk.ac.ebi.mnb.dialog.file.importation;
 
 import net.sf.furbelow.SpinningDialWaitIndicator;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
@@ -120,6 +121,8 @@ public class ImportSBML extends DelayedBuildAction {
                 public void run() {
                     InputStream in = null;
                     try {
+                        // turn off debug logging, can be a lot when reading the SBML
+                        Logger.getRootLogger().setLevel(Level.WARN);
                         in = new BufferedInputStream(new FileInputStream(choosen));
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override public void run() {
@@ -130,7 +133,9 @@ public class ImportSBML extends DelayedBuildAction {
                         SBMLDocument document = SBMLReader.read(in);
                         long t1 = System.nanoTime();
 
+                        Logger.getRootLogger().setLevel(Level.INFO);
                         LOGGER.info(((t1 - t0) / 1e6) + " ms to read with JSBML");
+                        Logger.getRootLogger().setLevel(Level.WARN);
 
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override public void run() {
@@ -158,6 +163,7 @@ public class ImportSBML extends DelayedBuildAction {
                         } catch (IOException e) {
                             // ignored
                         }
+                        Logger.getRootLogger().setLevel(Level.DEBUG);
                     }
 
                     SwingUtilities.invokeLater(new Runnable() {

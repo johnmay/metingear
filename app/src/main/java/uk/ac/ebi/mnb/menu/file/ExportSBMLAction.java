@@ -23,6 +23,7 @@
 package uk.ac.ebi.mnb.menu.file;
 
 import net.sf.furbelow.SpinningDialWaitIndicator;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
@@ -116,7 +117,7 @@ public class ExportSBMLAction
         Thread thread = new Thread(new Runnable() {
             @Override public void run() {
                 try {
-
+                    Logger.getRootLogger().setLevel(Level.WARN);
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override public void run() {
                             waitIndicator.setText("Exporting SBML to " + file + " (transferring to jSBML)");
@@ -125,7 +126,9 @@ public class ExportSBMLAction
                     SBMLIOUtil util = new SBMLIOUtil(DefaultEntityFactory.getInstance(), level, version);
                     SBMLDocument document = util.getDocument(DefaultReconstructionManager.getInstance().active());
                     long t1 = System.nanoTime();
+                    Logger.getRootLogger().setLevel(Level.INFO);
                     Logger.getLogger(getClass()).info(TimeUnit.NANOSECONDS.toMillis(t1-t0) + " ms to transfer to SBML");
+                    Logger.getRootLogger().setLevel(Level.WARN);
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override public void run() {
                             waitIndicator.setText("Exporting SBML to " + file + " (writing using jSBML)");
@@ -134,8 +137,9 @@ public class ExportSBMLAction
                     SBMLWriter writer = new SBMLWriter(' ', (short) 2);
                     writer.write(document, file);
                     long t2 = System.nanoTime();
+                    Logger.getRootLogger().setLevel(Level.INFO);
                     Logger.getLogger(getClass()).info(TimeUnit.NANOSECONDS.toMillis(t2-t1) + " ms to write to SBML");
-
+                    Logger.getRootLogger().setLevel(Level.WARN);
                 } catch (IOException ex) {
                     messages.add(new ErrorMessage("unable to export SBML: " + ex.getMessage()));
                 } catch (SBMLException ex) {
@@ -143,7 +147,7 @@ public class ExportSBMLAction
                 } catch (XMLStreamException ex) {
                     messages.add(new ErrorMessage("unable to export SBML: " + ex.getMessage()));
                 } finally {
-
+                    Logger.getRootLogger().setLevel(Level.DEBUG);
                     // send update to UI
                     SwingUtilities.invokeLater(new Runnable() {
 
@@ -157,6 +161,7 @@ public class ExportSBMLAction
                             controller.update();
                         }
                     });
+
 
                 }
 

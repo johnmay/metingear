@@ -482,7 +482,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
 
             if (infer.isSelected()) {
                 while ((row = reader.readNext()) != null) {
-                    if (row.length == 2) {
+                    if (row.length >= 2) {
                         mapper.map(row[0], row[1]);
                     }
                 }
@@ -490,21 +490,21 @@ public class ImportCrossReferences extends AbstractControlDialog {
                 Identifier identifier = ((Identifier) resource
                         .getSelectedItem()).newInstance();
                 while ((row = reader.readNext()) != null) {
-                    if (row.length == 2) {
+                    if (row.length >= 2) {
                         mapper.map(row[0], row[1], identifier
                                 .getShortDescription());
                     }
                 }
             } else if (mapped.isSelected()) {
                 while ((row = reader.readNext()) != null) {
-                    if (row.length == 3) {
+                    if (row.length >= 3) {
                         mapper.map(row[0], row[1], row[2]);
                     }
                 }
             } else if (annotation.isSelected()) {
                 AnnotationParser<Annotation> parser = importable.get((Annotation) importableBox.getSelectedItem());
                 while ((row = reader.readNext()) != null) {
-                    if (row.length == 2) {
+                    if (row.length >= 2) {
                         Annotation a = parser.parse(row[1]);
                         if(a != null)
                             mapper.map(row[0], a);

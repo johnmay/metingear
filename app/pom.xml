@@ -25,7 +25,7 @@
     <parent>
         <artifactId>metingear</artifactId>
         <groupId>uk.ac.ebi.metingear</groupId>
-        <version>1.1.2</version>
+        <version>1.1.2.2</version>
     </parent>
 
     <artifactId>metingear-app</artifactId>
