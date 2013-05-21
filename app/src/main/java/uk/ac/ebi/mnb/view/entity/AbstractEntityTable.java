@@ -91,11 +91,6 @@ public abstract class AbstractEntityTable
         setDragEnabled(true);
         setTransferHandler(new TransferHandler() {
 
-            @Override
-            public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
-                return super.canImport(comp, transferFlavors);
-            }
-
             @Override protected Transferable createTransferable(JComponent c) {
                 AbstractEntityTable t = (AbstractEntityTable) c;
                 Collection<AnnotatedEntity> entities = t.getSelection()
@@ -104,12 +99,6 @@ public abstract class AbstractEntityTable
                                                       .getInstance()
                                                       .active(),
                                               entities);
-            }
-
-            @Override
-            public boolean importData(TransferSupport support) {
-                System.out.println("import");
-                return super.importData(support);
             }
 
             @Override public int getSourceActions(JComponent c) {
