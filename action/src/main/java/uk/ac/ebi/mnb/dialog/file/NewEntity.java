@@ -89,7 +89,7 @@ public abstract class NewEntity extends ControllerDialog {
 
         JPanel panel = super.getForm();
 
-        panel.setLayout(new FormLayout("right:p, 4dlu, p",
+        panel.setLayout(new FormLayout("right:p, 4dlu, p:grow",
                                        "p, 4dlu, p:grow"));
 
 

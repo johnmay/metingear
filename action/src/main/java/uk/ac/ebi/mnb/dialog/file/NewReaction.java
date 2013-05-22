@@ -26,17 +26,13 @@ import mnb.io.tabular.parser.UnparsableReactionError;
 import mnb.io.tabular.preparse.PreparsedReaction;
 import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import uk.ac.ebi.caf.component.ReplacementHandler;
 import uk.ac.ebi.caf.component.SuggestionField;
 import uk.ac.ebi.caf.component.SuggestionHandler;
+import uk.ac.ebi.caf.component.complete.PrefixSearch;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
@@ -44,30 +40,31 @@ import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Membrane;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
-import uk.ac.ebi.mdk.domain.tool.PrefixCompartmentResolver;
-import uk.ac.ebi.mdk.tool.CompartmentResolver;
 import uk.ac.ebi.metingear.edit.entity.AddEntitiesEdit;
 import uk.ac.ebi.metingear.search.FieldType;
-import uk.ac.ebi.metingear.search.SearchManager;
-import uk.ac.ebi.metingear.search.SearchableIndex;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import java.io.IOException;
+import java.awt.AWTKeyStroke;
+import java.awt.KeyboardFocusManager;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -75,8 +72,7 @@ import java.util.regex.Pattern;
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @name NewMetabolite - 2011.10.04 <br>
- * Class description
+ * @name NewMetabolite - 2011.10.04 <br> Class description
  */
 public class NewReaction extends NewEntity {
 
@@ -87,18 +83,43 @@ public class NewReaction extends NewEntity {
     // stuff for lucene
     private static final String LUCENE_ESCAPE_CHARS = "[\\\\+\\-\\!\\(\\)\\:\\^\\[\\]\\{\\}\\~\\*\\?]";
 
-    private static final Pattern LUCENE_PATTERN = Pattern.compile(LUCENE_ESCAPE_CHARS);
+    private static final Pattern LUCENE_PATTERN = Pattern.compile(
+        LUCENE_ESCAPE_CHARS);
 
     private static final String REPLACEMENT_STRING = "\\\\$0";
 
-    private        TermQuery typeFilter = new TermQuery(FieldType.TYPE.getTerm(DefaultEntityFactory.getInstance().getRootClass(Metabolite.class).getSimpleName()));
+    private        TermQuery typeFilter = new TermQuery(FieldType.TYPE.getTerm(
+        DefaultEntityFactory.getInstance().getRootClass(
+            Metabolite.class).getSimpleName()));
     private static String[]  fields     = new String[]{FieldType.NAME.getName(),
                                                        FieldType.ABBREVIATION.getName()};
 
+    private final PrefixSearch compartments = PrefixSearch.forStrings(
+        compartments());
+    private final PrefixSearch chebi        = PrefixSearch.chebi();
+    private PrefixSearch current;
 
     public NewReaction(JFrame frame, TargetedUpdate updater, ReportManager messages, SelectionController controller, UndoableEditListener undoableEdits) {
         super(frame, updater, messages, controller, undoableEdits);
         setDefaultLayout();
+        setFocusTraversalKeysEnabled(false);
+        setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,
+                              Collections.<AWTKeyStroke>emptySet());
+        setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,
+                              Collections.<AWTKeyStroke>emptySet());
+    }
+
+    private static List<String> compartments() {
+        List<String> compartments = new ArrayList<String>();
+        for (final Compartment compartment : Organelle.values()) {
+            compartments.add("[" + compartment.getAbbreviation() + "]");
+            compartments.add("[" + compartment.getDescription() + "]");
+        }
+        for (final Compartment compartment : Membrane.values()) {
+            compartments.add("[" + compartment.getAbbreviation() + "]");
+            compartments.add("[" + compartment.getDescription() + "]");
+        }
+        return compartments;
     }
 
     @Override
@@ -113,10 +134,10 @@ public class NewReaction extends NewEntity {
 
         JPanel panel = super.getForm();
 
-        equation = new SuggestionField(this,
-                                       5,
+        equation = new SuggestionField(this, 80,
                                        new ReactionSuggestionHandler(),
                                        new ReplacementHandler());
+
 
         FormLayout layout = (FormLayout) panel.getLayout();
         layout.appendRow(new RowSpec(Sizes.DLUY4));
@@ -124,11 +145,13 @@ public class NewReaction extends NewEntity {
         JLabel label = LabelFactory.newFormLabel("Reaction Equation",
                                                  "Enter a text equation for your reaction (e.g. 1 A + B -> C [e])");
         label.setHorizontalAlignment(JLabel.LEADING);
-        panel.add(label,
-                  cc.xyw(1, layout.getRowCount(), layout.getColumnCount()));
+        panel.add(label, cc.xyw(1, layout.getRowCount(),
+                                layout.getColumnCount()));
         layout.appendRow(new RowSpec(Sizes.DLUY4));
         layout.appendRow(new RowSpec(Sizes.PREFERRED));
-        panel.add(equation, cc.xyw(1, layout.getRowCount(), layout.getColumnCount()));
+        panel.add(equation, cc.xyw(1, layout.getRowCount(),
+                                   layout.getColumnCount(),
+                                   CellConstraints.FILL, CellConstraints.FILL));
 
         return panel;
     }
@@ -138,6 +161,15 @@ public class NewReaction extends NewEntity {
         return BasicReactionIdentifier.nextIdentifier();
     }
 
+    @Override public void prepare() {
+        List<String> names = new ArrayList<String>();
+        Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
+        for (Metabolite m : reconstruction.metabolome()) {
+            names.add(m.getName());
+        }
+        current = PrefixSearch.forStrings(names);
+    }
+
     @Override
     public void process() {
 
@@ -145,7 +177,8 @@ public class NewReaction extends NewEntity {
         if (manager.active() != null) {
             Reconstruction reconstruction = manager.active();
 
-            ReactionParser parser = new ReactionParser(new NamedEntityResolver(), new AutomaticCompartmentResolver());
+            ReactionParser parser = new ReactionParser(
+                new NamedEntityResolver(), new AutomaticCompartmentResolver());
             PreparsedReaction ppRxn = new PreparsedReaction();
 
             ppRxn.addValue(ReactionColumn.ABBREVIATION, getAbbreviation());
@@ -156,100 +189,96 @@ public class NewReaction extends NewEntity {
                 MetabolicReaction reaction = parser.parseReaction(ppRxn);
                 reaction.setIdentifier(getIdentifier());
                 reconstruction.addReaction(reaction);
-                AddEntitiesEdit edit = new AddEntitiesEdit(reconstruction, EntityMap
-                        .singleton(DefaultEntityFactory.getInstance(),
-                                   reaction));
+                AddEntitiesEdit edit = new AddEntitiesEdit(reconstruction,
+                                                           EntityMap.singleton(
+                                                               DefaultEntityFactory.getInstance(),
+                                                               reaction));
                 addEdit(edit);
             } catch (UnparsableReactionError ex) {
-                addMessage(new ErrorMessage("Malformed reaction: " + ex.getMessage()));
+                addMessage(new ErrorMessage(
+                    "Malformed reaction: " + ex.getMessage()));
             }
 
         }
+
+
+    }
+
+    private class Edit {
+        private String content;
+        private int    start;
+        private int    end;
+
+        private Edit(String content, int start, int end) {
+            this.content = content;
+            this.start = start;
+            this.end = end;
+        }
+    }
+
+    private Edit NO_EDIT = new Edit("", 0, 0);
+
+    private static boolean breakChar(char c) {
+        return c == ' ' || c == '-' || c == '<' || c == '>';
+    }
+
+    private Edit getEdit(DocumentEvent e) {
+        String text = equation.getText();
+        int end = e.getOffset() + e.getLength();
+        if (end == text.length() || breakChar(text.charAt(end))) {
+            int start = end - 1;
+            if (text.charAt(start) == ' ') return NO_EDIT;
+            while (start > 0 && text.charAt(start - 1) != ' ') {
+                start--;
+            }
+            if (end - start < 3 && text.charAt(start) != '[') return NO_EDIT;
+            String prefix = text.substring(start, end);
+            return new Edit(prefix, start, end);
+        }
+        return NO_EDIT;
     }
 
 
     private class ReactionSuggestionHandler extends SuggestionHandler {
 
+
         @Override
         public Collection<Object> getSuggestions(DocumentEvent e) {
 
-            try {
+            Edit e2 = getEdit(e);
+            String text = equation.getText();
+            String prefix = text.substring(0, e2.start);
+            String suffix = text.substring(e2.end, text.length());
 
-                int[] range = expand(e);
+            Collection<Object> suggestions = new LinkedHashSet<Object>();
 
-                String input = e.getDocument().getText(e.getOffset(), e.getLength());
-                String text = e.getDocument().getText(0, e.getDocument().getLength());
+            List<String> compartmentSuggestions = compartments.startsWith(
+                e2.content);
+            List<String> currentSuggestions = current.startsWith(e2.content);
+            List<String> chebiSuggestions = chebi.startsWith(e2.content);
 
-
-                if (input.equals("[")) {
-
-                    List<Object> suggestions = new ArrayList<Object>();
-
-                    // handle compartment auto-complete
-                    for (Compartment compartment : Arrays.asList(Organelle.values())) {
-                        suggestions.add(text + compartment.getAbbreviation() + "] ");
-                    }
-
-                    return suggestions;
-
-                } else if (!input.matches("-|\\+|<|>|=")) {
-
-                    if (range[0] != range[1]) {
-
-                        String edit = text.substring(range[0], range[1]).trim();
-
-                        if (edit.contains("[") && !edit.contains("]")) {
-                            // do long compartment name prediction
-                            CompartmentResolver resolver = new PrefixCompartmentResolver();
-                            edit = edit.substring(Math.min(edit.indexOf('[') + 1, edit.length() - 1), edit.length());
-                            List<Object> suggestions = new ArrayList<Object>();
-                            for (Compartment compartment : resolver.getCompartments(edit)) {
-                                suggestions.add(text.substring(0, text.indexOf('[', range[0]) + 1) + compartment.getDescription() + "] ");
-                            }
-                            return suggestions;
-                        }
-
-                        SearchableIndex index = SearchManager.getInstance().getCurrentIndex();
-
-                        String searchableText =
-                                LUCENE_PATTERN.matcher(edit).replaceAll(REPLACEMENT_STRING);
+            Collections.sort(compartmentSuggestions,
+                             PrefixSearch.suggestionOrder());
+            Collections.sort(currentSuggestions,
+                             PrefixSearch.suggestionOrder());
+            Collections.sort(chebiSuggestions, PrefixSearch.suggestionOrder());
 
 
-                        Query baseQuery = SearchManager.getInstance().getQuery(fields, searchableText + "*~");
-
-                        BooleanQuery query = new BooleanQuery();
-                        query.add(baseQuery, BooleanClause.Occur.MUST);
-                        query.add(typeFilter, BooleanClause.Occur.MUST);
-
-
-                        List<AnnotatedEntity> entities = index.getRankedEntities(baseQuery,
-                                                                                 25,
-                                                                                 Metabolite.class);
-
-                        List<Object> suggestions = new ArrayList<Object>();
-
-                        for (AnnotatedEntity entity : entities) {
-                            suggestions.add(text.substring(0, range[0]) + entity.getName() + text.substring(range[1], text.length()));
-                        }
-
-                        return suggestions;
-
-
-                    }
-
+            for (final String suggestion : compartmentSuggestions) {
+                if (prefix.length() == 0) {
+                    suggestions.add(suggestion + ": " + suffix);
                 } else {
+                    suggestions.add(prefix + suggestion + suffix);
                 }
-
-
-            } catch (BadLocationException e1) {
-                e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (ParseException e1) {
-                e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (IOException e1) {
-                e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            for (final String suggestion : currentSuggestions) {
+                suggestions.add(prefix + suggestion + suffix);
+            }
+            for (final String suggestion : chebiSuggestions) {
+                suggestions.add(prefix + suggestion + suffix);
             }
 
-            return new ArrayList<Object>();
+            return suggestions;
         }
 
         // expand the range of the edit to the current metabolite
@@ -270,43 +299,35 @@ public class NewReaction extends NewEntity {
                 // ends of field
                 if (substring.length() == 3) {
                     if (substring.equals(" + ")) {
-                        return end >= offset ? new int[]{offset,
-                                                         offset}
-                                             : new int[]{end,
-                                                         offset};
-                    } else if (substring.matches("<[ -=]>")
-                            || substring.matches("<[ -=]{2}")
-                            || substring.matches("[ -=]{2}>")
-                            || substring.matches("<[ -=]{1}\\s")
-                            || substring.matches("[ -=]{1}>\\s")) {
-                        return end >= offset ? new int[]{offset,
-                                                         offset}
-                                             : new int[]{end,
-                                                         offset};
+                        return end >= offset ? new int[]{offset, offset}
+                                             : new int[]{end, offset};
+                    } else if (substring.matches(
+                        "<[ -=]>") || substring.matches(
+                        "<[ -=]{2}") || substring.matches(
+                        "[ -=]{2}>") || substring.matches(
+                        "<[ -=]{1}\\s") || substring.matches("[ -=]{1}>\\s")) {
+                        return end >= offset ? new int[]{offset, offset}
+                                             : new int[]{end, offset};
 
                     }
                 }
                 // catches end cases
                 else if (substring.length() == 2) {
-                    if (((substring.equals("+ ") && i != offset && i + 1 != offset)
-                            || (substring.equals(" +") && i != 0))) {
-                        return new int[]{end,
-                                         offset};
-                    } else if (substring.matches("<[ -=]")
-                            || substring.matches("[ -=]>")
-                            || substring.matches(" <")
-                            || substring.matches("> ")) {
-                        return end >= offset ? new int[]{offset,
-                                                         offset}
-                                             : new int[]{end,
-                                                         offset};
+                    if (((substring.equals(
+                        "+ ") && i != offset && i + 1 != offset) || (substring.equals(
+                        " +") && i != 0))) {
+                        return new int[]{end, offset};
+                    } else if (substring.matches("<[ -=]") || substring.matches(
+                        "[ -=]>") || substring.matches(
+                        " <") || substring.matches("> ")) {
+                        return end >= offset ? new int[]{offset, offset}
+                                             : new int[]{end, offset};
                     }
                 }
 
             }
 
-            return new int[]{0,
-                             offset};
+            return new int[]{0, offset};
 
         }
 
