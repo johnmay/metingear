@@ -21,14 +21,32 @@ import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
 import uk.ac.ebi.mdk.ui.edit.annotation.AnnotationEditorFactory;
-import uk.ac.ebi.mdk.ui.render.table.*;
+import uk.ac.ebi.mdk.ui.render.table.ActionButtonCellRenderer;
+import uk.ac.ebi.mdk.ui.render.table.AnnotationCellRenderer;
+import uk.ac.ebi.mdk.ui.render.table.ChemicalStructureRenderer;
+import uk.ac.ebi.mdk.ui.render.table.ClassBasedTableCellDDR;
+import uk.ac.ebi.mdk.ui.render.table.DescriptorRenderer;
+import uk.ac.ebi.mdk.ui.render.table.FormulaCellRender;
+import uk.ac.ebi.mdk.ui.render.table.RExExtractRenderer;
+import uk.ac.ebi.mdk.ui.render.table.StructuralValidityRenderer;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.JTable;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import java.awt.*;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.View;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -37,21 +55,21 @@ import java.net.URISyntaxException;
 
 
 /**
- * AnnotationTable - 2011.12.13 <br>
- * Class description
+ * AnnotationTable - 2011.12.13 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public class AnnotationTable
-        extends JTable {
+public class AnnotationTable extends JTable {
 
-    private static final Logger LOGGER = Logger.getLogger(AnnotationTable.class);
+    private static final Logger LOGGER = Logger.getLogger(
+        AnnotationTable.class);
 
     private boolean editable = false;
 
-    private ActionButtonCellRenderer deleteButtonRenderer = new ActionButtonCellRenderer(SwingConstants.CENTER);
+    private ActionButtonCellRenderer deleteButtonRenderer = new ActionButtonCellRenderer(
+        SwingConstants.CENTER);
 
     private ClassBasedTableCellDDR ANNOTATION_RENDERER = new ClassBasedTableCellDDR();
 
@@ -65,23 +83,35 @@ public class AnnotationTable
         model.getColumn(0).setCellRenderer(new DescriptorRenderer());
         model.getColumn(0).setPreferredWidth(150);
 
-        ANNOTATION_RENDERER.setRenderer(Annotation.class, new AnnotationCellRenderer());
-        ANNOTATION_RENDERER.setRenderer(AtomContainerAnnotation.class, new ChemicalStructureRenderer());
-        ANNOTATION_RENDERER.setRenderer(MolecularFormula.class, new FormulaCellRender());
-        ANNOTATION_RENDERER.setRenderer(Action.class, new ActionButtonCellRenderer(SwingConstants.LEFT));
+        ANNOTATION_RENDERER.setRenderer(Annotation.class,
+                                        new AnnotationCellRenderer());
+        ANNOTATION_RENDERER.setRenderer(AtomContainerAnnotation.class,
+                                        new ChemicalStructureRenderer());
+        ANNOTATION_RENDERER.setRenderer(MolecularFormula.class,
+                                        new FormulaCellRender());
+        ANNOTATION_RENDERER.setRenderer(RExExtract.class,
+                                        new RExExtractRenderer());
+        ANNOTATION_RENDERER.setRenderer(Action.class,
+                                        new ActionButtonCellRenderer(
+                                            SwingConstants.LEFT));
+
 
         setCellSelectionEnabled(false);
         setIntercellSpacing(new Dimension(4, 4));
         model.getColumn(1).setCellRenderer(ANNOTATION_RENDERER);
 
-        model.getColumn(1).setPreferredWidth(128);
-        model.getColumn(1).setCellEditor(AnnotationEditorFactory.getInstance().getTableCellEditor());
+        model.getColumn(1).setPreferredWidth(256);
+        model.getColumn(1).setCellEditor(
+            AnnotationEditorFactory.getInstance().getTableCellEditor());
         model.getColumn(2).setCellRenderer(deleteButtonRenderer);
         model.getColumn(2).setPreferredWidth(32);
 
-        CONTROL_RENDERER.setRenderer(Object.class, new ActionButtonCellRenderer(SwingConstants.CENTER));
-        CONTROL_RENDERER.setRenderer(Action.class, new ActionButtonCellRenderer(SwingConstants.CENTER));
-        CONTROL_RENDERER.setRenderer(StructuralValidity.class, new StructuralValidityRenderer());
+        CONTROL_RENDERER.setRenderer(Object.class, new ActionButtonCellRenderer(
+            SwingConstants.CENTER));
+        CONTROL_RENDERER.setRenderer(Action.class, new ActionButtonCellRenderer(
+            SwingConstants.CENTER));
+        CONTROL_RENDERER.setRenderer(StructuralValidity.class,
+                                     new StructuralValidityRenderer());
         model.getColumn(3).setCellRenderer(CONTROL_RENDERER);
         model.getColumn(3).setPreferredWidth(64);
 
@@ -119,11 +149,8 @@ public class AnnotationTable
     }
 
 
-    /**
-     * Forwards click events on table to appropiate action
-     */
-    private class ActionClickForwarder
-            extends MouseAdapter {
+    /** Forwards click events on table to appropiate action */
+    private class ActionClickForwarder extends MouseAdapter {
 
         private JTable table;
 
@@ -141,7 +168,8 @@ public class AnnotationTable
             if (row < table.getRowCount() && row >= 0 && column < table.getColumnCount() && column >= 0) {
                 Object value = table.getValueAt(row, column);
                 if (value instanceof Action) {
-                    ((Action) value).actionPerformed(new ActionEvent(me.getSource(), me.getID(), me.paramString()));
+                    ((Action) value).actionPerformed(new ActionEvent(
+                        me.getSource(), me.getID(), me.paramString()));
                 } else if (!editable && value instanceof CrossReference) {
                     openCrossReferenceLink((CrossReference) value);
                 }
