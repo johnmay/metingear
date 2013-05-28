@@ -20,7 +20,9 @@ package uk.ac.ebi.mnb.view.entity.reaction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.Subsystem;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Rating;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
 import uk.ac.ebi.mdk.ui.render.table.AnnotationCellRenderer;
 import uk.ac.ebi.mdk.ui.render.table.RatingCellRenderer;
@@ -40,7 +42,7 @@ public class ReactionTable extends AbstractEntityTable {
 
 
     public ReactionTable() {
-        super(new ReactionTableModel());
+        super(new ReactionTableModel(), Reaction.class);
 
         AnnotationCellRenderer annotationRenderer = new AnnotationCellRenderer();
         setDefaultRenderer(EnzymeClassification.class,

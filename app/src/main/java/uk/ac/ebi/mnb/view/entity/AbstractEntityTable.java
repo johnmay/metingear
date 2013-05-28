@@ -22,22 +22,36 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.metingear.TransferableEntity;
+import uk.ac.ebi.metingear.util.DefaultEntityTransfer;
 import uk.ac.ebi.mnb.core.EntityMap;
 import uk.ac.ebi.mnb.interfaces.EntityTable;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.TransferHandler;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.Container;
+import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -50,30 +64,27 @@ import java.util.List;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public abstract class AbstractEntityTable
-        extends JTable
-        implements EntityTable,
-                   SelectionController {
+public abstract class AbstractEntityTable extends JTable
+    implements EntityTable, SelectionController {
 
-    private static final Logger LOGGER = Logger
-            .getLogger(AbstractEntityTable.class);
-    private EntityCollection selection = new EntityMap(DefaultEntityFactory
-                                                               .getInstance());
+    private static final Logger           LOGGER    = Logger.getLogger(
+        AbstractEntityTable.class);
+    private              EntityCollection selection = new EntityMap(
+        DefaultEntityFactory.getInstance());
 
     private boolean updating = false;
 
     public void addListSelectionListener(final ListSelectionListener listener) {
         // only forward when not updating
-        getSelectionModel()
-                .addListSelectionListener(new ListSelectionListener() {
-                    @Override public void valueChanged(ListSelectionEvent e) {
-                        if (!updating)
-                            listener.valueChanged(e);
-                    }
-                });
+        getSelectionModel().addListSelectionListener(
+            new ListSelectionListener() {
+                @Override public void valueChanged(ListSelectionEvent e) {
+                    if (!updating) listener.valueChanged(e);
+                }
+            });
     }
 
-    public AbstractEntityTable(AbstractEntityTableModel model) {
+    public AbstractEntityTable(final AbstractEntityTableModel model, final Class<? extends AnnotatedEntity> type) {
         super(model);
         setUI(new ITunesTableUI());
         setAutoscrolls(true);
@@ -89,22 +100,99 @@ public abstract class AbstractEntityTable
         putClientProperty("JTable.autoStartsEdit", Boolean.FALSE);
         setColumnModel(columnModel);
         setDragEnabled(true);
+
+        ActionMap map = getActionMap();
+        map.put(TransferHandler.getCopyAction().getValue(Action.NAME),
+                TransferHandler.getCopyAction());
+        map.put(TransferHandler.getPasteAction().getValue(Action.NAME),
+                TransferHandler.getPasteAction());
+
+        InputMap imap = this.getInputMap();
+        imap.put(KeyStroke.getKeyStroke('c',
+                                        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+                 TransferHandler.getCopyAction().getValue(Action.NAME));
+        imap.put(KeyStroke.getKeyStroke('v',
+                                        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+                 TransferHandler.getPasteAction().getValue(Action.NAME));
+
         setTransferHandler(new TransferHandler() {
 
             @Override protected Transferable createTransferable(JComponent c) {
                 AbstractEntityTable t = (AbstractEntityTable) c;
-                Collection<AnnotatedEntity> entities = t.getSelection()
-                                                        .getEntities();
-                return new TransferableEntity(DefaultReconstructionManager
-                                                      .getInstance()
-                                                      .active(),
-                                              entities);
+                Collection<AnnotatedEntity> entities = t.getSelection().getEntities();
+                return new TransferableEntity(
+                    DefaultReconstructionManager.getInstance().active(),
+                    entities);
             }
 
             @Override public int getSourceActions(JComponent c) {
                 return COPY;
             }
+
+            @Override
+            public boolean canImport(TransferSupport support) {
+                Transferable transferable = support.getTransferable();
+                DataFlavor flavor = TransferableEntity.dataFlavor();
+                if (transferable.isDataFlavorSupported(flavor)) {
+                    try {
+                        TransferableEntity transferableEntity = (TransferableEntity) transferable.getTransferData(
+                            flavor);
+                        Reconstruction src = transferableEntity.reconstruction();
+                        Reconstruction dest = DefaultReconstructionManager.getInstance().active();
+                        for (AnnotatedEntity e : transferableEntity.entities()) {
+                            // note this only checks drag, dragging shouldn't copy elements so we check
+                            // the recons are different
+                            if (type.isAssignableFrom(e.getClass()) && src != dest) {
+                                return true;
+                            }
+                        }
+                    } catch (UnsupportedFlavorException e) {
+                        LOGGER.debug(e.getMessage());
+                    } catch (IOException e) {
+                        LOGGER.debug(e.getMessage());
+                    }
+                }
+                return super.canImport(support);
+            }
+
+            @Override
+            public boolean importData(TransferSupport support) {
+                Transferable transferable = support.getTransferable();
+                DataFlavor flavor = TransferableEntity.dataFlavor();
+                if (transferable.isDataFlavorSupported(flavor)) {
+                    try {
+                        TransferableEntity transferableEntity = (TransferableEntity) transferable.getTransferData(
+                            flavor);
+                        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>();
+                        for (AnnotatedEntity e : transferableEntity.entities()) {
+                            if (type.isAssignableFrom(e.getClass())) {
+                                entities.add(e);
+                            }
+                        }
+
+                        if (!entities.isEmpty()) {
+                            Reconstruction src = transferableEntity.reconstruction();
+                            Reconstruction dest = DefaultReconstructionManager.getInstance().active();
+                            if (src == dest) {
+                                DefaultEntityTransfer.INSTANCE.copyTo(src, dest,
+                                                                      entities);
+                            } else {
+                                DefaultEntityTransfer.INSTANCE.moveTo(src, dest,
+                                                                      entities);
+                            }
+                            return true;
+                        }
+
+                    } catch (UnsupportedFlavorException e) {
+                        LOGGER.debug(e.getMessage());
+                    } catch (IOException e) {
+                        LOGGER.debug(e.getMessage());
+                    }
+                }
+                return super.importData(support);
+            }
         });
+        addPropertyChangeListener(new TransferActionListener());
     }
 
     @Override
@@ -132,10 +220,8 @@ public abstract class AbstractEntityTable
     }
 
     static int[][] intervals(int[] rows) {
-        if (rows.length == 0)
-            return new int[0][];
-        if (rows.length == 1)
-            return new int[][]{{rows[0], rows[0]}};
+        if (rows.length == 0) return new int[0][];
+        if (rows.length == 1) return new int[][]{{rows[0], rows[0]}};
 
         List<int[]> intervals = new ArrayList<int[]>();
         int last = rows.length - 1;
@@ -176,11 +262,9 @@ public abstract class AbstractEntityTable
         int i = 0;
         for (AnnotatedEntity e : entities) {
             int index = indexInView(e);
-            if (index >= 0)
-                rows[i++] = index;
+            if (index >= 0) rows[i++] = index;
         }
-        if (i < rows.length)
-            rows = Arrays.copyOf(rows, i);
+        if (i < rows.length) rows = Arrays.copyOf(rows, i);
         Arrays.sort(rows);
         select(rows);
         scrollToSelected();
@@ -189,17 +273,12 @@ public abstract class AbstractEntityTable
 
     private void scrollToSelected() {
         int selected = getSelectedRow();
-        if (selected < 0)
-            return;
+        if (selected < 0) return;
 
         Container parent = getParent();
         if (parent != null) {
-            int y = getTableHeader()
-                    .getHeight() + (getRowHeight() * selected) - ((int) parent
-                    .getHeight()
-                    / 2);
-            scrollRectToVisible(new Rectangle(0, y,
-                                              parent.getWidth(),
+            int y = getTableHeader().getHeight() + (getRowHeight() * selected) - ((int) parent.getHeight() / 2);
+            scrollRectToVisible(new Rectangle(0, y, parent.getWidth(),
                                               parent.getHeight()));
         }
     }
@@ -210,7 +289,8 @@ public abstract class AbstractEntityTable
      * @param selectionManager
      */
     public boolean setSelection(EntityCollection selectionManager) {
-        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>(selectionManager.getEntities());
+        List<AnnotatedEntity> entities = new ArrayList<AnnotatedEntity>(
+            selectionManager.getEntities());
         getSelectionModel().setValueIsAdjusting(true);
         select(entities);
         scrollToSelected();
@@ -220,5 +300,36 @@ public abstract class AbstractEntityTable
     public void clear() {
         getSelectionModel().clearSelection();
         getModel().clear();
+    }
+
+    private static class TransferActionListener
+        implements ActionListener, PropertyChangeListener {
+        private JComponent focusOwner = null;
+
+        public TransferActionListener() {
+            KeyboardFocusManager manager = KeyboardFocusManager.
+                                                                   getCurrentKeyboardFocusManager();
+            manager.addPropertyChangeListener("permanentFocusOwner", this);
+        }
+
+        public void propertyChange(PropertyChangeEvent e) {
+            Object o = e.getNewValue();
+            if (o instanceof JComponent) {
+                focusOwner = (JComponent) o;
+            } else {
+                focusOwner = null;
+            }
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (focusOwner == null) return;
+            String action = (String) e.getActionCommand();
+            Action a = focusOwner.getActionMap().get(action);
+            if (a != null) {
+                a.actionPerformed(new ActionEvent(focusOwner,
+                                                  ActionEvent.ACTION_PERFORMED,
+                                                  null));
+            }
+        }
     }
 }

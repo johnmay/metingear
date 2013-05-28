@@ -17,6 +17,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.gene;
 
+import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
 import uk.ac.ebi.mdk.ui.render.table.RatingCellRenderer;
@@ -38,7 +39,7 @@ public class GeneTable extends AbstractEntityTable {
 
 
     public GeneTable() {
-        super(new GeneTableModel());
+        super(new GeneTableModel(), Gene.class);
         setDefaultRenderer(Rating.class, new RatingCellRenderer());
         setDefaultEditor(Rating.class, new RatingCellEditor());
     }

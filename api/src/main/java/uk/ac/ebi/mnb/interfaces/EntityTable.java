@@ -17,6 +17,7 @@
 package uk.ac.ebi.mnb.interfaces;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 /**
  *          EntityTable - 2011.10.20 <br>

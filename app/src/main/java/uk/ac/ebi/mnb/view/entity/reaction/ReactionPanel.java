@@ -258,7 +258,7 @@ public class ReactionPanel
         }
 
 
-        MainView.getInstance().update(collection);
+        MainView.getInstance().update();
 
         super.store();
 

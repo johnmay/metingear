@@ -17,6 +17,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.tasks;
 
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import org.apache.log4j.Logger;
@@ -35,7 +36,7 @@ public class TaskTable extends AbstractEntityTable {
 
 
     public TaskTable() {
-        super( new TaskTableModel());
+        super( new TaskTableModel(), RunnableTask.class);
     }
 
 

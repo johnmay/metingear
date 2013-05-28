@@ -18,6 +18,9 @@ package uk.ac.ebi.mnb.view.entity.general;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mnb.main.MainView;
@@ -35,7 +38,7 @@ public class GeneralTable extends AbstractEntityTable {
     private DoubleClickListener listener;
 
     public GeneralTable() {
-        super(new GeneralTableModel());
+        super(new GeneralTableModel(), AnnotatedEntity.class);
         listener = new DoubleClickListener(this);
         addMouseListener(listener);
 

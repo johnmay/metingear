@@ -18,6 +18,7 @@
 package uk.ac.ebi.mnb.view.entity.protein;
 
 import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
 import uk.ac.ebi.mdk.ui.render.table.AnnotationCellRenderer;
@@ -42,7 +43,7 @@ public class ProductTable extends AbstractEntityTable {
 
 
     public ProductTable() {
-        super(new ProductTableModel());
+        super(new ProductTableModel(), GeneProduct.class);
 
         setDefaultRenderer(Rating.class, new RatingCellRenderer());
         setDefaultEditor(Rating.class, new RatingCellEditor());

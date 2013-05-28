@@ -32,6 +32,7 @@ import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.metingear.SourceListTransferHandler;
 import uk.ac.ebi.metingear.search.SearchManager;
 import uk.ac.ebi.metingear.search.SearchableIndex;
+import uk.ac.ebi.metingear.util.DefaultEntityTransfer;
 import uk.ac.ebi.metingear.view.ControlDialog;
 import uk.ac.ebi.metingear.view.ViewToggle;
 import uk.ac.ebi.mnb.core.ErrorMessage;
@@ -219,7 +220,7 @@ public class MainView
         // source list (todo: wrap in a class MNBSourceList)
         sourceController = new SourceController();
         source = new SourceList(sourceController.model);
-        source.setTransferHandler(new SourceListTransferHandler());
+        source.setTransferHandler(new SourceListTransferHandler(DefaultEntityTransfer.INSTANCE));
         sourceController.setSource(source);
         project.setSourceController(sourceController);
 

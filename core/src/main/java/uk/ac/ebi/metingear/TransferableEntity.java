@@ -24,6 +24,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -42,12 +43,12 @@ public final class TransferableEntity implements Transferable {
         }
     }
 
-    private final Reconstruction recon;
-    private final Collection<AnnotatedEntity> entity;
+    private final Reconstruction              recon;
+    private final Collection<AnnotatedEntity> entities;
 
-    public TransferableEntity(Reconstruction recon, Collection<AnnotatedEntity> entity) {
+    public TransferableEntity(Reconstruction recon, Collection<AnnotatedEntity> entities) {
         this.recon = recon;
-        this.entity = entity;
+        this.entities = new ArrayList<AnnotatedEntity>(entities);
     }
 
     public Reconstruction reconstruction() {
@@ -55,7 +56,7 @@ public final class TransferableEntity implements Transferable {
     }
 
     public Collection<AnnotatedEntity> entities() {
-        return entity;
+        return entities;
     }
 
     public static DataFlavor dataFlavor() {

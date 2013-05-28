@@ -22,11 +22,11 @@ import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.metingear.AppliableEdit;
 
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
@@ -34,12 +34,9 @@ import javax.swing.undo.CannotUndoException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static java.util.Collections.unmodifiableCollection;
-
-/**
- * @author John May
- */
-public class AddEntitiesEdit extends AbstractUndoableEdit {
+/** @author John May */
+public class AddEntitiesEdit extends AbstractUndoableEdit implements
+                                                          AppliableEdit {
 
     private Reconstruction reconstruction;
 
@@ -48,17 +45,39 @@ public class AddEntitiesEdit extends AbstractUndoableEdit {
     private Collection<GeneProduct>       products;
     private Collection<Gene>              genes;
 
-    public AddEntitiesEdit(Reconstruction   reconstruction,
-                           EntityCollection entities) {
+    public AddEntitiesEdit(Reconstruction reconstruction, EntityCollection entities) {
 
         this.reconstruction = reconstruction;
 
-        this.metabolites = new ArrayList<Metabolite>(entities.get(Metabolite.class));
-        this.reactions   = new ArrayList<MetabolicReaction>(entities.get(MetabolicReaction.class));
-        this.products    = new ArrayList<GeneProduct>(entities.get(GeneProduct.class));
+        this.metabolites = new ArrayList<Metabolite>(entities.get(
+            Metabolite.class));
+        this.reactions = new ArrayList<MetabolicReaction>(entities.get(
+            MetabolicReaction.class));
+        this.products = new ArrayList<GeneProduct>(entities.get(
+            GeneProduct.class));
 
-        if(entities.hasSelection(Gene.class)){
+        if (entities.hasSelection(Gene.class)) {
             System.err.println("Gene undo/redo not yet supported");
+        }
+
+    }
+
+    public AddEntitiesEdit(Reconstruction reconstruction, Collection<AnnotatedEntity> entities) {
+
+        this.reconstruction = reconstruction;
+
+        this.metabolites = new ArrayList<Metabolite>();
+        this.reactions = new ArrayList<MetabolicReaction>();
+        this.products = new ArrayList<GeneProduct>();
+
+        for (AnnotatedEntity e : entities) {
+            if (e instanceof Metabolite) {
+                metabolites.add((Metabolite) e);
+            } else if(e instanceof MetabolicReaction) {
+                reactions.add((MetabolicReaction) e);
+            } else if(e instanceof GeneProduct){
+                products.add((GeneProduct) e);
+            }
         }
 
     }
@@ -66,14 +85,14 @@ public class AddEntitiesEdit extends AbstractUndoableEdit {
     @Override
     public void undo() throws CannotUndoException {
         super.undo();
-        for(Metabolite m : metabolites){
+        for (Metabolite m : metabolites) {
             reconstruction.metabolome().remove(m);
         }
         Reactome reactome = reconstruction.reactome();
-        for(MetabolicReaction reaction : reactions){
+        for (MetabolicReaction reaction : reactions) {
             reactome.remove(reaction);
         }
-        for(GeneProduct product : products){
+        for (GeneProduct product : products) {
             reconstruction.remove(product);
         }
     }
@@ -81,14 +100,25 @@ public class AddEntitiesEdit extends AbstractUndoableEdit {
     @Override
     public void redo() throws CannotRedoException {
         super.redo();
-        for(Metabolite m : metabolites){
-            reconstruction.metabolome().add(m);
+        for (Metabolite m : metabolites) {
+            reconstruction.addMetabolite(m);
         }
-        Reactome reactome = reconstruction.reactome();
-        for(MetabolicReaction reaction : reactions){
-            reactome.add(reaction);
+        for (MetabolicReaction reaction : reactions) {
+            reconstruction.addReaction(reaction);
         }
-        for(GeneProduct product : products){
+        for (GeneProduct product : products) {
+            reconstruction.addProduct(product);
+        }
+    }
+
+    @Override public void apply() {
+        for (Metabolite m : metabolites) {
+            reconstruction.addMetabolite(m);
+        }
+        for (MetabolicReaction reaction : reactions) {
+            reconstruction.addReaction(reaction);
+        }
+        for (GeneProduct product : products) {
             reconstruction.addProduct(product);
         }
     }

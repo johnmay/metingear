@@ -21,6 +21,7 @@ import uk.ac.ebi.mdk.domain.annotation.ACPAssociated;
 import uk.ac.ebi.mdk.domain.annotation.Lumped;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
 import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
@@ -47,7 +48,7 @@ public class MetaboliteTable
 
 
     public MetaboliteTable() {
-        super(new MetaboliteTableModel());
+        super(new MetaboliteTableModel(), Metabolite.class);
         //       setDefaultRenderer(ChemicalStructure.class,
         //                          new ChemStructureRenderer());
         AnnotationCellRenderer annotationRenderer = new AnnotationCellRenderer();

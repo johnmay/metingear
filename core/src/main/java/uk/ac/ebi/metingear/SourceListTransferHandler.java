@@ -23,7 +23,11 @@ import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.metingear.util.EntityTransfer;
+import uk.ac.ebi.mnb.interfaces.Updatable;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -39,6 +43,12 @@ import java.io.IOException;
  */
 public class SourceListTransferHandler extends TransferHandler {
 
+    private EntityTransfer transfer;
+
+    public SourceListTransferHandler(EntityTransfer transfer) {
+        this.transfer = transfer;
+    }
+
     @Override
     public boolean canImport(TransferSupport support) {
         support.setShowDropLocation(true);
@@ -47,7 +57,6 @@ public class SourceListTransferHandler extends TransferHandler {
 
     @Override
     public boolean canImport(JComponent comp, DataFlavor[] transferFlavors) {
-
         for (DataFlavor flavor : transferFlavors) {
             if (TransferableEntity.dataFlavor().equals(flavor)) {
                 JTree tree = (JTree) comp;
@@ -71,16 +80,21 @@ public class SourceListTransferHandler extends TransferHandler {
                         .getTransferData(TransferableEntity.dataFlavor());
                 Reconstruction recon = item.getEntity();
                 if (recon != entity.reconstruction()) {
-                    for (AnnotatedEntity e : entity.entities()) {
-                        if (e instanceof Metabolite) {
-                            recon.addMetabolite((Metabolite) e);
-                        } else if (e instanceof MetabolicReaction) {
-                            recon.addReaction((MetabolicReaction) e);
-                        } else if (e instanceof GeneProduct) {
-                            recon.addProduct((GeneProduct) e);
-                        }
-                    }
-                    // genes... we need the chromosome etc.
+                    transfer.moveTo(entity.reconstruction(), recon, entity.entities());
+                }
+                return true;
+            } catch (UnsupportedFlavorException e) {
+                System.err.println(e.getMessage());
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
+        } else {
+            Reconstruction recon = DefaultReconstructionManager.getInstance().active();
+            try {
+                TransferableEntity entity = (TransferableEntity) t
+                    .getTransferData(TransferableEntity.dataFlavor());
+                if (recon != entity.reconstruction()) {
+                    transfer.moveTo(entity.reconstruction(), recon, entity.entities());
                 }
                 return true;
             } catch (UnsupportedFlavorException e) {
