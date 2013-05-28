@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.metingear;
 
+import com.google.common.base.Joiner;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 
@@ -32,12 +33,12 @@ import java.util.Collection;
  */
 public final class TransferableEntity implements Transferable {
 
-    private static DataFlavor FLAVOR;
+    private static DataFlavor INTERNAL_FLAVOR;
 
     static {
         try {
-            FLAVOR = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType
-                                            + ";class=uk.ac.ebi.metingear.TransferableEntity");
+            INTERNAL_FLAVOR = new DataFlavor(
+                DataFlavor.javaJVMLocalObjectMimeType + ";class=uk.ac.ebi.metingear.TransferableEntity");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -60,20 +61,22 @@ public final class TransferableEntity implements Transferable {
     }
 
     public static DataFlavor dataFlavor() {
-        return FLAVOR;
+        return INTERNAL_FLAVOR;
     }
 
     @Override public DataFlavor[] getTransferDataFlavors() {
-        return new DataFlavor[]{FLAVOR};
+        return new DataFlavor[]{INTERNAL_FLAVOR, DataFlavor.stringFlavor};
     }
 
     @Override public boolean isDataFlavorSupported(DataFlavor flavor) {
-        return FLAVOR.equals(flavor);
+        return INTERNAL_FLAVOR.equals(flavor) || DataFlavor.stringFlavor.equals(flavor);
     }
 
-    @Override public Object getTransferData(DataFlavor flavor) throws
-                                                               UnsupportedFlavorException,
+    @Override public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException,
                                                                IOException {
+        if(DataFlavor.stringFlavor.equals(flavor)){
+            return Joiner.on(", ").join(entities);
+        }
         // transferring our-selves
         return this;
     }
