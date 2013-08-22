@@ -67,6 +67,9 @@ public abstract class DropdownDialog
 
     public DropdownDialog(Window window) {
         this(window, ModalityType.APPLICATION_MODAL);
+        
+        if (window instanceof DialogController)
+            setDialogController((DialogController) window);
     }
 
     public DropdownDialog(Window window, ModalityType modality) {
