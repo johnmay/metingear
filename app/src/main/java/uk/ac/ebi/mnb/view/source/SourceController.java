@@ -99,7 +99,7 @@ public class SourceController
 
     private Object selected;
 
-    private List<EntitySourceItem> items = new ArrayList(); // list of items to update
+    private List<EntitySourceItem> items = new ArrayList<EntitySourceItem>(); // list of items to update
 
     private Map<AnnotatedEntity, EntitySourceItem> itemMap = new IdentityHashMap<AnnotatedEntity, EntitySourceItem>();
 
@@ -365,7 +365,7 @@ public class SourceController
         }
     }
 
-    List<ContextAction> actions = new ArrayList();
+    List<ContextAction> actions = new ArrayList<ContextAction>();
 
 
     public void customizePopup(JPopupMenu popup) {

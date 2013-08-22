@@ -132,8 +132,9 @@ public class AutomatedReconciler
                 metabolite.addAnnotation(new Synonym(synonym));
             }
         }
-
+                
         try {
+            @SuppressWarnings("unchecked")
             Set<Candidate> candidates = factory.getCandidates(name, false);
 
             // contains a candidate with a score of 0

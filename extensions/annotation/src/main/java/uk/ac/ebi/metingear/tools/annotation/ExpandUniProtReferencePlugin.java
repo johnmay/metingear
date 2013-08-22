@@ -44,6 +44,7 @@ public final class ExpandUniProtReferencePlugin implements PlugableAction {
         return ExpandUniProtReference.class;
     }
 
+    @SuppressWarnings("unchecked")
     @Override public ContextResponder getContext() {
         return new ContextResponder() {
             @Override

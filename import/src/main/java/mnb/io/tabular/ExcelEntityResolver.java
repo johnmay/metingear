@@ -40,11 +40,11 @@ public class ExcelEntityResolver implements EntityResolver {
 
     private static final Logger LOGGER = Logger.getLogger(ExcelEntityResolver.class);
 
-    private List<PreparsedMetabolite> entities = new ArrayList();
+    private List<PreparsedMetabolite> entities = new ArrayList<PreparsedMetabolite>();
 
-    private Map<String, PreparsedMetabolite> entityMap = new HashMap(); // abbreviation -> entitiy
+    private Map<String, PreparsedMetabolite> entityMap = new HashMap<String,PreparsedMetabolite>(); // abbreviation -> entitiy
 
-    private Map<String, Metabolite> nonReconciled = new HashMap();
+    private Map<String, Metabolite> nonReconciled = new HashMap<String,Metabolite>();
 
     private Properties p;
 

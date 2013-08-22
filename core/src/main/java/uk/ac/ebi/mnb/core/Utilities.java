@@ -43,7 +43,7 @@ public class Utilities {
      */
     public static Collection<Metabolite> getMetabolites(Collection<AnnotatedEntity> entities) {
 
-        Collection<Metabolite> metabolites = new ArrayList();
+        Collection<Metabolite> metabolites = new ArrayList<Metabolite>();
 
         for (AnnotatedEntity entity : entities) {
             if (entity instanceof Metabolite) {
@@ -62,7 +62,7 @@ public class Utilities {
      */
     public static Collection<MetabolicReaction> getReactions(Collection<AnnotatedEntity> entities) {
 
-        Collection<MetabolicReaction> reactions = new ArrayList();
+        Collection<MetabolicReaction> reactions = new ArrayList<MetabolicReaction>();
 
         for (AnnotatedEntity entity : entities) {
             if (entity instanceof MetabolicReaction) {
@@ -76,7 +76,7 @@ public class Utilities {
 
     public static Collection<GeneProduct> getGeneProducts(Collection<AnnotatedEntity> entities) {
 
-        Collection<GeneProduct> products = new ArrayList();
+        Collection<GeneProduct> products = new ArrayList<GeneProduct>();
 
         for (AnnotatedEntity entity : entities) {
             if (entity instanceof GeneProduct) {

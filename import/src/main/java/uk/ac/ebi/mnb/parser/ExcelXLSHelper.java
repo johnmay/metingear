@@ -295,6 +295,7 @@ public class ExcelXLSHelper extends ExcelHelper {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public String[][] getTableHead(Integer sheetIndex, Integer rowCount) {
 
         HSSFSheet sheet = workbook.getSheetAt(sheetIndex);

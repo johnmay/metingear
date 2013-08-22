@@ -104,6 +104,7 @@ public class RenameFromResource extends AbstractControlDialog {
 
     /** @inheritDoc */
     @Override
+    @SuppressWarnings("unchecked")
     public void prepare() {
 
         // update available services based on the current selection
@@ -187,6 +188,7 @@ public class RenameFromResource extends AbstractControlDialog {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process(final SpinningDialWaitIndicator indicator) {
 
         // new edit action (one for all entries)

@@ -98,7 +98,7 @@ public class ImportPeptidesAction extends FileChooserAction {
         getChooser().setFileSelectionMode(JFileChooser.FILES_ONLY);
         File choosenFile = getFile(showOpenDialog());
 
-        Collection<GeneProduct> peptides = new ArrayList();
+        Collection<GeneProduct> peptides = new ArrayList<GeneProduct>();
 
         if (choosenFile != null) {
 

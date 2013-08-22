@@ -59,7 +59,7 @@ public abstract class NewEntity extends ControllerDialog {
 
     private Updatable updateable;
 
-    private static final Map<String, Byte> nameIndexMap = new HashMap();
+    private static final Map<String, Byte> nameIndexMap = new HashMap<String,Byte>();
 
     private static Pattern clean = Pattern.compile("[^A-z0-9]+");
     private static Pattern split = Pattern.compile("\\s+|\\-+");

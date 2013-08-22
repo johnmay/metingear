@@ -43,7 +43,7 @@ public class AddCrossReferenceDialog
         {
 
     private static final Logger LOGGER = Logger.getLogger(AddCrossReferenceDialog.class);
-    private static final Map<String, Byte> nameIndexMap = new HashMap();
+    private static final Map<String, Byte> nameIndexMap = new HashMap<String,Byte>();
     private AnnotatedEntity entity = null;
     private IdentifierEditor editor = new IdentifierEditor();
 

@@ -154,6 +154,7 @@ public class AutomaticCrossReference
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process(final SpinningDialWaitIndicator indicator) {
 
         List<Metabolite> metabolites = new ArrayList<Metabolite>(getSelection().get(Metabolite.class));

@@ -43,7 +43,7 @@ public class CrossReferenceEditorDialog extends PopupDialog {
 
     private CellConstraints cc = new CellConstraints();
 
-    private Map<String, Byte> map = new HashMap();
+    private Map<String, Byte> map = new HashMap<String,Byte>();
 
     private FormLayout layout;
     

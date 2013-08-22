@@ -93,7 +93,7 @@ public class TaskManager
 
 
     public List<RunnableTask> getTasks() {
-        List<RunnableTask> tasks = new ArrayList();
+        List<RunnableTask> tasks = new ArrayList<RunnableTask>();
 
         tasks.addAll(getQueuedTasks());
         tasks.addAll(getRunningTasks());

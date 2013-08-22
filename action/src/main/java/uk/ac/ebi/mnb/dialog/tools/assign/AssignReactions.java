@@ -63,6 +63,7 @@ public class AssignReactions extends ControllerAction {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void actionPerformed(ActionEvent e) {
 
         EntityCollection selection = getSelection();

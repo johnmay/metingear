@@ -60,6 +60,7 @@ public class CrossReferenceCellEditor
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Component getTableCellEditorComponent(JTable table,
                                                  Object value,
                                                  boolean isSelected,

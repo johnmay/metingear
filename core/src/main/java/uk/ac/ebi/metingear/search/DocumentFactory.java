@@ -52,7 +52,7 @@ public class DocumentFactory {
             throws
             CorruptIndexException, IOException {
 
-        Map<UUID, AnnotatedEntity> documents = new HashMap();
+        Map<UUID, AnnotatedEntity> documents = new HashMap<UUID, AnnotatedEntity>();
 
         for (Metabolite m : recon.metabolome()) {
             Document doc = getDocument(m);

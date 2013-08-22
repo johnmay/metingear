@@ -502,6 +502,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
                     }
                 }
             } else if (annotation.isSelected()) {
+                @SuppressWarnings("unchecked")
                 AnnotationParser<Annotation> parser = importable.get((Annotation) importableBox.getSelectedItem());
                 while ((row = reader.readNext()) != null) {
                     if (row.length >= 2) {
@@ -509,7 +510,7 @@ public class ImportCrossReferences extends AbstractControlDialog {
                         if(a != null)
                             mapper.map(row[0], a);
                     }
-                }
+                }                 
             }
 
         } catch (IOException e) {

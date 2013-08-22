@@ -243,7 +243,7 @@ public abstract class AbstractEntityTable extends JTable
     }
 
     public EntityCollection getSelection() {
-        List<AnnotatedEntity> components = new ArrayList();
+        List<AnnotatedEntity> components = new ArrayList<AnnotatedEntity>();
         selection.clear();
         for (Integer index : getSelectedRows()) {
             selection.add(getModel().getEntity(convertRowIndexToModel(index)));

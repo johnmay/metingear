@@ -130,6 +130,7 @@ public class ExportStoichiometricMatrix extends ControllerDialog {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process() {
 
         ReactionMatrixIO.setConvertDoubleToInChI(!useDouble.isSelected());

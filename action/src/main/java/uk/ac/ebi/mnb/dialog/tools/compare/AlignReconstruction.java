@@ -115,10 +115,11 @@ public class AlignReconstruction
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process() {
 
         Reconstruction reference = reconstructionChooser.getSelected();
-        AbstractEntityAligner resolver = new MappedEntityAligner(reference.metabolome().toList());
+        AbstractEntityAligner<Metabolite> resolver = new MappedEntityAligner<Metabolite>(reference.metabolome().toList());
 
         // set up the resolver
         for (MatcherDescription description : matcherStack.getElements()) {

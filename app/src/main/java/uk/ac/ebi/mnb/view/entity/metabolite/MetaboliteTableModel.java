@@ -105,6 +105,7 @@ public class MetaboliteTableModel
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
 
         if (getColumnClass(columnIndex) == CrossReference.class) {

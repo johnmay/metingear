@@ -199,7 +199,7 @@ public class ExcelImportDialog
             return;
         }
 
-        List<String> problemReactions = new ArrayList();
+        List<String> problemReactions = new ArrayList<String>();
         ReactionParser parser = null;
 
         try {
@@ -294,7 +294,8 @@ public class ExcelImportDialog
         }
         return new NamedEntityResolver();
     }
-
+    
+    @SuppressWarnings("unchecked")
     private EntryReconciler reconciler() {
         if (manager.hasService(ChEBIIdentifier.class, NameService.class)) {
 

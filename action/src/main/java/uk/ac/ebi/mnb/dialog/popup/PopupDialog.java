@@ -169,7 +169,7 @@ public class PopupDialog extends JDialog {
     }
     // rendering maps
 
-    private Map<Dimension, BufferedImage> backgroundCache = new HashMap();
+    private Map<Dimension, BufferedImage> backgroundCache = new HashMap<Dimension, BufferedImage>();
 
     private Map<Integer, Stroke> strokeMap = new HashMap<Integer, Stroke>();
 
@@ -189,7 +189,7 @@ public class PopupDialog extends JDialog {
 
         if (backgroundCache.size() > 200) {
             LOGGER.warn("Many images are being stored the background caching map has now be reinstantiated" + " considering making your popup discrete sizes prevent constant background re-drawing");
-            backgroundCache = new HashMap();
+            backgroundCache = new HashMap<Dimension, BufferedImage>();
         }
 
         LOGGER.info("Drawing new background image for size: " + size);

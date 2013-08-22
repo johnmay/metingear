@@ -78,7 +78,7 @@ public class ReactionColumnChooser
 
     private Map<String, String> rxnColumns = new HashMap<String, String>();
 
-    private Map<String, JComboBox> comboBoxes = new HashMap();
+    private Map<String, JComboBox> comboBoxes = new HashMap<String,JComboBox>();
 
     private ExcelModelProperties properties;
 
@@ -86,7 +86,7 @@ public class ReactionColumnChooser
                                              "Classification",
                                              "Subsystem", "Source"};
 
-    private List<String> columns = new ArrayList();
+    private List<String> columns = new ArrayList<String>();
 
     private JTextField field = new JTextField(20);
     // start end

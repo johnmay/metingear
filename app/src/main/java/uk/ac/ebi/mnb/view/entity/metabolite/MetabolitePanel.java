@@ -40,6 +40,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 
 /**
@@ -196,7 +197,7 @@ public class MetabolitePanel
         if (entity != null && recon != null) {
             return recon.participatesIn(entity);
         }
-        return new ArrayList();
+        return Collections.emptyList();
     }
 
 

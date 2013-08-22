@@ -42,6 +42,7 @@ public class PreparsedEntry {
     private List<String> coloumnValues = new ArrayList<String>();
     private Pattern listPattern = Pattern.compile("\\s*(?:[|;]|\\sand\\s|\\sor\\s|&)\\s*");
 
+    @SuppressWarnings("unchecked")
     public PreparsedEntry(Class<? extends TableDescription> clazz) {
         columnTypeMap = new EnumMap(clazz);
     }

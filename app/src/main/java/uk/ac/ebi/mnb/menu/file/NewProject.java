@@ -126,7 +126,7 @@ public class NewProject extends DropdownDialog {
             public Collection<Object> getSuggestions(String s) {
                 return service.startup()
                        ? new ArrayList<Object>(service.searchCode(s, true))
-                       : new ArrayList();
+                       : new ArrayList<Object>();
             }
         }, handler);
         taxonField = new SuggestionField(this, 5, 10, new SuggestionHandler() {

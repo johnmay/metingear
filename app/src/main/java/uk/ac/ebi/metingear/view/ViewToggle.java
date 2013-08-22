@@ -56,7 +56,7 @@ public class ViewToggle {
 
     private ProjectView controller;
 
-    private Map<Class<? extends Entity>, JToggleButton> buttonMap = new HashMap();
+    private Map<Class<? extends Entity>, JToggleButton> buttonMap = new HashMap<Class<? extends Entity>, JToggleButton>();
 
     private BottomBar bottombar = new BottomBar(BottomBarSize.SMALL);
 

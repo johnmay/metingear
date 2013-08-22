@@ -83,7 +83,7 @@ public class ReactionParser {
     private EntityFactory factory = DefaultEntityFactory.getInstance();
     private CompartmentResolver resolver;
 
-    private Set<Report> messages = new HashSet();
+    private Set<Report> messages = new HashSet<Report>();
 
 
     /**
@@ -193,7 +193,7 @@ public class ReactionParser {
         return rxn;
     }
 
-
+    @SuppressWarnings("unchecked")
     public MetabolicReaction getReaction(PreparsedReaction preparsed) {
 
         MetabolicReaction rxn = factory.ofClass(MetabolicReaction.class, BasicReactionIdentifier.nextIdentifier(),
@@ -266,7 +266,7 @@ public class ReactionParser {
                                                                       Compartment defaultCompartment,
                                                                       PreparsedReaction reaction) throws UnparsableReactionError {
 
-        List<MetabolicParticipantImplementation> parsedParticipants = new ArrayList();
+        List<MetabolicParticipantImplementation> parsedParticipants = new ArrayList<MetabolicParticipantImplementation>();
 
         String[] participants = EQUATION_ADDITION.split(equationSide);
         for (String participant : participants) {
@@ -281,7 +281,7 @@ public class ReactionParser {
 
 
     public Collection<Report> collectMessages() {
-        Set collected = new HashSet();
+        Set<Report> collected = new HashSet<Report>();
         collected.addAll(messages);
         messages.clear();
         return collected;

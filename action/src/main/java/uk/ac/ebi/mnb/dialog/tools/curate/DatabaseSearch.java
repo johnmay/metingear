@@ -241,6 +241,7 @@ public class DatabaseSearch
     }
 
 
+    @SuppressWarnings("unchecked")
     public void updateTable(String name) {
 
         if (name.isEmpty() || !component.isVisible()) {
@@ -316,6 +317,7 @@ public class DatabaseSearch
     }
 
 
+    @SuppressWarnings("unchecked")
     public void setup(Metabolite metabolite) {
 
         field.setText(metabolite.getName());

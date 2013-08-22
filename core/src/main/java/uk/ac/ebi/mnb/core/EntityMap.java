@@ -104,6 +104,7 @@ public class EntityMap implements EntityCollection {
     /**
      * @inheritDoc
      */
+    @SuppressWarnings("unchecked")
     public <T> Collection<T> get(Class<T> type) {
         return (Collection<T>) map.get(type);
     }
@@ -119,7 +120,7 @@ public class EntityMap implements EntityCollection {
         Collection<TransferRNA> trna = get(TransferRNA.class);
 //        Collection<TransferRNA> multimer = get(Multimer.class);
 
-        Collection<GeneProduct> products = new ArrayList();
+        Collection<GeneProduct> products = new ArrayList<GeneProduct>();
         products.addAll(proteins);
         products.addAll(rrna);
         products.addAll(trna);
@@ -156,13 +157,18 @@ public class EntityMap implements EntityCollection {
     /**
      * @inheritDoc
      */
+    @SuppressWarnings("unchecked")
     public AnnotatedEntity getFirstEntity() {
 
         if (map.keySet().size() == 1) {
             return map.values().iterator().next();
         }
 
-        List<Class<? extends AnnotatedEntity>> selections = new ArrayList(map.keySet());
+        List<Class<? extends AnnotatedEntity>> selections = new ArrayList<Class<? extends AnnotatedEntity>>();
+        for (Class c : map.keySet()) {
+            selections.add(c);
+        }
+        
         Collections.sort(selections, new Comparator<Class<? extends AnnotatedEntity>>() {
 
             public int compare(Class<? extends AnnotatedEntity> o1, Class<? extends AnnotatedEntity> o2) {

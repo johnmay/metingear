@@ -40,7 +40,7 @@ public class SearchableIndex {
     private final Directory index;
     private final Map<UUID, AnnotatedEntity> map;
 
-    public SearchableIndex(Directory index, Map map) {
+    public SearchableIndex(Directory index, Map<UUID, AnnotatedEntity> map) {
         this.index = index;
         this.map = map;
     }

@@ -111,7 +111,7 @@ public abstract class AbstractEntityPanel
 
     private JScrollPane refPane;
 
-    private List<JButton> removeAnnotationButtons = new ArrayList();
+    private List<JButton> removeAnnotationButtons = new ArrayList<JButton>();
 
     private boolean editable;
 

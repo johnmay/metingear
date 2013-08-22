@@ -48,7 +48,7 @@ public class ObservationBasedAnnotationControl implements AnnotationTableControl
         this.observationList = observationList;
     }
 
-
+    @SuppressWarnings("unchecked")
     public Object getController(final Annotation annotation, final AnnotatedEntity entity) {
 
         final ObservationBasedAnnotation<Observation> oba = (ObservationBasedAnnotation) annotation;

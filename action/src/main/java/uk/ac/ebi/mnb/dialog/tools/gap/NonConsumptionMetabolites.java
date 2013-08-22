@@ -50,6 +50,7 @@ public class NonConsumptionMetabolites
         this.controller = controller;
     }
 
+    @SuppressWarnings("unchecked")
     public void actionPerformed(ActionEvent e) {
 
         try {

@@ -74,7 +74,7 @@ public class ReactionTableModel extends AbstractEntityTableModel {
             return project.reactome().toList();
 
 
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
 

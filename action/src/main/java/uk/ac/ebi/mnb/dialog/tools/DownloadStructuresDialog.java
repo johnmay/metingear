@@ -145,6 +145,7 @@ public class DownloadStructuresDialog
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process(final SpinningDialWaitIndicator wait) {
 
         List<Identifier> problemIdentifiers = new ArrayList<Identifier>();
@@ -240,7 +241,8 @@ public class DownloadStructuresDialog
     public boolean isChemicalService(QueryService service) {
         return service.getIdentifier() instanceof ChemicalIdentifier;
     }
-
+    
+    @SuppressWarnings("unchecked")
     private void updateResourceList() {
 
         ServiceManager services = DefaultServiceManager.getInstance();
