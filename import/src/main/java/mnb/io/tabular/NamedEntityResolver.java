@@ -48,7 +48,7 @@ public class NamedEntityResolver implements EntityResolver {
 
     public NamedEntityResolver() {
 
-        for (Metabolite m : DefaultReconstructionManager.getInstance().active().getMetabolome()) {
+        for (Metabolite m : DefaultReconstructionManager.getInstance().active().metabolome()) {
 
             if (nameMap.containsKey(m.getName())) {
                 LOGGER.error("Name clash! " + m.getName());

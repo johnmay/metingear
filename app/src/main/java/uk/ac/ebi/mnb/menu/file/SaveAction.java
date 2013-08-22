@@ -69,7 +69,7 @@ public class SaveAction extends GeneralAction {
 
 
                 try {
-                    Version version = IOConstants.VERSION;
+                    Version version = IOConstants.CURRENT;
                     ReconstructionIOHelper.write(reconstruction, reconstruction.getContainer());
                     final long end = System.currentTimeMillis();
                     LOGGER.info("Wrote reconstruction in " + (end - start) + " ms");

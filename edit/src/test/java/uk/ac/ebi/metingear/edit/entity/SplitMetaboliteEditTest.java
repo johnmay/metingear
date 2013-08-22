@@ -27,7 +27,7 @@ import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 
 import java.util.Arrays;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.sameInstance;
@@ -99,13 +99,13 @@ public class SplitMetaboliteEditTest {
 
 
         assertTrue("all references of 'a' should be removed",
-                   reconstruction.getReactome().participatesIn(a).isEmpty());
+                   reconstruction.reactome().participatesIn(a).isEmpty());
 
         assertThat("'a1' should have 2 reactions",
-                   reconstruction.getReactome().participatesIn(a1).size(),
+                   reconstruction.reactome().participatesIn(a1).size(),
                    is(2));
         assertThat("'a2' should have 1 reactions",
-                   reconstruction.getReactome().participatesIn(a2).size(),
+                   reconstruction.reactome().participatesIn(a2).size(),
                    is(1));
 
 
@@ -172,13 +172,13 @@ public class SplitMetaboliteEditTest {
 
 
         assertTrue("all references of 'a' should be removed",
-                   reconstruction.getReactome().participatesIn(a).isEmpty());
+                   reconstruction.reactome().participatesIn(a).isEmpty());
 
         assertThat("'a1' should have 2 reactions",
-                   reconstruction.getReactome().participatesIn(a1).size(),
+                   reconstruction.reactome().participatesIn(a1).size(),
                    is(2));
         assertThat("'a2' should have 1 reactions",
-                   reconstruction.getReactome().participatesIn(a2).size(),
+                   reconstruction.reactome().participatesIn(a2).size(),
                    is(1));
 
         edit.undo();
@@ -210,13 +210,13 @@ public class SplitMetaboliteEditTest {
 
 
         assertThat("'a1' should have 3 reactions",
-                   reconstruction.getReactome().participatesIn(a).size(),
+                   reconstruction.reactome().participatesIn(a).size(),
                    is(3));
         assertThat("'a1' should have 0 reactions",
-                   reconstruction.getReactome().participatesIn(a1).size(),
+                   reconstruction.reactome().participatesIn(a1).size(),
                    is(0));
         assertThat("'a2' should have 0 reactions",
-                   reconstruction.getReactome().participatesIn(a2).size(),
+                   reconstruction.reactome().participatesIn(a2).size(),
                    is(0));
 
     }
@@ -282,13 +282,13 @@ public class SplitMetaboliteEditTest {
 
 
         assertTrue("all references of 'a' should be removed",
-                   reconstruction.getReactome().participatesIn(a).isEmpty());
+                   reconstruction.reactome().participatesIn(a).isEmpty());
 
         assertThat("'a1' should have 2 reactions",
-                   reconstruction.getReactome().participatesIn(a1).size(),
+                   reconstruction.reactome().participatesIn(a1).size(),
                    is(2));
         assertThat("'a2' should have 1 reactions",
-                   reconstruction.getReactome().participatesIn(a2).size(),
+                   reconstruction.reactome().participatesIn(a2).size(),
                    is(1));
 
         edit.undo();
@@ -320,13 +320,13 @@ public class SplitMetaboliteEditTest {
 
 
         assertThat("'a1' should have 3 reactions",
-                   reconstruction.getReactome().participatesIn(a).size(),
+                   reconstruction.reactome().participatesIn(a).size(),
                    is(3));
         assertThat("'a1' should have 0 reactions",
-                   reconstruction.getReactome().participatesIn(a1).size(),
+                   reconstruction.reactome().participatesIn(a1).size(),
                    is(0));
         assertThat("'a2' should have 0 reactions",
-                   reconstruction.getReactome().participatesIn(a2).size(),
+                   reconstruction.reactome().participatesIn(a2).size(),
                    is(0));
 
         edit.redo(); // redo the action
@@ -358,13 +358,13 @@ public class SplitMetaboliteEditTest {
 
 
         assertThat("'a1' should have 0 reactions",
-                   reconstruction.getReactome().participatesIn(a).size(),
+                   reconstruction.reactome().participatesIn(a).size(),
                    is(0));
         assertThat("'a1' should have 2 reactions",
-                   reconstruction.getReactome().participatesIn(a1).size(),
+                   reconstruction.reactome().participatesIn(a1).size(),
                    is(2));
         assertThat("'a2' should have 1 reactions",
-                   reconstruction.getReactome().participatesIn(a2).size(),
+                   reconstruction.reactome().participatesIn(a2).size(),
                    is(1));
 
     }

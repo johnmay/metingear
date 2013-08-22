@@ -66,7 +66,7 @@ public class NewProject extends DropdownDialog {
 
     public NewProject() {
 
-        super(MainView.getInstance(), "NewProject");
+        super(MainView.getInstance());
 
 
         service.setMaxResults(10);

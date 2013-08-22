@@ -49,7 +49,8 @@ public class MassChargeBalanceDialog
 
 
     public MassChargeBalanceDialog() {
-        super(MainView.getInstance(), MainView.getInstance(), "MassChargeBalance");
+        super(MainView.getInstance(), ModalityType.APPLICATION_MODAL);
+        setDialogController(MainView.getInstance());
         protonCheckBox = new JCheckBox("<html>H<sup>+</sup></html>");
         waterCheckBox = new JCheckBox("<html>H<sub>2</sub>O</html>");
         oxygenCheckBox = new JCheckBox("<html>O<sub>2</sub></html>");

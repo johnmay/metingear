@@ -47,7 +47,8 @@ public class PredictGPRDialog
 
 
     public PredictGPRDialog() {
-        super(MainView.getInstance(), MainView.getInstance(), "EnzymeAnnotation");
+        super(MainView.getInstance(), ModalityType.APPLICATION_MODAL);
+        setDialogController(MainView.getInstance());
         layoutForm();
     }
 

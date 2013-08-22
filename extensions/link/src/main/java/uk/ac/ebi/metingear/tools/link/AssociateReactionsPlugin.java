@@ -43,7 +43,7 @@ public class AssociateReactionsPlugin implements PlugableDialog {
             @Override
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return active != null
-                        && active.getReactome().size() > 0
+                        && active.reactome().size() > 0
                         && active.proteome().size() > 0;
             }
         };

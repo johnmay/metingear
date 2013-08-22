@@ -62,7 +62,7 @@ public abstract class ControllerDialog extends DropdownDialog {
                             SelectionController controller,
                             UndoableEditListener undoableEdits,
                             String name) {
-        super(frame, name);
+        super(frame);
         this.frame = frame;
         this.undoManager = undoableEdits;
         this.updater = updater;

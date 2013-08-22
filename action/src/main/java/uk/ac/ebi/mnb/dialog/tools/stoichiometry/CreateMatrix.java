@@ -98,7 +98,7 @@ public class CreateMatrix
         } else {
             LOGGER.info("Creating reaction matrix for " + recon.reactome().size() + " reactions");
             matrix = DefaultStoichiometricMatrix.create((int) (recon.reactome().size() * 1.5),
-                                                        recon.getMetabolome().size());
+                                                        recon.metabolome().size());
             for (MetabolicReaction rxn : recon.reactome()) {
 
                 // transpose

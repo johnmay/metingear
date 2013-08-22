@@ -61,8 +61,8 @@ public class RemoveMetaboliteEditTest {
         reconstruction.addMetabolite(b);
         reconstruction.addMetabolite(c);
         reconstruction.addMetabolite(d);
-        reconstruction.getReactome().add(r1);
-        reconstruction.getReactome().add(r2);
+        reconstruction.reactome().add(r1);
+        reconstruction.reactome().add(r2);
 
         UndoableEdit edit = new RemoveMetaboliteEdit(reconstruction, a);
 
@@ -70,10 +70,10 @@ public class RemoveMetaboliteEditTest {
         reconstruction.remove(a);
 
         assertFalse("metabolome contained metabolite, ",
-                    reconstruction.getMetabolome().contains(a));
+                    reconstruction.metabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      0,
-                     reconstruction.getReactome().participatesIn(a).size());
+                     reconstruction.reactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      1,
                      r1.getReactantCount());
@@ -85,10 +85,10 @@ public class RemoveMetaboliteEditTest {
         edit.undo();
 
         assertTrue("metabolome did not contain metabolite, ",
-                   reconstruction.getMetabolome().contains(a));
+                   reconstruction.metabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      2,
-                     reconstruction.getReactome().participatesIn(a).size());
+                     reconstruction.reactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      2,
                      r1.getReactantCount());
@@ -124,8 +124,8 @@ public class RemoveMetaboliteEditTest {
         reconstruction.addMetabolite(b);
         reconstruction.addMetabolite(c);
         reconstruction.addMetabolite(d);
-        reconstruction.getReactome().add(r1);
-        reconstruction.getReactome().add(r2);
+        reconstruction.reactome().add(r1);
+        reconstruction.reactome().add(r2);
 
         UndoableEdit edit = new RemoveMetaboliteEdit(reconstruction, a);
 
@@ -133,10 +133,10 @@ public class RemoveMetaboliteEditTest {
         reconstruction.remove(a);
 
         assertFalse("metabolome contained metabolite, ",
-                    reconstruction.getMetabolome().contains(a));
+                    reconstruction.metabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      0,
-                     reconstruction.getReactome().participatesIn(a).size());
+                     reconstruction.reactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      1,
                      r1.getReactantCount());
@@ -151,10 +151,10 @@ public class RemoveMetaboliteEditTest {
         edit.undo();
 
         assertTrue("metabolome did not contain metabolite, ",
-                   reconstruction.getMetabolome().contains(a));
+                   reconstruction.metabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      2,
-                     reconstruction.getReactome().participatesIn(a).size());
+                     reconstruction.reactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      2,
                      r1.getReactantCount());
@@ -193,8 +193,8 @@ public class RemoveMetaboliteEditTest {
         reconstruction.addMetabolite(b);
         reconstruction.addMetabolite(c);
         reconstruction.addMetabolite(d);
-        reconstruction.getReactome().add(r1);
-        reconstruction.getReactome().add(r2);
+        reconstruction.reactome().add(r1);
+        reconstruction.reactome().add(r2);
 
         UndoableEdit edit = new RemoveMetaboliteEdit(reconstruction, a);
 
@@ -202,10 +202,10 @@ public class RemoveMetaboliteEditTest {
         reconstruction.remove(a);
 
         assertFalse("metabolome contained metabolite, ",
-                    reconstruction.getMetabolome().contains(a));
+                    reconstruction.metabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      0,
-                     reconstruction.getReactome().participatesIn(a).size());
+                     reconstruction.reactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      1,
                      r1.getReactantCount());
@@ -217,10 +217,10 @@ public class RemoveMetaboliteEditTest {
         edit.undo();
 
         assertTrue("metabolome did not contain metabolite, ",
-                   reconstruction.getMetabolome().contains(a));
+                   reconstruction.metabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      2,
-                     reconstruction.getReactome().participatesIn(a).size());
+                     reconstruction.reactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      2,
                      r1.getReactantCount());
@@ -232,10 +232,10 @@ public class RemoveMetaboliteEditTest {
         edit.redo();
 
         assertFalse("metabolome contained metabolite, ",
-                    reconstruction.getMetabolome().contains(a));
+                    reconstruction.metabolome().contains(a));
         assertEquals("metabolome contained metabolite, ",
                      0,
-                     reconstruction.getReactome().participatesIn(a).size());
+                     reconstruction.reactome().participatesIn(a).size());
         assertEquals("incorrect r1 reactant count, ",
                      1,
                      r1.getReactantCount());

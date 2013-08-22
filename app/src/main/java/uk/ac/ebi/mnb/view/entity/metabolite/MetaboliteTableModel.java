@@ -84,7 +84,7 @@ public class MetaboliteTableModel
                                                              .active();
 
         if (project != null) {
-            return project.getMetabolome().toList();
+            return project.metabolome().toList();
         }
 
         return Collections.emptyList();

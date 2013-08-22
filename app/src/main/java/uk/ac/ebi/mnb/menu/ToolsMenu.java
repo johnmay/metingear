@@ -162,7 +162,7 @@ public class ToolsMenu extends ContextMenu {
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection
                         .hasSelection(MetabolicReactionImpl.class) || (active != null && active
-                        .getReactome().isEmpty() == false);
+                        .reactome().isEmpty() == false);
             }
         });
 

@@ -136,14 +136,14 @@ public class ImportCrossReferences extends AbstractControlDialog {
 
     private File selected;
     private JLabel selectedLabel;
-    private JComboBox separator = ComboBoxFactory.newComboBox(Separators
+    private JComboBox separator = ComboBoxFactory.newComboBox((Object[]) Separators
                                                                       .values());
     private JCheckBox headerCheck;
     private JRadioButton infer, single, mapped, annotation;
     private JComboBox resource = ComboBoxFactory
             .newComboBox(DefaultIdentifierFactory.getInstance()
                                                  .getSupportedIdentifiers());
-    private JComboBox mapTo = ComboBoxFactory.newComboBox(KeyType.values());
+    private JComboBox mapTo = ComboBoxFactory.newComboBox((Object[])KeyType.values());
     private boolean header;
     private int previewLength = 5;
     private int nCols = 2;

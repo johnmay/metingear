@@ -61,7 +61,7 @@ import java.util.Set;
 public final class MergeTool extends AbstractControlDialog {
 
     private final JComboBox mergeKey = ComboBoxFactory
-            .newComboBox(Key.values());
+            .newComboBox((Object[]) Key.values());
 
     public MergeTool(Window window) {
         super(window);

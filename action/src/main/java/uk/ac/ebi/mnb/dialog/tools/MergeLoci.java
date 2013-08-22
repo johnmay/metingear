@@ -57,7 +57,7 @@ public class MergeLoci extends ControllerAction {
         Multimap<String, MetabolicReaction> monomeric = HashMultimap.create();
         Multimap<String, MetabolicReaction> multimeric = HashMultimap.create();
 
-        Reactome reactome = recon.getReactome();
+        Reactome reactome = recon.reactome();
         for (MetabolicReaction rxn : reactome) {
             for (Locus locus : rxn.getAnnotations(Locus.class)) {
                 if (locus.containsMultiple()) {

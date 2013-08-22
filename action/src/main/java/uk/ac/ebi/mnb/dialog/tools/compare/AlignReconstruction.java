@@ -118,7 +118,7 @@ public class AlignReconstruction
     public void process() {
 
         Reconstruction reference = reconstructionChooser.getSelected();
-        AbstractEntityAligner resolver = new MappedEntityAligner(reference.getMetabolome().toList());
+        AbstractEntityAligner resolver = new MappedEntityAligner(reference.metabolome().toList());
 
         // set up the resolver
         for (MatcherDescription description : matcherStack.getElements()) {
@@ -135,7 +135,7 @@ public class AlignReconstruction
         }
 
         System.out.println("Query size: " + queries.size());
-        System.out.println("Reference size: " + reference.getMetabolome().size());
+        System.out.println("Reference size: " + reference.metabolome().size());
         System.out.println("Overlap: " + matched);
 
 

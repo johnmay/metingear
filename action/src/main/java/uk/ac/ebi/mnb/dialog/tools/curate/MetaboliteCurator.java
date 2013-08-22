@@ -68,7 +68,7 @@ public class MetaboliteCurator extends DropdownDialog {
 
 
     public MetaboliteCurator(JFrame frame, ServiceManager manager, UndoManager undoManager) {
-        super(frame, "OkayDialog");
+        super(frame);
         getClose().setText("Skip");
 
 

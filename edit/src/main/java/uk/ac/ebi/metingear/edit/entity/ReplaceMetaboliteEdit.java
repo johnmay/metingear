@@ -86,14 +86,14 @@ public final class ReplaceMetaboliteEdit extends CompoundEdit {
         addEdit(new AbstractUndoableEdit() {
             @Override
             public void undo() throws CannotUndoException {
-                reconstruction.getMetabolome().remove(replacement);
-                reconstruction.getMetabolome().add(original);
+                reconstruction.metabolome().remove(replacement);
+                reconstruction.metabolome().add(original);
             }
 
             @Override
             public void redo() throws CannotRedoException {
-                reconstruction.getMetabolome().remove(original);
-                reconstruction.getMetabolome().add(replacement);
+                reconstruction.metabolome().remove(original);
+                reconstruction.metabolome().add(replacement);
             }
         });
         for (final MetabolicReaction reaction : reactions) {

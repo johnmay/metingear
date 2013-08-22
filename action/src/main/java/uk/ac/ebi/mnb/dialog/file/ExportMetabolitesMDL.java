@@ -70,7 +70,7 @@ public class ExportMetabolitesMDL extends ControllerAction {
         Collection<Metabolite> metabolites =
                 selection.hasSelection(Metabolite.class)
                 ? selection.get(Metabolite.class)
-                : recon.getMetabolome().toList();
+                : recon.metabolome().toList();
 
 
         fileChooser = fileChooser == null ? new JFileChooser() : fileChooser;

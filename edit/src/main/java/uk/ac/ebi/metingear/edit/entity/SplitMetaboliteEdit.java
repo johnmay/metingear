@@ -71,8 +71,8 @@ public final class SplitMetaboliteEdit extends CompoundEdit {
      */
     public final void apply() {
 
-        Metabolome metabolome = reconstruction.getMetabolome();
-        Reactome reactome = reconstruction.getReactome();
+        Metabolome metabolome = reconstruction.metabolome();
+        Reactome reactome = reconstruction.reactome();
 
         metabolome.remove(original);
         metabolome.add(left);
@@ -135,8 +135,8 @@ public final class SplitMetaboliteEdit extends CompoundEdit {
      */
     private void build() {
 
-        final Metabolome metabolome = reconstruction.getMetabolome();
-        final Reactome reactome = reconstruction.getReactome();
+        final Metabolome metabolome = reconstruction.metabolome();
+        final Reactome reactome = reconstruction.reactome();
 
         addEdit(new AbstractUndoableEdit() {
             @Override

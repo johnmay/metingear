@@ -60,8 +60,8 @@ public class BasicReconciler
     public BasicReconciler() {
         recon = DefaultReconstructionManager.getInstance().active();
         nameMap = HashMultimap.create();
-        if (recon != null && !recon.getMetabolome().isEmpty()) {
-            for (Metabolite m : recon.getMetabolome()) {
+        if (recon != null && !recon.metabolome().isEmpty()) {
+            for (Metabolite m : recon.metabolome()) {
                 nameMap.put(m.getName(), m);
             }
         }

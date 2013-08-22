@@ -47,9 +47,9 @@ import java.util.List;
 public final class AssociateReactions extends AbstractControlDialog {
 
     private final JComboBox reactionKeyComboBox = ComboBoxFactory
-            .newComboBox(Key.values());
+            .newComboBox((Object[]) Key.values());
     private final JComboBox productKeyComboBox = ComboBoxFactory
-            .newComboBox(Key.values());
+            .newComboBox((Object[]) Key.values());
 
     public AssociateReactions(Window window) {
         super(window);
@@ -80,11 +80,11 @@ public final class AssociateReactions extends AbstractControlDialog {
         Key reactionKey = (Key) reactionKeyComboBox.getSelectedItem();
         Key productKey = (Key) productKeyComboBox.getSelectedItem();
 
-        int n = reconstruction.getReactome().size();
+        int n = reconstruction.reactome().size();
 
         Multimap<String, Reaction> reactionMap = HashMultimap.create(n, 1);
 
-        for (Reaction reaction : reconstruction.getReactome()) {
+        for (Reaction reaction : reconstruction.reactome()) {
             for (String key : reactionKey.keys(reaction)) {
                 reactionMap.put(key, reaction);
             }

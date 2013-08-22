@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.mnb.view.entity.components.control;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;

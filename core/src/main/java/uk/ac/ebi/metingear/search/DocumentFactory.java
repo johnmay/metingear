@@ -54,14 +54,14 @@ public class DocumentFactory {
 
         Map<UUID, AnnotatedEntity> documents = new HashMap();
 
-        for (Metabolite m : recon.getMetabolome()) {
+        for (Metabolite m : recon.metabolome()) {
             Document doc = getDocument(m);
             UUID uuid = UUID.randomUUID();
             doc.add(new Field("uuid", uuid.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             documents.put(uuid, m);
             writer.addDocument(doc);
         }
-        for (MetabolicReaction rxn : recon.getReactome()) {
+        for (MetabolicReaction rxn : recon.reactome()) {
             Document doc = getDocument(rxn);
             UUID uuid = UUID.randomUUID();
             doc.add(new Field("uuid", uuid.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));

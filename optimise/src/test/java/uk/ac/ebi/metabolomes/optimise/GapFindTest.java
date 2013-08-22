@@ -31,7 +31,7 @@ import uk.ac.ebi.optimise.gap.GapFind;
 
 import java.util.logging.Level;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author johnmay

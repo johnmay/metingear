@@ -61,7 +61,7 @@ public class GeneTableModel extends AbstractEntityTableModel {
                                                            .active();
 
         if (recon != null) {
-            return recon.getGenome().genes();
+            return recon.genome().genes();
         }
 
         return Collections.EMPTY_LIST;
