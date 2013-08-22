@@ -24,7 +24,6 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
@@ -97,7 +96,7 @@ public class GenerateStructureDiagram
 
                     try {
 
-                        IMolecule molecule = BUILDER.newInstance(IMolecule.class, structure);
+                        IAtomContainer molecule = BUILDER.newInstance(IAtomContainer.class, structure);
 
                         STRUCTURE_DIAGRAM_GENERATOR.setMolecule(molecule);
                         STRUCTURE_DIAGRAM_GENERATOR.generateCoordinates();

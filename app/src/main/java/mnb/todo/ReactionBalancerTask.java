@@ -16,7 +16,7 @@
  */
 package mnb.todo;
 
-import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
 
@@ -32,13 +32,14 @@ import java.util.List;
 public class ReactionBalancerTask
         extends RunnableTask {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ReactionBalancerTask.class);
-    private List<IMolecule> intialBalancingMolecules;
+    private static final org.apache.log4j.Logger logger = org.apache.log4j
+            .Logger.getLogger(ReactionBalancerTask.class);
+    private List<IAtomContainer> intialBalancingMolecules;
 
     public ReactionBalancerTask() {
 
         // instantiate collections here
-        intialBalancingMolecules = new ArrayList<IMolecule>();
+        intialBalancingMolecules = new ArrayList<IAtomContainer>();
 
     }
 

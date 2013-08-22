@@ -28,7 +28,6 @@ import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemFile;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV3000Reader;
@@ -246,7 +245,7 @@ public final class AssignStructure
 
     public void transferMDLV2000() throws IOException, CDKException {
         MDLV2000Reader reader = new MDLV2000Reader(new StringReader(area.getText()));
-        IMolecule molecule = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+        IAtomContainer molecule = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         reader.close();
         configure(molecule);
         Annotation annotation = new AtomContainerAnnotation(molecule);
@@ -257,7 +256,7 @@ public final class AssignStructure
 
     public void transferMDLV3000() throws IOException, CDKException {
         MDLV3000Reader reader = new MDLV3000Reader(new StringReader(area.getText()));
-        IMolecule molecule = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+        IAtomContainer molecule = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
         reader.close();
         configure(molecule);
         Annotation annotation = new AtomContainerAnnotation(molecule);
