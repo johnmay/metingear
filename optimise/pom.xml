@@ -43,7 +43,9 @@
         <dependency>
             <groupId>ilog.cplex</groupId>
             <artifactId>cplex</artifactId>
-            <version>1.0</version>
+            <version>1.2.5</version>                                
+            <systemPath>${cplex.home}/125/cplex/lib/cplex.jar</systemPath>
+            <scope>system</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
