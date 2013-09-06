@@ -23,7 +23,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import old.MetaboliteComparison;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.hash.MoleculeHashGenerator;
+import org.openscience.cdk.hash_mdk.MoleculeHashGenerator;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
