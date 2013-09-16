@@ -246,7 +246,7 @@ public class GapFind {
 
 
     public Integer[] getUnproducedMetabolites()
-            throws IloException {
+            throws Exception {
         cplex.remove(negMassBalance);
         cplex.add(posMassBalance);
 
@@ -255,7 +255,7 @@ public class GapFind {
 
 
     public Integer[] getUnconsumedMetabolites()
-            throws IloException {
+            throws Exception {
         cplex.remove(posMassBalance);
         cplex.add(negMassBalance);
 
