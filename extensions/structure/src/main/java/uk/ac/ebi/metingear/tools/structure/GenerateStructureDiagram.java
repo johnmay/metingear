@@ -27,7 +27,12 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.annotation.InChI;
+import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
 import uk.ac.ebi.mnb.core.WarningMessage;
@@ -55,6 +60,7 @@ public class GenerateStructureDiagram
     // don't want to make these static as it would increace class loading time
     private final StructureDiagramGenerator STRUCTURE_DIAGRAM_GENERATOR = new StructureDiagramGenerator();
     private final IChemObjectBuilder        BUILDER                     = SilentChemObjectBuilder.getInstance();
+    private final JComboBox                 annotationType              = ComboBoxFactory.newComboBox("SMILES", "InChI", "All");
 
     private JCheckBox overwrite = CheckBoxFactory.newCheckBox();
 
@@ -68,15 +74,30 @@ public class GenerateStructureDiagram
         JComponent component = super.createForm();
 
         component.setLayout(new FormLayout("right:p, 4dlu, left:p",
-                                           "p"));
+                                           "p, 4dlu, p"));
 
         CellConstraints cc = new CellConstraints();
 
-        component.add(getLabel("overwriteLabel"), cc.xy(1, 1));
-        component.add(overwrite,                  cc.xy(3, 1));
+        component.add(getLabel("annotationType"), cc.xy(1, 1));
+        component.add(annotationType, cc.xy(3, 1));
+        component.add(getLabel("overwriteLabel"), cc.xy(1, 3));
+        component.add(overwrite, cc.xy(3, 3));
 
         return component;
 
+    }
+
+    /**
+     * Get the class of annotation to generate the structure diagram for.
+     * @return the annotation class (SMILES, InChI, All).
+     */
+    private Class<? extends ChemicalStructure> annotationClass() {
+        String item = (String) annotationType.getSelectedItem();
+        if (item.equals("SMILES"))
+            return SMILES.class;
+        if (item.equals("InChI"))
+            return InChI.class;
+        return ChemicalStructure.class;
     }
 
     @Override
@@ -84,11 +105,15 @@ public class GenerateStructureDiagram
 
         // put all the edits together
         CompoundEdit edit = new CompoundEdit();
+        
+         
 
+        final Class<? extends ChemicalStructure> annotationClass = annotationClass();
+        
         for (Metabolite metabolite : getSelection(Metabolite.class)) {
 
-            Collection<AtomContainerAnnotation> annotations = new ArrayList<AtomContainerAnnotation>(metabolite.getAnnotations(AtomContainerAnnotation.class));
-            for (AtomContainerAnnotation original : annotations) {
+            Collection<ChemicalStructure> annotations = new ArrayList<ChemicalStructure>(metabolite.getAnnotationsExtending(annotationClass));
+            for (ChemicalStructure original : annotations) {
 
                 IAtomContainer structure = original.getStructure();
 
@@ -107,7 +132,9 @@ public class GenerateStructureDiagram
 
                         edit.addEdit(new ReplaceAnnotationEdit(metabolite, original, replacement));
 
-                        metabolite.removeAnnotation(original);
+                        // only remove existing AtomContainerAnnotation - SMILES/InChI remain
+                        if (original.getClass() == AtomContainerAnnotation.class)
+                            metabolite.removeAnnotation(original);
                         metabolite.addAnnotation(replacement);
 
                     } catch (CDKException ex) {
