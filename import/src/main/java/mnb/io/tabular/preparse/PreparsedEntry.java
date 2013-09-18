@@ -18,6 +18,7 @@ package mnb.io.tabular.preparse;
 
 import mnb.io.tabular.type.TableDescription;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -114,5 +115,9 @@ public class PreparsedEntry {
         }
 
         return value == null || value.isEmpty() ? new String[0] : new String[]{value};
+    }
+
+    @Override public String toString() {
+        return coloumnValues.toString();
     }
 }

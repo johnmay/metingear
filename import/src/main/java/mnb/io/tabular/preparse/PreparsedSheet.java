@@ -50,9 +50,9 @@ public abstract class PreparsedSheet {
                           TableDescription bounds) {
 
         this.properties = properties;
-        this.columns = this.properties.getDefinedColumns(bounds.getClass());
-
-        if(properties.contains(bounds.getKey())){
+        this.columns    = this.properties.getDefinedColumns(bounds.getClass());
+        
+        if(properties.containsKey(bounds.getKey())){
             this.bounds = properties.getDataBounds(bounds.getKey());
             this.minIndex = this.bounds.y - 1;
             this.maxIndex = this.bounds.y + this.bounds.height;
@@ -61,6 +61,7 @@ public abstract class PreparsedSheet {
             this.minIndex = 0;
             this.maxIndex = sheet.getLastRowNum();
         }
+        
         this.rowIndex = minIndex;
 
     }

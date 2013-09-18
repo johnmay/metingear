@@ -101,7 +101,7 @@ public class HSSFPreparsedSheet extends PreparsedSheet {
                     entry.addValue( col, cell.getStringCellValue() );
                 }
             }
-        }            
+        }
 
 
         return entry;
