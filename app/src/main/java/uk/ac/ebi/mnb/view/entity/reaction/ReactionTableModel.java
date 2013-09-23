@@ -26,6 +26,7 @@ import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.StarRating;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
@@ -55,6 +56,9 @@ public class ReactionTableModel extends AbstractEntityTableModel {
                                  String.class),
             new ColumnDescriptor(new EnzymeClassification()),
             new ColumnDescriptor(new Subsystem()),
+            new ColumnDescriptor("Compartments", null,
+                                 DataType.FIXED,
+                                 String.class),
             new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class)};
 
 
@@ -98,6 +102,7 @@ public class ReactionTableModel extends AbstractEntityTableModel {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Object getFixedType(AnnotatedEntity component, String name) {
 
         Reaction rxn = (Reaction) component;
@@ -108,6 +113,8 @@ public class ReactionTableModel extends AbstractEntityTableModel {
             return rxn.toString();
         } else if (name.equals("Rating")) {
             return component.getRating();
+        } else if (name.equals("Compartments")) {
+            return TransportReactionUtil.compartmentsAsString(rxn);
         }
 
         return "N/A";
