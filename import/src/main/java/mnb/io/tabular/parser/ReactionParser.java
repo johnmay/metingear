@@ -56,13 +56,13 @@ public class ReactionParser {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionParser.class);
     // Reaction arrow matcher (note excess space is gobbeled up in split)
-
+                                                       
     public static final Pattern EQUATION_ARROW = Pattern.compile("(<[-=]+>)|(<[-=]*)|([-=]*>)|(=+)");
 
     public static final Pattern EQUATION_ADDITION = Pattern.compile("\\s+[+]\\s+");
 
     private static final Pattern REACTION_COMPARTMENT =
-            Pattern.compile("\\A\\[([\\w\\s]+)\\]\\s*:");
+            Pattern.compile("\\A\\[([\\w\\s]+)\\]\\s*:?");
 
     public static final Pattern DOUBLE_PATTERN =
             Pattern.compile("([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?)");
