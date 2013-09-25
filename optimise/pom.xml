@@ -16,9 +16,10 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>metingear</artifactId>
@@ -41,9 +42,24 @@
 
     <dependencies>
         <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-io-data-core</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-apps-io</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-tool-domain</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
+        <dependency>
             <groupId>ilog.cplex</groupId>
             <artifactId>cplex</artifactId>
-            <version>1.2.5</version>                                
+            <version>1.2.5</version>
             <systemPath>${cplex.home}/125/cplex/lib/cplex.jar</systemPath>
             <scope>system</scope>
         </dependency>
