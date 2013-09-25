@@ -89,9 +89,7 @@ public class GapFind {
     private void setupConstraints()
             throws IloException {
         // value to optimize
-        xnp = cplex.intVarArray(s.getMoleculeCount(),
-                                0,
-                                1);
+        xnp = cplex.boolVarArray(s.getMoleculeCount());
         // flux can take any value between 0 and 100
         // LB ≤ v ≤ UB , j ∈ Model
         v = cplex.numVarArray(s.getReactionCount(),
@@ -124,10 +122,7 @@ public class GapFind {
         w = new IloIntVar[s.getMoleculeCount()][s.getReactionCount()];
 
         for (int i = 0; i < s.getMoleculeCount(); i++) {
-            w[i] =
-            cplex.intVarArray(s.getReactionCount(),
-                              0,
-                              1);
+            w[i] = cplex.boolVarArray(s.getReactionCount());
 
             IloLinearIntExpr term = cplex.linearIntExpr();
 
@@ -156,8 +151,7 @@ public class GapFind {
                 if (s.get(i, j) > 0) {
 
                     if (s.isReversible(j)) {
-
-
+                        
                         // min production limit (reversible)
                         cplex.addGe(cplex.prod(s.get(i, j).intValue(),
                                                v[j]), // Sijvj
@@ -236,9 +230,7 @@ public class GapFind {
                            s.get(i, j));
             }
 
-            negFlux[i] =
-            cplex.le(cplex.sum(values),
-                     0);
+            negFlux[i] = cplex.le(cplex.sum(values), 0);
         }
 
         return negFlux;
@@ -330,6 +322,7 @@ public class GapFind {
 
     private Integer[] solve()
             throws IloException {
+        
         cplex.solve();
 
         List<Integer> problemMetabolites = new ArrayList<Integer>();
