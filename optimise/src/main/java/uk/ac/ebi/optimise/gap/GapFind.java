@@ -16,11 +16,16 @@
  */
 package uk.ac.ebi.optimise.gap;
 
-import ilog.concert.*;
+import ilog.concert.IloAddable;
+import ilog.concert.IloException;
+import ilog.concert.IloIntVar;
+import ilog.concert.IloLinearIntExpr;
+import ilog.concert.IloNumExpr;
+import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mdk.domain.matrix.BasicStoichiometricMatrix;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.optimise.SimulationUtil;
 
 import java.io.FileNotFoundException;
@@ -33,13 +38,13 @@ import java.util.List;
  * DeadEndDetector
  *
  * @author John May
- * @author $Author$ – $LastChangedDate: 2011-12-06 18:18:06 +0000
- * (Tue, 06 Dec 2011) $ (this version) @date 2011.06.24
+ * @author $Author$ – $LastChangedDate: 2011-12-06 18:18:06 +0000 (Tue, 06 Dec
+ *         2011) $ (this version) @date 2011.06.24
  * @version $Revision$ @brief Locates various types of gaps in metabolic
- * network. The class identifies root non-production and downstream
- * non-production metabolites as well as terminal non-consumption and upstream
- * non-consumption. Upstream and down-stream are identified using Mixed Integer
- * Linear Programming using CPLEX ILOG library
+ *          network. The class identifies root non-production and downstream
+ *          non-production metabolites as well as terminal non-consumption and
+ *          upstream non-consumption. Upstream and down-stream are identified
+ *          using Mixed Integer Linear Programming using CPLEX ILOG library
  */
 public class GapFind {
 
@@ -47,7 +52,7 @@ public class GapFind {
 
     private IloCplex cplex;
 
-    private StoichiometricMatrix<?,?> s; // Stoichiometric matrix
+    private StoichiometricMatrix<?, ?> s; // Stoichiometric matrix
 
     private IloNumVar[] v; // flux vector (size = n reactions)
 
@@ -60,16 +65,12 @@ public class GapFind {
     private IloAddable[] negMassBalance;
 
 
-    public GapFind() throws Exception, UnsatisfiedLinkError{
+    public GapFind() throws Exception, UnsatisfiedLinkError {
         cplex = new IloCplex();
         cplex.setOut(null);
     }
 
-    /**
-     *
-     * @param s Matrix of stoichiometries, a column per reaction
-     *
-     */
+    /** @param s Matrix of stoichiometries, a column per reaction */
     public GapFind(StoichiometricMatrix s) throws Exception, UnsatisfiedLinkError {
         // todo handle our custom stoichiometric
         this.s = s;
@@ -82,9 +83,8 @@ public class GapFind {
 
 
     /**
-     * @brief Sets up the constraints of the problem
-     *
      * @throws IloException
+     * @brief Sets up the constraints of the problem
      */
     private void setupConstraints()
             throws IloException {
@@ -113,66 +113,73 @@ public class GapFind {
 
 
     /**
-     * @brief Add the binary constraints of \f[ W_{ij} \f]
-     *
      * @throws IloException
+     * @brief Add the binary constraints of \f[ W_{ij} \f]
      */
     private void binaryConstraints()
             throws IloException {
         w = new IloIntVar[s.getMoleculeCount()][s.getReactionCount()];
 
         for (int i = 0; i < s.getMoleculeCount(); i++) {
+            // binarycons(i)..sum(j$((S(i,j) ne 0 and rev(j) ) or (S(i,j) gt 0 and not rev(j) )), w(i,j))=g=xp(i);
             w[i] = cplex.boolVarArray(s.getReactionCount());
 
             IloLinearIntExpr term = cplex.linearIntExpr();
 
             for (int j = 0; j < s.getReactionCount(); j++) {
-                if (s.get(i, j) > 0) {
-                    term.addTerm(s.get(i, j).intValue(),
+                if (s.isReversible(j) && s.get(i,j) != 0) {
+                    term.addTerm(1,
+                                 w[i][j]);
+                } 
+                else if(!s.isReversible(j) && s.get(i,j) > 0) {
+                    term.addTerm(1,
                                  w[i][j]);
                 }
             }
 
-            cplex.addEq(term, xnp[i]).setName("Binary Constraints");
+            // constraint 8
+            cplex.addGe(term,
+                        xnp[i]).setName("Binary Constraints");
         }
+
     }
 
 
     /**
+     * @throws IloException
      * @brief Set min and max production constraints for each molecule @f[
      * S_{ij} v_{j} \geq \epsilon w_{ij} @f] @f[ S_{ij} v_{j} \leq E w_{ij} @f]
-     *
-     * @throws IloException
      */
     public void productionConstraints()
             throws IloException {
         for (int i = 0; i < s.getMoleculeCount(); i++) {
             for (int j = 0; j < s.getReactionCount(); j++) {
-                if (s.get(i, j) > 0) {
+                if (s.isReversible(j) && s.get(i, j) == 0) {
 
-                    if (s.isReversible(j)) {
-                        
-                        // min production limit (reversible)
-                        cplex.addGe(cplex.prod(s.get(i, j).intValue(),
-                                               v[j]), // Sijvj
-                                    cplex.sum(0.001, cplex.negative(cplex.prod(100, cplex.sum(1, cplex.negative(w[i][j])))))); // ε-M(1-wij)
+                    // min production limit (reversible)
+                    cplex.addGe(cplex.prod(s.get(i, j).intValue(),
+                                           v[j]), // Sijvj
+                                cplex.sum(0.001,
+                                          cplex.negative(cplex.prod(100,
+                                                                    cplex.sum(1,
+                                                                              cplex.negative(w[i][j])))))); // ε-M(1-wij)
 
-                        // max production limit (reversible)
-                        // Sijvj >= Mwij
-                        cplex.addGe(cplex.prod(s.get(i, j).intValue(),
-                                               v[j]),
-                                    cplex.prod(100, w[i][j]));
-                    } else {
+                    // max production limit (reversible)
+                    // Sijvj >= Mwij
+                    cplex.addGe(cplex.prod(s.get(i, j).intValue(),
+                                           v[j]),
+                                cplex.prod(100, w[i][j]));
+                }
+                else if (!s.isReversible(j) && s.get(i, j) > 0) {
 
-                        // min production limit
-                        cplex.addGe(cplex.prod(s.get(i, j).intValue(),
-                                               v[j]), // Sijvj
-                                    cplex.prod(0.001, w[i][j])); // εwij
-                        // max production limit
-                        cplex.addLe(cplex.prod(s.get(i, j).intValue(),
-                                               v[j]), // Sijvj
-                                    cplex.prod(100, w[i][j])); // εwij
-                    }
+                    // min production limit
+                    cplex.addGe(cplex.prod(s.get(i, j).intValue(),
+                                           v[j]), // Sijvj
+                                cplex.prod(0.001, w[i][j])); // εwij
+                    // max production limit
+                    cplex.addLe(cplex.prod(s.get(i, j).intValue(),
+                                           v[j]), // Sijvj
+                                cplex.prod(100, w[i][j])); // εwij
                 }
             }
         }
@@ -180,12 +187,10 @@ public class GapFind {
 
 
     /**
-     * @brief Generates a mass balance constraint for non-production metabolites
-     * \f[ \sum{S_{ij} v_{j}} \geq 0 \quad | \quad \forall i \in N \f]
-     *
-
      * @return Array of addable constraints
      * @throws IloException Exception is
+     * @brief Generates a mass balance constraint for non-production metabolites
+     * \f[ \sum{S_{ij} v_{j}} \geq 0 \quad | \quad \forall i \in N \f]
      */
     public IloAddable[] nonProductionMassBalanceConstraint()
             throws IloException {
@@ -196,15 +201,15 @@ public class GapFind {
 
             for (int j = 0; j < s.getReactionCount(); j++) {
                 values[j] =
-                cplex.prod(v[j],
-                           s.get(i, j));
+                        cplex.prod(v[j],
+                                   s.get(i, j));
             }
 
             // The sum of the reaction flux for this metabolite should
             // be greater then zero
             positiveFlux[i] =
-            cplex.ge(cplex.sum(values),
-                     0);
+                    cplex.ge(cplex.sum(values),
+                             0);
         }
 
         return positiveFlux;
@@ -226,8 +231,8 @@ public class GapFind {
 
             for (int j = 0; j < s.getReactionCount(); j++) {
                 values[j] =
-                cplex.prod(v[j],
-                           s.get(i, j));
+                        cplex.prod(v[j],
+                                   s.get(i, j));
             }
 
             negFlux[i] = cplex.le(cplex.sum(values), 0);
@@ -298,8 +303,9 @@ public class GapFind {
         for (int j = 0; j < s.getReactionCount(); j++) {
             if (s.get(i, j) > 0) {
                 return true;
-            } else if (s.isReversible(j)
-                       && s.get(i, j) != 0) {
+            }
+            else if (s.isReversible(j)
+                    && s.get(i, j) != 0) {
                 return true;
             }
         }
@@ -311,8 +317,9 @@ public class GapFind {
         for (int j = 0; j < s.getReactionCount(); j++) {
             if (s.get(i, j) < 0) {
                 return true;
-            } else if (s.isReversible(j)
-                       && s.get(i, j) != 0) {
+            }
+            else if (s.isReversible(j)
+                    && s.get(i, j) != 0) {
                 return true;
             }
         }
@@ -322,7 +329,7 @@ public class GapFind {
 
     private Integer[] solve()
             throws IloException {
-        
+
         cplex.solve();
 
         List<Integer> problemMetabolites = new ArrayList<Integer>();
@@ -358,7 +365,6 @@ public class GapFind {
         // print
         s.display(System.out, ' ', "0", 2, 2);
         // gap find
-
 
 
         System.out.println(Arrays.asList(new GapFind(s).getUnproducedMetabolites()));

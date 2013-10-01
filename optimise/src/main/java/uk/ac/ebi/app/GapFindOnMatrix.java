@@ -59,6 +59,7 @@ public class GapFindOnMatrix {
                 s.addReaction(mr);
             }
             else if (str.equals("{c, e}")) {
+               // s.addReaction(mr);
 //                List<Metabolite> ms = TransportReactionUtil.exchanged(mr);
 //                if (ms.size() == 0) {
 //                    System.out.println(mr);
