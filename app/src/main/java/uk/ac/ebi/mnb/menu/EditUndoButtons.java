@@ -48,11 +48,11 @@ public class EditUndoButtons {
         back = new JButton();
         forward = new JButton();
 
-        back.putClientProperty("JButton.buttonType", "segmentedTextured");
-        back.putClientProperty("JButton.segmentPosition", "first");
+        //back.putClientProperty("JButton.buttonType", "segmentedTextured");
+        //back.putClientProperty("JButton.segmentPosition", "first");
         back.setFocusable(false);
-        forward.putClientProperty("JButton.buttonType", "segmentedTextured");
-        forward.putClientProperty("JButton.segmentPosition", "last");
+        //forward.putClientProperty("JButton.buttonType", "segmentedTextured");
+        //forward.putClientProperty("JButton.segmentPosition", "last");
         forward.setFocusable(false);
 
         back.setAction(new AbstractAction() {
