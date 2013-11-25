@@ -52,3 +52,12 @@ ImportCrossReferences:
     dest:
         text:    "Destination:"
         tooltip: Select one or more entities to which you which to map the loaded identifiers
+        
+CreateTransporters:
+    information:
+        text:    Select the transport reactions to create
+        tooltip: Select the transproters from the predefined list below, duplicat metabolites may be created but these can be merged.
+    aa.trans:
+        text:    Amino-acid Transport
+        tooltip: Select the Amino-acids you wish to create transporters for
+      
