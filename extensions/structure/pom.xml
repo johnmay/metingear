@@ -69,6 +69,11 @@
             <groupId>org.openscience.cdk</groupId>
             <version>${cdk.version}</version>
         </dependency>
+        <dependency>
+            <artifactId>cdk-smarts</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <version>${cdk.version}</version>
+        </dependency>
 
         <dependency>
             <artifactId>log4j</artifactId>
