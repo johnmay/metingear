@@ -12,7 +12,11 @@
     <artifactId>metingear-extenstions-structure</artifactId>
 
     <dependencies>
-
+        <dependency>
+            <groupId>org.openscience.jchempaint</groupId>
+            <artifactId>jchempaint-hotfix</artifactId>
+            <version>${jchempaint.version}</version>
+        </dependency>
         <dependency>
             <artifactId>metingear-extension</artifactId>
             <groupId>${project.groupId}</groupId>

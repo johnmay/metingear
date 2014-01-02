@@ -1,2 +1,3 @@
 uk.ac.ebi.metingear.tools.structure.GenerateStructureDiagramPlugin
 uk.ac.ebi.metingear.tools.structure.SmartsSearchPlugin
+uk.ac.ebi.metingear.tools.structure.DrawStructurePlugin
