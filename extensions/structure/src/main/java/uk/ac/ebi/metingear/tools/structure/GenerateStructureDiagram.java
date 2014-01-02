@@ -19,7 +19,6 @@ package uk.ac.ebi.metingear.tools.structure;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -28,7 +27,6 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
-import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
@@ -55,7 +53,6 @@ import java.util.Collection;
 public class GenerateStructureDiagram
         extends AbstractControlDialog {
 
-    private static final Logger LOGGER = Logger.getLogger(GenerateStructureDiagram.class);
 
     // don't want to make these static as it would increace class loading time
     private final StructureDiagramGenerator STRUCTURE_DIAGRAM_GENERATOR = new StructureDiagramGenerator();
@@ -105,8 +102,8 @@ public class GenerateStructureDiagram
 
         // put all the edits together
         CompoundEdit edit = new CompoundEdit();
-        
-         
+
+        STRUCTURE_DIAGRAM_GENERATOR.setUseTemplates(false);
 
         final Class<? extends ChemicalStructure> annotationClass = annotationClass();
         
@@ -156,7 +153,7 @@ public class GenerateStructureDiagram
 
     @Override
     public void update() {
-        super.update(getSelectionController().getSelection());
+        super.update();
     }
 
 }
