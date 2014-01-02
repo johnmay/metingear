@@ -33,7 +33,7 @@
     <properties>
         <caf.version>0.8.6-SNAPSHOT</caf.version>
         <mdk.version>1.5.0-SNAPSHOT</mdk.version>
-        <cdk.version>1.5.4-SNAPSHOT</cdk.version>
+        <cdk.version>1.5.4</cdk.version>
     </properties>
 
     <distributionManagement>
