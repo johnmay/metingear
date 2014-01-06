@@ -18,7 +18,9 @@ package uk.ac.ebi.mnb.view.entity.components;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.metingear.util.JChemPaintEditor;
 import uk.ac.ebi.mnb.edit.DeleteAnnotation;
 import uk.ac.ebi.mnb.edit.ReplaceAnnotationEdit;
 import uk.ac.ebi.mnb.main.MainView;
@@ -47,7 +49,7 @@ public class AnnotationTableModel
 
     private List<Annotation> annotations;
 
-    private Class[] columns = new Class[]{Annotation.class, Annotation.class, Action.class, Action.class};
+    private Class[] columns = new Class[]{Annotation.class, Annotation.class, Action.class, Action.class, Action.class};
 
     private JList observationList;
 
@@ -113,11 +115,21 @@ public class AnnotationTableModel
             case 1:
                 return getAnnotation(annotations.get(row));
             case 2:
+                if (annotation instanceof ChemicalStructure) {
+                    return new EditStructure(MainView.getInstance(),
+                                             JChemPaintEditor.INSTANCE,
+                                             entity, 
+                                             (ChemicalStructure) annotation,
+                                             MainView.getInstance().getViewController().getActiveView(),
+                                             MainView.getInstance().getUndoManager());    
+                }
+                removeTableModelListener(null);
+            case 3:
                 return new DeleteAnnotation(entity,
                                             annotation,
                                             MainView.getInstance().getViewController().getActiveView(),
                                             MainView.getInstance().getUndoManager());
-            case 3:
+            case 4:
                 if (annotationControlManager != null) {
                     return annotationControlManager.getController(annotation, entity);
                 } else {

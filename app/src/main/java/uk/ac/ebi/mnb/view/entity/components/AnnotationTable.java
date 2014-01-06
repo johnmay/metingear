@@ -36,17 +36,11 @@ import uk.ac.ebi.mdk.ui.render.table.StructuralValidityRenderer;
 
 import javax.swing.Action;
 import javax.swing.JTable;
-import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.View;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -64,12 +58,12 @@ import java.net.URISyntaxException;
 public class AnnotationTable extends JTable {
 
     private static final Logger LOGGER = Logger.getLogger(
-        AnnotationTable.class);
+            AnnotationTable.class);
 
     private boolean editable = false;
 
-    private ActionButtonCellRenderer deleteButtonRenderer = new ActionButtonCellRenderer(
-        SwingConstants.CENTER);
+    private ActionButtonCellRenderer editCellRenderer = new ActionButtonCellRenderer(SwingConstants.CENTER);
+    private ActionButtonCellRenderer deleteCellRenderer = new ActionButtonCellRenderer(SwingConstants.CENTER);
 
     private ClassBasedTableCellDDR ANNOTATION_RENDERER = new ClassBasedTableCellDDR();
 
@@ -78,6 +72,8 @@ public class AnnotationTable extends JTable {
 
     public AnnotationTable() {
         super(new AnnotationTableModel());
+
+        editCellRenderer.setVisible(true);
 
         TableColumnModel model = getColumnModel();
         model.getColumn(0).setCellRenderer(new DescriptorRenderer());
@@ -93,7 +89,7 @@ public class AnnotationTable extends JTable {
                                         new RExExtractRenderer());
         ANNOTATION_RENDERER.setRenderer(Action.class,
                                         new ActionButtonCellRenderer(
-                                            SwingConstants.LEFT));
+                                                SwingConstants.LEFT));
 
 
         setCellSelectionEnabled(false);
@@ -101,19 +97,22 @@ public class AnnotationTable extends JTable {
         model.getColumn(1).setCellRenderer(ANNOTATION_RENDERER);
 
         model.getColumn(1).setPreferredWidth(256);
-        model.getColumn(1).setCellEditor(
-            AnnotationEditorFactory.getInstance().getTableCellEditor());
-        model.getColumn(2).setCellRenderer(deleteButtonRenderer);
-        model.getColumn(2).setPreferredWidth(32);
+        model.getColumn(1).setCellEditor(AnnotationEditorFactory.getInstance().getTableCellEditor());
+
+        model.getColumn(2).setCellRenderer(editCellRenderer);
+        model.getColumn(2).setPreferredWidth(16);
+
+        model.getColumn(3).setCellRenderer(deleteCellRenderer);
+        model.getColumn(3).setPreferredWidth(32);
 
         CONTROL_RENDERER.setRenderer(Object.class, new ActionButtonCellRenderer(
-            SwingConstants.CENTER));
+                SwingConstants.CENTER));
         CONTROL_RENDERER.setRenderer(Action.class, new ActionButtonCellRenderer(
-            SwingConstants.CENTER));
+                SwingConstants.CENTER));
         CONTROL_RENDERER.setRenderer(StructuralValidity.class,
                                      new StructuralValidityRenderer());
-        model.getColumn(3).setCellRenderer(CONTROL_RENDERER);
-        model.getColumn(3).setPreferredWidth(64);
+        model.getColumn(4).setCellRenderer(CONTROL_RENDERER);
+        model.getColumn(4).setPreferredWidth(64);
 
         addMouseListener(new ActionClickForwarder(this));
 
@@ -131,7 +130,7 @@ public class AnnotationTable extends JTable {
     public void setEditable(boolean editable) {
         this.editable = editable;
         getModel().setEditable(editable);
-        deleteButtonRenderer.setVisible(editable);
+        deleteCellRenderer.setVisible(editable);
         if (!editable) {
             AnnotationEditorFactory.getInstance().getTableCellEditor().cancelCellEditing();
         }

@@ -20,6 +20,7 @@ package uk.ac.ebi.mnb.edit;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.metingear.AppliableEdit;
 import uk.ac.ebi.mnb.interfaces.UndoableEntityEdit;
 
 import javax.swing.undo.CannotRedoException;
@@ -35,7 +36,7 @@ import java.util.Collection;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class ReplaceAnnotationEdit extends UndoableEntityEdit {
+public class ReplaceAnnotationEdit extends UndoableEntityEdit implements AppliableEdit {
 
     private static final Logger LOGGER = Logger.getLogger(ReplaceAnnotationEdit.class);
 
@@ -76,5 +77,10 @@ public class ReplaceAnnotationEdit extends UndoableEntityEdit {
     @Override
     public Collection<AnnotatedEntity> getEntities() {
         return Arrays.asList(entity);
+    }
+
+    @Override public void apply() {
+        entity.removeAnnotation(original);
+        entity.addAnnotation(replacement);
     }
 }
