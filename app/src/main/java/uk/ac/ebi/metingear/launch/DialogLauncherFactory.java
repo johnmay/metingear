@@ -101,6 +101,11 @@ public class DialogLauncherFactory {
                     LOGGER.error("Unable to create dialog: " + c.getSimpleName(), e);
                 }
             }
+            
+            @Override                              
+            protected ControlDialog accessComponent() {
+                return instance;
+            }
 
             @Override
             public void activateActions() {
