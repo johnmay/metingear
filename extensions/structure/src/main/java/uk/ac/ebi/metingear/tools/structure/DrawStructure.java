@@ -49,6 +49,7 @@ public final class DrawStructure extends AbstractControlDialog {
 
     private final JChemPaintPanel panel;
     private       boolean         confirmed;
+    private       boolean         editing;
 
     public DrawStructure(Window window) {
         super(window);
@@ -73,8 +74,9 @@ public final class DrawStructure extends AbstractControlDialog {
         // user pressed okay
         confirmed = true;
 
-        // no selection - can't set the structure for a metabolite
-        if (getSelection(Metabolite.class).isEmpty())
+        // no selection - can't set the structure for a metabolite - also don't
+        // create the annotation if in 'editing' mode
+        if (getSelection(Metabolite.class).isEmpty() || editing)
             return;
 
         Metabolite m = getSelection(Metabolite.class).iterator().next();
@@ -86,7 +88,7 @@ public final class DrawStructure extends AbstractControlDialog {
 
 
     public void setStructure(IAtomContainer input) {
-
+        
         IAtomContainer cpy;
 
         try {
@@ -109,6 +111,8 @@ public final class DrawStructure extends AbstractControlDialog {
                 }
             }
         }
+        
+        editing = true;
 
         IChemModel model = new ChemModel();
         model.setMoleculeSet(new AtomContainerSet());
@@ -131,6 +135,8 @@ public final class DrawStructure extends AbstractControlDialog {
         }
                 
         output.setStereoElements(StereoElementFactory.using2DCoordinates(output).createAll());
+        
+        editing = false;
         
         return output;
     }
