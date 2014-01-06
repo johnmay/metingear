@@ -19,9 +19,14 @@ package uk.ac.ebi.metingear.tools.structure;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
+import org.apache.log4j.Logger;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IStereoElement;
+import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.silent.AtomContainerSet;
 import org.openscience.cdk.silent.ChemModel;
@@ -43,7 +48,7 @@ import java.util.List;
 public final class DrawStructure extends AbstractControlDialog {
 
     private final JChemPaintPanel panel;
-    private boolean confirmed;
+    private       boolean         confirmed;
 
     public DrawStructure(Window window) {
         super(window);
@@ -64,34 +69,58 @@ public final class DrawStructure extends AbstractControlDialog {
     }
 
     @Override public void process() {
-        
+
         // user pressed okay
         confirmed = true;
-        
+
         // no selection - can't set the structure for a metabolite
         if (getSelection(Metabolite.class).isEmpty())
             return;
-        
+
         Metabolite m = getSelection(Metabolite.class).iterator().next();
         Annotation annotation = new AtomContainerAnnotation(getStructure());
         AddAnnotationEdit edit = new AddAnnotationEdit(m, annotation);
         edit.apply();
         addEdit(edit);
     }
-    
-    
+
+
     public void setStructure(IAtomContainer input) {
+
+        IAtomContainer cpy;
+
+        try {
+            cpy = input.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError("CDK object could not be cloned");
+        }
+
+        if (!input.isEmpty() && !GeometryTools.has2DCoordinates(cpy)) {
+            StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+            sdg.setUseTemplates(false); // faster
+            for (IAtomContainer component : ConnectivityChecker.partitionIntoMolecules(cpy)
+                                                               .atomContainers()) {
+                sdg.setMolecule(component, false);
+                try {
+                    sdg.generateCoordinates();
+                } catch (CDKException e) {
+                    Logger.getLogger(getClass()).error("Coordinates could not be generated for a component - structure can not be edited");
+                    return;
+                }
+            }
+        }
+
         IChemModel model = new ChemModel();
         model.setMoleculeSet(new AtomContainerSet());
-        model.getMoleculeSet().addAtomContainer(input);
-        panel.setChemModel(model);    
+        model.getMoleculeSet().addAtomContainer(cpy);
+        panel.setChemModel(model);
     }
-    
+
     public IAtomContainer getStructure() {
-        
+
         if (!confirmed)
             return null;
-        
+
         IChemModel model = panel.getChemModel();
         IAtomContainer output = new AtomContainer();
         List<IStereoElement> stereoElements = new ArrayList<IStereoElement>();
@@ -105,11 +134,12 @@ public final class DrawStructure extends AbstractControlDialog {
         if (Iterables.size(output.stereoElements()) == 0) {
             if (!stereoElements.isEmpty()) {
                 output.setStereoElements(stereoElements);
-            } else {
+            }
+            else {
                 output.setStereoElements(StereoElementFactory.using2DCoordinates(output).createAll());
             }
         }
-        
+
         return output;
     }
 }
