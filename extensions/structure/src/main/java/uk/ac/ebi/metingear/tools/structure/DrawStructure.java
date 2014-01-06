@@ -129,17 +129,9 @@ public final class DrawStructure extends AbstractControlDialog {
             stereoElements.addAll(FluentIterable.from(container.stereoElements())
                                                 .toList());
         }
-
-        // stereo may not currently be set -> check if it was set otherwise set the elements
-        if (Iterables.size(output.stereoElements()) == 0) {
-            if (!stereoElements.isEmpty()) {
-                output.setStereoElements(stereoElements);
-            }
-            else {
-                output.setStereoElements(StereoElementFactory.using2DCoordinates(output).createAll());
-            }
-        }
-
+                
+        output.setStereoElements(StereoElementFactory.using2DCoordinates(output).createAll());
+        
         return output;
     }
 }
