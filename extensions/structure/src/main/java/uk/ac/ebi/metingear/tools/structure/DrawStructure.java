@@ -43,6 +43,7 @@ import java.util.List;
 public final class DrawStructure extends AbstractControlDialog {
 
     private final JChemPaintPanel panel;
+    private boolean confirmed;
 
     public DrawStructure(Window window) {
         super(window);
@@ -59,36 +60,56 @@ public final class DrawStructure extends AbstractControlDialog {
     }
 
     @Override public void prepare() {
-        IChemModel model = new ChemModel();
-        model.setMoleculeSet(new AtomContainerSet());
-        model.getMoleculeSet().addAtomContainer(new AtomContainer(0, 0, 0, 0));
-        panel.setChemModel(model);
+        confirmed = false;
     }
 
     @Override public void process() {
+        
+        // user pressed okay
+        confirmed = true;
+        
+        // no selection - can't set the structure for a metabolite
+        if (getSelection(Metabolite.class).isEmpty())
+            return;
+        
+        Metabolite m = getSelection(Metabolite.class).iterator().next();
+        Annotation annotation = new AtomContainerAnnotation(getStructure());
+        AddAnnotationEdit edit = new AddAnnotationEdit(m, annotation);
+        edit.apply();
+        addEdit(edit);
+    }
+    
+    
+    public void setStructure(IAtomContainer input) {
+        IChemModel model = new ChemModel();
+        model.setMoleculeSet(new AtomContainerSet());
+        model.getMoleculeSet().addAtomContainer(input);
+        panel.setChemModel(model);    
+    }
+    
+    public IAtomContainer getStructure() {
+        
+        if (!confirmed)
+            return null;
+        
         IChemModel model = panel.getChemModel();
-        IAtomContainer base = new AtomContainer();
+        IAtomContainer output = new AtomContainer();
         List<IStereoElement> stereoElements = new ArrayList<IStereoElement>();
         for (IAtomContainer container : model.getMoleculeSet().atomContainers()) {
-            base.add(container);
+            output.add(container);
             stereoElements.addAll(FluentIterable.from(container.stereoElements())
                                                 .toList());
         }
-        
-        // stereo is not currently set -> check if it was set otherwise set the elements
-        if (Iterables.size(base.stereoElements()) == 0) {
+
+        // stereo may not currently be set -> check if it was set otherwise set the elements
+        if (Iterables.size(output.stereoElements()) == 0) {
             if (!stereoElements.isEmpty()) {
-                base.setStereoElements(stereoElements);
+                output.setStereoElements(stereoElements);
             } else {
-                base.setStereoElements(StereoElementFactory.using2DCoordinates(base).createAll());
+                output.setStereoElements(StereoElementFactory.using2DCoordinates(output).createAll());
             }
         }
-
-        Metabolite m = getSelection(Metabolite.class).iterator().next();
-        Annotation annotation = new AtomContainerAnnotation(base);
-        AddAnnotationEdit edit = new AddAnnotationEdit(m, annotation);
-        edit.apply();
-
-        addEdit(edit);
+        
+        return output;
     }
 }
