@@ -18,7 +18,6 @@
 package uk.ac.ebi.metingear.tools.structure;
 
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
@@ -28,8 +27,8 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.AtomContainer;
-import org.openscience.cdk.silent.AtomContainerSet;
-import org.openscience.cdk.silent.ChemModel;
+import org.openscience.cdk.AtomContainerSet;
+import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.stereo.StereoElementFactory;
 import org.openscience.jchempaint.JChemPaintPanel;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
@@ -92,7 +91,8 @@ public final class DrawStructure extends AbstractControlDialog {
         IAtomContainer cpy;
 
         try {
-            cpy = input.clone();
+            // note we need to make sure it's not silent
+            cpy = new org.openscience.cdk.AtomContainer(input.clone());
         } catch (CloneNotSupportedException e) {
             throw new InternalError("CDK object could not be cloned");
         }
