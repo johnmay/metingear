@@ -67,12 +67,15 @@ public final class StructureTable {
 
         table.setComponentPopupMenu(new StructurePopupMenu(table, (DefaultTableModel) table.getModel()));
 
+        table.getColumnModel().getColumn(0).setWidth(256);
+        table.setRowHeight(256);
+        
         return table;
     }
 
     private static TableModel createModel(List<IAtomContainer> containers, List<String> properties) {
-        Object[][] data = new Object[containers.size()][properties.size() + 1];
-        Object[] names = new Object[properties.size() + 1];
+        Object[][] data  = new Object[containers.size()][properties.size() + 1];
+        Object[]   names = new Object[properties.size() + 1];
 
         names[0] = "Structure";
         for (int i = 0; i < properties.size(); i++)
