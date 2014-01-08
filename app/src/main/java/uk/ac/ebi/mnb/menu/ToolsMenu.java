@@ -22,6 +22,7 @@
 package uk.ac.ebi.mnb.menu;
 
 import org.apache.log4j.Logger;
+import org.openscience.cdk.exception.InvalidSmilesException;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
@@ -29,6 +30,7 @@ import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
+import uk.ac.ebi.metingear.tools.structure.StructureTable;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 import uk.ac.ebi.mnb.dialog.tools.AddFlags;
 import uk.ac.ebi.mnb.dialog.tools.AutomaticCrossReference;
@@ -37,7 +39,6 @@ import uk.ac.ebi.mnb.dialog.tools.CollapseStructures;
 import uk.ac.ebi.mnb.dialog.tools.CompareReconstruction;
 import uk.ac.ebi.mnb.dialog.tools.CuratedReconciliation;
 import uk.ac.ebi.mnb.dialog.tools.DownloadStructuresDialog;
-
 import uk.ac.ebi.mnb.dialog.tools.RemoveWorstStructures;
 import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
 import uk.ac.ebi.mnb.dialog.tools.TransferAnnotations;
@@ -45,7 +46,13 @@ import uk.ac.ebi.mnb.dialog.tools.compare.AlignReconstruction;
 import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.mnb.main.MainView;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import java.awt.event.ActionEvent;
 
 
 /**
@@ -57,7 +64,7 @@ public class ToolsMenu extends ContextMenu {
 
     private static final Logger logger = Logger.getLogger(ToolsMenu.class);
 
-    private GapAnalysis gapMenu;
+    private       GapAnalysis gapMenu;
     private final ContextMenu annotation;
 
     private boolean developer = Boolean.getBoolean("metingear.developer");
@@ -142,7 +149,6 @@ public class ToolsMenu extends ContextMenu {
         add(new JSeparator());
 
 
-
         add(create(CollapseStructures.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
@@ -166,6 +172,8 @@ public class ToolsMenu extends ContextMenu {
             }
         });
 
+        
+
         if (developer) {
             add(gapMenu);
             add(new JSeparator());
@@ -179,6 +187,24 @@ public class ToolsMenu extends ContextMenu {
 
                 public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                     return active != null;
+                }
+            });
+            add(new JSeparator());
+            add(new AbstractAction("Amino Acids Table") {
+                @Override public void actionPerformed(ActionEvent e) {
+                    try {
+                        final JFrame frame = new JFrame();
+                        JTable table = StructureTable.aminoAcids();
+                        frame.add(new JScrollPane(table));
+                        frame.pack();
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override public void run() {
+                                frame.setVisible(true);
+                            }
+                        });
+                    } catch (InvalidSmilesException e1) {
+                        System.err.println(e1.getMessage());
+                    }
                 }
             });
         }
