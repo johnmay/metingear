@@ -1,5 +1,6 @@
 package uk.ac.ebi.metingear.tools.structure;
 
+import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -12,27 +13,29 @@ import uk.ac.ebi.mdk.tool.transport.AminoAcid;
 import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 import uk.ac.ebi.mdk.ui.render.table.ChemicalStructureRenderer;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import java.awt.Image;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /** @author John May */
@@ -111,114 +114,123 @@ public final class StructureTable {
     }
 
     private static final class StructurePopupMenu extends JPopupMenu {
+
+        private final JTable            table;
+        private final DefaultTableModel model;
+
         private StructurePopupMenu(final JTable table, final DefaultTableModel model) {
-
-
+            this.table = table;
+            this.model = model;
             add(new AbstractAction("Copy as Unique SMILES") {
                 @Override public void actionPerformed(ActionEvent e) {
-                    Point p = (Point) table.getClientProperty(popupLocation);
-                    if (p != null) { // popup triggered by mouse
-                        int row = table.rowAtPoint(p);
-                        IAtomContainer container = (IAtomContainer) model.getValueAt(row, 0);
-                        try {
-                            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(SmilesGenerator.unique().create(container)), null);
-                        } catch (CDKException ex) {
-
-                        }
-                    }
-                    else { // popup triggered otherwise
-
+                    IAtomContainer container = getSelectedStructure();
+                    if (container == null)
+                        return;
+                    try {
+                        setClipboardText(SmilesGenerator.unique().create(container));
+                    } catch (CDKException ex) {
+                        Logger.getLogger(getClass()).error(ex);
                     }
                 }
             });
             add(new AbstractAction("Copy as Isomeric SMILES (non-canonical)") {
                 @Override public void actionPerformed(ActionEvent e) {
-                    Point p = (Point) table.getClientProperty(popupLocation);
-                    if (p != null) { // popup triggered by mouse
-                        int row = table.rowAtPoint(p);
-                        IAtomContainer container = (IAtomContainer) model.getValueAt(row, 0);
-                        try {
-                            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(SmilesGenerator.isomeric().create(container)), null);
-                        } catch (CDKException ex) {
-
-                        }
-                    }
-                    else { // popup triggered otherwise
-
+                    IAtomContainer container = getSelectedStructure();
+                    if (container == null)
+                        return;
+                    try {
+                        setClipboardText(SmilesGenerator.isomeric().create(container));
+                    } catch (CDKException ex) {
+                        Logger.getLogger(getClass()).error(ex);
                     }
                 }
             });
+
             add(new AbstractAction("Copy as InChI") {
                 @Override public void actionPerformed(ActionEvent e) {
-                    Point p = (Point) table.getClientProperty(popupLocation);
-                    if (p != null) { // popup triggered by mouse
-                        int row = table.rowAtPoint(p);
-                        IAtomContainer container = (IAtomContainer) model.getValueAt(row, 0);
-                        try {
-                            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(InChIGeneratorFactory.getInstance().getInChIGenerator(container).getInchi()), null);
-                        } catch (CDKException ex) {
-
-                        }
-                    }
-                    else { // popup triggered otherwise
-
+                    IAtomContainer container = getSelectedStructure();
+                    if (container == null)
+                        return;
+                    try {
+                        setClipboardText(InChIGeneratorFactory.getInstance().getInChIGenerator(container).getInchi());
+                    } catch (CDKException ex) {
+                        Logger.getLogger(getClass()).error(ex);
                     }
                 }
             });
             add(new AbstractAction("Copy as Molfile") {
                 @Override public void actionPerformed(ActionEvent e) {
-                    Point p = (Point) table.getClientProperty(popupLocation);
-                    if (p != null) { // popup triggered by mouse
-                        int row = table.rowAtPoint(p);
-                        IAtomContainer container = (IAtomContainer) model.getValueAt(row, 0);
-                        try {
-                            StringWriter sw = new StringWriter();
-                            MDLV2000Writer writer = new MDLV2000Writer(sw);
-                            writer.write(container);
-                            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(sw.toString()), null);
-                        } catch (CDKException ex) {
+                    IAtomContainer container = getSelectedStructure();
+                    if (container == null)
+                        return;
+                    try {
+                        StringWriter sw = new StringWriter();
+                        MDLV2000Writer writer = new MDLV2000Writer(sw);
+                        writer.write(container);
+                        setClipboardText(sw.toString());
+                    } catch (CDKException ex) {
+                        Logger.getLogger(getClass()).error(ex);
+                    }
+                }
+            });
+            add(new AbstractAction("Save Image") {
+                @Override public void actionPerformed(ActionEvent e) {
+                    IAtomContainer container = getSelectedStructure();
+                    if (container == null)
+                        return;
+                    try {
+                        BufferedImage img = MoleculeRenderer.getInstance().getImage(container, 512);
+                        JFileChooser jfc = new JFileChooser();
+                        FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG", "png");
+                        jfc.setFileFilter(filter);
 
+                        File home = new File(System.getProperty("user.home"));
+                        File dskt = new File(home, "Desktop");
+
+                        if (dskt.exists())
+                            home = dskt;
+
+                        Date date = new Date();
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy-hh-mm-ss");
+                        String formattedDate = sdf.format(date);
+
+                        jfc.setSelectedFile(new File(home, "Metingear-" + formattedDate + ".png"));
+
+                        int opt = jfc.showSaveDialog(table);
+                        if (opt == JFileChooser.APPROVE_OPTION) {
+                            File f = jfc.getSelectedFile();
+                            String name = f.getAbsolutePath();
+                            String extenstion = name.substring(name.lastIndexOf('.') + 1);
+                            if (!extenstion.equals("png"))
+                                name += ".png";
+                            if (f.exists()) {
+                                if (JOptionPane.CANCEL_OPTION == JOptionPane.showConfirmDialog(table, "The file " + name + " already exists - would you like to overwrite it?"))
+                                    return;
+                            }
+                            ImageIO.write(img, "png", new File(name));
                         }
-                    }
-                    else { // popup triggered otherwise
-
+                    } catch (CDKException ex) {
+                        Logger.getLogger(getClass()).error(ex);
+                    } catch (IOException e1) {
+                        Logger.getLogger(getClass()).error(e1);
                     }
                 }
-            });             
-        }
-    }
-
-    private static class TransferableImage implements Transferable {
-
-        Image i;
-
-        public TransferableImage(Image i) {
-            this.i = i;
+            });
         }
 
-        public Object getTransferData(DataFlavor flavor)
-                throws UnsupportedFlavorException, IOException {
-            if (flavor.equals(DataFlavor.imageFlavor) && i != null) {
-                return i;
+        private void setClipboardText(String text) {
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(text), null);
+        }
+
+        private IAtomContainer getSelectedStructure() {
+            Point p = (Point) table.getClientProperty(popupLocation);
+            if (p != null) { // popup triggered by mouse
+                int row = table.rowAtPoint(p);
+                return (IAtomContainer) model.getValueAt(row, 0);
             }
-            else {
-                throw new UnsupportedFlavorException(flavor);
+            else { // popup triggered otherwise
+                return null;
             }
-        }
-
-        public DataFlavor[] getTransferDataFlavors() {
-            return new DataFlavor[]{DataFlavor.imageFlavor};
-        }
-
-        public boolean isDataFlavorSupported(DataFlavor flavor) {
-            DataFlavor[] flavors = getTransferDataFlavors();
-            for (int i = 0; i < flavors.length; i++) {
-                if (flavor.equals(flavors[i])) {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }
