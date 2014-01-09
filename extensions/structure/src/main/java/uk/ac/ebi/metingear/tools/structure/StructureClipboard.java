@@ -199,12 +199,13 @@ final class StructureClipboard {
      * @param f a file
      */
     private static void setFXClipboard(final File f) {
-        new javafx.embed.swing.JFXPanel(); // init javafx
-        javafx.application.Platform.runLater(new Runnable() {
-            @Override public void run() {
-                javafx.scene.input.Clipboard.getSystemClipboard().setContent(Collections.<javafx.scene.input.DataFormat, Object>singletonMap(javafx.scene.input.DataFormat.FILES, Arrays.asList(f)));
-            }
-        });
+        // TODO: difficulties building with maven
+//        new javafx.embed.swing.JFXPanel(); // init javafx
+//        javafx.application.Platform.runLater(new Runnable() {
+//            @Override public void run() {
+//                javafx.scene.input.Clipboard.getSystemClipboard().setContent(Collections.<javafx.scene.input.DataFormat, Object>singletonMap(javafx.scene.input.DataFormat.FILES, Arrays.asList(f)));
+//            }
+//        });
     }
 
     private static class FileSelection implements Transferable {
