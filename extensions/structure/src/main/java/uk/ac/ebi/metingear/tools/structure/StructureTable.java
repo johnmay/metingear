@@ -1,41 +1,24 @@
 package uk.ac.ebi.metingear.tools.structure;
 
-import org.apache.log4j.Logger;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
-import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import uk.ac.ebi.mdk.tool.transport.AminoAcid;
-import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 import uk.ac.ebi.mdk.ui.render.table.ChemicalStructureRenderer;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /** @author John May */
@@ -69,13 +52,13 @@ public final class StructureTable {
 
         table.getColumnModel().getColumn(0).setWidth(256);
         table.setRowHeight(256);
-        
+
         return table;
     }
 
     private static TableModel createModel(List<IAtomContainer> containers, List<String> properties) {
-        Object[][] data  = new Object[containers.size()][properties.size() + 1];
-        Object[]   names = new Object[properties.size() + 1];
+        Object[][] data = new Object[containers.size()][properties.size() + 1];
+        Object[] names = new Object[properties.size() + 1];
 
         names[0] = "Structure";
         for (int i = 0; i < properties.size(); i++)
@@ -126,103 +109,37 @@ public final class StructureTable {
             this.model = model;
             add(new AbstractAction("Copy as Unique SMILES") {
                 @Override public void actionPerformed(ActionEvent e) {
-                    IAtomContainer container = getSelectedStructure();
-                    if (container == null)
-                        return;
-                    try {
-                        setClipboardText(SmilesGenerator.unique().create(container));
-                    } catch (CDKException ex) {
-                        Logger.getLogger(getClass()).error(ex);
-                    }
+                    StructureClipboard.copyAsUSmiles(getSelectedStructure());
                 }
             });
             add(new AbstractAction("Copy as Isomeric SMILES (non-canonical)") {
                 @Override public void actionPerformed(ActionEvent e) {
-                    IAtomContainer container = getSelectedStructure();
-                    if (container == null)
-                        return;
-                    try {
-                        setClipboardText(SmilesGenerator.isomeric().create(container));
-                    } catch (CDKException ex) {
-                        Logger.getLogger(getClass()).error(ex);
-                    }
+                    StructureClipboard.copyAsIsoSmiles(getSelectedStructure());
                 }
             });
 
             add(new AbstractAction("Copy as InChI") {
                 @Override public void actionPerformed(ActionEvent e) {
-                    IAtomContainer container = getSelectedStructure();
-                    if (container == null)
-                        return;
-                    try {
-                        setClipboardText(InChIGeneratorFactory.getInstance().getInChIGenerator(container).getInchi());
-                    } catch (CDKException ex) {
-                        Logger.getLogger(getClass()).error(ex);
-                    }
+                    StructureClipboard.copyAsInChI(getSelectedStructure());
                 }
             });
             add(new AbstractAction("Copy as Molfile") {
                 @Override public void actionPerformed(ActionEvent e) {
-                    IAtomContainer container = getSelectedStructure();
-                    if (container == null)
-                        return;
-                    try {
-                        StringWriter sw = new StringWriter();
-                        MDLV2000Writer writer = new MDLV2000Writer(sw);
-                        writer.write(container);
-                        setClipboardText(sw.toString());
-                    } catch (CDKException ex) {
-                        Logger.getLogger(getClass()).error(ex);
-                    }
+                    StructureClipboard.copyAsMolfile(getSelectedStructure());
                 }
             });
-            add(new AbstractAction("Save Image") {
+            JMenu menu = new JMenu("Copy as PNG");
+            menu.add(new AbstractAction("256x256") {
                 @Override public void actionPerformed(ActionEvent e) {
-                    IAtomContainer container = getSelectedStructure();
-                    if (container == null)
-                        return;
-                    try {
-                        BufferedImage img = MoleculeRenderer.getInstance().getImage(container, 512);
-                        JFileChooser jfc = new JFileChooser();
-                        FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG", "png");
-                        jfc.setFileFilter(filter);
-
-                        File home = new File(System.getProperty("user.home"));
-                        File dskt = new File(home, "Desktop");
-
-                        if (dskt.exists())
-                            home = dskt;
-
-                        Date date = new Date();
-                        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy-hh-mm-ss");
-                        String formattedDate = sdf.format(date);
-
-                        jfc.setSelectedFile(new File(home, "Metingear-" + formattedDate + ".png"));
-
-                        int opt = jfc.showSaveDialog(table);
-                        if (opt == JFileChooser.APPROVE_OPTION) {
-                            File f = jfc.getSelectedFile();
-                            String name = f.getAbsolutePath();
-                            String extenstion = name.substring(name.lastIndexOf('.') + 1);
-                            if (!extenstion.equals("png"))
-                                name += ".png";
-                            if (f.exists()) {
-                                if (JOptionPane.CANCEL_OPTION == JOptionPane.showConfirmDialog(table, "The file " + name + " already exists - would you like to overwrite it?"))
-                                    return;
-                            }
-                            ImageIO.write(img, "png", new File(name));
-                        }
-                    } catch (CDKException ex) {
-                        Logger.getLogger(getClass()).error(ex);
-                    } catch (IOException e1) {
-                        Logger.getLogger(getClass()).error(e1);
-                    }
+                    StructureClipboard.copyAsPng(getSelectedStructure(), 256);
                 }
             });
-        }
-
-        private void setClipboardText(String text) {
-            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(text), null);
+            menu.add(new AbstractAction("512x512") {
+                @Override public void actionPerformed(ActionEvent e) {
+                    StructureClipboard.copyAsPng(getSelectedStructure(), 512);
+                }
+            });
+            add(menu);
         }
 
         private IAtomContainer getSelectedStructure() {
