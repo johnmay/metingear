@@ -134,6 +134,11 @@
             <artifactId>mdk-apps-io</artifactId>
             <version>${mdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-tool-search-tree</artifactId>
+            <version>${mdk.version}</version>
+        </dependency>
 
 
         <dependency>
