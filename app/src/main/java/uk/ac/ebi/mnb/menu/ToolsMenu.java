@@ -21,10 +21,15 @@
  */
 package uk.ac.ebi.mnb.menu;
 
+import au.com.bytecode.opencsv.CSVWriter;
+import com.google.common.primitives.Doubles;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.Score;
+import org.openscience.cdk.isomorphism.StereoCompatibility;
+import org.openscience.cdk.isomorphism.StructureUtil;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -66,6 +71,9 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -228,19 +236,44 @@ public class ToolsMenu extends ContextMenu {
                             for (Metabolite n : manager.active().metabolome()) {
                                 if (m != n) {
                                     for (ChemicalStructure cs : n.getStructures()) {
-                                        cs.getStructure().setProperty("Name",
-                                                                      n.getName());
-                                        cs.getStructure().setProperty("Id",
-                                                                      n.getIdentifier());
-                                        cs.getStructure().setProperty("Score",
-                                                                      score(query,
-                                                                            cs.getStructure()));
+
+                                        IAtomContainer unsuppressed = cs.getStructure();
+                                        IAtomContainer suppressed = StructureUtil.suppressHydrogens(cs.getStructure());
+                                        Score score = score(query, suppressed);
+                                        if (score == Score.MIN_VALUE)
+                                            continue;
+
+                                        unsuppressed.setProperty("Name",
+                                                                 n.getName());
+                                        unsuppressed.setProperty("Id",
+                                                                 n.getIdentifier());
+                                        unsuppressed.setProperty("Score",
+                                                                 score);
+                                        unsuppressed.setProperty("Score.Value",
+                                                                 score.toDouble());
+                                        unsuppressed.setProperty("Stereo.Comp",
+                                                                 Arrays.toString(score.compatibilities()));
                                         try {
-                                            cs.getStructure().setProperty("SMILES",
-                                                                          SmilesGenerator.isomeric().create(cs.getStructure()));
+                                            unsuppressed.setProperty("SMILES",
+                                                                     SmilesGenerator.isomeric().create(cs.getStructure()));
                                         } catch (CDKException ex) {
-                                            cs.getStructure().setProperty("SMILES",
-                                                                          " " + ex.getMessage());
+                                            unsuppressed.setProperty("SMILES",
+                                                                     " " + ex.getMessage());
+                                        }
+
+                                        if (unsuppressed.getAtomCount() == suppressed.getAtomCount()) {
+                                            int[] ids = new int[unsuppressed.getAtomCount()];
+                                            StereoCompatibility[] compatibilities = score.compatibilities();
+                                            for (int i = 0; i < ids.length; i++) {
+                                                switch (compatibilities[i]) {
+                                                    case Matched:
+                                                        ids[i] = 1;
+                                                    case Missing:
+                                                        ids[i] = 2;
+                                                    case Mismatched:
+                                                        ids[i] = 3;
+                                                }
+                                            }
                                         }
 
                                         structures.add(cs.getStructure());
@@ -248,17 +281,32 @@ public class ToolsMenu extends ContextMenu {
                                 }
                             }
 
-                            Collections.sort(structures, Collections.reverseOrder(new Comparator<IAtomContainer>() {
+                            Collections.sort(structures, new Comparator<IAtomContainer>() {
                                 @Override public int compare(IAtomContainer o1, IAtomContainer o2) {
-                                    Double s1 = o1.getProperty("Score");
-                                    Double s2 = o2.getProperty("Score");
-                                    return s1.compareTo(s2);
+                                    Score s1 = o1.getProperty("Score", Score.class);
+                                    Score s2 = o2.getProperty("Score", Score.class);
+                                    return -Doubles.compare(s1.toDouble(), s2.toDouble());
                                 }
-                            }));
+                            });
 
+                            File f = File.createTempFile(m.getName(), ".csv");
+                            CSVWriter csv = new CSVWriter(new FileWriter(f), ',', '\0', '\0');
+                            for (IAtomContainer structure : structures) {
+                                String smi = structure.getProperty("SMILES");
+                                String name = structure.getProperty("Name");
+                                Score score = structure.getProperty("Score");
+                                csv.writeNext(new String[]{
+                                        String.format("%80s", smi),
+                                        String.format("%30s", name),
+                                        score.toString(),
+                                        String.format("%.2f", score.toDouble())
+                                });
+                            }
+                            csv.close();
+                            System.out.println("writen to: \n" + f.getAbsolutePath());
 
                             final JFrame frame = new JFrame();
-                            JTable table = StructureTable.tableOf(structures, Arrays.asList("Name", "Id", "Score", "SMILES"));
+                            JTable table = StructureTable.tableOf(structures, Arrays.asList("Name", "Id", "Score", "Score.Value", "Stereo.Comp", "SMILES"));
                             table.setSelectionBackground(new Color(0xCCCCCC));
                             table.setSelectionForeground(new Color(0x444444));
                             BufferedImage img = MoleculeRenderer.getInstance().getImage(query, new Rectangle(0, 0, 256, 256));
@@ -272,6 +320,8 @@ public class ToolsMenu extends ContextMenu {
                             });
                         } catch (CDKException ex) {
                             System.err.println(ex);
+                        } catch (IOException e1) {
+                            System.err.println(e1.getMessage());
                         }
 
                     }

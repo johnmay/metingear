@@ -16,11 +16,6 @@
             <groupId>org.openscience.jchempaint</groupId>
             <artifactId>jchempaint-hotfix</artifactId>
             <version>${jchempaint.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>metingear-extension</artifactId>
-            <groupId>${project.groupId}</groupId>
-            <version>${project.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.openscience.cdk</groupId>
@@ -52,6 +47,10 @@
                 </exclusion>
                 <exclusion>
                     <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-ioformats</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
                     <artifactId>cdk-standard</artifactId>
                 </exclusion>
                 <exclusion>
@@ -67,6 +66,11 @@
                     <artifactId>cdk-inchi</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <artifactId>metingear-extension</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <artifactId>metingear-core</artifactId>

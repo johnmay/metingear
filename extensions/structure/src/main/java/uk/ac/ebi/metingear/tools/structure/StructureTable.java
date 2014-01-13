@@ -46,7 +46,7 @@ public final class StructureTable {
         table.getColumnModel().getColumn(0)
              .setCellEditor(null);
         table.getColumnModel().getColumn(0)
-             .setCellRenderer(new ChemicalStructureRenderer());
+             .setCellRenderer(new ChemicalStructureRenderer(true));
 
         table.setComponentPopupMenu(new StructurePopupMenu(table, (DefaultTableModel) table.getModel()));
 
