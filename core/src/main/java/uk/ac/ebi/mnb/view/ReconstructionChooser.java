@@ -18,6 +18,7 @@
 package uk.ac.ebi.mnb.view;
 
 import com.jgoodies.forms.layout.CellConstraints;
+import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
@@ -43,6 +44,7 @@ public class ReconstructionChooser {
     private JPanel component;
     private ReconstructionComboBox combobox = new ReconstructionComboBox();
     private ReconstructionFileChooser chooser;
+    private SpinningDialWaitIndicator waitIndicator = null;
 
     public ReconstructionChooser() {
         chooser = new ReconstructionFileChooser();
@@ -58,7 +60,7 @@ public class ReconstructionChooser {
     }
 
     private JPanel createComponent() {
-        JPanel panel = PanelFactory.createDialogPanel("p, 4dlu, p", "p");
+        final JPanel panel = PanelFactory.createDialogPanel("p, 4dlu, p", "p");
         CellConstraints cc = new CellConstraints();
         panel.add(combobox.getComponent(), cc.xy(1, 1));
         panel.add(ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/browse_16x16.png"),
@@ -67,22 +69,43 @@ public class ReconstructionChooser {
                                                    public void actionPerformed(ActionEvent e) {
 
                                                        int choice = chooser.showOpenDialog(component);
-
-                                                       if (choice == JFileChooser.APPROVE_OPTION) {
-                                                           File file = chooser.getSelectedFile();
-                                                           try {
-
-                                                               Reconstruction reconstruction = ReconstructionIOHelper.read(file);
-
-                                                               DefaultReconstructionManager.getInstance().add(reconstruction);
-                                                               combobox.refresh();
-                                                               combobox.setSelected(reconstruction);
-
-                                                           } catch (IOException ex) {
-                                                               ex.printStackTrace();
-                                                           } catch (ClassNotFoundException ex) {
-                                                               ex.printStackTrace();
+                                                                     
+                                                       SwingUtilities.invokeLater(new Runnable() {
+                                                           @Override public void run() {
+                                                               waitIndicator = new SpinningDialWaitIndicator(panel, "loading...");
                                                            }
+                                                       });
+                                                       
+                                                       if (choice == JFileChooser.APPROVE_OPTION) {
+                                                           final File file = chooser.getSelectedFile();
+                                                           new Thread(new Runnable() {
+                                                               @Override public void run() {
+                                                                   try {
+
+                                                                       final Reconstruction reconstruction = ReconstructionIOHelper.read(file);
+
+                                                                       DefaultReconstructionManager.getInstance().add(reconstruction);
+
+                                                                       SwingUtilities.invokeLater(new Runnable() {
+                                                                           @Override public void run() {
+                                                                               combobox.refresh();
+                                                                               combobox.setSelected(reconstruction);
+                                                                           }
+                                                                       });
+
+                                                                   } catch (IOException ex) {
+                                                                       ex.printStackTrace();
+                                                                   } catch (ClassNotFoundException ex) {
+                                                                       ex.printStackTrace();
+                                                                   } finally {
+                                                                       SwingUtilities.invokeLater(new Runnable() {
+                                                                           @Override public void run() {
+                                                                               waitIndicator.dispose();
+                                                                           }
+                                                                       });
+                                                                   }
+                                                               }
+                                                           }).start();
                                                        }
                                                    }
 
