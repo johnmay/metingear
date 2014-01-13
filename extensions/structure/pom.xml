@@ -87,6 +87,11 @@
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <artifactId>mdk-tool-search-tree</artifactId>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <version>${mdk.version}</version>
+        </dependency>
 
 
         <!-- CAF dependencies -->
