@@ -21,6 +21,52 @@
             <artifactId>metingear-extension</artifactId>
             <groupId>${project.groupId}</groupId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-silent</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-extra</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-libiocml</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-sdg</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-data</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-io</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-standard</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-formula</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-smiles</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.openscience.cdk</groupId>
+                    <artifactId>cdk-inchi</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <artifactId>metingear-core</artifactId>
