@@ -348,7 +348,7 @@ public class ToolsMenu extends ContextMenu {
                             System.out.println("writen to: \n" + f.getAbsolutePath());
 
                             final JFrame frame = new JFrame();
-                            JTable table = StructureTable.tableOf(structures, Arrays.asList("Name", "Id", "Score", "Score.Value", "Stereo.Comp", "SMILES"));
+                            JTable table = StructureTable.tableOf(structures, Arrays.asList("Name", "Id", "Score.Value"));
                             table.setSelectionBackground(new Color(0xCCCCCC));
                             table.setSelectionForeground(new Color(0x444444));
                             BufferedImage img = MoleculeRenderer.getInstance().getImage(query, new Rectangle(0, 0, 256, 256));
