@@ -26,10 +26,13 @@ import com.google.common.primitives.Doubles;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.Pattern;
 import org.openscience.cdk.isomorphism.Score;
 import org.openscience.cdk.isomorphism.StereoCompatibility;
 import org.openscience.cdk.isomorphism.StructureUtil;
+import org.openscience.cdk.renderer.generators.HighlightGenerator;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -79,7 +82,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.openscience.cdk.isomorphism.Scorer.score;
 
@@ -262,18 +267,55 @@ public class ToolsMenu extends ContextMenu {
                                         }
 
                                         if (unsuppressed.getAtomCount() == suppressed.getAtomCount()) {
-                                            int[] ids = new int[unsuppressed.getAtomCount()];
+                                            Map<IAtom, Integer> ids = new HashMap<IAtom, Integer>();
+                                            int[] mapping = score.mapping();
                                             StereoCompatibility[] compatibilities = score.compatibilities();
-                                            for (int i = 0; i < ids.length; i++) {
-                                                switch (compatibilities[i]) {
+
+                                            for (int i = 0; i < mapping.length; i++) {
+                                                IAtom atom = unsuppressed.getAtom(mapping[i]);
+                                                switch (compatibilities[mapping[i]]) {
                                                     case Matched:
-                                                        ids[i] = 1;
+                                                        ids.put(atom, 0);
+                                                        break;
                                                     case Missing:
-                                                        ids[i] = 2;
+                                                        ids.put(atom, 1);
+                                                        break;
                                                     case Mismatched:
-                                                        ids[i] = 3;
+                                                        ids.put(atom, 2);
+                                                        break;
                                                 }
                                             }
+                                            unsuppressed.setProperty(HighlightGenerator.ID_MAP,
+                                                                     ids);
+                                        }
+                                        else if (unsuppressed.getAtomCount() > suppressed.getAtomCount()) {
+                                            
+                                            // need substructure mapping without hydrogen to one with hydrogens
+                                            int[] mapping2 = Pattern.findSubstructure(suppressed)
+                                                                    .matchAll(unsuppressed)
+                                                                    .stereochemistry()
+                                                                    .first();
+                                            
+                                            Map<IAtom, Integer> ids = new HashMap<IAtom, Integer>();
+                                            int[] mapping = score.mapping();
+                                            StereoCompatibility[] compatibilities = score.compatibilities();
+
+                                            for (int i = 0; i < mapping.length; i++) {
+                                                IAtom atom = unsuppressed.getAtom(mapping2[mapping[i]]);
+                                                switch (compatibilities[mapping2[mapping[i]]]) {
+                                                    case Matched:
+                                                        ids.put(atom, 0);
+                                                        break;
+                                                    case Missing:
+                                                        ids.put(atom, 1);
+                                                        break;
+                                                    case Mismatched:
+                                                        ids.put(atom, 2);
+                                                        break;
+                                                }
+                                            }
+                                            unsuppressed.setProperty(HighlightGenerator.ID_MAP,
+                                                                     ids);
                                         }
 
                                         structures.add(cs.getStructure());
