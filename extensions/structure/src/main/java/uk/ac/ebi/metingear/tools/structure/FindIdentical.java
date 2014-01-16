@@ -39,8 +39,6 @@ import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.ui.render.list.DefaultRenderer;
 import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
@@ -65,7 +63,6 @@ import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
@@ -204,13 +201,13 @@ public final class FindIdentical extends AbstractControlDialog {
                             for (int i = 0; i < mapping.length; i++) {
                                 IAtom atom = unsuppressed.getAtom(mapping[i]);
                                 switch (compatibilities[i]) {
-                                    case Matched:
+                                    case MatchedTetrahedral:
                                         ids.put(atom, 0);
                                         break;
-                                    case Missing:
+                                    case UnspecifiedTetrahedralInQuery:
                                         ids.put(atom, 1);
                                         break;
-                                    case Mismatched:
+                                    case MismatchedTetrahedral:
                                         ids.put(atom, 2);
                                         break;
                                 }
@@ -233,13 +230,13 @@ public final class FindIdentical extends AbstractControlDialog {
                             for (int i = 0; i < mapping.length; i++) {
                                 IAtom atom = unsuppressed.getAtom(mapping2[mapping[i]]);
                                 switch (compatibilities[i]) {
-                                    case Matched:
+                                    case MatchedTetrahedral:
                                         ids.put(atom, 0);
                                         break;
-                                    case Missing:
+                                    case UnspecifiedTetrahedralInQuery:
                                         ids.put(atom, 1);
                                         break;
-                                    case Mismatched:
+                                    case MismatchedTetrahedral:
                                         ids.put(atom, 2);
                                         break;
                                 }
