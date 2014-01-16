@@ -200,14 +200,14 @@ public final class FindIdentical extends AbstractControlDialog {
 
                             for (int i = 0; i < mapping.length; i++) {
                                 IAtom atom = unsuppressed.getAtom(mapping[i]);
-                                switch (compatibilities[i]) {
-                                    case MatchedTetrahedral:
+                                switch (compatibilities[i].state()) {
+                                    case Same:
                                         ids.put(atom, 0);
                                         break;
-                                    case UnspecifiedTetrahedralInQuery:
+                                    case Unspecified:
                                         ids.put(atom, 1);
                                         break;
-                                    case MismatchedTetrahedral:
+                                    case Different:
                                         ids.put(atom, 2);
                                         break;
                                 }
@@ -229,14 +229,14 @@ public final class FindIdentical extends AbstractControlDialog {
 
                             for (int i = 0; i < mapping.length; i++) {
                                 IAtom atom = unsuppressed.getAtom(mapping2[mapping[i]]);
-                                switch (compatibilities[i]) {
-                                    case MatchedTetrahedral:
+                                switch (compatibilities[i].state()) {
+                                    case Same:
                                         ids.put(atom, 0);
                                         break;
-                                    case UnspecifiedTetrahedralInQuery:
+                                    case Unspecified:
                                         ids.put(atom, 1);
                                         break;
-                                    case MismatchedTetrahedral:
+                                    case Different:
                                         ids.put(atom, 2);
                                         break;
                                 }
