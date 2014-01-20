@@ -19,7 +19,7 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.ACPAssociated;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
-import uk.ac.ebi.mdk.domain.annotation.Lumped;
+import uk.ac.ebi.mdk.domain.annotation.Virtual;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
@@ -66,7 +66,7 @@ public class MetaboliteTableModel
                                  DataType.FIXED,
                                  StructuralValidity.class),
             new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class),
-            new ColumnDescriptor(Lumped.getInstance()),
+            new ColumnDescriptor(Virtual.getInstance()),
             new ColumnDescriptor(ACPAssociated.getInstance())
     };
 
@@ -116,14 +116,15 @@ public class MetaboliteTableModel
             edit.addEdit(new AddAnnotationEdit(entity, (Collection<Annotation>) value));
             edit.end();
             // apply the edit
-            for(Annotation annotation : annotations){
+            for (Annotation annotation : annotations) {
                 entity.removeAnnotation(annotation);
             }
             entity.addAnnotations((Collection<Annotation>) value);
             MainView.getInstance().getUndoManager().addEdit(edit);
             update(entity);
             return;
-        } else if (getColumnClass(columnIndex) == Rating.class) {
+        }
+        else if (getColumnClass(columnIndex) == Rating.class) {
             AnnotatedEntity entity = getEntity(rowIndex);
             entity.setRating((StarRating) value);
             update(entity);
