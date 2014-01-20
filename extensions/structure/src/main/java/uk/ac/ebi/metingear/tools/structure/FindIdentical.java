@@ -244,7 +244,6 @@ public final class FindIdentical extends AbstractControlDialog {
                             unsuppressed.setProperty(HighlightGenerator.ID_MAP,
                                                      ids);
                         }
-
                         structures.add(cs.getStructure());
                     }
                 }
