@@ -19,7 +19,7 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.ACPAssociated;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
-import uk.ac.ebi.mdk.domain.annotation.Virtual;
+import uk.ac.ebi.mdk.domain.annotation.Lumped;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
@@ -66,7 +66,7 @@ public class MetaboliteTableModel
                                  DataType.FIXED,
                                  StructuralValidity.class),
             new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class),
-            new ColumnDescriptor(Virtual.getInstance()),
+            new ColumnDescriptor(Lumped.getInstance()),
             new ColumnDescriptor(ACPAssociated.getInstance())
     };
 

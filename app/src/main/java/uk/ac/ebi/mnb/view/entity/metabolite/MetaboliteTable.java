@@ -18,7 +18,7 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.ACPAssociated;
-import uk.ac.ebi.mdk.domain.annotation.Virtual;
+import uk.ac.ebi.mdk.domain.annotation.Lumped;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -65,7 +65,7 @@ public class MetaboliteTable
 
         setDefaultRenderer(MolecularFormula.class,
                            annotationRenderer);
-        setDefaultRenderer(Virtual.class,
+        setDefaultRenderer(Lumped.class,
                            annotationRenderer);
         setDefaultRenderer(ACPAssociated.class,
                            annotationRenderer);

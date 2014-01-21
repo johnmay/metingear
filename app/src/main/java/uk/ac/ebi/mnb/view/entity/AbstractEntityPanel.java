@@ -29,6 +29,7 @@ import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.observation.MetaboliteMatch;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.domain.observation.ObservationCollection;
 import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
@@ -158,6 +159,7 @@ public abstract class AbstractEntityPanel
 
         OBSERVATION_CELL_RENDERER = new ClassBasedListCellDDR();
         OBSERVATION_CELL_RENDERER.setRenderer(LocalAlignment.class, new LocalAlignmentListCellRenderer());
+        OBSERVATION_CELL_RENDERER.setRenderer(MetaboliteMatch.class, new LocalAlignmentListCellRenderer());
 
         observationList.setCellRenderer(OBSERVATION_CELL_RENDERER);
 
