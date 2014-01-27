@@ -29,12 +29,13 @@ import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
-import uk.ac.ebi.mdk.domain.observation.MetaboliteMatch;
+import uk.ac.ebi.mdk.domain.observation.MatchedEntity;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.domain.observation.ObservationCollection;
 import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 import uk.ac.ebi.mdk.ui.render.list.ClassBasedListCellDDR;
 import uk.ac.ebi.mdk.ui.render.list.LocalAlignmentListCellRenderer;
+import uk.ac.ebi.mdk.ui.render.list.MatchedEntityRenderer;
 import uk.ac.ebi.mnb.dialog.popup.AlignmentViewer;
 import uk.ac.ebi.mnb.edit.AbbreviationEdit;
 import uk.ac.ebi.mnb.edit.AccessionEdit;
@@ -159,7 +160,7 @@ public abstract class AbstractEntityPanel
 
         OBSERVATION_CELL_RENDERER = new ClassBasedListCellDDR();
         OBSERVATION_CELL_RENDERER.setRenderer(LocalAlignment.class, new LocalAlignmentListCellRenderer());
-        OBSERVATION_CELL_RENDERER.setRenderer(MetaboliteMatch.class, new LocalAlignmentListCellRenderer());
+        OBSERVATION_CELL_RENDERER.setRenderer(MatchedEntity.class, new MatchedEntityRenderer());
 
         observationList.setCellRenderer(OBSERVATION_CELL_RENDERER);
 
