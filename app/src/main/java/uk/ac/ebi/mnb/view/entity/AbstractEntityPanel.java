@@ -340,12 +340,12 @@ public abstract class AbstractEntityPanel
                 observationModel.removeAllElements();
                 ObservationCollection collection = ((AbstractAnnotatedEntity) entity).getObservationCollection();
 
-                Collection<Observation> observationCollection = collection.get(LocalAlignment.class);
-                if (!observationCollection.isEmpty()) {
-                    LOGGER.debug("Displying " + observationCollection.size() + " observations");
+                Collection<Observation> observations = collection.getAll();
+                if (!observations.isEmpty()) {
+                    LOGGER.debug("Displying " + observations.size() + " observations");
                 }
 
-                for (Observation observation : observationCollection) {
+                for (Observation observation : observations) {
                     observationModel.addElement(observation);
                 }
 
