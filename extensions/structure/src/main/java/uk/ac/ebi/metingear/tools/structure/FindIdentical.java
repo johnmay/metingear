@@ -39,6 +39,8 @@ import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.observation.MatchedEntity;
 import uk.ac.ebi.mdk.ui.render.list.DefaultRenderer;
 import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
@@ -269,8 +271,15 @@ public final class FindIdentical extends AbstractControlDialog {
                         score.toString(),
                         String.format("%.2f", score.toDouble())
                 });
+                
+                
+                // add observation
+                m.addObservation(new MatchedEntity(reference.getIdentifier(),
+                                                   structure.getProperty("Id", Identifier.class)));
             }
             csv.close();
+
+           
             System.out.println("writen to: \n" + f.getAbsolutePath());
 
             final JFrame frame = new JFrame();
