@@ -116,6 +116,8 @@ public abstract class AbstractEntityPanel
     private List<JButton> removeAnnotationButtons = new ArrayList<JButton>();
 
     private boolean editable;
+    
+    private final MatchedEntityRenderer matchRenderer = new MatchedEntityRenderer();
 
     public AbstractEntityPanel(String type) {
 
@@ -160,7 +162,7 @@ public abstract class AbstractEntityPanel
 
         OBSERVATION_CELL_RENDERER = new ClassBasedListCellDDR();
         OBSERVATION_CELL_RENDERER.setRenderer(LocalAlignment.class, new LocalAlignmentListCellRenderer());
-        OBSERVATION_CELL_RENDERER.setRenderer(MatchedEntity.class, new MatchedEntityRenderer());
+        OBSERVATION_CELL_RENDERER.setRenderer(MatchedEntity.class, matchRenderer);
 
         observationList.setCellRenderer(OBSERVATION_CELL_RENDERER);
 
@@ -350,6 +352,8 @@ public abstract class AbstractEntityPanel
                 }
 
             }
+            
+            matchRenderer.setSubject(entity);
 
             annotationTable.getModel().fireTableDataChanged();
 
