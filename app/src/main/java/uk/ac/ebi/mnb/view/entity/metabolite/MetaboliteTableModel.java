@@ -17,6 +17,8 @@
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.utility.font.EBIIcon;
+import uk.ac.ebi.caf.utility.font.IconBuilder;
 import uk.ac.ebi.mdk.domain.annotation.ACPAssociated;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.Lumped;
@@ -28,6 +30,8 @@ import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.StarRating;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.observation.MatchedEntity;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
 import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 import uk.ac.ebi.mnb.edit.RemoveAnnotationEdit;
@@ -36,7 +40,9 @@ import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
 
+import javax.swing.ImageIcon;
 import javax.swing.undo.CompoundEdit;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -65,6 +71,9 @@ public class MetaboliteTableModel
             new ColumnDescriptor("Validity", null,
                                  DataType.FIXED,
                                  StructuralValidity.class),
+            new ColumnDescriptor("Match", null,
+                                 DataType.FIXED,
+                                 ImageIcon.class),
             new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class),
             new ColumnDescriptor(Lumped.getInstance()),
             new ColumnDescriptor(ACPAssociated.getInstance())
@@ -143,11 +152,24 @@ public class MetaboliteTableModel
         if (name.equals(DEFAULT[0].getName())) {
 
             return entity.isGeneric();
-        } else if (name.equals("Rating")) {
+        }
+        else if (name.equals("Rating")) {
             return component.getRating();
 
-        } else if (name.equals("Validity")) {
+        }
+        else if (name.equals("Validity")) {
             return StructuralValidity.getValidity(entity);
+        } else if (name.equals("Match")) {
+            Collection<Observation> matches = entity.getObservations(MatchedEntity.class);
+            IconBuilder builder = EBIIcon.DATABASE_CROSSLINK.create();
+            if (matches.isEmpty()) {
+                builder.color(new Color(0xFF8B91));
+            } else if (matches.size() == 1) {
+                builder.color(new Color(0xA2FF90));
+            } else {
+                builder.color(new Color(0xB6C1FF));
+            }
+            return builder.icon();
         }
 
         return "NA";
