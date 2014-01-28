@@ -31,16 +31,16 @@ import uk.ac.ebi.optimise.gap.GapFind;
 
 import java.util.logging.Level;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author johnmay
- */
+/** @author johnmay */
 public class GapFindTest {
     private static final Logger LOGGER = Logger.getLogger(GapFindTest.class);
 
-    private BasicStoichiometricMatrix s;
-    private static Boolean runnable;
+    private        BasicStoichiometricMatrix s;
+    private static Boolean                   runnable;
 
     @BeforeClass
     public static void setup() {
@@ -60,12 +60,13 @@ public class GapFindTest {
 
     /**
      * Tests fig.1 holds from BMC Bioinformatics 2007, 8:212
-     http://www.biomedcentral.com/1471-2105/8/212
+     * http://www.biomedcentral.com/1471-2105/8/212
+     *
      * @throws Exception
      */
     @Test public void paperFig1Test_a() throws Exception {
 
-        if(!runnable) return;
+        if (!runnable) return;
 
         BasicStoichiometricMatrix s2 = BasicStoichiometricMatrix.create(5, 5);
         s2.addReaction("A => ?", false);
@@ -79,22 +80,22 @@ public class GapFindTest {
 
         GapFind gf = new GapFind(s2);
         System.out.println("Non-production:");
-        for(Integer i : gf.getUnproducedMetabolites()){
+        for (Integer i : gf.getUnproducedMetabolites()) {
             System.out.print(s2.getMolecule(i) + "\t");
             System.out.println(gf.isProduced(i) ? "" : "*");
         }
         System.out.println("Non-consumption:");
-        for(Integer i : gf.getUnconsumedMetabolites()){
+        for (Integer i : gf.getUnconsumedMetabolites()) {
             System.out.print(s2.getMolecule(i) + "\t");
             System.out.println(gf.isConsumed(i) ? "" : "*");
         }
 
 
-
     }
+
     @Test public void paperFig1Test_b() throws Exception {
 
-        if(!runnable) return;
+        if (!runnable) return;
 
         BasicStoichiometricMatrix s2 = BasicStoichiometricMatrix.create(5, 5);
         s2.addReaction("D => B", false);
@@ -109,12 +110,12 @@ public class GapFindTest {
 
         GapFind gf = new GapFind(s2);
         System.out.println("Non-production:");
-        for(Integer i : gf.getUnproducedMetabolites()){
+        for (Integer i : gf.getUnproducedMetabolites()) {
             System.out.print(s2.getMolecule(i) + "\t");
             System.out.println(gf.isProduced(i) ? "" : "*");
         }
         System.out.println("Non-consumption:");
-        for(Integer i : gf.getUnconsumedMetabolites()){
+        for (Integer i : gf.getUnconsumedMetabolites()) {
             System.out.print(s2.getMolecule(i) + "\t");
             System.out.println(gf.isConsumed(i) ? "" : "*");
         }
@@ -122,9 +123,7 @@ public class GapFindTest {
 
     }
 
-    /**
-     * Test of findNonProductionMetabolites method, of class DeadEndDetector.
-     */
+    /** Test of findNonProductionMetabolites method, of class DeadEndDetector. */
     @Test
     public void testFindNonProductionMetabolites()
             throws Exception {
@@ -138,11 +137,9 @@ public class GapFindTest {
         GapFind gf = new GapFind(s);
         Integer[] unproduced = gf.getUnproducedMetabolites();
 
-        assertEquals(5, unproduced.length);
+        assertEquals(4, unproduced.length);
 
-        for (Integer i = 0; i < unproduced.length; i++) {
-            assertEquals(unproduced[i], i);
-        }
+        assertThat(unproduced, is(new Integer[]{0, 1, 2, 3}));
 
         // allow influx of A
         s.addReaction(new String[0],
@@ -154,9 +151,7 @@ public class GapFindTest {
         assertEquals(0, unproduced.length);
     }
 
-    /**
-     * Test of findNonConsumptionMetabolites method, of class DeadEndDetector.
-     */
+    /** Test of findNonConsumptionMetabolites method, of class DeadEndDetector. */
     @Test
     public void testFindNonConsumptionMetabolites()
             throws Exception {
@@ -169,28 +164,23 @@ public class GapFindTest {
         GapFind gf = new GapFind(s);
         Integer[] unconsumed = gf.getUnconsumedMetabolites();
 
-        assertEquals(5, unconsumed.length);
+        assertEquals(4, unconsumed.length);
 
-        for (Integer i = 0; i < unconsumed.length; i++) {
-            assertEquals(unconsumed[i], i);
+        for (Integer i = 1; i < unconsumed.length; i++) {
+            assertEquals(unconsumed[i - 1], i);
         }
 
         // drain E
         s.addReaction(new String[]{"E"},
                       new String[0]);
-        s.addReaction( new String[]{ "F" } , new String[ 0 ] );
+        s.addReaction(new String[]{"F"}, new String[0]);
         gf = new GapFind(s);
         unconsumed = gf.getUnconsumedMetabolites();
 
-        // should only be 1 which is F
-        assertEquals(1, unconsumed.length);
-        assertEquals("F",
-                     s.getMolecule(unconsumed[0]));
+        assertEquals(0, unconsumed.length);
     }
 
-    /**
-     * Test of getTerminalNCMetabolites method, of class DeadEndDetector.
-     */
+    /** Test of getTerminalNCMetabolites method, of class DeadEndDetector. */
     @Test
     public void testRoot() {
         if (!runnable) return;
@@ -207,7 +197,7 @@ public class GapFindTest {
 
             // product A via exchange reaction
             s.addReaction(new String[0],
-                          new String[]{"A"}    );
+                          new String[]{"A"});
             gf = new GapFind(s);
             root = gf.getRootUnproducedMetabolites();
 
@@ -218,9 +208,7 @@ public class GapFindTest {
         }
     }
 
-    /**
-     * Test of getRootNPMetabolites method, of class DeadEndDetector.
-     */
+    /** Test of getRootNPMetabolites method, of class DeadEndDetector. */
     @Test
     public void testTerminal() {
         if (!runnable) return;
