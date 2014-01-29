@@ -139,11 +139,14 @@ public final class FindIdentical extends AbstractControlDialog {
     @Override public void prepare() {
         metabolite = getSelection(Metabolite.class).iterator().next();
         Collection<ChemicalStructure> structures = metabolite.getStructures();
-        ChemicalStructure[] cs = structures.toArray(new ChemicalStructure[structures.size()]);
-        structureSelection.setModel(new DefaultComboBoxModel<ChemicalStructure>(cs));
+        ChemicalStructure[] css = structures.toArray(new ChemicalStructure[structures.size()]);
+        DefaultComboBoxModel model = new DefaultComboBoxModel<ChemicalStructure>();
+        for (ChemicalStructure cs : css)
+            model.addElement(cs);
+        structureSelection.setModel(model);
         structureSelection.setSelectedIndex(0);
-        showSelected(cs[0]);
-        structureSelection.setEnabled(cs.length > 1);
+        showSelected(css[0]);
+        structureSelection.setEnabled(css.length > 1);
         pack();
     }
 
