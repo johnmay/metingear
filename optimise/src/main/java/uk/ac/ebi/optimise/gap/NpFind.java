@@ -10,6 +10,7 @@ import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.metabolite.CompartmentalisedMetabolite;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.matrix.DefaultStoichiometricMatrix;
@@ -191,6 +192,14 @@ final class NpFind {
         System.out.println("[GapFind] Openning: " + path + "...");
         Reconstruction recon = ReconstructionIOHelper.read(new File(path));
         System.out.println("[GapFind] done");
+        
+        Set<MetabolicReaction> remove = new HashSet<MetabolicReaction>();
+        for (MetabolicReaction rxn : recon.reactome()) {
+            if (rxn.getParticipantCount() == 1) {
+                rxn.setDirection(Direction.BIDIRECTIONAL);       
+            }
+        }
+        
         System.out.print("[GapFind] Creating fromulation...");
         NpFind dnpm = new NpFind(recon);
         System.out.println("done");
