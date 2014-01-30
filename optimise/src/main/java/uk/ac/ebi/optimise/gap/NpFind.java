@@ -34,7 +34,7 @@ final class NpFind {
 
     private IloIntVar[] xnp; // binary variable for maximising
 
-    private IloIntVar[][] w; // binary matrix - active reactions
+    private SparseIloBoolMatrix w; // binary matrix - active reactions
 
     private final DefaultStoichiometricMatrix s;
 
@@ -65,10 +65,8 @@ final class NpFind {
                               -100,
                               100);
 
-        w = new IloIntVar[s.getMoleculeCount()][0];
-        for (int i = 0; i < s.getMoleculeCount(); i++)
-            w[i] = cplex.boolVarArray(s.getReactionCount());
-
+        w = new SparseIloBoolMatrix(cplex);
+        
         assignedCompartments();
 
         binaryCons();
@@ -105,7 +103,7 @@ final class NpFind {
             for (int j = 0; j < s.getReactionCount(); j++) {
                 // Sij > 0 and member of IR or Sij != 0 and member of Rev
                 if (s.isReversible(j) ? s.get(i, j) != 0 : s.get(i, j) > 0) {
-                    exp.addTerm(1, w[i][j]);
+                    exp.addTerm(1, w.get(i, j));
                 }
             }
             cplex.addGe(exp,
@@ -158,10 +156,10 @@ final class NpFind {
                     continue;
                 cplex.addGe(v[j],
                             cplex.prod(e,
-                                       w[i][j]));
+                                       w.get(i, j)));
                 cplex.addLe(v[j],
                             cplex.prod(E,
-                                       w[i][j]));
+                                       w.get(i, j)));
             }
         }
     }
@@ -178,11 +176,11 @@ final class NpFind {
                                        v[j]),
                             cplex.sum(e,
                                       cplex.negative(cplex.prod(E,
-                                                                cplex.sum(1, cplex.negative(w[i][j]))))));
+                                                                cplex.sum(1, cplex.negative(w.get(i, j)))))));
                 cplex.addLe(cplex.prod(s.get(i, j),
                                        v[j]),
                             cplex.prod(E,
-                                       w[i][j]));
+                                       w.get(i, j)));
             }
         }
     }
@@ -201,7 +199,7 @@ final class NpFind {
         System.out.println(np.size() + " Non-production metabolites");
         Set<String> abrvs = new TreeSet<String>();
         for (Metabolite m : np) {
-            abrvs.add(m.getAbbreviation());    
+            abrvs.add(m.getAbbreviation() + " " + m.getName());    
         }
         for (String abrv : abrvs)
             System.out.println(abrv);
