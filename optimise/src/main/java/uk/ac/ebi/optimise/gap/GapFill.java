@@ -72,7 +72,7 @@ public class GapFill<M, R> {
      * vector indicates whether database reaction j resolves gap v: flux vector
      *
      */
-    private IloIntVar[][] w;
+    private SparseIloBoolMatrix w;
 
     private IloIntVar[] y;
 
@@ -111,11 +111,8 @@ public class GapFill<M, R> {
         // intialise variables here...        
         v = solver.numVarArray(combined.getReactionCount(), -100, 100);
         y = solver.boolVarArray(combined.getReactionCount()); // - modelMap.size()
-        w = new IloIntVar[combined.getMoleculeCount()][combined.getReactionCount()];
-        for (int i = 0; i < combined.getMoleculeCount(); i++) {
-            w[i] = solver.boolVarArray(combined.getReactionCount());
-        }
-
+        w = new SparseIloBoolMatrix(solver);
+        
         // intialise constraints
 
         // constrain flux
@@ -204,6 +201,7 @@ public class GapFill<M, R> {
 
         model.addReaction(new String[]{"C"}, new String[0], true);
 
+        
         //model.addReaction("B => D", false);
 //        model.addReaction("D => E", false);
         //model.addReaction("E => F", false);

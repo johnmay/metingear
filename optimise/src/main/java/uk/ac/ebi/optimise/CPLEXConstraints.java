@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrixImpl;
+import uk.ac.ebi.optimise.gap.SparseIloBoolMatrix;
 
 
 /**
@@ -81,6 +82,41 @@ public class CPLEXConstraints {
                                           solver.prod(1000, w[i][j]))); // 1000*wij        
 
                 production.add(w[i][j]);
+
+            }
+
+
+        }
+
+        constraints.add(solver.ge(solver.sum(production.toArray(new IloIntVar[0])), 1));
+
+        return constraints.toArray(new IloAddable[0]);
+
+
+    }
+    
+    public static final IloAddable[] getProductionConstraints(StoichiometricMatrix<?,?> s, IloNumVar[] v, SparseIloBoolMatrix w, int i) throws IloException {
+
+        List<IloIntVar> production = new ArrayList<IloIntVar>();
+        List<IloAddable> constraints = new ArrayList<IloAddable>();
+
+        for (int j = 0; j < s.getReactionCount(); j++) {
+
+            if (s.get(i, j) != 0) {
+
+                // min production limit
+                constraints.add(solver.ge(solver.prod(s.get(i, j).intValue(),
+                                                      v[j]), // Sijvj
+                                          solver.sum(1,
+                                                     solver.negative(solver.prod(1000,
+                                                                                 solver.sum(1,
+                                                                                            solver.negative(w.get(i, j)))))))); // 1-1000*(1-wij)
+                // max production limit
+                constraints.add(solver.le(solver.prod(s.get(i, j).intValue(),
+                                                      v[j]), // Sijvj
+                                          solver.prod(1000, w.get(i, j)))); // 1000*wij        
+
+                production.add(w.get(i, j));
 
             }
 
