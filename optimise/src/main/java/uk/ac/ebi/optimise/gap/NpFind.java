@@ -1,5 +1,6 @@
 package uk.ac.ebi.optimise.gap;
 
+import com.google.common.base.Function;
 import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
 import ilog.concert.IloLinearIntExpr;
@@ -10,10 +11,12 @@ import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.metabolite.CompartmentalisedMetabolite;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.matrix.DefaultStoichiometricMatrix;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.optimise.SimulationUtil;
 
 import java.io.File;
@@ -27,7 +30,7 @@ import java.util.TreeSet;
  *
  * @author John May
  */
-final class NpFind {
+final class NpFind<M, R> {
 
     private IloCplex cplex;
 
@@ -37,22 +40,18 @@ final class NpFind {
 
     private SparseIloBoolMatrix w; // binary matrix - active reactions
 
-    private final DefaultStoichiometricMatrix s;
+    private final StoichiometricMatrix<M, R> s;
 
     private final BitSet cytosol, extracellular;
 
-    private final Reconstruction recon;
+    private final Function<M, Compartment> fCompartment;
 
-    NpFind(Reconstruction recon) throws Exception {
+    NpFind(StoichiometricMatrix<M, R> s, Function<M, Compartment> fCompartment) throws Exception {
 
         SimulationUtil.setup();
-        this.recon = recon;
         this.cplex = new IloCplex();
-
-        s = DefaultStoichiometricMatrix.create(5 * (recon.metabolome().size() / 3), // 1 2/3
-                                               recon.reactome().size());
-        for (MetabolicReaction rxn : recon.reactome())
-            s.addReaction(rxn);
+        this.s = s;
+        this.fCompartment = fCompartment;
 
         cytosol = new BitSet(s.getMoleculeCount());
         extracellular = new BitSet(s.getMoleculeCount());
@@ -67,7 +66,7 @@ final class NpFind {
                               100);
 
         w = new SparseIloBoolMatrix(cplex);
-        
+
         assignedCompartments();
 
         binaryCons();
@@ -86,14 +85,14 @@ final class NpFind {
 
     }
 
-    Set<Metabolite> solve() throws Exception {
+    Set<M> solve() throws Exception {
         cplex.solve();
         int n = 0;
-        Set<Metabolite> ms = new HashSet<Metabolite>();
+        Set<M> ms = new HashSet<M>();
         double[] xSolutions = cplex.getValues(xnp);
         for (int i = 0; i < s.getMoleculeCount(); i++) {
             if (xSolutions[i] == 0)
-                ms.add(s.getMolecule(i).metabolite);
+                ms.add(s.getMolecule(i));
         }
         return ms;
     }
@@ -116,10 +115,10 @@ final class NpFind {
         // note we don't really need to do this but for now it ensure we don't
         // have other compartments being provided
         for (int i = 0; i < s.getMoleculeCount(); i++) {
-            CompartmentalisedMetabolite m = s.getMolecule(i);
-            if (m.compartment == Organelle.CYTOPLASM)
+            Compartment c = fCompartment.apply(s.getMolecule(i));
+            if (c == Organelle.CYTOPLASM)
                 cytosol.set(i);
-            else if (m.compartment == Organelle.EXTRACELLULAR)
+            else if (c == Organelle.EXTRACELLULAR)
                 extracellular.set(i);
             else
                 throw new UnsupportedOperationException("Only reconstructions with cytosol and extracellular are supported.");
@@ -192,23 +191,28 @@ final class NpFind {
         System.out.println("[GapFind] Openning: " + path + "...");
         Reconstruction recon = ReconstructionIOHelper.read(new File(path));
         System.out.println("[GapFind] done");
-        
-        Set<MetabolicReaction> remove = new HashSet<MetabolicReaction>();
+
+        DefaultStoichiometricMatrix s = DefaultStoichiometricMatrix.create(2000, 2000);
         for (MetabolicReaction rxn : recon.reactome()) {
             if (rxn.getParticipantCount() == 1) {
-                rxn.setDirection(Direction.BIDIRECTIONAL);       
+                rxn.setDirection(Direction.BIDIRECTIONAL);
             }
-        }
-        
+            s.addReaction(rxn);
+        }      
+
         System.out.print("[GapFind] Creating fromulation...");
-        NpFind dnpm = new NpFind(recon);
+        NpFind<CompartmentalisedMetabolite, String> dnpm = new NpFind<CompartmentalisedMetabolite, String>(s, new Function<CompartmentalisedMetabolite, Compartment>() {
+            @Override public Compartment apply(CompartmentalisedMetabolite cm) {
+                return cm.compartment;
+            }
+        });
         System.out.println("done");
         System.out.println("[GapFind] Solving");
-        Set<Metabolite> np = dnpm.solve();
+        Set<CompartmentalisedMetabolite> np = dnpm.solve();
         System.out.println(np.size() + " Non-production metabolites");
         Set<String> abrvs = new TreeSet<String>();
-        for (Metabolite m : np) {
-            abrvs.add(m.getAbbreviation() + " " + m.getName());    
+        for (CompartmentalisedMetabolite m : np) {
+            abrvs.add(m.metabolite.getAbbreviation() + " " + m.metabolite.getName());
         }
         for (String abrv : abrvs)
             System.out.println(abrv);
