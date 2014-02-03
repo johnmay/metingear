@@ -120,14 +120,11 @@ public class CPLEXConstraints {
 
             }
 
-
         }
 
         constraints.add(solver.ge(solver.sum(production.toArray(new IloIntVar[0])), 1));
 
         return constraints.toArray(new IloAddable[0]);
-
-
     }
 
 
