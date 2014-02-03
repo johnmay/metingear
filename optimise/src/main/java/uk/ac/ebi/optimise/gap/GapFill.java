@@ -98,6 +98,10 @@ public class GapFill<M, R> {
         databaseMap = combined.assign(database);
         modelMap    = combined.assign(model);
 
+        System.out.println("model: " + model.getReactionCount());
+        System.out.println("database: " + database.getReactionCount());
+        System.out.println("combined: " + combined.getReactionCount());
+
         // remove intersect from database
         for (Integer j : modelMap.values()) {
             databaseMap.remove(j);
@@ -105,14 +109,17 @@ public class GapFill<M, R> {
 
         SimulationUtil.setup();
 
+       
+    }
+    
+    private final void init() throws IloException {
         this.solver = new IloCplex();
-
 
         // intialise variables here...        
         v = solver.numVarArray(combined.getReactionCount(), -100, 100);
         y = solver.boolVarArray(combined.getReactionCount()); // - modelMap.size()
         w = new SparseIloBoolMatrix(solver);
-        
+
         // intialise constraints
 
         // constrain flux
@@ -149,6 +156,8 @@ public class GapFill<M, R> {
         System.out.println("Model:" + model.getMolecule(i));
         System.out.println("Combined:" + combined.getMolecule(index));
 
+        init();
+        
         solver.add(CPLEXConstraints.getProductionConstraints(combined, v, w, index));
 
         solver.addMinimize(solver.sum(y));
@@ -162,7 +171,8 @@ public class GapFill<M, R> {
             double[] solutions = solver.getValues(y);
 
             for (int j = 0; j < solutions.length; j++) {
-                System.out.println(combined.getReaction(j) + ": " + solutions[j]);
+                // debug:
+                // System.out.println(combined.getReaction(j) + ": " + solutions[j]);
                 if (solutions[j] == 1.0d) {
                     candidates.add(databaseMap.get(j));
                 }
