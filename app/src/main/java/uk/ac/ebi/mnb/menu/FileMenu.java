@@ -118,8 +118,7 @@ public class FileMenu
     public void rebuildRecentlyOpen() {
         recent.removeAll(); // could just add and remove items... but for now
         List<String> items = DefaultReconstructionManager.getInstance().recent();
-        for (int i = items.size() - 1; i >= 0; i--) {
-            String path = items.get(i);
+        for (String path : items) {
             File file = new File(path);
             if (file.exists()) {
                 recent.add(new JMenuItem(new OpenAction(this, file)));
