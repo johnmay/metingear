@@ -49,9 +49,11 @@ public final class DrawStructure extends AbstractControlDialog {
     private final JChemPaintPanel panel;
     private       boolean         confirmed;
     private       boolean         editing;
+    private Metabolite metabolite = null;
 
     public DrawStructure(Window window) {
         super(window);
+        setModal(false);
         IChemModel model = new ChemModel();
         model.setMoleculeSet(new AtomContainerSet());
         model.getMoleculeSet().addAtomContainer(new AtomContainer(0, 0, 0, 0));
@@ -66,21 +68,20 @@ public final class DrawStructure extends AbstractControlDialog {
 
     @Override public void prepare() {
         confirmed = false;
+        metabolite = getSelection(Metabolite.class).iterator().next();
     }
 
     @Override public void process() {
 
         // user pressed okay
         confirmed = true;
-
-        // no selection - can't set the structure for a metabolite - also don't
-        // create the annotation if in 'editing' mode
-        if (getSelection(Metabolite.class).isEmpty() || editing)
+        
+        if (editing)
             return;
 
-        Metabolite m = getSelection(Metabolite.class).iterator().next();
         Annotation annotation = new AtomContainerAnnotation(getStructure());
-        AddAnnotationEdit edit = new AddAnnotationEdit(m, annotation);
+        AddAnnotationEdit edit = new AddAnnotationEdit(metabolite, annotation);
+        metabolite = null;
         edit.apply();
         addEdit(edit);
     }
