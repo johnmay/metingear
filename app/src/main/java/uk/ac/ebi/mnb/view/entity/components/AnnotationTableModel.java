@@ -123,7 +123,7 @@ public class AnnotationTableModel
                                              MainView.getInstance().getViewController().getActiveView(),
                                              MainView.getInstance().getUndoManager());    
                 }
-                removeTableModelListener(null);
+                return null;
             case 3:
                 return new DeleteAnnotation(entity,
                                             annotation,

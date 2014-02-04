@@ -62,7 +62,7 @@ public class AnnotationTable extends JTable {
 
     private boolean editable = false;
 
-    private ActionButtonCellRenderer editCellRenderer = new ActionButtonCellRenderer(SwingConstants.CENTER);
+    private ActionButtonCellRenderer editCellRenderer  = new ActionButtonCellRenderer(SwingConstants.CENTER);
     private ActionButtonCellRenderer deleteCellRenderer = new ActionButtonCellRenderer(SwingConstants.CENTER);
 
     private ClassBasedTableCellDDR ANNOTATION_RENDERER = new ClassBasedTableCellDDR();
