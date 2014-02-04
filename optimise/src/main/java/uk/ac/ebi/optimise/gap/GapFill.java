@@ -18,7 +18,7 @@ package uk.ac.ebi.optimise.gap;
 
 import com.google.common.base.Function;
 import com.google.common.collect.BiMap;
-import ilog.concert.IloAddable;
+import com.google.common.collect.Collections2;
 import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
 import ilog.concert.IloNumExpr;
@@ -31,8 +31,9 @@ import uk.ac.ebi.mdk.domain.matrix.BasicStoichiometricMatrix;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.optimise.SimulationUtil;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,11 +57,11 @@ public class GapFill<M, R> {
 
     private StoichiometricMatrix<M, R> model;
 
-    private StoichiometricMatrix<M, R> combined;
+    private StoichiometricMatrix<M, R> s;
 
     /**
      * Bi-directional hash maps provide look-up of database/model reaction index
-     * in the combined matrix and vise versa
+     * in the s matrix and vise versa
      */
     private BiMap<Integer, Integer> databaseMap;
 
@@ -96,28 +97,30 @@ public class GapFill<M, R> {
         this.database = database;
         this.model = model;
 
-        this.combined = database.newInstance(database.getMoleculeCount(),
-                                             database.getReactionCount());
+        this.s = database.newInstance(database.getMoleculeCount(),
+                                      database.getReactionCount());
 
-        databaseMap = combined.assign(database);
-        modelMap    = combined.assign(model);
+
+        databaseMap = s.assign(database);
+        modelMap = s.assign(model);
 
         System.out.println("model: " + model.getReactionCount());
         System.out.println("database: " + database.getReactionCount());
-        System.out.println("combined: " + combined.getReactionCount());
-                                
+        System.out.println("combined: " + s.getReactionCount());
+
         // remove intersect from database (note the databases is the base so
         // each key=value)
         for (Integer j : modelMap.values()) {
-            databaseMap.remove(j);        
+            databaseMap.remove(j);
         }
+
 
         // metabolites in cytosole and non-extracellular
         cytosolic = new HashSet<Integer>();
         other = new HashSet<Integer>();
 
-        for (int i = 0; i < combined.getMoleculeCount(); i++) {
-            Compartment compartment = functor.apply(combined.getMolecule(i));
+        for (int i = 0; i < s.getMoleculeCount(); i++) {
+            Compartment compartment = functor.apply(s.getMolecule(i));
             if (compartment == Organelle.CYTOPLASM)
                 cytosolic.add(i);
             else if (compartment == Organelle.BOUNDARY)
@@ -128,7 +131,7 @@ public class GapFill<M, R> {
 
         if (!other.isEmpty())
             throw new IllegalArgumentException("non-simple models not yet supported");
-        
+
         SimulationUtil.setup();
     }
 
@@ -137,12 +140,12 @@ public class GapFill<M, R> {
         // Massbalance(i)$(cytosol(i) and not extracellular(i)).. sum(j$S(i,j),S(i,j)*v(j))=g=0;
         for (int i : cytosolic) {
             // todo: make sparse
-            IloNumExpr[] values = new IloNumExpr[combined.getReactionCount()];
-            for (int j = 0; j < combined.getReactionCount(); j++) {
-                values[j] = solver.prod(combined.get(i, j),
-                                        v[j]);
+            List<IloNumExpr> values = new ArrayList<IloNumExpr>();
+            for (int j = 0; j < s.getReactionCount(); j++) {
+                values.add(solver.prod(s.get(i, j),
+                                       v[j]));
             }
-            solver.addGe(solver.sum(values),
+            solver.addGe(solver.sum(values.toArray(new IloNumExpr[values.size()])),
                          0);
         }
     }
@@ -160,7 +163,7 @@ public class GapFill<M, R> {
                 // boundcon1(j)$(model(j)).. v(j) =l= UB(j);
                 solver.addLe(v[j], UPPER_BOUND);
 
-                if (combined.isReversible(j)) {
+                if (s.isReversible(j)) {
                     // boundcon2(j)$(model(j) and rev(j)) .. v(j) =g= LB(j);
                     solver.addGe(v[j], LOWER_BOUND);
                 }
@@ -172,7 +175,7 @@ public class GapFill<M, R> {
             else {
                 // boundcon3(j)$(database(j) and  not  model(j)) .. v(j) =g= LB(j)*y(j);
                 solver.addGe(v[j], solver.prod(y[j], LOWER_BOUND));
-                
+
                 // boundcon4(j)$(database(j) and not model(j)) .. v(j) =l= UB(j)*y(j);
                 solver.addLe(v[j], solver.prod(y[j], UPPER_BOUND));
             }
@@ -187,24 +190,24 @@ public class GapFill<M, R> {
     private void productionConstraints(int problem) throws IloException {
         List<IloIntVar> production = new ArrayList<IloIntVar>();
 
-        for (int j = 0; j < combined.getReactionCount(); j++) {
+        for (int j = 0; j < s.getReactionCount(); j++) {
 
-            if (combined.get(problem, j) == 0)
+            if (s.get(problem, j) == 0)
                 continue;
 
             // min production limit
             // prodcons1(i,j)$(problem(i) and S(i,j) ne 0)..S(i,j)*v(j)=g=1-1000*(1-w(i,j));
-            solver.addGe(solver.prod(combined.get(problem, j),
-                                                  v[j]), // Sijvj
-                                      solver.sum(1,
-                                                 solver.negative(solver.prod(1000,
-                                                                             solver.sum(1,
-                                                                                        solver.negative(w.get(problem, j))))))); // 1-1000*(1-wij)
+            solver.addGe(solver.prod(s.get(problem, j),
+                                     v[j]), // Sijvj
+                         solver.sum(1,
+                                    solver.negative(solver.prod(1000,
+                                                                solver.sum(1,
+                                                                           solver.negative(w.get(problem, j))))))); // 1-1000*(1-wij)
             // max production limit
             // prodcons2(i,j)$(problem(i) and S(i,j) ne 0)..S(i,j)*v(j)=l=1000*w(i,j);
-            solver.addLe(solver.prod(combined.get(problem, j),
-                                                  v[j]), // Sijvj
-                                      solver.prod(1000, w.get(problem, j))); // 1000*wij        
+            solver.addLe(solver.prod(s.get(problem, j),
+                                     v[j]), // Sijvj
+                         solver.prod(1000, w.get(problem, j))); // 1000*wij        
 
             production.add(w.get(problem, j));
         }
@@ -214,17 +217,16 @@ public class GapFill<M, R> {
     }
 
     private final void init() throws IloException {
-        this.solver = new IloCplex();                  
+        this.solver = new IloCplex();
         
         // reset variables        
-        v = solver.numVarArray(combined.getReactionCount(), -1000, 100);
-        y = solver.boolVarArray(combined.getReactionCount()); // - modelMap.size()
+        v = solver.numVarArray(s.getReactionCount(), -1000, 100);
+        y = solver.boolVarArray(s.getReactionCount()); // - modelMap.size()
         w = new SparseIloBoolMatrix(solver);
 
         cytosolicMassBalance();
         boundConstraints();
     }
-
 
     /**
      * Access the column indices (database) of reactions that can resolve
@@ -232,50 +234,74 @@ public class GapFill<M, R> {
      *
      * @return
      */
-    public List<Integer> getCandidates(int problem) throws IloException {
+    public List<Set<Integer>> getCandidates(int problem) throws IloException {
 
-        problem = combined.getIndex(model.getMolecule(problem));
-        
+        problem = s.getIndex(model.getMolecule(problem));
+
+
+        // System.out.println(problem + ": " + s.getMolecule(problem));
+
         init();
         productionConstraints(problem);
 
-//        List<IloIntVar> dbY = new ArrayList<IloIntVar>(databaseMap.size());
-//        for (Integer dbRxn : databaseMap.values()) {
-//            dbY.add(y[dbRxn]);
-//        }
-//        solver.addMinimize(solver.sum(dbY.toArray(new IloIntVar[dbY.size()])));
         solver.addMinimize(solver.sum(y));
 
-        boolean solved = solver.solve();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        solver.setOut(out);
+        solver.setWarning(out);
+        
+        List<Set<Integer>> result = new ArrayList<Set<Integer>>();
 
-        List<Integer> candidates = new ArrayList<Integer>();
-
-        if (solved) {
+        while (solver.solve()) {
 
             double[] solutions = solver.getValues(y);
-            
+
+            Set<Integer> partial = new HashSet<Integer>();
+
             for (int j = 0; j < solutions.length; j++) {
                 if (solutions[j] == 1.0d) {
-                    candidates.add(j);
+                    partial.add(j);
                 }
             }
 
+            System.out.println("partial: " + partial);
+            
+            result.add(partial);
+
+            Set<IloIntVar> constrain = new HashSet<IloIntVar>();
+            for (int j : partial)
+                constrain.add(y[j]);
+            solver.addCut(solver.le(solver.sum(constrain.toArray(new IloIntVar[constrain.size()])),
+                                    constrain.size() - 1));
+            solver.addCut(solver.le(solver.sum(y),
+                                    constrain.size()));
         }
 
-        return candidates;
+        try {
+            out.close();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
 
+        return result;
     }
 
 
-    public List<R> getCandidateReactions(int i) throws IloException {
-        List<R> rxns = new ArrayList<R>();
-        
-        for (Integer j : getCandidates(i)) {
-            rxns.add(combined.getReaction(j));
+    public List<Set<R>> getCandidateReactions(int i) throws IloException {
+        List<Set<R>> rxns = new ArrayList<Set<R>>();
+        for (Set<Integer> solution : getCandidates(i)) {
+            rxns.add(new HashSet<R>(Collections2.transform(solution, new Function<Integer, R>() {
+                @Override public R apply(Integer j) {
+                    return s.getReaction(j);
+                }
+            })));
         }
         return rxns;
     }
 
+    public List<Set<R>> getCandidateReactions(M problem) throws IloException {
+        return getCandidateReactions(model.getIndex(problem));
+    }
 
     public static void main(String[] args) throws IloException {
 
@@ -291,7 +317,7 @@ public class GapFill<M, R> {
         model.addReaction("B => D", false);
         //model.addReaction("D => E", false);
         model.addReaction("E => C", false);
-        model.addReaction("G => E", false);
+        // model.addReaction("G => E", false);
 
         model.addReaction(new String[]{"C"}, new String[0], true);
 
@@ -324,8 +350,7 @@ public class GapFill<M, R> {
         reference.addReactionWithName("d3", "I => F");
         reference.addReactionWithName("d4", "E => F");
         reference.addReactionWithName("d5", "E => I");
-        reference.addReactionWithName("d5", "C => E");
-        
+
         reference.display();
 
         GapFill<String, String> gf = new GapFill<String, String>(reference, model, new Function<String, Compartment>() {
@@ -334,7 +359,7 @@ public class GapFill<M, R> {
             }
         });
 
-        System.out.println(gf.getCandidateReactions(model.getIndex("G")));
+        System.out.println(gf.getCandidateReactions(model.getIndex("E")));
 
     }
 }
