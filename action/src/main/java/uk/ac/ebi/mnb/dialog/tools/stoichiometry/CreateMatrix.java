@@ -121,14 +121,14 @@ public class CreateMatrix
         JFrame frame = new JFrame("Stoichiometric Matrix ("
                                           + reconstruction.getAccession()
                                           + ")");
+
+        Reconstruction active = DefaultReconstructionManager.getInstance().active();
+        active.setMatrix(matrix);
+
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(500, 500);
         frame.add(new MatrixPane(matrix));
         frame.setVisible(true);
-
-        Reconstruction active = DefaultReconstructionManager.getInstance().active();
-
-        active.setMatrix(matrix);
 
         updateMenuContext();
 
