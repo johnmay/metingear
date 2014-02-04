@@ -106,6 +106,18 @@ public class ViewMenu
             }
         }));
         add(new JSeparator());
+        add(new JMenuItem(new AbstractAction("Show Source Tree") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainView.getInstance().showSourceTree();
+            }
+        }));
+        add(new JMenuItem(new AbstractAction("Hide Source Tree") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainView.getInstance().hideSourceTree();
+            }
+        }));
         JMenuItem item = new JCheckBoxMenuItem(new ToggleInspectorToolbar());
         item.setSelected(true);
         add(item);

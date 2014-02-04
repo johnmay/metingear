@@ -466,6 +466,15 @@ public class MainView
     public DialogController getDialogController() {
         return this;
     }
+    
+    public void showSourceTree() {
+        if (pane.getDividerLocation() <= 0)
+            pane.setDividerLocation(0.25);
+    } 
+    
+    public void hideSourceTree() {
+        pane.setDividerLocation(0);
+    }
 
 
     public void updateMenuContext() {
