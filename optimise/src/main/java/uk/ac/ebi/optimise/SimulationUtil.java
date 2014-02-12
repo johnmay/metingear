@@ -28,8 +28,8 @@ import java.util.List;
 
 
 /**
- * SimulationUtil - 2011.12.02 <br>
- * Class provides utility methods for the simulation module
+ * SimulationUtil - 2011.12.02 <br> Class provides utility methods for the
+ * simulation module
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -39,23 +39,29 @@ public class SimulationUtil {
 
     private static final Logger LOGGER = Logger.getLogger(SimulationUtil.class);
 
+    private static String pathFromPreferences() {
+        String path = System.getProperty("mdk.cplex.path");
+        if (path != null) return path;
+        FilePreference pref = DomainPreferences.getInstance().getPreference("CPLEX_LIBRARY_PATH");
+        return pref.get().getPath();
+    }
 
     /**
-     * Adds the CPLEX library path specified in the user preferences {@see setCPLEXLibraryPath(String)}
+     * Adds the CPLEX library path specified in the user preferences {@see
+     * setCPLEXLibraryPath(String)}
      */
     public static boolean setup() {
 
-        FilePreference pref = DomainPreferences.getInstance().getPreference("CPLEX_LIBRARY_PATH");
-        String path    = pref.get().getPath();
+        String path = pathFromPreferences();
 
         List<String> paths = Arrays.asList(System.getProperty("java.library.path").split(File.pathSeparator));
 
         if (path != null
                 && !path.isEmpty()
-                && pref.get().exists()) {
+                && new File(path).exists()) {
 
             try {
-                if(paths.contains(path)) {
+                if (paths.contains(path)) {
                     return true;
                 }
                 LOGGER.info("Configuring library cplex path " + path);
@@ -71,28 +77,29 @@ public class SimulationUtil {
 
     }
 
-    public static boolean isAvailable(){
+    public static boolean isAvailable() {
         return setup() && isCPLEXinClassPath();
     }
 
     private static Boolean ilog = null;
 
-    public static boolean isCPLEXinClassPath(){
+    public static boolean isCPLEXinClassPath() {
 
-        if(ilog != null) return ilog;
+        if (ilog != null) return ilog;
 
-        try{
+        try {
             Class.forName("ilog.concert.IloNumVar", false, ClassLoader.getSystemClassLoader());
             ilog = true;
-        } catch (ClassNotFoundException ex){
+        } catch (ClassNotFoundException ex) {
             ilog = false;
         }
         return ilog;
     }
 
     /**
-     * Sets the CPLEX library path in the preferences and calls {@see setup()} adding this to the
-     * system property library paths. Note: No paths are not removed
+     * Sets the CPLEX library path in the preferences and calls {@see setup()}
+     * adding this to the system property library paths. Note: No paths are not
+     * removed
      */
     public static void setCPLEXLibraryPath(String path) {
         FilePreference pref = DomainPreferences.getInstance().getPreference("CPLEX_LIBRARY_PATH");
@@ -105,7 +112,6 @@ public class SimulationUtil {
      * Adds a path to the system property java.library.path at runtime
      *
      * @param s
-     *
      * @throws IOException
      */
     private static void addLibraryPath(String s) throws IOException {

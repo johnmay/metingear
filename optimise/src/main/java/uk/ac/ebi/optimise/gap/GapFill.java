@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -59,12 +60,6 @@ public class GapFill<M, R> {
 
     private StoichiometricMatrix<M, R> s;
 
-    /**
-     * Bi-directional hash maps provide look-up of database/model reaction index
-     * in the s matrix and vise versa
-     */
-    private BiMap<Integer, Integer> databaseMap;
-
     private BiMap<Integer, Integer> modelMap;
 
     private IloCplex solver;
@@ -83,6 +78,9 @@ public class GapFill<M, R> {
 
     private Set<Integer> cytosolic, other;
 
+    public static boolean REPORT_SINGLE_SOLUTION = false;
+
+    private boolean adjOnly = false;
 
     /**
      * @param database
@@ -97,23 +95,17 @@ public class GapFill<M, R> {
         this.database = database;
         this.model = model;
 
-        this.s = database.newInstance(database.getMoleculeCount(),
-                                      database.getReactionCount());
+        this.s = database;
 
+        int nDbReactions = database.getReactionCount();
+        int nModelReactions = model.getReactionCount();
 
-        databaseMap = s.assign(database);
+        System.out.println("adding model reactions");
         modelMap = s.assign(model);
 
-        System.out.println("model: " + model.getReactionCount());
-        System.out.println("database: " + database.getReactionCount());
-        System.out.println("combined: " + s.getReactionCount());
-
-        // remove intersect from database (note the databases is the base so
-        // each key=value)
-        for (Integer j : modelMap.values()) {
-            databaseMap.remove(j);
-        }
-
+        System.out.println("model: " + nModelReactions);
+        System.out.println("database: " + nDbReactions);
+        System.out.println("combined: " + s.getReactionCount() + " merged = " + ((nDbReactions + nModelReactions) - s.getReactionCount()));
 
         // metabolites in cytosole and non-extracellular
         cytosolic = new HashSet<Integer>();
@@ -133,6 +125,10 @@ public class GapFill<M, R> {
             throw new IllegalArgumentException("non-simple models not yet supported");
 
         SimulationUtil.setup();
+    }
+
+    void onlyAddAdjacent() {
+        this.adjOnly = true;
     }
 
     /** Mass balance constrains on cytosolic and non cytosolic metabolites. */
@@ -218,7 +214,7 @@ public class GapFill<M, R> {
 
     private final void init() throws IloException {
         this.solver = new IloCplex();
-        
+
         // reset variables        
         v = solver.numVarArray(s.getReactionCount(), -1000, 100);
         y = solver.boolVarArray(s.getReactionCount()); // - modelMap.size()
@@ -239,42 +235,63 @@ public class GapFill<M, R> {
         problem = s.getIndex(model.getMolecule(problem));
 
 
-        // System.out.println(problem + ": " + s.getMolecule(problem));
-
+        long t0 = System.nanoTime();
+        System.out.print("initalising...");
         init();
         productionConstraints(problem);
 
+        // constraint such as to only search direct neighbors
+        if (adjOnly) {
+            for (int j = 0; j < s.getReactionCount(); j++) {
+                if (s.get(problem, j) == 0)
+                    solver.addEq(y[j], 0);
+            }
+        }
+
         solver.addMinimize(solver.sum(y));
+        long t1 = System.nanoTime();
+        System.out.println("done " + TimeUnit.NANOSECONDS.toSeconds(t1 - t0) + " s");
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         solver.setOut(out);
         solver.setWarning(out);
-        
+
         List<Set<Integer>> result = new ArrayList<Set<Integer>>();
 
-        while (solver.solve()) {
+        try {
+            while (solver.solve()) {
 
-            double[] solutions = solver.getValues(y);
+                double[] solutions = solver.getValues(y);
 
-            Set<Integer> partial = new HashSet<Integer>();
+                Set<Integer> partial = new HashSet<Integer>();
 
-            for (int j = 0; j < solutions.length; j++) {
-                if (solutions[j] == 1.0d) {
-                    partial.add(j);
+                for (int j = 0; j < solutions.length; j++) {
+                    if (solutions[j] == 1.0d) {
+                        partial.add(j);
+                    }
                 }
+
+                result.add(partial);
+
+                if (REPORT_SINGLE_SOLUTION)
+                    break;
+
+                Set<IloIntVar> constrain = new HashSet<IloIntVar>();
+                for (int j : partial)
+                    constrain.add(y[j]);
+                solver.addCut(solver.le(solver.sum(constrain.toArray(new IloIntVar[constrain.size()])),
+                                        constrain.size() - 1));
+                solver.addCut(solver.le(solver.sum(y),
+                                        constrain.size()));
             }
+        } catch (Exception e) {
+            System.err.println("CPLEX Error: " + e.getMessage());
+        }
 
-            System.out.println("partial: " + partial);
-            
-            result.add(partial);
-
-            Set<IloIntVar> constrain = new HashSet<IloIntVar>();
-            for (int j : partial)
-                constrain.add(y[j]);
-            solver.addCut(solver.le(solver.sum(constrain.toArray(new IloIntVar[constrain.size()])),
-                                    constrain.size() - 1));
-            solver.addCut(solver.le(solver.sum(y),
-                                    constrain.size()));
+        try {
+            solver.end();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
 
         try {
