@@ -131,11 +131,11 @@ public class MetaboliteColumnChooser
 
         add(new JSeparator(), cc.xyw(1, 11, 7));
 
-        add(LabelFactory.newFormLabel("KEGG cross-reference"), cc.xy(1, 13));
+        add(LabelFactory.newFormLabel("KEGG Ligand Xref"), cc.xy(1, 13));
         add(kegg, cc.xy(3, 13));
-        add(LabelFactory.newFormLabel("ChEBI cross-reference"), cc.xy(5, 13));
+        add(LabelFactory.newFormLabel("ChEBI Xref"), cc.xy(5, 13));
         add(chebi, cc.xy(7, 13));
-        add(LabelFactory.newFormLabel("PubChem cross-reference"), cc.xy(1, 15));
+        add(LabelFactory.newFormLabel("PubChem-Compound Xref"), cc.xy(1, 15));
         add(pubchem, cc.xy(3, 15));
 
         add(new JSeparator(), cc.xyw(1, 17, 7));
@@ -187,8 +187,8 @@ public class MetaboliteColumnChooser
         charge.addActionListener(new TableHeaderChanger(charge, "Charge"));
         formula.addActionListener(new TableHeaderChanger(formula, "Formula"));
         chebi.addActionListener(new TableHeaderChanger(chebi, "ChEBI"));
-        kegg.addActionListener(new TableHeaderChanger(kegg, "KEGG"));
-        pubchem.addActionListener(new TableHeaderChanger(pubchem, "PubChem"));
+        kegg.addActionListener(new TableHeaderChanger(kegg, "KEGG Ligand"));
+        pubchem.addActionListener(new TableHeaderChanger(pubchem, "PubChem-Compound"));
 
 
 
