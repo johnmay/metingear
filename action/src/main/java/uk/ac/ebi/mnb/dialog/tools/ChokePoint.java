@@ -85,7 +85,9 @@ public class ChokePoint extends ControllerAction {
                 Metabolite metabolite = entry.getKey();
                 // use a better annotation
                 Annotation note = new Note("Reaction uniquely consumes " + metabolite.getName() + " (" + metabolite.getIdentifier() + ")");
-                entry.getValue().iterator().next().addAnnotation(note);
+                MetabolicReaction rxn = entry.getValue().iterator().next();
+                rxn.addAnnotation(note);
+                rxn.addAnnotation(uk.ac.ebi.mdk.domain.annotation.ChokePoint.getInstance());
                 chokePoints.addAll(entry.getValue());
             }
         }
@@ -96,7 +98,9 @@ public class ChokePoint extends ControllerAction {
                 Metabolite metabolite = entry.getKey();
                 // use a better annotation
                 Annotation note = new Note("Reaction uniquely produces " + metabolite.getName() + " (" + metabolite.getIdentifier() + ")");
-                entry.getValue().iterator().next().addAnnotation(note);
+                MetabolicReaction rxn = entry.getValue().iterator().next();
+                rxn.addAnnotation(note);
+                rxn.addAnnotation(uk.ac.ebi.mdk.domain.annotation.ChokePoint.getInstance());
                 chokePoints.addAll(entry.getValue());
             }
         }
