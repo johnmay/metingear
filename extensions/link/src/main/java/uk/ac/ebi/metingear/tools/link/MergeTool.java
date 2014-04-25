@@ -94,7 +94,7 @@ public final class MergeTool extends AbstractControlDialog {
                 .getInstance().active();
         Key type = (Key) mergeKey.getSelectedItem();
         Multimap<String, Metabolite> metabolites = HashMultimap.create(reconstruction.metabolome().size(), 2);
-
+        
         for (Metabolite m : reconstruction.metabolome()) {
             for (String key : type.key(m)) {
                 metabolites.put(key, m);
@@ -159,8 +159,8 @@ public final class MergeTool extends AbstractControlDialog {
         },
         INCHI_KEY("InChI-Key") {
             @Override Collection<String> key(AnnotatedEntity entity) {
-                Set<String> inchiKeys = new HashSet<String>();                    
-                for (ChemicalStructure cs : entity.getAnnotations(ChemicalStructure.class)) {
+                Set<String> inchiKeys = new HashSet<String>();
+                for (ChemicalStructure cs : entity.getAnnotationsExtending(ChemicalStructure.class)) {
                     try {
                         InChIGeneratorFactory igf = InChIGeneratorFactory.getInstance();
                         InChIGenerator ig = igf.getInChIGenerator(cs.getStructure());
@@ -177,7 +177,7 @@ public final class MergeTool extends AbstractControlDialog {
         UNIQUE_SMILES("Unique SMILES (non-stereo)") {
             @Override Collection<String> key(AnnotatedEntity entity) {
                 Set<String> smis = new HashSet<String>();
-                for (ChemicalStructure cs : entity.getAnnotations(ChemicalStructure.class)) {
+                for (ChemicalStructure cs : entity.getAnnotationsExtending(ChemicalStructure.class)) {
                     try {
                         smis.add(SmilesGenerator.unique().create(cs.getStructure()));
                     } catch (Exception e) {
