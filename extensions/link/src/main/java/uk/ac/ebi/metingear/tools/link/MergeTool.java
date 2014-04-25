@@ -36,7 +36,12 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import net.sf.jniinchi.INCHI_RET;
+import org.openscience.cdk.inchi.InChIGenerator;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.smiles.SmilesGenerator;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
@@ -52,7 +57,12 @@ import javax.swing.JComponent;
 import javax.swing.undo.CompoundEdit;
 import java.awt.Window;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -82,11 +92,13 @@ public final class MergeTool extends AbstractControlDialog {
     @Override public void process() {
         Reconstruction reconstruction = DefaultReconstructionManager
                 .getInstance().active();
-        Key key = (Key) mergeKey.getSelectedItem();
-        Multimap<String, Metabolite> metabolites = HashMultimap
-                .create(reconstruction.metabolome().size(), 2);
+        Key type = (Key) mergeKey.getSelectedItem();
+        Multimap<String, Metabolite> metabolites = HashMultimap.create(reconstruction.metabolome().size(), 2);
+
         for (Metabolite m : reconstruction.metabolome()) {
-            metabolites.put(key.key(m), m);
+            for (String key : type.key(m)) {
+                metabolites.put(key, m);
+            }
         }
 
         CompoundEdit edit = new CompoundEdit();
@@ -121,18 +133,58 @@ public final class MergeTool extends AbstractControlDialog {
      */
     enum Key {
         IDENTIFIER("Identifier") {
-            @Override String key(AnnotatedEntity entity) {
-                return entity.getIdentifier().getAccession();
+            @Override Collection<String> key(AnnotatedEntity entity) {
+                return Collections.singleton(entity.getIdentifier().getAccession());
             }
         },
         ABBREVIATION("Abbreviation") {
-            @Override String key(AnnotatedEntity entity) {
-                return entity.getAbbreviation();
+            @Override Collection<String> key(AnnotatedEntity entity) {
+                return Collections.singleton(entity.getAbbreviation().toLowerCase(Locale.ENGLISH));
             }
         },
         NAME("Name") {
-            @Override String key(AnnotatedEntity entity) {
-                return entity.getName();
+            @Override Collection<String> key(AnnotatedEntity entity) {
+                return Collections.singleton(entity.getName().toLowerCase(Locale.ENGLISH));
+            }
+        },
+        ABBREVIATION_CASE_SENS("Abbreviation (case sensative)") {
+            @Override Collection<String> key(AnnotatedEntity entity) {
+                return Collections.singleton(entity.getAbbreviation());
+            }
+        },
+        NAME_CASE_SENS("Name (case sensative)") {
+            @Override Collection<String> key(AnnotatedEntity entity) {
+                return Collections.singleton(entity.getName());
+            }
+        },
+        INCHI_KEY("InChI-Key") {
+            @Override Collection<String> key(AnnotatedEntity entity) {
+                Set<String> inchiKeys = new HashSet<String>();                    
+                for (ChemicalStructure cs : entity.getAnnotations(ChemicalStructure.class)) {
+                    try {
+                        InChIGeneratorFactory igf = InChIGeneratorFactory.getInstance();
+                        InChIGenerator ig = igf.getInChIGenerator(cs.getStructure());
+                        if (ig.getReturnStatus() != INCHI_RET.OKAY && ig.getReturnStatus() != INCHI_RET.WARNING)
+                            continue;
+                        inchiKeys.add(ig.getInchiKey());
+                    } catch (Exception e) {
+
+                    }
+                }
+                return inchiKeys;
+            }
+        },
+        UNIQUE_SMILES("Unique SMILES (non-stereo)") {
+            @Override Collection<String> key(AnnotatedEntity entity) {
+                Set<String> smis = new HashSet<String>();
+                for (ChemicalStructure cs : entity.getAnnotations(ChemicalStructure.class)) {
+                    try {
+                        smis.add(SmilesGenerator.unique().create(cs.getStructure()));
+                    } catch (Exception e) {
+
+                    }
+                }
+                return smis;
             }
         };
 
@@ -143,7 +195,7 @@ public final class MergeTool extends AbstractControlDialog {
             this.displayName = displayName;
         }
 
-        abstract String key(AnnotatedEntity entity);
+        abstract Collection<String> key(AnnotatedEntity entity);
 
 
         @Override public String toString() {
