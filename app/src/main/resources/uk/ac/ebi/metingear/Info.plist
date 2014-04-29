@@ -40,6 +40,7 @@
       <array>
         <string>-Xms512m</string>
         <string>-Xmx1G</string>
+        <string>-Xdock:name="Metingear"</string>
       </array>
       <key>SplashFile</key>
       <string>$APP_PACKAGE/Contents/Resources/splash.png</string>
