@@ -267,6 +267,12 @@ public class ReactionColumnChooser
         classification.addActionListener(new TableHeaderChanger(classification, "Classification"));
         source.addActionListener(new TableHeaderChanger(source, "Source"));
         subsystem.addActionListener(new TableHeaderChanger(subsystem, "Subsystem"));
+        locus.addActionListener(new TableHeaderChanger(locus, "Locus"));
+        minFlux.addActionListener(new TableHeaderChanger(minFlux, "Flux (low)"));
+        maxFlux.addActionListener(new TableHeaderChanger(maxFlux, "Flux (hi)"));
+        deltaG.addActionListener(new TableHeaderChanger(deltaG, "Gibbs free energy"));
+        deltaGError.addActionListener(new TableHeaderChanger(deltaGError, "Gibbs free energy (error)"));
+        direction.addActionListener(new TableHeaderChanger(direction, "Direction"));
 
         // Spinner listeners for shading the table
         start.addChangeListener(new ChangeListener() {
