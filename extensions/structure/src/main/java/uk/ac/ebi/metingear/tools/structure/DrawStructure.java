@@ -19,6 +19,8 @@ package uk.ac.ebi.metingear.tools.structure;
 
 import com.google.common.collect.FluentIterable;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.AtomContainerSet;
+import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.graph.ConnectivityChecker;
@@ -27,8 +29,6 @@ import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.AtomContainer;
-import org.openscience.cdk.AtomContainerSet;
-import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.stereo.StereoElementFactory;
 import org.openscience.jchempaint.JChemPaintPanel;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
@@ -40,6 +40,8 @@ import uk.ac.ebi.mnb.edit.AddAnnotationEdit;
 import javax.swing.JComponent;
 import java.awt.Dimension;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +51,7 @@ public final class DrawStructure extends AbstractControlDialog {
     private final JChemPaintPanel panel;
     private       boolean         confirmed;
     private       boolean         editing;
+    private       Runnable callback;
     private Metabolite metabolite = null;
 
     public DrawStructure(Window window) {
@@ -72,9 +75,7 @@ public final class DrawStructure extends AbstractControlDialog {
     }
 
     @Override public void process() {
-
-        // user pressed okay
-        confirmed = true;
+        confirmed = true;         
         
         if (editing)
             return;
@@ -88,12 +89,12 @@ public final class DrawStructure extends AbstractControlDialog {
 
 
     public void setStructure(IAtomContainer input) {
-        
+
         IAtomContainer cpy;
 
         try {
             // note we need to make sure it's not silent
-            cpy = new org.openscience.cdk.AtomContainer(input.clone());
+            cpy = new AtomContainer(input.clone());
         } catch (CloneNotSupportedException e) {
             throw new InternalError("CDK object could not be cloned");
         }
@@ -112,8 +113,9 @@ public final class DrawStructure extends AbstractControlDialog {
                 }
             }
         }
-        
+
         editing = true;
+        confirmed = false;
 
         IChemModel model = new ChemModel();
         model.setMoleculeSet(new AtomContainerSet());
@@ -134,11 +136,11 @@ public final class DrawStructure extends AbstractControlDialog {
             stereoElements.addAll(FluentIterable.from(container.stereoElements())
                                                 .toList());
         }
-                
+
         output.setStereoElements(StereoElementFactory.using2DCoordinates(output).createAll());
-        
+
         editing = false;
-        
+
         return output;
     }
 }
