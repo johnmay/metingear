@@ -27,6 +27,7 @@ import uk.ac.ebi.mnb.interfaces.StructureEditor;
 import uk.ac.ebi.mnb.interfaces.Updatable;
 
 import javax.swing.AbstractAction;
+import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import java.awt.Color;
@@ -57,7 +58,7 @@ final class EditStructure extends AbstractAction {
         this.org = org;
         putValue(SHORT_DESCRIPTION, "Edit chemical structure");
         putValue(LARGE_ICON_KEY, EBIIcon.EDIT.create()
-                                        .size(10f)
+                                        .size(12f)
                                         .color(Color.DARK_GRAY)
                                         .icon());
     }
