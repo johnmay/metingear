@@ -27,7 +27,6 @@ import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
@@ -97,7 +96,7 @@ public class ReactionPanel
 
             MassBalance.BalanceType balanceType = MassBalance.getBalanceClassification(entity);
             balanceIcon.setIcon(renderer.getBalanceTypeIcon(balanceType));
-            balanceIcon.setToolTipText(balanceType.toString());
+            balanceIcon.setToolTipText(balanceType.toString() + " " + MassBalance.deficit(entity));
 
             editor.setReaction(entity);
 
@@ -105,9 +104,7 @@ public class ReactionPanel
         }
 
         return false;
-
     }
-
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
