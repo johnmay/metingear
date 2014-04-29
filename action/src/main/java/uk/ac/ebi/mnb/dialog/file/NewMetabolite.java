@@ -128,7 +128,7 @@ public class NewMetabolite extends NewEntity {
     @Override
     public JLabel getDescription() {
         JLabel label = super.getDescription();
-        label.setText("Please specify detail for a new metabolite");
+        label.setText("Please specify the name and abbreviation for the new metabolite");
         return label;
     }
 
