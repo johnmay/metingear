@@ -18,6 +18,7 @@ package uk.ac.ebi.mnb.view.entity.general;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTableModel;
 import uk.ac.ebi.mnb.view.entity.ColumnDescriptor;
 import uk.ac.ebi.mnb.view.entity.DataType;
@@ -67,7 +68,7 @@ public class GeneralTableModel extends AbstractEntityTableModel {
         if (name.equals("Rank")) {
             return indexOf(component) + 1;
         } else if (name.equals("Type")) {
-            return component.getClass().getSimpleName();
+            return DefaultEntityFactory.getInstance().getRootClass(component.getClass()).getSimpleName();
         }
         return "NA";
     }
