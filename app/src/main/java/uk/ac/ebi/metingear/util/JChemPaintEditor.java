@@ -24,6 +24,9 @@ import uk.ac.ebi.metingear.tools.structure.DrawStructure;
 import uk.ac.ebi.mnb.interfaces.StructureEditor;
 import uk.ac.ebi.mnb.main.MainView;
 
+import javax.swing.SwingUtilities;
+import java.util.concurrent.Callable;
+
 /**
  * An structure editor utilising JChemPaint.
  *
@@ -56,7 +59,9 @@ public enum JChemPaintEditor implements StructureEditor {
     @Override
     public IAtomContainer edit(final IAtomContainer input) {
         dialog.setStructure(input);
+        dialog.setModal(true);
         action.activateActions();
+        dialog.setModal(false);
         return dialog.getStructure();
     }
 }
