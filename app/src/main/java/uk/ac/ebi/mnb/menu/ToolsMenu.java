@@ -21,39 +21,26 @@
  */
 package uk.ac.ebi.mnb.menu;
 
-import au.com.bytecode.opencsv.CSVWriter;
-import com.google.common.primitives.Doubles;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.InvalidSmilesException;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.isomorphism.Pattern;
-import org.openscience.cdk.isomorphism.Score;
-import org.openscience.cdk.isomorphism.StereoCompatibility;
-import org.openscience.cdk.isomorphism.StructureUtil;
-import org.openscience.cdk.renderer.generators.HighlightGenerator;
-import org.openscience.cdk.smiles.SmilesGenerator;
-import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
-import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 import uk.ac.ebi.metingear.tools.structure.StructureTable;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
-import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.dialog.tools.AddFlags;
 import uk.ac.ebi.mnb.dialog.tools.AutomaticCrossReference;
 import uk.ac.ebi.mnb.dialog.tools.ChokePoint;
+import uk.ac.ebi.mnb.dialog.tools.Furanator;
 import uk.ac.ebi.mnb.dialog.tools.CollapseStructures;
 import uk.ac.ebi.mnb.dialog.tools.CompareReconstruction;
 import uk.ac.ebi.mnb.dialog.tools.CuratedReconciliation;
 import uk.ac.ebi.mnb.dialog.tools.DownloadStructuresDialog;
+import uk.ac.ebi.mnb.dialog.tools.Pyranator;
 import uk.ac.ebi.mnb.dialog.tools.RemoveWorstStructures;
 import uk.ac.ebi.mnb.dialog.tools.SequenceHomology;
 import uk.ac.ebi.mnb.dialog.tools.TransferAnnotations;
@@ -62,31 +49,12 @@ import uk.ac.ebi.mnb.dialog.tools.stoichiometry.CreateMatrix;
 import uk.ac.ebi.mnb.main.MainView;
 
 import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.openscience.cdk.isomorphism.Scorer.score;
 
 
 /**
@@ -201,8 +169,21 @@ public class ToolsMenu extends ContextMenu {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return selection
-                        .hasSelection(MetabolicReactionImpl.class) || (active != null && active
-                        .reactome().isEmpty() == false);
+                        .hasSelection(MetabolicReactionImpl.class) || (active != null && !active.reactome().isEmpty());
+            }
+        });
+        
+        
+        add(create(Furanator.class), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return active != null && active.metabolome().size() > 0;
+            }
+        });
+        add(create(Pyranator.class), new ContextResponder() {
+
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return active != null && active.metabolome().size() > 0;
             }
         });
 
