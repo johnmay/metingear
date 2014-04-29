@@ -21,6 +21,7 @@ import uk.ac.ebi.caf.report.ReportManager;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.metabolite.CompartmentalisedMetabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.matrix.DefaultStoichiometricMatrix;
@@ -127,7 +128,7 @@ public class CreateMatrix
 
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(500, 500);
-        frame.add(new MatrixPane(matrix));
+        frame.add(new MatrixPane<CompartmentalisedMetabolite, String>(matrix));
         frame.setVisible(true);
 
         updateMenuContext();
