@@ -16,11 +16,13 @@
  */
 package mnb.io.tabular.parser;
 
+import com.google.common.collect.Sets;
 import mnb.io.tabular.EntityResolver;
 import mnb.io.tabular.preparse.PreparsedReaction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.mdk.domain.annotation.FluxLowerBound;
+import uk.ac.ebi.mdk.domain.annotation.FluxUpperBound;
 import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
 import uk.ac.ebi.mdk.domain.annotation.Locus;
 import uk.ac.ebi.mdk.domain.annotation.Subsystem;
@@ -56,7 +58,7 @@ public class ReactionParser {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionParser.class);
     // Reaction arrow matcher (note excess space is gobbeled up in split)
-                                                       
+
     public static final Pattern EQUATION_ARROW = Pattern.compile("(<[-=]+>)|(<[-=]*)|([-=]*>)|(=+)");
 
     public static final Pattern EQUATION_ADDITION = Pattern.compile("\\s+[+]\\s+");
@@ -71,13 +73,15 @@ public class ReactionParser {
             Pattern.compile("\\A" + DOUBLE_PATTERN.pattern() + "\\s+" + "|\\(" + DOUBLE_PATTERN.pattern() + "\\)");
 
     public static final Pattern COMPARTMENT_PATTERN =
-            Pattern.compile("[\\(\\[]([\\w\\s]+)[\\)\\]]\\s*\\z");
+            Pattern.compile("\\[([\\w\\s]+)\\]\\s*\\z");
 
     private static final Direction[] NORMALISED_ARROWS =
             new Direction[]{Direction.BIDIRECTIONAL,
                             Direction.BACKWARD,
                             Direction.FORWARD,
                             Direction.BIDIRECTIONAL};
+
+    private static final Set<String> IGNORED_COMPARTMENTS = Sets.newHashSet("acp", "carboxylase");
 
     private EntityResolver entites;
     private EntityFactory factory = DefaultEntityFactory.getInstance();
@@ -115,12 +119,14 @@ public class ReactionParser {
             // standard reaction
             return parseTwoSidedReaction(reaction, rxnSides);
 
-        } else if (rxnSides.length == 1) {
+        }
+        else if (rxnSides.length == 1) {
 
             // exchange reaction
             return parseExchangeReaction(reaction, rxnSides[0]);
 
-        } else {
+        }
+        else {
 
             throw new UnparsableReactionError("No equation found for rxn: "
                                                       + reaction.getIdentifier());
@@ -252,10 +258,23 @@ public class ReactionParser {
 
         if (preparsed.hasValue(MAX_FLUX)) {
             try {
-                rxn.addAnnotation(new FluxLowerBound(Double.parseDouble(preparsed.getValue(MAX_FLUX))));
+                rxn.addAnnotation(new FluxUpperBound(Double.parseDouble(preparsed.getValue(MAX_FLUX))));
             } catch (NumberFormatException ex) {
                 LOGGER.error("Max flux column contained invalid value (not a double): " + preparsed.getValue(MAX_FLUX));
             }
+        }
+        
+        // correct reaction direction based on flux bounds
+        if (rxn.hasAnnotation(FluxLowerBound.class) && rxn.hasAnnotation(FluxUpperBound.class)) {
+            double lo = rxn.getAnnotations(FluxLowerBound.class).iterator().next().getValue();
+            double hi = rxn.getAnnotations(FluxUpperBound.class).iterator().next().getValue();
+            if (lo == 0 && hi > 0)
+                rxn.setDirection(Direction.FORWARD);
+            else if (lo < 0 && hi == 0)
+                rxn.setDirection(Direction.BACKWARD);
+            else if (lo < 0 && hi > 0)
+                rxn.setDirection(Direction.BIDIRECTIONAL);
+                
         }
 
         return rxn;
@@ -270,7 +289,7 @@ public class ReactionParser {
 
         String[] participants = EQUATION_ADDITION.split(equationSide);
         for (String participant : participants) {
-            if (!participant.trim().isEmpty()) {
+            if (!unicodeTrim(participant).isEmpty()) {
                 parsedParticipants.add(parseParticipant(participant, defaultCompartment, reaction));
             }
         }
@@ -279,6 +298,22 @@ public class ReactionParser {
 
     }
 
+
+    // also trip NBSP etc
+    static String unicodeTrim(String str) {
+        char[] value = str.toCharArray();
+        int len = value.length;
+        int st = 0;
+        char[] val = value;    /* avoid getfield opcode */
+
+        while ((st < len) && (Character.isSpaceChar(val[st]))) {
+            st++;
+        }
+        while ((st < len) && (Character.isSpaceChar(val[len - 1]))) {
+            len--;
+        }
+        return ((st > 0) || (len < value.length)) ? str.substring(st, len) : str;    
+    }
 
     public Collection<Report> collectMessages() {
         Set<Report> collected = new HashSet<Report>();
@@ -292,7 +327,7 @@ public class ReactionParser {
                                                                final Compartment defaultCompartment,
                                                                final PreparsedReaction rxn) throws UnparsableReactionError {
 
-        String entityAbbr = participant.trim();
+        String entityAbbr = unicodeTrim(participant);
         String entityAbbrComp = entityAbbr;
         Compartment compartment = defaultCompartment;
         Double coef = 1d;
@@ -308,12 +343,15 @@ public class ReactionParser {
         // compartment
         Matcher compartmentMatcher = COMPARTMENT_PATTERN.matcher(entityAbbr);
         if (compartmentMatcher.find()) {
-            compartment = resolver.getCompartment(compartmentMatcher.group(1));
-            entityAbbr = compartmentMatcher.replaceAll("");
+            String compId = compartmentMatcher.group(1);
+            if (!IGNORED_COMPARTMENTS.contains(compId)) {
+                compartment = resolver.getCompartment(compId);
+                entityAbbr = compartmentMatcher.replaceAll("");
+            }
         }
 
         // trim the abbreviation
-        entityAbbr = entityAbbr.trim();
+        entityAbbr = unicodeTrim(entityAbbr);
 
         // try fetching with compartment attached and without
         //        PreparsedMetabolite entity = entites.getEntity(entityAbbrComp.trim());
@@ -325,9 +363,9 @@ public class ReactionParser {
                                                           coef,
                                                           (Compartment) compartment);
         } else {
-            messages.add(new WarningMessage("The metabolite "
+            messages.add(new WarningMessage("The metabolite '"
                                                     + entityAbbr
-                                                    + " was not found in the metabolite sheet for reaction " + rxn));
+                                                    + "' was not found in the metabolite sheet for reaction " + rxn));
             entity = entites.getNonReconciledMetabolite(entityAbbr);
             return new MetabolicParticipantImplementation(entity,
                                                           coef,
