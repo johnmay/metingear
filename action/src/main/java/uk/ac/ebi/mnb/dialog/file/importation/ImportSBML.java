@@ -133,9 +133,7 @@ public class ImportSBML extends DelayedBuildAction {
                         SBMLDocument document = SBMLReader.read(in);
                         long t1 = System.nanoTime();
 
-                        Logger.getRootLogger().setLevel(Level.INFO);
-                        LOGGER.info(((t1 - t0) / 1e6) + " ms to read with JSBML");
-                        Logger.getRootLogger().setLevel(Level.WARN);
+                        long tJSBML = t1 - t0;
 
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override public void run() {
@@ -147,10 +145,19 @@ public class ImportSBML extends DelayedBuildAction {
                         SBMLReactionReader reader = new SBMLReactionReader(document,
                                                                            entities,
                                                                            new DialogCompartmentResolver(new AutomaticCompartmentResolver(),
+                        
                                                                                                          (JFrame) controller));
+                        t0 = System.nanoTime();
                         while (reader.hasNext()) {
                             active.addReaction(reader.next());
                         }
+                        t1 = System.nanoTime();
+                        long tConv = t1 - t0;
+
+                        Logger.getRootLogger().setLevel(Level.DEBUG);
+
+                        LOGGER.info(String.format("Loaded SBML in %.0f ms (JSBML), %.0f ms (conv)", tJSBML / 1e6, tConv / 1e6));
+                        
                     } catch (IOException e) {
                         messages.add(new ErrorMessage(e.getMessage()));
                     } catch (XMLStreamException ex) {
