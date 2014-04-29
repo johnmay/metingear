@@ -22,6 +22,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
@@ -128,7 +129,7 @@ public class DocumentFactory {
             document.add(new Field(FieldType.TYPE.getName(),
                                    type,
                                    Field.Store.YES,
-                                   Field.Index.ANALYZED));
+                                   Field.Index.NOT_ANALYZED));
         }
         if (entity.getName() != null) {
             document.add(new Field(FieldType.NAME.getName(),
@@ -142,13 +143,14 @@ public class DocumentFactory {
         }
         // index annotations
 
-        // index string annotations
+        // index string annotations and corss reference
         for (Annotation annotation : entity.getAnnotations()) {
             if(annotation instanceof StringAnnotation){
                 document.add(new Field(FieldType.ANNOTATION.getName(), annotation.toString(), Field.Store.YES, Field.Index.ANALYZED));
+            } else if(annotation instanceof CrossReference){
+                document.add(new Field(FieldType.XREF.getName(), annotation.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             }
         }
-
 
         return document;
 
