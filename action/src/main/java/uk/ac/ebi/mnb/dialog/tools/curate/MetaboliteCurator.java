@@ -76,6 +76,7 @@ public class MetaboliteCurator extends DropdownDialog {
                 new DatabaseSearch(manager, undoManager),
                 new AssignStructure(undoManager),
                 new PeptideGenerator(this, DefaultEntityFactory.getInstance(), undoManager),
+                new ACPGenerator(undoManager),
                 new ManualCrossReferenceModule(this, undoManager),
                 new WebSearch(undoManager),};
         setDefaultLayout();
@@ -107,7 +108,6 @@ public class MetaboliteCurator extends DropdownDialog {
         for (CrossreferenceModule module : modules) {
             module.setup(query);
         }
-
     }
 
 
