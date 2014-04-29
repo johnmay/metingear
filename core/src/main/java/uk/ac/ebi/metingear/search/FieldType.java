@@ -31,7 +31,8 @@ public enum FieldType {
     NAME("Name"),
     ABBREVIATION("Abbreviation"),
     ANNOTATION("Annotation"),
-    TYPE("Type");
+    TYPE("Type"),
+    XREF("Xref");
     public final String name;
     public final Term term;
 
