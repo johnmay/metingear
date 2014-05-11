@@ -51,6 +51,7 @@ import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.metingear.AppliableEdit;
 import uk.ac.ebi.metingear.edit.entity.MergeMetaboliteEdit;
 import uk.ac.ebi.metingear.view.AbstractControlDialog;
+import uk.ac.ebi.mnb.core.WarningMessage;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -107,6 +108,7 @@ public final class MergeTool extends AbstractControlDialog {
         for (String k : keys) {
             List<Metabolite> ms = new ArrayList<Metabolite>(metabolites.get(k));
             if (ms.size() > 1) {
+                addReport(new WarningMessage(ms + " have been merged into a single entry."));
                 AppliableEdit subedit = new MergeMetaboliteEdit(ms, union(ms.get(0)), reconstruction);
                 subedit.apply();
                 edit.addEdit(subedit);
