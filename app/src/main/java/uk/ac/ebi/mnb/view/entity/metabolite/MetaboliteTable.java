@@ -27,10 +27,15 @@ import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
 import uk.ac.ebi.mdk.ui.edit.table.RatingCellEditor;
 import uk.ac.ebi.mdk.ui.render.table.AnnotationCellRenderer;
 import uk.ac.ebi.mdk.ui.render.table.BooleanCellRenderer;
+import uk.ac.ebi.mdk.ui.render.table.DefaultRenderer;
 import uk.ac.ebi.mdk.ui.render.table.RatingCellRenderer;
 import uk.ac.ebi.mdk.ui.render.table.StructuralValidityRenderer;
 import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTable;
 
 
 /**
@@ -69,6 +74,15 @@ public class MetaboliteTable
                            annotationRenderer);
         setDefaultRenderer(ACPAssociated.class,
                            annotationRenderer);
+        setDefaultRenderer(MetaboliteTableModel.Match.class,
+                           new DefaultRenderer<MetaboliteTableModel.Match>() {
+                               @Override public JLabel getComponent(JTable table, MetaboliteTableModel.Match value, int row, int column) {
+                                   setText("");
+                                   setToolTipText(value.toString());
+                                   setIcon(value.icon());
+                                   return this;
+                               }
+                           });
 
 
         setDefaultRenderer(Rating.class, new RatingCellRenderer());

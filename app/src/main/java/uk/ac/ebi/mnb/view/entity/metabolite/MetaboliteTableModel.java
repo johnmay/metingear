@@ -73,8 +73,9 @@ public class MetaboliteTableModel
                                  StructuralValidity.class),
             new ColumnDescriptor("Match", null,
                                  DataType.FIXED,
-                                 ImageIcon.class),
+                                 Match.class),
             new ColumnDescriptor("Rating", null, DataType.FIXED, Rating.class),
+            new ColumnDescriptor("Structures", null, DataType.FIXED, Integer.class),
             new ColumnDescriptor(Lumped.getInstance()),
             new ColumnDescriptor(ACPAssociated.getInstance())
     };
@@ -159,20 +160,39 @@ public class MetaboliteTableModel
         }
         else if (name.equals("Validity")) {
             return StructuralValidity.getValidity(entity);
-        } else if (name.equals("Match")) {
+        }
+        else if (name.equals("Match")) {
             Collection<Observation> matches = entity.getObservations(MatchedEntity.class);
-            IconBuilder builder = EBIIcon.DATABASE_CROSSLINK.create();
             if (matches.isEmpty()) {
-                builder.color(new Color(0xFF8B91));
-            } else if (matches.size() == 1) {
-                builder.color(new Color(0xA2FF90));
-            } else {
-                builder.color(new Color(0xB6C1FF));
+                return Match.NONE;
             }
-            return builder.icon();
+            else if (matches.size() == 1) {
+                return Match.UNIQUE;
+            }
+            else {
+                return Match.MULTIPLE;
+            }
+        }
+        else if (name.equals("Structures")) {
+            return entity.getStructures().size();
         }
 
         return "NA";
+    }
 
+    enum Match {
+        NONE(new Color(0xFF8B91)),
+        MULTIPLE(new Color(0xB6C1FF)),
+        UNIQUE(new Color(0xA2FF90));
+
+        private final ImageIcon icon;
+
+        Match(Color color) {
+            icon = EBIIcon.DATABASE_CROSSLINK.create().color(color).icon();
+        }
+        
+        ImageIcon icon() {
+            return icon;
+        }
     }
 }
