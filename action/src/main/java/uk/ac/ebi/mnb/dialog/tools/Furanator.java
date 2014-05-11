@@ -99,7 +99,7 @@ public final class Furanator extends ControllerDialog {
 
     @Override public void prepare() {
         Reconstruction reconstruction = DefaultReconstructionManager.getInstance().active();
-        map = metaboliteMap(reconstruction.metabolome());
+        map = metaboliteMap(getSelection().get(Metabolite.class));
         List<Metabolite> metabolites = new ArrayList<Metabolite>();
         List<IAtomContainer> org = new ArrayList<IAtomContainer>();
         List<IAtomContainer> mod = new ArrayList<IAtomContainer>();
@@ -138,7 +138,7 @@ public final class Furanator extends ControllerDialog {
         addEdit(edit);
     }
 
-    Map<IAtomContainer, Metabolite> metaboliteMap(Metabolome metabolome) {
+    Map<IAtomContainer, Metabolite> metaboliteMap(Collection<Metabolite> metabolome) {
         Map<IAtomContainer, Metabolite> map = new HashMap<IAtomContainer, Metabolite>();
         for (Metabolite m : metabolome) {
             for (ChemicalStructure cs : m.getStructures())
