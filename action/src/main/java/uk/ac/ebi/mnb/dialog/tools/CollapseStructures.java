@@ -16,17 +16,28 @@
  */
 package uk.ac.ebi.mnb.dialog.tools;
 
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.hash.BasicAtomEncoder;
+import org.openscience.cdk.hash.HashGeneratorMaker;
+import org.openscience.cdk.hash.MoleculeHashGenerator;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.caf.report.ReportManager;
-import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.prototype.hash.MolecularHashFactory;
 import uk.ac.ebi.mnb.core.ControllerDialog;
+import uk.ac.ebi.mnb.edit.RemoveAnnotationEdit;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
 import uk.ac.ebi.mnb.interfaces.TargetedUpdate;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CompoundEdit;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -54,15 +65,47 @@ public class CollapseStructures
 
     @Override
     public void process() {
-        if (getSelection().hasSelection(Metabolite.class) == false) {
-            return;
-        }
+
+        MoleculeHashGenerator hashGen = new HashGeneratorMaker().depth(16)
+                                                                .elemental()
+                                                                .charged()
+                                                                .isotopic()
+                                                                .chiral()
+                                                                .suppressHydrogens()
+                                                                .perturbed()
+                                                                .encode(BasicAtomEncoder.BOND_ORDER_SUM)
+                                                                .molecular();
+
+        CompoundEdit edit = new CompoundEdit();
         Collection<Metabolite> metabolites = getSelection().get(Metabolite.class);
         for (Metabolite m : metabolites) {
-            for (AtomContainerAnnotation structure : m.getAnnotations(AtomContainerAnnotation.class)) {
-                System.out.println(MolecularHashFactory.getInstance().getHash(structure.getStructure()));
+            Set<Long> seen = new HashSet<Long>();
+            Collection<ChemicalStructure> remove = new ArrayList<ChemicalStructure>();
+
+            for (ChemicalStructure cs : m.getStructures()) {
+                
+                IAtomContainer ac = cs.getStructure();
+
+                try {
+                    // XXX: needed for stereo
+                    AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
+                } catch (CDKException e) {
+                    continue;
+                }
+
+                long hash = hashGen.generate(ac);
+                if (!seen.add(hash))
+                    remove.add(cs);
             }
+
+            RemoveAnnotationEdit removeEdit = new RemoveAnnotationEdit(m, remove);
+            removeEdit.apply();
+            edit.addEdit(removeEdit);
+            
         }
+        edit.end();
+
+        addEdit(edit);
 
     }
 }
