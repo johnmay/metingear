@@ -8,7 +8,6 @@ import ilog.concert.IloNumExpr;
 import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
-import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.metabolite.CompartmentalisedMetabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
@@ -156,10 +155,12 @@ final class NpFind<M, R> {
                     continue;
                 cplex.addGe(v[j],
                             cplex.prod(e,
-                                       w.get(i, j)));
+                                       w.get(i, j))
+                           );
                 cplex.addLe(v[j],
                             cplex.prod(E,
-                                       w.get(i, j)));
+                                       w.get(i, j))
+                           );
             }
         }
     }
@@ -176,11 +177,14 @@ final class NpFind<M, R> {
                                        v[j]),
                             cplex.sum(e,
                                       cplex.negative(cplex.prod(E,
-                                                                cplex.sum(1, cplex.negative(w.get(i, j)))))));
+                                                                cplex.sum(1, cplex.negative(w.get(i, j)))))
+                                     )
+                           );
                 cplex.addLe(cplex.prod(s.get(i, j),
                                        v[j]),
                             cplex.prod(E,
-                                       w.get(i, j)));
+                                       w.get(i, j))
+                           );
             }
         }
     }
@@ -198,7 +202,7 @@ final class NpFind<M, R> {
                 rxn.setDirection(Direction.BIDIRECTIONAL);
             }
             s.addReaction(rxn);
-        }      
+        }
 
         System.out.print("[GapFind] Creating fromulation...");
         NpFind<CompartmentalisedMetabolite, String> dnpm = new NpFind<CompartmentalisedMetabolite, String>(s, new Function<CompartmentalisedMetabolite, Compartment>() {
