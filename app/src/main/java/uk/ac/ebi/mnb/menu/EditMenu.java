@@ -17,13 +17,21 @@
 package uk.ac.ebi.mnb.menu;
 
 import org.apache.log4j.Logger;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.CDKHydrogenAdder;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.caf.action.GeneralAction;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.metingear.preference.PreferenceFrame;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
+import uk.ac.ebi.mnb.core.ControllerAction;
 import uk.ac.ebi.mnb.dialog.edit.AddAnnotation;
 import uk.ac.ebi.mnb.dialog.edit.AddAuthorAnnotation;
 import uk.ac.ebi.mnb.dialog.edit.ClearAnnotations;
@@ -54,6 +62,8 @@ public class EditMenu extends ContextMenu {
     private static final Logger LOGGER = Logger.getLogger(EditMenu.class);
 
     private boolean prefItemLoaded = false;
+    
+    private final boolean devItems = Boolean.getBoolean("metingear.developer");
 
 
     public EditMenu() {
@@ -122,6 +132,36 @@ public class EditMenu extends ContextMenu {
             @Override
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return active != null;
+            }
+        });
+        
+        
+        
+        add(new ControllerAction("fix.valence.errors", MainView.getInstance()) {
+            @Override public void actionPerformed(ActionEvent e) {
+                for (Metabolite m : getSelection().get(Metabolite.class)) {
+                    for (ChemicalStructure cs : m.getStructures()) {
+                        if (cs instanceof AtomContainerAnnotation) {
+                            try {
+                                IAtomContainer ac = cs.getStructure();
+                                for (IAtom a : ac.atoms()) {
+                                    a.setValency(null);
+                                    a.setImplicitHydrogenCount(null);
+                                }
+                                AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
+                                CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance())
+                                                .addImplicitHydrogens(ac);
+                            } catch (Exception ex) {
+                                System.err.println(ex.getMessage());  
+                            }
+                        }
+                    }
+                }
+            }
+        }, new ContextResponder() {
+            @Override
+            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return devItems;
             }
         });
         add(new ClearAnnotations(MainView.getInstance()), new ContextResponder() {
