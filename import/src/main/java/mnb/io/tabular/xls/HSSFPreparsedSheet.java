@@ -34,6 +34,10 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.util.HSSFCellUtil;
 import org.apache.poi.ss.format.CellFormatType;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
 
 
 /**
@@ -45,9 +49,11 @@ import org.apache.poi.ss.format.CellFormatType;
  */
 public class HSSFPreparsedSheet extends PreparsedSheet {
 
-    private static final Logger LOGGER = Logger.getLogger( HSSFPreparsedSheet.class );
+    private static final Logger LOGGER = Logger.getLogger(HSSFPreparsedSheet.class);
     private final HSSFSheet worksheet;
-    private Class dataType;
+    private       Class     dataType;
+
+    private  final FormulaEvaluator evaluator;
 
 
     /**
@@ -62,49 +68,68 @@ public class HSSFPreparsedSheet extends PreparsedSheet {
      *                   PreparsedEntry
      *
      */
-    public HSSFPreparsedSheet( HSSFSheet worksheet,
-                               ExcelModelProperties properties,
-                               TableDescription bounds ) {
-        super(worksheet, properties, bounds );
+    public HSSFPreparsedSheet(HSSFSheet worksheet,
+                              ExcelModelProperties properties,
+                              FormulaEvaluator evaluator,
+                              TableDescription bounds) {
+        super(worksheet, properties, bounds);
         dataType = bounds.getClass();
+        this.evaluator = evaluator;
         this.worksheet = worksheet;
     }
 
 
     @Override
-    public PreparsedEntry getEntry( int i, List<TableDescription> cols ) {
+    public PreparsedEntry getEntry(int i, List<TableDescription> cols) {
 
         PreparsedEntry entry = null;
 
         // otherwise we can't cast
-        if( dataType == ReactionColumn.class ) {
+        if (dataType == ReactionColumn.class) {
             entry = new PreparsedReaction();
-        } else if( dataType == EntityColumn.class ) {
+        }
+        else if (dataType == EntityColumn.class) {
             entry = new PreparsedMetabolite();
         }
 
         // add others
 
-        HSSFRow row = worksheet.getRow( i );
+        Row row = worksheet.getRow(i);
         ExcelModelProperties properties = super.getProperties();
 
         // for the described columns add them to the preparsed entry
-        for( TableDescription col : cols ) {
-            int index = properties.getColumnIndex( col );
-            HSSFCell cell = row.getCell( index );
-            if( cell != null ) {
-                int type = cell.getCellType();
-                if( type == HSSFCell.CELL_TYPE_NUMERIC ) {
-                    entry.addValue( col, Double.toString( cell.getNumericCellValue() ) );
-                } else if (type != HSSFCell.CELL_TYPE_BLANK) {
-                    cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-                    entry.addValue( col, cell.getStringCellValue() );
-                }
-            }
+        for (TableDescription col : cols) {
+            int index = properties.getColumnIndex(col);
+            assert entry != null;
+            entry.addValue(col, valueOf(row, index));
         }
 
 
         return entry;
+    }
+
+    String valueOf(Row row, int index) {
+        if (row == null) return "";
+        return valueOf(row.getCell(index));    
+    }
+    
+    String valueOf(Cell cell) {
+        if (cell == null) return "";
+        CellValue value = evaluator.evaluate(cell);
+        if (value == null) return "";
+        switch (value.getCellType()) {
+            case Cell.CELL_TYPE_BOOLEAN:
+                return Boolean.toString(value.getBooleanValue());                
+            case Cell.CELL_TYPE_NUMERIC:
+                return Double.toString(value.getNumberValue());
+            case Cell.CELL_TYPE_STRING:
+                return value.getStringValue();
+            case Cell.CELL_TYPE_BLANK:
+                break;
+            case Cell.CELL_TYPE_ERROR:
+                break;
+        }
+        return "";
     }
 
 

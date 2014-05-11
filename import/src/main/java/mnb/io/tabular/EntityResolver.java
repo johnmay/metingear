@@ -17,6 +17,7 @@
 package mnb.io.tabular;
 
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.metabolite.CompartmentalisedMetabolite;
 
 
 /**

@@ -18,6 +18,7 @@ package uk.ac.ebi.mnb.importer.xls.wizzard;
 
 import com.explodingpixels.macwidgets.MacFontUtils;
 import java.awt.Component;
+import java.util.Arrays;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -71,10 +72,12 @@ public class SelectionTable extends JTable {
 
     public void setSheet(int index) {
         String[][] data = helper.getSheetData(index);
-        super.setModel(new DefaultTableModel(data, ExcelUtilities.buildHeaders(0, data[0].length)));
+        String[] headers = ExcelUtilities.buildHeaders(0, data[0].length);
+        super.setModel(new DefaultTableModel(data, headers));
         end = super.getRowCount();
-        for (int i = 0; i < getColumnCount(); i++) {
-            this.getColumnModel().getColumn(index).setWidth(80);
+        
+        for (int i = 0; i < super.getColumnCount(); i++) {
+            this.getColumnModel().getColumn(i).setWidth(80);
         }
     }
 

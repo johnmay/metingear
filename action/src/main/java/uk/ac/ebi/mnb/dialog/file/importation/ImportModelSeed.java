@@ -30,6 +30,7 @@ import mnb.io.tabular.xls.HSSFPreparsedSheet;
 import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import uk.ac.ebi.caf.action.DelayedBuildAction;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
@@ -115,6 +116,8 @@ public class ImportModelSeed extends DelayedBuildAction {
                 try {
                     HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(xls));
 
+                    FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+
                     ExcelModelProperties properties = new ExcelModelProperties();
                     properties.load(getClass().getResourceAsStream("modelseed.properties"));
 
@@ -123,9 +126,11 @@ public class ImportModelSeed extends DelayedBuildAction {
 
                     PreparsedSheet rxnSht = new HSSFPreparsedSheet(workbook.getSheetAt(rxnI),
                                                                    properties,
+                                                                   evaluator,
                                                                    ReactionColumn.DATA_BOUNDS);
                     PreparsedSheet entSht = new HSSFPreparsedSheet(workbook.getSheetAt(metI),
                                                                    properties,
+                                                                   evaluator,
                                                                    EntityColumn.DATA_BOUNDS);
 
                     ExcelEntityResolver entitySheet = new ExcelEntityResolver(entSht,

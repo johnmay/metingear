@@ -21,6 +21,8 @@ import mnb.io.tabular.parser.ReactionParser;
 import mnb.io.tabular.preparse.PreparsedMetabolite;
 import mnb.io.tabular.preparse.PreparsedSheet;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.entity.metabolite.CompartmentalisedMetabolite;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
@@ -129,7 +131,6 @@ public class ExcelEntityResolver implements EntityResolver {
         }
 
         return resolved.get(abbreviation);
-
     }
 
     private Map<String, Metabolite> resolved = new HashMap<String, Metabolite>();

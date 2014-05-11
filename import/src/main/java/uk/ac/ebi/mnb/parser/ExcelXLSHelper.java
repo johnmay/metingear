@@ -32,6 +32,10 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import sun.org.mozilla.javascript.internal.Evaluator;
 
 
 /**
@@ -47,7 +51,8 @@ public class ExcelXLSHelper extends ExcelHelper {
 
     private static final Logger LOGGER = Logger.getLogger(ExcelXLSHelper.class);
 
-    private HSSFWorkbook workbook;
+    private HSSFWorkbook     workbook;
+    private FormulaEvaluator evaluator;
 
 
     /**
@@ -58,6 +63,7 @@ public class ExcelXLSHelper extends ExcelHelper {
      */
     public ExcelXLSHelper(InputStream stream) throws IOException {
         this.workbook = new HSSFWorkbook(stream);
+        this.evaluator = workbook.getCreationHelper().createFormulaEvaluator();
     }
 
 
@@ -109,25 +115,24 @@ public class ExcelXLSHelper extends ExcelHelper {
 
 
     public String getCellString(HSSFCell cell) {
-        if (cell == null) {
+        if (cell == null)
             return "";
+        CellValue value = evaluator.evaluate(cell);
+        if (value == null)
+            return "";
+        switch (value.getCellType()) {
+            case Cell.CELL_TYPE_BOOLEAN:
+                return Boolean.toString(value.getBooleanValue());
+            case Cell.CELL_TYPE_NUMERIC:
+                return Double.toString(value.getNumberValue());
+            case Cell.CELL_TYPE_STRING:
+                return value.getStringValue();
+            case Cell.CELL_TYPE_BLANK:
+                return "";
+            case Cell.CELL_TYPE_ERROR:
+                return "<ERROR>";
         }
-
-        int type = cell.getCellType();
-        if (type == HSSFCell.CELL_TYPE_NUMERIC) {
-            return Double.toString(cell.getNumericCellValue());
-        } else if (type == HSSFCell.CELL_TYPE_STRING) {
-            return cell.getStringCellValue().trim();
-        } else if (type == HSSFCell.CELL_TYPE_BLANK) {
-            return "";
-        } else if (type == HSSFCell.CELL_TYPE_ERROR) {
-            return "ERROR!";
-        } else if (type == HSSFCell.CELL_TYPE_FORMULA) {
-            return cell.getCellFormula();
-        } else {
-            LOGGER.info("Unhandled cell type: " + cell.getCellType());
-            return "";
-        }
+        return "";
     }
 
 

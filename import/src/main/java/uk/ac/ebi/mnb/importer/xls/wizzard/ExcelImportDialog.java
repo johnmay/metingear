@@ -37,6 +37,7 @@ import mnb.io.tabular.xls.HSSFPreparsedSheet;
 import net.sf.furbelow.SpinningDialWaitIndicator;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import uk.ac.ebi.caf.action.GeneralAction;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.report.Report;
@@ -214,8 +215,11 @@ public class ExcelImportDialog
 
             Integer rxnI = Integer.parseInt(properties.getProperty("rxn.sheet"));
 
+            FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+            
             final PreparsedSheet rxnSht = new HSSFPreparsedSheet(workbook.getSheetAt(rxnI),
                                                                  properties,
+                                                                 evaluator,
                                                                  ReactionColumn.DATA_BOUNDS);
             waitIndicator.setText(String.format("initialising."));
             waitIndicator.repaint();
@@ -286,9 +290,11 @@ public class ExcelImportDialog
 
     private EntityResolver resolver(HSSFWorkbook workbook) {
         String sheet = properties.getProperty("ent.sheet");
+        FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
         if(sheet != null) {
             PreparsedSheet entSht = new HSSFPreparsedSheet(workbook.getSheetAt(Integer.parseInt(sheet)),
                                                            properties,
+                                                           evaluator,
                                                            EntityColumn.DATA_BOUNDS);
             return new ExcelEntityResolver(entSht, reconciler(), DefaultEntityFactory.getInstance());
         }
@@ -297,7 +303,7 @@ public class ExcelImportDialog
     
     @SuppressWarnings("unchecked")
     private EntryReconciler reconciler() {
-        if (manager.hasService(ChEBIIdentifier.class, NameService.class)) {
+        if (false && manager.hasService(ChEBIIdentifier.class, NameService.class)) {
 
             @SuppressWarnings("unchecked")
             NameService<ChEBIIdentifier> service = manager.getService(ChEBIIdentifier.class,NameService.class);

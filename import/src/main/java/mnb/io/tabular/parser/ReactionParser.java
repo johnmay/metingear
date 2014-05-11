@@ -19,18 +19,21 @@ package mnb.io.tabular.parser;
 import com.google.common.collect.Sets;
 import mnb.io.tabular.EntityResolver;
 import mnb.io.tabular.preparse.PreparsedReaction;
+import mnb.io.tabular.type.ReactionColumn;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.report.Report;
 import uk.ac.ebi.mdk.domain.annotation.FluxLowerBound;
 import uk.ac.ebi.mdk.domain.annotation.FluxUpperBound;
 import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
 import uk.ac.ebi.mdk.domain.annotation.Locus;
+import uk.ac.ebi.mdk.domain.annotation.Source;
 import uk.ac.ebi.mdk.domain.annotation.Subsystem;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.Classification;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.metabolite.CompartmentalisedMetabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.*;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
@@ -70,7 +73,7 @@ public class ReactionParser {
             Pattern.compile("([+-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+-]?\\d+)?)");
 
     public static final Pattern COEFFICIENT_PATTERN =
-            Pattern.compile("\\A" + DOUBLE_PATTERN.pattern() + "\\s+" + "|\\(" + DOUBLE_PATTERN.pattern() + "\\)");
+            Pattern.compile("\\A(" + DOUBLE_PATTERN.pattern() + "\\s+" + "|\\(" + DOUBLE_PATTERN.pattern() + "\\))");
 
     public static final Pattern COMPARTMENT_PATTERN =
             Pattern.compile("\\[([\\w\\s]+)\\]\\s*\\z");
@@ -212,6 +215,10 @@ public class ReactionParser {
         } else {
             rxn.setDirection(getReactionArrow(preparsed.getEquation()));
         }
+        
+        if (preparsed.hasValue(ReactionColumn.SOURCE)) {
+            rxn.addAnnotation(new Source(preparsed.getValue(SOURCE)));
+        }
 
         // add subsytem annotation
         if (preparsed.hasValue(SUBSYSTEM)) {
@@ -221,6 +228,7 @@ public class ReactionParser {
 
         // add classification
         for (String classification : preparsed.getClassifications()) {
+            classification = classification.trim();
             // load EC code
             if (classification.matches("(?:\\d+\\.){3}\\d+") || classification.contains("EC")) {
                 rxn.addAnnotation(new EnzymeClassification(new ECNumber(classification)));
@@ -335,7 +343,10 @@ public class ReactionParser {
         // stoichiometric coefficients
         Matcher coefMatcher = COEFFICIENT_PATTERN.matcher(entityAbbr);
         if (coefMatcher.find()) {
-            coef = Double.parseDouble(coefMatcher.group(1) == null ? coefMatcher.group(2) : coefMatcher.group(1));
+            String coefStr = coefMatcher.group(1);
+            if (coefStr.charAt(0) == '(')
+                coefStr = coefStr.substring(1, coefStr.length() - 1);
+            coef = Double.parseDouble(coefStr);
             entityAbbr = coefMatcher.replaceAll("");
             entityAbbrComp = entityAbbr;
         }
