@@ -177,13 +177,13 @@ public class ToolsMenu extends ContextMenu {
         add(create(Furanator.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return active != null && active.metabolome().size() > 0;
+                return active != null && selection.hasSelection(Metabolite.class);
             }
         });
         add(create(Pyranator.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return active != null && active.metabolome().size() > 0;
+                return active != null && selection.hasSelection(Metabolite.class);
             }
         });
 
