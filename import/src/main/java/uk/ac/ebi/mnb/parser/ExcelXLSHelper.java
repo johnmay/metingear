@@ -35,8 +35,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import sun.org.mozilla.javascript.internal.Evaluator;
-
 
 /**
  * @name ExcelXLSImporter @date 2011.07.31
