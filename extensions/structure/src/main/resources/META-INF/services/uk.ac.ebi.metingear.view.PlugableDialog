@@ -1,4 +1,6 @@
 uk.ac.ebi.metingear.tools.structure.GenerateStructureDiagramPlugin
 uk.ac.ebi.metingear.tools.structure.SmartsSearchPlugin
+uk.ac.ebi.metingear.tools.structure.SubstructureSearchPlugin
 uk.ac.ebi.metingear.tools.structure.DrawStructurePlugin
 uk.ac.ebi.metingear.tools.structure.FindIdenticalPlugin
+uk.ac.ebi.metingear.tools.structure.ChooseTautomerPlugin

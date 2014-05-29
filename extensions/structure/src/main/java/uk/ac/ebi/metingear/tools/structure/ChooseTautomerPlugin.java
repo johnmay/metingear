@@ -21,36 +21,33 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
+import uk.ac.ebi.metingear.view.ControlAction;
 import uk.ac.ebi.metingear.view.ControlDialog;
+import uk.ac.ebi.metingear.view.PlugableAction;
 import uk.ac.ebi.metingear.view.PlugableDialog;
 import uk.ac.ebi.metingeer.interfaces.menu.ContextResponder;
 
 import java.util.Arrays;
 import java.util.List;
 
-/** @author John May */
-public final class FindIdenticalPlugin implements PlugableDialog {
+/**
+ * @author John May
+ */
+public class ChooseTautomerPlugin implements PlugableDialog {
 
-    @Override
-    public List<String> getMenuPath() {
-        return Arrays.asList("Tools");
+    @Override public List<String> getMenuPath() {
+        return Arrays.asList("Tools", "Structure", "Tautomers");
     }
 
-    @Override
-    public Class<? extends ControlDialog> getDialogClass() {
-        return FindIdentical.class;
+    @Override public Class<? extends ControlDialog> getDialogClass() {
+        return ChooseTautomer.class;
     }
 
-    @Override
-    public ContextResponder getContext() {
+    @Override public ContextResponder getContext() {
         return new ContextResponder() {
-            @Override
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                // a single selected metabolite
-                return active != null && selection.hasSelection(Metabolite.class) && selection.getEntities().size() == 1;
+            @Override public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                return active != null && selection.hasSelection(Metabolite.class) && selection.get(Metabolite.class).size() == 1;
             }
         };
     }
-
-
 }

@@ -134,36 +134,37 @@ public class EditMenu extends ContextMenu {
                 return active != null;
             }
         });
-        
-        
-        
-        add(new ControllerAction("fix.valence.errors", MainView.getInstance()) {
-            @Override public void actionPerformed(ActionEvent e) {
-                for (Metabolite m : getSelection().get(Metabolite.class)) {
-                    for (ChemicalStructure cs : m.getStructures()) {
-                        if (cs instanceof AtomContainerAnnotation) {
-                            try {
-                                IAtomContainer ac = cs.getStructure();
-                                for (IAtom a : ac.atoms()) {
-                                    a.setValency(null);
-                                    a.setImplicitHydrogenCount(null);
+
+
+        if (Boolean.getBoolean("metingear.developer")) {
+            add(new ControllerAction("fix.valence.errors", MainView.getInstance()) {
+                @Override public void actionPerformed(ActionEvent e) {
+                    for (Metabolite m : getSelection().get(Metabolite.class)) {
+                        for (ChemicalStructure cs : m.getStructures()) {
+                            if (cs instanceof AtomContainerAnnotation) {
+                                try {
+                                    IAtomContainer ac = cs.getStructure();
+                                    for (IAtom a : ac.atoms()) {
+                                        a.setValency(null);
+                                        a.setImplicitHydrogenCount(null);
+                                    }
+                                    AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
+                                    CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance())
+                                                    .addImplicitHydrogens(ac);
+                                } catch (Exception ex) {
+                                    System.err.println(ex.getMessage());
                                 }
-                                AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(ac);
-                                CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance())
-                                                .addImplicitHydrogens(ac);
-                            } catch (Exception ex) {
-                                System.err.println(ex.getMessage());  
                             }
                         }
                     }
                 }
-            }
-        }, new ContextResponder() {
-            @Override
-            public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
-                return devItems;
-            }
-        });
+            }, new ContextResponder() {
+                @Override
+                public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
+                    return devItems;
+                }
+            });
+        }
         add(new ClearAnnotations(MainView.getInstance()), new ContextResponder() {
             @Override
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {

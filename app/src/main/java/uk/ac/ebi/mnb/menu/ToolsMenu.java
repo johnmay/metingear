@@ -50,6 +50,7 @@ import uk.ac.ebi.mnb.main.MainView;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
@@ -172,15 +173,20 @@ public class ToolsMenu extends ContextMenu {
                         .hasSelection(MetabolicReactionImpl.class) || (active != null && !active.reactome().isEmpty());
             }
         });
-        
-        
-        add(create(Furanator.class), new ContextResponder() {
+        add(new JSeparator());
+
+        ContextMenu structMenu = new ContextMenu("Structure", MainView.getInstance());
+        ContextMenu tautMenu   = new ContextMenu("Tautomers", MainView.getInstance());
+        add(structMenu);
+        structMenu.add(tautMenu);
+
+        tautMenu.add(create(Furanator.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return active != null && selection.hasSelection(Metabolite.class);
             }
         });
-        add(create(Pyranator.class), new ContextResponder() {
+        tautMenu.add(create(Pyranator.class), new ContextResponder() {
 
             public boolean getContext(ReconstructionManager reconstructions, Reconstruction active, EntityCollection selection) {
                 return active != null && selection.hasSelection(Metabolite.class);

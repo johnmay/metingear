@@ -21,6 +21,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.google.common.primitives.Doubles;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -31,6 +32,7 @@ import org.openscience.cdk.isomorphism.StereoCompatibility;
 import org.openscience.cdk.isomorphism.StructureUtil;
 import org.openscience.cdk.renderer.generators.HighlightGenerator;
 import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
@@ -63,6 +65,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Window;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
@@ -84,12 +88,14 @@ public final class FindIdentical extends AbstractControlDialog {
     private Metabolite            metabolite              = null;
     private JLabel                selectedStructure       = new JLabel();
     private JComboBox             structureSelection      = new JComboBox();
-    private JCheckBox             neutralise              = CheckBoxFactory.newCheckBox();
+    private JCheckBox             standardise             = CheckBoxFactory.newCheckBox();
     private ReconstructionChooser reconstructionSelection = new ReconstructionChooser();
+    private final Window window;
 
     @SuppressWarnings("unchecked")
     public FindIdentical(Window window) {
         super(window);
+        this.window = window;
         DefaultRenderer<ChemicalStructure> renderer = new DefaultRenderer<ChemicalStructure>() {
             @Override public JLabel getComponent(JList list, ChemicalStructure value, int index) {
                 setText(nameAnnotation(value));
@@ -130,8 +136,8 @@ public final class FindIdentical extends AbstractControlDialog {
         panel.add(structureSelection, new CellConstraints(3, 3));
         panel.add(getLabel("recons"), new CellConstraints(1, 5));
         panel.add(reconstructionSelection.getComponent(), new CellConstraints(3, 5));
-        panel.add(getLabel("neu"), new CellConstraints(1, 7));
-        panel.add(neutralise, new CellConstraints(3, 7));
+        panel.add(getLabel("standardise"), new CellConstraints(1, 7));
+        panel.add(standardise, new CellConstraints(3, 7));
         return panel;
     }
 
@@ -158,7 +164,8 @@ public final class FindIdentical extends AbstractControlDialog {
             IAtomContainer queryContainer = queryStructure.getStructure();
 
             queryContainer = StructureUtil.suppressHydrogens(queryContainer);
-            if (neutralise.isSelected()) {
+            if (standardise.isSelected()) {
+                AtomContainerManipulator.removeHydrogens(queryContainer);
                 StructureUtil.neutralise(queryContainer);
             }
 
@@ -173,7 +180,7 @@ public final class FindIdentical extends AbstractControlDialog {
                         IAtomContainer unsuppressed = cs.getStructure();
                         IAtomContainer suppressed = StructureUtil.suppressHydrogens(cs.getStructure());
 
-                        if (neutralise.isSelected()) {
+                        if (standardise.isSelected()) {
                             StructureUtil.neutralise(suppressed);
                         }
                         
@@ -286,6 +293,7 @@ public final class FindIdentical extends AbstractControlDialog {
             System.out.println("writen to: \n" + f.getAbsolutePath());
 
             final JFrame frame = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             JTable table = StructureTable.tableOf(structures, Arrays.asList("Name", "Id", "Score.Value"));
             table.setSelectionBackground(new Color(0xCCCCCC));
             table.setSelectionForeground(new Color(0x444444));
@@ -293,6 +301,13 @@ public final class FindIdentical extends AbstractControlDialog {
             frame.add(new JLabel(new ImageIcon(img)), BorderLayout.WEST);
             frame.add(new JScrollPane(table));
             frame.pack();
+            frame.addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentHidden(ComponentEvent e) {
+                    Logger.getLogger(getClass()).debug("request focus");
+                    window.requestFocusInWindow();
+                }
+            });
             SwingUtilities.invokeLater(new Runnable() {
                 @Override public void run() {
                     frame.setVisible(true);
