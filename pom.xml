@@ -31,8 +31,8 @@
     <!-- versions for some core libraries changing here will affect all child modules -->
     <properties>
         <caf.version>0.8.6-SNAPSHOT</caf.version>
-        <mdk.version>1.5.0-SNAPSHOT</mdk.version>
-        <cdk.version>1.5.6-SNAPSHOT</cdk.version>
+        <mdk.version>1.5.0</mdk.version>
+        <cdk.version>1.5.6</cdk.version>
         <jchempaint.version>3.4</jchempaint.version>
     </properties>
 
