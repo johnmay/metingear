@@ -5,7 +5,7 @@
     <parent>
         <artifactId>metingear-extensions</artifactId>
         <groupId>uk.ac.ebi.metingear</groupId>
-        <version>1.1.4</version>
+        <version>1.1.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -64,6 +64,10 @@
                 <exclusion>
                     <groupId>org.openscience.cdk</groupId>
                     <artifactId>cdk-inchi</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.ac.cam.ch.opsin</groupId>
+                    <artifactId>opsin-core</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
