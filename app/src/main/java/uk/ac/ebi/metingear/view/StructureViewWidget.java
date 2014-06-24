@@ -855,6 +855,10 @@ final class StructureViewWidget {
         }
 
         void update() {
+            boolean multipleStructures = controller.model.structures.size() > 1;
+            selected.setVisible(multipleStructures);
+            prev.setVisible(multipleStructures);
+            next.setVisible(multipleStructures);
             selected.setText(selectedIndexText());
             formula.setText("");
             depiction.setText("No structure");
