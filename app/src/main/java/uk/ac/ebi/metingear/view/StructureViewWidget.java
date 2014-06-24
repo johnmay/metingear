@@ -77,6 +77,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
@@ -89,11 +90,11 @@ import java.util.List;
 
 /**
  * A self contained widget for viewing and editing structure annotations.
- * 
+ *
  * @author John May
  */
 final class StructureViewWidget {
-    
+
     private final View       view;
     private final Controller controller;
 
@@ -148,12 +149,12 @@ final class StructureViewWidget {
             this.mtbl = mtbl;
             this.structures = structures;
         }
-        
+
         int index() {
             if (structures.isEmpty()) return 0;
             return Math.abs(position % structures.size());
         }
-        
+
         IAtomContainer selectedAtomContainer() {
             if (structures.isEmpty())
                 return null;
@@ -165,7 +166,7 @@ final class StructureViewWidget {
                 return null;
             return structures.get(index());
         }
-        
+
         String selectedAbbreviation() {
             if (mtbl != null)
                 return mtbl.getAbbreviation();
@@ -342,7 +343,7 @@ final class StructureViewWidget {
                 Logger.getLogger(getClass()).error(e);
             }
         }
-        
+
         void saveAsPDF(File file, Coloring coloring) {
             IAtomContainer container = model.selectedAtomContainer();
             if (container == null) return;
@@ -351,19 +352,19 @@ final class StructureViewWidget {
                 return;
             if (!file.getName().endsWith(".pdf"))
                 file = new File(file.getPath() + ".pdf");
-            
+
             AtomContainerIcon icon = new AtomContainerIcon(container,
                                                            coloring);
-            
-            Rectangle rect = icon.bounds();
-            rect.setRect(0, 0, rect.width * 100, rect.height * 100);
+
+            Rectangle2D rect = icon.bounds();
+            rect.setRect(0, 0, rect.getWidth() * 100, rect.getHeight() * 100);
             PDFGraphics2D g2 = new PDFGraphics2D(0, 0, rect.getWidth(), rect.getHeight());
             g2.setColor(coloring.bgColor());
-            g2.fillRect(0, 0, rect.width, rect.height);
-            icon.render(g2, rect);
+            g2.fill(rect);
+            icon.render(g2, new Rectangle((int) rect.getWidth(), (int) rect.getHeight()));
             g2.dispose();
-            
-            String content = g2.toString();              
+
+            String content = g2.toString();
             FileWriter fw = null;
             try {
                 fw = new FileWriter(file);
@@ -371,12 +372,12 @@ final class StructureViewWidget {
             } catch (IOException e) {
                 Logger.getLogger(getClass()).error(e);
             } finally {
-                 try {
-                     if (fw != null) fw.close();
+                try {
+                    if (fw != null) fw.close();
                 } catch (IOException e) {
-                     Logger.getLogger(getClass()).error(e);
+                    Logger.getLogger(getClass()).error(e);
                 }
-            }             
+            }
         }
 
         void saveAsEPS(File file, Coloring coloring) {
@@ -391,12 +392,12 @@ final class StructureViewWidget {
             AtomContainerIcon icon = new AtomContainerIcon(container,
                                                            coloring);
 
-            Rectangle rect = icon.bounds();
-            rect.setRect(0, 0, rect.width * 100, rect.height * 100);
+            Rectangle2D rect = icon.bounds();
+            rect.setRect(0, 0, rect.getWidth() * 100, rect.getHeight() * 100);
             EPSGraphics2D g2 = new EPSGraphics2D(0, 0, rect.getWidth(), rect.getHeight());
             g2.setColor(coloring.bgColor());
-            g2.fillRect(0, 0, rect.width, rect.height);
-            icon.render(g2, rect);
+            g2.fill(rect);
+            icon.render(g2, new Rectangle((int) rect.getWidth(), (int) rect.getHeight()));
             g2.dispose();
 
             String content = g2.toString();
@@ -427,15 +428,15 @@ final class StructureViewWidget {
             AtomContainerIcon icon = new AtomContainerIcon(container,
                                                            coloring);
 
-            Rectangle rect = icon.bounds();
-            rect.setRect(0, 0, rect.width * 100, rect.height * 100);
+            Rectangle2D rect = icon.bounds();
+            rect.setRect(0, 0, rect.getWidth() * 100, rect.getHeight() * 100);
             BufferedImage img = new BufferedImage((int) rect.getWidth(),
-                                                  (int)rect.getHeight(),
+                                                  (int) rect.getHeight(),
                                                   BufferedImage.TYPE_4BYTE_ABGR);
             Graphics2D g2 = img.createGraphics();
             g2.setColor(coloring.bgColor());
-            g2.fillRect(0, 0, rect.width, rect.height);
-            icon.render(g2, rect);
+            g2.fill(rect);
+            icon.render(g2, new Rectangle((int) rect.getWidth(), (int) rect.getHeight()));
             g2.dispose();
 
             try {
@@ -444,7 +445,7 @@ final class StructureViewWidget {
                 Logger.getLogger(getClass()).error(e);
             }
         }
-        
+
 
         void saveAsMolfile(File file) {
             IAtomContainer container = model.selectedAtomContainer();
@@ -480,7 +481,7 @@ final class StructureViewWidget {
                 return;
             if (!file.getName().endsWith(".cml"))
                 file = new File(file.getPath() + ".cml");
-            FileWriter fileWriter = null;            
+            FileWriter fileWriter = null;
             try {
                 fileWriter = new FileWriter(file);
                 CMLWriter writer = new CMLWriter(fileWriter);
@@ -607,7 +608,7 @@ final class StructureViewWidget {
             component.setOpaque(true);
             topBar.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             btmBar.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            
+
             // tool tips
             tools.setToolTipText("Tools and Settings");
             save.setToolTipText("Export and copy structure representations");
@@ -652,7 +653,7 @@ final class StructureViewWidget {
                     zoomedView.popout.setEnabled(false);
 
                     myController.addView(zoomedView);
-                    
+
                     zoomedView.update();
                     dialog.add(zoomedView.component);
                     SwingUtilities.invokeLater(new Runnable() {
@@ -860,12 +861,12 @@ final class StructureViewWidget {
             depiction.setIcon(null);
             IAtomContainer container = controller.model.selectedAtomContainer();
             if (container != null) {
-                
+
                 // set formula
                 IMolecularFormula mf = MolecularFormulaManipulator.getMolecularFormula(container);
                 formula.setText(formulaAsHTML(mf));
                 formula.setPreferredSize(formula.getMinimumSize());
-                        
+
                 // need to generate coordinates
                 if (GeometryTools.get2DCoordinateCoverage(container) != GeometryTools.CoordinateCoverage.FULL) {
                     try {
@@ -880,12 +881,12 @@ final class StructureViewWidget {
                         return;
                     }
                 }
-                
+
                 depiction.setText(null);
                 depiction.setIcon(new AtomContainerIcon(container, coloring));
             }
         }
-        
+
         private static String formulaAsHTML(IMolecularFormula formula) {
             String html = MolecularFormulaManipulator.getHTML(formula, false, false);
             html = html.replaceAll("<sub>1</sub>", ""); // CH4 not C1H4, patched in future CDK release
@@ -894,7 +895,7 @@ final class StructureViewWidget {
                 if (formula.getIsotopeCount() > 1)
                     html = "[" + html + "]";
                 String symbol = chg > 0 ? "+" : "–";
-                String mag    = Math.abs(chg) > 1 ? Integer.toString(Math.abs(chg)) : "";
+                String mag = Math.abs(chg) > 1 ? Integer.toString(Math.abs(chg)) : "";
                 html += "<sup>" + mag + symbol + "</sup>";
             }
             return "<html>" + html + "</html>";
