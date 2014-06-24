@@ -856,7 +856,7 @@ final class StructureViewWidget {
 
         void update() {
             boolean multipleStructures = controller.model.structures.size() > 1;
-            selected.setVisible(multipleStructures);
+            selected.setForeground(multipleStructures ? coloring.fgColor() : coloring.bgColor());
             prev.setVisible(multipleStructures);
             next.setVisible(multipleStructures);
             selected.setText(selectedIndexText());
