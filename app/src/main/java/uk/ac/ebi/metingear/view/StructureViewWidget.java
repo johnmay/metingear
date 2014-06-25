@@ -33,6 +33,7 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.utility.font.EBIIcon;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
@@ -67,6 +68,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -608,6 +610,7 @@ final class StructureViewWidget {
             component.setOpaque(true);
             topBar.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             btmBar.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            
 
             // tool tips
             tools.setToolTipText("Tools and Settings");
@@ -913,11 +916,13 @@ final class StructureViewWidget {
         }
 
         private static JButton transparentButton(ImageIcon icon) {
-            JButton btn = new JButton();
-            btn.setIcon(icon);
-            btn.setOpaque(false);
-            btn.setBorder(BorderFactory.createEmptyBorder());
-            return btn;
+            JButton button = ButtonFactory.newCleanButton(icon, new AbstractAction() {
+                @Override public void actionPerformed(ActionEvent e) {
+                    // will be set elsewhere
+                }
+            });
+            button.setOpaque(false);
+            return button;
         }
     }
 }   
