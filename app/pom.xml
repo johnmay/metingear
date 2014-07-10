@@ -210,6 +210,18 @@
             <artifactId>cdk-interfaces</artifactId>
             <version>${cdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-libiocml</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+
+        <!-- render to PDF, EPS, and SVG -->
+        <dependency>
+            <groupId>de.erichseifert.vectorgraphics2d</groupId>
+            <artifactId>VectorGraphics2D</artifactId>
+            <version>0.9.1</version>
+        </dependency>
 
         <!-- Other -->
         <dependency>
@@ -296,7 +308,8 @@
                         </goals>
                         <configuration>
                             <finalName>Metingear</finalName>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <createDependencyReducedPom>false
+                            </createDependencyReducedPom>
                             <artifactSet>
                                 <excludes>
                                     <exclude>ilog:*</exclude>
@@ -322,7 +335,9 @@
                                     <mainClass>uk.ac.ebi.metingear.Main
                                     </mainClass>
                                     <manifestEntries>
-                                        <SplashScreen-Image>uk/ac/ebi/metingear/splash.png</SplashScreen-Image>
+                                        <SplashScreen-Image>
+                                            uk/ac/ebi/metingear/splash.png
+                                        </SplashScreen-Image>
                                     </manifestEntries>
                                 </transformer>
                                 <transformer

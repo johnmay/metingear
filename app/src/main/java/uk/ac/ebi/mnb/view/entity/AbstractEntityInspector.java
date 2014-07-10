@@ -22,6 +22,7 @@ import uk.ac.ebi.caf.component.BorderlessScrollPane;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mnb.interfaces.SelectionController;
+import uk.ac.ebi.mnb.view.entity.metabolite.MetaboliteInspector;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -59,10 +60,13 @@ public abstract class AbstractEntityInspector
         // associate with this inspector (this) and the entity panel
         toolbar = new InspectorToolbar(this);
         pane = new BorderlessScrollPane(panel);
-
-
+        
         this.add(toolbar, BorderLayout.NORTH);
-        this.add(pane, BorderLayout.CENTER);
+        if (this instanceof MetaboliteInspector) {
+            this.add(panel, BorderLayout.CENTER);
+        } else {
+            this.add(pane, BorderLayout.CENTER);
+        }
 
     }
 
@@ -105,13 +109,11 @@ public abstract class AbstractEntityInspector
 
             panel.setEntity(entity);
             panel.update();
-            setDisplay();
             repaint();
             revalidate();
         } else {
             if (entity != null) {
                 panel.update();
-                setDisplay();
                 repaint();
                 revalidate();
             }
@@ -126,7 +128,6 @@ public abstract class AbstractEntityInspector
     public boolean update(EntityCollection selection) {
         if (selection.getEntities().contains(entity)) {
             panel.update();
-            setDisplay();
             repaint();
             revalidate();
             return true;
@@ -136,9 +137,8 @@ public abstract class AbstractEntityInspector
 
     private JScrollPane pane;
 
-    private void setDisplay() {
-        // called on update
-        toolbar.setVisible(true);
+    private void setToolbarDisplayed(boolean x) {
+        toolbar.setVisible(x);
     }
 
     /**

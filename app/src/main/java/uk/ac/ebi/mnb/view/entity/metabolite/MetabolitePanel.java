@@ -16,36 +16,36 @@
  */
 package uk.ac.ebi.mnb.view.entity.metabolite;
 
+import com.explodingpixels.macwidgets.plaf.EmphasizedLabelUI;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.caf.utility.TextUtility;
-import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.collection.MetaboliteClassImplementation;
-import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
-import uk.ac.ebi.mnb.main.MainView;
+import uk.ac.ebi.metingear.view.MetaboliteInspectorView;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityPanel;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.event.UndoableEditListener;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
 
 /**
- * MetabolitePanel – 2011.09.30 <br>
- * Class description
+ * MetabolitePanel – 2011.09.30 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -75,7 +75,7 @@ public class MetabolitePanel
 
     private JLabel typeViewer = LabelFactory.newLabel("");
 
-    private JComboBox typeEditor = ComboBoxFactory.newComboBox((Object[])MetaboliteClassImplementation.values());
+    private JComboBox typeEditor = ComboBoxFactory.newComboBox((Object[]) MetaboliteClassImplementation.values());
     // molecular formula
 
 
@@ -84,76 +84,105 @@ public class MetabolitePanel
 
     private CellConstraints cc = new CellConstraints();
 
+    MetaboliteInspectorView view;
 
-    public MetabolitePanel() {
+    private final CardLayout layout = new CardLayout();
+
+    public MetabolitePanel(UndoableEditListener editListener) {
         super("Metabolite");
 
-        buildSynopsis();
+        view = new MetaboliteInspectorView(editListener);
+
+        setLayout(layout);
+        add(view, "view");
+
+        this.setBackground(new Color(0x444444));
+        JLabel holdingLabel = new JLabel("No metabolite is selected");
+        holdingLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        holdingLabel.setUI(new EmphasizedLabelUI(new Color(0xc4c4c4), new Color(0xc4c4c4), new Color(0x333333)));
+        holdingLabel.setFont(holdingLabel.getFont().deriveFont(Font.BOLD, 28));
+
+        add(holdingLabel, "holding");
+
+        layout.show(this, "holding");
+//        buildSynopsis();
     }
 
+    @Override public void setup() {
+
+    }
 
     @Override
     public boolean update() {
 
-        // update all fields and labels...
-        if (super.update()) {
-
-            if (entity.hasStructure()) {
-                IAtomContainer atomcontainer = entity.getStructures().iterator().next().getStructure();
-                try {
-                    structure.setIcon(new ImageIcon(MoleculeRenderer.getInstance().getImage(atomcontainer,
-                                                                                            new Rectangle(256, 256))));
-                } catch (CDKException ex) {
-                    MainView.getInstance().addErrorMessage("Could not render structure");
-                }
-                structure.setText("");
-            } else {
-                structure.setText("No Structure");
-                structure.setIcon(null);
-            }
-
-            Collection<MolecularFormula> formulas = entity.getAnnotations(MolecularFormula.class);
-            if (formulas.iterator().hasNext()) {
-                MolecularFormula mf = formulas.iterator().next();
-                formularViewer.setText(mf.getFormula() != null ? TextUtility.html(mf.toHTML()) : mf.toString());
-            } else {
-                formularViewer.setText("");
-            }
-
-            boolean generic = entity.isGeneric();
-
-            markushViewer.setText(generic ? "Yes" : "No");
-            markushEditor.setSelectedIndex(generic ? 0 : 1);
-
-            typeViewer.setText(entity.getType().toString());
-            typeEditor.setSelectedItem(entity.getType());
-
-            return true;
-        }
-
-        return false;
+//        // update all fields and labels...
+//        if (super.update()) {
+//
+//            if (entity.hasStructure()) {
+//                IAtomContainer atomcontainer = entity.getStructures().iterator().next().getStructure();
+//                try {
+//                    structure.setIcon(new ImageIcon(MoleculeRenderer.getInstance().getImage(atomcontainer,
+//                                                                                            new Rectangle(256, 256))));
+//                } catch (CDKException ex) {
+//                    MainView.getInstance().addErrorMessage("Could not render structure");
+//                }
+//                structure.setText("");
+//            }
+//            else {
+//                structure.setText("No Structure");
+//                structure.setIcon(null);
+//            }
+//
+//            Collection<MolecularFormula> formulas = entity.getAnnotations(MolecularFormula.class);
+//            if (formulas.iterator().hasNext()) {
+//                MolecularFormula mf = formulas.iterator().next();
+//                formularViewer.setText(mf.getFormula() != null ? TextUtility.html(mf.toHTML()) : mf.toString());
+//            }
+//            else {
+//                formularViewer.setText("");
+//            }
+//
+//            boolean generic = entity.isGeneric();
+//
+//            markushViewer.setText(generic ? "Yes" : "No");
+//            markushEditor.setSelectedIndex(generic ? 0 : 1);
+//
+//            typeViewer.setText(entity.getType().toString());
+//            typeEditor.setSelectedItem(entity.getType());
+//
+//            return true;
+//        }
+//
+//        return false;
+        return true;
     }
 
 
     @Override
     public boolean setEntity(AnnotatedEntity entity) {
+        if (entity != null) {
+            layout.show(this, "view");
+        }
+        else {
+            layout.show(this, "holding");
+        }
         this.entity = (Metabolite) entity;
-        return super.setEntity(entity);
+        this.view.setMtbl(this.entity);
+        return true;
     }
-
 
     @Override
     public void setEditable(boolean editable) {
-        super.setEditable(editable);
+//        super.setEditable(editable);
 
-        // set editor vissible when editable and vise versa
-        markushEditor.setVisible(editable);
-        typeEditor.setVisible(editable);
-
-        // set viewers hidden when editable and vise versa
-        formularViewer.setVisible(!editable);
-        markushViewer.setVisible(!editable);
-        typeViewer.setVisible(!editable);
+//        // set editor vissible when editable and vise versa
+//        markushEditor.setVisible(editable);
+//        typeEditor.setVisible(editable);
+//
+//        // set viewers hidden when editable and vise versa
+//        formularViewer.setVisible(!editable);
+//        markushViewer.setVisible(!editable);
+//        typeViewer.setVisible(!editable);
     }
 
     private JPanel specific;
@@ -204,15 +233,16 @@ public class MetabolitePanel
     @Override
     public void store() {
 
-        super.store();
+//        super.store();
 
-        entity.setGeneric(((String) markushEditor.getSelectedItem()).equals("Yes") ? true : false);
-        entity.setType((MetaboliteClassImplementation) typeEditor.getSelectedItem());
+//        entity.setGeneric(((String) markushEditor.getSelectedItem()).equals("Yes") ? true : false);
+//        entity.setType((MetaboliteClassImplementation) typeEditor.getSelectedItem());
     }
 
     @Override public void clear() {
-        super.clear();
-        structure.setIcon(null);
-        formularViewer.setText("");
+//        super.clear();
+//        structure.setIcon(null);
+//        formularViewer.setText("");
+        view.clear();
     }
 }

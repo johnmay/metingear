@@ -19,6 +19,8 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 
 import uk.ac.ebi.mnb.view.entity.AbstractEntityView;
 
+import javax.swing.event.UndoableEditListener;
+
 
 /**
  * MetaboliteView.java – MetabolicDevelopmentKit – Jun 4, 2011
@@ -32,8 +34,8 @@ public class MetaboliteView
                                                  org.apache.log4j.Logger.getLogger(
       MetaboliteView.class);
 
-    public MetaboliteView() {
-        super("Metabolites", new MetaboliteTable(), new MetaboliteInspector());
+    public MetaboliteView(UndoableEditListener editListener) {
+        super("Metabolites", new MetaboliteTable(), new MetaboliteInspector(editListener));
     }
 
 

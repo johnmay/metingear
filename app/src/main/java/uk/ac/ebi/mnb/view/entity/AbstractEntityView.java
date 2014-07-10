@@ -78,11 +78,12 @@ public class AbstractEntityView
         setDividerSize(10);
         setBackground(ThemeManager.getInstance().getTheme().getBackground());
         JScrollPane tablePane = new BorderlessScrollPane(this.table);
-        add(tablePane, JSplitPane.TOP);
-        add(this.inspector, JSplitPane.BOTTOM);
+        
+        setTopComponent(tablePane);
+        setBottomComponent(this.inspector);
         setBorders();
         inspector.setTable(table);
-        setDividerLocation(350);
+        setDividerLocation(500);
 
 
         // action listener changes text on the bottom-bar

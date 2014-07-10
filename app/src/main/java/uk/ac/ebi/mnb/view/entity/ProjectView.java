@@ -39,6 +39,7 @@ import uk.ac.ebi.mnb.view.entity.tasks.TaskView;
 import uk.ac.ebi.mnb.view.source.SourceController;
 
 import javax.swing.*;
+import javax.swing.event.UndoableEditListener;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Arrays;
@@ -87,12 +88,12 @@ public class ProjectView
 
     private SourceController controller;
 
-    public ProjectView() {
+    public ProjectView(UndoableEditListener editListener) {
 
         genes = new GeneView();
         products = new ProductView();
         reactions = new ReactionView();
-        metabolites = new MetaboliteView();
+        metabolites = new MetaboliteView(editListener);
         tasks = new TaskView();
         general = new GeneralView();
 

@@ -20,6 +20,8 @@ package uk.ac.ebi.mnb.view.entity.metabolite;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityInspector;
 import org.apache.log4j.Logger;
 
+import javax.swing.event.UndoableEditListener;
+
 
 /**
  *          MetaboliteInspector – 2011.09.06 <br>
@@ -33,8 +35,9 @@ public class MetaboliteInspector
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteInspector.class);
   
-    public MetaboliteInspector() {
-        super(new MetabolitePanel());
+    public MetaboliteInspector(UndoableEditListener editListener) {
+        super(new MetabolitePanel(editListener));
+        remove(0);
     }
 
 

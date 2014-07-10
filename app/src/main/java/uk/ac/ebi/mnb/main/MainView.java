@@ -83,7 +83,7 @@ public class MainView
 
     private static final Logger LOGGER = Logger.getLogger(MainView.class);
 
-    private UndoManager undoManager;
+    private UndoManager undoManager = new UndoManager();
 
     private Toolbar toolbar; //TODO: wrap in class
 
@@ -116,7 +116,7 @@ public class MainView
 
         super("Metingear");
 
-        project = new ProjectView();
+        project = new ProjectView(undoManager);
 
         getContentPane().setLayout(new CardLayout());
 
@@ -167,8 +167,8 @@ public class MainView
                                             public void run() {
                                                 SearchManager.getInstance().setPreviousEntries(entities);
                                                 EntityTable table = getViewController().getActiveView().getTable();
-                                                if(table instanceof GeneralTable){
-                                                    ((GeneralTableModel)table.getModel()).setGeneralEntities(entities);
+                                                if (table instanceof GeneralTable) {
+                                                    ((GeneralTableModel) table.getModel()).setGeneralEntities(entities);
                                                 }
                                                 table.update();
                                             }
@@ -282,7 +282,6 @@ public class MainView
         });
 
 
-        undoManager = new UndoManager();
 
         // links the task manager with this
         TaskManager.getInstance().setController(this);
