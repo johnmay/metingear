@@ -65,8 +65,9 @@ public abstract class AbstractEntityTableModel
     private List<? extends AnnotatedEntity> components = new ArrayList<AnnotatedEntity>();
 
     private static List<ColumnDescriptor> defaultColumns = new ArrayList<ColumnDescriptor>(
-            Arrays.asList(new ColumnDescriptor("Accession", String.class,
-                                               DataType.BASIC, String.class, false),
+            Arrays.asList(
+//                          new ColumnDescriptor("Accession", String.class,
+//                                               DataType.BASIC, String.class, false),
                           new ColumnDescriptor("Abbreviation", String.class,
                                                DataType.BASIC, String.class, new AbbreviationSetter()),
                           new ColumnDescriptor("Name", String.class, DataType.BASIC,

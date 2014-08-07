@@ -63,9 +63,6 @@ public class MetaboliteTableModel
     private static final Logger LOGGER = Logger.getLogger(MetaboliteTableModel.class);
 
     private static final ColumnDescriptor[] DEFAULT = new ColumnDescriptor[]{
-            new ColumnDescriptor("Generic", null,
-                                 DataType.FIXED,
-                                 Boolean.class),
             new ColumnDescriptor(new CrossReference()),
             new ColumnDescriptor(new MolecularFormula()),
             new ColumnDescriptor("Validity", null,

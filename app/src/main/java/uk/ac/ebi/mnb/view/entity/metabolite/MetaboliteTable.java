@@ -30,12 +30,16 @@ import uk.ac.ebi.mdk.ui.render.table.BooleanCellRenderer;
 import uk.ac.ebi.mdk.ui.render.table.DefaultRenderer;
 import uk.ac.ebi.mdk.ui.render.table.RatingCellRenderer;
 import uk.ac.ebi.mdk.ui.render.table.StructuralValidityRenderer;
+import uk.ac.ebi.metingear.view.ChemicalNameHtmlStyler;
 import uk.ac.ebi.mnb.editors.CrossReferenceCellEditor;
 import uk.ac.ebi.mnb.view.entity.AbstractEntityTable;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 /**
@@ -58,6 +62,29 @@ public class MetaboliteTable
         //                          new ChemStructureRenderer());
         AnnotationCellRenderer annotationRenderer = new AnnotationCellRenderer();
         BooleanCellRenderer booleanRenderer = new BooleanCellRenderer();
+
+        // name column has special formatting and width
+        getColumnModel().getColumn(1).setCellRenderer(new DefaultRenderer<String>(){
+            Map<String, String> cache = new LinkedHashMap<String, String>() {
+                @Override protected boolean removeEldestEntry(Map.Entry<String, String> eldest) {
+                    return size() > 500;
+                }
+            };
+
+            @Override public JLabel getComponent(JTable table, String value, int row, int column) {
+                String html = cache.get(value);
+                if (html == null) {
+                    cache.put(value, html = ChemicalNameHtmlStyler.styleHtml(value));
+                }
+                JLabel component = (JLabel) super.getComponent(table, value, row, column);
+                component.setText(html);
+                component.setToolTipText(value);
+                return component;
+            }
+        });
+        getColumnModel().getColumn(1).setWidth(250);
+        getColumnModel().getColumn(1).setMinWidth(200);
+        getColumnModel().getColumn(1).setMaxWidth(600);
 
         setDefaultRenderer(Boolean.class,
                            booleanRenderer);
@@ -82,13 +109,14 @@ public class MetaboliteTable
                                    setIcon(value.icon());
                                    return this;
                                }
-                           });
+                           }
+                          );
 
 
         setDefaultRenderer(Rating.class, new RatingCellRenderer());
         setDefaultEditor(Rating.class, new RatingCellEditor());
         // setDefaultEditor(Rating.class, new ITunesRatingTableCellEditor());
-
+        setRowHeight(20);
 //        setRowHeight(64);// only set when chem structure is to be displayed
 
         //addMouseListener(new DoubleClickListener(this));
