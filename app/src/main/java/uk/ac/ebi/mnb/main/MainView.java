@@ -230,7 +230,7 @@ public class MainView
         controlBar.installDraggableWidgetOnSplitPane(pane);
         controlBar.createAndAddButton(MacIcons.PLUS, null);
         controlBar.createAndAddPopdownButton(MacIcons.GEAR, sourceController);
-        pane.setDividerLocation((int) ((float) getWidth() * 0.25)); // 25 % of the width
+        pane.setDividerLocation((int) ((float) getWidth() * 0.15)); // 15 % of the width
         pane.setBorder(Borders.EMPTY_BORDER);
         pane.add(source.getComponent(), JSplitPane.LEFT);
         source.installSourceListControlBar(controlBar);
