@@ -39,12 +39,16 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.Desktop;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.Window;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -112,6 +116,7 @@ public class ApplicationLauncher implements Runnable {
     public void run() {
 
         loadLookAndFeel();
+        loadRequiredFonts();
         configureProxy();
 
         final MainView view = MainView.getInstance();
@@ -170,6 +175,21 @@ public class ApplicationLauncher implements Runnable {
                                        portPref.get());
         }
 
+    }
+    
+    void loadRequiredFonts() {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+        try {
+            Font cousineRegular = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/fonts/cousine/Cousine-Regular.ttf"));
+            Font cousineBold = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/fonts/cousine/Cousine-Bold.ttf"));
+            ge.registerFont(cousineRegular);
+            ge.registerFont(cousineBold);
+        } catch (FontFormatException e) {
+            System.err.println(e.getMessage());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private void checkForUpdate(final Window window) {
