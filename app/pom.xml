@@ -412,7 +412,7 @@
                             </bundleName>
                             <mainClass>uk.ac.ebi.metingear.Main</mainClass>
                             <iconFile>
-                                /Users/johnmay/EBI/illustration/mnb/icons/mnb.icns
+                                ${basedir}/src/main/resources/uk/ac/ebi/metingear/mnb.icns
                             </iconFile>
                             <buildDirectory>
                                 /Users/johnmay/Applications/Metingear
