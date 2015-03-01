@@ -15,6 +15,8 @@
 
    <!-- TODO: move script to a separate file -->
     <script type="text/javascript">
+
+        var latestVersion = '1.1.6';
         
         // get the appropiate label for the download button
         function getDownloadOSLabel(){
@@ -27,12 +29,12 @@
         // directs to windows or mac specific downloads, defaults to the jar
         function download(){
             if (navigator.appVersion.indexOf("Win")!=-1) {
-                window.location.href='http://www.ebi.ac.uk/~johnmay/metingear/download/LATEST/Metingear.exe.zip';
+                window.location.href='https://github.com/johnmay/metingear/releases/download/' + latestVersion + '/Metingear.jar';
             }
             else if (navigator.appVersion.indexOf("Mac")!=-1){
-                window.location.href='http://www.ebi.ac.uk/~johnmay/metingear/download/LATEST/Metingear.dmg';
+                window.location.href='https://github.com/johnmay/metingear/releases/download/' + latestVersion + '/Metingear.dmg';
             } else {             
-                window.location.href='http://www.ebi.ac.uk/~johnmay/metingear/download/LATEST/Metingear.jar.zip';                
+                window.location.href='https://github.com/johnmay/metingear/releases/download/' + latestVersion + '/Metingear.jar';
             }
         }
         
@@ -73,7 +75,7 @@
                         <b>Download Metingear</b>
                         <br/>
                         <span><script type="text/javascript">document.write(getDownloadOSLabel())</script></span>
-                        <a href="http://www.ebi.ac.uk/~johnmay/metingear/download/"
+                        <a href="https://github.com/johnmay/metingear/releases"
                            title="alternative download options">more</a>
                         </p>
                 </div>
@@ -93,7 +95,7 @@
 <h5>Screenshots</h5>
 
 
-<img src="http://www.ebi.ac.uk/~johnmay/metingear/img/metingear-screenshot.png"/>
+<img src="images/screenshot-Mar2015.png"/>
 
 <h5>Key Features</h5>
 
