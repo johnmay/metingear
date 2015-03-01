@@ -14,7 +14,6 @@ import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.matrix.DefaultStoichiometricMatrix;
 import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil;
 import uk.ac.ebi.optimise.SimulationUtil;
-import uk.ac.ebi.optimise.gap.GapFind;
 
 import java.io.File;
 import java.util.Arrays;
@@ -102,27 +101,27 @@ public class GapFindOnMatrix {
 
         SimulationUtil.setup(); // load C library
 
-        GapFind gaps = new GapFind(s);
-        for (int i = 0; i < s.getMoleculeCount(); i++) {
-            Map<Integer, Double> m = s.getReactions(s.getMolecule(i));
-            boolean produced = false;
-            for (Map.Entry<Integer, Double> e : m.entrySet()) {
-                if (s.isReversible(e.getKey())) {
-                    produced |= true;
-                    break;
-                }
-                else if (e.getValue() > 0) {
-                    produced |= true;
-                    break;
-                }
-            }
-            if (!produced) {
-                System.out.println(s.getMolecule(i).metabolite.getAbbreviation() + " is root NP");                
-            }
-        }
-        Integer[] unproduced = gaps.getUnconsumedMetabolites();
-        System.out.println(unproduced.length);
-        System.out.println(Arrays.toString(unproduced));
+//        GapFind gaps = new GapFind(s);
+//        for (int i = 0; i < s.getMoleculeCount(); i++) {
+//            Map<Integer, Double> m = s.getReactions(s.getMolecule(i));
+//            boolean produced = false;
+//            for (Map.Entry<Integer, Double> e : m.entrySet()) {
+//                if (s.isReversible(e.getKey())) {
+//                    produced |= true;
+//                    break;
+//                }
+//                else if (e.getValue() > 0) {
+//                    produced |= true;
+//                    break;
+//                }
+//            }
+//            if (!produced) {
+//                System.out.println(s.getMolecule(i).metabolite.getAbbreviation() + " is root NP");                
+//            }
+//        }
+//        Integer[] unproduced = gaps.getUnconsumedMetabolites();
+//        System.out.println(unproduced.length);
+//        System.out.println(Arrays.toString(unproduced));
 
     }
 

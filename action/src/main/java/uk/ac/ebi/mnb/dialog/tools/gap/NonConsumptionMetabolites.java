@@ -28,7 +28,6 @@ import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mnb.core.ErrorMessage;
 import uk.ac.ebi.mnb.interfaces.MainController;
 import uk.ac.ebi.optimise.SimulationUtil;
-import uk.ac.ebi.optimise.gap.GapFind;
 
 import java.awt.event.ActionEvent;
 
@@ -53,33 +52,33 @@ public class NonConsumptionMetabolites
     @SuppressWarnings("unchecked")
     public void actionPerformed(ActionEvent e) {
 
-        try {
-            Reconstruction active = DefaultReconstructionManager.getInstance().active();
-            StoichiometricMatrix<CompartmentalisedMetabolite,?> s = active.getMatrix();
-
-            SimulationUtil.setup(); // make sure the paths are set
-
-            GapFind gf = new GapFind(active.getMatrix());
-
-            EntityCollection manager = controller.getViewController().getSelection();
-            manager.clear();
-
-            Integer[] indices = gf.getUnconsumedMetabolites();
-            LOGGER.debug("Unconsumped Metabolites: " + Joiner.on(", ").join(indices));
-
-            for (Integer i : indices) {
-                Metabolite metabolite = s.getMolecule(i).metabolite;
-                manager.add(metabolite);
-            }
-
-            controller.getViewController().setSelection(manager);
-
-        } catch (Exception ex) {
-            controller.getMessageManager().addReport(new ErrorMessage(ex.getLocalizedMessage()));
-
-        } catch (UnsatisfiedLinkError ex) {
-            controller.getMessageManager().addReport(new ErrorMessage(
-                    "Please ensure the CPLEX library path is set correctly"));
-        }
+//        try {
+//            Reconstruction active = DefaultReconstructionManager.getInstance().active();
+//            StoichiometricMatrix<CompartmentalisedMetabolite,?> s = active.getMatrix();
+//
+//            SimulationUtil.setup(); // make sure the paths are set
+//
+//            GapFind gf = new GapFind(active.getMatrix());
+//
+//            EntityCollection manager = controller.getViewController().getSelection();
+//            manager.clear();
+//
+//            Integer[] indices = gf.getUnconsumedMetabolites();
+//            LOGGER.debug("Unconsumped Metabolites: " + Joiner.on(", ").join(indices));
+//
+//            for (Integer i : indices) {
+//                Metabolite metabolite = s.getMolecule(i).metabolite;
+//                manager.add(metabolite);
+//            }
+//
+//            controller.getViewController().setSelection(manager);
+//
+//        } catch (Exception ex) {
+//            controller.getMessageManager().addReport(new ErrorMessage(ex.getLocalizedMessage()));
+//
+//        } catch (UnsatisfiedLinkError ex) {
+//            controller.getMessageManager().addReport(new ErrorMessage(
+//                    "Please ensure the CPLEX library path is set correctly"));
+//        }
     }
 }
