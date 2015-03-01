@@ -176,7 +176,7 @@ public class ApplicationLauncher implements Runnable {
         }
 
     }
-    
+
     void loadRequiredFonts() {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
@@ -201,86 +201,93 @@ public class ApplicationLauncher implements Runnable {
 
         if (TimeUnit.NANOSECONDS.toDays(delta) > 5) {
             Logger.getLogger(getClass()).info("Checking for update");
-            InputStream in = null;
-            try {
+            for (String addr : new String[]{
+                    "http://johnmay.github.io/metingear/latest/version-info.xml",
+                    "http://www.ebi.ac.uk/steinbeck-srv/metingear/download/LATEST/version-info.xml"
+            }) {
+                InputStream in = null;
+                try {
 
-                URL url = new URL("http://www.ebi.ac.uk/steinbeck-srv/metingear/download/LATEST/version-info.xml");
-                in = url.openStream();
-                DocumentBuilder documentBuilder = DocumentBuilderFactory
-                        .newInstance().newDocumentBuilder();
-                Document doc = documentBuilder.parse(in);
+                    URL url = new URL(addr);
+                    in = url.openStream();
+                    DocumentBuilder documentBuilder = DocumentBuilderFactory
+                            .newInstance().newDocumentBuilder();
+                    Document doc = documentBuilder.parse(in);
 
-                String latestVersionString = doc.getElementsByTagName("version")
-                                                .item(0).getTextContent();
-                final String latestMessage = doc.getElementsByTagName("message")
-                                                .item(0).getTextContent();
+                    String latestVersionString = doc.getElementsByTagName("version")
+                                                    .item(0).getTextContent();
+                    final String latestMessage = doc.getElementsByTagName("message")
+                                                    .item(0).getTextContent();
 
-                String currentVersionString = getClass().getPackage()
-                        .getImplementationVersion();
+                    String currentVersionString = getClass().getPackage()
+                                                            .getImplementationVersion();
 
-                // not running from the jar
-                if (currentVersionString == null)
-                    return;
+                    // not running from the jar
+                    if (currentVersionString == null)
+                        return;
 
-                Version latest = new Version(latestVersionString);
-                Version current = new Version(currentVersionString);
+                    Version latest = new Version(latestVersionString);
+                    Version current = new Version(currentVersionString);
 
-                if (current.compareTo(latest) > 0) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override public void run() {
-                            String[] options = new String[]{"Remind Me Later", "Download Now"};
-                            int i = JOptionPane.showOptionDialog(window,
-                                                                 latestMessage,
-                                                                 "A new version is available",
-                                                                 JOptionPane.DEFAULT_OPTION,
-                                                                 JOptionPane.INFORMATION_MESSAGE,
-                                                                 ResourceUtility
-                                                                         .getIcon("/uk/ac/ebi/chemet/render/images/networkbuilder_64x64.png"),
-                                                                 options,
-                                                                 options[1]);
-                            if (i == 0) {
-                                // write the time to the preferences
-                                updatePref.put(Long.toString(now));
-                            } else if (i == 1) {
-                                String page = "http://johnmay.github.com/metingear";
-                                try {
-                                    Desktop.getDesktop().browse(new URI(page));
-                                } catch (IOException e) {
-                                    Logger.getLogger(getClass())
-                                          .warn("Unable to open page:", e);
-                                } catch (URISyntaxException e) {
-                                    Logger.getLogger(getClass())
-                                          .warn("Unable to open page:", e);
+                    if (current.compareTo(latest) > 0) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override public void run() {
+                                String[] options = new String[]{"Remind Me Later", "Download Now"};
+                                int i = JOptionPane.showOptionDialog(window,
+                                                                     latestMessage,
+                                                                     "A new version is available",
+                                                                     JOptionPane.DEFAULT_OPTION,
+                                                                     JOptionPane.INFORMATION_MESSAGE,
+                                                                     ResourceUtility
+                                                                             .getIcon("/uk/ac/ebi/chemet/render/images/networkbuilder_64x64.png"),
+                                                                     options,
+                                                                     options[1]);
+                                if (i == 0) {
+                                    // write the time to the preferences
+                                    updatePref.put(Long.toString(now));
+                                }
+                                else if (i == 1) {
+                                    String page = "http://johnmay.github.com/metingear";
+                                    try {
+                                        Desktop.getDesktop().browse(new URI(page));
+                                    } catch (IOException e) {
+                                        Logger.getLogger(getClass())
+                                              .warn("Unable to open page:", e);
+                                    } catch (URISyntaxException e) {
+                                        Logger.getLogger(getClass())
+                                              .warn("Unable to open page:", e);
+                                    }
                                 }
                             }
-                        }
-                    });
-                }
-
-            } catch (IOException e) {
-                Logger.getLogger(getClass())
-                      .warn("unable to check for update:", e);
-            } catch (ParserConfigurationException e) {
-                Logger.getLogger(getClass())
-                      .warn("unable to get dom document builder:", e);
-            } catch (SAXException e) {
-                Logger.getLogger(getClass())
-                      .warn("unable to get dom document builder:", e);
-            } catch (Exception e) {
-                // got to catch-em all, make sure we fail never
-                Logger.getLogger(getClass())
-                      .error("high level error on update check:", e);
-            } finally {
-                try {
-                    if (in != null) {
-                        in.close();
+                        });
                     }
+
+
                 } catch (IOException e) {
-                    // ignore
+                    Logger.getLogger(getClass())
+                          .warn("unable to check for update:", e);
+                } catch (ParserConfigurationException e) {
+                    Logger.getLogger(getClass())
+                          .warn("unable to get dom document builder:", e);
+                } catch (SAXException e) {
+                    Logger.getLogger(getClass())
+                          .warn("unable to get dom document builder:", e);
+                } catch (Exception e) {
+                    // got to catch-em all, make sure we fail never
+                    Logger.getLogger(getClass())
+                          .error("high level error on update check:", e);
+                } finally {
+                    try {
+                        if (in != null) {
+                            in.close();
+                        }
+                    } catch (IOException e) {
+                        // ignore
+                    }
                 }
             }
-
-        } else {
+        }
+        else {
             Logger.getLogger(getClass())
                   .info("Skipping update check, time since user notified < 5 days");
         }
