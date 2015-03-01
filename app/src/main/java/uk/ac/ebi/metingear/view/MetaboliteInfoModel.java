@@ -18,13 +18,16 @@
 package uk.ac.ebi.metingear.view;
 
 import com.google.common.base.Joiner;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.Charge;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.annotation.primitive.DoubleAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.primitive.FloatAnnotation;
@@ -124,10 +127,19 @@ class MetaboliteInfoModel extends AbstractTableModel {
                     return a.getSimpleName().compareTo(b.getSimpleName());
                 }
             });
+            
+            List<ChemicalStructure> structures = new ArrayList<ChemicalStructure>();
 
             for (Class<Annotation> c : classes) {
-                if (ChemicalStructure.class.isAssignableFrom(c))
+                
+                // skip chemical structures, these are displayed separately
+                // but also all are converted to SMILES and InChI
+                if (ChemicalStructure.class.isAssignableFrom(c)) {
+                    for (Annotation chemstruct : mtbl.getAnnotations(c)) {
+                        structures.add((ChemicalStructure) chemstruct);
+                    }
                     continue;
+                }
 
                 Type type = Type.Annotation;
                 if (StringAnnotation.class.isAssignableFrom(c))
@@ -145,6 +157,36 @@ class MetaboliteInfoModel extends AbstractTableModel {
                     rowList.add(new Row(type, annotation));
                 }
             }
+            
+            // don't show duplicate strings
+            Set<String> included = new HashSet<String>();
+            
+            // add SMILES
+            for (ChemicalStructure chemstruct : structures) {
+                SMILES smis = new SMILES();
+                IAtomContainer container = chemstruct.getStructure();
+                if (container == null)
+                    continue;
+                smis.setStructure(container);
+                if (!included.add(smis.toString()))
+                    continue;
+                rowList.add(new Row(Type.LineNotation, smis));
+            }
+            // add InChI
+            for (ChemicalStructure chemstruct : structures) {
+                InChI inchi = new InChI();
+                IAtomContainer container = chemstruct.getStructure();
+                if (container == null)
+                    continue;
+                inchi.setStructure(container);
+                // check inchi could be generated
+                if (inchi.getValue() == null)
+                    continue; 
+                if (!included.add(inchi.toString()))
+                    continue;
+                rowList.add(new Row(Type.LineNotation, inchi));
+            }
+            
         }
         rows = rowList.toArray(new Row[rowList.size()]);
     }
@@ -207,6 +249,8 @@ class MetaboliteInfoModel extends AbstractTableModel {
                 }
                 // modify / add
                 else {
+                    // CDK formula parser expected hyphens
+                    asciiFormula = asciiFormula.replaceAll("–", "-");
                     IMolecularFormula formula = MolecularFormulaManipulator.getMolecularFormula(asciiFormula,
                                                                                                 SilentChemObjectBuilder.getInstance());
 
@@ -296,15 +340,16 @@ class MetaboliteInfoModel extends AbstractTableModel {
 
     @Override public boolean isCellEditable(int rowIndex, int columnIndex) {
         if (columnIndex == 0) return false;
-        if (typeOf(rowIndex) == Type.Reactions)
-            return true;
-        if (typeOf(rowIndex) == Type.Formula)
-            return true;
-        if (typeOf(rowIndex) == Type.Confidence)
+        Type rowType = typeOf(rowIndex);
+        if (rowType == Type.Confidence)
             return false; // buggy for now
-        if (typeOf(rowIndex) == Type.Abbreviation || typeOf(rowIndex) == Type.Name || typeOf(rowIndex) == Type.EditableAnnotation || typeOf(rowIndex) == Type.Xref)
-            return true;
-        return false;
+        return rowType == Type.Reactions ||
+                rowType == Type.Formula ||
+                rowType == Type.LineNotation ||
+                rowType == Type.Abbreviation ||
+                rowType == Type.Name ||
+                rowType == Type.EditableAnnotation ||
+                rowType == Type.Xref;
     }
 
     @Override public int getRowCount() {
@@ -376,6 +421,12 @@ class MetaboliteInfoModel extends AbstractTableModel {
             @Override String desc(Object value) {
                 assert value instanceof uk.ac.ebi.mdk.domain.annotation.Annotation;
                 return ((Annotation) value).getBrief();
+            }
+        },
+        LineNotation {
+            @Override String desc(Object value) {
+                assert value instanceof uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+                return ((ChemicalStructure) value).getBrief();
             }
         },
         Unknown {

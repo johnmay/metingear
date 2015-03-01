@@ -144,24 +144,32 @@ public final class MetaboliteTableInfo {
 
     private static final class TableView extends JTable {
 
-        private final FieldTypeRenderer        typeRenderer       = new FieldTypeRenderer();
-        private final CrossReferenceEditor     xrefRenderer       = new CrossReferenceEditor();
-        private final BasicValueRenderer       valueRenderer      = new BasicValueRenderer();
-        private final NameRenderer             nameRenderer       = new NameRenderer();
-        private final FormulaRenderer          formulaRenderer    = new FormulaRenderer();
-        private final BasicValueRenderer       valueMonoRenderer  = new BasicValueRenderer();
-        private final BasicValueEditor         valueEditor        = new BasicValueEditor();
-        private final AnnotationEditor         annotationEditor   = new AnnotationEditor();
-        private final ReactionListRenderer     reactionRender     = new ReactionListRenderer();
-        private final RatingCellRenderer       ratingCellRenderer = new RatingCellRenderer();
-        private final RatingCellEditor         ratingCellEditor   = new RatingCellEditor();
-        private       List<TableModelListener> listeners          = new ArrayList<TableModelListener>();
+        private final FieldTypeRenderer        typeRenderer         = new FieldTypeRenderer();
+        private final CrossReferenceEditor     xrefRenderer         = new CrossReferenceEditor();
+        private final BasicValueRenderer       valueRenderer        = new BasicValueRenderer();
+        private final NameRenderer             nameRenderer         = new NameRenderer();
+        private final FormulaRenderer          formulaRenderer      = new FormulaRenderer();
+        private final BasicValueRenderer       valueMonoRenderer    = new BasicValueRenderer();
+        private final BasicValueRenderer       lineNotationRenderer = new BasicValueRenderer();
+        private final BasicValueEditor         valueEditor          = new BasicValueEditor();
+        private final BasicValueEditor         lineNotationSelector = new BasicValueEditor();
+        private final AnnotationEditor         annotationEditor     = new AnnotationEditor();
+        private final ReactionListRenderer     reactionRender       = new ReactionListRenderer();
+        private final RatingCellRenderer       ratingCellRenderer   = new RatingCellRenderer();
+        private final RatingCellEditor         ratingCellEditor     = new RatingCellEditor();
+        private       List<TableModelListener> listeners            = new ArrayList<TableModelListener>();
         private MetaboliteInfoModel model;
 
         private TableView(final MetaboliteInfoModel localModel) {
             super(localModel);
             this.model = localModel;
+            
+            // set mono-spaced fonts
             this.valueMonoRenderer.label.setFont(new Font("Cousine", Font.BOLD, 12));
+            this.lineNotationRenderer.label.setFont(new Font("Cousine", Font.PLAIN, 12));
+            this.lineNotationSelector.field.setEditable(false);
+            this.lineNotationSelector.field.setFont(new Font("Cousine", Font.PLAIN, 12));
+            this.lineNotationSelector.field.setBackground(Color.WHITE);
 
             // style
             setIntercellSpacing(new Dimension(0, 0));
@@ -217,6 +225,8 @@ public final class MetaboliteTableInfo {
                     return xrefRenderer;
                 case Abbreviation:
                     return valueMonoRenderer;
+                case LineNotation:
+                    return lineNotationRenderer;
                 default:
                     return valueRenderer;
             }
@@ -234,6 +244,8 @@ public final class MetaboliteTableInfo {
                     return annotationEditor;
                 case Xref:
                     return xrefRenderer;
+                case LineNotation:
+                    return lineNotationSelector;
                 default:
                     return valueEditor;
             }
@@ -363,7 +375,7 @@ public final class MetaboliteTableInfo {
 
     private static final class FormulaRenderer extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
 
-        private JLabel label = new JLabel();
+        private JLabel     label = new JLabel();
         private JTextField field = new JTextField();
 
         private FormulaRenderer() {

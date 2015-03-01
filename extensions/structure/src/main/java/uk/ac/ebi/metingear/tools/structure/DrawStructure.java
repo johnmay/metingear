@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.ChemModel;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemModel;
@@ -99,7 +99,7 @@ public final class DrawStructure extends AbstractControlDialog {
             throw new InternalError("CDK object could not be cloned");
         }
 
-        if (!input.isEmpty() && !GeometryTools.has2DCoordinates(cpy)) {
+        if (!input.isEmpty() && !GeometryUtil.has2DCoordinates(cpy)) {
             StructureDiagramGenerator sdg = new StructureDiagramGenerator();
             sdg.setUseTemplates(false); // faster
             for (IAtomContainer component : ConnectivityChecker.partitionIntoMolecules(cpy)

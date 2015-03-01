@@ -33,7 +33,7 @@
         <caf.version>0.8.7-SNAPSHOT</caf.version>
         <mdk.version>1.5.1-SNAPSHOT</mdk.version>
         <cdk.version>1.5.10</cdk.version>
-        <jchempaint.version>3.4</jchempaint.version>
+        <jchempaint.version>3.4-SNAPSHOT</jchempaint.version>
     </properties>
 
     <distributionManagement>

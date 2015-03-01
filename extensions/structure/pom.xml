@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>org.openscience.jchempaint</groupId>
-            <artifactId>jchempaint-hotfix</artifactId>
+            <artifactId>jchempaint-app-jar</artifactId>
             <version>${jchempaint.version}</version>
             <exclusions>
                 <exclusion>

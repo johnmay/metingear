@@ -22,7 +22,7 @@ import de.erichseifert.vectorgraphics2d.PDFGraphics2D;
 import net.sf.jniinchi.INCHI_RET;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -875,7 +875,7 @@ final class StructureViewWidget {
                 formula.setPreferredSize(formula.getMinimumSize());
 
                 // need to generate coordinates
-                if (GeometryTools.get2DCoordinateCoverage(container) != GeometryTools.CoordinateCoverage.FULL) {
+                if (GeometryUtil.get2DCoordinateCoverage(container) != GeometryUtil.CoordinateCoverage.FULL) {
                     try {
                         StructureDiagramGenerator sdg = new StructureDiagramGenerator();
                         sdg.setMolecule(container, false);

@@ -20,7 +20,7 @@ package uk.ac.ebi.metingear.tools.structure;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
@@ -114,7 +114,7 @@ public class GenerateStructureDiagram
 
                 IAtomContainer structure = original.getStructure();
 
-                if (!GeometryTools.has2DCoordinates(structure) || overwrite.isSelected()) {
+                if (!GeometryUtil.has2DCoordinates(structure) || overwrite.isSelected()) {
 
                     try {
 
